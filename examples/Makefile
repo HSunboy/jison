@@ -86,6 +86,7 @@ BASIC_TARGETS =                                                 \
 			codegen-feature-tester                              \
 			comments                                            \
 			compiled_calc                                       \
+			cpp-the-preprocessor                                \
 			dism                                                \
 			dism_lr0                                            \
 			dot                                                 \
@@ -149,6 +150,7 @@ MISC_TARGETS =                                                  \
 			classy_ast                                          \
 			comments                                            \
 			compiled_calc                                       \
+			cpp-the-preprocessor                                \
 			dism                                                \
 			dism_lr0                                            \
 			dot                                                 \
@@ -319,46 +321,46 @@ inherited_y:
 # build *AND* run the test:
 issue-205:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 issue-205-2:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 issue-205-3:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 issue-205-4:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 issue-254:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 issue-289:
 	$(JISON) --main -p lalr --no-partial-lr-upgrade-on-conflict ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 	$(JISON) --main -p lalr ./$@.jison -o ./output/$@/$@-HQ.js
-	node ./output/$@/$@-HQ.js
+	node output/$@/$@-HQ.js
 	$(JISON) --main -p lr ./$@.jison -o ./output/$@/$@-LR.js
-	node ./output/$@/$@-LR.js
+	node output/$@/$@-LR.js
 
 # build *AND* run the test:
 issue-293:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 issue-342:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 issue-344-BAD:
 
@@ -367,27 +369,27 @@ issue-344-2-BAD:
 # build *AND* run the test:
 issue-344:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 issue-344-2:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 issue-348:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 issue-357-url-lexing:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test (JSON input!):
 issue-360:
 	$(JISON) --main --export-ast+ ./$@.json
-	node ./output/$@/$@.js $@.test-input-1.txt
+	node output/$@/$@.js $@.test-input-1.txt
 
 jscore:
 	$(JISON) --main ./$@.jison
@@ -490,7 +492,7 @@ mfcalc:
 
 no-prec-hack-needed:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 olmenu-proto2:
 	$(JISON) --main ./$@.jison
@@ -522,6 +524,10 @@ ccalc:
 c99:
 	$(JISON) --main ./$@.y ./$@.l
 
+cpp-the-preprocessor:
+	$(JISON) --main ./$@.jison
+	node output/$@/$@.js
+
 btyacc-ansiC:
 	$(JISON) --main ./$@.y
 
@@ -550,11 +556,11 @@ parser-to-lexer-communication-test--profiling:
 
 parser-to-lexer-communication-test:
 	$(JISON) --main -p lr ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 parser-to-lexer-communication-test-w-debug:
 	$(JISON) --main -p lr ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 faking-multiple-start-rules:
 	$(JISON) --main ./$@.jison
@@ -570,62 +576,62 @@ pascal:
 # build *AND* run the test:
 lalr-but-not-slr:
 	$(JISON) --main -p lalr ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 lr-but-not-lalr:
 	$(JISON) --main -p lr ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 theory-left-recurs-01:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 test-EOF-bugfix:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 test-epsilon-rules-early-reduce:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 test-literal-quote-tokens-in-grammar:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 test-nonassociative-operator-0:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 test-nonassociative-operator-1:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 test-nonassociative-operator-2:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 # build *AND* run the test:
 test-propagation-rules-reduction-1:
 	$(JISON) --main -c 0 -I ./$@.jison
 	$(JISON) --main -c 0 -I ./test-propagation-rules-reduction-2.jison
-	node ./output/$@/$@.js
-	node ./output/$@/test-propagation-rules-reduction-2.js
+	node output/$@/$@.js
+	node output/$@/test-propagation-rules-reduction-2.js
 
 test-unused-rules-reporting:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 test-unused-rules-reporting-alt:
 	$(JISON) --main ./$@.jison
-	node ./output/$@/$@.js
+	node output/$@/$@.js
 
 
 
@@ -679,118 +685,118 @@ codegen-feature-tester:                                                     \
 
 codegen-feature-tester-base:
 	$(JISON) --main ./$(CGT)-base.jison -o ./output/$(CGT)/$(CGT)-base.js
-	node ./output/$(CGT)/$(CGT)-base.js
+	node output/$(CGT)/$(CGT)-base.js
 
 codegen-feature-tester-base-debug:
 	$(JISON) --main ./$(CGT)-base.jison -o ./output/$(CGT)/$(CGT)-base-debug.js --debug
-	node ./output/$(CGT)/$(CGT)-base-debug.js
+	node output/$(CGT)/$(CGT)-base-debug.js
 
 codegen-feature-tester-base-try-catch:
 	$(JISON) --main ./$(CGT)-base.jison -o ./output/$(CGT)/$(CGT)-base-try-catch.js --try-catch
-	node ./output/$(CGT)/$(CGT)-base-try-catch.js
+	node output/$(CGT)/$(CGT)-base-try-catch.js
 
 codegen-feature-tester-base-no-try-catch:
 	$(JISON) --main ./$(CGT)-base.jison -o ./output/$(CGT)/$(CGT)-base-no-try-catch.js --no-try-catch
-	node ./output/$(CGT)/$(CGT)-base-no-try-catch.js
+	node output/$(CGT)/$(CGT)-base-no-try-catch.js
 
 codegen-feature-tester-base-error-recovery-10:
 	$(JISON) --main ./$(CGT)-base.jison -o ./output/$(CGT)/$(CGT)-base-error-recovery-10.js -Q=10
-	node ./output/$(CGT)/$(CGT)-base-error-recovery-10.js
+	node output/$(CGT)/$(CGT)-base-error-recovery-10.js
 
 codegen-feature-tester-no-default-action:
 	$(JISON) --main ./$(CGT)-no-default-action.jison -o ./output/$(CGT)/$(CGT)-no-default-action.js --default-action=none,none
-	node ./output/$(CGT)/$(CGT)-no-default-action.js
+	node output/$(CGT)/$(CGT)-no-default-action.js
 
 codegen-feature-tester-all-default-action:
 	$(JISON) --main ./$(CGT)-all-default-action.jison -o ./output/$(CGT)/$(CGT)-all-default-action.js
-	node ./output/$(CGT)/$(CGT)-all-default-action.js
+	node output/$(CGT)/$(CGT)-all-default-action.js
 
 codegen-feature-tester-no-yyleng:
 	$(JISON) --main ./$(CGT)-no-yyleng.jison -o ./output/$(CGT)/$(CGT)-no-yyleng.js
-	node ./output/$(CGT)/$(CGT)-no-yyleng.js
+	node output/$(CGT)/$(CGT)-no-yyleng.js
 
 codegen-feature-tester-no-yylineno:
 	$(JISON) --main ./$(CGT)-no-yylineno.jison -o ./output/$(CGT)/$(CGT)-no-yylineno.js
-	node ./output/$(CGT)/$(CGT)-no-yylineno.js
+	node output/$(CGT)/$(CGT)-no-yylineno.js
 
 codegen-feature-tester-yylineno:
 	$(JISON) --main ./$(CGT)-yylineno.jison -o ./output/$(CGT)/$(CGT)-yylineno.js
-	node ./output/$(CGT)/$(CGT)-yylineno.js
+	node output/$(CGT)/$(CGT)-yylineno.js
 
 codegen-feature-tester-no-yytext:
 	$(JISON) --main ./$(CGT)-no-yytext.jison -o ./output/$(CGT)/$(CGT)-no-yytext.js
-	node ./output/$(CGT)/$(CGT)-no-yytext.js
+	node output/$(CGT)/$(CGT)-no-yytext.js
 
 codegen-feature-tester-no-yyloc:
 	$(JISON) --main ./$(CGT)-no-yyloc.jison -o ./output/$(CGT)/$(CGT)-no-yyloc.js
-	node ./output/$(CGT)/$(CGT)-no-yyloc.js
+	node output/$(CGT)/$(CGT)-no-yyloc.js
 
 codegen-feature-tester-no-parseerror:
 	$(JISON) --main ./$(CGT)-no-parseerror.jison -o ./output/$(CGT)/$(CGT)-no-parseerror.js
-	node ./output/$(CGT)/$(CGT)-no-parseerror.js
+	node output/$(CGT)/$(CGT)-no-parseerror.js
 
 codegen-feature-tester-no-yyerror:
 	$(JISON) --main ./$(CGT)-no-yyerror.jison -o ./output/$(CGT)/$(CGT)-no-yyerror.js
-	node ./output/$(CGT)/$(CGT)-no-yyerror.js
+	node output/$(CGT)/$(CGT)-no-yyerror.js
 
 codegen-feature-tester-no-yyrecovering:
 	$(JISON) --main ./$(CGT)-no-yyrecovering.jison -o ./output/$(CGT)/$(CGT)-no-yyrecovering.js
-	node ./output/$(CGT)/$(CGT)-no-yyrecovering.js
+	node output/$(CGT)/$(CGT)-no-yyrecovering.js
 
 codegen-feature-tester-no-yyerrok:
 	$(JISON) --main ./$(CGT)-no-yyerrok.jison -o ./output/$(CGT)/$(CGT)-no-yyerrok.js
-	node ./output/$(CGT)/$(CGT)-no-yyerrok.js
+	node output/$(CGT)/$(CGT)-no-yyerrok.js
 
 codegen-feature-tester-no-yyclearin:
 	$(JISON) --main ./$(CGT)-no-yyclearin.jison -o ./output/$(CGT)/$(CGT)-no-yyclearin.js
-	node ./output/$(CGT)/$(CGT)-no-yyclearin.js
+	node output/$(CGT)/$(CGT)-no-yyclearin.js
 
 codegen-feature-tester-no-value-tracking:
 	$(JISON) --main ./$(CGT)-no-value-tracking.jison -o ./output/$(CGT)/$(CGT)-no-value-tracking.js
-	node ./output/$(CGT)/$(CGT)-no-value-tracking.js
+	node output/$(CGT)/$(CGT)-no-value-tracking.js
 
 codegen-feature-tester-no-value-assignment:
 	$(JISON) --main ./$(CGT)-no-value-assignment.jison -o ./output/$(CGT)/$(CGT)-no-value-assignment.js
-	node ./output/$(CGT)/$(CGT)-no-value-assignment.js
+	node output/$(CGT)/$(CGT)-no-value-assignment.js
 
 codegen-feature-tester-no-location-tracking:
 	$(JISON) --main ./$(CGT)-no-location-tracking.jison -o ./output/$(CGT)/$(CGT)-no-location-tracking.js
-	node ./output/$(CGT)/$(CGT)-no-location-tracking.js
+	node output/$(CGT)/$(CGT)-no-location-tracking.js
 
 codegen-feature-tester-no-location-assignment:
 	$(JISON) --main ./$(CGT)-no-location-assignment.jison -o ./output/$(CGT)/$(CGT)-no-location-assignment.js
-	node ./output/$(CGT)/$(CGT)-no-location-assignment.js
+	node output/$(CGT)/$(CGT)-no-location-assignment.js
 
 codegen-feature-tester-no-yystack:
 	$(JISON) --main ./$(CGT)-no-yystack.jison -o ./output/$(CGT)/$(CGT)-no-yystack.js
-	node ./output/$(CGT)/$(CGT)-no-yystack.js
+	node output/$(CGT)/$(CGT)-no-yystack.js
 
 codegen-feature-tester-no-yysstack:
 	$(JISON) --main ./$(CGT)-no-yysstack.jison -o ./output/$(CGT)/$(CGT)-no-yysstack.js
-	node ./output/$(CGT)/$(CGT)-no-yysstack.js
+	node output/$(CGT)/$(CGT)-no-yysstack.js
 
 codegen-feature-tester-no-yysp:
 	$(JISON) --main ./$(CGT)-no-yysp.jison -o ./output/$(CGT)/$(CGT)-no-yysp.js
-	node ./output/$(CGT)/$(CGT)-no-yysp.js
+	node output/$(CGT)/$(CGT)-no-yysp.js
 
 codegen-feature-tester-no-error-recovery:
 	$(JISON) --main ./$(CGT)-no-error-recovery.jison -o ./output/$(CGT)/$(CGT)-no-error-recovery.js
-	node ./output/$(CGT)/$(CGT)-no-error-recovery.js
+	node output/$(CGT)/$(CGT)-no-error-recovery.js
 
 # (!info.actionsUseYYLOC && !info.actionsUseLocationTracking && !info.actionsUseLocationAssignment)
 codegen-feature-tester-no-location-info:
 	$(JISON) --main ./$(CGT)-no-location-info.jison -o ./output/$(CGT)/$(CGT)-no-location-info.js
-	node ./output/$(CGT)/$(CGT)-no-location-info.js
+	node output/$(CGT)/$(CGT)-no-location-info.js
 
 # (!info.actionsUseValueTracking && !info.actionsUseValueAssignment) {
 codegen-feature-tester-no-value-work:
 	$(JISON) --main ./$(CGT)-no-value-work.jison -o ./output/$(CGT)/$(CGT)-no-value-work.js
-	node ./output/$(CGT)/$(CGT)-no-value-work.js
+	node output/$(CGT)/$(CGT)-no-value-work.js
 
 # (!info.actionsUseYYERROK && !info.actionsUseYYRECOVERING && !info.actionsUseYYCLEARIN && !info.actionsUseYYERROR) {
 codegen-feature-tester-no-err-api-usage:
 	$(JISON) --main ./$(CGT)-no-err-api-usage.jison -o ./output/$(CGT)/$(CGT)-no-err-api-usage.js
-	node ./output/$(CGT)/$(CGT)-no-err-api-usage.js
+	node output/$(CGT)/$(CGT)-no-err-api-usage.js
 
 
 

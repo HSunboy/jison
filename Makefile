@@ -162,6 +162,9 @@ examples/comments: build
 examples/compiled_calc: build
 	cd examples/ && make compiled_calc
 
+examples/cpp-the-preprocessor: build
+	cd examples/ && make cpp-the-preprocessor
+
 examples/dism: build
 	cd examples/ && make dism
 
