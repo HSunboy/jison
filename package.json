@@ -40,10 +40,10 @@
     "cjson": "0.3.0"
   },
   "devDependencies": {
-    "test": "0.6.x",
+    "browserify": "^16.5.1",
     "jison": "0.4.x",
-    "uglify-js": "~2.4.0",
-    "browserify": "2.x.x"
+    "test": "0.6.x",
+    "uglify-js": "~2.4.0"
   },
   "scripts": {
     "test": "node tests/all-tests.js"
