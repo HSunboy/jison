@@ -53,6 +53,9 @@ function prepareRules(rules, macros, actions, tokens, startConditions, caseless)
             // }
             // m = new RegExp("^(?:" + m + ")", caseless ? 'i':'');
             //[russa] MOD START: break-up large reg-exp
+            var lastbreak = m.length, mi;
+            var islarge = lastbreak > 3000;
+            var mlist = islarge? [] : null;
             for (k in macros) {
                 if (macros.hasOwnProperty(k)) {
                     if(islarge){//[russa]: try to break up very large reg-expr
