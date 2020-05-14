@@ -46,6 +46,9 @@
     "uglify-js": "^3.9.3"
   },
   "scripts": {
+    "build": "npm run build:dev && npm run build:prod",
+    "build:dev": "browserify entry.js --exports require --outfile dist/jison.js",
+    "build:prod": "uglifyjs dist/jison.js --output dist/jison.min.js",
     "test": "node tests/all-tests.js"
   },
   "homepage": "http://jison.org"
