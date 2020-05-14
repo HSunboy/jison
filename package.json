@@ -1,8 +1,9 @@
 {
   "author": "Zach Carter <zach@carter.name> (http://zaa.ch)",
+  "contributors": [ "russa" ],
   "name": "jison",
   "description": "A parser generator with Bison's API",
-  "version": "0.4.18",
+  "version": "0.4.18-mre.1",
   "license": "MIT",
   "keywords": [
     "jison",
@@ -18,11 +19,10 @@
   "preferGlobal": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/zaach/jison.git"
+    "url": "git://github.com/mmig/jison.git"
   },
   "bugs": {
-    "email": "jison@librelist.com",
-    "url": "http://github.com/zaach/jison/issues"
+    "url": "http://github.com/mmig/jison/issues"
   },
   "main": "lib/jison",
   "bin": "lib/cli.js",
