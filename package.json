@@ -43,7 +43,7 @@
     "browserify": "^16.5.1",
     "jison": "0.4.x",
     "test": "0.6.x",
-    "uglify-js": "~2.4.0"
+    "uglify-js": "^3.9.3"
   },
   "scripts": {
     "test": "node tests/all-tests.js"
