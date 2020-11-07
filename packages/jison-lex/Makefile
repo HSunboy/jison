@@ -12,7 +12,7 @@ else
 endif
 
 
-all: build test examples
+all: build test 
 
 prep:
 
