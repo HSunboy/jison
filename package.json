@@ -40,12 +40,12 @@
     "@gerhobbelt/ast-util": "0.6.1-4",
     "@gerhobbelt/json5": "2.1.0-48",
     "@gerhobbelt/nomnom": "1.8.4-30",
-    "@gerhobbelt/recast": "0.15.0-31",
+    "@gerhobbelt/recast": "0.15.1-32",
     "@gerhobbelt/xregexp": "4.4.0-32"
   },
   "devDependencies": {
-    "@babel/core": "7.7.2",
-    "@babel/preset-env": "7.7.1",
+    "@babel/core": "7.12.3",
+    "@babel/preset-env": "7.12.1",
     "@gerhobbelt/babel-cli": "7.2.1-26",
     "@gerhobbelt/babel-core": "7.2.1-26",
     "@gerhobbelt/babel-preset-env": "7.2.1-26",
