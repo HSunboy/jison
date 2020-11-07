@@ -46,6 +46,7 @@ export default {
     '@gerhobbelt/nomnom',
     '@gerhobbelt/prettier-miscellaneous',
     '@gerhobbelt/recast',
+    'recast',
     '@gerhobbelt/xregexp',
     'jison-helpers-lib',
     '@gerhobbelt/lex-parser',

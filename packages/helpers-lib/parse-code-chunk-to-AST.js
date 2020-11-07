@@ -10,8 +10,8 @@
 // 
 
 
-import recast from '@gerhobbelt/recast';
-//import astUtils from '@gerhobbelt/ast-util';
+import recast from 'recast';
+//import astUtils from 'ast-util';
 import assert from 'assert';
 
 assert(recast);
@@ -27,10 +27,10 @@ assert(b);
 
 
 function parseCodeChunkToAST(src, options) {
-    // src = src
-    // .replace(/@/g, '\uFFDA')
-    // .replace(/#/g, '\uFFDB')
-    // ;
+    src = src
+    .replace(/@/g, '\uFFDA')
+    .replace(/#/g, '\uFFDB')
+    ;
     var ast = recast.parse(src);
     return ast;
 }
@@ -69,9 +69,9 @@ function prettyPrintAST(ast, options) {
 
     new_src = new_src
     .replace(/\r\n|\n|\r/g, '\n')    // platform dependent EOL fixup
-    // // backpatch possible jison variables extant in the prettified code:
-    // .replace(/\uFFDA/g, '@')
-    // .replace(/\uFFDB/g, '#')
+    // backpatch possible jison variables extant in the prettified code:
+    .replace(/\uFFDA/g, '@')
+    .replace(/\uFFDB/g, '#')
     ;
 
     return new_src;

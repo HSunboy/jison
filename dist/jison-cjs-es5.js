@@ -112,11 +112,11 @@ function _interopDefault(ex) {
 
 var fs = _interopDefault(require('fs'));
 var path = _interopDefault(require('path'));
-var recast = _interopDefault(require('@gerhobbelt/recast'));
+var recast = _interopDefault(require('recast'));
 var assert$1 = _interopDefault(require('assert'));
 var XRegExp = _interopDefault(require('@gerhobbelt/xregexp'));
 var json5 = _interopDefault(require('@gerhobbelt/json5'));
-var astUtils = _interopDefault(require('@gerhobbelt/ast-util'));
+var astUtils = _interopDefault(require('ast-util'));
 
 // Return TRUE if `src` starts with `searchString`. 
 function startsWith(src, searchString) {
@@ -416,10 +416,10 @@ assert$1(b);
 
 
 function parseCodeChunkToAST(src, options) {
-    // src = src
-    // .replace(/@/g, '\uFFDA')
-    // .replace(/#/g, '\uFFDB')
-    // ;
+    src = src
+     .replace(/@/g, '\uFFDA')
+     .replace(/#/g, '\uFFDB')
+     ;
     var ast = recast.parse(src);
     return ast;
 }
@@ -439,8 +439,8 @@ function prettyPrintAST(ast, options) {
 
     new_src = new_src.replace(/\r\n|\n|\r/g, '\n') // platform dependent EOL fixup
     // // backpatch possible jison variables extant in the prettified code:
-    // .replace(/\uFFDA/g, '@')
-    // .replace(/\uFFDB/g, '#')
+     .replace(/\uFFDA/g, '@')
+     .replace(/\uFFDB/g, '#')
     ;
 
     return new_src;
