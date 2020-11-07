@@ -2598,7 +2598,7 @@ return `{
         //    these conditions.
         this.yytext = Object.freeze(this.yytext);
         this.matches = Object.freeze(this.matches);
-        this.yylloc.range = Object.freeze(this.yylloc.range);
+        //this.yylloc.range = Object.freeze(this.yylloc.range);
         this.yylloc = Object.freeze(this.yylloc);
 
         this._clear_state = 0;
@@ -2643,7 +2643,7 @@ return `{
         //    these conditions.
         this.yytext = Object.freeze(this.yytext);
         this.matches = Object.freeze(this.matches);
-        this.yylloc.range = Object.freeze(this.yylloc.range);
+        //this.yylloc.range = Object.freeze(this.yylloc.range);
         this.yylloc = Object.freeze(this.yylloc);
 
         this._clear_state = 0;

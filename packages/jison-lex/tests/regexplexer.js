@@ -2099,17 +2099,16 @@ describe("Lexer Kernel", function () {
     prevloc = lexer.yylloc;
     assert.equal(lexer.input(), "z");
     // this will modify the existing yylloc:
-    assert.strictEqual(prevloc, lexer.yylloc);
     assert.deepEqual(prevloc, {first_line: 1,
                                     first_column: 1,
                                     last_line: 1,
-                                    last_column: 3,
-                                    range: [1, 3]});
+                                    last_column: 2,
+                                    range: [1, 2]});
     assert.deepEqual(lexer.yylloc, {first_line: 1,
-                                    first_column: 1,
+                                    first_column: 2,
                                     last_line: 1,
                                     last_column: 3,
-                                    range: [1, 3]});
+                                    range: [2, 3]});
     prevloc = lexer.yylloc;
     assert.equal(lexer.lex(), lexer.EOF);
     // yylloc on EOF is NOT the same yylloc object as before: EOF is just another token, WITH its own yylloc info...
