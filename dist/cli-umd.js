@@ -29716,7 +29716,7 @@ lrGeneratorMixin.parseTable = function lrParseTable(itemSets) {
     self.conflicting_states = conflictedStates;
 
     if (self.conflicts > 0) {
-        if (this.numExpectedConflictStates !== self.conflicts || self.enableDebugLogs) {
+        if (self.numExpectedConflictStates !== self.conflicts || self.enableDebugLogs) {
             self.warn('\nStates with conflicts:');
             each(conflictedStates, function report_conflict_state(val, state) {
                 self.warn('\nState ' + state, '    (' + val.symbol + ' @ ' + val.reduction.production.symbol + ' -> ' + val.reduction.handleToString() + ')\n');
