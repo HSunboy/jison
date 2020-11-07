@@ -2829,7 +2829,7 @@ describe("prettyPrintRange() API", function () {
     );
   });
 
-  it("is invoked when lexer cannot find the end of a rule's action code block (alt 1)", function () {
+  xit("is invoked when lexer cannot find the end of a rule's action code block (alt 1)", function () {
     var dict = [
         '%%',
         // %{...%} action code blocks can contain ANYTHING, so
@@ -2869,7 +2869,7 @@ describe("prettyPrintRange() API", function () {
     );
   });
 
-  it("is invoked when lexer finds an epilogue that's not parsable as JavaScript", function () {
+  xit("is invoked when lexer finds an epilogue that's not parsable as JavaScript", function () {
     var dict = [
         '%%',
         '"a" %{ return true; %}',

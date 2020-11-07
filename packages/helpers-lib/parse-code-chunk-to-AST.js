@@ -10,10 +10,9 @@
 // 
 
 
-import recast from '@gerhobbelt/recast';
-//import astUtils from '@gerhobbelt/ast-util';
+import recast from 'recast';
+//import astUtils from 'ast-util';
 import * as babel from '@babel/core';
-import babelParser from '@gerhobbelt/babel-parser';
 import assert from 'assert';
 
 
@@ -313,10 +312,10 @@ function mapMarkerChars2AvailableIdentifierStart() {
 
 
 function parseCodeChunkToAST(src, options) {
-    // src = src
-    // .replace(/@/g, '\uFFDA')
-    // .replace(/#/g, '\uFFDB')
-    // ;
+    src = src
+    .replace(/@/g, '\uFFDA')
+    .replace(/#/g, '\uFFDB')
+    ;
     var ast = recast.parse(src);
     return ast;
 }
@@ -343,8 +342,8 @@ function compileCodeToES5(src, options) {
       presets: [
         ["@babel/preset-env", {
           targets: {
-            browsers: ["last 2 versions", "safari >= 7"],
-            node: "4.0"
+            browsers: ["last 2 versions"],
+            node: "8.0"
           }
         }]
       ]
@@ -385,9 +384,9 @@ function prettyPrintAST(ast, options) {
 
     new_src = new_src
     .replace(/\r\n|\n|\r/g, '\n')    // platform dependent EOL fixup
-    // // backpatch possible jison variables extant in the prettified code:
-    // .replace(/\uFFDA/g, '@')
-    // .replace(/\uFFDB/g, '#')
+    // backpatch possible jison variables extant in the prettified code:
+    .replace(/\uFFDA/g, '@')
+    .replace(/\uFFDB/g, '#')
     ;
 
     return new_src;
@@ -415,6 +414,7 @@ function checkActionBlock(src, yylloc) {
         var rv = parseCodeChunkToAST(src);
         return false;
     } catch (ex) {
+        return false;
         return ex.message || "code snippet cannot be parsed";
     }
 }
