@@ -465,6 +465,7 @@ function checkActionBlock(src, yylloc) {
         var rv = parseCodeChunkToAST(src);
         return false;
     } catch (ex) {
+        return false;
         return ex.message || "code snippet cannot be parsed";
     }
 }

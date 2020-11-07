@@ -5647,24 +5647,56 @@ EOF: 1,
 
     // yy: ...,                                 /// <-- injected by setInput()
 
-    __currentRuleSet__: null,                   /// INTERNAL USE ONLY: internal rule set cache for the current lexer state  
+    /// INTERNAL USE ONLY: internal rule set cache for the current lexer state
+    __currentRuleSet__: null,
 
-    __error_infos: [],                          /// INTERNAL USE ONLY: the set of lexErrorInfo objects created since the last cleanup  
-    __decompressed: false,                      /// INTERNAL USE ONLY: mark whether the lexer instance has been 'unfolded' completely and is now ready for use  
-    done: false,                                /// INTERNAL USE ONLY  
-    _backtrack: false,                          /// INTERNAL USE ONLY  
-    _input: '',                                 /// INTERNAL USE ONLY  
-    _more: false,                               /// INTERNAL USE ONLY  
-    _signaled_error_token: false,               /// INTERNAL USE ONLY  
-    conditionStack: [],                         /// INTERNAL USE ONLY; managed via `pushState()`, `popState()`, `topState()` and `stateStackSize()`  
-    match: '',                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction. `match` is identical to `yytext` except that this one still contains the matched input string after `lexer.performAction()` has been invoked, where userland code MAY have changed/replaced the `yytext` value entirely!  
-    matched: '',                                /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks entire input which has been matched so far  
-    matches: false,                             /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks RE match result for last (successful) match attempt  
-    yytext: '',                                 /// ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction; this value is transferred to the parser as the 'token value' when the parser consumes the lexer token produced through a call to the `lex()` API.  
-    offset: 0,                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far  
-    yyleng: 0,                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: length of matched input for the token under construction (`yytext`)  
-    yylineno: 0,                                /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: 'line number' at which the token under construction is located  
-    yylloc: null,                               /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks location info (lines + columns) for the token under construction  
+    /// INTERNAL USE ONLY: the set of lexErrorInfo objects created since the last cleanup
+    __error_infos: [],
+
+    /// INTERNAL USE ONLY: mark whether the lexer instance has been 'unfolded' completely and is now ready for use
+    __decompressed: false,
+
+    /// INTERNAL USE ONLY
+    done: false,
+
+    /// INTERNAL USE ONLY
+    _backtrack: false,
+
+    /// INTERNAL USE ONLY
+    _input: '',
+
+    /// INTERNAL USE ONLY
+    _more: false,
+
+    /// INTERNAL USE ONLY
+    _signaled_error_token: false,
+
+    /// INTERNAL USE ONLY; managed via `pushState()`, `popState()`, `topState()` and `stateStackSize()`
+    conditionStack: [],
+
+    /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction. `match` is identical to `yytext` except that this one still contains the matched input string after `lexer.performAction()` has been invoked, where userland code MAY have changed/replaced the `yytext` value entirely!
+    match: '',
+
+    /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks entire input which has been matched so far
+    matched: '',
+
+    /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks RE match result for last (successful) match attempt
+    matches: false,
+
+    /// ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction; this value is transferred to the parser as the 'token value' when the parser consumes the lexer token produced through a call to the `lex()` API.
+    yytext: '',
+
+    /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far
+    offset: 0,
+
+    /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: length of matched input for the token under construction (`yytext`)
+    yyleng: 0,
+
+    /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: 'line number' at which the token under construction is located
+    yylineno: 0,
+
+    /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks location info (lines + columns) for the token under construction
+    yylloc: null,
 
     /**
      * INTERNAL USE: construct a suitable error info hash object instance for `parseError`.
@@ -5707,7 +5739,10 @@ EOF: 1,
       var pei = {
         errStr: msg,
         recoverable: !!recoverable,
-        text: this.match,           // This one MAY be empty; userland code should use the `upcomingInput` API to obtain more text which follows the 'lexer cursor position'...  
+
+        // This one MAY be empty; userland code should use the `upcomingInput` API to obtain more text which follows the 'lexer cursor position'...
+        text: this.match,
+
         token: null,
         line: this.yylineno,
         loc: this.yylloc,
@@ -5892,7 +5927,7 @@ EOF: 1,
           var spec = conditions[k];
           var rule_ids = spec.rules;
           var len = rule_ids.length;
-          var rule_regexes = new Array(len + 1);             // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple! 
+          var rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
           var rule_new_ids = new Array(len + 1);
 
           for (var i = 0; i < len; i++) {
@@ -5981,8 +6016,8 @@ EOF: 1,
       if (typeof rv !== 'string') {
         if (rv) {
           this._input = '' + rv;
-        } 
-        // else: keep `this._input` as is.  
+        }
+        // else: keep `this._input` as is. 
       } else {
         this._input = rv;
       }
@@ -6165,7 +6200,7 @@ EOF: 1,
         maxSize = 20;
 
       if (maxLines < 0)
-        maxLines = past.length;          // can't ever have more input lines than this! 
+        maxLines = past.length;         // can't ever have more input lines than this!;
       else if (!maxLines)
         maxLines = 1;
 
@@ -6221,7 +6256,7 @@ EOF: 1,
         maxSize = 20;
 
       if (maxLines < 0)
-        maxLines = maxSize;          // can't ever have more input lines than this! 
+        maxLines = maxSize;         // can't ever have more input lines than this!;
       else if (!maxLines)
         maxLines = 1;
 
@@ -6229,7 +6264,7 @@ EOF: 1,
       // more than necessary so that we can still properly check against maxSize
       // after we've transformed and limited the newLines in here:
       if (next.length < maxSize * 2 + 2) {
-        next += this._input.substring(0, maxSize * 2 + 2);   // substring is faster on Chrome/V8 
+        next += this._input.substring(0, maxSize * 2 + 2);  // substring is faster on Chrome/V8
       }
 
       // now that we have a significantly reduced string to process, transform the newlines
@@ -6358,7 +6393,7 @@ EOF: 1,
 
       if (loc.first_line <= 0) {
         loc.first_line = loc.last_line;
-        loc.first_column = 0;  // loc.last_column; 
+        loc.first_column = 0; // loc.last_column;
         loc.range[1] = loc.range[0];
       }
 
@@ -6633,7 +6668,7 @@ EOF: 1,
         }
 
         this.__currentRuleSet__ = null;
-        return false;  // rule action called reject() implying the next rule should be tested instead. 
+        return false; // rule action called reject() implying the next rule should be tested instead.
       } else if (this._signaled_error_token) {
         // produce one 'error' token as `.parseError()` in `reject()`
         // did not guarantee a failure signal by throwing an exception!
@@ -6716,7 +6751,7 @@ EOF: 1,
               return token;
             } else if (this._backtrack) {
               match = undefined;
-              continue;  // rule action called reject() implying a rule MISmatch. 
+              continue; // rule action called reject() implying a rule MISmatch.
             } else {
               // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
               return false;
@@ -6957,7 +6992,7 @@ EOF: 1,
       case 2:
         /*! Conditions:: action */
         /*! Rule::       \/[^ /]*?['"{}][^ ]*?\/ */
-        return 43;  // regexp with braces or quotes (and no spaces)  
+        return 43; // regexp with braces or quotes (and no spaces) 
 
         break;
 
@@ -7024,7 +7059,7 @@ EOF: 1,
         yy_.yytext = unescQuote(this.matches[1], /\\"/g);
 
         this.popState();
-        return 29;    // value is always a string type  
+        return 29;   // value is always a string type 
         break;
 
       case 27:
@@ -7033,7 +7068,7 @@ EOF: 1,
         yy_.yytext = unescQuote(this.matches[1], /\\'/g);
 
         this.popState();
-        return 29;    // value is always a string type  
+        return 29;   // value is always a string type 
         break;
 
       case 28:
@@ -7042,7 +7077,7 @@ EOF: 1,
         yy_.yytext = unescQuote(this.matches[1], /\\`/g);
 
         this.popState();
-        return 29;    // value is always a string type  
+        return 29;   // value is always a string type 
         break;
 
       case 29:
@@ -7181,10 +7216,9 @@ EOF: 1,
                                                   Erroneous area:
                                                 ` + this.prettyPrintRange(yy_.yylloc));
 
-        yy_.yytext = [
-          this.matches[1],            // {NAME}  
-          this.matches[2].trim()       // optional value/parameters 
-        ];
+        yy_.yytext = [// {NAME}
+        this.matches[1], // optional value/parameters
+        this.matches[2].trim()];
 
         return 21;
         break;
@@ -7200,7 +7234,7 @@ EOF: 1,
       case 66:
         /*! Conditions:: token bnf ebnf INITIAL */
         /*! Rule::       \{\{([^]*?)\}\} */
-        yy_.yytext = this.matches[1].replace(/\}\\\}/g, '}}');   // unescape any literal '}\}' that exists within the action code block 
+        yy_.yytext = this.matches[1].replace(/\}\\\}/g, '}}');  // unescape any literal '}\}' that exists within the action code block
 
         return 15;
         break;
@@ -7208,7 +7242,7 @@ EOF: 1,
       case 67:
         /*! Conditions:: token bnf ebnf INITIAL */
         /*! Rule::       %\{([^]*?)%\} */
-        yy_.yytext = this.matches[1].replace(/%\\\}/g, '%}');    // unescape any literal '%\}' that exists within the action code block 
+        yy_.yytext = this.matches[1].replace(/%\\\}/g, '%}');   // unescape any literal '%\}' that exists within the action code block
 
         return 15;
         break;
@@ -7265,7 +7299,7 @@ EOF: 1,
       case 75:
         /*! Conditions:: code */
         /*! Rule::       [^\r\n]+ */
-        return 46;       // the bit of CODE just before EOF...  
+        return 46;      // the bit of CODE just before EOF... 
 
         break;
 
@@ -7599,13 +7633,13 @@ EOF: 1,
     },
 
     rules: [
-      /*  0: */  new XRegExp('^(?:\\/\\*[^]*?\\*\\/)', ''),
+      /*  0: */  /^(?:\/\*[\s\S]*?\*\/)/,
       /*  1: */  /^(?:\/\/[^\r\n]*)/,
-      /*  2: */  /^(?:\/[^ \/]*?['"{}][^ ]*?\/)/,
+      /*  2: */  /^(?:\/[^ /]*?['"{}][^ ]*?\/)/,
       /*  3: */  /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)")/,
       /*  4: */  /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,
-      /*  5: */  /^(?:[\/"'][^{}\/"']+)/,
-      /*  6: */  /^(?:[^{}\/"']+)/,
+      /*  5: */  /^(?:[/"'][^{}/"']+)/,
+      /*  6: */  /^(?:[^{}/"']+)/,
       /*  7: */  /^(?:\{)/,
       /*  8: */  /^(?:\})/,
       /*  9: */  /^(?:(\r\n|\n|\r))/,
@@ -7632,7 +7666,7 @@ EOF: 1,
       /* 27: */  /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,
       /* 28: */  /^(?:`((?:\\`|\\[^`]|[^\\`])*)`)/,
       /* 29: */  /^(?:\/\/[^\r\n]*)/,
-      /* 30: */  new XRegExp('^(?:\\/\\*[^]*?\\*\\/)', ''),
+      /* 30: */  /^(?:\/\*[\s\S]*?\*\/)/,
       /* 31: */  /^(?:\S+)/,
       /* 32: */  /^(?:(\r\n|\n|\r)([^\S\n\r])+(?=\S))/,
       /* 33: */  /^(?:(\r\n|\n|\r))/,
@@ -7665,10 +7699,7 @@ EOF: 1,
       /* 57: */  /^(?:%token\b)/,
       /* 58: */  /^(?:%parse-param[s]?)/,
       /* 59: */  /^(?:%option[s]?)/,
-      /* 60: */  new XRegExp(
-        '^(?:%lex((?:[^\\S\\n\\r])*(?:(?:\\r\\n|\\n|\\r)[^]*?)?(?:\\r\\n|\\n|\\r)(?:[^\\S\\n\\r])*)\\/lex\\b)',
-        ''
-      ),
+      /* 60: */  /^(?:%lex((?:[^\S\n\r])*(?:(?:\r\n|\n|\r)[\s\S]*?)?(?:\r\n|\n|\r)(?:[^\S\n\r])*)\/lex\b)/,
       /* 61: */  /^(?:%code\b)/,
       /* 62: */  /^(?:%import\b)/,
       /* 63: */  /^(?:%include\b)/,
@@ -7677,8 +7708,8 @@ EOF: 1,
         ''
       ),
       /* 65: */  new XRegExp('^(?:<([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*)>)', ''),
-      /* 66: */  new XRegExp('^(?:\\{\\{([^]*?)\\}\\})', ''),
-      /* 67: */  new XRegExp('^(?:%\\{([^]*?)%\\})', ''),
+      /* 66: */  /^(?:\{\{([\s\S]*?)\}\})/,
+      /* 67: */  /^(?:%\{([\s\S]*?)%\})/,
       /* 68: */  /^(?:\{)/,
       /* 69: */  /^(?:->.*)/,
       /* 70: */  /^(?:→.*)/,
