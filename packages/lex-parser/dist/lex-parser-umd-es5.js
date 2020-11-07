@@ -1,6 +1,6 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('@gerhobbelt/xregexp'), require('fs'), require('path'), require('recast'), require('assert')) : typeof define === 'function' && define.amd ? define(['@gerhobbelt/xregexp', 'fs', 'path', 'recast', 'assert'], factory) : (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global['lex-parser'] = factory(global.XRegExp, global.fs, global.path, global.recast, global.assert$1));
-})(this, function (XRegExp, fs, path, recast, assert$1) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('@gerhobbelt/xregexp'), require('fs'), require('path'), require('recast'), require('@babel/core'), require('assert')) : typeof define === 'function' && define.amd ? define(['@gerhobbelt/xregexp', 'fs', 'path', 'recast', '@babel/core', 'assert'], factory) : (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global['lex-parser'] = factory(global.XRegExp, global.fs, global.path$1, global.recast, global.babel, global.assert$1));
+})(this, function (XRegExp, fs, path$1, recast, babel, assert$1) {
   'use strict';
 
   function _interopDefaultLegacy(e) {
@@ -13,7 +13,7 @@
 
   var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
 
-  var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
+  var path__default = /*#__PURE__*/_interopDefaultLegacy(path$1);
 
   var recast__default = /*#__PURE__*/_interopDefaultLegacy(recast);
 
@@ -125,11 +125,102 @@
 
 
   function mkIdentifier(s) {
-    s = camelCase('' + s); // cleanup: replace any non-suitable character series to a single underscore:
+    s = '' + s;
+    return s // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
+    // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
+    .replace(/-\w/g, function (match) {
+      var c = match.charAt(1);
+      var rv = c.toUpperCase(); // do not mutate 'a-2' to 'a2':
 
-    return s.replace(/^[^\w_]/, '_') // do not accept numerics at the leading position, despite those matching regex `\w`:
-    .replace(/^\d/, '_').replace(/[^\w\d_]+/g, '_') // and only accept multiple (double, not triple) underscores at start or end of identifier name:
+      if (c === rv && c.match(/\d/)) {
+        return match;
+      }
+
+      return rv;
+    }) // cleanup: replace any non-suitable character series to a single underscore:
+    .replace(/^[^\w_]/, '_') // do not accept numerics at the leading position, despite those matching regex `\w`:
+    .replace(/^\d/, '_').replace(/[^\w\d_]/g, '_') // and only accept multiple (double, not triple) underscores at start or end of identifier name:
     .replace(/^__+/, '#').replace(/__+$/, '#').replace(/_+/g, '_').replace(/#/g, '__');
+  } // Check if the start of the given input matches a regex expression.
+  // Return the length of the regex expression or -1 if none was found.
+
+  /** @public */
+
+
+  function scanRegExp(s) {
+    s = '' + s; // code based on Esprima scanner: `Scanner.prototype.scanRegExpBody()`
+
+    var index = 0;
+    var length = s.length;
+    var ch = s[index]; //assert.assert(ch === '/', 'Regular expression literal must start with a slash');
+
+    var str = s[index++];
+    var classMarker = false;
+    var terminated = false;
+
+    while (index < length) {
+      ch = s[index++];
+      str += ch;
+
+      if (ch === '\\') {
+        ch = s[index++]; // https://tc39.github.io/ecma262/#sec-literals-regular-expression-literals
+
+        if (isLineTerminator(ch.charCodeAt(0))) {
+          break; // UnterminatedRegExp
+        }
+
+        str += ch;
+      } else if (isLineTerminator(ch.charCodeAt(0))) {
+        break; // UnterminatedRegExp
+      } else if (classMarker) {
+        if (ch === ']') {
+          classMarker = false;
+        }
+      } else {
+        if (ch === '/') {
+          terminated = true;
+          break;
+        } else if (ch === '[') {
+          classMarker = true;
+        }
+      }
+    }
+
+    if (!terminated) {
+      return -1; // UnterminatedRegExp
+    }
+
+    return index;
+  } // https://tc39.github.io/ecma262/#sec-line-terminators
+
+
+  function isLineTerminator(cp) {
+    return cp === 0x0A || cp === 0x0D || cp === 0x2028 || cp === 0x2029;
+  } // Check if the given input can be a legal identifier-to-be-camelcased:
+  // use this function to check if the way the identifier is written will
+  // produce a sensible & comparable identifier name using the `mkIdentifier'
+  // API - for humans that transformation should be obvious/trivial in
+  // order to prevent confusion.
+
+  /** @public */
+
+
+  function isLegalIdentifierInput(s) {
+    s = '' + s; // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
+    // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
+
+    s = s.replace(/-\w/g, function (match) {
+      var c = match.charAt(1);
+      var rv = c.toUpperCase(); // do not mutate 'a-2' to 'a2':
+
+      if (c === rv && c.match(/\d/)) {
+        return match;
+      }
+
+      return rv;
+    });
+    var alt = mkIdentifier(s);
+    return alt === s;
   } // properly quote and escape the given input string
 
 
@@ -277,12 +368,36 @@
   var namedTypes = types.namedTypes;
   assert__default['default'](namedTypes);
   var b = types.builders;
-  assert__default['default'](b); // //assert(astUtils);
+  assert__default['default'](b);
 
   function parseCodeChunkToAST(src, options) {
     src = src.replace(/@/g, '\uFFDA').replace(/#/g, '\uFFDB');
     var ast = recast__default['default'].parse(src);
     return ast;
+  }
+
+  function compileCodeToES5(src, options) {
+    options = Object.assign({}, {
+      ast: true,
+      code: true,
+      sourceMaps: true,
+      comments: true,
+      filename: 'compileCodeToES5.js',
+      sourceFileName: 'compileCodeToES5.js',
+      sourceRoot: '.',
+      sourceType: 'module',
+      babelrc: false,
+      ignore: ["node_modules/**/*.js"],
+      compact: false,
+      retainLines: false,
+      presets: [["@babel/preset-env", {
+        targets: {
+          browsers: ["last 2 versions"],
+          node: "8.0"
+        }
+      }]]
+    }, options);
+    return babel.transformSync(src, options); // => { code, map, ast }
   }
 
   function prettyPrintAST(ast, options) {
@@ -316,7 +431,7 @@
     // backpatch possible jison variables extant in the prettified code:
     .replace(/\uFFDA/g, '@').replace(/\uFFDB/g, '#');
     return new_src;
-  } // validate the given JavaScript snippet: does it compile?
+  } // validate the given JISON+JavaScript snippet: does it compile?
   // 
   // Return either the parsed AST (object) or an error message (string). 
 
@@ -340,12 +455,87 @@
     } catch (ex) {
       return false;
     }
+  } // The rough-and-ready preprocessor for any action code block:
+  // this one trims off any surplus whitespace and removes any
+  // trailing semicolons and/or wrapping `{...}` braces,
+  // when such is easily possible *without having to actually
+  // **parse** the `src` code block in order to do this safely*.
+  // 
+  // Returns the trimmed sourcecode which was provided via `src`.
+  // 
+  // Note: the `startMarker` argument is special in that a lexer/parser
+  // can feed us the delimiter which started the code block here:
+  // when the starting delimiter actually is `{` we can safely
+  // remove the outer `{...}` wrapper (which then *will* be present!),
+  // while otherwise we may *not* do so as complex/specially-crafted
+  // code will fail when it was wrapped in other delimiters, e.g.
+  // action code specs like this one:
+  // 
+  //              %{
+  //                  {  // trimActionCode sees this one as outer-starting: WRONG
+  //                      a: 1
+  //                  };
+  //                  {
+  //                      b: 2
+  //                  }  // trimActionCode sees this one as outer-ending: WRONG
+  //              %}
+  //              
+  // Of course the example would be 'ludicrous' action code but the
+  // key point here is that users will certainly be able to come up with 
+  // convoluted code that is smarter than our simple regex-based
+  // `{...}` trimmer in here!
+  // 
+
+
+  function trimActionCode(src, startMarker) {
+    var s = src.trim(); // remove outermost set of braces UNLESS there's
+    // a curly brace in there anywhere: in that case
+    // we should leave it up to the sophisticated
+    // code analyzer to simplify the code!
+    //
+    // This is a very rough check as it will also look
+    // inside code comments, which should not have
+    // any influence.
+    //
+    // Nevertheless: this is a *safe* transform as
+    // long as the code doesn't end with a C++-style
+    // comment which happens to contain that closing
+    // curly brace at the end!
+    //
+    // Also DO strip off any trailing optional semicolon,
+    // which might have ended up here due to lexer rules
+    // like this one:
+    //
+    //     [a-z]+              -> 'TOKEN';
+    //
+    // We can safely ditch any trailing semicolon(s) as
+    // our code generator reckons with JavaScript's
+    // ASI rules (Automatic Semicolon Insertion).
+    //
+    //
+    // TODO: make this is real code edit without that
+    // last edge case as a fault condition.
+
+    if (startMarker === '{') {
+      // code is wrapped in `{...}` for sure: remove the wrapping braces.
+      s = s.replace(/^\{([^]*?)\}$/, '$1').trim();
+    } else {
+      // code may not be wrapped or otherwise non-simple: only remove
+      // wrapping braces when we can guarantee they're the only ones there,
+      // i.e. only exist as outer wrapping.
+      s = s.replace(/^\{([^}]*)\}$/, '$1').trim();
+    }
+
+    s = s.replace(/;+$/, '').trim();
+    return s;
   }
 
   var parse2AST = {
     parseCodeChunkToAST,
+    compileCodeToES5,
     prettyPrintAST,
-    checkActionBlock
+    checkActionBlock,
+    trimActionCode
   };
 
   function chkBugger$1(src) {
@@ -442,18 +632,449 @@
     const globalvar = new Function('return this')();
     var coverage = globalvar[gcv];
     return coverage || false;
+  } //
+  // Helper library for safe code execution/compilation
+  //
+  // MIT Licensed
+  //
+  //
+  // This code is intended to help test and diagnose arbitrary regexes, answering questions like this:
+  //
+  // - is this a valid regex, i.e. does it compile?
+  // - does it have captures, and if yes, how many?
+  //
+  //import XRegExp from '@gerhobbelt/xregexp';
+  // validate the given regex.
+  //
+  // You can specify an (advanced or regular) regex class as a third parameter.
+  // The default assumed is the standard JavaScript `RegExp` class.
+  //
+  // Return FALSE when there's no failure, otherwise return an `Error` info object.
+
+
+  function checkRegExp(re_src, re_flags, XRegExp) {
+    var re; // were we fed a RegExp object or a string?
+
+    if (re_src && typeof re_src.source === 'string' && typeof re_src.flags === 'string' && typeof re_src.toString === 'function' && typeof re_src.test === 'function' && typeof re_src.exec === 'function') {
+      // we're looking at a RegExp (or XRegExp) object, so we can trust the `.source` member
+      // and the `.toString()` method to produce something that's compileable by XRegExp
+      // at least...
+      if (!re_flags || re_flags === re_src.flags) {
+        // no change of flags: we assume it's okay as it's already contained
+        // in an RegExp or XRegExp object
+        return false;
+      }
+    } // we DO accept empty regexes: `''` but we DO NOT accept null/undefined
+
+
+    if (re_src == null) {
+      return new Error('invalid regular expression source: ' + re_src);
+    }
+
+    re_src = '' + re_src;
+
+    if (re_flags == null) {
+      re_flags = undefined; // `new RegExp(..., flags)` will barf a hairball when `flags===null`
+    } else {
+      re_flags = '' + re_flags;
+    }
+
+    XRegExp = XRegExp || RegExp;
+
+    try {
+      re = new XRegExp(re_src, re_flags);
+    } catch (ex) {
+      return ex;
+    }
+
+    return false;
+  } // provide some info about the given regex.
+  //
+  // You can specify an (advanced or regular) regex class as a third parameter.
+  // The default assumed is the standard JavaScript `RegExp` class.
+  //
+  // Return FALSE when the input is not a legal regex.
+
+
+  function getRegExpInfo(re_src, re_flags, XRegExp) {
+    var re1, re2, m1, m2; // were we fed a RegExp object or a string?
+
+    if (re_src && typeof re_src.source === 'string' && typeof re_src.flags === 'string' && typeof re_src.toString === 'function' && typeof re_src.test === 'function' && typeof re_src.exec === 'function') {
+      // we're looking at a RegExp (or XRegExp) object, so we can trust the `.source` member
+      // and the `.toString()` method to produce something that's compileable by XRegExp
+      // at least...
+      if (!re_flags || re_flags === re_src.flags) {
+        // no change of flags: we assume it's okay as it's already contained
+        // in an RegExp or XRegExp object
+        re_flags = undefined;
+      }
+    } else if (re_src == null) {
+      // we DO NOT accept null/undefined
+      return false;
+    } else {
+      re_src = '' + re_src;
+
+      if (re_flags == null) {
+        re_flags = undefined; // `new RegExp(..., flags)` will barf a hairball when `flags===null`
+      } else {
+        re_flags = '' + re_flags;
+      }
+    }
+
+    XRegExp = XRegExp || RegExp;
+
+    try {
+      // A little trick to obtain the captures from a regex:
+      // wrap it and append `(?:)` to ensure it matches
+      // the empty string, then match it against it to
+      // obtain the `match` array.
+      re1 = new XRegExp(re_src, re_flags);
+      re2 = new XRegExp('(?:' + re_src + ')|(?:)', re_flags);
+      m1 = re1.exec('');
+      m2 = re2.exec('');
+      return {
+        acceptsEmptyString: !!m1,
+        captureCount: m2.length - 1
+      };
+    } catch (ex) {
+      return false;
+    }
+  }
+
+  var reHelpers = {
+    checkRegExp: checkRegExp,
+    getRegExpInfo: getRegExpInfo
+  };
+  var cycleref = [];
+  var cyclerefpath = [];
+  var linkref = [];
+  var linkrefpath = [];
+  var path = [];
+
+  function shallow_copy(src) {
+    if (typeof src === 'object') {
+      if (src instanceof Array) {
+        return src.slice();
+      }
+
+      var dst = {};
+
+      if (src instanceof Error) {
+        dst.name = src.name;
+        dst.message = src.message;
+        dst.stack = src.stack;
+      }
+
+      for (var k in src) {
+        if (Object.prototype.hasOwnProperty.call(src, k)) {
+          dst[k] = src[k];
+        }
+      }
+
+      return dst;
+    }
+
+    return src;
+  }
+
+  function shallow_copy_and_strip_depth(src, parentKey) {
+    if (typeof src === 'object') {
+      var dst;
+
+      if (src instanceof Array) {
+        dst = src.slice();
+
+        for (var i = 0, len = dst.length; i < len; i++) {
+          path.push('[' + i + ']');
+          dst[i] = shallow_copy_and_strip_depth(dst[i], parentKey + '[' + i + ']');
+          path.pop();
+        }
+      } else {
+        dst = {};
+
+        if (src instanceof Error) {
+          dst.name = src.name;
+          dst.message = src.message;
+          dst.stack = src.stack;
+        }
+
+        for (var k in src) {
+          if (Object.prototype.hasOwnProperty.call(src, k)) {
+            var el = src[k];
+
+            if (el && typeof el === 'object') {
+              dst[k] = '[cyclic reference::attribute --> ' + parentKey + '.' + k + ']';
+            } else {
+              dst[k] = src[k];
+            }
+          }
+        }
+      }
+
+      return dst;
+    }
+
+    return src;
+  }
+
+  function trim_array_tail(arr) {
+    if (arr instanceof Array) {
+      for (var len = arr.length; len > 0; len--) {
+        if (arr[len - 1] != null) {
+          break;
+        }
+      }
+
+      arr.length = len;
+    }
+  }
+
+  function treat_value_stack(v) {
+    if (v instanceof Array) {
+      var idx = cycleref.indexOf(v);
+
+      if (idx >= 0) {
+        v = '[cyclic reference to parent array --> ' + cyclerefpath[idx] + ']';
+      } else {
+        idx = linkref.indexOf(v);
+
+        if (idx >= 0) {
+          v = '[reference to sibling array --> ' + linkrefpath[idx] + ', length = ' + v.length + ']';
+        } else {
+          cycleref.push(v);
+          cyclerefpath.push(path.join('.'));
+          linkref.push(v);
+          linkrefpath.push(path.join('.'));
+          v = treat_error_infos_array(v);
+          cycleref.pop();
+          cyclerefpath.pop();
+        }
+      }
+    } else if (v) {
+      v = treat_object(v);
+    }
+
+    return v;
+  }
+
+  function treat_error_infos_array(arr) {
+    var inf = arr.slice();
+    trim_array_tail(inf);
+
+    for (var key = 0, len = inf.length; key < len; key++) {
+      var err = inf[key];
+
+      if (err) {
+        path.push('[' + key + ']');
+        err = treat_object(err);
+
+        if (typeof err === 'object') {
+          if (err.lexer) {
+            err.lexer = '[lexer]';
+          }
+
+          if (err.parser) {
+            err.parser = '[parser]';
+          }
+
+          trim_array_tail(err.symbol_stack);
+          trim_array_tail(err.state_stack);
+          trim_array_tail(err.location_stack);
+
+          if (err.value_stack) {
+            path.push('value_stack');
+            err.value_stack = treat_value_stack(err.value_stack);
+            path.pop();
+          }
+        }
+
+        inf[key] = err;
+        path.pop();
+      }
+    }
+
+    return inf;
+  }
+
+  function treat_lexer(l) {
+    // shallow copy object:
+    l = shallow_copy(l);
+    delete l.simpleCaseActionClusters;
+    delete l.rules;
+    delete l.conditions;
+    delete l.__currentRuleSet__;
+
+    if (l.__error_infos) {
+      path.push('__error_infos');
+      l.__error_infos = treat_value_stack(l.__error_infos);
+      path.pop();
+    }
+
+    return l;
+  }
+
+  function treat_parser(p) {
+    // shallow copy object:
+    p = shallow_copy(p);
+    delete p.productions_;
+    delete p.table;
+    delete p.defaultActions;
+
+    if (p.__error_infos) {
+      path.push('__error_infos');
+      p.__error_infos = treat_value_stack(p.__error_infos);
+      path.pop();
+    }
+
+    if (p.__error_recovery_infos) {
+      path.push('__error_recovery_infos');
+      p.__error_recovery_infos = treat_value_stack(p.__error_recovery_infos);
+      path.pop();
+    }
+
+    if (p.lexer) {
+      path.push('lexer');
+      p.lexer = treat_lexer(p.lexer);
+      path.pop();
+    }
+
+    return p;
+  }
+
+  function treat_hash(h) {
+    // shallow copy object:
+    h = shallow_copy(h);
+
+    if (h.parser) {
+      path.push('parser');
+      h.parser = treat_parser(h.parser);
+      path.pop();
+    }
+
+    if (h.lexer) {
+      path.push('lexer');
+      h.lexer = treat_lexer(h.lexer);
+      path.push();
+    }
+
+    return h;
+  }
+
+  function treat_error_report_info(e) {
+    // shallow copy object:
+    e = shallow_copy(e);
+
+    if (e && e.hash) {
+      path.push('hash');
+      e.hash = treat_hash(e.hash);
+      path.pop();
+    }
+
+    if (e.parser) {
+      path.push('parser');
+      e.parser = treat_parser(e.parser);
+      path.pop();
+    }
+
+    if (e.lexer) {
+      path.push('lexer');
+      e.lexer = treat_lexer(e.lexer);
+      path.pop();
+    }
+
+    if (e.__error_infos) {
+      path.push('__error_infos');
+      e.__error_infos = treat_value_stack(e.__error_infos);
+      path.pop();
+    }
+
+    if (e.__error_recovery_infos) {
+      path.push('__error_recovery_infos');
+      e.__error_recovery_infos = treat_value_stack(e.__error_recovery_infos);
+      path.pop();
+    }
+
+    trim_array_tail(e.symbol_stack);
+    trim_array_tail(e.state_stack);
+    trim_array_tail(e.location_stack);
+
+    if (e.value_stack) {
+      path.push('value_stack');
+      e.value_stack = treat_value_stack(e.value_stack);
+      path.pop();
+    }
+
+    return e;
+  }
+
+  function treat_object(e) {
+    if (e && typeof e === 'object') {
+      var idx = cycleref.indexOf(e);
+
+      if (idx >= 0) {
+        // cyclic reference, most probably an error instance.
+        // we still want it to be READABLE in a way, though:
+        e = shallow_copy_and_strip_depth(e, cyclerefpath[idx]);
+      } else {
+        idx = linkref.indexOf(e);
+
+        if (idx >= 0) {
+          e = '[reference to sibling --> ' + linkrefpath[idx] + ']';
+        } else {
+          cycleref.push(e);
+          cyclerefpath.push(path.join('.'));
+          linkref.push(e);
+          linkrefpath.push(path.join('.'));
+          e = treat_error_report_info(e);
+          cycleref.pop();
+          cyclerefpath.pop();
+        }
+      }
+    }
+
+    return e;
+  } // strip off large chunks from the Error exception object before
+  // it will be fed to a test log or other output.
+  // 
+  // Internal use in the unit test rigs.
+
+
+  function trimErrorForTestReporting(e) {
+    cycleref.length = 0;
+    cyclerefpath.length = 0;
+    linkref.length = 0;
+    linkrefpath.length = 0;
+    path = ['*'];
+
+    if (e) {
+      e = treat_object(e);
+    }
+
+    cycleref.length = 0;
+    cyclerefpath.length = 0;
+    linkref.length = 0;
+    linkrefpath.length = 0;
+    path = ['*'];
+    return e;
   }
 
   var helpers = {
     rmCommonWS,
     camelCase,
     mkIdentifier,
+    isLegalIdentifierInput,
+    scanRegExp,
     dquote,
+    trimErrorForTestReporting,
+    checkRegExp: reHelpers.checkRegExp,
+    getRegExpInfo: reHelpers.getRegExpInfo,
     exec: code_exec.exec,
     dump: code_exec.dump,
     parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,
+    compileCodeToES5: parse2AST.compileCodeToES5,
     prettyPrintAST: parse2AST.prettyPrintAST,
     checkActionBlock: parse2AST.checkActionBlock,
+    trimActionCode: parse2AST.trimActionCode,
     printFunctionSourceCode: stringifier.printFunctionSourceCode,
     printFunctionSourceCodeContainer: stringifier.printFunctionSourceCodeContainer,
     detectIstanbulGlobal

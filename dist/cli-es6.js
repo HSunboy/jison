@@ -2,8 +2,9 @@
 
 
 import fs from 'fs';
-import path from 'path';
+import path$1 from 'path';
 import recast from 'recast';
+import { transformSync } from '@babel/core';
 import assert$1 from 'assert';
 import XRegExp from '@gerhobbelt/xregexp';
 import json5 from '@gerhobbelt/json5';
@@ -119,18 +120,107 @@ function camelCase(s) {
 // Convert dashed option keys and other inputs to Camel Cased legal JavaScript identifiers
 /** @public */
 function mkIdentifier(s) {
-    s = camelCase('' + s);
-    // cleanup: replace any non-suitable character series to a single underscore:
+    s = '' + s;
     return s
+    // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
+    // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
+    .replace(/-\w/g, function (match) {
+        var c = match.charAt(1);
+        var rv = c.toUpperCase();
+        // do not mutate 'a-2' to 'a2':
+        if (c === rv && c.match(/\d/)) {
+            return match;
+        }
+        return rv;
+    })
+    // cleanup: replace any non-suitable character series to a single underscore:
     .replace(/^[^\w_]/, '_')
     // do not accept numerics at the leading position, despite those matching regex `\w`:
     .replace(/^\d/, '_')
-    .replace(/[^\w\d_]+/g, '_')
+    .replace(/[^\w\d_]/g, '_')
     // and only accept multiple (double, not triple) underscores at start or end of identifier name:
     .replace(/^__+/, '#')
     .replace(/__+$/, '#')
     .replace(/_+/g, '_')
     .replace(/#/g, '__');
+}
+
+// Check if the start of the given input matches a regex expression.
+// Return the length of the regex expression or -1 if none was found.
+/** @public */
+function scanRegExp(s) {
+    s = '' + s;
+    // code based on Esprima scanner: `Scanner.prototype.scanRegExpBody()`
+    var index = 0;
+    var length = s.length;
+    var ch = s[index];
+    //assert.assert(ch === '/', 'Regular expression literal must start with a slash');
+    var str = s[index++];
+    var classMarker = false;
+    var terminated = false;
+    while (index < length) {
+        ch = s[index++];
+        str += ch;
+        if (ch === '\\') {
+            ch = s[index++];
+            // https://tc39.github.io/ecma262/#sec-literals-regular-expression-literals
+            if (isLineTerminator(ch.charCodeAt(0))) {
+                break;             // UnterminatedRegExp
+            }
+            str += ch;
+        }
+        else if (isLineTerminator(ch.charCodeAt(0))) {
+            break;                 // UnterminatedRegExp
+        }
+        else if (classMarker) {
+            if (ch === ']') {
+                classMarker = false;
+            }
+        }
+        else {
+            if (ch === '/') {
+                terminated = true;
+                break;
+            }
+            else if (ch === '[') {
+                classMarker = true;
+            }
+        }
+    }
+    if (!terminated) {
+        return -1;                  // UnterminatedRegExp
+    }
+    return index;
+}
+
+
+// https://tc39.github.io/ecma262/#sec-line-terminators
+function isLineTerminator(cp) {
+    return (cp === 0x0A) || (cp === 0x0D) || (cp === 0x2028) || (cp === 0x2029);
+}
+
+// Check if the given input can be a legal identifier-to-be-camelcased:
+// use this function to check if the way the identifier is written will
+// produce a sensible & comparable identifier name using the `mkIdentifier'
+// API - for humans that transformation should be obvious/trivial in
+// order to prevent confusion.
+/** @public */
+function isLegalIdentifierInput(s) {
+    s = '' + s;
+    // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
+    // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
+    s = s
+    .replace(/-\w/g, function (match) {
+        var c = match.charAt(1);
+        var rv = c.toUpperCase();
+        // do not mutate 'a-2' to 'a2':
+        if (c === rv && c.match(/\d/)) {
+            return match;
+        }
+        return rv;
+    });
+    var alt = mkIdentifier(s);
+    return alt === s;
 }
 
 // properly quote and escape the given input string
@@ -178,8 +268,8 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
     options = options || {};
 
     try {
-        var dumpPaths = [(options.outfile ? path.dirname(options.outfile) : null), options.inputPath, process.cwd()];
-        var dumpName = path.basename(options.inputFilename || options.moduleName || (options.outfile ? path.dirname(options.outfile) : null) || options.defaultModuleName || errname)
+        var dumpPaths = [(options.outfile ? path$1.dirname(options.outfile) : null), options.inputPath, process.cwd()];
+        var dumpName = path$1.basename(options.inputFilename || options.moduleName || (options.outfile ? path$1.dirname(options.outfile) : null) || options.defaultModuleName || errname)
         .replace(/\.[a-z]{1,5}$/i, '')          // remove extension .y, .yacc, .jison, ...whatever
         .replace(/[^a-z0-9_]/ig, '_');          // make sure it's legal in the destination filesystem: the least common denominator.
         if (dumpName === '' || dumpName === '_') {
@@ -205,7 +295,7 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
             }
 
             try {
-                dumpfile = path.normalize(dumpPaths[i] + '/' + dumpName);
+                dumpfile = path$1.normalize(dumpPaths[i] + '/' + dumpName);
                 fs.writeFileSync(dumpfile, sourcecode, 'utf8');
                 console.error("****** offending generated " + errname + " source code dumped into file: ", dumpfile);
                 break;          // abort loop once a dump action was successful!
@@ -291,6 +381,8 @@ var code_exec = {
 
 //
 
+
+
 assert$1(recast);
 var types = recast.types;
 assert$1(types);
@@ -298,7 +390,11 @@ var namedTypes = types.namedTypes;
 assert$1(namedTypes);
 var b = types.builders;
 assert$1(b);
-// //assert(astUtils);
+
+
+
+
+
 
 
 
@@ -313,6 +409,36 @@ function parseCodeChunkToAST(src, options) {
 }
 
 
+function compileCodeToES5(src, options) {
+    options = Object.assign({}, {
+      ast: true,
+      code: true,
+      sourceMaps: true,
+      comments: true,
+      filename: 'compileCodeToES5.js',
+      sourceFileName: 'compileCodeToES5.js',
+      sourceRoot: '.',
+      sourceType: 'module',
+
+      babelrc: false,
+      
+      ignore: [
+        "node_modules/**/*.js"
+      ],
+      compact: false,
+      retainLines: false,
+      presets: [
+        ["@babel/preset-env", {
+          targets: {
+            browsers: ["last 2 versions"],
+            node: "8.0"
+          }
+        }]
+      ]
+    }, options);
+
+    return transformSync(src, options); // => { code, map, ast }
+}
 
 
 function prettyPrintAST(ast, options) {
@@ -357,7 +483,7 @@ function prettyPrintAST(ast, options) {
 
 
 
-// validate the given JavaScript snippet: does it compile?
+// validate the given JISON+JavaScript snippet: does it compile?
 // 
 // Return either the parsed AST (object) or an error message (string). 
 function checkActionBlock(src, yylloc) {
@@ -382,14 +508,88 @@ function checkActionBlock(src, yylloc) {
 
 
 
+// The rough-and-ready preprocessor for any action code block:
+// this one trims off any surplus whitespace and removes any
+// trailing semicolons and/or wrapping `{...}` braces,
+// when such is easily possible *without having to actually
+// **parse** the `src` code block in order to do this safely*.
+// 
+// Returns the trimmed sourcecode which was provided via `src`.
+// 
+// Note: the `startMarker` argument is special in that a lexer/parser
+// can feed us the delimiter which started the code block here:
+// when the starting delimiter actually is `{` we can safely
+// remove the outer `{...}` wrapper (which then *will* be present!),
+// while otherwise we may *not* do so as complex/specially-crafted
+// code will fail when it was wrapped in other delimiters, e.g.
+// action code specs like this one:
+// 
+//              %{
+//                  {  // trimActionCode sees this one as outer-starting: WRONG
+//                      a: 1
+//                  };
+//                  {
+//                      b: 2
+//                  }  // trimActionCode sees this one as outer-ending: WRONG
+//              %}
+//              
+// Of course the example would be 'ludicrous' action code but the
+// key point here is that users will certainly be able to come up with 
+// convoluted code that is smarter than our simple regex-based
+// `{...}` trimmer in here!
+// 
+function trimActionCode(src, startMarker) {
+    var s = src.trim();
+    // remove outermost set of braces UNLESS there's
+    // a curly brace in there anywhere: in that case
+    // we should leave it up to the sophisticated
+    // code analyzer to simplify the code!
+    //
+    // This is a very rough check as it will also look
+    // inside code comments, which should not have
+    // any influence.
+    //
+    // Nevertheless: this is a *safe* transform as
+    // long as the code doesn't end with a C++-style
+    // comment which happens to contain that closing
+    // curly brace at the end!
+    //
+    // Also DO strip off any trailing optional semicolon,
+    // which might have ended up here due to lexer rules
+    // like this one:
+    //
+    //     [a-z]+              -> 'TOKEN';
+    //
+    // We can safely ditch any trailing semicolon(s) as
+    // our code generator reckons with JavaScript's
+    // ASI rules (Automatic Semicolon Insertion).
+    //
+    //
+    // TODO: make this is real code edit without that
+    // last edge case as a fault condition.
+    if (startMarker === '{') {
+        // code is wrapped in `{...}` for sure: remove the wrapping braces.
+        s = s.replace(/^\{([^]*?)\}$/, '$1').trim();
+    } else {
+        // code may not be wrapped or otherwise non-simple: only remove
+        // wrapping braces when we can guarantee they're the only ones there,
+        // i.e. only exist as outer wrapping.
+        s = s.replace(/^\{([^}]*)\}$/, '$1').trim();
+    }
+    s = s.replace(/;+$/, '').trim();
+    return s;
+}
+
 
 
 
 
 var parse2AST = {
     parseCodeChunkToAST,
+    compileCodeToES5,
     prettyPrintAST,
     checkActionBlock,
+    trimActionCode,
 };
 
 function chkBugger$1(src) {
@@ -493,18 +693,462 @@ function detectIstanbulGlobal() {
     return coverage || false;
 }
 
+//
+// Helper library for safe code execution/compilation
+//
+// MIT Licensed
+//
+//
+// This code is intended to help test and diagnose arbitrary regexes, answering questions like this:
+//
+// - is this a valid regex, i.e. does it compile?
+// - does it have captures, and if yes, how many?
+//
+
+//import XRegExp from '@gerhobbelt/xregexp';
+
+
+// validate the given regex.
+//
+// You can specify an (advanced or regular) regex class as a third parameter.
+// The default assumed is the standard JavaScript `RegExp` class.
+//
+// Return FALSE when there's no failure, otherwise return an `Error` info object.
+function checkRegExp(re_src, re_flags, XRegExp) {
+    var re;
+
+    // were we fed a RegExp object or a string?
+    if (re_src
+        && typeof re_src.source === 'string'
+        && typeof re_src.flags === 'string'
+        && typeof re_src.toString === 'function'
+        && typeof re_src.test === 'function'
+        && typeof re_src.exec === 'function'
+    ) {
+        // we're looking at a RegExp (or XRegExp) object, so we can trust the `.source` member
+        // and the `.toString()` method to produce something that's compileable by XRegExp
+        // at least...
+        if (!re_flags || re_flags === re_src.flags) {
+            // no change of flags: we assume it's okay as it's already contained
+            // in an RegExp or XRegExp object
+            return false;
+        }
+    }
+    // we DO accept empty regexes: `''` but we DO NOT accept null/undefined
+    if (re_src == null) {
+        return new Error('invalid regular expression source: ' + re_src);
+    }
+
+    re_src = '' + re_src;
+    if (re_flags == null) {
+        re_flags = undefined;       // `new RegExp(..., flags)` will barf a hairball when `flags===null`
+    } else {
+        re_flags = '' + re_flags;
+    }
+
+    XRegExp = XRegExp || RegExp;
+
+    try {
+        re = new XRegExp(re_src, re_flags);
+    } catch (ex) {
+        return ex;
+    }
+    return false;
+}
+
+// provide some info about the given regex.
+//
+// You can specify an (advanced or regular) regex class as a third parameter.
+// The default assumed is the standard JavaScript `RegExp` class.
+//
+// Return FALSE when the input is not a legal regex.
+function getRegExpInfo(re_src, re_flags, XRegExp) {
+    var re1, re2, m1, m2;
+
+    // were we fed a RegExp object or a string?
+    if (re_src
+        && typeof re_src.source === 'string'
+        && typeof re_src.flags === 'string'
+        && typeof re_src.toString === 'function'
+        && typeof re_src.test === 'function'
+        && typeof re_src.exec === 'function'
+    ) {
+        // we're looking at a RegExp (or XRegExp) object, so we can trust the `.source` member
+        // and the `.toString()` method to produce something that's compileable by XRegExp
+        // at least...
+        if (!re_flags || re_flags === re_src.flags) {
+            // no change of flags: we assume it's okay as it's already contained
+            // in an RegExp or XRegExp object
+            re_flags = undefined;
+        }
+    } else if (re_src == null) {
+        // we DO NOT accept null/undefined
+        return false;
+    } else {
+        re_src = '' + re_src;
+
+        if (re_flags == null) {
+            re_flags = undefined;       // `new RegExp(..., flags)` will barf a hairball when `flags===null`
+        } else {
+            re_flags = '' + re_flags;
+        }
+    }
+
+    XRegExp = XRegExp || RegExp;
+
+    try {
+        // A little trick to obtain the captures from a regex:
+        // wrap it and append `(?:)` to ensure it matches
+        // the empty string, then match it against it to
+        // obtain the `match` array.
+        re1 = new XRegExp(re_src, re_flags);
+        re2 = new XRegExp('(?:' + re_src + ')|(?:)', re_flags);
+        m1 = re1.exec('');
+        m2 = re2.exec('');
+        return {
+            acceptsEmptyString: !!m1,
+            captureCount: m2.length - 1
+        };
+    } catch (ex) {
+        return false;
+    }
+}
+
+
+
+
+
+
+
+
+var reHelpers = {
+    checkRegExp: checkRegExp,
+    getRegExpInfo: getRegExpInfo
+};
+
+var cycleref = [];
+var cyclerefpath = [];
+
+var linkref = [];
+var linkrefpath = [];
+
+var path = [];
+
+function shallow_copy(src) {
+    if (typeof src === 'object') {
+        if (src instanceof Array) {
+            return src.slice();
+        }
+
+        var dst = {};
+        if (src instanceof Error) {
+            dst.name = src.name;
+            dst.message = src.message;
+            dst.stack = src.stack;
+        }
+
+        for (var k in src) {
+            if (Object.prototype.hasOwnProperty.call(src, k)) {
+                dst[k] = src[k];
+            }
+        }
+        return dst;
+    }
+    return src;
+}
+
+
+function shallow_copy_and_strip_depth(src, parentKey) {
+    if (typeof src === 'object') {
+        var dst;
+
+        if (src instanceof Array) {
+            dst = src.slice();
+            for (var i = 0, len = dst.length; i < len; i++) {
+                path.push('[' + i + ']');
+                dst[i] = shallow_copy_and_strip_depth(dst[i], parentKey + '[' + i + ']');
+                path.pop();
+            }
+        } else {
+            dst = {};
+            if (src instanceof Error) {
+                dst.name = src.name;
+                dst.message = src.message;
+                dst.stack = src.stack;
+            }
+
+            for (var k in src) {
+                if (Object.prototype.hasOwnProperty.call(src, k)) {
+                    var el = src[k];
+                    if (el && typeof el === 'object') {
+                        dst[k] = '[cyclic reference::attribute --> ' + parentKey + '.' + k + ']';
+                    } else {
+                        dst[k] = src[k];
+                    }
+                }
+            }
+        }
+        return dst;
+    }
+    return src;
+}
+
+
+function trim_array_tail(arr) {
+    if (arr instanceof Array) {
+        for (var len = arr.length; len > 0; len--) {
+            if (arr[len - 1] != null) {
+                break;
+            }
+        }
+        arr.length = len;
+    }
+}
+
+function treat_value_stack(v) {
+    if (v instanceof Array) {
+        var idx = cycleref.indexOf(v);
+        if (idx >= 0) {
+            v = '[cyclic reference to parent array --> ' + cyclerefpath[idx] + ']';
+        } else {
+            idx = linkref.indexOf(v);
+            if (idx >= 0) {
+                v = '[reference to sibling array --> ' + linkrefpath[idx] + ', length = ' + v.length + ']';
+            } else {
+                cycleref.push(v);
+                cyclerefpath.push(path.join('.'));
+                linkref.push(v);
+                linkrefpath.push(path.join('.'));
+
+                v = treat_error_infos_array(v);
+
+                cycleref.pop();
+                cyclerefpath.pop();
+            }
+        }
+    } else if (v) {
+        v = treat_object(v);
+    }
+    return v;
+}
+
+function treat_error_infos_array(arr) {
+    var inf = arr.slice();
+    trim_array_tail(inf);
+    for (var key = 0, len = inf.length; key < len; key++) {
+        var err = inf[key];
+        if (err) {
+            path.push('[' + key + ']');
+
+            err = treat_object(err);
+
+            if (typeof err === 'object') {
+                if (err.lexer) {
+                    err.lexer = '[lexer]';
+                }
+                if (err.parser) {
+                    err.parser = '[parser]';
+                }
+                trim_array_tail(err.symbol_stack);
+                trim_array_tail(err.state_stack);
+                trim_array_tail(err.location_stack);
+                if (err.value_stack) {
+                    path.push('value_stack');
+                    err.value_stack = treat_value_stack(err.value_stack);
+                    path.pop();
+                }
+            }
+
+            inf[key] = err;
+
+            path.pop();
+        }
+    }
+    return inf;
+}
+
+function treat_lexer(l) {
+    // shallow copy object:
+    l = shallow_copy(l);
+    delete l.simpleCaseActionClusters;
+    delete l.rules;
+    delete l.conditions;
+    delete l.__currentRuleSet__;
+
+    if (l.__error_infos) {
+        path.push('__error_infos');
+        l.__error_infos = treat_value_stack(l.__error_infos);
+        path.pop();
+    }
+
+    return l;
+}
+
+function treat_parser(p) {
+    // shallow copy object:
+    p = shallow_copy(p);
+    delete p.productions_;
+    delete p.table;
+    delete p.defaultActions;
+
+    if (p.__error_infos) {
+        path.push('__error_infos');
+        p.__error_infos = treat_value_stack(p.__error_infos);
+        path.pop();
+    }
+
+    if (p.__error_recovery_infos) {
+        path.push('__error_recovery_infos');
+        p.__error_recovery_infos = treat_value_stack(p.__error_recovery_infos);
+        path.pop();
+    }
+
+    if (p.lexer) {
+        path.push('lexer');
+        p.lexer = treat_lexer(p.lexer);
+        path.pop();
+    }
+
+    return p;
+}
+
+function treat_hash(h) {
+    // shallow copy object:
+    h = shallow_copy(h);
+
+    if (h.parser) {
+        path.push('parser');
+        h.parser = treat_parser(h.parser);
+        path.pop();
+    }
+
+    if (h.lexer) {
+        path.push('lexer');
+        h.lexer = treat_lexer(h.lexer);
+        path.push();
+    }
+
+    return h;
+}
+
+function treat_error_report_info(e) {
+    // shallow copy object:
+    e = shallow_copy(e);
+    
+    if (e && e.hash) {
+        path.push('hash');
+        e.hash = treat_hash(e.hash);
+        path.pop();
+    }
+
+    if (e.parser) {
+        path.push('parser');
+        e.parser = treat_parser(e.parser);
+        path.pop();
+    }
+
+    if (e.lexer) {
+        path.push('lexer');
+        e.lexer = treat_lexer(e.lexer);
+        path.pop();
+    }    
+
+    if (e.__error_infos) {
+        path.push('__error_infos');
+        e.__error_infos = treat_value_stack(e.__error_infos);
+        path.pop();
+    }
+
+    if (e.__error_recovery_infos) {
+        path.push('__error_recovery_infos');
+        e.__error_recovery_infos = treat_value_stack(e.__error_recovery_infos);
+        path.pop();
+    }
+
+    trim_array_tail(e.symbol_stack);
+    trim_array_tail(e.state_stack);
+    trim_array_tail(e.location_stack);
+    if (e.value_stack) {
+        path.push('value_stack');
+        e.value_stack = treat_value_stack(e.value_stack);
+        path.pop();
+    }
+
+    return e;
+}
+
+function treat_object(e) {
+    if (e && typeof e === 'object') {
+        var idx = cycleref.indexOf(e);
+        if (idx >= 0) {
+            // cyclic reference, most probably an error instance.
+            // we still want it to be READABLE in a way, though:
+            e = shallow_copy_and_strip_depth(e, cyclerefpath[idx]);
+        } else {
+            idx = linkref.indexOf(e);
+            if (idx >= 0) {
+                e = '[reference to sibling --> ' + linkrefpath[idx] + ']';
+            } else {
+                cycleref.push(e);
+                cyclerefpath.push(path.join('.'));
+                linkref.push(e);
+                linkrefpath.push(path.join('.'));
+
+                e = treat_error_report_info(e);
+                
+                cycleref.pop();
+                cyclerefpath.pop();
+            }
+        }
+    }
+    return e;
+}
+
+
+// strip off large chunks from the Error exception object before
+// it will be fed to a test log or other output.
+// 
+// Internal use in the unit test rigs.
+function trimErrorForTestReporting(e) {
+    cycleref.length = 0;
+    cyclerefpath.length = 0;
+    linkref.length = 0;
+    linkrefpath.length = 0;
+    path = ['*'];
+
+    if (e) {
+        e = treat_object(e);
+    }
+
+    cycleref.length = 0;
+    cyclerefpath.length = 0;
+    linkref.length = 0;
+    linkrefpath.length = 0;
+    path = ['*'];
+
+    return e;
+}
+
 var helpers = {
     rmCommonWS,
     camelCase,
     mkIdentifier,
+    isLegalIdentifierInput,
+    scanRegExp,
     dquote: dquote$1,
+    trimErrorForTestReporting,
+
+    checkRegExp: reHelpers.checkRegExp,
+    getRegExpInfo: reHelpers.getRegExpInfo,
 
     exec: code_exec.exec,
     dump: code_exec.dump,
 
     parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,
+    compileCodeToES5: parse2AST.compileCodeToES5,
     prettyPrintAST: parse2AST.prettyPrintAST,
     checkActionBlock: parse2AST.checkActionBlock,
+    trimActionCode: parse2AST.trimActionCode,
 
     printFunctionSourceCode: stringifier.printFunctionSourceCode,
     printFunctionSourceCodeContainer: stringifier.printFunctionSourceCodeContainer,
@@ -9528,7 +10172,7 @@ var rmCommonWS$2  = helpers.rmCommonWS;
 var mkIdentifier$2 = helpers.mkIdentifier;
 var code_exec$1   = helpers.exec;
 
-var version = '0.6.1-215';                              // require('./package.json').version;
+var version = '0.6.2-220';                              // require('./package.json').version;
 
 
 
@@ -9601,7 +10245,7 @@ const defaultJisonLexOptions = {
 // defined as specifying a not-undefined value which is not equal to the
 // default value.
 //
-// When the FIRST argument is STRING "NODEFAULT", then we MUST NOT mix the 
+// When the FIRST argument is STRING "NODEFAULT", then we MUST NOT mix the
 // default values avialable in Jison.defaultJisonOptions.
 //
 // Return a fresh set of options.
@@ -9670,7 +10314,7 @@ function prepExportStructures(options) {
         exportSourceCode.enabled = true;
     }
     options.exportSourceCode = exportSourceCode;
-} 
+}
 
 // Autodetect if the input lexer spec is in JSON or JISON
 // format when the `options.json` flag is `true`.
@@ -9682,48 +10326,85 @@ function prepExportStructures(options) {
 // Otherwise return the *parsed* lexer spec as it has
 // been processed through LexParser.
 function autodetectAndConvertToJSONformat(lexerSpec, options) {
-  var chk_l = null;
-  var ex1, err;
+    var chk_l = null;
+    var ex1, err;
 
-  if (typeof lexerSpec === 'string') {
-    if (options.json) {
-      try {
-          chk_l = json5.parse(lexerSpec);
+    if (typeof lexerSpec === 'string') {
+        if (options.json) {
+            try {
+                chk_l = json5.parse(lexerSpec);
 
-          // When JSON5-based parsing of the lexer spec succeeds, this implies the lexer spec is specified in `JSON mode`
-          // *OR* there's a JSON/JSON5 format error in the input:
-      } catch (e) {
-          ex1 = e;
-      }
+                // When JSON5-based parsing of the lexer spec succeeds, this implies the lexer spec is specified in `JSON mode`
+                // *OR* there's a JSON/JSON5 format error in the input:
+            } catch (e) {
+                ex1 = e;
+            }
+        }
+        if (!chk_l) {
+            // // WARNING: the lexer may receive options specified in the **grammar spec file**,
+            // //          hence we should mix the options to ensure the lexParser always
+            // //          receives the full set!
+            // //
+            // // make sure all options are 'standardized' before we go and mix them together:
+            // options = mkStdOptions(grammar.options, options);
+            try {
+                chk_l = lexParser.parse(lexerSpec, options);
+            } catch (e) {
+                if (options.json) {
+                    // When both JSON5 and JISON input modes barf a hairball, assume the most important
+                    // error is the JISON one (show that one first!), while it MAY be a JSON5 format
+                    // error that triggered it (show that one last!).
+                    //
+                    // Also check for common JISON errors which are obviously never triggered by any
+                    // odd JSON5 input format error: when we encounter such an error here, we don't
+                    // confuse matters and forget about the JSON5 fail as it's irrelevant:
+                    const commonErrors = [
+                        /does not compile/,
+                        /you did not correctly separate trailing code/,
+                        /You did not specify/,
+                        /You cannot specify/,
+                        /must be qualified/,
+                        /%start/,
+                        /%token/,
+                        /%import/,
+                        /%include/,
+                        /%options/,
+                        /%parse-params/,
+                        /%parser-type/,
+                        /%epsilon/,
+                        /definition list error/,
+                        /token list error/,
+                        /declaration error/,
+                        /should be followed/,
+                        /should be separated/,
+                        /an error in one or more of your lexer regex rules/,
+                        /an error in your lexer epilogue/,
+                        /unsupported definition type/,
+                    ];
+                    var cmnerr = commonErrors.filter(function check(re) {
+                        return e.message.match(re);
+                    });
+                    if (cmnerr.length > 0) {
+                        err = e;
+                    } else {
+                        err = new Error('Could not parse jison lexer spec in JSON AUTODETECT mode:\nin JISON Mode we get Error: ' + e.message + '\n\nwhile JSON5 Mode produces Error: ' + ex1.message);
+                        err.secondary_exception = e;
+                        err.stack = ex1.stack;
+                    }
+                } else {
+                    err = new Error('Could not parse lexer spec\nError: ' + e.message);
+                    err.stack = e.stack;
+                }
+                throw err;
+            }
+        }
+    } else {
+        chk_l = lexerSpec;
     }
-    if (!chk_l) {
-      // // WARNING: the lexer may receive options specified in the **grammar spec file**,
-      // //          hence we should mix the options to ensure the lexParser always
-      // //          receives the full set!
-      // //
-      // // make sure all options are 'standardized' before we go and mix them together:
-      // options = mkStdOptions(grammar.options, options);
-      try {
-          chk_l = lexParser.parse(lexerSpec, options);
-      } catch (e) {
-          if (options.json) {
-              err = new Error('Could not parse lexer spec in JSON AUTODETECT mode\nError: ' + ex1.message + ' (' + e.message + ')');
-              err.secondary_exception = e;
-              err.stack = ex1.stack;
-          } else {
-              err = new Error('Could not parse lexer spec\nError: ' + e.message);
-              err.stack = e.stack;
-          }
-          throw err;
-      }
-    }
-  } else {
-    chk_l = lexerSpec;
-  }
 
-  // Save time! Don't reparse the entire lexer spec *again* inside the code generators when that's not necessary:
+    // Save time! Don't reparse the entire lexer spec *again* inside the code generators when that's not necessary:
 
-  return chk_l;
+    return chk_l;
 }
 
 
@@ -9732,7 +10413,7 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, opts) 
     var m, i, k, rule, action, conditions;
     var active_conditions;
     assert$1(Array.isArray(dict.rules));
-    var rules = dict.rules.slice(0);    // shallow copy of the rules array as we MAY modify it in here!        
+    var rules = dict.rules.slice(0);    // shallow copy of the rules array as we MAY modify it in here!
     var newRules = [];
     var macros = {};
     var regular_rule_count = 0;
@@ -10421,7 +11102,7 @@ function prepareStartConditions(conditions) {
     for (sc in conditions) {
         if (conditions.hasOwnProperty(sc)) {
             hash[sc] = {
-                rules: [], 
+                rules: [],
                 inclusive: !conditions[sc]
             };
         }
@@ -10485,6 +11166,8 @@ var prelude = `/**
  * @nocollapse
  */
 function JisonLexerError(msg, hash) {
+    "use strict";
+
     Object.defineProperty(this, 'name', {
         enumerable: false,
         writable: false,
@@ -10646,7 +11329,7 @@ function RegExpLexer(dict, input, tokens, build_options) {
 
             if (opts.options.showSource) {
                 if (typeof opts.options.showSource === 'function') {
-                    opts.options.showSource(lexer, source, opts);
+                    opts.options.showSource(lexer, source, opts, RegExpLexer);
                 } else {
                     console.log("\nGenerated lexer sourcecode:\n----------------------------------------\n", source, "\n----------------------------------------\n");
                 }
@@ -10697,7 +11380,7 @@ function RegExpLexer(dict, input, tokens, build_options) {
                     // store the parsed rule set size so we can use that info in case
                     // this attempt also fails:
                     assert$1(Array.isArray(opts.rules));
-                    rulesSpecSize = opts.rules.length; 
+                    rulesSpecSize = opts.rules.length;
 
                     // opts.conditions = [];
                     opts.rules = [];
@@ -10715,7 +11398,7 @@ function RegExpLexer(dict, input, tokens, build_options) {
                             // opts.conditions = [];
                             // opts.rules = [];
                             // opts.__in_rules_failure_analysis_mode__ = true;
-                            
+
                             // nuke all rules' actions up to and including rule numero `i`:
                             for (var j = 0; j <= i; j++) {
                                 // rules, when parsed, have 2 or 3 elements: [conditions, handle, action];
@@ -10832,6 +11515,7 @@ return `{
     _input: '',                                 /// INTERNAL USE ONLY
     _more: false,                               /// INTERNAL USE ONLY
     _signaled_error_token: false,               /// INTERNAL USE ONLY
+    _clear_state: 0,                            /// INTERNAL USE ONLY; 0: clear to do, 1: clear done for lex()/next(); -1: clear done for inut()/unput()/...
 
     conditionStack: [],                         /// INTERNAL USE ONLY; managed via \`pushState()\`, \`popState()\`, \`topState()\` and \`stateStackSize()\`
 
@@ -10839,18 +11523,22 @@ return `{
     matched: '',                                /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks entire input which has been matched so far
     matches: false,                             /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks RE match result for last (successful) match attempt
     yytext: '',                                 /// ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction; this value is transferred to the parser as the 'token value' when the parser consumes the lexer token produced through a call to the \`lex()\` API.
-    offset: 0,                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far
+    offset: 0,                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far. (**WARNING:** this value MAY be negative if you \`unput()\` more text than you have already lexed. This type of behaviour is generally observed for one kind of 'lexer/parser hack' where custom token-illiciting characters are pushed in front of the input stream to help simulate multiple-START-points in the parser. When this happens, \`base_position\` will be adjusted to help track the original input's starting point in the \`_input\` buffer.)
+    base_position: 0,                           /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: index to the original starting point of the input; always ZERO(0) unless \`unput()\` has pushed content before the input: see the \`offset\` **WARNING** just above.
     yyleng: 0,                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: length of matched input for the token under construction (\`yytext\`)
     yylineno: 0,                                /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: 'line number' at which the token under construction is located
     yylloc: null,                               /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks location info (lines + columns) for the token under construction
+    CRLF_Re: /\\r\\n?|\\n/,                        /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: regex used to split lines while tracking the lexer cursor position.
 
     /**
      * INTERNAL USE: construct a suitable error info hash object instance for \`parseError\`.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     constructLexErrorInfo: function lexer_constructLexErrorInfo(msg, recoverable, show_input_position) {
+        "use strict";
+    
         msg = '' + msg;
 
         // heuristic to determine if the error message already contains a (partial) source code dump
@@ -10865,7 +11553,7 @@ return `{
                 if (!/\\n\\s*$/.test(msg)) {
                     msg += '\\n';
                 }
-                msg += '\\n  Erroneous area:\\n' + this.prettyPrintRange(this.yylloc);          
+                msg += '\\n  Erroneous area:\\n' + this.prettyPrintRange(this.yylloc);
             } else if (typeof this.showPosition === 'function') {
                 var pos_str = this.showPosition();
                 if (pos_str) {
@@ -10885,18 +11573,18 @@ return `{
             token: null,
             line: this.yylineno,
             loc: this.yylloc,
-            yy: this.yy,
+            yy: this.yy,                
             lexer: this,
 
             /**
              * and make sure the error info doesn't stay due to potential
              * ref cycle via userland code manipulations.
              * These would otherwise all be memory leak opportunities!
-             * 
+             *
              * Note that only array and object references are nuked as those
              * constitute the set of elements which can produce a cyclic ref.
              * The rest of the members is kept intact as they are harmless.
-             * 
+             *
              * @public
              * @this {LexErrorInfo}
              */
@@ -10905,9 +11593,10 @@ return `{
                 // info.yy = null;
                 // info.lexer = null;
                 // ...
+                "use strict";
                 var rec = !!this.recoverable;
                 for (var key in this) {
-                    if (this.hasOwnProperty(key) && typeof key === 'object') {
+                    if (this[key] && this.hasOwnProperty(key) && typeof this[key] === 'object') {
                         this[key] = undefined;
                     }
                 }
@@ -10921,11 +11610,13 @@ return `{
 
     /**
      * handler which is invoked when a lexer error occurs.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     parseError: function lexer_parseError(str, hash, ExceptionClass) {
+        "use strict";
+
         if (!ExceptionClass) {
             ExceptionClass = this.JisonLexerError;
         }
@@ -10934,18 +11625,20 @@ return `{
                 return this.yy.parser.parseError.call(this, str, hash, ExceptionClass) || this.ERROR;
             } else if (typeof this.yy.parseError === 'function') {
                 return this.yy.parseError.call(this, str, hash, ExceptionClass) || this.ERROR;
-            } 
+            }
         }
         throw new ExceptionClass(str, hash);
     },
 
     /**
      * method which implements \`yyerror(str, ...args)\` functionality for use inside lexer actions.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     yyerror: function yyError(str /*, ...args */) {
+        "use strict";
+
         var lineno_msg = '';
         if (this.yylloc) {
             lineno_msg = ' on line ' + (this.yylineno + 1);
@@ -10969,11 +11662,13 @@ return `{
      * up these constructs, which *may* carry cyclic references which would
      * otherwise prevent the instances from being properly and timely
      * garbage-collected, i.e. this function helps prevent memory leaks!
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     cleanupAfterLex: function lexer_cleanupAfterLex(do_not_nuke_errorinfos) {
+        "use strict";
+
         // prevent lingering circular references from causing memory leaks:
         this.setInput('', {});
 
@@ -10995,20 +11690,23 @@ return `{
 
     /**
      * clear the lexer token context; intended for internal use only
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     clear: function lexer_clear() {
+        "use strict";
+
         this.yytext = '';
         this.yyleng = 0;
         this.match = '';
         // - DO NOT reset \`this.matched\`
         this.matches = false;
+
         this._more = false;
         this._backtrack = false;
 
-        var col = (this.yylloc ? this.yylloc.last_column : 0);
+        var col = this.yylloc.last_column;
         this.yylloc = {
             first_line: this.yylineno + 1,
             first_column: col,
@@ -11021,11 +11719,13 @@ return `{
 
     /**
      * resets the lexer, sets new input
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     setInput: function lexer_setInput(input, yy) {
+        "use strict";
+
         this.yy = yy || this.yy || {};
 
         // also check if we've fully initialized the lexer instance,
@@ -11069,8 +11769,11 @@ return `{
           this.__decompressed = true;
         }
 
+        if (input && typeof input !== 'string') {
+            input = '' + input;
+        }
         this._input = input || '';
-        this.clear();
+        this._clear_state = -1;
         this._signaled_error_token = false;
         this.done = false;
         this.yylineno = 0;
@@ -11086,39 +11789,49 @@ return `{
             range: [0, 0]
         };
         this.offset = 0;
+        this.base_position = 0;
+        // apply these bits of \`this.clear()\` as well:
+        this.yytext = '';
+        this.yyleng = 0;
+        this.match = '';
+        this.matches = false;
+
+        this._more = false;
+        this._backtrack = false;
+
         return this;
     },
 
     /**
      * edit the remaining input via user-specified callback.
-     * This can be used to forward-adjust the input-to-parse, 
+     * This can be used to forward-adjust the input-to-parse,
      * e.g. inserting macro expansions and alike in the
      * input which has yet to be lexed.
      * The behaviour of this API contrasts the \`unput()\` et al
      * APIs as those act on the *consumed* input, while this
      * one allows one to manipulate the future, without impacting
-     * the current \`yyloc\` cursor location or any history. 
-     * 
+     * the current \`yyloc\` cursor location or any history.
+     *
      * Use this API to help implement C-preprocessor-like
      * \`#include\` statements, etc.
-     * 
+     *
      * The provided callback must be synchronous and is
      * expected to return the edited input (string).
      *
      * The \`cpsArg\` argument value is passed to the callback
      * as-is.
      *
-     * \`callback\` interface: 
+     * \`callback\` interface:
      * \`function callback(input, cpsArg)\`
-     * 
+     *
      * - \`input\` will carry the remaining-input-to-lex string
      *   from the lexer.
      * - \`cpsArg\` is \`cpsArg\` passed into this API.
-     * 
+     *
      * The \`this\` reference for the callback will be set to
      * reference this lexer instance so that userland code
      * in the callback can easily and quickly access any lexer
-     * API. 
+     * API.
      *
      * When the callback returns a non-string-type falsey value,
      * we assume the callback did not edit the input and we
@@ -11126,36 +11839,44 @@ return `{
      *
      * When the callback returns a non-string-type value, it
      * is converted to a string for lexing via the \`"" + retval\`
-     * operation. (See also why: http://2ality.com/2012/03/converting-to-string.html 
+     * operation. (See also why: http://2ality.com/2012/03/converting-to-string.html
      * -- that way any returned object's \`toValue()\` and \`toString()\`
      * methods will be invoked in a proper/desirable order.)
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     editRemainingInput: function lexer_editRemainingInput(callback, cpsArg) {
+        "use strict";
+
         var rv = callback.call(this, this._input, cpsArg);
         if (typeof rv !== 'string') {
             if (rv) {
-                this._input = '' + rv; 
+                this._input = '' + rv;
             }
-            // else: keep \`this._input\` as is. 
+            // else: keep \`this._input\` as is.
         } else {
-            this._input = rv; 
+            this._input = rv;
         }
         return this;
     },
 
     /**
      * consumes and returns one char from the input
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     input: function lexer_input() {
+        "use strict";
+
         if (!this._input) {
             //this.done = true;    -- don't set \`done\` as we want the lex()/next() API to be able to produce one custom EOF token match after this anyhow. (lexer can match special <<EOF>> tokens and perform user action code for a <<EOF>> match, but only does so *once*)
             return null;
+        }
+        if (!this._clear_state && !this._more) {
+            this._clear_state = -1;
+            this.clear();
         }
         var ch = this._input[0];
         this.yytext += ch;
@@ -11200,18 +11921,35 @@ return `{
 
     /**
      * unshifts one char (or an entire string) into the input
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     unput: function lexer_unput(ch) {
+        "use strict";
+
         var len = ch.length;
-        var lines = ch.split(/(?:\\r\\n?|\\n)/g);
+        var lines = ch.split(this.CRLF_Re);
+
+        if (!this._clear_state && !this._more) {
+            this._clear_state = -1;
+            this.clear();
+        }
 
         this._input = ch + this._input;
         this.yytext = this.yytext.substr(0, this.yytext.length - len);
         this.yyleng = this.yytext.length;
         this.offset -= len;
+        // **WARNING:**
+        // The \`offset\` value MAY be negative if you \`unput()\` more text than you have already lexed.
+        // This type of behaviour is generally observed for one kind of 'lexer/parser hack'
+        // where custom token-illiciting characters are pushed in front of the input stream to help
+        // simulate multiple-START-points in the parser.
+        // When this happens, \`base_position\` will be adjusted to help track the original input's
+        // starting point in the \`_input\` buffer.
+        if (-this.offset > this.base_position) {
+            this.base_position = -this.offset;
+        }
         this.match = this.match.substr(0, this.match.length - len);
         this.matched = this.matched.substr(0, this.matched.length - len);
 
@@ -11221,13 +11959,13 @@ return `{
             this.yylloc.last_line = this.yylineno + 1;
 
             // Get last entirely matched line into the \`pre_lines[]\` array's
-            // last index slot; we don't mind when other previously 
-            // matched lines end up in the array too. 
+            // last index slot; we don't mind when other previously
+            // matched lines end up in the array too.
             var pre = this.match;
-            var pre_lines = pre.split(/(?:\\r\\n?|\\n)/g);
+            var pre_lines = pre.split(this.CRLF_Re);
             if (pre_lines.length === 1) {
                 pre = this.matched;
-                pre_lines = pre.split(/(?:\\r\\n?|\\n)/g);
+                pre_lines = pre.split(this.CRLF_Re);
             }
             this.yylloc.last_column = pre_lines[pre_lines.length - 1].length;
         } else {
@@ -11241,12 +11979,39 @@ return `{
     },
 
     /**
-     * cache matched text and append it on next action
+     * return the upcoming input *which has not been lexed yet*.
+     * This can, for example, be used for custom look-ahead inspection code 
+     * in your lexer.
+     * 
+     * The entire pending input string is returned.
+     *
+     * > ### NOTE ###
+     * >
+     * > When augmenting error reports and alike, you might want to
+     * > look at the \`upcomingInput()\` API instead, which offers more
+     * > features for limited input extraction and which includes the
+     * > part of the input which has been lexed by the last token a.k.a.
+     * > the *currently lexed* input.
+     * > 
      * 
      * @public
      * @this {RegExpLexer}
      */
+    lookAhead: function lexer_lookAhead() {
+        "use strict";
+
+        return this._input || '';
+    },
+
+    /**
+     * cache matched text and append it on next action
+     *
+     * @public
+     * @this {RegExpLexer}
+     */
     more: function lexer_more() {
+        "use strict";
+
         this._more = true;
         return this;
     },
@@ -11254,11 +12019,13 @@ return `{
     /**
      * signal the lexer that this rule fails to match the input, so the
      * next matching rule (regex) should be tested instead.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     reject: function lexer_reject() {
+        "use strict";
+
         if (this.options.backtrack_lexer) {
             this._backtrack = true;
         } else {
@@ -11277,36 +12044,44 @@ return `{
 
     /**
      * retain first n characters of the match
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     less: function lexer_less(n) {
+        "use strict";
+
         return this.unput(this.match.slice(n));
     },
 
     /**
      * return (part of the) already matched input, i.e. for error
      * messages.
-     * 
+     *
      * Limit the returned string length to \`maxSize\` (default: 20).
-     * 
+     *
      * Limit the returned string to the \`maxLines\` number of lines of
      * input (default: 1).
-     * 
-     * Negative limit values equal *unlimited*.
-     * 
+     *
+     * A negative \`maxSize\` limit value equals *unlimited*, i.e.
+     * produce the entire input that has already been lexed.
+     *
+     * A negative \`maxLines\` limit value equals *unlimited*, i.e. limit the result
+     * to the \`maxSize\` specified number of characters *only*.
+     *
      * @public
      * @this {RegExpLexer}
      */
     pastInput: function lexer_pastInput(maxSize, maxLines) {
+        "use strict";
+
         var past = this.matched.substring(0, this.matched.length - this.match.length);
         if (maxSize < 0)
-            maxSize = past.length;
+            maxSize = Infinity;
         else if (!maxSize)
             maxSize = 20;
         if (maxLines < 0)
-            maxLines = past.length;         // can't ever have more input lines than this!
+            maxLines = Infinity;         // can't ever have more input lines than this!
         else if (!maxLines)
             maxLines = 1;
         // \`substr\` anticipation: treat \\r\\n as a single character and take a little
@@ -11315,7 +12090,7 @@ return `{
         past = past.substr(-maxSize * 2 - 2);
         // now that we have a significantly reduced string to process, transform the newlines
         // and chop them, then limit them:
-        var a = past.replace(/\\r\\n|\\r/g, '\\n').split('\\n');
+        var a = past.split(this.CRLF_Re);
         a = a.slice(-maxLines);
         past = a.join('\\n');
         // When, after limiting to maxLines, we still have too much to return,
@@ -11327,31 +12102,45 @@ return `{
     },
 
     /**
-     * return (part of the) upcoming input, i.e. for error messages.
-     * 
+     * return (part of the) upcoming input *including* the input 
+     * matched by the last token (see also the NOTE below). 
+     * This can be used to augment error messages, for example.
+     *
      * Limit the returned string length to \`maxSize\` (default: 20).
-     * 
+     *
      * Limit the returned string to the \`maxLines\` number of lines of input (default: 1).
-     * 
-     * Negative limit values equal *unlimited*.
+     *
+     * A negative \`maxSize\` limit value equals *unlimited*, i.e.
+     * produce the entire input that is yet to be lexed.
+     *
+     * A negative \`maxLines\` limit value equals *unlimited*, i.e. limit the result
+     * to the \`maxSize\` specified number of characters *only*.
      *
      * > ### NOTE ###
      * >
      * > *"upcoming input"* is defined as the whole of the both
      * > the *currently lexed* input, together with any remaining input
-     * > following that. *"currently lexed"* input is the input 
+     * > following that. *"currently lexed"* input is the input
      * > already recognized by the lexer but not yet returned with
      * > the lexer token. This happens when you are invoking this API
-     * > from inside any lexer rule action code block. 
+     * > from inside any lexer rule action code block.
      * >
+     * > When you want access to the 'upcoming input' in that you want access
+     * > to the input *which has not been lexed yet* for look-ahead
+     * > inspection or likewise purposes, please consider using the
+     * > \`lookAhead()\` API instead.
+     * > 
      * 
      * @public
      * @this {RegExpLexer}
      */
     upcomingInput: function lexer_upcomingInput(maxSize, maxLines) {
+        "use strict";
+
         var next = this.match;
+        var source = this._input || '';
         if (maxSize < 0)
-            maxSize = next.length + this._input.length;
+            maxSize = next.length + source.length;
         else if (!maxSize)
             maxSize = 20;
         if (maxLines < 0)
@@ -11362,11 +12151,11 @@ return `{
         // more than necessary so that we can still properly check against maxSize
         // after we've transformed and limited the newLines in here:
         if (next.length < maxSize * 2 + 2) {
-            next += this._input.substring(0, maxSize * 2 + 2);  // substring is faster on Chrome/V8
+            next += source.substring(0, maxSize * 2 + 2 - next.length);  // substring is faster on Chrome/V8
         }
         // now that we have a significantly reduced string to process, transform the newlines
         // and chop them, then limit them:
-        var a = next.replace(/\\r\\n|\\r/g, '\\n').split('\\n');
+        var a = next.split(this.CRLF_Re, maxLines + 1);     // stop splitting once we have reached just beyond the reuired number of lines.
         a = a.slice(0, maxLines);
         next = a.join('\\n');
         // When, after limiting to maxLines, we still have too much to return,
@@ -11380,11 +12169,13 @@ return `{
     /**
      * return a string which displays the character position where the
      * lexing error occurred, i.e. for error messages
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     showPosition: function lexer_showPosition(maxPrefix, maxPostfix) {
+        "use strict";
+
         var pre = this.pastInput(maxPrefix).replace(/\\s/g, ' ');
         var c = new Array(pre.length + 1).join('-');
         return pre + this.upcomingInput(maxPostfix).replace(/\\s/g, ' ') + '\\n' + c + '^';
@@ -11403,11 +12194,13 @@ return `{
      *
      * NOTE: \`deriveLocationInfo()\` ALWAYS produces a location info object *copy* of \`actual\`, not just
      * a *reference* hence all input location objects can be assumed to be 'constant' (function has no side-effects).
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     deriveLocationInfo: function lexer_deriveYYLLOC(actual, preceding, following, current) {
+        "use strict";
+
         var loc = {
             first_line: 1,
             first_column: 0,
@@ -11423,9 +12216,9 @@ return `{
             loc.last_column = actual.last_column | 0;
 
             if (actual.range) {
-                loc.range[0] = actual.range[0] | 0; 
+                loc.range[0] = actual.range[0] | 0;
                 loc.range[1] = actual.range[1] | 0;
-            } 
+            }
         }
         if (loc.first_line <= 0 || loc.last_line < loc.first_line) {
             // plan B: heuristic using preceding and following:
@@ -11434,8 +12227,8 @@ return `{
                 loc.first_column = preceding.last_column | 0;
 
                 if (preceding.range) {
-                    loc.range[0] = actual.range[1] | 0; 
-                } 
+                    loc.range[0] = actual.range[1] | 0;
+                }
             }
 
             if ((loc.last_line <= 0 || loc.last_line < loc.first_line) && following) {
@@ -11443,8 +12236,8 @@ return `{
                 loc.last_column = following.first_column | 0;
 
                 if (following.range) {
-                    loc.range[1] = actual.range[0] | 0; 
-                } 
+                    loc.range[1] = actual.range[0] | 0;
+                }
             }
 
             // plan C?: see if the 'current' location is useful/sane too:
@@ -11453,8 +12246,8 @@ return `{
                 loc.first_column = current.first_column | 0;
 
                 if (current.range) {
-                    loc.range[0] = current.range[0] | 0; 
-                } 
+                    loc.range[0] = current.range[0] | 0;
+                }
             }
 
             if (loc.last_line <= 0 && current && (loc.first_line <= 0 || current.first_line >= loc.first_line)) {
@@ -11462,8 +12255,8 @@ return `{
                 loc.last_column = current.last_column | 0;
 
                 if (current.range) {
-                    loc.range[1] = current.range[1] | 0; 
-                } 
+                    loc.range[1] = current.range[1] | 0;
+                }
             }
         }
         // sanitize: fix last_line BEFORE we fix first_line as we use the 'raw' value of the latter
@@ -11500,63 +12293,68 @@ return `{
     },
 
     /**
-     * return a string which displays the lines & columns of input which are referenced 
+     * return a string which displays the lines & columns of input which are referenced
      * by the given location info range, plus a few lines of context.
-     * 
-     * This function pretty-prints the indicated section of the input, with line numbers 
+     *
+     * This function pretty-prints the indicated section of the input, with line numbers
      * and everything!
-     * 
+     *
      * This function is very useful to provide highly readable error reports, while
      * the location range may be specified in various flexible ways:
-     * 
+     *
      * - \`loc\` is the location info object which references the area which should be
      *   displayed and 'marked up': these lines & columns of text are marked up by \`^\`
      *   characters below each character in the entire input range.
-     * 
+     *
      * - \`context_loc\` is the *optional* location info object which instructs this
      *   pretty-printer how much *leading* context should be displayed alongside
      *   the area referenced by \`loc\`. This can help provide context for the displayed
      *   error, etc.
-     * 
+     *
      *   When this location info is not provided, a default context of 3 lines is
      *   used.
-     * 
+     *
      * - \`context_loc2\` is another *optional* location info object, which serves
      *   a similar purpose to \`context_loc\`: it specifies the amount of *trailing*
      *   context lines to display in the pretty-print output.
-     * 
+     *
      *   When this location info is not provided, a default context of 1 line only is
      *   used.
-     * 
+     *
      * Special Notes:
-     * 
+     *
      * - when the \`loc\`-indicated range is very large (about 5 lines or more), then
      *   only the first and last few lines of this block are printed while a
      *   \`...continued...\` message will be printed between them.
-     * 
+     *
      *   This serves the purpose of not printing a huge amount of text when the \`loc\`
      *   range happens to be huge: this way a manageable & readable output results
      *   for arbitrary large ranges.
-     * 
+     *
      * - this function can display lines of input which whave not yet been lexed.
      *   \`prettyPrintRange()\` can access the entire input!
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     prettyPrintRange: function lexer_prettyPrintRange(loc, context_loc, context_loc2) {
-        loc = this.deriveLocationInfo(loc, context_loc, context_loc2);        
+        "use strict";
+
+        loc = this.deriveLocationInfo(loc, context_loc, context_loc2);
+
         const CONTEXT = 3;
         const CONTEXT_TAIL = 1;
         const MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT = 2;
-        var input = this.matched + this._input;
+        var input = this.matched + (this._input || '');
         var lines = input.split('\\n');
         var l0 = Math.max(1, (context_loc ? context_loc.first_line : loc.first_line - CONTEXT));
         var l1 = Math.max(1, (context_loc2 ? context_loc2.last_line : loc.last_line + CONTEXT_TAIL));
         var lineno_display_width = (1 + Math.log10(l1 | 1) | 0);
         var ws_prefix = new Array(lineno_display_width).join(' ');
-        var nonempty_line_indexes = [];
+        var nonempty_line_indexes = [[], [], []];
         var rv = lines.slice(l0 - 1, l1 + 1).map(function injectLineNumber(line, index) {
+            "use strict";
+
             var lno = index + l0;
             var lno_pfx = (ws_prefix + lno).substr(-lineno_display_width);
             var rv = lno_pfx + ': ' + line;
@@ -11577,44 +12375,59 @@ return `{
               len = Math.max(2, line.length + 1);
             }
 
+            var nli;
             if (len) {
               var lead = new Array(offset).join('.');
               var mark = new Array(len).join('^');
               rv += '\\n' + errpfx + lead + mark;
 
-              if (line.trim().length > 0) {
-                nonempty_line_indexes.push(index);
-              }
+              nli = 1;
+            } else if (lno < loc.first_line) {
+              nli = 0;
+            } else if (lno > loc.last_line) {
+              nli = 2;
+            }
+
+            if (line.trim().length > 0) {
+              nonempty_line_indexes[nli].push(index);
             }
 
             rv = rv.replace(/\\t/g, ' ');
             return rv;
         });
 
-        // now make sure we don't print an overly large amount of error area: limit it 
+        // now make sure we don't print an overly large amount of lead/error/tail area: limit it
         // to the top and bottom line count:
-        if (nonempty_line_indexes.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {
-            var clip_start = nonempty_line_indexes[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
-            var clip_end = nonempty_line_indexes[nonempty_line_indexes.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
+        for (var i = 0; i <= 2; i++) {
+            var line_arr = nonempty_line_indexes[i];
+            if (line_arr.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {
+                var clip_start = line_arr[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
+                var clip_end = line_arr[line_arr.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
 
-            var intermediate_line = (new Array(lineno_display_width + 1)).join(' ') +     '  (...continued...)';
-            intermediate_line += '\\n' + (new Array(lineno_display_width + 1)).join('-') + '  (---------------)';
-            rv.splice(clip_start, clip_end - clip_start + 1, intermediate_line);
+                var intermediate_line = (new Array(lineno_display_width + 1)).join(' ') +     '  (...continued...)';
+                if (i === 1) {
+                    intermediate_line += '\\n' + (new Array(lineno_display_width + 1)).join('-') + '  (---------------)';
+                }
+                rv.splice(clip_start, clip_end - clip_start + 1, intermediate_line);
+            }
         }
+
         return rv.join('\\n');
     },
 
     /**
      * helper function, used to produce a human readable description as a string, given
      * the input \`yylloc\` location object.
-     * 
+     *
      * Set \`display_range_too\` to TRUE to include the string character index position(s)
      * in the description if the \`yylloc.range\` is available.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     describeYYLLOC: function lexer_describe_yylloc(yylloc, display_range_too) {
+        "use strict";
+
         var l1 = yylloc.first_line;
         var l2 = yylloc.last_line;
         var c1 = yylloc.first_column;
@@ -11646,23 +12459,25 @@ return `{
 
     /**
      * test the lexed token: return FALSE when not a match, otherwise return token.
-     * 
+     *
      * \`match\` is supposed to be an array coming out of a regex match, i.e. \`match[0]\`
      * contains the actually matched text string.
-     * 
+     *
      * Also move the input cursor forward and update the match collectors:
-     * 
+     *
      * - \`yytext\`
      * - \`yyleng\`
      * - \`match\`
      * - \`matches\`
      * - \`yylloc\`
      * - \`offset\`
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     test_match: function lexer_test_match(match, indexed_rule) {
+        "use strict";
+
         var token,
             lines,
             backup,
@@ -11679,7 +12494,7 @@ return `{
                     first_column: this.yylloc.first_column,
                     last_column: this.yylloc.last_column,
 
-                    range: this.yylloc.range.slice(0)
+                    range: this.yylloc.range.slice()
                 },
                 yytext: this.yytext,
                 match: this.match,
@@ -11691,24 +12506,24 @@ return `{
                 _input: this._input,
                 //_signaled_error_token: this._signaled_error_token,
                 yy: this.yy,
-                conditionStack: this.conditionStack.slice(0),
+                conditionStack: this.conditionStack.slice(),
                 done: this.done
             };
         }
 
         match_str = match[0];
         match_str_len = match_str.length;
-        // if (match_str.indexOf('\\n') !== -1 || match_str.indexOf('\\r') !== -1) {
-            lines = match_str.split(/(?:\\r\\n?|\\n)/g);
-            if (lines.length > 1) {
-                this.yylineno += lines.length - 1;
 
-                this.yylloc.last_line = this.yylineno + 1;
-                this.yylloc.last_column = lines[lines.length - 1].length;
-            } else {
-                this.yylloc.last_column += match_str_len;
-            }
-        // }
+        lines = match_str.split(this.CRLF_Re);
+        if (lines.length > 1) {
+            this.yylineno += lines.length - 1;
+
+            this.yylloc.last_line = this.yylineno + 1;
+            this.yylloc.last_column = lines[lines.length - 1].length;
+        } else {
+            this.yylloc.last_column += match_str_len;
+        }
+
         this.yytext += match_str;
         this.match += match_str;
         this.matched += match_str;
@@ -11755,11 +12570,13 @@ return `{
 
     /**
      * return next match in input
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     next: function lexer_next() {
+        "use strict";
+
         if (this.done) {
             this.clear();
             return this.EOF;
@@ -11773,6 +12590,9 @@ return `{
             tempMatch,
             index;
         if (!this._more) {
+            if (!this._clear_state) {
+                this._clear_state = 1;
+            }
             this.clear();
         }
         var spec = this.__currentRuleSet__;
@@ -11786,7 +12606,7 @@ return `{
             // user-programmer bugs such as https://github.com/zaach/jison-lex/issues/19
             if (!spec || !spec.rules) {
                 var lineno_msg = '';
-                if (this.options.trackPosition) {
+                if (this.yylloc) {
                     lineno_msg = ' on line ' + (this.yylineno + 1);
                 }
                 var p = this.constructLexErrorInfo('Internal lexer engine error' + lineno_msg + ': The lex grammar programmer pushed a non-existing condition name "' + this.topState() + '"; this is a fatal error and should be reported to the application programmer team!', false);
@@ -11836,7 +12656,7 @@ return `{
             return this.EOF;
         } else {
             var lineno_msg = '';
-            if (this.options.trackPosition) {
+            if (this.yylloc) {
                 lineno_msg = ' on line ' + (this.yylineno + 1);
             }
             var p = this.constructLexErrorInfo('Lexical error' + lineno_msg + ': Unrecognized text.', this.options.lexerErrorsAreRecoverable);
@@ -11850,12 +12670,12 @@ return `{
                 // we can try to recover from a lexer error that \`parseError()\` did not 'recover' for us
                 // by moving forward at least one character at a time IFF the (user-specified?) \`parseError()\`
                 // has not consumed/modified any pending input or changed state in the error handler:
-                if (!this.matches && 
+                if (!this.matches &&
                     // and make sure the input has been modified/consumed ...
                     pendingInput === this._input &&
                     // ...or the lexer state has been modified significantly enough
                     // to merit a non-consuming error handling action right now.
-                    activeCondition === this.topState() && 
+                    activeCondition === this.topState() &&
                     conditionStackDepth === this.conditionStack.length
                 ) {
                     this.input();
@@ -11867,12 +12687,17 @@ return `{
 
     /**
      * return next match that has a token
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     lex: function lexer_lex() {
+        "use strict";
+
         var r;
+
+        //this._clear_state = 0;
+
         // allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:
         if (typeof this.pre_lex === 'function') {
             r = this.pre_lex.call(this, 0);
@@ -11902,22 +12727,75 @@ return `{
             // (also account for a userdef function which does not return any value: keep the token as is)
             r = this.post_lex.call(this, r) || r;
         }
+
+        // 1) make sure any outside interference is detected ASAP: 
+        //    these attributes are to be treated as 'const' values
+        //    once the lexer has produced them with the token (return value \`r\`).
+        // 2) make sure any subsequent \`lex()\` API invocation CANNOT
+        //    edit the \`yytext\`, etc. token attributes for the *current*
+        //    token, i.e. provide a degree of 'closure safety' so that
+        //    code like this:
+        //    
+        //        t1 = lexer.lex();
+        //        v = lexer.yytext;
+        //        l = lexer.yylloc;
+        //        t2 = lexer.lex();
+        //        assert(lexer.yytext !== v);
+        //        assert(lexer.yylloc !== l);
+        //        
+        //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+        //    these conditions.
+        this.yytext = Object.freeze(this.yytext);
+        this.matches = Object.freeze(this.matches);
+        //this.yylloc.range = Object.freeze(this.yylloc.range);
+        this.yylloc = Object.freeze(this.yylloc);
+
+        this._clear_state = 0;
+
         return r;
     },
 
     /**
-     * return next match that has a token. Identical to the \`lex()\` API but does not invoke any of the 
+     * return next match that has a token. Identical to the \`lex()\` API but does not invoke any of the
      * \`pre_lex()\` nor any of the \`post_lex()\` callbacks.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     fastLex: function lexer_fastLex() {
+        "use strict";
+
         var r;
+
+        //this._clear_state = 0;
 
         while (!r) {
             r = this.next();
         }
+
+        // 1) make sure any outside interference is detected ASAP: 
+        //    these attributes are to be treated as 'const' values
+        //    once the lexer has produced them with the token (return value \`r\`).
+        // 2) make sure any subsequent \`lex()\` API invocation CANNOT
+        //    edit the \`yytext\`, etc. token attributes for the *current*
+        //    token, i.e. provide a degree of 'closure safety' so that
+        //    code like this:
+        //    
+        //        t1 = lexer.lex();
+        //        v = lexer.yytext;
+        //        l = lexer.yylloc;
+        //        t2 = lexer.lex();
+        //        assert(lexer.yytext !== v);
+        //        assert(lexer.yylloc !== l);
+        //        
+        //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+        //    these conditions.
+        this.yytext = Object.freeze(this.yytext);
+        this.matches = Object.freeze(this.matches);
+        //this.yylloc.range = Object.freeze(this.yylloc.range);
+        this.yylloc = Object.freeze(this.yylloc);
+
+        this._clear_state = 0;
 
         return r;
     },
@@ -11926,11 +12804,13 @@ return `{
      * return info about the lexer state that can help a parser or other lexer API user to use the
      * most efficient means available. This API is provided to aid run-time performance for larger
      * systems which employ this lexer.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     canIUse: function lexer_canIUse() {
+        "use strict";
+
         var rv = {
             fastLex: !(
                 typeof this.pre_lex === 'function' ||
@@ -11949,22 +12829,26 @@ return `{
      * backwards compatible alias for \`pushState()\`;
      * the latter is symmetrical with \`popState()\` and we advise to use
      * those APIs in any modern lexer code, rather than \`begin()\`.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     begin: function lexer_begin(condition) {
+        "use strict";
+
         return this.pushState(condition);
     },
 
     /**
      * activates a new lexer condition state (pushes the new lexer
      * condition state onto the condition stack)
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     pushState: function lexer_pushState(condition) {
+        "use strict";
+
         this.conditionStack.push(condition);
         this.__currentRuleSet__ = null;
         return this;
@@ -11973,14 +12857,16 @@ return `{
     /**
      * pop the previously active lexer condition state off the condition
      * stack
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     popState: function lexer_popState() {
+        "use strict";
+
         var n = this.conditionStack.length - 1;
         if (n > 0) {
-            this.__currentRuleSet__ = null; 
+            this.__currentRuleSet__ = null;
             return this.conditionStack.pop();
         } else {
             return this.conditionStack[0];
@@ -11991,11 +12877,13 @@ return `{
      * return the currently active lexer condition state; when an index
      * argument is provided it produces the N-th previous condition state,
      * if available
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     topState: function lexer_topState(n) {
+        "use strict";
+
         n = this.conditionStack.length - 1 - Math.abs(n || 0);
         if (n >= 0) {
             return this.conditionStack[n];
@@ -12007,25 +12895,32 @@ return `{
     /**
      * (internal) determine the lexer rule set which is active for the
      * currently active lexer condition state
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     _currentRules: function lexer__currentRules() {
-        if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
-            return this.conditions[this.conditionStack[this.conditionStack.length - 1]];
+        "use strict";
+
+        var n = this.conditionStack.length - 1;
+        var state;
+        if (n >= 0) {
+            state = this.conditionStack[n];
         } else {
-            return this.conditions['INITIAL'];
+            state = 'INITIAL';
         }
+        return this.conditions[state] || this.conditions['INITIAL'];
     },
 
     /**
      * return the number of states currently on the stack
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     stateStackSize: function lexer_stateStackSize() {
+        "use strict";
+
         return this.conditionStack.length;
     }
 }`;
@@ -12191,8 +13086,8 @@ function processGrammar(dict, tokens, build_options) {
     };
 
     // only produce rule action code blocks when there are any rules at all;
-    // a "custom lexer" has ZERO rules and must be defined entirely in 
-    // other code blocks: 
+    // a "custom lexer" has ZERO rules and must be defined entirely in
+    // other code blocks:
     var code = (dict.rules ? buildActions(dict, tokens, opts) : {});
     opts.performAction = code.actions;
     opts.caseHelperInclude = code.caseHelperInclude;
@@ -12389,7 +13284,7 @@ function generateModuleBody(opt) {
         assert$1(typeof opt.options['case-insensitive'] === 'undefined');
 
         code.push('    options: ' + produceOptions(opt.options));
-  
+
 /*
         function isEmpty(code) {
             switch (typeof code) {
@@ -12399,10 +13294,10 @@ function generateModuleBody(opt) {
 
             case 'string':
 
-            } 
+            }
         }
-*/        
-        
+*/
+
         var performActionCode = String(opt.performAction);
         var simpleCaseActionClustersCode = String(opt.caseHelperInclude);
         var rulesCode = generateRegexesInitTableCode(opt);
@@ -12463,11 +13358,11 @@ function generateGenericHeaderComment() {
      *               the real "shared state" \`yy\` passed around to
      *               the rule actions, etc. is a direct reference!
      *
-     *               This "shared context" object was passed to the lexer by way of 
+     *               This "shared context" object was passed to the lexer by way of
      *               the \`lexer.setInput(str, yy)\` API before you may use it.
      *
      *               This "shared context" object is passed to the lexer action code in \`performAction()\`
-     *               so userland code in the lexer actions may communicate with the outside world 
+     *               so userland code in the lexer actions may communicate with the outside world
      *               and/or other lexer rules' actions in more or less complex ways.
      *
      *  }
@@ -12483,7 +13378,7 @@ function generateGenericHeaderComment() {
      *    performAction: function lexer__performAction(yy, yyrulenumber, YY_START),
      *
      *               The function parameters and \`this\` have the following value/meaning:
-     *               - \`this\`    : reference to the \`lexer\` instance. 
+     *               - \`this\`    : reference to the \`lexer\` instance.
      *                               \`yy_\` is an alias for \`this\` lexer instance reference used internally.
      *
      *               - \`yy\`      : a reference to the \`yy\` "shared state" object which was passed to the lexer
@@ -12517,15 +13412,15 @@ function generateGenericHeaderComment() {
      *
      *               WARNING:
      *               Lexer's additional \`args...\` parameters (via lexer's \`%parse-param\`) MAY conflict with
-     *               any attributes already added to \`yy\` by the **parser** or the jison run-time; 
-     *               when such a collision is detected an exception is thrown to prevent the generated run-time 
-     *               from silently accepting this confusing and potentially hazardous situation! 
+     *               any attributes already added to \`yy\` by the **parser** or the jison run-time;
+     *               when such a collision is detected an exception is thrown to prevent the generated run-time
+     *               from silently accepting this confusing and potentially hazardous situation!
      *
      *    cleanupAfterLex: function(do_not_nuke_errorinfos),
      *               Helper function.
      *
      *               This helper API is invoked when the **parse process** has completed: it is the responsibility
-     *               of the **parser** (or the calling userland code) to invoke this method once cleanup is desired. 
+     *               of the **parser** (or the calling userland code) to invoke this method once cleanup is desired.
      *
      *               This helper may be invoked by user code to ensure the internal lexer gets properly garbage collected.
      *
@@ -12636,7 +13531,7 @@ function generateGenericHeaderComment() {
      * These options are available:
      *
      * (Options are permanent.)
-     *  
+     *
      *  yy: {
      *      parseError: function(str, hash, ExceptionClass)
      *                 optional: overrides the default \`parseError\` function.
@@ -12716,7 +13611,7 @@ function generateModule(opt) {
 
     var src = out.join('\n') + '\n';
     src = stripUnusedLexerCode(src, opt);
-    opt.exportSourceCode.all = src;   
+    opt.exportSourceCode.all = src;
     return src;
 }
 
@@ -12739,7 +13634,7 @@ function generateAMDModule(opt) {
 
     var src = out.join('\n') + '\n';
     src = stripUnusedLexerCode(src, opt);
-    opt.exportSourceCode.all = src;   
+    opt.exportSourceCode.all = src;
     return src;
 }
 
@@ -12772,7 +13667,7 @@ function generateESModule(opt) {
 
     var src = out.join('\n') + '\n';
     src = stripUnusedLexerCode(src, opt);
-    opt.exportSourceCode.all = src;   
+    opt.exportSourceCode.all = src;
     return src;
 }
 
@@ -12802,7 +13697,7 @@ function generateCommonJSModule(opt) {
 
     var src = out.join('\n') + '\n';
     src = stripUnusedLexerCode(src, opt);
-    opt.exportSourceCode.all = src;   
+    opt.exportSourceCode.all = src;
     return src;
 }
 
@@ -16125,7 +17020,10 @@ function transformProduction(id, production, grammar) {
             opts = handle[2];
             handle = handle[0];
         }
-        var expressions = parser$2.parse(handle);
+        var expressions = handle;
+        if (typeof expressions === 'string') {
+            expressions = parser$2.parse(handle);
+        }
 
         var list = transformExpressionList(expressions, transform_opts);
 
@@ -16277,18 +17175,25 @@ function deepClone(from, sub) {
         return from;
     }
 
-    for (var i = 0, len = ref_list.length; i < len; i++) {
-        if (ref_list[i] === from) {
-            throw new Error('[Circular/Xref:' + ref_names[i] + ']');   // circular or cross reference
-        }
+    var idx = ref_list.indexOf(from);
+    if (idx >= 0) {
+        throw new Error('[Circular/Xref:' + ref_names[i] + ']');   // circular or cross reference
     }
     ref_list.push(from);
     ref_names.push(sub);
-    sub += '.';
 
-    var to = new from.constructor();
-    for (var name in from) {
-        to[name] = deepClone(from[name], sub + name);
+    if (from.constructor === Array) {
+        var to = from.slice();
+        for (var i = 0, len = to.length; i < len; i++) {
+            to[i] = deepClone(from[i], sub + '[' + i + ']');
+        }
+    } else {
+        sub += '.';
+
+        var to = new from.constructor();
+        for (var name in from) {
+            to[name] = deepClone(from[name], sub + name);
+        }
     }
     return to;
 }
@@ -16536,145 +17441,174 @@ options: {
 symbols_: {
   "$accept": 0,
   "$end": 1,
-  "%%": 14,
-  "(": 7,
-  ")": 8,
-  "*": 9,
-  "+": 11,
-  ":": 5,
+  "%%": 13,
+  "(": 6,
+  ")": 7,
+  "*": 8,
+  "+": 10,
+  ",": 11,
+  ":": 3,
   ";": 4,
-  "=": 3,
-  "?": 10,
-  "ACTION": 15,
-  "ACTION_BODY": 43,
-  "ALIAS": 39,
-  "ARROW_ACTION": 42,
-  "CODE": 46,
-  "DEBUG": 19,
-  "EBNF": 20,
+  "=": 12,
+  "?": 9,
+  "ACTION_BODY": 53,
+  "ACTION_END": 22,
+  "ACTION_START": 24,
+  "ACTION_START_AT_SOL": 21,
+  "ALIAS": 51,
+  "ARROW_ACTION_START": 46,
+  "BRACKET_MISSING": 55,
+  "BRACKET_SURPLUS": 56,
+  "CODE": 32,
+  "DEBUG": 27,
+  "DUMMY": 25,
+  "DUMMY3": 50,
+  "DUMMY5": 47,
+  "DUMMY8": 45,
+  "DUMMY9": 14,
+  "EBNF": 28,
   "EOF": 1,
-  "EOF_ID": 40,
-  "EPSILON": 38,
-  "ID": 24,
-  "IMPORT": 22,
-  "INCLUDE": 44,
-  "INIT_CODE": 23,
-  "INTEGER": 37,
-  "LEFT": 33,
+  "EOF_ID": 52,
+  "EPSILON": 48,
+  "FLEX_ARRAY_MODE": 19,
+  "FLEX_POINTER_MODE": 18,
+  "ID": 16,
+  "IMPORT": 31,
+  "INCLUDE": 33,
+  "INCLUDE_PLACEMENT_ERROR": 54,
+  "INTEGER": 42,
+  "LEFT": 38,
   "LEX_BLOCK": 17,
-  "NAME": 25,
-  "NONASSOC": 35,
-  "OPTIONS": 27,
-  "OPTIONS_END": 28,
-  "OPTION_STRING_VALUE": 29,
-  "OPTION_VALUE": 30,
-  "PARSER_TYPE": 32,
-  "PARSE_PARAM": 31,
-  "PATH": 45,
-  "PREC": 41,
-  "RIGHT": 34,
-  "START": 16,
-  "STRING": 26,
-  "TOKEN": 18,
-  "TOKEN_TYPE": 36,
-  "UNKNOWN_DECL": 21,
-  "action": 85,
-  "action_body": 86,
-  "action_comments_body": 87,
-  "action_ne": 84,
-  "associativity": 61,
-  "declaration": 51,
-  "declaration_list": 50,
+  "NONASSOC": 40,
+  "ON_ERROR_RECOVERY_REDUCE": 35,
+  "ON_ERROR_RECOVERY_SHIFT": 34,
+  "OPTIONS": 30,
+  "OPTIONS_END": 26,
+  "OPTION_STRING": 58,
+  "OPTION_VALUE": 59,
+  "PARSER_TYPE": 37,
+  "PARSE_PARAM": 36,
+  "PREC": 49,
+  "RIGHT": 39,
+  "START": 15,
+  "STRING_LIT": 43,
+  "TOKEN": 20,
+  "TOKEN_TYPE": 41,
+  "TRAILING_CODE_CHUNK": 60,
+  "UNKNOWN_DECL": 29,
+  "UNTERMINATED_ACTION_BLOCK": 23,
+  "UNTERMINATED_STRING_ERROR": 57,
+  "action": 97,
+  "associativity": 75,
+  "declaration": 64,
+  "declaration_list": 63,
+  "epilogue": 103,
+  "epilogue_chunk": 105,
+  "epilogue_chunks": 104,
   "error": 2,
-  "expression": 79,
-  "extra_parser_module_code": 88,
-  "full_token_definitions": 63,
-  "grammar": 69,
-  "handle": 76,
-  "handle_action": 75,
-  "handle_list": 74,
-  "handle_sublist": 77,
-  "id": 83,
-  "id_list": 68,
-  "import_name": 53,
-  "import_path": 54,
-  "include_macro_code": 89,
-  "init_code_name": 52,
-  "module_code_chunk": 90,
-  "one_full_token": 64,
-  "operator": 60,
-  "option": 57,
-  "option_list": 56,
-  "optional_action_header_block": 49,
-  "optional_end_block": 48,
-  "optional_module_code_chunk": 91,
-  "optional_production_description": 73,
-  "optional_token_type": 65,
-  "options": 55,
-  "parse_params": 58,
-  "parser_type": 59,
-  "prec": 81,
-  "production": 71,
-  "production_id": 72,
-  "production_list": 70,
-  "spec": 47,
-  "suffix": 80,
-  "suffixed_expression": 78,
-  "symbol": 82,
-  "token_description": 67,
-  "token_list": 62,
-  "token_value": 66,
-  "{": 12,
-  "|": 6,
-  "}": 13
+  "expression": 91,
+  "full_token_definitions": 76,
+  "grammar": 81,
+  "handle": 88,
+  "handle_action": 87,
+  "handle_list": 86,
+  "handle_sublist": 89,
+  "id_list": 96,
+  "import_keyword": 66,
+  "include_keyword": 68,
+  "include_macro_code": 106,
+  "init": 62,
+  "init_code_keyword": 67,
+  "on_error_recovery_keyword": 69,
+  "on_error_recovery_statement": 98,
+  "one_full_token": 77,
+  "operator": 74,
+  "option": 100,
+  "option_keyword": 65,
+  "option_list": 99,
+  "option_name": 101,
+  "option_value": 102,
+  "optional_token_type": 78,
+  "parse_params": 72,
+  "parser_type": 73,
+  "prec": 93,
+  "production": 83,
+  "production_description": 85,
+  "production_id": 84,
+  "production_list": 82,
+  "setup_action_block": 44,
+  "spec": 61,
+  "start_epilogue_marker": 71,
+  "start_productions_marker": 70,
+  "suffix": 92,
+  "suffixed_expression": 90,
+  "symbol": 95,
+  "symbol_list": 94,
+  "token_description": 80,
+  "token_value": 79,
+  "|": 5
 },
 terminals_: {
   1: "EOF",
   2: "error",
-  3: "=",
+  3: ":",
   4: ";",
-  5: ":",
-  6: "|",
-  7: "(",
-  8: ")",
-  9: "*",
-  10: "?",
-  11: "+",
-  12: "{",
-  13: "}",
-  14: "%%",
-  15: "ACTION",
-  16: "START",
+  5: "|",
+  6: "(",
+  7: ")",
+  8: "*",
+  9: "?",
+  10: "+",
+  11: ",",
+  12: "=",
+  13: "%%",
+  14: "DUMMY9",
+  15: "START",
+  16: "ID",
   17: "LEX_BLOCK",
-  18: "TOKEN",
-  19: "DEBUG",
-  20: "EBNF",
-  21: "UNKNOWN_DECL",
-  22: "IMPORT",
-  23: "INIT_CODE",
-  24: "ID",
-  25: "NAME",
-  26: "STRING",
-  27: "OPTIONS",
-  28: "OPTIONS_END",
-  29: "OPTION_STRING_VALUE",
-  30: "OPTION_VALUE",
-  31: "PARSE_PARAM",
-  32: "PARSER_TYPE",
-  33: "LEFT",
-  34: "RIGHT",
-  35: "NONASSOC",
-  36: "TOKEN_TYPE",
-  37: "INTEGER",
-  38: "EPSILON",
-  39: "ALIAS",
-  40: "EOF_ID",
-  41: "PREC",
-  42: "ARROW_ACTION",
-  43: "ACTION_BODY",
-  44: "INCLUDE",
-  45: "PATH",
-  46: "CODE"
+  18: "FLEX_POINTER_MODE",
+  19: "FLEX_ARRAY_MODE",
+  20: "TOKEN",
+  21: "ACTION_START_AT_SOL",
+  22: "ACTION_END",
+  23: "UNTERMINATED_ACTION_BLOCK",
+  24: "ACTION_START",
+  25: "DUMMY",
+  26: "OPTIONS_END",
+  27: "DEBUG",
+  28: "EBNF",
+  29: "UNKNOWN_DECL",
+  30: "OPTIONS",
+  31: "IMPORT",
+  32: "CODE",
+  33: "INCLUDE",
+  34: "ON_ERROR_RECOVERY_SHIFT",
+  35: "ON_ERROR_RECOVERY_REDUCE",
+  36: "PARSE_PARAM",
+  37: "PARSER_TYPE",
+  38: "LEFT",
+  39: "RIGHT",
+  40: "NONASSOC",
+  41: "TOKEN_TYPE",
+  42: "INTEGER",
+  43: "STRING_LIT",
+  44: "setup_action_block",
+  45: "DUMMY8",
+  46: "ARROW_ACTION_START",
+  47: "DUMMY5",
+  48: "EPSILON",
+  49: "PREC",
+  50: "DUMMY3",
+  51: "ALIAS",
+  52: "EOF_ID",
+  53: "ACTION_BODY",
+  54: "INCLUDE_PLACEMENT_ERROR",
+  55: "BRACKET_MISSING",
+  56: "BRACKET_SURPLUS",
+  57: "UNTERMINATED_STRING_ERROR",
+  58: "OPTION_STRING",
+  59: "OPTION_VALUE",
+  60: "TRAILING_CODE_CHUNK"
 },
 TERROR: 2,
     EOF: 1,
@@ -16781,168 +17715,168 @@ TERROR: 2,
 productions_: bp$2({
   pop: u$2([
   s$2,
-  [47, 3],
-  48,
-  48,
-  s$2,
-  [49, 3],
-  s$2,
-  [50, 3],
-  s$2,
-  [51, 20],
-  s$2,
-  [52, 3],
-  53,
-  53,
-  54,
-  54,
-  s$2,
-  [55, 3],
-  56,
-  56,
-  s$2,
-  [57, 6],
-  58,
-  58,
-  59,
-  59,
-  60,
-  60,
-  s$2,
-  [61, 3],
-  62,
+  [61, 4],
   62,
   63,
   63,
   s$2,
-  [64, 3],
-  65,
+  [64, 27],
   s$2,
-  [65, 4, 1],
-  68,
-  69,
-  70,
-  70,
+  [65, 5, 1],
   s$2,
-  [71, 3],
-  72,
+  [69, 4, 1],
   72,
   73,
   73,
-  s$2,
-  [74, 4],
+  74,
+  74,
   s$2,
   [75, 3],
   76,
   76,
-  77,
-  77,
+  s$2,
+  [77, 3],
   78,
-  78,
   s$2,
-  [79, 5],
+  [78, 4, 1],
+  81,
   s$2,
-  [80, 4],
+  [82, 6],
   s$2,
-  [81, 3],
-  82,
-  82,
-  83,
+  [83, 5],
   s$2,
-  [84, 4],
+  [84, 3],
+  85,
   s$2,
-  [85, 3],
+  [86, 4],
   s$2,
-  [86, 5],
-  87,
-  87,
+  [87, 13],
   88,
   88,
   89,
   89,
+  90,
+  90,
   s$2,
-  [90, 3],
-  91,
-  91
+  [91, 4],
+  s$2,
+  [92, 4],
+  s$2,
+  [93, 3],
+  94,
+  94,
+  95,
+  95,
+  96,
+  96,
+  s$2,
+  [97, 7],
+  98,
+  98,
+  s$2,
+  [99, 3],
+  s$2,
+  [100, 4],
+  101,
+  101,
+  102,
+  102,
+  s$2,
+  [103, 3],
+  s$2,
+  [104, 3],
+  s$2,
+  [105, 5],
+  106,
+  106
 ]),
   rule: u$2([
   5,
   5,
-  3,
+  4,
+  4,
   0,
   2,
   0,
+  2,
+  2,
   s$2,
-  [2, 3],
-  c$2,
-  [4, 3],
+  [1, 4],
+  2,
+  2,
+  3,
   1,
-  1,
+  2,
+  3,
   c$2,
+  [12, 4],
+  3,
+  c$2,
+  [16, 4],
+  3,
+  2,
+  6,
+  4,
+  3,
+  s$2,
+  [1, 9],
+  s$2,
+  [2, 6],
+  c$2,
+  [38, 6],
+  2,
+  2,
+  0,
+  c$2,
+  [18, 8],
+  s$2,
+  [1, 3],
+  4,
+  4,
+  s$2,
   [3, 3],
-  s$2,
-  [1, 6],
-  s$2,
-  [3, 5],
-  s$2,
-  [2, 3],
-  c$2,
-  [15, 9],
-  c$2,
-  [11, 4],
-  c$2,
-  [20, 7],
-  s$2,
-  [2, 4],
-  s$2,
-  [1, 3],
   2,
   1,
-  2,
-  2,
-  c$2,
-  [15, 3],
-  0,
-  c$2,
-  [11, 7],
-  c$2,
-  [36, 4],
-  3,
   3,
   1,
-  0,
   3,
-  c$2,
-  [39, 4],
-  c$2,
-  [80, 4],
-  c$2,
-  [9, 3],
-  c$2,
-  [39, 4],
-  3,
-  3,
-  c$2,
-  [34, 5],
-  c$2,
-  [40, 5],
-  c$2,
-  [32, 3],
-  s$2,
-  [1, 3],
-  0,
-  0,
   1,
+  3,
+  3,
   5,
+  5,
+  2,
   4,
-  4,
+  1,
   c$2,
-  [53, 3],
+  [31, 3],
   c$2,
-  [85, 4],
+  [12, 4],
   c$2,
-  [35, 3],
-  0
+  [21, 6],
+  c$2,
+  [79, 4],
+  3,
+  c$2,
+  [48, 6],
+  0,
+  c$2,
+  [64, 5],
+  c$2,
+  [75, 7],
+  0,
+  c$2,
+  [55, 3],
+  c$2,
+  [28, 5],
+  c$2,
+  [124, 5],
+  c$2,
+  [21, 5],
+  c$2,
+  [13, 6],
+  3,
+  2
 ])
 }),
 performAction: function parser__PerformAction(yyloc, yystate /* action[1] */, yysp, yyvstack, yylstack) {
@@ -16954,7 +17888,11 @@ performAction: function parser__PerformAction(yyloc, yystate /* action[1] */, yy
           var yyparser = yy.parser;
           var yylexer = yy.lexer;
 
-          
+          const OPTION_DOES_NOT_ACCEPT_VALUE = 0x0001;    
+    const OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES = 0x0002;
+    const OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME = 0x0004;
+    const OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS = 0x0008;
+    const OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS = 0x0010;
 
           switch (yystate) {
 case 0:
@@ -16967,21 +17905,35 @@ case 0:
     break;
 
 case 1:
-    /*! Production::    spec : declaration_list "%%" grammar optional_end_block EOF */
+    /*! Production::    spec : init declaration_list grammar epilogue EOF */
 
     // default action (generated by JISON mode classic/merge :: 5,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yyparser.yyMergeLocationInfo(yysp - 4, yysp);
     // END of default action (generated by JISON mode classic/merge :: 5,VT,VA,VU,-,LT,LA,-,-)
     
     
-    this.$ = yyvstack[yysp - 4];
-    if (yyvstack[yysp - 1].trim() !== '') {
-        yy.addDeclaration(this.$, { include: yyvstack[yysp - 1] });
+    this.$ = yyvstack[yysp - 3];
+    
+    // transform ebnf to bnf if necessary
+    if (ebnf) {
+        this.$.ebnf = yyvstack[yysp - 2].grammar;        // keep the original source EBNF around for possible pretty-printing & AST exports.
+        this.$.bnf = transform(yyvstack[yysp - 2].grammar);
     }
-    return extend(this.$, yyvstack[yysp - 2]);
+    else {
+        this.$.bnf = yyvstack[yysp - 2].grammar;
+    }
+    
+    yy.addDeclaration(this.$, yyvstack[yysp - 2]);
+    
+    // source code has already been checked!
+    var srcCode = yyvstack[yysp - 1];
+    if (srcCode) {
+        yy.addDeclaration(this.$, { include: srcCode });
+    }
+    break;
 
 case 2:
-    /*! Production::    spec : declaration_list "%%" grammar error EOF */
+    /*! Production::    spec : init declaration_list grammar error EOF */
 
     // default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-):
     this.$ = yyvstack[yysp - 4];
@@ -16990,72 +17942,89 @@ case 2:
     
     
     yyparser.yyError(rmCommonWS$3`
+        illegal input in the parser grammar productions definition section.
+    
         Maybe you did not correctly separate trailing code from the grammar rule set with a '%%' marker on an otherwise empty line?
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
+    
+          Technical error report:
+        ${yyvstack[yysp - 1].errStr}
     `);
     break;
 
 case 3:
-    /*! Production::    spec : declaration_list error EOF */
+    /*! Production::    spec : init declaration_list error "%%" */
 
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp - 2];
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+    // default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 3];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yyparser.yyError(rmCommonWS$3`
+        illegal input in the parser header section.
+    
+        Maybe you did not correctly separate the parse 'header section' (token definitions, options, lexer spec, etc.) from the grammar rule set with a '%%' on an otherwise empty line?
+        It can also be that the error is triggered by the last ${yy.__options_category_description__} statement 
+        just above, so make sure to check the surroundings of the error location.
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
+    
+          Technical error report:
+        ${yyvstack[yysp - 1].errStr}
+    `);
+    break;
+
+case 4:
+    /*! Production::    spec : init DUMMY9 error EOF */
+
+    // default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 3];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-)
     
     
     yyparser.yyError(rmCommonWS$3`
         Maybe you did not correctly separate the parse 'header section' (token definitions, options, lexer spec, etc.) from the grammar rule set with a '%%' on an otherwise empty line?
     
           Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
+        ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 4])}
+    
+          Technical error report:
+        ${yyvstack[yysp - 1].errStr}
     `);
     break;
 
-case 4:
-    /*! Production::    optional_end_block : %epsilon */
-case 100:
-    /*! Production::    suffix : %epsilon */
-case 116:
-    /*! Production::    action : %epsilon */
-case 117:
-    /*! Production::    action_body : %epsilon */
-case 132:
-    /*! Production::    optional_module_code_chunk : %epsilon */
+case 5:
+    /*! Production::    init : %epsilon */
 
-    // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
+    // default action (generated by JISON mode classic/merge :: 0,VT,VA,-,-,LT,LA,-,-):
+    this.$ = undefined;
     this._$ = yyparser.yyMergeLocationInfo(null, null, null, null, true);
-    // END of default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-)
+    // END of default action (generated by JISON mode classic/merge :: 0,VT,VA,-,-,LT,LA,-,-)
     
     
-    this.$ = '';
+    if (!yy.options) yy.options = {};
+    yy.__options_flags__ = 0;
+    yy.__options_category_description__ = '???';
     break;
 
-case 5:
-    /*! Production::    optional_end_block : "%%" extra_parser_module_code */
+case 6:
+    /*! Production::    declaration_list : declaration_list declaration */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
     // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
     
     
-    var rv = checkActionBlock$2(yyvstack[yysp], yylstack[yysp]);
-    if (rv) {
-        yyparser.yyError(rmCommonWS$3`
-            The extra parser module code section (a.k.a. 'epilogue') does not compile: ${rv}
-    
-              Erroneous area:
-            ${yylexer.prettyPrintRange(yylstack[yysp])}
-        `);
-    }
-    this.$ = yyvstack[yysp];
+    this.$ = yyvstack[yysp - 1]; 
+    yy.addDeclaration(this.$, yyvstack[yysp]);
     break;
 
-case 6:
-    /*! Production::    optional_action_header_block : %epsilon */
-case 10:
+case 7:
     /*! Production::    declaration_list : %epsilon */
 
     // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
@@ -17066,60 +18035,8 @@ case 10:
     this.$ = {};
     break;
 
-case 7:
-    /*! Production::    optional_action_header_block : optional_action_header_block ACTION */
 case 8:
-    /*! Production::    optional_action_header_block : optional_action_header_block include_macro_code */
-
-    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = yyvstack[yysp - 1];
-    var rv = checkActionBlock$2(yyvstack[yysp], yylstack[yysp]);
-    if (rv) {
-        yyparser.yyError(rmCommonWS$3`
-            action header code block does not compile: ${rv}
-    
-              Erroneous area:
-            ${yylexer.prettyPrintRange(yylstack[yysp])}
-        `);
-    }
-    yy.addDeclaration(this.$, { actionInclude: yyvstack[yysp] });
-    break;
-
-case 9:
-    /*! Production::    declaration_list : declaration_list declaration */
-
-    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = yyvstack[yysp - 1]; yy.addDeclaration(this.$, yyvstack[yysp]);
-    break;
-
-case 11:
-    /*! Production::    declaration_list : declaration_list error */
-
-    // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp - 1];
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
-    
-    
-    // TODO ...
-    yyparser.yyError(rmCommonWS$3`
-        declaration list error?
-    
-          Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
-    `);
-    break;
-
-case 12:
-    /*! Production::    declaration : START id */
+    /*! Production::    declaration : START ID */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
@@ -17129,240 +18046,7 @@ case 12:
     this.$ = {start: yyvstack[yysp]};
     break;
 
-case 13:
-    /*! Production::    declaration : LEX_BLOCK */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = {lex: {text: yyvstack[yysp], position: yylstack[yysp]}};
-    break;
-
-case 14:
-    /*! Production::    declaration : operator */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = {operator: yyvstack[yysp]};
-    break;
-
-case 15:
-    /*! Production::    declaration : TOKEN full_token_definitions */
-
-    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = {token_list: yyvstack[yysp]};
-    break;
-
-case 16:
-    /*! Production::    declaration : ACTION */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    var rv = checkActionBlock$2(yyvstack[yysp], yylstack[yysp]);
-    if (rv) {
-        yyparser.yyError(rmCommonWS$3`
-            action code block does not compile: ${rv}
-    
-              Erroneous area:
-            ${yylexer.prettyPrintRange(yylstack[yysp])}
-        `);
-    }
-    this.$ = {include: yyvstack[yysp]};
-    break;
-
-case 17:
-    /*! Production::    declaration : include_macro_code */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    var rv = checkActionBlock$2(yyvstack[yysp], yylstack[yysp]);
-    if (rv) {
-        yyparser.yyError(rmCommonWS$3`
-            action header code block does not compile: ${rv}
-    
-              Erroneous area:
-            ${yylexer.prettyPrintRange(yylstack[yysp])}
-        `);
-    }
-    this.$ = {include: yyvstack[yysp]};
-    break;
-
-case 18:
-    /*! Production::    declaration : parse_params */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = {parseParams: yyvstack[yysp]};
-    break;
-
-case 19:
-    /*! Production::    declaration : parser_type */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = {parserType: yyvstack[yysp]};
-    break;
-
-case 20:
-    /*! Production::    declaration : options */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = {options: yyvstack[yysp]};
-    break;
-
-case 21:
-    /*! Production::    declaration : DEBUG */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = {options: [['debug', true]]};
-    break;
-
-case 22:
-    /*! Production::    declaration : EBNF */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    ebnf = true; 
-    this.$ = {options: [['ebnf', true]]};
-    break;
-
-case 23:
-    /*! Production::    declaration : UNKNOWN_DECL */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = {unknownDecl: yyvstack[yysp]};
-    break;
-
-case 24:
-    /*! Production::    declaration : IMPORT import_name import_path */
-
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = {imports: {name: yyvstack[yysp - 1], path: yyvstack[yysp]}};
-    break;
-
-case 25:
-    /*! Production::    declaration : IMPORT import_name error */
-
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp - 2];
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
-    
-    
-    yyparser.yyError(rmCommonWS$3`
-        You did not specify a legal file path for the '%import' initialization code statement, which must have the format:
-    
-            %import qualifier_name file_path
-    
-          Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
-    `);
-    break;
-
-case 26:
-    /*! Production::    declaration : IMPORT error import_path */
-
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp - 2];
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
-    
-    
-    yyparser.yyError(rmCommonWS$3`
-        Each '%import'-ed initialization code section must be qualified by a name, e.g. 'required' before the import path itself:
-    
-            %import qualifier_name file_path
-    
-          Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
-    `);
-    break;
-
-case 27:
-    /*! Production::    declaration : INIT_CODE init_code_name action_ne */
-
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    var rv = checkActionBlock$2(yyvstack[yysp], yylstack[yysp]);
-    if (rv) {
-        yyparser.yyError(rmCommonWS$3`
-            %code "${$init_code_name}" initialization section action code block does not compile: ${rv}
-    
-              Erroneous area:
-            ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
-        `);
-    }
-    this.$ = {
-        initCode: {
-            qualifier: yyvstack[yysp - 1],
-            include: yyvstack[yysp]
-        }
-    };
-    break;
-
-case 28:
-    /*! Production::    declaration : INIT_CODE error action_ne */
-
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp - 2];
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
-    
-    
-    yyparser.yyError(rmCommonWS$3`
-        Each '%code' initialization code section must be qualified by a name, e.g. 'required' before the action code itself:
-    
-            %code qualifier_name {action code}
-    
-          Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2], yylstack[yysp])}
-    `);
-    break;
-
-case 29:
+case 9:
     /*! Production::    declaration : START error */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
@@ -17377,10 +18061,75 @@ case 29:
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);
     break;
 
-case 30:
+case 10:
+    /*! Production::    declaration : LEX_BLOCK */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = {lex: {text: yyvstack[yysp], position: yylstack[yysp]}};
+    break;
+
+case 11:
+    /*! Production::    declaration : FLEX_POINTER_MODE */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    // This is the only mode we do support in JISON...
+    this.$ = null;
+    break;
+
+case 12:
+    /*! Production::    declaration : FLEX_ARRAY_MODE */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    yyparser.yyError(rmCommonWS$3`
+        JISON does not support the %array lexing mode.
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp])}
+    `);
+    this.$ = null;
+    break;
+
+case 13:
+    /*! Production::    declaration : operator */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = {operator: yyvstack[yysp]};
+    break;
+
+case 14:
+    /*! Production::    declaration : TOKEN full_token_definitions */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = {token_list: yyvstack[yysp]};
+    break;
+
+case 15:
     /*! Production::    declaration : TOKEN error */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
@@ -17395,103 +18144,364 @@ case 30:
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    break;
+
+case 16:
+    /*! Production::    declaration : ACTION_START_AT_SOL action ACTION_END */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    var srcCode = trimActionCode$1(yyvstack[yysp - 1] + yyvstack[yysp], yyvstack[yysp - 2]);
+    if (srcCode) {
+        var rv = checkActionBlock$2(srcCode, yylstack[yysp - 1]);
+        if (rv) {
+            yyparser.yyError(rmCommonWS$3`
+                The '%{...%}' grammar setup action code section does not compile: ${rv}
+    
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
+            `);
+        }
+        this.$ = {include: srcCode}; 
+    }
+    this.$ = null;
+    break;
+
+case 17:
+    /*! Production::    declaration : UNTERMINATED_ACTION_BLOCK */
+case 147:
+    /*! Production::    epilogue_chunk : UNTERMINATED_ACTION_BLOCK */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    // The issue has already been reported by the lexer. No need to repeat
+    // ourselves with another error report from here.
+    this.$ = null;
+    break;
+
+case 18:
+    /*! Production::    declaration : ACTION_START_AT_SOL error */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    var start_marker = yyvstack[yysp - 1].trim();
+    var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
+    yyparser.yyError(rmCommonWS$3`
+        There's very probably a problem with this '%{...%}' parser setup action code section.
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    this.$ = null;
+    break;
+
+case 19:
+    /*! Production::    declaration : ACTION_START include_macro_code ACTION_END */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = {include: yyvstack[yysp - 1] + yyvstack[yysp]};
+    break;
+
+case 20:
+    /*! Production::    declaration : ACTION_START error */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    var start_marker = yyvstack[yysp - 1].trim();
+    var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
+    yyparser.yyError(rmCommonWS$3`
+        The '%{...%}' parser setup action code section MUST have its action
+        block start marker (\`%{\`${marker_msg}) positioned 
+        at the start of a line to be accepted: *indented* action code blocks
+        (such as this one) are always related to an immediately preceding parser spec item, 
+        e.g. a grammar production rule.
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    this.$ = null;
+    break;
+
+case 21:
+    /*! Production::    declaration : ACTION_START DUMMY */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    var start_marker = yyvstack[yysp - 1].trim();
+    var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
+    yyparser.yyError(rmCommonWS$3`
+        The '%{...%}' lexer setup action code section MUST have its action
+        block start marker (\`%{\`${marker_msg}) positioned 
+        at the start of a line to be accepted: *indented* action code blocks
+        (such as this one) are always related to an immediately preceding lexer spec item, 
+        e.g. a lexer match rule expression (see 'lexer rules').
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp - 1])}
+    `);
+    this.$ = null;
+    break;
+
+case 22:
+    /*! Production::    declaration : parse_params */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = {parseParams: yyvstack[yysp]};
+    break;
+
+case 23:
+    /*! Production::    declaration : parser_type */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = {parserType: yyvstack[yysp]};
+    break;
+
+case 24:
+    /*! Production::    declaration : option_keyword option_list OPTIONS_END */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = {options: yyvstack[yysp - 1]};
+    break;
+
+case 25:
+    /*! Production::    declaration : option_keyword error */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 1];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yyparser.yyError(rmCommonWS$3`
+        ill defined %options line.
+    
+          Erroneous code:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    break;
+
+case 26:
+    /*! Production::    declaration : DEBUG */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = {options: [['debug', true]]};
+    break;
+
+case 27:
+    /*! Production::    declaration : EBNF */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    ebnf = true; 
+    this.$ = {options: [['ebnf', true]]};
+    break;
+
+case 28:
+    /*! Production::    declaration : UNKNOWN_DECL */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = {unknownDecl: yyvstack[yysp]};
+    break;
+
+case 29:
+    /*! Production::    declaration : import_keyword option_list OPTIONS_END */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    // check if there are two unvalued options: 'name path'
+    var lst = yyvstack[yysp - 1];
+    var len = lst.length;
+    var body;
+    if (len === 2 && lst[0][1] === true && lst[1][1] === true) {
+        // `name path`:
+        body = {
+            name: lst[0][0],
+            path: lst[1][0]
+        };
+    } else if (len <= 2) {
+        yyparser.yyError(rmCommonWS$3`
+            You did not specify a legal qualifier name and/or file path for the '%import' statement, which must have the format:
+                %import qualifier_name file_path
+    
+              Erroneous code:
+            ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
+        `);
+    } else {
+        yyparser.yyError(rmCommonWS$3`
+            You did specify too many attributes for the '%import' statement, which must have the format:
+                %import qualifier_name file_path
+    
+              Erroneous code:
+            ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
+        `);
+    }
+    
+    this.$ = {
+        imports: body
+    };
+    break;
+
+case 30:
+    /*! Production::    declaration : import_keyword error */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 1];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yyparser.yyError(rmCommonWS$3`
+        %import name or source filename missing maybe?
+    
+        Note: each '%import' must be qualified by a name, e.g. 'required' before the import path itself:
+            %import qualifier_name file_path
+    
+          Erroneous code:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);
     break;
 
 case 31:
-    /*! Production::    declaration : IMPORT error */
+    /*! Production::    declaration : init_code_keyword option_list ACTION_START action ACTION_END OPTIONS_END */
 
-    // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp - 1];
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+    // default action (generated by JISON mode classic/merge :: 6,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 5, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 6,VT,VA,VU,-,LT,LA,-,-)
     
     
-    // TODO ...
-    yyparser.yyError(rmCommonWS$3`
-        %import name or source filename missing maybe?
+    // check there's only 1 option which is an identifier
+    var lst = yyvstack[yysp - 4];
+    var len = lst.length;
+    var name;
+    if (len === 1 && lst[0][1] === true) {
+        // `name`:
+        name = lst[0][0];
+    } else if (len <= 1) {
+        yyparser.yyError(rmCommonWS$3`
+            You did not specify a legal qualifier name for the '%code' initialization code statement, which must have the format:
+                %code qualifier_name %{...code...%}
     
-          Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
-    `);
+              Erroneous code:
+            ${yylexer.prettyPrintRange(yylstack[yysp - 4], yylstack[yysp - 5])}
+        `);
+    } else {
+        yyparser.yyError(rmCommonWS$3`
+            You did specify too many attributes for the '%code' initialization code statement, which must have the format:
+                %code qualifier_name %{...code...%}
+    
+              Erroneous code:
+            ${yylexer.prettyPrintRange(yylstack[yysp - 4], yylstack[yysp - 5])}
+        `);
+    }
+    
+    var srcCode = trimActionCode$1(yyvstack[yysp - 2] + yyvstack[yysp - 1], yyvstack[yysp - 3]);
+    var rv = checkActionBlock$2(srcCode, yylstack[yysp - 2]);
+    if (rv) {
+        yyparser.yyError(rmCommonWS$3`
+            The '%code ${name}' initialization code section does not compile: ${rv}
+    
+              Erroneous area:
+            ${yylexer.prettyPrintRange(yylstack[yysp - 2], yylstack[yysp - 5])}
+        `);
+    }
+    this.$ = {
+        codeSection: {
+          qualifier: name,
+          include: srcCode
+        }
+    };
     break;
 
 case 32:
-    /*! Production::    init_code_name : ID */
+    /*! Production::    declaration : init_code_keyword option_list ACTION_START error */
+
+    // default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 3];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    var start_marker = yyvstack[yysp - 1].trim();
+    var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
+    var end_marker_msg = marker_msg.replace(/\{/g, '}');
+    yyparser.yyError(rmCommonWS$3`
+        The '%code ID %{...%\}' initialization code section must be properly 
+        wrapped in block start markers (\`%{\`${marker_msg}) 
+        and matching end markers (\`%}\`${end_marker_msg}). Expected format:
+    
+            %code qualifier_name {action code}
+    
+          Erroneous code:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    break;
+
 case 33:
-    /*! Production::    init_code_name : NAME */
-case 34:
-    /*! Production::    init_code_name : STRING */
-case 35:
-    /*! Production::    import_name : ID */
-case 36:
-    /*! Production::    import_name : STRING */
-case 37:
-    /*! Production::    import_path : ID */
-case 38:
-    /*! Production::    import_path : STRING */
-case 67:
-    /*! Production::    optional_token_type : TOKEN_TYPE */
-case 68:
-    /*! Production::    token_value : INTEGER */
-case 69:
-    /*! Production::    token_description : STRING */
-case 80:
-    /*! Production::    optional_production_description : STRING */
-case 95:
-    /*! Production::    expression : ID */
-case 101:
-    /*! Production::    suffix : "*" */
-case 102:
-    /*! Production::    suffix : "?" */
-case 103:
-    /*! Production::    suffix : "+" */
-case 107:
-    /*! Production::    symbol : id */
-case 108:
-    /*! Production::    symbol : STRING */
-case 109:
-    /*! Production::    id : ID */
-case 112:
-    /*! Production::    action_ne : ACTION */
-case 113:
-    /*! Production::    action_ne : include_macro_code */
-case 114:
-    /*! Production::    action : action_ne */
-case 118:
-    /*! Production::    action_body : action_comments_body */
-case 122:
-    /*! Production::    action_comments_body : ACTION_BODY */
-case 124:
-    /*! Production::    extra_parser_module_code : optional_module_code_chunk */
-case 128:
-    /*! Production::    module_code_chunk : CODE */
-case 131:
-    /*! Production::    optional_module_code_chunk : module_code_chunk */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = yyvstack[yysp];
-    break;
-
-case 39:
-    /*! Production::    options : OPTIONS option_list OPTIONS_END */
-case 110:
-    /*! Production::    action_ne : "{" action_body "}" */
-
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = yyvstack[yysp - 1];
-    break;
-
-case 40:
-    /*! Production::    options : OPTIONS error OPTIONS_END */
+    /*! Production::    declaration : init_code_keyword error ACTION_START */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
     this.$ = yyvstack[yysp - 2];
@@ -17499,140 +18509,104 @@ case 40:
     // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
     
     
-    // TODO ...
     yyparser.yyError(rmCommonWS$3`
-        %options ill defined / error?
+        Each '%code' initialization code section must be qualified by a name, e.g. 'required' before the action code itself:
+            %code qualifier_name {action code}
     
-          Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2], yylstack[yysp])}
+          Erroneous code:
+        ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
+    
+          Technical error report:
+        ${yyvstack[yysp - 1].errStr}
     `);
+    break;
+
+case 34:
+    /*! Production::    declaration : on_error_recovery_statement */
+case 39:
+    /*! Production::    on_error_recovery_keyword : ON_ERROR_RECOVERY_SHIFT */
+case 40:
+    /*! Production::    on_error_recovery_keyword : ON_ERROR_RECOVERY_REDUCE */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp];
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+    break;
+
+case 35:
+    /*! Production::    option_keyword : OPTIONS */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp];
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yy.__options_flags__ = OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;
+    yy.__options_category_description__ = yyvstack[yysp];
+    break;
+
+case 36:
+    /*! Production::    import_keyword : IMPORT */
+case 38:
+    /*! Production::    include_keyword : INCLUDE */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp];
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;
+    yy.__options_category_description__ = yyvstack[yysp];
+    break;
+
+case 37:
+    /*! Production::    init_code_keyword : CODE */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp];
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS | OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;
+    yy.__options_category_description__ = yyvstack[yysp];
     break;
 
 case 41:
-    /*! Production::    options : OPTIONS error */
+    /*! Production::    start_productions_marker : "%%" */
 
-    // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp - 1];
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp];
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
     
     
-    // TODO ...
-    yyparser.yyError(rmCommonWS$3`
-        %options don't seem terminated?
-    
-          Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
-    `);
+    yy.__options_flags__ = 0;
+    yy.__options_category_description__ = 'the grammar productions definition section';
     break;
 
 case 42:
-    /*! Production::    option_list : option_list option */
-case 59:
-    /*! Production::    token_list : token_list symbol */
-case 70:
-    /*! Production::    id_list : id_list id */
+    /*! Production::    start_epilogue_marker : "%%" */
 
-    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp];
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
     
     
-    this.$ = yyvstack[yysp - 1]; this.$.push(yyvstack[yysp]);
+    yy.__options_flags__ = 0;
+    yy.__options_category_description__ = 'the grammar epilogue section';
     break;
 
 case 43:
-    /*! Production::    option_list : option */
-case 60:
-    /*! Production::    token_list : symbol */
-case 71:
-    /*! Production::    id_list : id */
-case 83:
-    /*! Production::    handle_list : handle_action */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = [yyvstack[yysp]];
-    break;
-
-case 44:
-    /*! Production::    option : NAME */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = [yyvstack[yysp], true];
-    break;
-
+    /*! Production::    parse_params : PARSE_PARAM id_list */
 case 45:
-    /*! Production::    option : NAME "=" OPTION_STRING_VALUE */
-
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = [yyvstack[yysp - 2], yyvstack[yysp]];
-    break;
-
-case 46:
-    /*! Production::    option : NAME "=" OPTION_VALUE */
-case 47:
-    /*! Production::    option : NAME "=" NAME */
-
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = [yyvstack[yysp - 2], parseValue$1(yyvstack[yysp])];
-    break;
-
-case 48:
-    /*! Production::    option : NAME "=" error */
-
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp - 2];
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
-    
-    
-    // TODO ...
-    yyparser.yyError(rmCommonWS$3`
-        named %option value error for ${yyvstack[yysp - 2]}?
-    
-          Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
-    `);
-    break;
-
-case 49:
-    /*! Production::    option : NAME error */
-
-    // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp - 1];
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
-    
-    
-    // TODO ...
-    yyparser.yyError(rmCommonWS$3`
-        named %option value assignment error?
-    
-          Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
-    `);
-    break;
-
-case 50:
-    /*! Production::    parse_params : PARSE_PARAM token_list */
-case 52:
     /*! Production::    parser_type : PARSER_TYPE symbol */
+case 61:
+    /*! Production::    grammar : start_productions_marker production_list */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
@@ -17642,7 +18616,7 @@ case 52:
     this.$ = yyvstack[yysp];
     break;
 
-case 51:
+case 44:
     /*! Production::    parse_params : PARSE_PARAM error */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
@@ -17657,10 +18631,13 @@ case 51:
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);
     break;
 
-case 53:
+case 46:
     /*! Production::    parser_type : PARSER_TYPE error */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
@@ -17675,11 +18652,14 @@ case 53:
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);
     break;
 
-case 54:
-    /*! Production::    operator : associativity token_list */
+case 47:
+    /*! Production::    operator : associativity symbol_list */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
@@ -17689,7 +18669,7 @@ case 54:
     this.$ = [yyvstack[yysp - 1]]; this.$.push.apply(this.$, yyvstack[yysp]);
     break;
 
-case 55:
+case 48:
     /*! Production::    operator : associativity error */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
@@ -17704,10 +18684,13 @@ case 55:
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);
     break;
 
-case 56:
+case 49:
     /*! Production::    associativity : LEFT */
 
     // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
@@ -17718,7 +18701,7 @@ case 56:
     this.$ = 'left';
     break;
 
-case 57:
+case 50:
     /*! Production::    associativity : RIGHT */
 
     // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
@@ -17729,7 +18712,7 @@ case 57:
     this.$ = 'right';
     break;
 
-case 58:
+case 51:
     /*! Production::    associativity : NONASSOC */
 
     // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
@@ -17740,7 +18723,7 @@ case 58:
     this.$ = 'nonassoc';
     break;
 
-case 61:
+case 52:
     /*! Production::    full_token_definitions : optional_token_type id_list */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
@@ -17761,7 +18744,7 @@ case 61:
     this.$ = rv;
     break;
 
-case 62:
+case 53:
     /*! Production::    full_token_definitions : optional_token_type one_full_token */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
@@ -17776,8 +18759,8 @@ case 62:
     this.$ = [m];
     break;
 
-case 63:
-    /*! Production::    one_full_token : id token_value token_description */
+case 54:
+    /*! Production::    one_full_token : ID token_value token_description */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
@@ -17791,8 +18774,8 @@ case 63:
     };
     break;
 
-case 64:
-    /*! Production::    one_full_token : id token_description */
+case 55:
+    /*! Production::    one_full_token : ID token_description */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
@@ -17805,8 +18788,8 @@ case 64:
     };
     break;
 
-case 65:
-    /*! Production::    one_full_token : id token_value */
+case 56:
+    /*! Production::    one_full_token : ID token_value */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
@@ -17819,7 +18802,7 @@ case 65:
     };
     break;
 
-case 66:
+case 57:
     /*! Production::    optional_token_type : %epsilon */
 
     // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
@@ -17830,76 +18813,39 @@ case 66:
     this.$ = false;
     break;
 
-case 72:
-    /*! Production::    grammar : optional_action_header_block production_list */
-
-    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = yyvstack[yysp - 1];
-    this.$.grammar = yyvstack[yysp];
-    break;
-
-case 73:
-    /*! Production::    production_list : production_list production */
-
-    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = yyvstack[yysp - 1];
-    if (yyvstack[yysp][0] in this.$) {
-        this.$[yyvstack[yysp][0]] = this.$[yyvstack[yysp][0]].concat(yyvstack[yysp][1]);
-    } else {
-        this.$[yyvstack[yysp][0]] = yyvstack[yysp][1];
-    }
-    break;
-
-case 74:
-    /*! Production::    production_list : production */
+case 58:
+    /*! Production::    optional_token_type : TOKEN_TYPE */
+case 59:
+    /*! Production::    token_value : INTEGER */
+case 60:
+    /*! Production::    token_description : STRING_LIT */
+case 75:
+    /*! Production::    production_id : ID */
+case 77:
+    /*! Production::    production_description : STRING_LIT */
+case 106:
+    /*! Production::    suffix : "*" */
+case 107:
+    /*! Production::    suffix : "?" */
+case 108:
+    /*! Production::    suffix : "+" */
+case 114:
+    /*! Production::    symbol : ID */
+case 115:
+    /*! Production::    symbol : STRING_LIT */
+case 143:
+    /*! Production::    epilogue_chunks : epilogue_chunk */
 
     // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yylstack[yysp];
     // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
     
     
-    this.$ = {}; this.$[yyvstack[yysp][0]] = yyvstack[yysp][1];
+    this.$ = yyvstack[yysp];
     break;
 
-case 75:
-    /*! Production::    production : production_id handle_list ";" */
-
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = [yyvstack[yysp - 2], yyvstack[yysp - 1]];
-    break;
-
-case 76:
-    /*! Production::    production : production_id error ";" */
-
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp - 2];
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
-    
-    
-    // TODO ...
-    yyparser.yyError(rmCommonWS$3`
-        rule production declaration error?
-    
-          Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
-    `);
-    break;
-
-case 77:
-    /*! Production::    production : production_id error */
+case 62:
+    /*! Production::    grammar : start_productions_marker error */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
     this.$ = yyvstack[yysp - 1];
@@ -17909,28 +18855,171 @@ case 77:
     
     // TODO ...
     yyparser.yyError(rmCommonWS$3`
-        rule production declaration error: did you terminate the rule production set with a semicolon?
+        Each '%code' initialization code section must be qualified by a name, e.g. 'required' before the action code itself:
+            %code qualifier_name {action code}
     
-          Erroneous area:
+          Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);
     break;
 
-case 78:
-    /*! Production::    production_id : id optional_production_description ":" */
+case 63:
+    /*! Production::    production_list : production_list production */
 
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
     
     
-    this.$ = yyvstack[yysp - 2];
+    this.$ = yyvstack[yysp - 1];
     
-    // TODO: carry rule description support into the parser generator...
+    var grammar = this.$.grammar || {};
+    var rule_id = yyvstack[yysp][0]; 
+    
+    if (rule_id in grammar) {
+        grammar[rule_id] = grammar[rule_id].concat(yyvstack[yysp][1]);
+    } else {
+        grammar[rule_id] = yyvstack[yysp][1];
+    }
+    this.$.grammar = grammar;
     break;
 
-case 79:
-    /*! Production::    production_id : id optional_production_description error */
+case 64:
+    /*! Production::    production_list : production_list setup_action_block */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = yyvstack[yysp - 1];
+    var actionInclude = this.$.actionInclude || [];
+    
+    // source code has already been checked!
+    var srcCode = yyvstack[yysp];
+    if (srcCode) {
+        actionInclude.push(srcCode);
+    }
+    this.$.actionInclude = actionInclude;
+    break;
+
+case 65:
+    /*! Production::    production_list : production_list on_error_recovery_statement */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = yyvstack[yysp - 1];
+    var onErrorRecovery = this.$.onErrorRecovery || [];
+    onErrorRecovery.push(yyvstack[yysp]);
+    this.$.onErrorRecovery = onErrorRecovery;
+    break;
+
+case 66:
+    /*! Production::    production_list : production */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    var grammar = {}; 
+    grammar[yyvstack[yysp][0]] = yyvstack[yysp][1]; 
+    this.$ = {
+        grammar: grammar
+    };
+    break;
+
+case 67:
+    /*! Production::    production_list : setup_action_block */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = {};
+    
+    // source code has already been checked!
+    var srcCode = yyvstack[yysp];
+    if (srcCode) {
+        this.$.actionInclude = [srcCode];
+    }
+    break;
+
+case 68:
+    /*! Production::    production_list : on_error_recovery_statement */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = {
+        onErrorRecovery: [yyvstack[yysp]] 
+    };
+    break;
+
+case 69:
+    /*! Production::    production : production_id ":" handle_list ";" */
+
+    // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = [yyvstack[yysp - 3], yyvstack[yysp - 1]];
+    break;
+
+case 70:
+    /*! Production::    production : production_id ":" error ";" */
+
+    // default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 3];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    // TODO ...
+    yyparser.yyError(rmCommonWS$3`
+        rule production declaration error?
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 3])}
+    
+          Technical error report:
+        ${yyvstack[yysp - 1].errStr}
+    `);
+    break;
+
+case 71:
+    /*! Production::    production : production_id DUMMY8 error */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 2];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    // TODO ...
+    yyparser.yyError(rmCommonWS$3`
+        rule production declaration error: did you terminate the rule production set with a semicolon?
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    break;
+
+case 72:
+    /*! Production::    production : production_id error ";" */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
     this.$ = yyvstack[yysp - 2];
@@ -17942,22 +19031,80 @@ case 79:
     yyparser.yyError(rmCommonWS$3`
         rule id should be followed by a colon, but that one seems missing?
     
+        *Aside*: rule id may be followed by descriptive text (string) before the \`:\` colon.
+        This text must be surrounded by single ('), double (") or backtick (\`) quotes.
+    
           Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+        ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
+    
+          Technical error report:
+        ${yyvstack[yysp - 1].errStr}
     `);
     break;
 
-case 81:
-    /*! Production::    optional_production_description : %epsilon */
+case 73:
+    /*! Production::    production : production_id ARROW_ACTION_START DUMMY5 */
 
-    // default action (generated by JISON mode classic/merge :: 0,VT,VA,-,-,LT,LA,-,-):
-    this.$ = undefined;
-    this._$ = yyparser.yyMergeLocationInfo(null, null, null, null, true);
-    // END of default action (generated by JISON mode classic/merge :: 0,VT,VA,-,-,LT,LA,-,-)
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 2];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yyparser.yyError(rmCommonWS$3`
+        rule id should be followed by a colon instead of an arrow: 
+        please adjust your grammar to use this format:
+    
+            rule_id : terms  { optional action code }
+                    | terms  { optional action code }
+                    ...
+                    ;
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
+    `);
     break;
 
-case 82:
+case 74:
+    /*! Production::    production_id : ID production_description */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = yyvstack[yysp - 1];
+    
+    // TODO: carry rule description support into the parser generator...
+    break;
+
+case 76:
+    /*! Production::    production_id : ID DUMMY9 error */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 2];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    // TODO ...
+    yyparser.yyError(rmCommonWS$3`
+        rule id may be followed by descriptive text (string) before the \`:\` colon, 
+        but there's something wrong with the description text. Do note that the
+        text must be surrounded by single ('), double (") or backtick (\`) quotes.
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    break;
+
+case 78:
     /*! Production::    handle_list : handle_list "|" handle_action */
+case 97:
+    /*! Production::    handle_sublist : handle_sublist "|" handle */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
@@ -17968,7 +19115,28 @@ case 82:
     this.$.push(yyvstack[yysp]);
     break;
 
-case 84:
+case 79:
+    /*! Production::    handle_list : handle_action */
+case 96:
+    /*! Production::    handle : suffixed_expression */
+case 98:
+    /*! Production::    handle_sublist : handle */
+case 113:
+    /*! Production::    symbol_list : symbol */
+case 117:
+    /*! Production::    id_list : ID */
+case 129:
+    /*! Production::    option_list : option */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = [yyvstack[yysp]];
+    break;
+
+case 80:
     /*! Production::    handle_list : handle_list "|" error */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
@@ -17983,11 +19151,14 @@ case 84:
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);
     break;
 
-case 85:
-    /*! Production::    handle_list : handle_list ":" error */
+case 81:
+    /*! Production::    handle_list : handle_list ":" DUMMY5 */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
     this.$ = yyvstack[yysp - 2];
@@ -18000,80 +19171,304 @@ case 85:
         multiple alternative rule productions should be separated by a '|' pipe character, not a ':' colon!
     
           Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+        ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
     `);
     break;
 
-case 86:
-    /*! Production::    handle_action : handle prec action */
+case 82:
+    /*! Production::    handle_action : handle prec ACTION_START action ACTION_END */
 
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+    // default action (generated by JISON mode classic/merge :: 5,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 4, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 5,VT,VA,VU,-,LT,LA,-,-)
     
     
-    this.$ = [(yyvstack[yysp - 2].length ? yyvstack[yysp - 2].join(' ') : '')];
-    if (yyvstack[yysp]) {
-        var rv = checkActionBlock$2(yyvstack[yysp], yylstack[yysp]);
+    this.$ = [yyvstack[yysp - 4]];
+    var srcCode = trimActionCode$1(yyvstack[yysp - 1] + yyvstack[yysp], yyvstack[yysp - 2]);
+    if (srcCode) {
+        var rv = checkActionBlock$2(srcCode, yylstack[yysp - 1]);
         if (rv) {
             yyparser.yyError(rmCommonWS$3`
                 production rule action code block does not compile: ${rv}
     
                   Erroneous area:
-                ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+                ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 4])}
             `);
         }
-        this.$.push(yyvstack[yysp]);
+        this.$.push(srcCode);
     }
-    if (yyvstack[yysp - 1]) {
-        if (yyvstack[yysp - 2].length === 0) {
-            yyparser.yyError(rmCommonWS$3`
-                You cannot specify a precedence override for an epsilon (a.k.a. empty) rule!
     
-                  Erroneous area:
-                ${yylexer.prettyPrintRange(yylstack[yysp - 2], yylstack[yysp - 3], yylstack[yysp] /* @handle is very probably NULL! We need this one for some decent location info! */)}
-            `);
-        }
-        this.$.push(yyvstack[yysp - 1]);
+    if (yyvstack[yysp - 3]) {
+        this.$.push(yyvstack[yysp - 3]);
     }
+    
     if (this.$.length === 1) {
         this.$ = this.$[0];
     }
     break;
 
-case 87:
-    /*! Production::    handle_action : EPSILON action */
+case 83:
+    /*! Production::    handle_action : handle prec ARROW_ACTION_START action ACTION_END */
+
+    // default action (generated by JISON mode classic/merge :: 5,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 4, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 5,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = [yyvstack[yysp - 4]];
+    
+    var srcCode = trimActionCode$1(yyvstack[yysp - 1] + yyvstack[yysp]);
+    if (srcCode) {
+        // add braces around ARROW_ACTION_CODE so that the action chunk test/compiler
+        // will uncover any illegal action code following the arrow operator, e.g.
+        // multiple statements separated by semicolon.
+        //
+        // Note/Optimization:
+        // there's no need for braces in the generated expression when we can
+        // already see the given action is an identifier string or something else
+        // that's a sure simple thing for a JavaScript `return` statement to carry.
+        // By doing this, we simplify the token return replacement code replacement
+        // process which will be applied to the parsed lexer before its code
+        // will be generated by JISON.
+        if (/^[^\r\n;\/]+$/.test(srcCode)) {
+            srcCode = '$$ = ' + srcCode; 
+        } else {
+            srcCode = '$$ = (' + srcCode + '\n)'; 
+        }
+    
+        var rv = checkActionBlock$2(srcCode, yylstack[yysp - 1]);
+        if (rv) {
+            yyparser.yyError(rmCommonWS$3`
+                The lexer rule's 'arrow' action code section does not compile: ${rv}
+    
+                # NOTE that the arrow action automatically wraps the action code
+                # in a \`this.$ = (...);\` statement to prevent hard-to-diagnose run-time
+                # errors down the line.
+    
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 4])}
+            `);
+        }
+    
+        this.$.push(srcCode);
+    }
+    
+    if (yyvstack[yysp - 3]) {
+        this.$.push(yyvstack[yysp - 3]);
+    }
+    
+    if (this.$.length === 1) {
+        this.$ = this.$[0];
+    }
+    break;
+
+case 84:
+    /*! Production::    handle_action : handle prec */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
     // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
     
     
-    this.$ = [''];
-    if (yyvstack[yysp]) {
-        var rv = checkActionBlock$2(yyvstack[yysp], yylstack[yysp]);
-        if (rv) {
-            yyparser.yyError(rmCommonWS$3`
-                epsilon production rule action code block does not compile: ${rv}
+    this.$ = [yyvstack[yysp - 1]];
     
-                  Erroneous area:
-                ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
-            `);
-        }
+    if (yyvstack[yysp]) {
         this.$.push(yyvstack[yysp]);
     }
+    
     if (this.$.length === 1) {
         this.$ = this.$[0];
     }
     break;
 
-case 88:
-    /*! Production::    handle_action : EPSILON error */
+case 85:
+    /*! Production::    handle_action : EPSILON ACTION_START action ACTION_END */
+
+    // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = [[]];
+    var srcCode = trimActionCode$1(yyvstack[yysp - 1] + yyvstack[yysp], yyvstack[yysp - 2]);
+    if (srcCode) {
+        var rv = checkActionBlock$2(srcCode, yylstack[yysp - 1]);
+        if (rv) {
+            yyparser.yyError(rmCommonWS$3`
+                epsilon production rule action code block does not compile: ${rv}
+    
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 3])}
+            `);
+        }
+        this.$.push(srcCode);
+    }
+    
+    if (this.$.length === 1) {
+        this.$ = this.$[0];
+    }
+    break;
+
+case 86:
+    /*! Production::    handle_action : EPSILON */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = [];
+    break;
+
+case 87:
+    /*! Production::    handle_action : EPSILON PREC */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
     this.$ = yyvstack[yysp - 1];
     this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
     // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yyparser.yyError(rmCommonWS$3`
+        You cannot specify a precedence override for an epsilon (a.k.a. empty) rule!
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1] /* @EPSILON is very probably NULL! We need this one for some decent location info! */)}
+    `);
+    break;
+
+case 88:
+    /*! Production::    handle_action : %epsilon */
+
+    // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(null, null, null, null, true);
+    // END of default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = [];
+    break;
+
+case 89:
+    /*! Production::    handle_action : PREC */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp];
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yyparser.yyError(rmCommonWS$3`
+        You cannot specify a precedence override for an epsilon (a.k.a. empty) rule!
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1] /* We need this one for some decent location info! */)}
+    `);
+    break;
+
+case 90:
+    /*! Production::    handle_action : ACTION_START action ACTION_END */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = [[]];
+    var srcCode = trimActionCode$1(yyvstack[yysp - 1] + yyvstack[yysp], yyvstack[yysp - 2]);
+    if (srcCode) {
+        var rv = checkActionBlock$2(srcCode, yylstack[yysp - 1]);
+        if (rv) {
+            yyparser.yyError(rmCommonWS$3`
+                epsilon production rule action code block does not compile: ${rv}
+    
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
+            `);
+        }
+        this.$.push(srcCode);
+    }
+    
+    if (this.$.length === 1) {
+        this.$ = this.$[0];
+    }
+    break;
+
+case 91:
+    /*! Production::    handle_action : ARROW_ACTION_START */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp];
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yyparser.yyError(rmCommonWS$3`
+        Empty (~ epsilon) rule productions MAY NOT contain arrow action code blocks.
+        Only regular '%{...%}' action blocks are allowed here.
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp])}
+    `);
+    break;
+
+case 92:
+    /*! Production::    handle_action : EPSILON ARROW_ACTION_START error */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = [[], yyvstack[yysp]];
+    yyparser.yyError(rmCommonWS$3`
+        An epsilon production rule action arrow must be followed by a single JavaScript expression to assign the production rule's value, e.g.:
+    
+            rule: %epsilon   -> 42
+                ;
+    
+        which is equivalent to:
+    
+            rule: %epsilon   %{ this.$ = 42; %}
+                ;
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    break;
+
+case 93:
+    /*! Production::    handle_action : EPSILON ACTION_START error */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    // TODO: REWRITE
+    this.$ = [[], yyvstack[yysp]];
+    yyparser.yyError(rmCommonWS$3`
+        An epsilon production rule action must consist of a (properly '%{...%}' delimited) JavaScript statement block, e.g.:
+    
+            rule: %epsilon   %{ this.$ = 'BUGGABOO'; %}
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    break;
+
+case 94:
+    /*! Production::    handle_action : DUMMY3 EPSILON error */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 2];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
     
     
     // TODO ...
@@ -18082,10 +19477,13 @@ case 88:
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);
     break;
 
-case 89:
+case 95:
     /*! Production::    handle : handle suffixed_expression */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
@@ -18097,41 +19495,7 @@ case 89:
     this.$.push(yyvstack[yysp]);
     break;
 
-case 90:
-    /*! Production::    handle : %epsilon */
-
-    // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(null, null, null, null, true);
-    // END of default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = [];
-    break;
-
-case 91:
-    /*! Production::    handle_sublist : handle_sublist "|" handle */
-
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = yyvstack[yysp - 2];
-    this.$.push(yyvstack[yysp].join(' '));
-    break;
-
-case 92:
-    /*! Production::    handle_sublist : handle */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = [yyvstack[yysp].join(' ')];
-    break;
-
-case 93:
+case 99:
     /*! Production::    suffixed_expression : expression suffix ALIAS */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
@@ -18139,25 +19503,36 @@ case 93:
     // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
     
     
-    this.$ = yyvstack[yysp - 2] + yyvstack[yysp - 1] + "[" + yyvstack[yysp] + "]";
+    this.$ = ['xalias', yyvstack[yysp - 1], yyvstack[yysp - 2], yyvstack[yysp]];
     break;
 
-case 94:
+case 100:
     /*! Production::    suffixed_expression : expression suffix */
-case 123:
-    /*! Production::    action_comments_body : action_comments_body ACTION_BODY */
-case 129:
-    /*! Production::    module_code_chunk : module_code_chunk CODE */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
     // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
     
     
-    this.$ = yyvstack[yysp - 1] + yyvstack[yysp];
+    if (yyvstack[yysp]) {
+        this.$ = [yyvstack[yysp], yyvstack[yysp - 1]];
+    } else {
+        this.$ = yyvstack[yysp - 1];
+    }
     break;
 
-case 96:
+case 101:
+    /*! Production::    expression : symbol */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = ['symbol', yyvstack[yysp]];
+    break;
+
+case 102:
     /*! Production::    expression : EOF_ID */
 
     // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
@@ -18165,36 +19540,34 @@ case 96:
     // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
     
     
-    this.$ = '$end';
+    this.$ = ['symbol', '$end'];
     break;
 
-case 97:
-    /*! Production::    expression : STRING */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    // Re-encode the string *anyway* as it will
-    // be made part of the rule rhs a.k.a. production (type: *string*) again and we want
-    // to be able to handle all tokens, including *significant space*
-    // encoded as literal tokens in a grammar such as this: `rule: A ' ' B`.
-    this.$ = dquote$2(yyvstack[yysp]);
-    break;
-
-case 98:
+case 103:
     /*! Production::    expression : "(" handle_sublist ")" */
 
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,LU,LUbA):
     this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,LU,LUbA)
     
     
-    this.$ = '(' + yyvstack[yysp - 1].join(' | ') + ')';
+    // Do not allow empty sublist here, i.e. writing '()' in a grammar is illegal.
+    //
+    // empty list ε is encoded as `[[]]`:
+    var lst = yyvstack[yysp - 1];
+    if (lst.length === 1 && lst[0].length === 0) {
+        yyparser.yyError(rmCommonWS$3`
+            Empty grammar rule sublists are not accepted within '( ... )' brackets.
+    
+              Erroneous area:
+            ${yylexer.prettyPrintRange(this._$) /* @$ =?= yylexer.deriveLocationInfo(@1, @3) */}
+        `);
+    }
+    
+    this.$ = ['()', yyvstack[yysp - 1]];
     break;
 
-case 99:
+case 104:
     /*! Production::    expression : "(" handle_sublist error */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
@@ -18208,10 +19581,24 @@ case 99:
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);
     break;
 
-case 104:
+case 105:
+    /*! Production::    suffix : %epsilon */
+
+    // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(null, null, null, null, true);
+    // END of default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = undefined;
+    break;
+
+case 109:
     /*! Production::    prec : PREC symbol */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
@@ -18222,7 +19609,7 @@ case 104:
     this.$ = { prec: yyvstack[yysp] };
     break;
 
-case 105:
+case 110:
     /*! Production::    prec : PREC error */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
@@ -18237,10 +19624,13 @@ case 105:
     
           Erroneous precedence declaration:
         ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);
     break;
 
-case 106:
+case 111:
     /*! Production::    prec : %epsilon */
 
     // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
@@ -18251,108 +19641,45 @@ case 106:
     this.$ = null;
     break;
 
-case 111:
-    /*! Production::    action_ne : "{" action_body error */
-
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp - 2];
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
-    
-    
-    yyparser.yyError(rmCommonWS$3`
-        Seems you did not correctly bracket a parser rule action block in curly braces: '{ ... }'.
-    
-          Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
-    `);
-    break;
-
-case 115:
-    /*! Production::    action : ARROW_ACTION */
-
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = '$$ = (' + yyvstack[yysp] + ');';
-    break;
-
-case 119:
-    /*! Production::    action_body : action_body "{" action_body "}" action_comments_body */
-
-    // default action (generated by JISON mode classic/merge :: 5,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 4, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 5,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = yyvstack[yysp - 4] + yyvstack[yysp - 3] + yyvstack[yysp - 2] + yyvstack[yysp - 1] + yyvstack[yysp];
-    break;
-
-case 120:
-    /*! Production::    action_body : action_body "{" action_body "}" */
-
-    // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = yyvstack[yysp - 3] + yyvstack[yysp - 2] + yyvstack[yysp - 1] + yyvstack[yysp];
-    break;
-
-case 121:
-    /*! Production::    action_body : action_body "{" action_body error */
-
-    // default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp - 3];
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-)
-    
-    
-    yyparser.yyError(rmCommonWS$3`
-        Seems you did not correctly match curly braces '{ ... }' in a parser rule action block.
-    
-          Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
-    `);
-    break;
-
-case 125:
-    /*! Production::    extra_parser_module_code : optional_module_code_chunk include_macro_code extra_parser_module_code */
-
-    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
-    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
-    
-    
-    this.$ = yyvstack[yysp - 2] + yyvstack[yysp - 1] + yyvstack[yysp];
-    break;
-
-case 126:
-    /*! Production::    include_macro_code : INCLUDE PATH */
+case 112:
+    /*! Production::    symbol_list : symbol_list symbol */
+case 116:
+    /*! Production::    id_list : id_list ID */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
     // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
     
     
-    var fileContent = fs.readFileSync(yyvstack[yysp], { encoding: 'utf-8' });
-    var rv = checkActionBlock$2(fileContent);
-    if (rv) {
-        yyparser.yyError(rmCommonWS$3`
-            included action code file "${$PATH}" does not compile: ${rv}
-    
-              Erroneous area:
-            ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
-        `);
-    }
-    // And no, we don't support nested '%include':
-    this.$ = '\n// Included by Jison: ' + yyvstack[yysp] + ':\n\n' + fileContent + '\n\n// End Of Include by Jison: ' + yyvstack[yysp] + '\n\n';
+    this.$ = yyvstack[yysp - 1]; this.$.push(yyvstack[yysp]);
     break;
 
-case 127:
-    /*! Production::    include_macro_code : INCLUDE error */
+case 118:
+    /*! Production::    action : action ACTION_BODY */
+case 141:
+    /*! Production::    epilogue_chunks : epilogue_chunks epilogue_chunk */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = yyvstack[yysp - 1] + yyvstack[yysp];
+    break;
+
+case 119:
+    /*! Production::    action : action include_macro_code */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = yyvstack[yysp - 1] + '\n\n' + yyvstack[yysp] + '\n\n';
+    break;
+
+case 120:
+    /*! Production::    action : action INCLUDE_PLACEMENT_ERROR */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
     this.$ = yyvstack[yysp - 1];
@@ -18361,1398 +19688,2287 @@ case 127:
     
     
     yyparser.yyError(rmCommonWS$3`
-    %include MUST be followed by a valid file path.
+        You may place the '%include' instruction only at the start/front of a line.
     
-      Erroneous path:
-    ` + yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]));
+          Its use is not permitted at this position:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])}
+    `);
+    break;
+
+case 121:
+    /*! Production::    action : action BRACKET_MISSING */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 1];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yyparser.yyError(rmCommonWS$3`
+        Missing curly braces: seems you did not correctly bracket a lexer rule action block in curly braces: '{ ... }'.
+    
+          Offending action body:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])}
+    `);
+    break;
+
+case 122:
+    /*! Production::    action : action BRACKET_SURPLUS */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 1];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yyparser.yyError(rmCommonWS$3`
+        Too many curly braces: seems you did not correctly bracket a lexer rule action block in curly braces: '{ ... }'.
+    
+          Offending action body:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])}
+    `);
+    break;
+
+case 123:
+    /*! Production::    action : action UNTERMINATED_STRING_ERROR */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 1];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yyparser.yyError(rmCommonWS$3`
+        Unterminated string constant in lexer rule action block.
+    
+        When your action code is as intended, it may help to enclose 
+        your rule action block code in a '%{...%}' block.
+    
+          Offending action body:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])}
+    `);
+    break;
+
+case 124:
+    /*! Production::    action : %epsilon */
+
+    // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(null, null, null, null, true);
+    // END of default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = '';
+    break;
+
+case 125:
+    /*! Production::    on_error_recovery_statement : on_error_recovery_keyword ACTION_START action ACTION_END */
+
+    // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    var srcCode = trimActionCode$1(yyvstack[yysp - 1] + yyvstack[yysp], yyvstack[yysp - 2]);
+    var rv = checkActionBlock$2(srcCode, yylstack[yysp - 1]);
+    if (rv) {
+        yyparser.yyError(rmCommonWS$3`
+            The '${$on_error_recovery_keyword}' action code section does not compile: ${rv}
+    
+              Erroneous area:
+            ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 3])}
+        `);
+    }
+    this.$ = {
+        onErrorRecoveryAction: {
+          qualifier: yyvstack[yysp - 3],
+          include: srcCode
+        }
+    };
+    break;
+
+case 126:
+    /*! Production::    on_error_recovery_statement : on_error_recovery_keyword ACTION_START error */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 2];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    var start_marker = yyvstack[yysp - 1].trim();
+    var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
+    var end_marker_msg = marker_msg.replace(/\{/g, '}');
+    yyparser.yyError(rmCommonWS$3`
+        The '${$on_error_recovery_keyword} %{...%\}' initialization code section must be properly 
+        wrapped in block start markers (\`%{\`${marker_msg}) 
+        and matching end markers (\`%}\`${end_marker_msg}). Expected format:
+    
+            ${yyvstack[yysp - 2]} {action code}
+    
+          Erroneous code:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    break;
+
+case 127:
+    /*! Production::    option_list : option_list "," option */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    // validate that this is legal behaviour under the given circumstances, i.e. parser context:
+    if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS) {
+        yyparser.yyError(rmCommonWS$3`
+            You may only specify one name/argument in a ${yy.__options_category_description__} statement.
+    
+              Erroneous area:
+            ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp - 1], yylstack[yysp]), yylstack[yysp - 4])}
+        `);
+    }
+    if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS) {
+        var optlist = yyvstack[yysp - 2].map(function (opt) { 
+            return opt[0]; 
+        });
+        optlist.push(yyvstack[yysp][0]);
+    
+        yyparser.yyError(rmCommonWS$3`
+            You may not separate entries in a ${yy.__options_category_description__} statement using commas.
+            Use whitespace instead, e.g.:
+    
+                ${yyvstack[yysp - 4]} ${optlist.join(' ')} ...
+    
+              Erroneous area:
+            ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp - 1], yylstack[yysp - 2]), yylstack[yysp - 4])}
+        `);
+    }
+    this.$ = yyvstack[yysp - 2]; 
+    this.$.push(yyvstack[yysp]);
+    break;
+
+case 128:
+    /*! Production::    option_list : option_list option */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    // validate that this is legal behaviour under the given circumstances, i.e. parser context:
+    if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS) {
+        yyparser.yyError(rmCommonWS$3`
+            You may only specify one name/argument in a ${yy.__options_category_description__} statement.
+    
+              Erroneous area:
+            ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp]), yylstack[yysp - 3])}
+        `);
+    }
+    this.$ = yyvstack[yysp - 1]; 
+    this.$.push(yyvstack[yysp]);
     break;
 
 case 130:
-    /*! Production::    module_code_chunk : error */
+    /*! Production::    option : option_name */
 
-    // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp];
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = [yyvstack[yysp], true];
+    break;
+
+case 131:
+    /*! Production::    option : option_name "=" option_value */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    // validate that this is legal behaviour under the given circumstances, i.e. parser context:
+    if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
+        yyparser.yyError(rmCommonWS$3`
+            The entries in a ${yy.__options_category_description__} statement MUST NOT be assigned values, such as '${$option_name}=${$option_value}'.
+    
+              Erroneous area:
+            ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp], yylstack[yysp - 2]), yylstack[yysp - 4])}
+        `);
+    }
+    this.$ = [yyvstack[yysp - 2], yyvstack[yysp]];
+    break;
+
+case 132:
+    /*! Production::    option : option_name "=" error */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 2];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
     
     
     // TODO ...
     yyparser.yyError(rmCommonWS$3`
-        module code declaration error?
+        Internal error: option "${$option}" value assignment failure in a ${yy.__options_category_description__} statement.
     
           Erroneous area:
-        ` + yylexer.prettyPrintRange(yylstack[yysp]));
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 4])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    break;
+
+case 133:
+    /*! Production::    option : DUMMY3 error */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 1];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    var with_value_msg = ' (with optional value assignment)';
+    if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
+        with_value_msg = '';
+    }
+    yyparser.yyError(rmCommonWS$3`
+        Expected a valid option name${with_value_msg} in a ${yy.__options_category_description__} statement.
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    break;
+
+case 134:
+    /*! Production::    option_name : option_value */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    // validate that this is legal input under the given circumstances, i.e. parser context:
+    if (yy.__options_flags__ & OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES) {
+        this.$ = mkIdentifier$3(yyvstack[yysp]);
+        // check if the transformation is obvious & trivial to humans;
+        // if not, report an error as we don't want confusion due to
+        // typos and/or garbage input here producing something that
+        // is usable from a machine perspective.
+        if (!isLegalIdentifierInput$1(yyvstack[yysp])) {
+            var with_value_msg = ' (with optional value assignment)';
+            if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
+                with_value_msg = '';
+            }
+            yyparser.yyError(rmCommonWS$3`
+                Expected a valid name/argument${with_value_msg} in a ${yy.__options_category_description__} statement.
+                Entries (names) must look like regular programming language
+                identifiers, with the addition that option names MAY contain
+                '-' dashes, e.g. 'example-option-1'.
+    
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+            `);
+        }
+    } else {
+        this.$ = yyvstack[yysp];
+    }
+    break;
+
+case 135:
+    /*! Production::    option_name : "*" */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    // validate that this is legal input under the given circumstances, i.e. parser context:
+    if (!(yy.__options_flags__ & OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES) || (yy.__options_flags__ & OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME)) {
+        this.$ = yyvstack[yysp];
+    } else {
+        var with_value_msg = ' (with optional value assignment)';
+        if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
+            with_value_msg = '';
+        }
+        yyparser.yyError(rmCommonWS$3`
+            Expected a valid name/argument${with_value_msg} in a ${yy.__options_category_description__} statement.
+            Entries (names) must look like regular programming language
+            identifiers, with the addition that option names MAY contain
+            '-' dashes, e.g. 'example-option-1'
+    
+              Erroneous area:
+            ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+        `);
+    }
+    break;
+
+case 136:
+    /*! Production::    option_value : OPTION_STRING */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = json5.parse(yyvstack[yysp]);
+    break;
+
+case 137:
+    /*! Production::    option_value : OPTION_VALUE */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = parseValue$1(yyvstack[yysp]);
+    break;
+
+case 138:
+    /*! Production::    epilogue : start_epilogue_marker */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = '';
+    break;
+
+case 139:
+    /*! Production::    epilogue : start_epilogue_marker epilogue_chunks */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    var srcCode = trimActionCode$1(yyvstack[yysp]);
+    if (srcCode) {
+        var rv = checkActionBlock$2(srcCode, yylstack[yysp]);
+        if (rv) {
+            yyparser.yyError(rmCommonWS$3`
+                The '%%' lexer epilogue code does not compile: ${rv}
+    
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+            `);
+        }
+    }
+    this.$ = srcCode;
+    break;
+
+case 140:
+    /*! Production::    epilogue : start_epilogue_marker error */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 1];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yyparser.yyError(rmCommonWS$3`
+        There's an error in your lexer epilogue code block.
+    
+          Erroneous code:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    break;
+
+case 142:
+    /*! Production::    epilogue_chunks : epilogue_chunks error */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    // TODO ...
+    yyparser.yyError(rmCommonWS$3`
+        Module code declaration error?
+    
+          Erroneous code:
+        ${yylexer.prettyPrintRange(yylstack[yysp])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    this.$ = '';
+    break;
+
+case 144:
+    /*! Production::    epilogue_chunk : ACTION_START include_macro_code ACTION_END */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    this.$ = '\n\n' + yyvstack[yysp - 1] + '\n\n' + yyvstack[yysp] + '\n\n';
+    break;
+
+case 145:
+    /*! Production::    epilogue_chunk : ACTION_START_AT_SOL action ACTION_END */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    var srcCode = trimActionCode$1(yyvstack[yysp - 1] + yyvstack[yysp], yyvstack[yysp - 2]);
+    if (srcCode) {
+        var rv = checkActionBlock$2(srcCode, yylstack[yysp - 1]);
+        if (rv) {
+            yyparser.yyError(rmCommonWS$3`
+                The '%{...%}' lexer epilogue code chunk does not compile: ${rv}
+    
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
+            `);
+        }
+    }
+    // Since the epilogue is concatenated as-is (see the `epilogue_chunks` rule above)
+    // we append those protective double newlines right now, as the calling site
+    // won't do it for us: 
+    this.$ = '\n\n' + srcCode + '\n\n';
+    break;
+
+case 146:
+    /*! Production::    epilogue_chunk : ACTION_START_AT_SOL error */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    var start_marker = yyvstack[yysp - 1].trim();
+    var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
+    yyparser.yyError(rmCommonWS$3`
+        There's very probably a problem with this '%{...%}' lexer setup action code section.
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
+    this.$ = '';
+    break;
+
+case 148:
+    /*! Production::    epilogue_chunk : TRAILING_CODE_CHUNK */
+
+    // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    this._$ = yylstack[yysp];
+    // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+    
+    
+    // these code chunks are very probably incomplete, hence compile-testing
+    // for these should be deferred until we've collected the entire epilogue. 
+    this.$ = yyvstack[yysp];
+    break;
+
+case 149:
+    /*! Production::    include_macro_code : include_keyword option_list OPTIONS_END */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,LU,LUbA):
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,LU,LUbA)
+    
+    
+    // check if there is only 1 unvalued options: 'path'
+    var lst = yyvstack[yysp - 1];
+    var len = lst.length;
+    var path;
+    if (len === 1 && lst[0][1] === true) {
+        // `path`:
+        path = lst[0][0];
+    } else if (len <= 1) {
+        yyparser.yyError(rmCommonWS$3`
+            You did not specify a legal file path for the '%include' statement, which must have the format:
+                %include file_path
+    
+              Erroneous code:
+            ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
+    
+              Technical error report:
+            ${$error.errStr}
+        `);
+    } else {
+        yyparser.yyError(rmCommonWS$3`
+            You did specify too many attributes for the '%include' statement, which must have the format:
+                %include file_path
+    
+              Erroneous code:
+            ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])}
+    
+              Technical error report:
+            ${$error.errStr}
+        `);
+    }
+    
+    // **Aside**: And no, we don't support nested '%include'!
+    var fileContent = fs.readFileSync(path, { encoding: 'utf-8' });
+    
+    var srcCode = trimActionCode$1(fileContent);
+    if (srcCode) {
+        var rv = checkActionBlock$2(srcCode, this._$);
+        if (rv) {
+            yyparser.yyError(rmCommonWS$3`
+                The source code included from file '${path}' does not compile: ${rv}
+    
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(this._$)}
+            `);
+        }
+    }
+    
+    this.$ = '\n// Included by Jison: ' + path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + path + '\n\n';
+    break;
+
+case 150:
+    /*! Production::    include_macro_code : include_keyword error */
+
+    // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 1];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    yyparser.yyError(rmCommonWS$3`
+        %include MUST be followed by a valid file path.
+    
+          Erroneous path:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
+    `);
     break;
             
 }
 },
 table: bt$2({
   len: u$2([
-  20,
+  26,
   1,
   25,
-  5,
-  19,
-  18,
-  3,
-  18,
-  18,
-  5,
-  s$2,
-  [18, 8],
+  35,
+  1,
   4,
-  5,
-  6,
+  1,
+  23,
+  10,
   2,
   s$2,
-  [6, 4, -1],
-  3,
-  3,
-  4,
-  8,
-  1,
-  18,
-  18,
-  26,
+  [23, 4],
+  5,
+  9,
+  23,
+  5,
+  23,
+  23,
+  9,
+  s$2,
+  [23, 3],
+  9,
   c$2,
-  [18, 3],
-  1,
+  [10, 3],
+  5,
+  3,
   4,
-  21,
-  3,
-  3,
-  5,
-  5,
+  s$2,
+  [5, 3],
+  1,
   s$2,
   [3, 3],
-  22,
-  18,
-  20,
-  25,
-  25,
-  24,
-  24,
-  22,
   s$2,
-  [18, 3],
-  3,
-  19,
+  [1, 5],
+  8,
+  6,
+  1,
+  10,
   2,
+  s$2,
+  [6, 3],
   4,
-  1,
-  1,
   7,
-  7,
+  s$2,
+  [23, 4],
+  3,
+  1,
+  9,
+  23,
+  1,
   c$2,
   [40, 3],
-  17,
-  4,
-  20,
-  18,
-  23,
+  c$2,
+  [51, 3],
+  7,
+  8,
+  1,
   s$2,
-  [18, 6],
-  6,
-  21,
-  21,
-  18,
-  20,
-  18,
-  2,
-  18,
-  4,
-  2,
+  [8, 4],
+  9,
+  23,
+  9,
+  1,
+  26,
+  23,
+  25,
+  37,
+  37,
+  24,
+  23,
+  24,
+  c$2,
+  [25, 3],
   s$2,
   [1, 3],
-  s$2,
-  [3, 4],
-  4,
-  3,
-  5,
-  3,
-  15,
-  11,
-  2,
-  2,
-  19,
-  20,
-  18,
-  c$2,
-  [104, 3],
-  4,
-  4,
-  s$2,
-  [2, 4],
   7,
+  1,
+  6,
   3,
+  9,
+  s$2,
+  [6, 5],
+  19,
+  s$2,
+  [1, 3],
   4,
-  16,
   1,
   4,
-  10,
+  24,
+  23,
+  28,
+  23,
+  s$2,
+  [7, 6],
+  23,
+  9,
+  7,
+  c$2,
+  [10, 3],
+  c$2,
+  [75, 3],
+  9,
+  23,
+  25,
+  24,
+  9,
+  25,
+  6,
+  6,
+  1,
+  9,
+  6,
+  3,
+  1,
+  3,
   14,
+  6,
+  3,
+  8,
+  3,
+  1,
+  12,
+  17,
+  16,
+  16,
+  c$2,
+  [56, 4],
+  4,
+  25,
+  c$2,
+  [74, 3],
+  s$2,
+  [7, 4],
+  c$2,
+  [37, 3],
+  s$2,
+  [6, 3],
+  18,
+  1,
+  6,
+  5,
+  12,
+  4,
+  9,
   c$2,
   [122, 3],
-  18,
-  18,
+  1,
+  s$2,
+  [13, 4],
+  3,
+  10,
+  23,
+  c$2,
+  [156, 4],
+  8,
+  8,
+  5,
+  5,
   9,
   s$2,
   [3, 4],
-  14,
-  14,
-  18,
-  21,
-  21,
-  6,
-  4,
-  c$2,
-  [50, 5],
-  7,
-  7,
-  s$2,
-  [15, 4],
-  3,
-  9,
-  3,
-  14,
-  18,
-  18,
+  12,
+  16,
+  16,
   8,
-  5,
+  c$2,
+  [184, 3],
   3,
-  9,
-  4
+  10,
+  3,
+  3
 ]),
   symbol: u$2([
   2,
+  13,
+  14,
+  15,
   s$2,
-  [14, 10, 1],
-  27,
+  [17, 5, 1],
+  23,
+  24,
   s$2,
-  [31, 5, 1],
-  44,
-  47,
-  50,
+  [27, 6, 1],
+  s$2,
+  [34, 7, 1],
+  61,
+  62,
   1,
   c$2,
-  [21, 18],
-  51,
-  55,
-  s$2,
-  [58, 4, 1],
-  89,
-  15,
-  24,
-  44,
-  49,
-  69,
-  c$2,
-  [31, 19],
-  c$2,
-  [18, 19],
-  24,
-  83,
-  c$2,
-  [39, 38],
-  36,
+  [27, 24],
   63,
-  65,
-  c$2,
-  [41, 37],
-  c$2,
-  [18, 108],
-  24,
-  26,
-  53,
   2,
-  24,
-  25,
-  26,
-  52,
+  13,
   c$2,
-  [9, 3],
-  62,
+  [24, 21],
+  s$2,
+  [64, 4, 1],
+  69,
+  70,
+  s$2,
+  [72, 4, 1],
+  81,
+  98,
+  2,
+  2,
+  13,
+  71,
+  103,
+  13,
+  c$2,
+  [41, 23],
+  2,
+  16,
+  34,
+  35,
+  44,
+  69,
   82,
   83,
-  2,
-  45,
-  c$2,
-  [8, 7],
-  24,
-  26,
-  c$2,
-  [5, 3],
-  25,
-  56,
-  57,
-  c$2,
-  [9, 3],
-  c$2,
-  [3, 6],
-  c$2,
-  [266, 3],
-  48,
-  c$2,
-  [275, 3],
-  70,
-  71,
-  72,
-  83,
-  89,
-  c$2,
-  [278, 38],
-  4,
-  5,
-  6,
-  12,
-  s$2,
-  [14, 11, 1],
-  26,
-  c$2,
-  [24, 6],
-  37,
-  42,
-  c$2,
-  [152, 37],
-  24,
-  64,
-  68,
-  83,
-  24,
-  c$2,
-  [119, 3],
-  54,
-  c$2,
-  [27, 11],
-  c$2,
-  [67, 8],
-  44,
-  54,
-  c$2,
-  [147, 6],
-  12,
-  15,
-  44,
   84,
-  89,
+  98,
+  2,
+  16,
   c$2,
-  [5, 8],
+  [35, 24],
+  c$2,
+  [23, 69],
+  16,
+  41,
+  76,
+  78,
+  2,
+  22,
+  33,
+  s$2,
+  [53, 5, 1],
+  97,
+  c$2,
+  [37, 24],
+  25,
+  33,
+  68,
+  106,
+  c$2,
+  [88, 47],
+  8,
+  50,
+  58,
+  59,
+  s$2,
+  [99, 4, 1],
+  c$2,
+  [166, 70],
+  c$2,
+  [78, 9],
+  c$2,
+  [87, 32],
+  c$2,
+  [311, 4],
+  2,
+  16,
+  43,
+  94,
+  95,
+  2,
+  16,
+  96,
+  c$2,
+  [8, 3],
+  95,
+  c$2,
+  [49, 5],
+  c$2,
+  [5, 10],
+  24,
+  c$2,
+  [20, 3],
   c$2,
   [3, 6],
+  24,
+  24,
+  s$2,
+  [1, 4],
+  2,
   c$2,
-  [46, 20],
+  [65, 3],
+  60,
+  104,
+  105,
   c$2,
-  [201, 3],
+  [8, 6],
   c$2,
-  [113, 28],
+  [462, 3],
   c$2,
-  [40, 9],
+  [374, 5],
   c$2,
-  [177, 23],
+  [373, 4],
   c$2,
-  [176, 3],
+  [408, 3],
   c$2,
-  [25, 24],
-  1,
+  [75, 5],
   c$2,
-  [26, 4],
-  c$2,
-  [25, 11],
-  c$2,
-  [73, 7],
+  [6, 12],
+  3,
+  45,
   46,
-  c$2,
-  [24, 24],
-  c$2,
-  [158, 51],
-  c$2,
-  [18, 25],
-  25,
-  28,
-  57,
-  c$2,
-  [21, 12],
-  28,
-  c$2,
-  [22, 8],
   2,
   3,
-  25,
-  28,
-  s$2,
-  [1, 3],
-  2,
-  44,
+  14,
+  43,
+  45,
   46,
+  85,
+  c$2,
+  [402, 92],
+  16,
+  77,
+  96,
+  16,
+  c$2,
+  [400, 7],
+  c$2,
+  [373, 25],
+  22,
+  c$2,
+  [319, 60],
+  8,
+  11,
+  26,
+  c$2,
+  [6, 3],
+  c$2,
+  [324, 26],
+  8,
+  11,
+  24,
+  c$2,
+  [33, 4],
+  8,
+  11,
+  12,
+  c$2,
+  [8, 5],
+  2,
+  c$2,
+  [9, 8],
+  c$2,
+  [8, 26],
+  c$2,
+  [80, 33],
+  c$2,
+  [32, 6],
+  24,
+  c$2,
+  [33, 3],
+  s$2,
+  [16, 6, 1],
+  c$2,
+  [34, 15],
+  c$2,
+  [423, 3],
+  c$2,
+  [208, 25],
+  c$2,
+  [49, 22],
+  s$2,
+  [2, 9, 1],
+  c$2,
+  [33, 24],
+  46,
+  49,
+  51,
+  52,
+  c$2,
+  [37, 38],
+  c$2,
+  [29, 23],
+  c$2,
+  [146, 47],
+  c$2,
+  [401, 47],
+  c$2,
+  [881, 8],
+  c$2,
+  [644, 9],
+  105,
+  c$2,
+  [8, 7],
+  c$2,
+  [873, 4],
+  c$2,
+  [29, 9],
+  c$2,
+  [662, 7],
+  c$2,
+  [6, 4],
+  c$2,
+  [655, 20],
+  c$2,
+  [222, 3],
+  16,
+  24,
+  43,
+  46,
+  48,
+  49,
+  50,
+  52,
+  86,
+  87,
   88,
   90,
   91,
-  c$2,
-  [425, 3],
-  24,
-  c$2,
-  [433, 3],
-  c$2,
-  [440, 3],
-  c$2,
-  [3, 3],
-  c$2,
-  [13, 4],
-  c$2,
-  [153, 4],
-  7,
-  12,
-  15,
-  24,
-  26,
-  38,
-  40,
-  41,
-  42,
-  44,
-  74,
-  75,
-  76,
+  95,
   2,
-  5,
-  26,
-  73,
+  4,
+  47,
   c$2,
-  [151, 12],
+  [677, 5],
   c$2,
-  [94, 7],
+  [5, 5],
   c$2,
-  [307, 38],
-  37,
-  44,
-  66,
-  67,
-  c$2,
-  [685, 109],
-  12,
-  13,
+  [216, 70],
+  42,
   43,
-  86,
-  87,
-  c$2,
-  [349, 14],
-  c$2,
-  [445, 11],
-  c$2,
-  [84, 46],
-  c$2,
-  [504, 10],
-  c$2,
-  [348, 19],
-  c$2,
-  [58, 19],
-  25,
-  29,
-  30,
-  c$2,
-  [346, 5],
-  1,
-  44,
-  89,
-  1,
-  c$2,
-  [483, 3],
-  c$2,
-  [3, 6],
-  c$2,
-  [339, 3],
-  c$2,
-  [121, 3],
-  c$2,
-  [496, 3],
-  c$2,
-  [8, 5],
-  c$2,
-  [349, 8],
-  c$2,
-  [348, 4],
-  78,
   79,
-  81,
-  c$2,
-  [568, 5],
-  15,
-  42,
-  44,
-  84,
-  85,
-  89,
-  2,
-  5,
-  2,
-  5,
-  c$2,
-  [359, 19],
-  c$2,
-  [19, 11],
-  c$2,
-  [142, 8],
-  c$2,
-  [337, 30],
-  c$2,
-  [180, 26],
-  c$2,
-  [284, 3],
-  c$2,
-  [287, 4],
-  c$2,
-  [4, 4],
-  25,
-  28,
-  25,
-  28,
-  c$2,
-  [4, 4],
-  c$2,
-  [517, 8],
-  c$2,
-  [168, 6],
-  c$2,
-  [507, 14],
-  c$2,
-  [506, 3],
-  c$2,
-  [189, 7],
-  c$2,
-  [162, 8],
-  s$2,
-  [4, 5, 1],
-  c$2,
-  [190, 8],
-  c$2,
-  [1024, 6],
-  s$2,
-  [4, 9, 1],
-  c$2,
-  [22, 3],
-  s$2,
-  [39, 4, 1],
-  44,
   80,
   c$2,
-  [19, 18],
+  [645, 24],
   c$2,
-  [18, 37],
+  [167, 6],
   c$2,
-  [16, 3],
+  [7, 35],
   c$2,
-  [88, 3],
-  76,
-  77,
+  [537, 25],
   c$2,
-  [292, 6],
+  [569, 7],
   c$2,
-  [3, 6],
+  [39, 31],
   c$2,
-  [144, 14],
+  [37, 6],
   c$2,
-  [14, 15],
+  [663, 7],
+  2,
+  58,
+  59,
   c$2,
-  [480, 39],
+  [11, 9],
   c$2,
-  [21, 21],
+  [349, 31],
   c$2,
-  [549, 6],
+  [597, 49],
+  c$2,
+  [25, 23],
+  c$2,
+  [910, 12],
+  c$2,
+  [33, 21],
+  44,
+  c$2,
+  [426, 12],
+  22,
+  c$2,
+  [47, 9],
+  c$2,
+  [16, 6],
+  c$2,
+  [423, 3],
+  4,
+  c$2,
+  [4, 3],
+  c$2,
+  [430, 8],
+  49,
+  52,
+  90,
+  91,
+  93,
+  95,
+  c$2,
+  [14, 3],
+  24,
+  46,
+  49,
   c$2,
   [6, 3],
-  1,
   c$2,
-  [111, 12],
+  [172, 8],
   c$2,
-  [234, 7],
+  [11, 3],
+  48,
   c$2,
-  [7, 7],
+  [688, 6],
   c$2,
-  [238, 10],
+  [37, 6],
   c$2,
-  [179, 11],
+  [700, 9],
   c$2,
-  [15, 40],
+  [15, 5],
+  51,
+  52,
+  92,
+  c$2,
+  [17, 16],
+  c$2,
+  [16, 16],
   6,
-  8,
+  16,
+  43,
+  52,
+  s$2,
+  [88, 4, 1],
   c$2,
-  [209, 7],
-  78,
-  79,
+  [843, 3],
   c$2,
-  [374, 4],
+  [1209, 21],
   c$2,
-  [313, 14],
+  [268, 22],
+  43,
   c$2,
-  [271, 43],
+  [477, 24],
   c$2,
-  [164, 4],
+  [48, 24],
   c$2,
-  [169, 4],
+  [524, 30],
   c$2,
-  [78, 12],
-  43
+  [1083, 9],
+  c$2,
+  [7, 12],
+  c$2,
+  [1229, 32],
+  c$2,
+  [342, 37],
+  c$2,
+  [756, 19],
+  c$2,
+  [755, 5],
+  47,
+  c$2,
+  [25, 6],
+  c$2,
+  [336, 5],
+  c$2,
+  [320, 13],
+  c$2,
+  [1532, 4],
+  c$2,
+  [349, 11],
+  c$2,
+  [12, 8],
+  c$2,
+  [134, 3],
+  c$2,
+  [39, 11],
+  c$2,
+  [327, 8],
+  c$2,
+  [13, 34],
+  5,
+  7,
+  2,
+  c$2,
+  [14, 4],
+  43,
+  c$2,
+  [446, 3],
+  c$2,
+  [1197, 24],
+  26,
+  c$2,
+  [486, 6],
+  c$2,
+  [469, 11],
+  c$2,
+  [128, 11],
+  24,
+  46,
+  c$2,
+  [5, 5],
+  c$2,
+  [134, 9],
+  c$2,
+  [44, 9],
+  c$2,
+  [156, 4],
+  c$2,
+  [504, 27],
+  c$2,
+  [487, 21],
+  c$2,
+  [132, 26],
+  c$2,
+  [96, 9],
+  c$2,
+  [105, 12],
+  c$2,
+  [186, 10],
+  c$2,
+  [112, 6]
 ]),
   type: u$2([
   s$2,
-  [2, 18],
+  [2, 24],
   0,
   0,
   1,
   c$2,
-  [21, 20],
+  [27, 25],
+  c$2,
+  [51, 25],
   s$2,
-  [0, 5],
+  [0, 10],
   c$2,
-  [10, 5],
+  [15, 5],
   s$2,
-  [2, 39],
+  [2, 29],
   c$2,
-  [40, 41],
-  c$2,
-  [41, 40],
+  [39, 8],
   s$2,
-  [2, 108],
+  [2, 94],
   c$2,
-  [148, 5],
+  [99, 10],
   c$2,
-  [239, 6],
+  [108, 27],
   c$2,
-  [159, 6],
+  [136, 53],
   c$2,
-  [253, 10],
+  [191, 78],
   c$2,
-  [176, 14],
+  [78, 9],
   c$2,
-  [36, 7],
+  [87, 35],
   c$2,
-  [197, 102],
+  [33, 4],
   c$2,
-  [103, 7],
+  [353, 5],
   c$2,
-  [108, 21],
+  [257, 46],
   c$2,
-  [21, 10],
+  [95, 39],
   c$2,
-  [423, 36],
+  [404, 94],
   c$2,
-  [373, 149],
+  [400, 11],
   c$2,
-  [158, 67],
+  [105, 76],
   c$2,
-  [57, 32],
+  [215, 15],
   c$2,
-  [322, 8],
+  [602, 80],
   c$2,
-  [98, 26],
+  [80, 32],
   c$2,
-  [489, 7],
+  [32, 29],
   c$2,
-  [721, 173],
+  [741, 98],
+  s$2,
+  [2, 150],
   c$2,
-  [462, 131],
+  [248, 10],
   c$2,
-  [130, 37],
+  [500, 19],
   c$2,
-  [375, 11],
+  [277, 44],
   c$2,
-  [818, 45],
+  [1106, 9],
   c$2,
-  [223, 79],
+  [655, 92],
   c$2,
-  [124, 24],
+  [751, 88],
   c$2,
-  [986, 15],
+  [97, 35],
   c$2,
-  [38, 19],
+  [37, 13],
   c$2,
-  [57, 20],
+  [145, 39],
   c$2,
-  [157, 62],
+  [184, 80],
   c$2,
-  [443, 106],
+  [265, 47],
   c$2,
-  [106, 103],
+  [47, 25],
   c$2,
-  [103, 62],
+  [426, 20],
   c$2,
-  [1248, 16],
+  [91, 33],
   c$2,
-  [78, 6]
+  [1225, 39],
+  c$2,
+  [517, 49],
+  c$2,
+  [890, 106],
+  c$2,
+  [584, 81],
+  c$2,
+  [238, 32],
+  c$2,
+  [841, 21],
+  c$2,
+  [134, 65],
+  c$2,
+  [354, 43],
+  c$2,
+  [41, 8],
+  c$2,
+  [49, 18],
+  c$2,
+  [134, 62],
+  c$2,
+  [1697, 35],
+  c$2,
+  [123, 9],
+  c$2,
+  [823, 12],
+  c$2,
+  [13, 8]
 ]),
   state: u$2([
   1,
   2,
-  5,
-  14,
-  12,
-  13,
-  8,
+  3,
+  7,
   20,
-  11,
-  29,
-  28,
-  31,
+  24,
+  25,
   34,
-  36,
-  38,
-  42,
-  47,
-  49,
+  8,
+  18,
+  19,
+  13,
+  28,
+  5,
+  26,
+  43,
+  41,
+  34,
+  46,
+  48,
+  51,
   50,
-  54,
-  49,
-  50,
-  56,
-  50,
-  58,
-  60,
-  62,
-  65,
+  55,
+  57,
+  59,
+  64,
+  61,
+  66,
   68,
   69,
-  70,
-  67,
-  72,
   71,
-  73,
-  74,
-  78,
+  75,
+  c$2,
+  [4, 3],
+  77,
+  c$2,
+  [4, 3],
   79,
-  82,
-  83,
-  82,
+  81,
   84,
-  50,
-  84,
-  50,
-  86,
-  92,
-  94,
+  87,
   93,
-  97,
-  69,
-  70,
-  98,
+  95,
+  34,
   100,
-  101,
-  103,
-  105,
-  106,
+  51,
+  102,
   107,
+  111,
   110,
-  111,
-  117,
-  124,
-  126,
-  123,
-  133,
+  64,
+  115,
+  121,
+  c$2,
+  [19, 3],
+  125,
+  c$2,
+  [3, 8],
   131,
-  82,
-  137,
-  142,
-  94,
-  93,
-  143,
-  101,
   133,
-  146,
-  82,
-  147,
-  50,
+  135,
+  64,
+  137,
+  138,
+  140,
+  142,
+  143,
   149,
-  154,
-  153,
-  155,
-  111,
-  124,
-  126,
-  162,
+  150,
+  151,
+  158,
+  159,
+  c$2,
+  [17, 3],
   163,
-  124,
-  126
+  69,
+  71,
+  164,
+  166,
+  64,
+  115,
+  64,
+  115,
+  176,
+  150,
+  175,
+  151,
+  181,
+  183,
+  188,
+  187,
+  c$2,
+  [25, 3],
+  189,
+  64,
+  115,
+  191,
+  c$2,
+  [33, 4],
+  196,
+  198,
+  c$2,
+  [23, 4],
+  151,
+  208,
+  209,
+  64,
+  115,
+  211,
+  c$2,
+  [15, 3],
+  c$2,
+  [38, 6],
+  151
 ]),
   mode: u$2([
   s$2,
-  [2, 18],
+  [2, 26],
+  1,
+  c$2,
+  [22, 22],
   s$2,
-  [1, 18],
+  [1, 26],
   c$2,
-  [21, 4],
+  [72, 24],
+  c$2,
+  [30, 29],
   s$2,
-  [2, 36],
+  [2, 69],
+  1,
   c$2,
-  [42, 5],
+  [101, 3],
   c$2,
-  [38, 34],
+  [34, 31],
   c$2,
-  [77, 38],
+  [129, 48],
+  c$2,
+  [180, 74],
+  c$2,
+  [289, 33],
+  c$2,
+  [38, 13],
+  c$2,
+  [389, 27],
+  c$2,
+  [30, 4],
+  c$2,
+  [36, 14],
+  c$2,
+  [85, 24],
+  c$2,
+  [24, 6],
+  c$2,
+  [372, 94],
+  c$2,
+  [374, 6],
+  c$2,
+  [505, 29],
+  c$2,
+  [370, 56],
+  c$2,
+  [561, 38],
+  c$2,
+  [44, 7],
+  c$2,
+  [383, 38],
+  c$2,
+  [668, 33],
+  c$2,
+  [328, 22],
   s$2,
-  [2, 108],
-  s$2,
-  [1, 20],
+  [2, 125],
   c$2,
-  [30, 15],
+  [126, 114],
   c$2,
-  [134, 100],
+  [622, 15],
   c$2,
-  [106, 4],
+  [311, 9],
   c$2,
-  [335, 26],
+  [586, 39],
   c$2,
-  [151, 16],
+  [328, 5],
   c$2,
-  [376, 48],
+  [1041, 15],
   c$2,
-  [347, 120],
+  [67, 9],
   c$2,
-  [63, 75],
+  [842, 69],
   c$2,
-  [13, 9],
+  [249, 89],
   c$2,
-  [23, 4],
+  [626, 35],
   c$2,
-  [4, 3],
+  [272, 13],
   c$2,
-  [587, 6],
+  [44, 32],
   c$2,
-  [427, 12],
+  [160, 85],
   c$2,
-  [9, 15],
+  [390, 39],
   c$2,
-  [335, 13],
+  [45, 13],
   c$2,
-  [389, 39],
+  [10, 12],
   c$2,
-  [45, 43],
+  [1320, 8],
   c$2,
-  [509, 77],
+  [74, 16],
   c$2,
-  [762, 121],
+  [88, 19],
   c$2,
-  [129, 9],
+  [1277, 42],
   c$2,
-  [756, 14],
+  [1320, 49],
   c$2,
-  [334, 14],
+  [727, 99],
   c$2,
-  [41, 6],
+  [1651, 73],
   c$2,
-  [367, 5],
+  [722, 14],
   c$2,
-  [784, 37],
+  [649, 23],
   c$2,
-  [208, 63],
+  [107, 14],
   c$2,
-  [1142, 20],
+  [1518, 20],
   c$2,
-  [1081, 10],
+  [138, 41],
   c$2,
-  [487, 14],
+  [1464, 6],
   c$2,
-  [22, 9],
+  [382, 27],
   c$2,
-  [151, 17],
+  [74, 34],
   c$2,
-  [221, 10],
+  [252, 63],
   c$2,
-  [803, 156],
+  [1325, 34],
   c$2,
-  [318, 61],
+  [97, 12],
   c$2,
-  [216, 50],
-  c$2,
-  [457, 7],
-  c$2,
-  [455, 38],
-  c$2,
-  [123, 34],
-  c$2,
-  [1206, 8],
-  1
+  [171, 11]
 ]),
   goto: u$2([
   s$2,
-  [10, 18],
-  4,
-  3,
-  10,
-  6,
+  [5, 24],
   7,
-  9,
+  7,
+  4,
   s$2,
-  [15, 5, 1],
-  24,
+  [7, 21],
+  6,
+  27,
+  s$2,
+  [9, 4, 1],
+  s$2,
+  [14, 4, 1],
+  21,
   22,
   23,
-  25,
-  26,
-  27,
-  21,
-  s$2,
-  [6, 3],
-  30,
-  s$2,
-  [11, 18],
-  s$2,
-  [9, 18],
+  31,
   32,
   33,
-  s$2,
-  [13, 18],
-  s$2,
-  [14, 18],
+  38,
+  39,
+  29,
+  30,
   35,
-  66,
+  36,
   37,
+  40,
+  42,
+  44,
+  45,
   s$2,
-  [16, 18],
+  [6, 23],
+  47,
+  52,
+  38,
+  39,
+  49,
+  54,
+  53,
   s$2,
-  [17, 18],
+  [10, 23],
   s$2,
-  [18, 18],
+  [11, 23],
   s$2,
-  [19, 18],
+  [12, 23],
   s$2,
-  [20, 18],
+  [13, 23],
+  56,
+  57,
+  58,
+  60,
   s$2,
-  [21, 18],
+  [124, 7],
   s$2,
-  [22, 18],
+  [17, 23],
+  62,
+  63,
+  65,
   s$2,
-  [23, 18],
+  [22, 23],
+  s$2,
+  [23, 23],
+  67,
+  72,
+  70,
+  73,
+  74,
+  s$2,
+  [26, 23],
+  s$2,
+  [27, 23],
+  s$2,
+  [28, 23],
+  76,
+  c$2,
+  [74, 4],
+  78,
+  c$2,
+  [5, 4],
+  s$2,
+  [34, 23],
+  s$2,
+  [41, 5],
+  80,
+  82,
+  83,
+  85,
+  86,
+  88,
+  82,
+  83,
+  s$2,
+  [35, 5],
+  s$2,
+  [36, 5],
+  s$2,
+  [37, 5],
+  89,
+  s$2,
+  [49, 3],
+  s$2,
+  [50, 3],
+  s$2,
+  [51, 3],
   39,
   40,
-  41,
-  s$2,
-  [43, 4, 1],
-  48,
-  33,
-  51,
-  53,
-  52,
-  55,
-  33,
-  51,
-  57,
-  33,
-  51,
-  59,
-  61,
-  s$2,
-  [56, 3],
-  s$2,
-  [57, 3],
-  s$2,
-  [58, 3],
-  4,
-  63,
-  64,
-  66,
-  33,
-  21,
-  3,
-  s$2,
-  [12, 18],
-  s$2,
-  [29, 18],
-  s$2,
-  [109, 26],
-  s$2,
-  [15, 18],
-  s$2,
-  [30, 18],
-  33,
-  67,
-  75,
-  76,
-  77,
-  s$2,
-  [31, 11],
-  c$2,
-  [13, 9],
-  s$2,
-  [35, 3],
-  s$2,
-  [36, 3],
-  80,
-  81,
-  21,
-  c$2,
-  [3, 3],
-  s$2,
-  [32, 3],
-  s$2,
-  [33, 3],
-  s$2,
-  [34, 3],
-  s$2,
-  [54, 11],
-  33,
-  51,
-  s$2,
-  [54, 7],
-  s$2,
-  [55, 18],
-  s$2,
-  [60, 20],
-  s$2,
-  [107, 25],
-  s$2,
-  [108, 25],
-  s$2,
-  [126, 24],
-  s$2,
-  [127, 24],
-  s$2,
-  [50, 11],
-  33,
-  51,
-  s$2,
-  [50, 7],
-  s$2,
-  [51, 18],
-  s$2,
-  [52, 18],
-  s$2,
-  [53, 18],
-  61,
-  85,
-  s$2,
-  [41, 12],
-  87,
-  s$2,
-  [41, 6],
-  43,
-  43,
-  89,
-  88,
-  44,
-  44,
   90,
   91,
-  132,
+  92,
+  138,
+  94,
+  97,
+  98,
   96,
-  132,
-  95,
-  s$2,
-  [72, 3],
-  33,
-  s$2,
-  [7, 3],
-  s$2,
-  [8, 3],
-  s$2,
-  [74, 4],
   99,
   s$2,
-  [90, 8],
-  102,
+  [42, 6],
+  3,
+  61,
+  61,
+  c$2,
+  [346, 3],
+  101,
+  62,
+  62,
   s$2,
-  [90, 4],
-  81,
-  81,
+  [66, 6],
+  s$2,
+  [67, 6],
+  s$2,
+  [68, 6],
+  105,
+  103,
   104,
-  s$2,
-  [61, 11],
-  33,
-  s$2,
-  [61, 7],
-  s$2,
-  [62, 18],
-  s$2,
-  [71, 12],
-  109,
-  s$2,
-  [71, 6],
+  106,
+  75,
+  75,
   108,
-  71,
+  109,
+  75,
+  75,
   s$2,
-  [24, 18],
+  [8, 23],
   s$2,
-  [25, 18],
+  [9, 23],
   s$2,
-  [37, 18],
+  [14, 23],
   s$2,
-  [38, 18],
-  s$2,
-  [26, 18],
-  s$2,
-  [27, 18],
-  s$2,
-  [117, 3],
-  s$2,
-  [112, 22],
-  s$2,
-  [113, 21],
-  s$2,
-  [28, 18],
-  s$2,
-  [59, 20],
-  s$2,
-  [39, 18],
-  42,
-  42,
-  s$2,
-  [40, 18],
-  116,
-  115,
+  [15, 23],
+  112,
+  58,
   113,
+  65,
   114,
-  49,
-  49,
-  1,
-  2,
-  5,
-  124,
-  21,
-  131,
-  131,
-  118,
   s$2,
-  [128, 3],
+  [116, 4, 1],
   s$2,
-  [130, 3],
-  s$2,
-  [73, 4],
-  119,
-  121,
+  [18, 23],
   120,
-  77,
-  77,
+  s$2,
+  [20, 23],
+  s$2,
+  [21, 23],
   122,
-  77,
-  77,
+  c$2,
+  [291, 4],
   s$2,
-  [83, 3],
+  [38, 5],
+  72,
+  124,
+  123,
+  c$2,
+  [11, 3],
   s$2,
-  [106, 3],
+  [25, 23],
+  s$2,
+  [129, 7],
   130,
-  106,
-  106,
+  130,
+  126,
+  s$2,
+  [130, 5],
   127,
-  129,
+  s$2,
+  [134, 8],
+  s$2,
+  [135, 8],
+  s$2,
+  [136, 8],
+  s$2,
+  [137, 8],
+  72,
+  124,
   128,
-  125,
-  106,
-  106,
+  c$2,
+  [77, 3],
+  s$2,
+  [30, 23],
+  72,
+  124,
+  129,
+  c$2,
+  [29, 3],
+  130,
+  s$2,
+  [47, 3],
+  82,
+  s$2,
+  [47, 20],
+  83,
+  s$2,
+  [48, 23],
+  s$2,
+  [113, 25],
+  s$2,
+  [114, 37],
+  s$2,
+  [115, 37],
+  s$2,
+  [43, 3],
   132,
   s$2,
-  [116, 3],
-  80,
-  81,
+  [43, 20],
+  s$2,
+  [44, 23],
+  s$2,
+  [117, 24],
+  s$2,
+  [45, 23],
+  s$2,
+  [46, 23],
   134,
-  21,
-  136,
-  135,
-  80,
-  80,
   s$2,
-  [70, 19],
-  s$2,
-  [65, 11],
-  109,
-  s$2,
-  [65, 7],
-  s$2,
-  [64, 18],
-  s$2,
-  [68, 19],
-  s$2,
-  [69, 18],
+  [124, 7],
+  4,
+  1,
+  2,
   139,
+  136,
+  c$2,
+  [618, 4],
   140,
-  138,
   s$2,
-  [118, 3],
+  [143, 6],
+  65,
+  139,
+  s$2,
+  [124, 7],
+  s$2,
+  [147, 6],
+  s$2,
+  [148, 6],
+  s$2,
+  [63, 6],
+  s$2,
+  [64, 6],
+  s$2,
+  [65, 6],
   141,
   s$2,
-  [122, 4],
-  45,
-  45,
-  46,
-  46,
-  47,
-  47,
-  48,
-  48,
-  c$2,
-  [494, 4],
-  s$2,
-  [129, 3],
-  s$2,
-  [75, 4],
+  [88, 3],
+  153,
+  82,
+  146,
+  83,
+  147,
   144,
-  c$2,
-  [487, 13],
   145,
-  s$2,
-  [76, 4],
-  c$2,
-  [153, 7],
-  s$2,
-  [89, 14],
   148,
-  33,
-  51,
+  152,
+  154,
+  155,
+  156,
   s$2,
-  [100, 6],
-  150,
-  151,
+  [74, 4],
+  157,
+  s$2,
+  [77, 4],
+  s$2,
+  [52, 3],
+  132,
+  s$2,
+  [52, 20],
+  s$2,
+  [53, 23],
+  s$2,
+  [117, 24],
+  160,
+  161,
+  s$2,
+  [16, 23],
+  s$2,
+  [118, 7],
+  s$2,
+  [119, 7],
+  s$2,
+  [120, 7],
+  s$2,
+  [121, 7],
+  s$2,
+  [122, 7],
+  s$2,
+  [123, 7],
+  s$2,
+  [19, 23],
+  72,
+  124,
+  162,
+  c$2,
+  [520, 3],
+  s$2,
+  [150, 7],
+  s$2,
+  [24, 23],
+  c$2,
+  [671, 4],
+  s$2,
+  [128, 7],
+  165,
+  73,
+  74,
+  s$2,
+  [133, 7],
+  s$2,
+  [29, 23],
+  167,
+  s$2,
+  [124, 7],
+  s$2,
+  [33, 23],
+  s$2,
+  [112, 25],
+  s$2,
+  [116, 24],
+  168,
+  c$2,
+  [873, 6],
+  s$2,
+  [126, 25],
+  s$2,
+  [141, 6],
+  s$2,
+  [142, 6],
+  169,
+  170,
+  c$2,
+  [45, 6],
+  s$2,
+  [146, 6],
+  173,
+  171,
+  172,
+  174,
+  s$2,
+  [79, 3],
+  s$2,
+  [111, 3],
+  153,
+  82,
+  111,
+  83,
+  111,
+  177,
   152,
   s$2,
-  [100, 9],
-  s$2,
-  [95, 18],
-  s$2,
-  [96, 18],
-  s$2,
-  [97, 18],
-  s$2,
-  [90, 7],
-  s$2,
-  [87, 3],
-  s$2,
-  [88, 3],
-  s$2,
-  [114, 3],
-  s$2,
-  [115, 3],
-  s$2,
-  [78, 14],
-  s$2,
-  [79, 14],
-  s$2,
-  [63, 18],
-  s$2,
-  [110, 21],
-  s$2,
-  [111, 21],
-  c$2,
-  [526, 4],
-  s$2,
-  [123, 4],
-  125,
-  s$2,
-  [82, 3],
-  s$2,
-  [84, 3],
-  s$2,
-  [85, 3],
-  s$2,
   [86, 3],
+  178,
+  180,
+  179,
   s$2,
-  [104, 7],
+  [89, 3],
+  s$2,
+  [124, 7],
+  s$2,
+  [91, 3],
+  182,
+  s$2,
+  [96, 12],
+  s$2,
+  [105, 6],
+  184,
+  185,
+  186,
   s$2,
   [105, 7],
   s$2,
-  [94, 10],
-  156,
+  [101, 16],
   s$2,
-  [94, 4],
+  [102, 16],
+  153,
+  82,
+  83,
+  152,
   s$2,
-  [101, 15],
+  [71, 6],
   s$2,
-  [102, 15],
+  [72, 6],
   s$2,
-  [103, 15],
-  158,
-  159,
-  157,
-  92,
-  92,
-  130,
-  92,
-  c$2,
-  [465, 3],
+  [73, 6],
+  s$2,
+  [76, 4],
+  s$2,
+  [56, 23],
   161,
-  140,
-  160,
   s$2,
-  [93, 14],
+  [55, 23],
   s$2,
-  [98, 18],
+  [59, 24],
   s$2,
-  [99, 18],
+  [60, 23],
   s$2,
-  [90, 7],
+  [149, 7],
   s$2,
-  [120, 3],
-  112,
+  [127, 7],
   s$2,
-  [121, 3],
-  91,
-  91,
-  130,
-  91,
+  [131, 7],
+  s$2,
+  [132, 7],
+  190,
   c$2,
-  [74, 3],
+  [258, 6],
   s$2,
-  [119, 3],
-  141
+  [32, 23],
+  s$2,
+  [125, 25],
+  s$2,
+  [144, 6],
+  s$2,
+  [145, 6],
+  s$2,
+  [69, 6],
+  192,
+  c$2,
+  [722, 12],
+  193,
+  s$2,
+  [70, 6],
+  s$2,
+  [84, 3],
+  194,
+  195,
+  s$2,
+  [95, 12],
+  197,
+  82,
+  83,
+  199,
+  s$2,
+  [124, 7],
+  s$2,
+  [87, 3],
+  200,
+  201,
+  c$2,
+  [125, 6],
+  202,
+  s$2,
+  [100, 11],
+  203,
+  100,
+  s$2,
+  [106, 13],
+  s$2,
+  [107, 13],
+  s$2,
+  [108, 13],
+  205,
+  206,
+  204,
+  98,
+  98,
+  153,
+  98,
+  c$2,
+  [339, 3],
+  s$2,
+  [54, 23],
+  207,
+  s$2,
+  [78, 3],
+  s$2,
+  [80, 3],
+  s$2,
+  [81, 3],
+  s$2,
+  [124, 14],
+  s$2,
+  [109, 5],
+  s$2,
+  [110, 5],
+  210,
+  c$2,
+  [127, 6],
+  s$2,
+  [93, 3],
+  s$2,
+  [92, 3],
+  s$2,
+  [90, 3],
+  s$2,
+  [94, 3],
+  s$2,
+  [99, 12],
+  s$2,
+  [103, 16],
+  s$2,
+  [104, 16],
+  c$2,
+  [463, 4],
+  s$2,
+  [31, 23],
+  212,
+  c$2,
+  [90, 6],
+  213,
+  c$2,
+  [7, 6],
+  s$2,
+  [85, 3],
+  97,
+  97,
+  153,
+  97,
+  c$2,
+  [47, 3],
+  s$2,
+  [82, 3],
+  s$2,
+  [83, 3]
 ])
 }),
 defaultActions: bda$1({
   idx: u$2([
   0,
-  3,
-  5,
   7,
-  8,
   s$2,
-  [10, 8, 1],
-  25,
+  [10, 4, 1],
+  16,
+  18,
+  19,
+  21,
+  22,
+  23,
   26,
   27,
+  31,
+  32,
+  33,
   s$2,
-  [30, 6, 1],
-  37,
-  40,
-  41,
+  [35, 5, 1],
   44,
   45,
-  46,
   s$2,
-  [48, 6, 1],
-  55,
-  56,
-  57,
+  [47, 4, 1],
+  s$2,
+  [53, 4, 1],
+  58,
   60,
-  66,
+  62,
+  63,
+  65,
   67,
   68,
-  72,
   s$2,
-  [74, 6, 1],
+  [71, 4, 1],
+  76,
   s$2,
-  [81, 7, 1],
+  [80, 4, 1],
   s$2,
-  [89, 4, 1],
+  [85, 4, 1],
+  90,
+  91,
+  92,
+  94,
   95,
-  96,
-  97,
-  100,
-  104,
-  105,
-  107,
-  108,
-  109,
   s$2,
-  [112, 5, 1],
-  118,
-  119,
+  [98, 5, 1],
+  s$2,
+  [107, 4, 2],
+  s$2,
+  [114, 7, 1],
   122,
-  124,
+  123,
+  125,
+  127,
+  128,
+  130,
+  131,
+  132,
+  134,
+  135,
   s$2,
-  [127, 13, 1],
-  s$2,
-  [141, 8, 1],
-  150,
+  [136, 4, 3],
+  146,
+  147,
+  149,
   151,
   152,
   s$2,
-  [156, 4, 1],
-  161
+  [154, 4, 1],
+  s$2,
+  [159, 7, 1],
+  s$2,
+  [167, 5, 1],
+  174,
+  176,
+  179,
+  184,
+  185,
+  186,
+  189,
+  s$2,
+  [191, 7, 1],
+  s$2,
+  [199, 7, 1],
+  207,
+  210,
+  212,
+  213
 ]),
   goto: u$2([
-  10,
+  5,
   6,
-  9,
-  13,
-  14,
   s$2,
-  [16, 8, 1],
-  56,
-  57,
-  58,
-  3,
-  12,
-  29,
-  109,
-  15,
-  30,
-  67,
-  35,
-  36,
-  32,
-  33,
-  34,
-  55,
-  60,
-  107,
-  108,
-  126,
-  127,
-  51,
-  52,
-  53,
-  43,
-  7,
-  8,
-  74,
-  62,
-  24,
-  25,
-  37,
-  38,
+  [10, 4, 1],
+  17,
+  22,
+  23,
   26,
   27,
-  112,
-  113,
   28,
-  59,
-  39,
-  42,
-  40,
+  34,
+  41,
+  35,
+  36,
+  37,
   49,
-  1,
-  2,
-  5,
-  128,
-  130,
-  73,
-  83,
-  80,
-  70,
-  64,
+  50,
+  51,
+  39,
+  40,
+  42,
+  3,
+  62,
+  66,
+  67,
   68,
-  69,
-  122,
-  s$2,
-  [45, 4, 1],
+  8,
+  9,
+  14,
+  15,
+  58,
+  18,
+  20,
+  21,
+  38,
+  25,
   129,
-  75,
-  76,
-  89,
-  95,
-  96,
-  97,
-  90,
-  87,
-  88,
+  s$2,
+  [134, 4, 1],
+  30,
+  48,
+  113,
   114,
   115,
-  78,
-  79,
+  44,
+  117,
+  45,
+  46,
+  4,
+  1,
+  2,
+  140,
+  143,
+  147,
+  148,
   63,
-  110,
-  111,
-  123,
-  125,
-  82,
-  84,
-  85,
-  86,
-  104,
-  105,
+  64,
+  65,
+  74,
+  77,
+  53,
+  16,
+  s$2,
+  [118, 6, 1],
+  19,
+  150,
+  24,
+  128,
+  133,
+  29,
+  33,
+  112,
+  116,
+  126,
+  141,
+  142,
+  146,
+  79,
+  89,
+  124,
+  91,
+  96,
   101,
   102,
-  103,
+  71,
+  72,
+  73,
+  76,
+  55,
+  59,
+  60,
+  149,
+  127,
+  131,
+  132,
+  32,
+  125,
+  144,
+  145,
+  69,
+  70,
+  95,
+  87,
+  106,
+  107,
+  108,
+  54,
+  78,
+  80,
+  81,
+  124,
+  124,
+  109,
+  110,
   93,
-  98,
-  99,
+  92,
   90,
-  121
+  94,
+  99,
+  103,
+  104,
+  31,
+  85,
+  82,
+  83
 ])
 }),
 parseError: function parseError(str, hash, ExceptionClass) {
@@ -19793,7 +22009,7 @@ parse: function parse(input) {
     var TERROR = this.TERROR;
     var EOF = this.EOF;
     var ERROR_RECOVERY_TOKEN_DISCARD_COUNT = (this.options.errorRecoveryTokenDiscardCount | 0) || 3;
-    var NO_ACTION = [0, 164 /* === table.length :: ensures that anyone using this new state will fail dramatically! */];
+    var NO_ACTION = [0, 214 /* === table.length :: ensures that anyone using this new state will fail dramatically! */];
 
     var lexer;
     if (this.__lexer__) {
@@ -22896,333 +25112,533 @@ EOF: 1,
       var yy_ = this;
 
       switch (yyrulenumber) {
+      case 0:
+        /*! Conditions:: INITIAL ebnf options */
+        /*! Rule::       \/\/[^\r\n]* */
+        /* skip single-line comment */
+        break;
+      case 1:
+        /*! Conditions:: INITIAL ebnf options */
+        /*! Rule::       \/\*[^]*?\*\/ */
+        /* skip multi-line comment */
+        break;
       case 2:
         /*! Conditions:: action */
-        /*! Rule::       \/[^ /]*?['"{}][^ ]*?\/ */
-        return 43; // regexp with braces or quotes (and no spaces) 
+        /*! Rule::       %\{([^]*?)%\}(?!\}) */
+        yy_.yytext = this.matches[1];
+
+        yy.include_command_allowed = false;
+        return 53;
+      case 3:
+        /*! Conditions:: action */
+        /*! Rule::       %include\b */
+        if (yy.include_command_allowed) {
+          // This is an include instruction in place of (part of) an action:
+          this.pushState('options');
+
+          return 33;
+        } else {
+          // TODO
+          yy_.yyerror(rmCommonWS`
+                                                %include statements must occur on a line on their own and cannot occur inside an action code block.
+                                                Its use is not permitted at this position.
+
+                                                  Erroneous area:
+                                                ` + this.prettyPrintRange(yy_.yylloc));
+
+          return 54;
+        }
+      case 4:
+        /*! Conditions:: action */
+        /*! Rule::       \/\*[^]*?\*\/ */
+        //yy.include_command_allowed = false; -- doesn't impact include-allowed state
+        return 53;
+      case 5:
+        /*! Conditions:: action */
+        /*! Rule::       \/\/.* */
+        yy.include_command_allowed = false;
+
+        return 53;
+      case 6:
+        /*! Conditions:: action */
+        /*! Rule::       ; */
+        if (yy.depth === 0) {
+          this.popState();
+          this.unput(yy_.yytext);
+
+          // yy_.yytext = '';    --- ommitted as this is the side-effect of .unput(yy_.yytext) already!
+          return 22;
+        } else {
+          return 53;
+        }
       case 7:
+        /*! Conditions:: action */
+        /*! Rule::       \| */
+        if (yy.depth === 0) {
+          this.popState();
+          this.unput(yy_.yytext);
+
+          // yy_.yytext = '';    --- ommitted as this is the side-effect of .unput(yy_.yytext) already!
+          return 22;
+        } else {
+          return 53;
+        }
+      case 8:
+        /*! Conditions:: action */
+        /*! Rule::       %% */
+        if (yy.depth === 0) {
+          this.popState();
+          this.unput(yy_.yytext);
+
+          // yy_.yytext = '';    --- ommitted as this is the side-effect of .unput(yy_.yytext) already!
+          return 22;
+        } else {
+          return 53;
+        }
+      case 9:
+        /*! Conditions:: action */
+        /*! Rule::       \/(?=\s) */
+        return 53;       // most probably a `/` divide operator. 
+      case 10:
+        /*! Conditions:: action */
+        /*! Rule::       \/.* */
+        yy.include_command_allowed = false;
+
+        var l = scanRegExp(yy_.yytext);
+
+        if (l > 0) {
+          this.unput(yy_.yytext.substring(l));
+          yy_.yytext = yy_.yytext.substring(0, l);
+        } else {
+          // assume it's a division operator:
+          this.unput(yy_.yytext.substring(1));
+
+          yy_.yytext = yy_.yytext[0];
+        }
+
+        return 53;
+      case 11:
+        /*! Conditions:: action */
+        /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}"|'{QUOTED_STRING_CONTENT}'|`{ES2017_STRING_CONTENT}` */
+        yy.include_command_allowed = false;
+
+        return 53;
+      case 12:
+        /*! Conditions:: action */
+        /*! Rule::       [^/"'`%\{\}\/{BR}]+ */
+        yy.include_command_allowed = false;
+
+        return 53;
+      case 13:
+        /*! Conditions:: action */
+        /*! Rule::       % */
+        yy.include_command_allowed = false;
+
+        return 53;
+      case 14:
         /*! Conditions:: action */
         /*! Rule::       \{ */
         yy.depth++;
 
-        return 12;
-      case 8:
+        yy.include_command_allowed = false;
+        return 53;
+      case 15:
         /*! Conditions:: action */
         /*! Rule::       \} */
-        if (yy.depth === 0) {
-          this.popState();
+        yy.include_command_allowed = false;
+
+        if (yy.depth <= 0) {
+          yy_.yyerror(rmCommonWS`
+                                                too many closing curly braces in parser rule action block.
+
+                                                Note: the action code chunk may be too complex for jison to parse
+                                                easily; we suggest you wrap the action code chunk in '%{...%}'
+                                                to help jison grok more or less complex action code chunks.
+
+                                                  Erroneous area:
+                                                ` + this.prettyPrintRange(yy_.yylloc));
+
+          return 56;
         } else {
           yy.depth--;
+
+          // Contrary to the lexer language, the parser grammar language
+          // REQUIRES braces around action code chunks, hence when we've
+          // hit the top-most brace level, we *know* we're at the end
+          // of the action code block!
+          if (yy.depth === 0) {
+            this.popState();
+
+            // this.unput(yy_.yytext);
+            // yy_.yytext = '}';
+            return 22;
+          }
         }
 
-        return 13;
-      case 9:
-        /*! Conditions:: token */
+        return 53;
+      case 16:
+        /*! Conditions:: action */
+        /*! Rule::       (?:[\s\r\n]*?){BR}+{WS}+ */
+        yy.include_command_allowed = true;
+
+        return 53;           // keep empty lines as-is inside action code blocks. 
+      case 18:
+        /*! Conditions:: action */
         /*! Rule::       {BR} */
-        this.popState();
+        if (yy.depth > 0) {
+          yy.include_command_allowed = true;
+          return 53;       // keep empty lines as-is inside action code blocks.
+        } else {
+          // end of action code chunk; allow parent mode to see this mode-terminating linebreak too.
+          this.popState();
 
-        break;
-      case 10:
-        /*! Conditions:: token */
+          this.unput(yy_.yytext);
+
+          // yy_.yytext = '';    --- ommitted as this is the side-effect of .unput(yy_.yytext) already!
+          return 22;
+        }
+      case 19:
+        /*! Conditions:: action */
+        /*! Rule::       $ */
+        yy.include_command_allowed = false;
+
+        if (yy.depth !== 0) {
+          yy_.yyerror(rmCommonWS`
+                                                missing ${yy.depth} closing curly braces in parser rule action block.
+
+                                                Note: the action code chunk may be too complex for jison to parse
+                                                easily; we suggest you wrap the action code chunk in '%{...%}'
+                                                to help jison grok more or less complex action code chunks.
+
+                                                  Erroneous area:
+                                                ` + this.prettyPrintRange(yy_.yylloc));
+
+          return 55;
+        }
+
+        this.popState();
+        yy_.yytext = '';
+        return 22;
+      case 20:
+        /*! Conditions:: INITIAL ebnf options */
+        /*! Rule::       [%\{]?\{+ */
+        {
+          yy.depth = 0;
+          yy.include_command_allowed = false;
+          this.pushState('action');
+
+          // keep matched string in local variable as the `unput()` call at the end will also 'unput' `yy_.yytext`,
+          // which for our purposes here is highly undesirable (see trimActionCode() use in the BNF parser spec).
+          var marker = yy_.yytext;
+
+          // check whether this `%{` marker was located at the start of the line:
+          // if it is, we treat it as a different token to signal the grammar we've
+          // got an action which stands on its own, i.e. is not a rule action, %code
+          // section, etc...
+          //var precedingStr = this.pastInput(1,2).replace(/[\r\n]/g, '\n');
+          //var precedingStr = this.matched.substr(-this.match.length - 1, 1);
+          var precedingStr = this.matched[this.matched.length - this.match.length - 1];
+
+          var atSOL = !precedingStr /* @ Start Of File */ || precedingStr === '\n';
+
+          // Make sure we've the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
+          var endMarker = this.setupDelimitedActionChunkLexerRegex(marker);
+
+          // Early sanity check for better error reporting: 
+          // we'd better make sure that end marker indeed does exist in the
+          // remainder of the input! When it's not, we'll have the `action`
+          // lexer state running past its due date as it'll then go and spit
+          // out a 'too may closing braces' error report at some spot way
+          // beyond the intended end of the action code chunk.
+          // 
+          // Writing the wrong end marker is a common user mistake, we can
+          // easily look ahead and check for it now and report a proper hint
+          // to cover this failure mode in a more helpful manner.
+          var remaining = this.lookAhead();
+
+          var prevEnd = 0;
+          var endMarkerIndex;
+
+          for (; ; ) {
+            endMarkerIndex = remaining.indexOf(endMarker, prevEnd);
+
+            // check for both simple non-existence *and* non-match due to trailing braces,
+            // e.g. in this input: `%{{...%}}}` -- note the 3rd curly closing brace.
+            if (endMarkerIndex >= 0 && remaining[endMarkerIndex + endMarker.length] === '}') {
+              prevEnd = endMarkerIndex + endMarker.length;
+              continue;
+            }
+
+            if (endMarkerIndex < 0) {
+              yy_.yyerror(rmCommonWS`
+                                                    Incorrectly terminated action code block. We're expecting the
+                                                    '${endMarker}' end marker to go with the given start marker.
+                                                    Regrettably, it does not exist in the remainder of the input.
+
+                                                      Erroneous area:
+                                                ` + this.prettyPrintRange(yy_.yylloc));
+
+              return 23;
+            }
+
+            break;
+          }
+
+          // Allow the start marker to be re-matched by the generated lexer rule regex:
+          this.unput(marker);
+
+          // Now RESET `yy_.yytext` to what it was originally, i.e. un-unput that lexer variable explicitly:
+          yy_.yytext = marker;
+
+          // and allow the next lexer round to match and execute the suitable lexer rule(s) to parse this incoming action code block. 
+          if (atSOL) {
+            return 21;
+          }
+
+          return 24;
+        }
+      case 21:
+        /*! Conditions:: ebnf INITIAL */
+        /*! Rule::       -> */
+        yy.depth = 0;
+
+        yy.include_command_allowed = false;
+        this.pushState('action');
+        return 46;
+      case 22:
+        /*! Conditions:: ebnf INITIAL */
+        /*! Rule::       → */
+        yy.depth = 0;
+
+        yy.include_command_allowed = false;
+        this.pushState('action');
+        return 46;
+      case 23:
+        /*! Conditions:: ebnf INITIAL */
+        /*! Rule::       => */
+        yy.depth = 0;
+
+        yy.include_command_allowed = false;
+        this.pushState('action');
+        return 46;
+      case 24:
+        /*! Conditions:: ebnf */
         /*! Rule::       %% */
         this.popState();
 
-        break;
-      case 11:
-        /*! Conditions:: token */
-        /*! Rule::       ; */
-        this.popState();
-
-        break;
-      case 12:
-        /*! Conditions:: bnf ebnf */
-        /*! Rule::       %% */
         this.pushState('code');
-
-        return 14;
+        return 13;
       case 25:
-        /*! Conditions:: options */
-        /*! Rule::       = */
-        this.pushState('option_values');
-
-        return 3;
-      case 26:
-        /*! Conditions:: option_values */
-        /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */
-        yy_.yytext = unescQuote(this.matches[1]);
-
+        /*! Conditions:: ebnf */
+        /*! Rule::       $ */
         this.popState();
-        return 29;   // value is always a string type 
-      case 27:
-        /*! Conditions:: option_values */
-        /*! Rule::       '{QUOTED_STRING_CONTENT}' */
-        yy_.yytext = unescQuote(this.matches[1]);
 
-        this.popState();
-        return 29;   // value is always a string type 
-      case 28:
-        /*! Conditions:: option_values */
-        /*! Rule::       `{ES2017_STRING_CONTENT}` */
-        yy_.yytext = unescQuote(this.matches[1]);
-
-        this.popState();
-        return 29;   // value is always a string type 
-      case 29:
-        /*! Conditions:: INITIAL ebnf bnf token path options option_values */
-        /*! Rule::       \/\/[^\r\n]* */
-        /* skip single-line comment */
-        break;
+        this.pushState('code');
+        return 13;
       case 30:
-        /*! Conditions:: INITIAL ebnf bnf token path options option_values */
-        /*! Rule::       \/\*[^]*?\*\/ */
-        /* skip multi-line comment */
-        break;
-      case 31:
-        /*! Conditions:: option_values */
-        /*! Rule::       [^\s\r\n]+ */
+        /*! Conditions:: options */
+        /*! Rule::       %%|\||; */
         this.popState();
 
-        return 30;
+        this.unput(yy_.yytext);
+        return 26;
+      case 31:
+        /*! Conditions:: options */
+        /*! Rule::       %include\b */
+        yy.depth = 0;
+
+        yy.include_command_allowed = true;
+        this.pushState('action');
+
+        // push the parsed '%include' back into the input-to-parse
+        // to trigger the `<action>` state to re-parse it
+        // and issue the desired follow-up token: 'INCLUDE':
+        this.unput(yy_.yytext);
+
+        return 24;
       case 32:
         /*! Conditions:: options */
+        /*! Rule::       > */
+        this.popState();
+
+        this.unput(yy_.yytext);
+        return 26;
+      case 35:
+        /*! Conditions:: options */
+        /*! Rule::       <{ID}> */
+        yy_.yytext = this.matches[1];
+
+        return 41;
+      case 37:
+        /*! Conditions:: options */
         /*! Rule::       {BR}{WS}+(?=\S) */
-        /* skip leading whitespace on the next line of input, when followed by more options */
+        /* ignore */
         break;
-      case 33:
+      case 38:
         /*! Conditions:: options */
         /*! Rule::       {BR} */
         this.popState();
 
-        return 28;
-      case 34:
-        /*! Conditions:: options option_values */
+        this.unput(yy_.yytext);
+        return 26;
+      case 39:
+        /*! Conditions:: options */
         /*! Rule::       {WS}+ */
         /* skip whitespace */
         break;
-      case 35:
-        /*! Conditions:: token bnf ebnf INITIAL */
-        /*! Rule::       {WS}+ */
-        /* skip whitespace */
-        break;
-      case 36:
-        /*! Conditions:: token bnf ebnf INITIAL */
+      case 40:
+        /*! Conditions:: ebnf INITIAL */
         /*! Rule::       {BR}+ */
         /* skip newlines */
         break;
-      case 37:
-        /*! Conditions:: token bnf ebnf INITIAL */
+      case 41:
+        /*! Conditions:: ebnf INITIAL */
+        /*! Rule::       {WS}+ */
+        /* skip whitespace */
+        break;
+      case 45:
+        /*! Conditions:: ebnf INITIAL */
         /*! Rule::       \[{ID}\] */
         yy_.yytext = this.matches[1];
 
-        return 39;
-      case 42:
-        /*! Conditions:: token bnf ebnf INITIAL */
-        /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */
-        yy_.yytext = unescQuote(this.matches[1]);
+        return 51;
+      case 54:
+        /*! Conditions:: ebnf INITIAL */
+        /*! Rule::       {HEX_NUMBER} */
+        yy_.yytext = parseInt(yy_.yytext, 16);
 
-        return 26;
-      case 43:
-        /*! Conditions:: token bnf ebnf INITIAL */
-        /*! Rule::       '{QUOTED_STRING_CONTENT}' */
-        yy_.yytext = unescQuote(this.matches[1]);
+        return 42;
+      case 55:
+        /*! Conditions:: ebnf INITIAL */
+        /*! Rule::       {DECIMAL_NUMBER} */
+        yy_.yytext = parseInt(yy_.yytext, 10);
 
-        return 26;
-      case 48:
-        /*! Conditions:: token bnf ebnf INITIAL */
+        return 42;
+      case 65:
+        /*! Conditions:: ebnf INITIAL */
         /*! Rule::       %% */
-        this.pushState(yy.ebnf ? 'ebnf' : 'bnf');
+        this.pushState('ebnf');
 
-        return 14;
-      case 49:
-        /*! Conditions:: token bnf ebnf INITIAL */
-        /*! Rule::       %ebnf\b */
-        yy.ebnf = true;
-
-        return 20;
-      case 57:
-        /*! Conditions:: token bnf ebnf INITIAL */
-        /*! Rule::       %token\b */
-        this.pushState('token');
-
-        return 18;
-      case 59:
-        /*! Conditions:: token bnf ebnf INITIAL */
+        return 13;
+      case 78:
+        /*! Conditions:: ebnf INITIAL */
         /*! Rule::       %option[s]? */
         this.pushState('options');
 
-        return 27;
-      case 60:
-        /*! Conditions:: token bnf ebnf INITIAL */
+        return 30;
+      case 79:
+        /*! Conditions:: ebnf INITIAL */
         /*! Rule::       %lex{LEX_CONTENT}\/lex\b */
         // remove the %lex../lex wrapper and return the pure lex section:
         yy_.yytext = this.matches[1];
 
         return 17;
-      case 63:
-        /*! Conditions:: INITIAL ebnf bnf code */
-        /*! Rule::       %include\b */
-        this.pushState('path');
+      case 80:
+        /*! Conditions:: ebnf INITIAL */
+        /*! Rule::       %code\b */
+        this.pushState('options');
 
-        return 44;
-      case 64:
-        /*! Conditions:: token bnf ebnf INITIAL */
+        return 32;
+      case 81:
+        /*! Conditions:: ebnf INITIAL */
+        /*! Rule::       %import\b */
+        this.pushState('options');
+
+        return 31;
+      case 82:
+        /*! Conditions:: INITIAL ebnf code */
+        /*! Rule::       %include\b */
+        yy.depth = 0;
+
+        yy.include_command_allowed = true;
+        this.pushState('action');
+
+        // push the parsed '%include' back into the input-to-parse
+        // to trigger the `<action>` state to re-parse it
+        // and issue the desired follow-up token: 'INCLUDE':
+        this.unput(yy_.yytext);
+
+        return 24;
+      case 83:
+        /*! Conditions:: INITIAL ebnf code */
         /*! Rule::       %{NAME}([^\r\n]*) */
         /* ignore unrecognized decl */
         this.warn(rmCommonWS`
-                                                EBNF: ignoring unsupported parser option ${dquote(yy_.yytext)}
+                                                ignoring unsupported parser option ${dquote(yy_.yytext)}
                                                 while lexing in ${dquote(this.topState())} state.
 
                                                   Erroneous area:
                                                 ` + this.prettyPrintRange(yy_.yylloc));
 
-        yy_.yytext = [// {NAME}
-        this.matches[1], // optional value/parameters
-        this.matches[2].trim()];
+        yy_.yytext = {
+          // {NAME}
+          name: this.matches[1],
 
-        return 21;
-      case 65:
-        /*! Conditions:: token bnf ebnf INITIAL */
-        /*! Rule::       <{ID}> */
-        yy_.yytext = this.matches[1];
+          // optional value/parameters
+          value: this.matches[2].trim()
+        };
 
-        return 36;
-      case 66:
-        /*! Conditions:: token bnf ebnf INITIAL */
-        /*! Rule::       \{\{([^]*?)\}\} */
-        yy_.yytext = this.matches[1].replace(/\}\\\}/g, '}}');  // unescape any literal '}\}' that exists within the action code block
-
-        return 15;
-      case 67:
-        /*! Conditions:: token bnf ebnf INITIAL */
-        /*! Rule::       %\{([^]*?)%\} */
-        yy_.yytext = this.matches[1].replace(/%\\\}/g, '%}');   // unescape any literal '%\}' that exists within the action code block
-
-        return 15;
-      case 68:
-        /*! Conditions:: token bnf ebnf INITIAL */
-        /*! Rule::       \{ */
-        yy.depth = 0;
-
-        this.pushState('action');
-        return 12;
-      case 69:
-        /*! Conditions:: token bnf ebnf INITIAL */
-        /*! Rule::       ->.* */
-        yy_.yytext = yy_.yytext.substr(2, yy_.yyleng - 2).trim();
-
-        return 42;
-      case 70:
-        /*! Conditions:: token bnf ebnf INITIAL */
-        /*! Rule::       →.* */
-        yy_.yytext = yy_.yytext.substr(1, yy_.yyleng - 1).trim();
-
-        return 42;
-      case 71:
-        /*! Conditions:: token bnf ebnf INITIAL */
-        /*! Rule::       =>.* */
-        yy_.yytext = yy_.yytext.substr(2, yy_.yyleng - 2).trim();
-
-        return 42;
-      case 72:
-        /*! Conditions:: token bnf ebnf INITIAL */
-        /*! Rule::       {HEX_NUMBER} */
-        yy_.yytext = parseInt(yy_.yytext, 16);
-
-        return 37;
-      case 73:
-        /*! Conditions:: token bnf ebnf INITIAL */
-        /*! Rule::       {DECIMAL_NUMBER}(?![xX0-9a-fA-F]) */
-        yy_.yytext = parseInt(yy_.yytext, 10);
-
-        return 37;
-      case 75:
-        /*! Conditions:: code */
-        /*! Rule::       [^\r\n]+ */
-        return 46;      // the bit of CODE just before EOF... 
-      case 76:
-        /*! Conditions:: path */
-        /*! Rule::       {BR} */
-        this.popState();
-
-        this.unput(yy_.yytext);
-        break;
-      case 77:
-        /*! Conditions:: path */
-        /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */
-        yy_.yytext = unescQuote(this.matches[1]);
-
-        this.popState();
-        return 45;
-      case 78:
-        /*! Conditions:: path */
-        /*! Rule::       '{QUOTED_STRING_CONTENT}' */
-        yy_.yytext = unescQuote(this.matches[1]);
-
-        this.popState();
-        return 45;
-      case 79:
-        /*! Conditions:: path */
-        /*! Rule::       {WS}+ */
-        // skip whitespace in the line 
-        break;
-      case 80:
-        /*! Conditions:: path */
-        /*! Rule::       [^\s\r\n]+ */
-        this.popState();
-
-        return 45;
-      case 81:
-        /*! Conditions:: action */
-        /*! Rule::       " */
-        yy_.yyerror(rmCommonWS`
-                                            unterminated string constant in lexer rule action block.
-
-                                              Erroneous area:
-                                            ` + this.prettyPrintRange(yy_.yylloc));
-
-        return 2;
-      case 82:
-        /*! Conditions:: action */
-        /*! Rule::       ' */
-        yy_.yyerror(rmCommonWS`
-                                            unterminated string constant in lexer rule action block.
-
-                                              Erroneous area:
-                                            ` + this.prettyPrintRange(yy_.yylloc));
-
-        return 2;
-      case 83:
-        /*! Conditions:: action */
-        /*! Rule::       ` */
-        yy_.yyerror(rmCommonWS`
-                                            unterminated string constant in lexer rule action block.
-
-                                              Erroneous area:
-                                            ` + this.prettyPrintRange(yy_.yylloc));
-
-        return 2;
+        return 29;
       case 84:
-        /*! Conditions:: option_values */
-        /*! Rule::       " */
-        yy_.yyerror(rmCommonWS`
-                                            unterminated string constant in %options entry.
-
-                                              Erroneous area:
-                                            ` + this.prettyPrintRange(yy_.yylloc));
-
-        return 2;
-      case 85:
-        /*! Conditions:: option_values */
-        /*! Rule::       ' */
-        yy_.yyerror(rmCommonWS`
-                                            unterminated string constant in %options entry.
-
-                                              Erroneous area:
-                                            ` + this.prettyPrintRange(yy_.yylloc));
-
-        return 2;
+        /*! Conditions:: code */
+        /*! Rule::       (?:[^%{BR}][^{BR}]*{BR}+)+ */
+        return 60;      // shortcut to grab a large bite at once when we're sure not to encounter any `%include` in there at start-of-line. 
       case 86:
-        /*! Conditions:: option_values */
+        /*! Conditions:: code */
+        /*! Rule::       [^{BR}]+ */
+        return 60;      // the bit of CODE just before EOF... 
+      case 87:
+        /*! Conditions:: action */
+        /*! Rule::       " */
+        yy_.yyerror(rmCommonWS`
+                                            unterminated string constant in parser rule action block.
+
+                                              Erroneous area:
+                                            ` + this.prettyPrintRange(yy_.yylloc));
+
+        return 57;
+      case 88:
+        /*! Conditions:: action */
+        /*! Rule::       ' */
+        yy_.yyerror(rmCommonWS`
+                                            unterminated string constant in parser rule action block.
+
+                                              Erroneous area:
+                                            ` + this.prettyPrintRange(yy_.yylloc));
+
+        return 57;
+      case 89:
+        /*! Conditions:: action */
+        /*! Rule::       ` */
+        yy_.yyerror(rmCommonWS`
+                                            unterminated string constant in parser rule action block.
+
+                                              Erroneous area:
+                                            ` + this.prettyPrintRange(yy_.yylloc));
+
+        return 57;
+      case 90:
+        /*! Conditions:: options */
+        /*! Rule::       " */
+        yy_.yyerror(rmCommonWS`
+                                            unterminated string constant in %options entry.
+
+                                              Erroneous area:
+                                            ` + this.prettyPrintRange(yy_.yylloc));
+
+        return 57;
+      case 91:
+        /*! Conditions:: options */
+        /*! Rule::       ' */
+        yy_.yyerror(rmCommonWS`
+                                            unterminated string constant in %options entry.
+
+                                              Erroneous area:
+                                            ` + this.prettyPrintRange(yy_.yylloc));
+
+        return 57;
+      case 92:
+        /*! Conditions:: options */
         /*! Rule::       ` */
         yy_.yyerror(rmCommonWS`
                                             unterminated string constant in %options entry.
@@ -23230,58 +25646,72 @@ EOF: 1,
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
 
-        return 2;
-      case 87:
+        return 57;
+      case 93:
         /*! Conditions:: * */
         /*! Rule::       " */
         var rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
 
         yy_.yyerror(rmCommonWS`
-                                            unterminated string constant  encountered while lexing
+                                            unterminated string constant encountered while lexing
                                             ${rules}.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
 
-        return 2;
-      case 88:
+        return 57;
+      case 94:
         /*! Conditions:: * */
         /*! Rule::       ' */
         var rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
 
         yy_.yyerror(rmCommonWS`
-                                            unterminated string constant  encountered while lexing
+                                            unterminated string constant encountered while lexing
                                             ${rules}.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
 
-        return 2;
-      case 89:
+        return 57;
+      case 95:
         /*! Conditions:: * */
         /*! Rule::       ` */
         var rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
 
         yy_.yyerror(rmCommonWS`
-                                            unterminated string constant  encountered while lexing
+                                            unterminated string constant encountered while lexing
                                             ${rules}.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
 
+        return 57;
+      case 96:
+        /*! Conditions:: options */
+        /*! Rule::       . */
+        yy_.yyerror(rmCommonWS`
+                                            unsupported parser input: ${dquote(yy_.yytext)}
+                                            while lexing in ${dquote(this.topState())} state.
+
+                                            If this input was intentional, you might want to put quotes around
+                                            it; any JavaScript string quoting style is accepted (single quotes,
+                                            double quotes *or* backtick quotes a la ES6 string templates).
+
+                                              Erroneous area:
+                                            ` + this.prettyPrintRange(yy_.yylloc));
+
         return 2;
-      case 90:
+      case 97:
         /*! Conditions:: * */
         /*! Rule::       . */
-        /* b0rk on bad characters */
         yy_.yyerror(rmCommonWS`
-                                                unsupported parser input: ${dquote(yy_.yytext)}
-                                                while lexing in ${dquote(this.topState())} state.
-                                                
-                                                  Erroneous area:
-                                                ` + this.prettyPrintRange(yy_.yylloc));
+                                            unsupported parser input: ${dquote(yy_.yytext)}
+                                            while lexing in ${dquote(this.topState())} state.
 
-        break;
+                                              Erroneous area:
+                                            ` + this.prettyPrintRange(yy_.yylloc));
+
+        return 2;
       default:
         return this.simpleCaseActionClusters[yyrulenumber];
       }
@@ -23289,300 +25719,290 @@ EOF: 1,
 
     simpleCaseActionClusters: {
       /*! Conditions:: action */
-      /*! Rule::       \/\*[^]*?\*\/ */
-      0: 43,
-
-      /*! Conditions:: action */
-      /*! Rule::       \/\/[^\r\n]* */
-      1: 43,
-
-      /*! Conditions:: action */
-      /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */
-      3: 43,
-
-      /*! Conditions:: action */
-      /*! Rule::       '{QUOTED_STRING_CONTENT}' */
-      4: 43,
-
-      /*! Conditions:: action */
-      /*! Rule::       [/"'][^{}/"']+ */
-      5: 43,
-
-      /*! Conditions:: action */
-      /*! Rule::       [^{}/"']+ */
-      6: 43,
-
-      /*! Conditions:: bnf ebnf */
-      /*! Rule::       %empty\b */
-      13: 38,
-
-      /*! Conditions:: bnf ebnf */
-      /*! Rule::       %epsilon\b */
-      14: 38,
-
-      /*! Conditions:: bnf ebnf */
-      /*! Rule::       \u0190 */
-      15: 38,
-
-      /*! Conditions:: bnf ebnf */
-      /*! Rule::       \u025B */
-      16: 38,
-
-      /*! Conditions:: bnf ebnf */
-      /*! Rule::       \u03B5 */
-      17: 38,
-
-      /*! Conditions:: bnf ebnf */
-      /*! Rule::       \u03F5 */
-      18: 38,
-
-      /*! Conditions:: ebnf */
-      /*! Rule::       \( */
-      19: 7,
-
-      /*! Conditions:: ebnf */
-      /*! Rule::       \) */
-      20: 8,
-
-      /*! Conditions:: ebnf */
-      /*! Rule::       \* */
-      21: 9,
-
-      /*! Conditions:: ebnf */
-      /*! Rule::       \? */
-      22: 10,
-
-      /*! Conditions:: ebnf */
-      /*! Rule::       \+ */
-      23: 11,
+      /*! Rule::       {WS}+ */
+      17: 53,
 
       /*! Conditions:: options */
-      /*! Rule::       {NAME} */
-      24: 25,
+      /*! Rule::       = */
+      26: 12,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
-      /*! Rule::       {ID} */
-      38: 24,
+      /*! Conditions:: options */
+      /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */
+      27: 58,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
-      /*! Rule::       {NAME} */
-      39: 25,
+      /*! Conditions:: options */
+      /*! Rule::       '{QUOTED_STRING_CONTENT}' */
+      28: 58,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
+      /*! Conditions:: options */
+      /*! Rule::       `{ES2017_STRING_CONTENT}` */
+      29: 58,
+
+      /*! Conditions:: options */
+      /*! Rule::       , */
+      33: 11,
+
+      /*! Conditions:: options */
+      /*! Rule::       \* */
+      34: 8,
+
+      /*! Conditions:: options */
+      /*! Rule::       {ANY_LITERAL_CHAR}+ */
+      36: 59,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */
+      42: 43,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       '{QUOTED_STRING_CONTENT}' */
+      43: 43,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       `{ES2017_STRING_CONTENT}` */
+      44: 43,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       %empty\b */
+      46: 48,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       %epsilon\b */
+      47: 48,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       \u0190 */
+      48: 48,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       \u025B */
+      49: 48,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       \u03B5 */
+      50: 48,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       \u03F5 */
+      51: 48,
+
+      /*! Conditions:: ebnf INITIAL */
       /*! Rule::       \$end\b */
-      40: 40,
+      52: 52,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
+      /*! Conditions:: ebnf INITIAL */
       /*! Rule::       \$eof\b */
-      41: 40,
+      53: 52,
 
-      /*! Conditions:: token */
-      /*! Rule::       [^\s\r\n]+ */
-      44: 'TOKEN_WORD',
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       {ID} */
+      56: 16,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       \( */
+      57: 6,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       \) */
+      58: 7,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       \+ */
+      59: 10,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       \* */
+      60: 8,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       \? */
+      61: 9,
+
+      /*! Conditions:: ebnf INITIAL */
       /*! Rule::       : */
-      45: 5,
+      62: 3,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
+      /*! Conditions:: ebnf INITIAL */
       /*! Rule::       ; */
-      46: 4,
+      63: 4,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
+      /*! Conditions:: ebnf INITIAL */
       /*! Rule::       \| */
-      47: 6,
+      64: 5,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       %ebnf\b */
+      66: 28,
+
+      /*! Conditions:: ebnf INITIAL */
       /*! Rule::       %debug\b */
-      50: 19,
+      67: 27,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
+      /*! Conditions:: ebnf INITIAL */
       /*! Rule::       %parser-type\b */
-      51: 32,
+      68: 37,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
+      /*! Conditions:: ebnf INITIAL */
       /*! Rule::       %prec\b */
-      52: 41,
+      69: 49,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
+      /*! Conditions:: ebnf INITIAL */
       /*! Rule::       %start\b */
-      53: 16,
+      70: 15,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
+      /*! Conditions:: ebnf INITIAL */
       /*! Rule::       %left\b */
-      54: 33,
+      71: 38,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
+      /*! Conditions:: ebnf INITIAL */
       /*! Rule::       %right\b */
-      55: 34,
+      72: 39,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
+      /*! Conditions:: ebnf INITIAL */
       /*! Rule::       %nonassoc\b */
-      56: 35,
+      73: 40,
 
-      /*! Conditions:: token bnf ebnf INITIAL */
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       %token\b */
+      74: 20,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       %on_error_recovery_shift\b */
+      75: 34,
+
+      /*! Conditions:: ebnf INITIAL */
+      /*! Rule::       %on_error_recovery_reduce\b */
+      76: 35,
+
+      /*! Conditions:: ebnf INITIAL */
       /*! Rule::       %parse-param[s]? */
-      58: 31,
-
-      /*! Conditions:: token bnf ebnf INITIAL */
-      /*! Rule::       %code\b */
-      61: 23,
-
-      /*! Conditions:: token bnf ebnf INITIAL */
-      /*! Rule::       %import\b */
-      62: 22,
+      77: 36,
 
       /*! Conditions:: code */
-      /*! Rule::       [^\r\n]*(\r|\n)+ */
-      74: 46,
+      /*! Rule::       [^{BR}]*{BR}+ */
+      85: 60,
 
       /*! Conditions:: * */
       /*! Rule::       $ */
-      91: 1
+      98: 1
     },
 
     rules: [
-      /*  0: */  /^(?:\/\*[\s\S]*?\*\/)/,
-      /*  1: */  /^(?:\/\/[^\r\n]*)/,
-      /*  2: */  /^(?:\/[^ /]*?['"{}][^ ]*?\/)/,
-      /*  3: */  /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)")/,
-      /*  4: */  /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,
-      /*  5: */  /^(?:[/"'][^{}/"']+)/,
-      /*  6: */  /^(?:[^{}/"']+)/,
-      /*  7: */  /^(?:\{)/,
-      /*  8: */  /^(?:\})/,
-      /*  9: */  /^(?:(\r\n|\n|\r))/,
-      /* 10: */  /^(?:%%)/,
-      /* 11: */  /^(?:;)/,
-      /* 12: */  /^(?:%%)/,
-      /* 13: */  /^(?:%empty\b)/,
-      /* 14: */  /^(?:%epsilon\b)/,
-      /* 15: */  /^(?:\u0190)/,
-      /* 16: */  /^(?:\u025B)/,
-      /* 17: */  /^(?:\u03B5)/,
-      /* 18: */  /^(?:\u03F5)/,
-      /* 19: */  /^(?:\()/,
-      /* 20: */  /^(?:\))/,
-      /* 21: */  /^(?:\*)/,
-      /* 22: */  /^(?:\?)/,
-      /* 23: */  /^(?:\+)/,
-      /* 24: */  new XRegExp(
-        '^(?:([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}\\-_]*(?:[\\p{Alphabetic}\\p{Number}_]))?))',
-        ''
-      ),
-      /* 25: */  /^(?:=)/,
-      /* 26: */  /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)")/,
-      /* 27: */  /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,
-      /* 28: */  /^(?:`((?:\\`|\\[^`]|[^\\`])*)`)/,
-      /* 29: */  /^(?:\/\/[^\r\n]*)/,
-      /* 30: */  /^(?:\/\*[\s\S]*?\*\/)/,
-      /* 31: */  /^(?:\S+)/,
-      /* 32: */  /^(?:(\r\n|\n|\r)([^\S\n\r])+(?=\S))/,
-      /* 33: */  /^(?:(\r\n|\n|\r))/,
-      /* 34: */  /^(?:([^\S\n\r])+)/,
-      /* 35: */  /^(?:([^\S\n\r])+)/,
-      /* 36: */  /^(?:(\r\n|\n|\r)+)/,
-      /* 37: */  new XRegExp('^(?:\\[([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*)\\])', ''),
-      /* 38: */  new XRegExp('^(?:([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*))', ''),
-      /* 39: */  new XRegExp(
-        '^(?:([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}\\-_]*(?:[\\p{Alphabetic}\\p{Number}_]))?))',
-        ''
-      ),
-      /* 40: */  /^(?:\$end\b)/,
-      /* 41: */  /^(?:\$eof\b)/,
+      /*  0: */  /^(?:\/\/[^\r\n]*)/,
+      /*  1: */  /^(?:\/\*[\s\S]*?\*\/)/,
+      /*  2: */  /^(?:%\{([\s\S]*?)%\}(?!\}))/,
+      /*  3: */  /^(?:%include\b)/,
+      /*  4: */  /^(?:\/\*[\s\S]*?\*\/)/,
+      /*  5: */  /^(?:\/\/.*)/,
+      /*  6: */  /^(?:;)/,
+      /*  7: */  /^(?:\|)/,
+      /*  8: */  /^(?:%%)/,
+      /*  9: */  /^(?:\/(?=\s))/,
+      /* 10: */  /^(?:\/.*)/,
+      /* 11: */  /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)"|'((?:\\'|\\[^']|[^\n\r'\\])*)'|`((?:\\`|\\[^`]|[^\\`])*)`)/,
+      /* 12: */  /^(?:[^\n\r"%'/`{}]+)/,
+      /* 13: */  /^(?:%)/,
+      /* 14: */  /^(?:\{)/,
+      /* 15: */  /^(?:\})/,
+      /* 16: */  /^(?:(?:\s*?)(\r\n|\n|\r)+([^\S\n\r])+)/,
+      /* 17: */  /^(?:([^\S\n\r])+)/,
+      /* 18: */  /^(?:(\r\n|\n|\r))/,
+      /* 19: */  /^(?:$)/,
+      /* 20: */  /^(?:[%{]?\{+)/,
+      /* 21: */  /^(?:->)/,
+      /* 22: */  /^(?:→)/,
+      /* 23: */  /^(?:=>)/,
+      /* 24: */  /^(?:%%)/,
+      /* 25: */  /^(?:$)/,
+      /* 26: */  /^(?:=)/,
+      /* 27: */  /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)")/,
+      /* 28: */  /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,
+      /* 29: */  /^(?:`((?:\\`|\\[^`]|[^\\`])*)`)/,
+      /* 30: */  /^(?:%%|\||;)/,
+      /* 31: */  /^(?:%include\b)/,
+      /* 32: */  /^(?:>)/,
+      /* 33: */  /^(?:,)/,
+      /* 34: */  /^(?:\*)/,
+      /* 35: */  new XRegExp('^(?:<([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*)>)', ''),
+      /* 36: */  /^(?:([^\s!"$%'-,./:-?\[-\^`{-}])+)/,
+      /* 37: */  /^(?:(\r\n|\n|\r)([^\S\n\r])+(?=\S))/,
+      /* 38: */  /^(?:(\r\n|\n|\r))/,
+      /* 39: */  /^(?:([^\S\n\r])+)/,
+      /* 40: */  /^(?:(\r\n|\n|\r)+)/,
+      /* 41: */  /^(?:([^\S\n\r])+)/,
       /* 42: */  /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)")/,
       /* 43: */  /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,
-      /* 44: */  /^(?:\S+)/,
-      /* 45: */  /^(?::)/,
-      /* 46: */  /^(?:;)/,
-      /* 47: */  /^(?:\|)/,
-      /* 48: */  /^(?:%%)/,
-      /* 49: */  /^(?:%ebnf\b)/,
-      /* 50: */  /^(?:%debug\b)/,
-      /* 51: */  /^(?:%parser-type\b)/,
-      /* 52: */  /^(?:%prec\b)/,
-      /* 53: */  /^(?:%start\b)/,
-      /* 54: */  /^(?:%left\b)/,
-      /* 55: */  /^(?:%right\b)/,
-      /* 56: */  /^(?:%nonassoc\b)/,
-      /* 57: */  /^(?:%token\b)/,
-      /* 58: */  /^(?:%parse-param[s]?)/,
-      /* 59: */  /^(?:%option[s]?)/,
-      /* 60: */  /^(?:%lex((?:[^\S\n\r])*(?:(?:\r\n|\n|\r)[\s\S]*?)?(?:\r\n|\n|\r)(?:[^\S\n\r])*)\/lex\b)/,
-      /* 61: */  /^(?:%code\b)/,
-      /* 62: */  /^(?:%import\b)/,
-      /* 63: */  /^(?:%include\b)/,
-      /* 64: */  new XRegExp(
+      /* 44: */  /^(?:`((?:\\`|\\[^`]|[^\\`])*)`)/,
+      /* 45: */  new XRegExp('^(?:\\[([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*)\\])', ''),
+      /* 46: */  /^(?:%empty\b)/,
+      /* 47: */  /^(?:%epsilon\b)/,
+      /* 48: */  /^(?:\u0190)/,
+      /* 49: */  /^(?:\u025B)/,
+      /* 50: */  /^(?:\u03B5)/,
+      /* 51: */  /^(?:\u03F5)/,
+      /* 52: */  /^(?:\$end\b)/,
+      /* 53: */  /^(?:\$eof\b)/,
+      /* 54: */  /^(?:(0[Xx][\dA-Fa-f]+))/,
+      /* 55: */  /^(?:([1-9]\d*))/,
+      /* 56: */  new XRegExp('^(?:([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*))', ''),
+      /* 57: */  /^(?:\()/,
+      /* 58: */  /^(?:\))/,
+      /* 59: */  /^(?:\+)/,
+      /* 60: */  /^(?:\*)/,
+      /* 61: */  /^(?:\?)/,
+      /* 62: */  /^(?::)/,
+      /* 63: */  /^(?:;)/,
+      /* 64: */  /^(?:\|)/,
+      /* 65: */  /^(?:%%)/,
+      /* 66: */  /^(?:%ebnf\b)/,
+      /* 67: */  /^(?:%debug\b)/,
+      /* 68: */  /^(?:%parser-type\b)/,
+      /* 69: */  /^(?:%prec\b)/,
+      /* 70: */  /^(?:%start\b)/,
+      /* 71: */  /^(?:%left\b)/,
+      /* 72: */  /^(?:%right\b)/,
+      /* 73: */  /^(?:%nonassoc\b)/,
+      /* 74: */  /^(?:%token\b)/,
+      /* 75: */  /^(?:%on_error_recovery_shift\b)/,
+      /* 76: */  /^(?:%on_error_recovery_reduce\b)/,
+      /* 77: */  /^(?:%parse-param[s]?)/,
+      /* 78: */  /^(?:%option[s]?)/,
+      /* 79: */  /^(?:%lex((?:[^\S\n\r])*(?:(?:\r\n|\n|\r)[\s\S]*?)?(?:\r\n|\n|\r)(?:[^\S\n\r])*)\/lex\b)/,
+      /* 80: */  /^(?:%code\b)/,
+      /* 81: */  /^(?:%import\b)/,
+      /* 82: */  /^(?:%include\b)/,
+      /* 83: */  new XRegExp(
         '^(?:%([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}\\-_]*(?:[\\p{Alphabetic}\\p{Number}_]))?)([^\\n\\r]*))',
         ''
       ),
-      /* 65: */  new XRegExp('^(?:<([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*)>)', ''),
-      /* 66: */  /^(?:\{\{([\s\S]*?)\}\})/,
-      /* 67: */  /^(?:%\{([\s\S]*?)%\})/,
-      /* 68: */  /^(?:\{)/,
-      /* 69: */  /^(?:->.*)/,
-      /* 70: */  /^(?:→.*)/,
-      /* 71: */  /^(?:=>.*)/,
-      /* 72: */  /^(?:(0[Xx][\dA-Fa-f]+))/,
-      /* 73: */  /^(?:([1-9]\d*)(?![\dA-FXa-fx]))/,
-      /* 74: */  /^(?:[^\r\n]*(\r|\n)+)/,
-      /* 75: */  /^(?:[^\r\n]+)/,
-      /* 76: */  /^(?:(\r\n|\n|\r))/,
-      /* 77: */  /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)")/,
-      /* 78: */  /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,
-      /* 79: */  /^(?:([^\S\n\r])+)/,
-      /* 80: */  /^(?:\S+)/,
-      /* 81: */  /^(?:")/,
-      /* 82: */  /^(?:')/,
-      /* 83: */  /^(?:`)/,
-      /* 84: */  /^(?:")/,
-      /* 85: */  /^(?:')/,
-      /* 86: */  /^(?:`)/,
+      /* 84: */  /^(?:(?:[^\n\r%][^\n\r]*(\r\n|\n|\r)+)+)/,
+      /* 85: */  /^(?:[^\n\r]*(\r\n|\n|\r)+)/,
+      /* 86: */  /^(?:[^\n\r]+)/,
       /* 87: */  /^(?:")/,
       /* 88: */  /^(?:')/,
       /* 89: */  /^(?:`)/,
-      /* 90: */  /^(?:.)/,
-      /* 91: */  /^(?:$)/
+      /* 90: */  /^(?:")/,
+      /* 91: */  /^(?:')/,
+      /* 92: */  /^(?:`)/,
+      /* 93: */  /^(?:")/,
+      /* 94: */  /^(?:')/,
+      /* 95: */  /^(?:`)/,
+      /* 96: */  /^(?:.)/,
+      /* 97: */  /^(?:.)/,
+      /* 98: */  /^(?:$)/
     ],
 
     conditions: {
-      'action': {
-        rules: [0, 1, 2, 3, 4, 5, 6, 7, 8, 81, 82, 83, 87, 88, 89, 90, 91],
-        inclusive: false
-      },
-
-      'code': {
-        rules: [63, 74, 75, 87, 88, 89, 90, 91],
-        inclusive: false
-      },
-
-      'path': {
-        rules: [29, 30, 76, 77, 78, 79, 80, 87, 88, 89, 90, 91],
-        inclusive: false
-      },
-
-      'options': {
-        rules: [24, 25, 29, 30, 32, 33, 34, 87, 88, 89, 90, 91],
-        inclusive: false
-      },
-
-      'option_values': {
-        rules: [26, 27, 28, 29, 30, 31, 34, 84, 85, 86, 87, 88, 89, 90, 91],
-        inclusive: false
-      },
-
-      'token': {
+      'ebnf': {
         rules: [
-          9,
-          10,
-          11,
-          29,
-          30,
-          35,
-          36,
-          37,
-          38,
-          39,
+          0,
+          1,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
           40,
           41,
           42,
@@ -23606,64 +26026,6 @@ EOF: 1,
           60,
           61,
           62,
-          64,
-          65,
-          66,
-          67,
-          68,
-          69,
-          70,
-          71,
-          72,
-          73,
-          87,
-          88,
-          89,
-          90,
-          91
-        ],
-
-        inclusive: true
-      },
-
-      'bnf': {
-        rules: [
-          12,
-          13,
-          14,
-          15,
-          16,
-          17,
-          18,
-          29,
-          30,
-          35,
-          36,
-          37,
-          38,
-          39,
-          40,
-          41,
-          42,
-          43,
-          45,
-          46,
-          47,
-          48,
-          49,
-          50,
-          51,
-          52,
-          53,
-          54,
-          55,
-          56,
-          57,
-          58,
-          59,
-          60,
-          61,
-          62,
           63,
           64,
           65,
@@ -23675,18 +26037,76 @@ EOF: 1,
           71,
           72,
           73,
-          87,
-          88,
-          89,
-          90,
-          91
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80,
+          81,
+          82,
+          83,
+          93,
+          94,
+          95,
+          97,
+          98
         ],
 
         inclusive: true
       },
 
-      'ebnf': {
+      'code': {
+        rules: [82, 83, 84, 85, 86, 93, 94, 95, 97, 98],
+        inclusive: false
+      },
+
+      'options': {
         rules: [
+          0,
+          1,
+          20,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          90,
+          91,
+          92,
+          93,
+          94,
+          95,
+          96,
+          97,
+          98
+        ],
+
+        inclusive: false
+      },
+
+      'action': {
+        rules: [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
           12,
           13,
           14,
@@ -23695,73 +26115,32 @@ EOF: 1,
           17,
           18,
           19,
-          20,
-          21,
-          22,
-          23,
-          29,
-          30,
-          35,
-          36,
-          37,
-          38,
-          39,
-          40,
-          41,
-          42,
-          43,
-          45,
-          46,
-          47,
-          48,
-          49,
-          50,
-          51,
-          52,
-          53,
-          54,
-          55,
-          56,
-          57,
-          58,
-          59,
-          60,
-          61,
-          62,
-          63,
-          64,
-          65,
-          66,
-          67,
-          68,
-          69,
-          70,
-          71,
-          72,
-          73,
           87,
           88,
           89,
-          90,
-          91
+          93,
+          94,
+          95,
+          97,
+          98
         ],
 
-        inclusive: true
+        inclusive: false
       },
 
       'INITIAL': {
         rules: [
-          29,
-          30,
-          35,
-          36,
-          37,
-          38,
-          39,
+          0,
+          1,
+          20,
+          21,
+          22,
+          23,
           40,
           41,
           42,
           43,
+          44,
           45,
           46,
           47,
@@ -23791,11 +26170,21 @@ EOF: 1,
           71,
           72,
           73,
-          87,
-          88,
-          89,
-          90,
-          91
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80,
+          81,
+          82,
+          83,
+          93,
+          94,
+          95,
+          97,
+          98
         ],
 
         inclusive: true
@@ -23805,19 +26194,102 @@ EOF: 1,
 
   var rmCommonWS = helpers.rmCommonWS;
   var dquote = helpers.dquote;
+  var scanRegExp = helpers.scanRegExp;
 
-  // unescape a string value which is wrapped in quotes/doublequotes
-  function unescQuote(str) {
-    str = '' + str;
-    var a = str.split('\\\\');
+  // Calculate the end marker to match and produce a
+  // lexer rule to match when the need arrises:
+  lexer.setupDelimitedActionChunkLexerRegex = function lexer__setupDelimitedActionChunkLexerRegex(marker) {
+    // Special: when we encounter `{` as the start of the action code block,
+    // we DO NOT patch the `%{...%}` lexer rule as we will handle `{...}` 
+    // elsewhere in the lexer anyway: we cannot use a simple regex like 
+    // `/{[^]*?}/` to match an entire action code block after all!
+    var doNotPatch = marker === '{';
 
-    a = a.map(function(s) {
-      return s.replace(/\\'/g, '\'').replace(/\\"/g, '"');
-    });
+    var action_end_marker = marker.replace(/\{/g, '}');
 
-    str = a.join('\\\\');
-    return str;
-  }
+    if (!doNotPatch) {
+      // Note: this bit comes straight from the lexer kernel!
+      //
+      // Get us the currently active set of lexer rules. 
+      // (This is why we push the 'action' lexer condition state above *before*
+      // we commence and work on the ruleset itself.)
+      var spec = this.__currentRuleSet__;
+
+      if (!spec) {
+        // Update the ruleset cache as we apparently encountered a state change or just started lexing.
+        // The cache is set up for fast lookup -- we assume a lexer will switch states much less often than it will
+        // invoke the `lex()` token-producing API and related APIs, hence caching the set for direct access helps
+        // speed up those activities a tiny bit.
+        spec = this.__currentRuleSet__ = this._currentRules();
+      }
+
+      var regexes = spec.__rule_regexes;
+      var len = spec.__rule_count;
+      var rules = spec.rules;
+      var i;
+      var action_chunk_regex;
+
+      // Must we still locate the rule to patch or have we done 
+      // that already during a previous encounter?
+      //
+      // WARNING: our cache/patch must live beyond the current lexer+parser invocation:
+      // our patching must remain detected indefinitely to ensure subsequent invocations
+      // of the parser will still work as expected!
+      // This implies that we CANNOT store anything in the `yy` context as that one
+      // is short-lived: `yy` dies once the current parser.parse() has completed!
+      // Hence we store our patch data in the lexer instance itself: in `spec`.
+      //
+      if (!spec.__action_chunk_rule_idx) {
+        // **WARNING**: *(this bit, like so much else in here, comes straight from the lexer kernel)*
+        //
+        // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
+        var orig_re_str1 = '/^(?:%\\{([^]*?)%\\}(?!\\}))/';
+
+        var orig_re_str2 = '/^(?:%\\{([\\s\\S]*?)%\\}(?!\\}))/';   // the XRegExp 'cross-platform' version of the same.
+
+        // Note: the arrays are 1-based, while `len` itself is a valid index,
+        // hence the non-standard less-or-equal check in the next loop condition!
+        for (i = 1; i <= len; i++) {
+          var rule_re = regexes[i];
+          var re_str = rule_re.toString();
+
+          //console.error('test regexes:', {i, len, re1: re_str, match1: rule_re.toString() === orig_re_str1, match1: rule_re.toString() === orig_re_str2});
+          if (re_str === orig_re_str1 || re_str === orig_re_str2) {
+            spec.__action_chunk_rule_idx = i;
+            break;
+          }
+        }
+
+        if (!spec.__action_chunk_rule_idx) {
+          //console.error('ruleset dump:', spec);
+          throw new Error('INTERNAL DEV ERROR: cannot locate %{...%} rule regex!');
+        }
+
+        // As we haven't initialized yet, we're sure the rule cache doesn't exist either.
+        // Make it happen:
+        spec.__cached_action_chunk_rule = {};   // set up empty cache
+      }
+
+      i = spec.__action_chunk_rule_idx;
+
+      // Must we build the lexer rule or did we already run this variant 
+      // through this lexer before? When the latter, fetch the cached version!
+      action_chunk_regex = spec.__cached_action_chunk_rule[marker];
+
+      if (!action_chunk_regex) {
+        action_chunk_regex = spec.__cached_action_chunk_rule[marker] = new RegExp(
+          '^(?:' + marker.replace(/\{/g, '\\{') + '([^]*?)' + action_end_marker.replace(/\}/g, '\\}') + '(?!\\}))'
+        );
+        //console.warn('encode new action block regex:', action_chunk_regex);
+      }
+
+      //console.error('new ACTION REGEX:', { i, action_chunk_regex });
+      // and patch the lexer regex table for the current lexer condition state:
+      regexes[i] = action_chunk_regex;
+    }
+
+    return action_end_marker;
+  };
 
   lexer.warn = function l_warn() {
     if (this.yy && this.yy.parser && typeof this.yy.parser.warn === 'function') {
@@ -23844,24 +26316,13 @@ var ebnf = false;
 
 
 var rmCommonWS$3 = helpers.rmCommonWS;
-var dquote$2 = helpers.dquote;
 var checkActionBlock$2 = helpers.checkActionBlock;
+var mkIdentifier$3 = helpers.mkIdentifier;
+var isLegalIdentifierInput$1 = helpers.isLegalIdentifierInput;
+var trimActionCode$1 = helpers.trimActionCode;
 
 
-// transform ebnf to bnf if necessary
-function extend(json, grammar) {
-    if (ebnf) {
-        json.ebnf = grammar.grammar;        // keep the original source EBNF around for possible pretty-printing & AST exports.
-        json.bnf = transform(grammar.grammar);
-    }
-    else {
-        json.bnf = grammar.grammar;
-    }
-    if (grammar.actionInclude) {
-        json.actionInclude = grammar.actionInclude;
-    }
-    return json;
-}
+
 
 // convert string value to number or boolean value, when possible
 // (and when this is more or less obviously the intent)
@@ -23913,7 +26374,7 @@ var bnf = {
     
 };
 
-var version$1 = '0.6.1-215';                              // require('./package.json').version;
+var version$1 = '0.6.2-220';                              // require('./package.json').version;
 
 function parse(grammar) {
     return bnf.parser.parse(grammar);
@@ -23921,52 +26382,87 @@ function parse(grammar) {
 
 // adds a declaration to the grammar
 bnf.parser.yy.addDeclaration = function bnfAddDeclaration(grammar, decl) {
+    if (!decl) {
+        return;
+    }
+
     if (decl.start) {
         grammar.start = decl.start;
-    } else if (decl.lex) {
+    }
+    if (decl.lex) {
         grammar.lex = parseLex(decl.lex.text, decl.lex.position);
-    } else if (decl.operator) {
+    }
+    if (decl.grammar) {
+        grammar.grammar = decl.grammar;
+    }
+    if (decl.ebnf) {
+        grammar.ebnf = decl.ebnf;
+    }
+    if (decl.bnf) {
+        grammar.bnf = decl.bnf;
+    }
+    if (decl.operator) {
         if (!grammar.operators) grammar.operators = [];
         grammar.operators.push(decl.operator);
-    } else if (decl.token) {
+    }
+    if (decl.token) {
         if (!grammar.extra_tokens) grammar.extra_tokens = [];
         grammar.extra_tokens.push(decl.token);
-    } else if (decl.token_list) {
+    }
+    if (decl.token_list) {
         if (!grammar.extra_tokens) grammar.extra_tokens = [];
         decl.token_list.forEach(function (tok) {
             grammar.extra_tokens.push(tok);
         });
-    } else if (decl.parseParams) {
+    }
+    if (decl.parseParams) {
         if (!grammar.parseParams) grammar.parseParams = [];
         grammar.parseParams = grammar.parseParams.concat(decl.parseParams);
-    } else if (decl.parserType) {
+    }
+    if (decl.parserType) {
         if (!grammar.options) grammar.options = {};
         grammar.options.type = decl.parserType;
-    } else if (decl.include) {
-        if (!grammar.moduleInclude) grammar.moduleInclude = '';
-        grammar.moduleInclude += decl.include;
-    } else if (decl.options) {
+    }
+    if (decl.include) {
+        if (!grammar.moduleInclude) {
+            grammar.moduleInclude = decl.include;
+        } else {
+            grammar.moduleInclude += '\n\n' + decl.include;
+        }
+    }
+    if (decl.actionInclude) {
+        if (!grammar.actionInclude) {
+            grammar.actionInclude = decl.actionInclude;
+        } else {
+            grammar.actionInclude += '\n\n' + decl.actionInclude;
+        }
+    }
+    if (decl.options) {
         if (!grammar.options) grammar.options = {};
         // last occurrence of `%options` wins:
         for (var i = 0; i < decl.options.length; i++) {
             grammar.options[decl.options[i][0]] = decl.options[i][1];
         }
-    } else if (decl.unknownDecl) {
-        if (!grammar.unknownDecls) grammar.unknownDecls = [];
+    }
+    if (decl.unknownDecl) {
+        if (!grammar.unknownDecls) grammar.unknownDecls = [];         // [ array of {name,value} pairs ]
         grammar.unknownDecls.push(decl.unknownDecl);
-    } else if (decl.imports) {
-        if (!grammar.imports) grammar.imports = [];
+    }
+    if (decl.imports) {
+        if (!grammar.imports) grammar.imports = [];                   // [ array of {name,path} pairs ]
         grammar.imports.push(decl.imports);
-    } else if (decl.actionInclude) {
-        if (!grammar.actionInclude) {
-            grammar.actionInclude = '';
-        }
-        grammar.actionInclude += decl.actionInclude;
-    } else if (decl.initCode) {
+    }
+    if (decl.codeSection) {
         if (!grammar.moduleInit) {
             grammar.moduleInit = [];
         }
-        grammar.moduleInit.push(decl.initCode);       // {qualifier: <name>, include: <source code chunk>}
+        grammar.moduleInit.push(decl.codeSection);                    // {qualifier: <name>, include: <source code chunk>}
+    }
+    if (decl.onErrorRecovery) {
+        if (!grammar.errorRecoveryActions) {
+            grammar.errorRecoveryActions = [];
+        }
+        grammar.errorRecoveryActions.push(decl.onErrorRecovery);      // {qualifier: <name>, include: <source code chunk>}
     }
 };
 
@@ -24206,8 +26702,8 @@ function grammarPrinter(raw, options) {
 
             for (var i = 0, len = src.length; i < len; i++) {
                 var entry = src[i];
-                var key = entry[0];
-                var value = entry[1];
+                var key = entry.name;
+                var value = entry.value;
 
                 lex_pre.push('%' + key + ' ' + value);
             }
@@ -24487,8 +26983,8 @@ function grammarPrinter(raw, options) {
 
         for (var i = 0, len = src.length; i < len; i++) {
             var entry = src[i];
-            var key = entry[0];
-            var value = entry[1];
+            var key = entry.name;
+            var value = entry.value;
 
             lex_pre.push('%' + key + ' ' + value);
         }
@@ -24797,17 +27293,18 @@ function grammarPrinter(raw, options) {
 
 // Jison, an LR(0), SLR(1), LARL(1), LR(1) Parser Generator
 var rmCommonWS$5 = helpers.rmCommonWS;
-var mkIdentifier$3  = helpers.mkIdentifier;
+var mkIdentifier$4  = helpers.mkIdentifier;
 var code_exec$2  = helpers.exec;
 
 
-var version$2 = '0.6.1-215';
+var version$2 = '0.6.2-220';
 
 var devDebug = 0;
 
 function chkBugger$3(src) {
     src = '' + src;
     if (src.match(/\bcov_\w+/)) {
+        // TODO
         console.error('### ISTANBUL COVERAGE CODE DETECTED ###\n', src);
     }
 }
@@ -24933,7 +27430,7 @@ function mkStdOptions$1(...args) {
 
         for (var p in o) {
             if (typeof o[p] !== 'undefined' && h.call(o, p)) {
-                o2[mkIdentifier$3(p)] = o[p];
+                o2[mkIdentifier$4(p)] = o[p];
             }
         }
 
@@ -25206,7 +27703,7 @@ function autodetectAndConvertToJSONformat$1(grammar, optionalLexerSection, optio
 Jison.rmCommonWS = rmCommonWS$5;
 Jison.mkStdOptions = mkStdOptions$1;
 Jison.camelCase = helpers.camelCase;
-Jison.mkIdentifier = mkIdentifier$3;
+Jison.mkIdentifier = mkIdentifier$4;
 Jison.autodetectAndConvertToJSONformat = autodetectAndConvertToJSONformat$1;
 
 // detect print
@@ -25518,9 +28015,9 @@ generator.constructor = function Jison_Generator(grammar, optionalLexerSection, 
 
     // calculate the input path; if none is specified, it's the present working directory
     var inpath = options.file || options.outfile || './dummy';
-    inpath = path.normalize(inpath);
-    options.inputPath = path.dirname(inpath);
-    options.inputFilename = path.basename(inpath);
+    inpath = path$1.normalize(inpath);
+    options.inputPath = path$1.dirname(inpath);
+    options.inputFilename = path$1.basename(inpath);
 
     // source included in semantic action execution scope
     if (grammar.actionInclude) {
@@ -25639,7 +28136,7 @@ generator.processGrammar = function processGrammarDef(grammar) {
             return false;
         });
         if (symbols_import) {
-            var filepath = path.resolve(symbols_import.path);
+            var filepath = path$1.resolve(symbols_import.path);
 
             var source = fs.readFileSync(filepath, 'utf8');
             // It's either a JSON file or a JISON generated output file:
@@ -26696,8 +29193,11 @@ generator.buildProductionActions = function buildProductionActions() {
                 missingActions.push(idx);
             }
         }
+        this.missingActions = missingActions;        
         if (missingActions.length) {
-            console.warn("WARNING: missing actions for states: ", missingActions);
+            if ( this.DEBUG) {
+                this.warn("WARNING: missing actions for states: ", missingActions);
+            }
 
             actions.push(`default:
                 // default action for all unlisted resolve states: ${missingActions.join(', ')}
@@ -27687,6 +30187,8 @@ generator.reportGrammarInformation = function reportGrammarInformation() {
 // --- START of debugTraceSrc chunk ---
 const debugTraceSrc = `
 function debug_trace() {
+    "use strict";
+
     if (typeof Jison !== 'undefined' && Jison.print) {
         Jison.print.apply(null, arguments);
     } else if (typeof print !== 'undefined') {
@@ -28297,7 +30799,7 @@ lrGeneratorMixin.parseTable = function lrParseTable(itemSets) {
     self.conflicting_states = conflictedStates;
 
     if (self.conflicts > 0) {
-        if (this.numExpectedConflictStates !== self.conflicts || self.enableDebugLogs) {
+        if (self.numExpectedConflictStates !== self.conflicts || self.enableDebugLogs) {
             self.warn('\nStates with conflicts:');
             each(conflictedStates, function report_conflict_state(val, state) {
                 self.warn('\nState ' + state, '    (' + val.symbol + ' @ ' + val.reduction.production.symbol + ' -> ' + val.reduction.handleToString() + ')\n');
@@ -28845,7 +31347,212 @@ generatorMixin.generateGenericHeaderComment = function generateGenericHeaderComm
  *      flex: boolean
  *                 optional: \`true\` ==> flex-like lexing behaviour where the rules are tested
  *                 exhaustively to find the longest match.
- *      backtrack_lexer: boolean
+ *      backtrack_lexer: boolean                                                                   (⅏ 센 ⅊ ⁖ ⁘ ⁙ ⁚ ⁛ ⁜ ⁝ ⁞ † ‡ 
+ a⯈b
+        ∀   ∁   ∂   ∃   ∄   ∅   ∆   ∇   ∈   ∉   ∊   ∋   ∌   ∍   ∎   ∏
+U+221x  ∐   ∑   −   ∓   ∔   ∕   ∖   ∗   ∘   ∙   √   ∛   ∜   ∝   ∞   ∟
+U+222x  ∠   ∡   ∢   ∣   ∤   ∥   ∦   ∧   ∨   ∩   ∪   ∫   ∬   ∭   ∮   ∯
+U+223x  ∰   ∱   ∲   ∳   ∴   ∵   ∶   ∷   ∸   ∹   ∺   ∻   ∼   ∽   ∾   ∿
+U+224x  ≀   ≁   ≂   ≃   ≄   ≅   ≆   ≇   ≈   ≉   ≊   ≋   ≌   ≍   ≎   ≏
+U+225x  ≐   ≑   ≒   ≓   ≔   ≕   ≖   ≗   ≘   ≙   ≚   ≛   ≜   ≝   ≞   ≟
+U+226x  ≠   ≡   ≢   ≣   ≤   ≥   ≦   ≧   ≨   ≩   ≪   ≫   ≬   ≭   ≮   ≯
+U+227x  ≰   ≱   ≲   ≳   ≴   ≵   ≶   ≷   ≸   ≹   ≺   ≻   ≼   ≽   ≾   ≿
+U+228x  ⊀   ⊁   ⊂   ⊃   ⊄   ⊅   ⊆   ⊇   ⊈   ⊉   ⊊   ⊋   ⊌   ⊍   ⊎   ⊏
+U+229x  ⊐   ⊑   ⊒   ⊓   ⊔   ⊕   ⊖   ⊗   ⊘   ⊙   ⊚   ⊛   ⊜   ⊝   ⊞   ⊟
+U+22Ax  ⊠   ⊡   ⊢   ⊣   ⊤   ⊥   ⊦   ⊧   ⊨   ⊩   ⊪   ⊫   ⊬   ⊭   ⊮   ⊯
+U+22Bx  ⊰   ⊱   ⊲   ⊳   ⊴   ⊵   ⊶   ⊷   ⊸   ⊹   ⊺   ⊻   ⊼   ⊽   ⊾   ⊿
+U+22Cx  ⋀   ⋁   ⋂   ⋃   ⋄   ⋅   ⋆   ⋇   ⋈   ⋉   ⋊   ⋋   ⋌   ⋍   ⋎   ⋏
+U+22Dx  ⋐   ⋑   ⋒   ⋓   ⋔   ⋕   ⋖   ⋗   ⋘   ⋙   ⋚   ⋛   ⋜   ⋝   ⋞   ⋟
+U+22Ex  ⋠   ⋡   ⋢   ⋣   ⋤   ⋥   ⋦   ⋧   ⋨   ⋩   ⋪   ⋫   ⋬   ⋭   ⋮   ⋯
+U+22Fx  ⋰   ⋱   ⋲   ⋳   ⋴   ⋵   ⋶   ⋷   ⋸   ⋹   ⋺   ⋻   ⋼   ⋽   ⋾   ⋿)
+U+230x  ⌀   ⌁   ⌂   ⌃   ⌄   ⌅   ⌆   ⌇   ⌈   ⌉   ⌊   ⌋   ⌌   ⌍   ⌎   ⌏
+U+231x  ⌐   ⌑   ⌒   ⌓   ⌔   ⌕   ⌖   ⌗   ⌘   ⌙   ⌚   ⌛   ⌜   ⌝   ⌞   ⌟
+U+232x  ⌠   ⌡   ⌢   ⌣   ⌤   ⌥   ⌦   ⌧   ⌨   〈   〉   ⌫   ⌬   ⌭   ⌮   ⌯
+U+233x  ⌰   ⌱   ⌲   ⌳   ⌴   ⌵   ⌶   ⌷   ⌸   ⌹   ⌺   ⌻   ⌼   ⌽   ⌾   ⌿
+U+234x  ⍀   ⍁   ⍂   ⍃   ⍄   ⍅   ⍆   ⍇   ⍈   ⍉   ⍊   ⍋   ⍌   ⍍   ⍎   ⍏
+U+235x  ⍐   ⍑   ⍒   ⍓   ⍔   ⍕   ⍖   ⍗   ⍘   ⍙   ⍚   ⍛   ⍜   ⍝   ⍞   ⍟
+U+236x  ⍠   ⍡   ⍢   ⍣   ⍤   ⍥   ⍦   ⍧   ⍨   ⍩   ⍪   ⍫   ⍬   ⍭   ⍮   ⍯
+U+237x  ⍰   ⍱   ⍲   ⍳   ⍴   ⍵   ⍶   ⍷   ⍸   ⍹   ⍺   ⍻   ⍼   ⍽   ⍾   ⍿
+U+238x  ⎀   ⎁   ⎂   ⎃   ⎄   ⎅   ⎆   ⎇   ⎈   ⎉   ⎊   ⎋   ⎌   ⎍   ⎎   ⎏
+U+239x  ⎐   ⎑   ⎒   ⎓   ⎔   ⎕   ⎖   ⎗   ⎘   ⎙   ⎚   ⎛   ⎜   ⎝   ⎞   ⎟
+U+23Ax  ⎠   ⎡   ⎢   ⎣   ⎤   ⎥   ⎦   ⎧   ⎨   ⎩   ⎪   ⎫   ⎬   ⎭   ⎮   ⎯
+U+23Bx  ⎰   ⎱   ⎲   ⎳   ⎴   ⎵   ⎶   ⎷   ⎸   ⎹   ⎺   ⎻   ⎼   ⎽   ⎾   ⎿
+U+23Cx  ⏀   ⏁   ⏂   ⏃   ⏄   ⏅   ⏆   ⏇   ⏈   ⏉   ⏊   ⏋   ⏌   ⏍   ⏎   ⏏
+U+23Dx  ⏐   ⏑   ⏒   ⏓   ⏔   ⏕   ⏖   ⏗   ⏘   ⏙   ⏚   ⏛   ⏜   ⏝   ⏞   ⏟
+U+23Ex  ⏠   ⏡   ⏢   ⏣   ⏤   ⏥   ⏦   ⏧   ⏨   ⏩   ⏪   ⏫   ⏬   ⏭   ⏮   ⏯
+U+23Fx  ⏰   ⏱   ⏲   ⏳   ⏴   ⏵   ⏶   ⏷   ⏸   ⏹   ⏺   ⏻   ⏼   ⏽   ⏾   ⏿
+
+U+260x  ☀   ☁   ☂   ☃   ☄   ★   ☆   ☇   ☈   ☉   ☊   ☋   ☌   ☍   ☎   ☏
+U+261x  ☐   ☑   ☒   ☓   ☔   ☕   ☖   ☗   ☘   ☙   ☚   ☛   ☜   ☝   ☞   ☟
+U+262x  ☠   ☡   ☢   ☣   ☤   ☥   ☦   ☧   ☨   ☩   ☪   ☫   ☬   ☭   ☮   ☯
+U+263x  ☰   ☱   ☲   ☳   ☴   ☵   ☶   ☷   ☸   ☹   ☺   ☻   ☼   ☽   ☾   ☿
+U+264x  ♀   ♁   ♂   ♃   ♄   ♅   ♆   ♇   ♈   ♉   ♊   ♋   ♌   ♍   ♎   ♏
+U+265x  ♐   ♑   ♒   ♓   ♔   ♕   ♖   ♗   ♘   ♙   ♚   ♛   ♜   ♝   ♞   ♟
+U+266x  ♠   ♡   ♢   ♣   ♤   ♥   ♦   ♧   ♨   ♩   ♪   ♫   ♬   ♭   ♮   ♯
+U+267x  ♰   ♱   ♲   ♳   ♴   ♵   ♶   ♷   ♸   ♹   ♺   ♻   ♼   ♽   ♾   ♿
+U+268x  ⚀   ⚁   ⚂   ⚃   ⚄   ⚅   ⚆   ⚇   ⚈   ⚉   ⚊   ⚋   ⚌   ⚍   ⚎   ⚏
+U+269x  ⚐   ⚑   ⚒   ⚓   ⚔   ⚕   ⚖   ⚗   ⚘   ⚙   ⚚   ⚛   ⚜   ⚝   ⚞   ⚟
+U+26Ax  ⚠   ⚡   ⚢   ⚣   ⚤   ⚥   ⚦   ⚧   ⚨   ⚩   ⚪   ⚫   ⚬   ⚭   ⚮   ⚯
+U+26Bx  ⚰   ⚱   ⚲   ⚳   ⚴   ⚵   ⚶   ⚷   ⚸   ⚹   ⚺   ⚻   ⚼   ⚽   ⚾   ⚿
+U+26Cx  ⛀   ⛁   ⛂   ⛃   ⛄   ⛅   ⛆   ⛇   ⛈   ⛉   ⛊   ⛋   ⛌   ⛍   ⛎   ⛏
+U+26Dx  ⛐   ⛑   ⛒   ⛓   ⛔   ⛕   ⛖   ⛗   ⛘   ⛙   ⛚   ⛛   ⛜   ⛝   ⛞   ⛟
+U+26Ex  ⛠   ⛡   ⛢   ⛣   ⛤   ⛥   ⛦   ⛧   ⛨   ⛩   ⛪   ⛫   ⛬   ⛭   ⛮   ⛯
+U+26Fx  ⛰   ⛱   ⛲   ⛳   ⛴   ⛵   ⛶   ⛷   ⛸   ⛹   ⛺   ⛻   ⛼   ⛽   ⛾   ⛿
+
+    ✁   ✂   ✃   ✄   ✅   ✆   ✇   ✈   ✉   ☛   ☞   ✌   ✍   ✎   ✏
+✐   ✑   ✒   ✓   ✔   ✕   ✖   ✗   ✘   ✙   ✚   ✛   ✜   ✝   ✞   ✟
+✠   ✡   ✢   ✣   ✤   ✥   ✦   ✧   ★   ✩   ✪   ✫   ✬   ✭   ✮   ✯
+✰   ✱   ✲   ✳   ✴   ✵   ✶   ✷   ✸   ✹   ✺   ✻   ✼   ✽   ✾   ✿
+❀   ❁   ❂   ❃   ❄   ❅   ❆   ❇   ❈   ❉   ❊   ❋   ●   ❍   ■   ❏
+☺   ☻   ♥   ♦   ♣   ♠   •   ◘   ○   ❐   ❑   ❒   ▲   ▼   ◆   ❖
+◗   ❘   ❙   ❚   ❛   ❜   ❝   ❞    
+
+U+270x  ✀   ✁   ✂   ✃   ✄   ✅   ✆   ✇   ✈   ✉   ✊   ✋   ✌   ✍   ✎   ✏
+U+271x  ✐   ✑   ✒   ✓   ✔   ✕   ✖   ✗   ✘   ✙   ✚   ✛   ✜   ✝   ✞   ✟
+U+272x  ✠   ✡   ✢   ✣   a✤b   a✥b   a✦b   a✧b   ✨   ✩   ✪   ✫   ✬   ✭   ✮   ✯
+U+273x  ✰   ✱   ✲   ✳   ✴   ✵   ✶   ✷   ✸   ✹   ✺   ✻   ✼   ✽   ✾   ✿
+U+274x  ❀   ❁   ❂   ❃   ❄   ❅   ❆   ❇   ❈   ❉   ❊   ❋   ❌   ❍   ❎   ❏
+U+275x  ❐   ❑   ❒   ❓   ❔   ❕   ❖   ❗   ❘   ❙   ❚   ❛   ❜   ❝   ❞   ❟
+U+276x  ❠   ❡   ❢   ❣   ❤   ❥   ❦   ❧   ❨   ❩   ❪   ❫   ❬   ❭   ❮   a❯b
+U+277x  ❰   ❱   ❲   ❳   ❴   ❵   ❶   ❷   ❸   ❹   ❺   ❻   ❼   ❽   ❾   ❿
+U+278x  ➀   ➁   ➂   ➃   ➄   ➅   ➆   ➇   ➈   ➉   ➊   ➋   ➌   ➍   ➎   ➏
+U+279x  ➐   ➑   ➒   ➓   ➔   ➕   ➖   ➗   ➘   ➙   ➚   ➛   ➜   ➝   ➞   ➟
+U+27Ax  ➠   ➡   ➢   ➣   ➤   ➥   ➦   ➧   a➨b   ➩   ➪   ➫   ➬   ➭   ➮   ➯
+U+27Bx  ➰   a➱b   ➲   ➳   ➴   ➵   ➶   ➷   ➸   ➹   ➺   ➻   ➼   ➽   ➾   ➿
+
+U+2580  ▀   Upper half block
+U+2581  ▁   Lower one eighth block
+U+2582  ▂   Lower one quarter block
+U+2583  ▃   Lower three eighths block
+U+2584  ▄   Lower half block
+U+2585  ▅   Lower five eighths block
+U+2586  ▆   Lower three quarters block
+U+2587  ▇   Lower seven eighths block
+U+2588  █   Full block
+U+2589  ▉   Left seven eighths block
+U+258A  ▊   Left three quarters block
+U+258B  ▋   Left five eighths block
+U+258C  ▌   Left half block
+U+258D  ▍   Left three eighths block
+U+258E  ▎   Left one quarter block
+U+258F  ▏   Left one eighth block
+U+2590  ▐   Right half block
+U+2591  ░   Light shade
+U+2592  ▒   Medium shade
+U+2593  ▓   Dark shade
+U+2594  ▔   Upper one eighth block
+U+2595  ▕   Right one eighth block
+U+2596  ▖   Quadrant lower left
+U+2597  ▗   Quadrant lower right
+U+2598  ▘   Quadrant upper left
+U+2599  ▙   Quadrant upper left and lower left and lower right
+U+259A  ▚   Quadrant upper left and lower right
+U+259B  ▛   Quadrant upper left and upper right and lower left
+U+259C  ▜   Quadrant upper left and upper right and lower right
+U+259D  ▝   Quadrant upper right
+U+259E  ▞   Quadrant upper right and lower left
+U+259F  ▟   Quadrant upper right and lower left and lower right
+Geometric Shapes
+Main articles: Geometric Shapes (Unicode block) and Geometric Shapes Extended (Unicode block)
+[hide]Code  Glyph   Description
+U+25A0  ■   Black square
+U+25A1  □   White square
+U+25A2  ▢   White square with rounded corners
+U+25A3  ▣   White square containing small black square
+U+25A4  ▤   Square with horizontal fill
+U+25A5  ▥   Square with vertical fill
+U+25A6  ▦   Square with orthogonal crosshatch fill
+U+25A7  ▧   Square with upper left to lower right fill
+U+25A8  ▨   Square with upper right to lower left fill
+U+25A9  ▩   Square with diagonal crosshatch fill
+U+25AA  ▪   Black small square
+U+25AB  ▫   White small square
+U+25AC  ▬   Black rectangle
+U+25AD  ▭   White rectangle
+U+25AE  ▮   Black vertical rectangle
+U+25AF  ▯   White vertical rectangle
+U+25B0  ▰   Black parallelogram
+U+25B1  ▱   White parallelogram
+U+25B2  ▲   Black up-pointing triangle
+U+25B3  △   White up-pointing triangle
+U+25B4  ▴   Black up-pointing small triangle
+U+25B5  ▵   White up-pointing small triangle
+U+25B6  ▶   Black right-pointing triangle
+U+25B7  ▷   White right-pointing triangle
+U+25B8  ▸   Black right-pointing small triangle
+U+25B9  ▹   White right-pointing small triangle
+U+25BA  ►   Black right-pointing pointer
+U+25BB  ▻   White right-pointing pointer
+U+25BC  ▼   Black down-pointing triangle
+U+25BD  ▽   White down-pointing triangle
+U+25BE  ▾   Black down-pointing small triangle
+U+25BF  ▿   White down-pointing small triangle
+U+25C0  ◀   Black left-pointing triangle
+U+25C1  ◁   White left-pointing triangle
+U+25C2  ◂   Black left-pointing small triangle
+U+25C3  ◃   White left-pointing small triangle
+U+25C4  ◄   Black left-pointing pointer
+U+25C5  ◅   White left-pointing pointer
+U+25C6  ◆   Black diamond
+U+25C7  ◇   White diamond
+U+25C8  ◈   White diamond containing small black diamond
+U+25C9  ◉   Fisheye
+U+25CA  ◊   Lozenge
+U+25CB  ○   White circle
+U+25CC  ◌   Dotted circle
+U+25CD  ◍   Circle with vertical fill
+U+25CE  ◎   Bullseye
+U+25CF  ●   Black circle
+U+25D0  ◐   Circle with left half black
+U+25D1  ◑   Circle with right half black
+U+25D2  ◒   Circle with lower half black
+U+25D3  ◓   Circle with upper half black
+U+25D4  ◔   Circle with upper right quadrant black
+U+25D5  ◕   Circle with all but upper left quadrant black
+U+25D6  ◖   Left half circle black
+U+25D7  ◗   Right half black circle
+U+25D8  ◘   Inverse bullet
+U+25D9  ◙   Inverse white circle
+U+25DA  ◚   Upper half inverse white circle
+U+25DB  ◛   Lower half inverse white circle
+U+25DC  ◜   Upper left quadrant circular arc
+U+25DD  ◝   Upper right quadrant circular arc
+U+25DE  ◞   Lower right quadrant circular arc
+U+25DF  ◟   Lower left quadrant circular arc
+U+25E0  ◠   Upper half circle
+U+25E1  ◡   Lower half circle
+U+25E2  ◢   Black lower right triangle
+U+25E3  ◣   Black lower left triangle
+U+25E4  ◤   Black upper left triangle
+U+25E5  ◥   Black upper right triangle
+U+25E6  ◦   White bullet
+U+25E7  ◧   Square with left half black
+U+25E8  ◨   Square with right half black
+U+25E9  ◩   Square with upper left diagonal half black
+U+25EA  ◪   Square with lower right diagonal half black
+U+25EB  ◫   White square with vertical bisecting line
+U+25EC  ◬   White up-pointing triangle with dot
+U+25ED  ◭   Up-pointing triangle with left half black
+U+25EE  ◮   Up-pointing triangle with right half black
+U+25EF  ◯   Large circle
+U+25F0  ◰   White square with upper left quadrant
+U+25F1  ◱   White square with lower left quadrant
+U+25F2  ◲   White square with lower right quadrant
+U+25F3  ◳   White square with upper right quadrant
+U+25F4  ◴   White circle with upper left quadrant
+U+25F5  ◵   White circle with lower left quadrant
+U+25F6  ◶   White circle with lower right quadrant
+U+25F7  ◷   White circle with upper right quadrant
+U+25F8  ◸   Upper left triangle
+U+25F9  ◹   Upper right triangle
+U+25FA  ◺   Lower-left triangle
+U+25FB  ◻   White medium square
+U+25FC  ◼   Black medium square
+U+25FD  ◽   White medium small square
+U+25FE  ◾   Black medium small square
+U+25FF  ◿   Lower right triangle
+
+
  *                 optional: \`true\` ==> lexer regexes are tested in order and for invoked;
  *                 the lexer terminates the scan when a token is returned by the action code.
  *      xregexp: boolean
@@ -30246,6 +32953,8 @@ lrGeneratorMixin.generateErrorClass = function () {
 // but we keep the prototype.constructor and prototype.name assignment lines too for compatibility
 // with userland code which might access the derived class in a 'classic' way.
 function JisonParserError(msg, hash) {
+    "use strict";
+
     Object.defineProperty(this, 'name', {
         enumerable: false,
         writable: false,
@@ -30972,6 +33681,8 @@ lrGeneratorMixin.generateTableCode2 = function (table, defaultActions, productio
 // default main method for generated commonjs modules
 const commonJsMain = `
 function (args) {
+    "use strict";
+
     // When the parser comes with its own \`main\` function, then use that one:
     if (typeof exports.parser.main === 'function') {
       return exports.parser.main(args);
@@ -31145,6 +33856,8 @@ parser$4.error = generator.error;
 // --- START parser Error class chunk ---
 const parseErrorSourceCode = `
 function parseError(str, hash, ExceptionClass) {
+    "use strict";
+
     if (hash.recoverable) {
         if (typeof this.trace === 'function') {
             this.trace(str);
@@ -31190,6 +33903,8 @@ const define_parser_APIs_1 = `
     cleanupAfterParse: null,
     constructParseErrorInfo: null,
     yyMergeLocationInfo: null,
+    copy_yytext: null,
+    copy_yylloc: null,
 
     __reentrant_call_depth: 0,      // INTERNAL USE ONLY
     __error_infos: [],              // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
@@ -31206,6 +33921,8 @@ const define_parser_APIs_1 = `
     // Helper function which can be overridden by user code later on: put suitable quotes around
     // literal IDs in a description string.
     quoteName: function parser_quoteName(id_str) {
+        "use strict";
+
         return '"' + id_str + '"';
     },
 
@@ -31213,6 +33930,8 @@ const define_parser_APIs_1 = `
     //
     // Return NULL when the symbol is unknown to the parser.
     getSymbolName: function parser_getSymbolName(symbol) {
+        "use strict";
+
         if (this.terminals_[symbol]) {
             return this.terminals_[symbol];
         }
@@ -31238,6 +33957,8 @@ const define_parser_APIs_1 = `
     //
     // Return NULL when the symbol is unknown to the parser.
     describeSymbol: function parser_describeSymbol(symbol) {
+        "use strict";
+
         if (symbol !== this.EOF && this.terminal_descriptions_ && this.terminal_descriptions_[symbol]) {
             return this.terminal_descriptions_[symbol];
         }
@@ -31260,6 +33981,8 @@ const define_parser_APIs_1 = `
     //
     // The returned list (array) will not contain any duplicate entries.
     collect_expected_token_set: function parser_collect_expected_token_set(state, do_not_describe) {
+        "use strict";
+
         var TERROR = this.TERROR;
         var tokenset = [];
         var check = {};
@@ -31294,6 +34017,8 @@ for (var api in api_set) {
 // --- START parser kernel ---
 parser$4.parse = `
 function parse(input, parseParams) {
+    "use strict";
+
     var self = this;
     var stack = new Array(128);         // token stack: stores token which leads to state at the same index (column storage)
     var sstack = new Array(128);        // state stack: stores states (column storage)
@@ -31339,6 +34064,8 @@ function parse(input, parseParams) {
     var ASSERT;
     if (typeof assert !== 'function') {
         ASSERT = function JisonAssert(cond, msg) {
+            "use strict";
+
             if (!cond) {
                 throw new Error('assertion failed: ' + (msg || '***'));
             }
@@ -31360,33 +34087,66 @@ function parse(input, parseParams) {
 //_handle_error_no_recovery:                      // run this code when the grammar does not include any error recovery rules
 //_handle_error_end_of_section:                   // this concludes the error recovery / no error recovery code section choice above
 
-    // shallow clone objects, straight copy of simple \`src\` values
+    // shallow clone objects & arrays, straight copy of simple \`src\` values
     // e.g. \`lexer.yytext\` MAY be a complex value object,
     // rather than a simple string/value.
+    //
+    // https://jsperf.com/new-array-vs-splice-vs-slice/72
+    // https://jsperf.com/instanceof-vs-typeof/20
+    // benchmark:: http://127.0.0.1:8080/example/jsperf/#testfile=test0020-typeof-instanceof-isArray.json5
+    // benchmark:: http://127.0.0.1:8080/example/jsperf/?333#testfile=test0021-shallow-clones.json5
+    //
     function shallow_copy(src) {
-        if (typeof src === 'object') {
-            var dst = {};
-            for (var k in src) {
-                if (Object.prototype.hasOwnProperty.call(src, k)) {
-                    dst[k] = src[k];
+        "use strict";
+
+        if (src && typeof src === 'object') {
+            // non-Object-type objects, e.g. RegExp, Date, etc., can usually be shallow cloned
+            // using their constructor:
+            if (src.constructor !== Object) {
+                if (Array.isArray(src)) {
+                    return src.slice();
                 }
+                var dst = new src.constructor(src);
+
+                // and make sure all custom attributes are added to the clone:
+                shallow_copy_noclobber(dst, src);
+                return dst;
             }
+            // native objects must be cloned a different way:
+            //
+            //return Object.assign({}, src);
+            var dst = {};
+            shallow_copy_noclobber(dst, src);
             return dst;
         }
         return src;
     }
+    // add elements from \`src\` to \`dst\` when:
+    // - either the element does not yet exist in \`src\`
+    // - or exists in \`src\` but is NULL or UNDEFINED there, while its value is non-NULL in \`dst\`
     function shallow_copy_noclobber(dst, src) {
+        "use strict";
+
+        const chk = Object.prototype.hasOwnProperty;
         for (var k in src) {
-            if (typeof dst[k] === 'undefined' && Object.prototype.hasOwnProperty.call(src, k)) {
-                dst[k] = src[k];
+            if (!(k in dst)) {
+                if (chk.call(src, k)) {
+                    dst[k] = src[k];
+                }
+            }
+            else {
+                if (src[k] != null && dst[k] == null && chk.call(src, k)) {
+                    dst[k] = src[k];
+                }
             }
         }
     }
-    function copy_yylloc(loc) {
+    function copy_yylloc_native(loc) {
+        "use strict";
+
         var rv = shallow_copy(loc);
-        if (rv && rv.range) {
-            rv.range = rv.range.slice(0);
-        }
+        // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
+        rv.range = rv.range.slice();
         return rv;
     }
 
@@ -31396,13 +34156,21 @@ function parse(input, parseParams) {
     sharedState_yy.lexer = lexer;
     sharedState_yy.parser = this;
 
+    // allow userland code to override the yytext and yylloc copy/clone functions:
+    this.copy_yytext = this.options.copy_yytext || sharedState_yy.copy_yytext || shallow_copy;
+    this.copy_yylloc = this.options.copy_yylloc || sharedState_yy.copy_yylloc || copy_yylloc_native;
+
     var yydebug = false;
     if (this.options.debug) {
         yydebug = function yydebug_impl(msg, obj) {
+            "use strict";
+
             var ref_list;
             var ref_names;
 
             function deepClone(from, sub) {
+                "use strict";
+
                 if (sub == null) {
                     ref_list = [];
                     ref_names = [];
@@ -31414,10 +34182,9 @@ function parse(input, parseParams) {
                     return from;
                 }
 
-                for (var i = 0, len = ref_list.length; i < len; i++) {
-                    if (ref_list[i] === from) {
-                        return '[Circular/Xref:' + ref_names[i] + ']';   // circular or cross reference
-                    }
+                var i = ref_list.indexOf(from);
+                if (i >= 0) {
+                    return '[Circular/Xref:' + ref_names[i] + ']';   // circular or cross reference
                 }
                 ref_list.push(from);
                 ref_names.push(sub);
@@ -31451,6 +34218,8 @@ function parse(input, parseParams) {
 
             // wrap try/catch in a function to help the V8 JIT compiler...
             function yydebug_cvt(obj) {
+                "use strict";
+
                 var js;
                 try {
                     var re1;
@@ -31487,6 +34256,8 @@ function parse(input, parseParams) {
     // them up. Hence we MUST set them up at the start of every \`parse()\` run!
     if (this.yyError) {
         this.yyError = function yyError(str /*, ...args */) {
+            "use strict";
+
             if (yydebug) yydebug('yyerror: ', { message: str, args: arguments, symbol: symbol, state: state, newState: newState, recovering: recovering, action: action });
 
 //_handle_error_with_recovery:                    // run this code when the grammar includes error recovery rules
@@ -31506,7 +34277,7 @@ function parse(input, parseParams) {
                 // v.stackSampleLength = error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH;
 
                 recoveringErrorInfo.value_stack[esp] = v;
-                recoveringErrorInfo.location_stack[esp] = copy_yylloc(lexer.yylloc);
+                recoveringErrorInfo.location_stack[esp] = this.copy_yylloc(lexer.yylloc);
                 recoveringErrorInfo.state_stack[esp] = newState || NO_ACTION[1];
 
                 ++esp;
@@ -31539,6 +34310,8 @@ function parse(input, parseParams) {
 
     if (this.yyRecovering) {
         this.yyRecovering = function yyRecovering() {
+            "use strict";
+
             if (yydebug) yydebug('yyrecovering: ', { symbol: symbol, state: state, newState: newState, recovering: recovering, action: action });
             return recovering;
         };
@@ -31546,6 +34319,8 @@ function parse(input, parseParams) {
 
     if (this.yyErrOk) {
         this.yyErrOk = function yyErrOk() {
+            "use strict";
+
             if (yydebug) yydebug('yyerrok: ', { symbol: symbol, state: state, newState: newState, recovering: recovering, action: action });
             recovering = 0;
 
@@ -31553,7 +34328,7 @@ function parse(input, parseParams) {
             // MAY invoke this API before the error is actually fully
             // recovered, in which case the parser recovery code won't be able
             // to append the skipped tokens to this info object.
-            // 
+            //
             // The rest of the kernel code is safe enough that it won't inadvertedly
             // re-use an old \`recoveringErrorInfo\` chunk so we'ld better wait
             // with destruction/cleanup until the end of the parse or until another
@@ -31568,6 +34343,8 @@ function parse(input, parseParams) {
 
     if (this.yyClearIn) {
         this.yyClearIn = function yyClearIn() {
+            "use strict";
+
             if (yydebug) yydebug('yyclearin: ', { symbol: symbol, newState: newState, recovering: recovering, action: action, preErrorSymbol: preErrorSymbol });
             if (symbol === TERROR) {
                 symbol = 0;
@@ -31585,6 +34362,8 @@ function parse(input, parseParams) {
     // Does the shared state override the default \`parseError\` that already comes with this instance?
     if (typeof sharedState_yy.parseError === 'function') {
         this.parseError = function parseErrorAlt(str, hash, ExceptionClass) {
+            "use strict";
+
             if (!ExceptionClass) {
                 ExceptionClass = this.JisonParserError;
             }
@@ -31597,6 +34376,8 @@ function parse(input, parseParams) {
     // Does the shared state override the default \`quoteName\` that already comes with this instance?
     if (typeof sharedState_yy.quoteName === 'function') {
         this.quoteName = function quoteNameAlt(id_str) {
+            "use strict";
+
             return sharedState_yy.quoteName.call(this, id_str);
         };
     } else {
@@ -31610,6 +34391,8 @@ function parse(input, parseParams) {
     // NOTE: as this API uses parse() as a closure, it MUST be set again on every parse() invocation,
     //       or else your \`sharedState\`, etc. references will be *wrong*!
     this.cleanupAfterParse = function parser_cleanupAfterParse(resultValue, invoke_post_methods, do_not_nuke_errorinfos) {
+        "use strict";
+
         var rv;
 
         if (invoke_post_methods) {
@@ -31712,6 +34495,8 @@ function parse(input, parseParams) {
     //
     // Note: epsilon rule's yylloc situation is detected by passing both \`first_index\` and \`first_yylloc\` as UNDEFINED/NULL.
     this.yyMergeLocationInfo = function parser_yyMergeLocationInfo(first_index, last_index, first_yylloc, last_yylloc, dont_look_back) {
+        "use strict";
+
         var i1 = first_index | 0,
             i2 = last_index | 0;
         var l1 = first_yylloc,
@@ -31763,32 +34548,22 @@ function parse(input, parseParams) {
                 } else {
                     // shallow-copy L2: after all, we MAY be looking
                     // at unconventional yylloc info objects...
-                    rv = shallow_copy(l2);
-                    if (rv.range) {
-                        // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-                        rv.range = rv.range.slice(0);
-                    }
+                    rv = this.copy_yylloc(l2);
                     return rv;
                 }
             } else {
                 // shallow-copy L1, then adjust first col/row 1 column past the end.
-                rv = shallow_copy(l1);
+                rv = this.copy_yylloc(l1);
                 rv.first_line = rv.last_line;
                 rv.first_column = rv.last_column;
-                if (rv.range) {
-                    // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-                    rv.range = rv.range.slice(0);
-                    rv.range[0] = rv.range[1];
-                }
+                rv.range[0] = rv.range[1];
 
                 if (l2) {
                     // shallow-mixin L2, then adjust last col/row accordingly.
                     shallow_copy_noclobber(rv, l2);
                     rv.last_line = l2.last_line;
                     rv.last_column = l2.last_column;
-                    if (rv.range && l2.range) {
-                        rv.range[1] = l2.range[1];
-                    }
+                    rv.range[1] = l2.range[1];
                 }
                 return rv;
             }
@@ -31804,24 +34579,13 @@ function parse(input, parseParams) {
 
         // shallow-copy L1|L2, before we try to adjust the yylloc values: after all, we MAY be looking
         // at unconventional yylloc info objects...
-        rv = shallow_copy(l1);
-
-        // first_line: ...,
-        // first_column: ...,
-        // last_line: ...,
-        // last_column: ...,
-        if (rv.range) {
-            // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-            rv.range = rv.range.slice(0);
-        }
+        rv = this.copy_yylloc(l1);
 
         if (l2) {
             shallow_copy_noclobber(rv, l2);
             rv.last_line = l2.last_line;
             rv.last_column = l2.last_column;
-            if (rv.range && l2.range) {
-                rv.range[1] = l2.range[1];
-            }
+            rv.range[1] = l2.range[1];
         }
 
         return rv;
@@ -31830,15 +34594,17 @@ function parse(input, parseParams) {
     // NOTE: as this API uses parse() as a closure, it MUST be set again on every parse() invocation,
     //       or else your \`lexer\`, \`sharedState\`, etc. references will be *wrong*!
     this.constructParseErrorInfo = function parser_constructParseErrorInfo(msg, ex, expected, recoverable) {
+        "use strict";
+
         var pei = {
             errStr: msg,
             exception: ex,
             text: lexer.match,
-            value: lexer.yytext,
+            value: this.copy_yytext(lexer.yytext),
             token: this.describeSymbol(symbol) || symbol,
             token_id: symbol,
             line: lexer.yylineno,
-            loc: copy_yylloc(lexer.yylloc),
+            loc: this.copy_yylloc(lexer.yylloc),
             expected: expected,
             recoverable: recoverable,
             state: state,
@@ -31867,9 +34633,11 @@ function parse(input, parseParams) {
                 // info.value = null;
                 // info.value_stack = null;
                 // ...
+                "use strict";
+
                 var rec = !!this.recoverable;
                 for (var key in this) {
-                    if (this.hasOwnProperty(key) && typeof key === 'object') {
+                    if (this[key] && this.hasOwnProperty(key) && typeof this[key] === 'object') {
                         this[key] = undefined;
                     }
                 }
@@ -31884,6 +34652,8 @@ function parse(input, parseParams) {
     // clone some parts of the (possibly enhanced!) errorInfo object
     // to give them some persistence.
     this.shallowCopyErrorInfo = function parser_shallowCopyErrorInfo(p) {
+        "use strict";
+
         var rv = shallow_copy(p);
 
         // remove the large parts which can only cause cyclic references
@@ -31893,23 +34663,23 @@ function parse(input, parseParams) {
         delete rv.lexer;
 
         // lexer.yytext MAY be a complex value object, rather than a simple string/value:
-        rv.value = shallow_copy(rv.value);
+        rv.value = this.copy_yytext(rv.value);
 
         // yylloc info:
-        rv.loc = copy_yylloc(rv.loc);
+        rv.loc = this.copy_yylloc(rv.loc);
 
         // the 'expected' set won't be modified, so no need to clone it:
-        //rv.expected = rv.expected.slice(0);
+        //rv.expected = rv.expected.slice();
 
         //symbol stack is a simple array:
-        rv.symbol_stack = rv.symbol_stack.slice(0);
+        rv.symbol_stack = rv.symbol_stack.slice();
         // ditto for state stack:
-        rv.state_stack = rv.state_stack.slice(0);
+        rv.state_stack = rv.state_stack.slice();
         // clone the yylloc's in the location stack?:
-        rv.location_stack = rv.location_stack.map(copy_yylloc);
+        rv.location_stack = rv.location_stack.map(this.copy_yylloc);
         // and the value stack may carry both simple and complex values:
         // shallow-copy the latter.
-        rv.value_stack = rv.value_stack.map(shallow_copy);
+        rv.value_stack = rv.value_stack.map(this.copy_yytext);
 
         // and we don't bother with the sharedState_yy reference:
         //delete rv.yy;
@@ -31941,7 +34711,7 @@ function parse(input, parseParams) {
         //                  arrive at the resolving error recovery rule.**
         // - info_stack_pointer:
         //                  this stack pointer points to the **top of
-        //                  the error ecovery tracking stack space**, i.e.
+        //                  the error recovery tracking stack space**, i.e.
         //                  this stack pointer takes up the role of
         //                  the \`stack_pointer\` for the error recovery
         //                  process. Any mutations in the **parse stack**
@@ -31953,7 +34723,7 @@ function parse(input, parseParams) {
         // - root_failure_pointer:
         //                  copy of the \`stack_pointer\`...
         //
-        for (var i = rv.stack_pointer; typeof rv.state_stack[i] !== 'undefined'; i++) {
+        for (var i = rv.stack_pointer; rv.state_stack[i] != null; i++) {
             // empty
         }
         rv.base_pointer = i;
@@ -31968,6 +34738,8 @@ function parse(input, parseParams) {
     };
 
     function getNonTerminalFromCode(symbol) {
+        "use strict";
+
         var tokenName = self.getSymbolName(symbol);
         if (!tokenName) {
             tokenName = symbol;
@@ -31978,20 +34750,50 @@ function parse(input, parseParams) {
 //_lexer_without_token_stack:
 
     function stdLex() {
+        "use strict";
+
         var token = lexer.lex();
         // if token isn't its numeric value, convert
         if (typeof token !== 'number') {
             token = self.symbols_[token] || token;
         }
 
+        if (typeof Jison !== 'undefined' && Jison.lexDebugger) {
+            var tokenName = self.getSymbolName(token || EOF);
+            if (!tokenName) {
+                tokenName = token;
+            }
+
+            Jison.lexDebugger.push({
+                tokenName: tokenName,
+                tokenText: lexer.match,
+                tokenValue: lexer.yytext
+            });
+        }
+
         return token || EOF;
     }
 
     function fastLex() {
+        "use strict";
+
         var token = lexer.fastLex();
         // if token isn't its numeric value, convert
         if (typeof token !== 'number') {
             token = self.symbols_[token] || token;
+        }
+
+        if (typeof Jison !== 'undefined' && Jison.lexDebugger) {
+            var tokenName = self.getSymbolName(token || EOF);
+            if (!tokenName) {
+                tokenName = token;
+            }
+
+            Jison.lexDebugger.push({
+                tokenName: tokenName,
+                tokenText: lexer.match,
+                tokenValue: lexer.yytext
+            });
         }
 
         return token || EOF;
@@ -32003,11 +34805,17 @@ function parse(input, parseParams) {
 
     // lex function that supports token stacks
     function tokenStackLex() {
+        "use strict";
+
         var token;
         token = tstack.pop() || lexer.lex() || EOF;
         // if token isn't its numeric value, convert
         if (typeof token !== 'number') {
             if (token instanceof Array) {
+                // tokenstack CANNOT be nested, i.e. an 'array'-type token
+                // now means the \`tstack\` is empty as this array of tokens
+                // could only have originated from the \`lexer.lex()\`
+                // call:
                 tstack = token;
                 token = tstack.pop();
             }
@@ -32015,6 +34823,19 @@ function parse(input, parseParams) {
             if (typeof token !== 'number') {
                 token = self.symbols_[token] || token;
             }
+        }
+
+        if (typeof Jison !== 'undefined' && Jison.lexDebugger) {
+            var tokenName = self.getSymbolName(token || EOF);
+            if (!tokenName) {
+                tokenName = token;
+            }
+
+            Jison.lexDebugger.push({
+                tokenName: tokenName,
+                tokenText: lexer.match,
+                tokenValue: lexer.yytext
+            });
         }
 
         return token || EOF;
@@ -32039,6 +34860,8 @@ function parse(input, parseParams) {
     // Return the rule stack depth where the nearest error rule can be found.
     // Return -1 when no error recovery rule was found.
     function locateNearestErrorRecoveryRule(state) {
+        "use strict";
+
         var stack_probe = sp - 1;
         var depth = 0;
 
@@ -32046,7 +34869,7 @@ function parse(input, parseParams) {
         while (stack_probe >= 0) {
             // check for error recovery rule in this state
             if (yydebug) yydebug('locateNearestErrorRecoveryRule #test#: ', { symbol: symbol, state: state, depth: depth, stackidx: sp - 1 - depth, lastidx: lastEofErrorStateDepth });
-            var t = table[state][TERROR] || NO_ACTION;
+            var t = (table[state] && table[state][TERROR]) || NO_ACTION;
             if (t[0]) {
                 // We need to make sure we're not cycling forever:
                 // once we hit EOF, even when we \`yyerrok()\` an error, we must
@@ -32095,7 +34918,7 @@ function parse(input, parseParams) {
 
         lexer.setInput(input, sharedState_yy);
 
-        // NOTE: we *assume* no lexer pre/post handlers are set up *after* 
+        // NOTE: we *assume* no lexer pre/post handlers are set up *after*
         // this initial \`setInput()\` call: hence we can now check and decide
         // whether we'll go with the standard, slower, lex() API or the
         // \`fast_lex()\` one:
@@ -32104,9 +34927,9 @@ function parse(input, parseParams) {
             if (lexerInfo.fastLex && typeof fastLex === 'function') {
                 lex = fastLex;
             }
-        } 
+        }
 
-        yyloc = lexer.yylloc;
+        yyloc = this.copy_yylloc(lexer.yylloc);
         lstack[sp] = yyloc;
         vstack[sp] = null;
         sstack[sp] = 0;
@@ -32178,7 +35001,7 @@ function parse(input, parseParams) {
                         p = this.constructParseErrorInfo(errStr, null, expected, (error_rule_depth >= 0));
 
                         // DO NOT cleanup the old one before we start the new error info track:
-                        // the old one will *linger* on the error stack and stay alive until we 
+                        // the old one will *linger* on the error stack and stay alive until we
                         // invoke the parser's cleanup API!
                         recoveringErrorInfo = this.shallowCopyErrorInfo(p);
 
@@ -32206,18 +35029,18 @@ function parse(input, parseParams) {
 
                     // just recovered from another error
                     if (recovering === ERROR_RECOVERY_TOKEN_DISCARD_COUNT && error_rule_depth >= 0) {
-                        // SHIFT current lookahead and grab another
-                        recoveringErrorInfo.symbol_stack[esp] = symbol;
-                        recoveringErrorInfo.value_stack[esp] = shallow_copy(lexer.yytext);
-                        recoveringErrorInfo.location_stack[esp] = copy_yylloc(lexer.yylloc);
-                        recoveringErrorInfo.state_stack[esp] = newState; // push state
-                        ++esp;
-
                         // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
                         yyleng = lexer.yyleng;
-                        yytext = lexer.yytext;
+                        yytext = this.copy_yytext(lexer.yytext);
                         yylineno = lexer.yylineno;
-                        yyloc = lexer.yylloc;
+                        yyloc = this.copy_yylloc(lexer.yylloc);
+
+                        // SHIFT current lookahead and grab another
+                        recoveringErrorInfo.symbol_stack[esp] = symbol;
+                        recoveringErrorInfo.value_stack[esp] = yytext;
+                        recoveringErrorInfo.location_stack[esp] = yyloc;
+                        recoveringErrorInfo.state_stack[esp] = newState; // push state
+                        ++esp;
 
                         preErrorSymbol = 0;
                         symbol = lex();
@@ -32277,7 +35100,7 @@ function parse(input, parseParams) {
                     recoveringErrorInfo.symbol_stack[esp] = preErrorSymbol;
                     if (errStr) {
                         recoveringErrorInfo.value_stack[esp] = {
-                            yytext: shallow_copy(lexer.yytext),
+                            yytext: this.copy_yytext(lexer.yytext),
                             errorRuleDepth: error_rule_depth,
                             errStr: errStr,
                             errorSymbolDescr: errSymbolDescr,
@@ -32295,12 +35118,12 @@ function parse(input, parseParams) {
                         });
                     } else {
                         recoveringErrorInfo.value_stack[esp] = {
-                            yytext: shallow_copy(lexer.yytext),
+                            yytext: this.copy_yytext(lexer.yytext),
                             errorRuleDepth: error_rule_depth,
                             stackSampleLength: error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH
                         };
                     }
-                    recoveringErrorInfo.location_stack[esp] = copy_yylloc(lexer.yylloc);
+                    recoveringErrorInfo.location_stack[esp] = this.copy_yylloc(lexer.yylloc);
                     recoveringErrorInfo.state_stack[esp] = newState || NO_ACTION[1];
 
                     ++esp;
@@ -32328,14 +35151,14 @@ function parse(input, parseParams) {
                     // and move the top entries + discarded part of the parse stacks onto the error info stack:
                     for (var idx = sp - EXTRA_STACK_SAMPLE_DEPTH, top = idx + yyrulelen; idx < top; idx++, esp++) {
                         recoveringErrorInfo.symbol_stack[esp] = stack[idx];
-                        recoveringErrorInfo.value_stack[esp] = shallow_copy(vstack[idx]);
-                        recoveringErrorInfo.location_stack[esp] = copy_yylloc(lstack[idx]);
+                        recoveringErrorInfo.value_stack[esp] = vstack[idx];
+                        recoveringErrorInfo.location_stack[esp] = lstack[idx];
                         recoveringErrorInfo.state_stack[esp] = sstack[idx];
                     }
 
                     recoveringErrorInfo.symbol_stack[esp] = TERROR;
-                    recoveringErrorInfo.value_stack[esp] = shallow_copy(yyval.$);
-                    recoveringErrorInfo.location_stack[esp] = copy_yylloc(yyval._$);
+                    recoveringErrorInfo.value_stack[esp] = this.copy_yytext(yyval.$);
+                    recoveringErrorInfo.location_stack[esp] = this.copy_yylloc(yyval._$);
 
                     // goto new state = table[STATE][NONTERMINAL]
                     newState = sstack[sp - 1];
@@ -32432,6 +35255,8 @@ function parse(input, parseParams) {
                         }
 
                         if (yydebug) yydebug('::: SLOW ERROR RECOVERY PHASE CYCLE action: ' + (action === 1 ? 'shift token ' + symbol + ' (then go to state ' + newState + ')' : action === 2 ? 'reduce by rule: ' + newState + (function __print_rule(nt, state) {
+                            "use strict";
+
                             if (!nt || !nt.states || !nt.rules)
                               return '';
                             var rulename = nt.states[state];
@@ -32468,11 +35293,26 @@ function parse(input, parseParams) {
                                 ASSERT(symbol !== 0, "line 1135");
                                 ASSERT(preErrorSymbol === 0, "line 1136");
                                 vstack[sp] = lexer.yytext;
-                                lstack[sp] = copy_yylloc(lexer.yylloc);
+                                lstack[sp] = this.copy_yylloc(lexer.yylloc);
                             }
                             sstack[sp] = newState; // push state
 
                             ++sp;
+
+                            if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                                var tokenName = this.getSymbolName(symbol || EOF);
+                                if (!tokenName) {
+                                    tokenName = symbol;
+                                }
+
+                                Jison.parserDebugger.push({
+                                    action: 'shift',
+                                    text: lexer.yytext,
+                                    terminal: tokenName,
+                                    terminal_id: symbol
+                                });
+                            }
+
                             symbol = 0;
                             // **Warning: Edge Case**: the *lexer* may have produced
                             // TERROR tokens of its own volition: *those* TERROR
@@ -32485,7 +35325,7 @@ function parse(input, parseParams) {
                                 yyleng = lexer.yyleng;
                                 yytext = lexer.yytext;
                                 yylineno = lexer.yylineno;
-                                yyloc = lexer.yylloc;
+                                yyloc = this.copy_yylloc(lexer.yylloc);
 
                                 if (recovering > 0) {
                                     recovering--;
@@ -32539,11 +35379,43 @@ function parse(input, parseParams) {
 
                             r = this.performAction.call(yyval, yytext, yyleng, yylineno, yyloc, newState, sp - 1, yyrulelen, vstack, lstack, stack, sstack);
 
+                            if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                                var prereduceValue = vstack.slice(sp - yyrulelen, sp);
+                                var debuggableProductions = [];
+                                for (var debugIdx = yyrulelen - 1; debugIdx >= 0; debugIdx--) {
+                                    var debuggableProduction = getNonTerminalFromCode(stack[sp - debugIdx]);
+                                    debuggableProductions.push(debuggableProduction);
+                                }
+
+                                // find the current nonterminal name (- nolan)
+                                var currentNonterminalCode = this_production[0];     // WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];
+                                var currentNonterminal = getNonTerminalFromCode(currentNonterminalCode);
+
+                                Jison.parserDebugger.push({
+                                    action: 'reduce',
+                                    nonterminal: currentNonterminal,
+                                    nonterminal_id: currentNonterminalCode,
+                                    prereduce: prereduceValue,
+                                    result: r,
+                                    productions: debuggableProductions,
+                                    text: yyval.$
+                                });
+                            }
+
                             if (typeof r !== 'undefined') {
                                 // signal end of error recovery loop AND end of outer parse loop
                                 action = 3;
-                                sp = -2;      // magic number: signal outer "fast parse loop" ACCEPT state that we already have a properly set up \`retval\` parser return value.
                                 retval = r;
+
+                                if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                                    Jison.parserDebugger.push({
+                                        action: 'accept',
+                                        text: retval
+                                    });
+                                    console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+                                }
+
+                                sp = -2;      // magic number: signal outer "fast parse loop" ACCEPT state that we already have a properly set up \`retval\` parser return value.
                                 break;
                             }
 
@@ -32590,6 +35462,15 @@ function parse(input, parseParams) {
                             if (sp >= 0 && typeof vstack[sp] !== 'undefined') {
                                 retval = vstack[sp];
                             }
+
+                            if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                                Jison.parserDebugger.push({
+                                    action: 'accept',
+                                    text: retval
+                                });
+                                console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+                            }
+
                             sp = -2;      // magic number: signal outer "fast parse loop" ACCEPT state that we already have a properly set up \`retval\` parser return value.
                             break;
                         }
@@ -32644,6 +35525,8 @@ function parse(input, parseParams) {
             }
 
             if (yydebug) yydebug('::: MAIN CYCLE action: ' + (action === 1 ? 'shift token ' + symbol + ' (then go to state ' + newState + ')' : action === 2 ? 'reduce by rule: ' + newState + (function __print_rule(nt, state) {
+                "use strict";
+
                 if (!nt || !nt.states || !nt.rules)
                   return '';
                 var rulename = nt.states[state];
@@ -32676,10 +35559,25 @@ function parse(input, parseParams) {
             case 1:
                 stack[sp] = symbol;
                 vstack[sp] = lexer.yytext;
-                lstack[sp] = copy_yylloc(lexer.yylloc);
+                lstack[sp] = this.copy_yylloc(lexer.yylloc);
                 sstack[sp] = newState; // push state
 
                 ++sp;
+
+                if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                    var tokenName = this.getSymbolName(symbol || EOF);
+                    if (!tokenName) {
+                        tokenName = symbol;
+                    }
+
+                    Jison.parserDebugger.push({
+                        action: 'shift',
+                        text: lexer.yytext,
+                        terminal: tokenName,
+                        terminal_id: symbol
+                    });
+                }
+
                 symbol = 0;
 
                 ASSERT(preErrorSymbol === 0, "line 1352");         // normal execution / no error
@@ -32689,7 +35587,7 @@ function parse(input, parseParams) {
                 yyleng = lexer.yyleng;
                 yytext = lexer.yytext;
                 yylineno = lexer.yylineno;
-                yyloc = lexer.yylloc;
+                yyloc = this.copy_yylloc(lexer.yylloc);
                 continue;
 
             // reduce:
@@ -32704,8 +35602,40 @@ function parse(input, parseParams) {
 
                 r = this.performAction.call(yyval, yytext, yyleng, yylineno, yyloc, newState, sp - 1, yyrulelen, vstack, lstack, stack, sstack);
 
+                if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                    var prereduceValue = vstack.slice(sp - yyrulelen, sp);
+                    var debuggableProductions = [];
+                    for (var debugIdx = yyrulelen - 1; debugIdx >= 0; debugIdx--) {
+                        var debuggableProduction = getNonTerminalFromCode(stack[sp - debugIdx]);
+                        debuggableProductions.push(debuggableProduction);
+                    }
+
+                    // find the current nonterminal name (- nolan)
+                    var currentNonterminalCode = this_production[0];     // WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];
+                    var currentNonterminal = getNonTerminalFromCode(currentNonterminalCode);
+
+                    Jison.parserDebugger.push({
+                        action: 'reduce',
+                        nonterminal: currentNonterminal,
+                        nonterminal_id: currentNonterminalCode,
+                        prereduce: prereduceValue,
+                        result: r,
+                        productions: debuggableProductions,
+                        text: yyval.$
+                    });
+                }
+
                 if (typeof r !== 'undefined') {
                     retval = r;
+
+                    if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                        Jison.parserDebugger.push({
+                            action: 'accept',
+                            text: retval
+                        });
+                        console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+                    }
+
                     break;
                 }
 
@@ -32753,6 +35683,14 @@ function parse(input, parseParams) {
                     if (typeof vstack[sp] !== 'undefined') {
                         retval = vstack[sp];
                     }
+
+                    if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                        Jison.parserDebugger.push({
+                            action: 'accept',
+                            text: retval
+                        });
+                        console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+                    }
                 }
                 break;
             }
@@ -32779,6 +35717,14 @@ function parse(input, parseParams) {
     } finally {
         retval = this.cleanupAfterParse(retval, true, true);
         this.__reentrant_call_depth--;
+
+        if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+            Jison.parserDebugger.push({
+                action: 'return',
+                text: retval
+            });
+            console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+        }
     }   // /finally
 
     return retval;
@@ -33289,7 +36235,7 @@ function Parser$3(g, l, options) {
 Jison.Parser = Parser$3;
 
 var rmCommonWS$6 = helpers.rmCommonWS;
-var mkIdentifier$4 = helpers.mkIdentifier;
+var mkIdentifier$5 = helpers.mkIdentifier;
 
 
 assert$1(Jison);
@@ -33299,7 +36245,7 @@ assert$1(typeof Jison.mkStdOptions === 'function');
 assert$1(typeof Jison.Generator === 'function');
 
 
-var version$3 = '0.6.1-215';
+var version$3 = '0.6.2-220';                              // require('./package.json').version;
 
 
 function getCommandlineOptions() {
@@ -33477,7 +36423,7 @@ function getCommandlineOptions() {
                           --default-action=ast
                       equals:
                           --default-action=ast,ast
-                    - when you do not specify an explicit default mode or only a "true"/"1" value, the default is assumed: "ast,merge".
+                    - when you do not specify an explicit default mode or only a "true"/"1" value, the default is assumed: "${defaults.defaultActionMode.join(",")}".
                     - when you specify "false"/"0" as an explicit default mode, "none,none" is assumed. This produces the fastest deterministic parser.
                 `
             },
@@ -33572,238 +36518,243 @@ function getCommandlineOptions() {
     return opts;
 }
 
-var cli = {
-    main: function cliMain(opts) {
-        //opts = Jison.mkStdOptions(opts);
 
-        function isDirectory(fp) {
-            try {
-                return fs.lstatSync(fp).isDirectory();
-            } catch (e) {
-                return false;
-            }
-        }
+function cliMain(opts) {
+    //opts = Jison.mkStdOptions(opts);
 
-        function mkdirp(fp) {
-            if (!fp || fp === '.' || fp.length === 0) {
-                return false;
-            }
-            try {
-                fs.mkdirSync(fp);
-                return true;
-            } catch (e) {
-                if (e.code === 'ENOENT') {
-                    var parent = path.dirname(fp);
-                    // Did we hit the root directory by now? If so, abort!
-                    // Else, create the parent; iff that fails, we fail too...
-                    if (parent !== fp && mkdirp(parent)) {
-                        try {
-                            // Retry creating the original directory: it should succeed now
-                            fs.mkdirSync(fp);
-                            return true;
-                        } catch (e) {
-                            return false;
-                        }
-                    }
-                }
-            }
+    function isDirectory(fp) {
+        try {
+            return fs.lstatSync(fp).isDirectory();
+        } catch (e) {
             return false;
         }
+    }
 
-        function processInputFile() {
-            // getting raw files
-            var lex;
-            var original_cwd = process$1.cwd();
-
-            if (opts.lexfile) {
-                lex = fs.readFileSync(path.normalize(opts.lexfile), 'utf8');
-            }
-            var raw = fs.readFileSync(path.normalize(opts.file), 'utf8');
-
-            // making best guess at json mode
-            opts.json = path.extname(opts.file) === '.json' || opts.json;
-
-            // When only the directory part of the output path was specified, then we
-            // do NOT have the target module name in there as well!
-            var outpath = opts.outfile;
-            if (typeof outpath === 'string') {
-                if (/[\\\/]$/.test(outpath) || isDirectory(outpath)) {
-                    opts.outfile = null;
-                    outpath = outpath.replace(/[\\\/]$/, '');
-                } else {
-                    outpath = path.dirname(outpath);
-                }
-            } else {
-                outpath = null;
-            }
-            if (outpath && outpath.length > 0) {
-                outpath += '/';
-            } else {
-                outpath = '';
-            }
-
-            // setting output file name and module name based on input file name
-            // if they aren't specified.
-            var name = path.basename(opts.outfile || opts.file);
-
-            // get the base name (i.e. the file name without extension)
-            // i.e. strip off only the extension and keep any other dots in the filename
-            name = path.basename(name, path.extname(name));
-
-            opts.outfile = opts.outfile || (outpath + name + '.js');
-            if (!opts.moduleName && name) {
-                opts.moduleName = opts.defaultModuleName = mkIdentifier$4(name);
-            }
-
-            if (opts.exportAST) {
-                // When only the directory part of the AST output path was specified, then we
-                // still need to construct the JSON AST output file name!
-                var astpath, astname, ext;
-
-                astpath = opts.exportAST;
-                if (typeof astpath === 'string') {
-                    if (/[\\\/]$/.test(astpath) || isDirectory(astpath)) {
-                        opts.exportAST = null;
-                        astpath = astpath.replace(/[\\\/]$/, '');
-                    } else {
-                        astpath = path.dirname(astpath);
-                    }
-                } else {
-                    astpath = path.dirname(opts.outfile);
-                }
-                if (astpath && astpath.length > 0) {
-                    astpath = astpath.replace(/[\\\/]$/, '') + '/';
-                } else {
-                    astpath = '';
-                }
-
-                // setting AST output file name and module name based on input file name
-                // if they aren't specified.
-                if (typeof opts.exportAST === 'string') {
-                    astname = path.basename(opts.exportAST);
-                    ext = path.extname(astname);
-
-                    // get the base name (i.e. the file name without extension)
-                    // i.e. strip off only the extension and keep any other dots in the filename.
-                    astname = path.basename(astname, ext);
-                } else {
-                    // get the base name (i.e. the file name without extension)
-                    // i.e. strip off only the extension and keep any other dots in the filename.
-                    astname = path.basename(opts.outfile, path.extname(opts.outfile));
-
-                    // Then add the name postfix '-AST' to ensure we won't collide with the input file.
-                    astname += '-AST';
-                    ext = '.jison';
-                }
-
-                opts.exportAST = path.normalize(astpath + astname + ext);
-            }
-
-            // Change CWD to the directory where the source grammar resides: this helps us properly
-            // %include any files mentioned in the grammar with relative paths:
-            var new_cwd = path.dirname(path.normalize(opts.file));
-            process$1.chdir(new_cwd);
-
-            var parser = cli.generateParserString(raw, lex, opts);
-
-            // and change back to the CWD we started out with:
-            process$1.chdir(original_cwd);
-
-            opts.outfile = path.normalize(opts.outfile);
-            mkdirp(path.dirname(opts.outfile));
-            fs.writeFileSync(opts.outfile, parser, 'utf8');
-            console.log('JISON output', 'for module [' + opts.moduleName + '] has been written to file:', opts.outfile);
-
-            if (opts.exportAllTables.enabled) {
-                // Determine the output file path 'template' for use by the exportAllTables
-                // functionality:
-                var out_base_fname = path.join(path.dirname(opts.outfile), path.basename(opts.outfile, path.extname(opts.outfile)));
-
-                var t = opts.exportAllTables;
-
-                for (var id in t) {
-                    if (t.hasOwnProperty(id) && id !== 'enabled') {
-                        var content = t[id];
-                        if (content) {
-                            var fname = out_base_fname + '.' + id.replace(/[^a-zA-Z0-9_]/g, '_') + '.json';
-                            fs.writeFileSync(fname, JSON.stringify(content, null, 2), 'utf8');
-                            console.log('JISON table export', 'for [' + id + '] has been written to file:', fname);
-                        }
+    function mkdirp(fp) {
+        if (!fp || fp === '.' || fp.length === 0) {
+            return false;
+        }
+        try {
+            fs.mkdirSync(fp);
+            return true;
+        } catch (e) {
+            if (e.code === 'ENOENT') {
+                var parent = path$1.dirname(fp);
+                // Did we hit the root directory by now? If so, abort!
+                // Else, create the parent; iff that fails, we fail too...
+                if (parent !== fp && mkdirp(parent)) {
+                    try {
+                        // Retry creating the original directory: it should succeed now
+                        fs.mkdirSync(fp);
+                        return true;
+                    } catch (e) {
+                        return false;
                     }
                 }
             }
+        }
+        return false;
+    }
 
-            if (opts.exportAST) {
-                var content = opts.exportedAST;
-                var fname = opts.exportAST;
+    function processInputFile() {
+        // getting raw files
+        var lex;
+        var original_cwd = process$1.cwd();
 
-                var ext = path.extname(fname);
-                switch (ext) {
-                case '.json5':
-                case '.jison':
-                case '.y':
-                case '.yacc':
-                case '.l':
-                case '.lex':
-                    content = Jison.prettyPrint(content, {
-                        format: ext.substr(1)
-                    });
-                    break;
+        if (opts.lexfile) {
+            lex = fs.readFileSync(path$1.normalize(opts.lexfile), 'utf8');
+        }
+        var raw = fs.readFileSync(path$1.normalize(opts.file), 'utf8');
 
-                default:
-                case '.json':
-                    content = JSON.stringify(content, null, 2);
-                    break;
-                }
-                mkdirp(path.dirname(fname));
-                fs.writeFileSync(fname, content, 'utf8');
-                console.log('Grammar AST export', 'for module [' + opts.moduleName + '] has been written to file:', fname);
+        // making best guess at json mode
+        opts.json = path$1.extname(opts.file) === '.json' || opts.json;
+
+        // When only the directory part of the output path was specified, then we
+        // do NOT have the target module name in there as well!
+        var outpath = opts.outfile;
+        if (typeof outpath === 'string') {
+            if (/[\\\/]$/.test(outpath) || isDirectory(outpath)) {
+                opts.outfile = null;
+                outpath = outpath.replace(/[\\\/]$/, '');
+            } else {
+                outpath = path$1.dirname(outpath);
             }
-        }
-
-        function readin(cb) {
-            var stdin = process$1.openStdin(),
-            data = '';
-
-            stdin.setEncoding('utf8');
-            stdin.addListener('data', function (chunk) {
-                data += chunk;
-            });
-            stdin.addListener('end', function () {
-                cb(data);
-            });
-        }
-
-        function processStdin() {
-            readin(function processStdinReadInCallback(raw) {
-                console.log('', cli.generateParserString(raw, null, opts));
-            });
-        }
-
-        // if an input file wasn't given, assume input on stdin
-        if (opts.file) {
-            processInputFile();
         } else {
-            processStdin();
+            outpath = null;
         }
-    },
+        if (outpath && outpath.length > 0) {
+            outpath += '/';
+        } else {
+            outpath = '';
+        }
 
-    generateParserString: function generateParserString(grammar, optionalLexSection, opts) {
+        // setting output file name and module name based on input file name
+        // if they aren't specified.
+        var name = path$1.basename(opts.outfile || opts.file);
+
+        // get the base name (i.e. the file name without extension)
+        // i.e. strip off only the extension and keep any other dots in the filename
+        name = path$1.basename(name, path$1.extname(name));
+
+        opts.outfile = opts.outfile || (outpath + name + '.js');
+        if (!opts.moduleName && name) {
+            opts.moduleName = opts.defaultModuleName = mkIdentifier$5(name);
+        }
+
+        if (opts.exportAST) {
+            // When only the directory part of the AST output path was specified, then we
+            // still need to construct the JSON AST output file name!
+            var astpath, astname, ext;
+
+            astpath = opts.exportAST;
+            if (typeof astpath === 'string') {
+                if (/[\\\/]$/.test(astpath) || isDirectory(astpath)) {
+                    opts.exportAST = null;
+                    astpath = astpath.replace(/[\\\/]$/, '');
+                } else {
+                    astpath = path$1.dirname(astpath);
+                }
+            } else {
+                astpath = path$1.dirname(opts.outfile);
+            }
+            if (astpath && astpath.length > 0) {
+                astpath = astpath.replace(/[\\\/]$/, '') + '/';
+            } else {
+                astpath = '';
+            }
+
+            // setting AST output file name and module name based on input file name
+            // if they aren't specified.
+            if (typeof opts.exportAST === 'string') {
+                astname = path$1.basename(opts.exportAST);
+                ext = path$1.extname(astname);
+
+                // get the base name (i.e. the file name without extension)
+                // i.e. strip off only the extension and keep any other dots in the filename.
+                astname = path$1.basename(astname, ext);
+            } else {
+                // get the base name (i.e. the file name without extension)
+                // i.e. strip off only the extension and keep any other dots in the filename.
+                astname = path$1.basename(opts.outfile, path$1.extname(opts.outfile));
+
+                // Then add the name postfix '-AST' to ensure we won't collide with the input file.
+                astname += '-AST';
+                ext = '.jison';
+            }
+
+            opts.exportAST = path$1.normalize(astpath + astname + ext);
+        }
+
+        // Change CWD to the directory where the source grammar resides: this helps us properly
+        // %include any files mentioned in the grammar with relative paths:
+        var new_cwd = path$1.dirname(path$1.normalize(opts.file));
+        process$1.chdir(new_cwd);
+
+        var parser = cli.generateParserString(raw, lex, opts);
+
+        // and change back to the CWD we started out with:
+        process$1.chdir(original_cwd);
+
+        opts.outfile = path$1.normalize(opts.outfile);
+        mkdirp(path$1.dirname(opts.outfile));
+        fs.writeFileSync(opts.outfile, parser, 'utf8');
+        console.log('JISON output', 'for module [' + opts.moduleName + '] has been written to file:', opts.outfile);
+
+        if (opts.exportAllTables.enabled) {
+            // Determine the output file path 'template' for use by the exportAllTables
+            // functionality:
+            var out_base_fname = path$1.join(path$1.dirname(opts.outfile), path$1.basename(opts.outfile, path$1.extname(opts.outfile)));
+
+            var t = opts.exportAllTables;
+
+            for (var id in t) {
+                if (t.hasOwnProperty(id) && id !== 'enabled') {
+                    var content = t[id];
+                    if (content) {
+                        var fname = out_base_fname + '.' + id.replace(/[^a-zA-Z0-9_]/g, '_') + '.json';
+                        fs.writeFileSync(fname, JSON.stringify(content, null, 2), 'utf8');
+                        console.log('JISON table export', 'for [' + id + '] has been written to file:', fname);
+                    }
+                }
+            }
+        }
+
+        if (opts.exportAST) {
+            var content = opts.exportedAST;
+            var fname = opts.exportAST;
+
+            var ext = path$1.extname(fname);
+            switch (ext) {
+            case '.json5':
+            case '.jison':
+            case '.y':
+            case '.yacc':
+            case '.l':
+            case '.lex':
+                content = Jison.prettyPrint(content, {
+                    format: ext.substr(1)
+                });
+                break;
+
+            default:
+            case '.json':
+                content = JSON.stringify(content, null, 2);
+                break;
+            }
+            mkdirp(path$1.dirname(fname));
+            fs.writeFileSync(fname, content, 'utf8');
+            console.log('Grammar AST export', 'for module [' + opts.moduleName + '] has been written to file:', fname);
+        }
+    }
+
+    function readin(cb) {
+        var stdin = process$1.openStdin(),
+        data = '';
+
+        stdin.setEncoding('utf8');
+        stdin.addListener('data', function (chunk) {
+            data += chunk;
+        });
+        stdin.addListener('end', function () {
+            cb(data);
+        });
+    }
+
+    function processStdin() {
+        readin(function processStdinReadInCallback(raw) {
+            console.log('', cli.generateParserString(raw, null, opts));
+        });
+    }
+
+    // if an input file wasn't given, assume input on stdin
+    if (opts.file) {
+        processInputFile();
+    } else {
+        processStdin();
+    }
+}
+
+
+function generateParserString(grammar, optionalLexSection, opts) {
 
 //      var settings = Jison.mkStdOptions(opts);
 
-        var generator = new Jison.Generator(grammar, optionalLexSection, opts);
-        var srcCode = generator.generate(opts);
-        generator.reportGrammarInformation();
+    var generator = new Jison.Generator(grammar, optionalLexSection, opts);
+    var srcCode = generator.generate(opts);
+    generator.reportGrammarInformation();
 
-        // as `opts` is cloned inside `generator.generate()`, we need to fetch
-        // the extra exported tables from the `options` member of the generator
-        // itself:
-        opts.exportAllTables = generator.options.exportAllTables;
-        opts.exportedAST = generator.grammar;
+    // as `opts` is cloned inside `generator.generate()`, we need to fetch
+    // the extra exported tables from the `options` member of the generator
+    // itself:
+    opts.exportAllTables = generator.options.exportAllTables;
+    opts.exportedAST = generator.grammar;
 
-        return srcCode;
-    }
+    return srcCode;
+}
+
+var cli = {
+    main: cliMain,
+    generateParserString: generateParserString
 };
 
 

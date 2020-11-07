@@ -1,15 +1,15 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('@gerhobbelt/xregexp'), require('@gerhobbelt/json5'), require('fs'), require('path'), require('recast'), require('assert')) :
-    typeof define === 'function' && define.amd ? define(['@gerhobbelt/xregexp', '@gerhobbelt/json5', 'fs', 'path', 'recast', 'assert'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global['regexp-lexer'] = factory(global.XRegExp, global.json5, global.fs, global.path, global.recast, global.assert$1));
-}(this, (function (XRegExp, json5, fs, path, recast, assert$1) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('@gerhobbelt/xregexp'), require('@gerhobbelt/json5'), require('fs'), require('path'), require('recast'), require('@babel/core'), require('assert')) :
+    typeof define === 'function' && define.amd ? define(['@gerhobbelt/xregexp', '@gerhobbelt/json5', 'fs', 'path', 'recast', '@babel/core', 'assert'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global['regexp-lexer'] = factory(global.XRegExp, global.json5, global.fs, global.path$1, global.recast, global.babel, global.assert$1));
+}(this, (function (XRegExp, json5, fs, path$1, recast, babel, assert$1) { 'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var XRegExp__default = /*#__PURE__*/_interopDefaultLegacy(XRegExp);
     var json5__default = /*#__PURE__*/_interopDefaultLegacy(json5);
     var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
-    var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
+    var path__default = /*#__PURE__*/_interopDefaultLegacy(path$1);
     var recast__default = /*#__PURE__*/_interopDefaultLegacy(recast);
     var assert__default = /*#__PURE__*/_interopDefaultLegacy(assert$1);
 
@@ -121,18 +121,107 @@
     // Convert dashed option keys and other inputs to Camel Cased legal JavaScript identifiers
     /** @public */
     function mkIdentifier(s) {
-        s = camelCase('' + s);
-        // cleanup: replace any non-suitable character series to a single underscore:
+        s = '' + s;
         return s
+        // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
+        // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
+        .replace(/-\w/g, function (match) {
+            var c = match.charAt(1);
+            var rv = c.toUpperCase();
+            // do not mutate 'a-2' to 'a2':
+            if (c === rv && c.match(/\d/)) {
+                return match;
+            }
+            return rv;
+        })
+        // cleanup: replace any non-suitable character series to a single underscore:
         .replace(/^[^\w_]/, '_')
         // do not accept numerics at the leading position, despite those matching regex `\w`:
         .replace(/^\d/, '_')
-        .replace(/[^\w\d_]+/g, '_')
+        .replace(/[^\w\d_]/g, '_')
         // and only accept multiple (double, not triple) underscores at start or end of identifier name:
         .replace(/^__+/, '#')
         .replace(/__+$/, '#')
         .replace(/_+/g, '_')
         .replace(/#/g, '__');
+    }
+
+    // Check if the start of the given input matches a regex expression.
+    // Return the length of the regex expression or -1 if none was found.
+    /** @public */
+    function scanRegExp(s) {
+        s = '' + s;
+        // code based on Esprima scanner: `Scanner.prototype.scanRegExpBody()`
+        var index = 0;
+        var length = s.length;
+        var ch = s[index];
+        //assert.assert(ch === '/', 'Regular expression literal must start with a slash');
+        var str = s[index++];
+        var classMarker = false;
+        var terminated = false;
+        while (index < length) {
+            ch = s[index++];
+            str += ch;
+            if (ch === '\\') {
+                ch = s[index++];
+                // https://tc39.github.io/ecma262/#sec-literals-regular-expression-literals
+                if (isLineTerminator(ch.charCodeAt(0))) {
+                    break;             // UnterminatedRegExp
+                }
+                str += ch;
+            }
+            else if (isLineTerminator(ch.charCodeAt(0))) {
+                break;                 // UnterminatedRegExp
+            }
+            else if (classMarker) {
+                if (ch === ']') {
+                    classMarker = false;
+                }
+            }
+            else {
+                if (ch === '/') {
+                    terminated = true;
+                    break;
+                }
+                else if (ch === '[') {
+                    classMarker = true;
+                }
+            }
+        }
+        if (!terminated) {
+            return -1;                  // UnterminatedRegExp
+        }
+        return index;
+    }
+
+
+    // https://tc39.github.io/ecma262/#sec-line-terminators
+    function isLineTerminator(cp) {
+        return (cp === 0x0A) || (cp === 0x0D) || (cp === 0x2028) || (cp === 0x2029);
+    }
+
+    // Check if the given input can be a legal identifier-to-be-camelcased:
+    // use this function to check if the way the identifier is written will
+    // produce a sensible & comparable identifier name using the `mkIdentifier'
+    // API - for humans that transformation should be obvious/trivial in
+    // order to prevent confusion.
+    /** @public */
+    function isLegalIdentifierInput(s) {
+        s = '' + s;
+        // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
+        // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
+        s = s
+        .replace(/-\w/g, function (match) {
+            var c = match.charAt(1);
+            var rv = c.toUpperCase();
+            // do not mutate 'a-2' to 'a2':
+            if (c === rv && c.match(/\d/)) {
+                return match;
+            }
+            return rv;
+        });
+        var alt = mkIdentifier(s);
+        return alt === s;
     }
 
     // properly quote and escape the given input string
@@ -293,6 +382,8 @@
 
     //
 
+
+
     assert__default['default'](recast__default['default']);
     var types = recast__default['default'].types;
     assert__default['default'](types);
@@ -300,7 +391,11 @@
     assert__default['default'](namedTypes);
     var b = types.builders;
     assert__default['default'](b);
-    // //assert(astUtils);
+
+
+
+
+
 
 
 
@@ -315,6 +410,36 @@
     }
 
 
+    function compileCodeToES5(src, options) {
+        options = Object.assign({}, {
+          ast: true,
+          code: true,
+          sourceMaps: true,
+          comments: true,
+          filename: 'compileCodeToES5.js',
+          sourceFileName: 'compileCodeToES5.js',
+          sourceRoot: '.',
+          sourceType: 'module',
+
+          babelrc: false,
+          
+          ignore: [
+            "node_modules/**/*.js"
+          ],
+          compact: false,
+          retainLines: false,
+          presets: [
+            ["@babel/preset-env", {
+              targets: {
+                browsers: ["last 2 versions"],
+                node: "8.0"
+              }
+            }]
+          ]
+        }, options);
+
+        return babel.transformSync(src, options); // => { code, map, ast }
+    }
 
 
     function prettyPrintAST(ast, options) {
@@ -359,7 +484,7 @@
 
 
 
-    // validate the given JavaScript snippet: does it compile?
+    // validate the given JISON+JavaScript snippet: does it compile?
     // 
     // Return either the parsed AST (object) or an error message (string). 
     function checkActionBlock(src, yylloc) {
@@ -384,14 +509,88 @@
 
 
 
+    // The rough-and-ready preprocessor for any action code block:
+    // this one trims off any surplus whitespace and removes any
+    // trailing semicolons and/or wrapping `{...}` braces,
+    // when such is easily possible *without having to actually
+    // **parse** the `src` code block in order to do this safely*.
+    // 
+    // Returns the trimmed sourcecode which was provided via `src`.
+    // 
+    // Note: the `startMarker` argument is special in that a lexer/parser
+    // can feed us the delimiter which started the code block here:
+    // when the starting delimiter actually is `{` we can safely
+    // remove the outer `{...}` wrapper (which then *will* be present!),
+    // while otherwise we may *not* do so as complex/specially-crafted
+    // code will fail when it was wrapped in other delimiters, e.g.
+    // action code specs like this one:
+    // 
+    //              %{
+    //                  {  // trimActionCode sees this one as outer-starting: WRONG
+    //                      a: 1
+    //                  };
+    //                  {
+    //                      b: 2
+    //                  }  // trimActionCode sees this one as outer-ending: WRONG
+    //              %}
+    //              
+    // Of course the example would be 'ludicrous' action code but the
+    // key point here is that users will certainly be able to come up with 
+    // convoluted code that is smarter than our simple regex-based
+    // `{...}` trimmer in here!
+    // 
+    function trimActionCode(src, startMarker) {
+        var s = src.trim();
+        // remove outermost set of braces UNLESS there's
+        // a curly brace in there anywhere: in that case
+        // we should leave it up to the sophisticated
+        // code analyzer to simplify the code!
+        //
+        // This is a very rough check as it will also look
+        // inside code comments, which should not have
+        // any influence.
+        //
+        // Nevertheless: this is a *safe* transform as
+        // long as the code doesn't end with a C++-style
+        // comment which happens to contain that closing
+        // curly brace at the end!
+        //
+        // Also DO strip off any trailing optional semicolon,
+        // which might have ended up here due to lexer rules
+        // like this one:
+        //
+        //     [a-z]+              -> 'TOKEN';
+        //
+        // We can safely ditch any trailing semicolon(s) as
+        // our code generator reckons with JavaScript's
+        // ASI rules (Automatic Semicolon Insertion).
+        //
+        //
+        // TODO: make this is real code edit without that
+        // last edge case as a fault condition.
+        if (startMarker === '{') {
+            // code is wrapped in `{...}` for sure: remove the wrapping braces.
+            s = s.replace(/^\{([^]*?)\}$/, '$1').trim();
+        } else {
+            // code may not be wrapped or otherwise non-simple: only remove
+            // wrapping braces when we can guarantee they're the only ones there,
+            // i.e. only exist as outer wrapping.
+            s = s.replace(/^\{([^}]*)\}$/, '$1').trim();
+        }
+        s = s.replace(/;+$/, '').trim();
+        return s;
+    }
+
 
 
 
 
     var parse2AST = {
         parseCodeChunkToAST,
+        compileCodeToES5,
         prettyPrintAST,
         checkActionBlock,
+        trimActionCode,
     };
 
     function chkBugger$1(src) {
@@ -495,18 +694,462 @@
         return coverage || false;
     }
 
+    //
+    // Helper library for safe code execution/compilation
+    //
+    // MIT Licensed
+    //
+    //
+    // This code is intended to help test and diagnose arbitrary regexes, answering questions like this:
+    //
+    // - is this a valid regex, i.e. does it compile?
+    // - does it have captures, and if yes, how many?
+    //
+
+    //import XRegExp from '@gerhobbelt/xregexp';
+
+
+    // validate the given regex.
+    //
+    // You can specify an (advanced or regular) regex class as a third parameter.
+    // The default assumed is the standard JavaScript `RegExp` class.
+    //
+    // Return FALSE when there's no failure, otherwise return an `Error` info object.
+    function checkRegExp(re_src, re_flags, XRegExp) {
+        var re;
+
+        // were we fed a RegExp object or a string?
+        if (re_src
+            && typeof re_src.source === 'string'
+            && typeof re_src.flags === 'string'
+            && typeof re_src.toString === 'function'
+            && typeof re_src.test === 'function'
+            && typeof re_src.exec === 'function'
+        ) {
+            // we're looking at a RegExp (or XRegExp) object, so we can trust the `.source` member
+            // and the `.toString()` method to produce something that's compileable by XRegExp
+            // at least...
+            if (!re_flags || re_flags === re_src.flags) {
+                // no change of flags: we assume it's okay as it's already contained
+                // in an RegExp or XRegExp object
+                return false;
+            }
+        }
+        // we DO accept empty regexes: `''` but we DO NOT accept null/undefined
+        if (re_src == null) {
+            return new Error('invalid regular expression source: ' + re_src);
+        }
+
+        re_src = '' + re_src;
+        if (re_flags == null) {
+            re_flags = undefined;       // `new RegExp(..., flags)` will barf a hairball when `flags===null`
+        } else {
+            re_flags = '' + re_flags;
+        }
+
+        XRegExp = XRegExp || RegExp;
+
+        try {
+            re = new XRegExp(re_src, re_flags);
+        } catch (ex) {
+            return ex;
+        }
+        return false;
+    }
+
+    // provide some info about the given regex.
+    //
+    // You can specify an (advanced or regular) regex class as a third parameter.
+    // The default assumed is the standard JavaScript `RegExp` class.
+    //
+    // Return FALSE when the input is not a legal regex.
+    function getRegExpInfo(re_src, re_flags, XRegExp) {
+        var re1, re2, m1, m2;
+
+        // were we fed a RegExp object or a string?
+        if (re_src
+            && typeof re_src.source === 'string'
+            && typeof re_src.flags === 'string'
+            && typeof re_src.toString === 'function'
+            && typeof re_src.test === 'function'
+            && typeof re_src.exec === 'function'
+        ) {
+            // we're looking at a RegExp (or XRegExp) object, so we can trust the `.source` member
+            // and the `.toString()` method to produce something that's compileable by XRegExp
+            // at least...
+            if (!re_flags || re_flags === re_src.flags) {
+                // no change of flags: we assume it's okay as it's already contained
+                // in an RegExp or XRegExp object
+                re_flags = undefined;
+            }
+        } else if (re_src == null) {
+            // we DO NOT accept null/undefined
+            return false;
+        } else {
+            re_src = '' + re_src;
+
+            if (re_flags == null) {
+                re_flags = undefined;       // `new RegExp(..., flags)` will barf a hairball when `flags===null`
+            } else {
+                re_flags = '' + re_flags;
+            }
+        }
+
+        XRegExp = XRegExp || RegExp;
+
+        try {
+            // A little trick to obtain the captures from a regex:
+            // wrap it and append `(?:)` to ensure it matches
+            // the empty string, then match it against it to
+            // obtain the `match` array.
+            re1 = new XRegExp(re_src, re_flags);
+            re2 = new XRegExp('(?:' + re_src + ')|(?:)', re_flags);
+            m1 = re1.exec('');
+            m2 = re2.exec('');
+            return {
+                acceptsEmptyString: !!m1,
+                captureCount: m2.length - 1
+            };
+        } catch (ex) {
+            return false;
+        }
+    }
+
+
+
+
+
+
+
+
+    var reHelpers = {
+        checkRegExp: checkRegExp,
+        getRegExpInfo: getRegExpInfo
+    };
+
+    var cycleref = [];
+    var cyclerefpath = [];
+
+    var linkref = [];
+    var linkrefpath = [];
+
+    var path = [];
+
+    function shallow_copy(src) {
+        if (typeof src === 'object') {
+            if (src instanceof Array) {
+                return src.slice();
+            }
+
+            var dst = {};
+            if (src instanceof Error) {
+                dst.name = src.name;
+                dst.message = src.message;
+                dst.stack = src.stack;
+            }
+
+            for (var k in src) {
+                if (Object.prototype.hasOwnProperty.call(src, k)) {
+                    dst[k] = src[k];
+                }
+            }
+            return dst;
+        }
+        return src;
+    }
+
+
+    function shallow_copy_and_strip_depth(src, parentKey) {
+        if (typeof src === 'object') {
+            var dst;
+
+            if (src instanceof Array) {
+                dst = src.slice();
+                for (var i = 0, len = dst.length; i < len; i++) {
+                    path.push('[' + i + ']');
+                    dst[i] = shallow_copy_and_strip_depth(dst[i], parentKey + '[' + i + ']');
+                    path.pop();
+                }
+            } else {
+                dst = {};
+                if (src instanceof Error) {
+                    dst.name = src.name;
+                    dst.message = src.message;
+                    dst.stack = src.stack;
+                }
+
+                for (var k in src) {
+                    if (Object.prototype.hasOwnProperty.call(src, k)) {
+                        var el = src[k];
+                        if (el && typeof el === 'object') {
+                            dst[k] = '[cyclic reference::attribute --> ' + parentKey + '.' + k + ']';
+                        } else {
+                            dst[k] = src[k];
+                        }
+                    }
+                }
+            }
+            return dst;
+        }
+        return src;
+    }
+
+
+    function trim_array_tail(arr) {
+        if (arr instanceof Array) {
+            for (var len = arr.length; len > 0; len--) {
+                if (arr[len - 1] != null) {
+                    break;
+                }
+            }
+            arr.length = len;
+        }
+    }
+
+    function treat_value_stack(v) {
+        if (v instanceof Array) {
+            var idx = cycleref.indexOf(v);
+            if (idx >= 0) {
+                v = '[cyclic reference to parent array --> ' + cyclerefpath[idx] + ']';
+            } else {
+                idx = linkref.indexOf(v);
+                if (idx >= 0) {
+                    v = '[reference to sibling array --> ' + linkrefpath[idx] + ', length = ' + v.length + ']';
+                } else {
+                    cycleref.push(v);
+                    cyclerefpath.push(path.join('.'));
+                    linkref.push(v);
+                    linkrefpath.push(path.join('.'));
+
+                    v = treat_error_infos_array(v);
+
+                    cycleref.pop();
+                    cyclerefpath.pop();
+                }
+            }
+        } else if (v) {
+            v = treat_object(v);
+        }
+        return v;
+    }
+
+    function treat_error_infos_array(arr) {
+        var inf = arr.slice();
+        trim_array_tail(inf);
+        for (var key = 0, len = inf.length; key < len; key++) {
+            var err = inf[key];
+            if (err) {
+                path.push('[' + key + ']');
+
+                err = treat_object(err);
+
+                if (typeof err === 'object') {
+                    if (err.lexer) {
+                        err.lexer = '[lexer]';
+                    }
+                    if (err.parser) {
+                        err.parser = '[parser]';
+                    }
+                    trim_array_tail(err.symbol_stack);
+                    trim_array_tail(err.state_stack);
+                    trim_array_tail(err.location_stack);
+                    if (err.value_stack) {
+                        path.push('value_stack');
+                        err.value_stack = treat_value_stack(err.value_stack);
+                        path.pop();
+                    }
+                }
+
+                inf[key] = err;
+
+                path.pop();
+            }
+        }
+        return inf;
+    }
+
+    function treat_lexer(l) {
+        // shallow copy object:
+        l = shallow_copy(l);
+        delete l.simpleCaseActionClusters;
+        delete l.rules;
+        delete l.conditions;
+        delete l.__currentRuleSet__;
+
+        if (l.__error_infos) {
+            path.push('__error_infos');
+            l.__error_infos = treat_value_stack(l.__error_infos);
+            path.pop();
+        }
+
+        return l;
+    }
+
+    function treat_parser(p) {
+        // shallow copy object:
+        p = shallow_copy(p);
+        delete p.productions_;
+        delete p.table;
+        delete p.defaultActions;
+
+        if (p.__error_infos) {
+            path.push('__error_infos');
+            p.__error_infos = treat_value_stack(p.__error_infos);
+            path.pop();
+        }
+
+        if (p.__error_recovery_infos) {
+            path.push('__error_recovery_infos');
+            p.__error_recovery_infos = treat_value_stack(p.__error_recovery_infos);
+            path.pop();
+        }
+
+        if (p.lexer) {
+            path.push('lexer');
+            p.lexer = treat_lexer(p.lexer);
+            path.pop();
+        }
+
+        return p;
+    }
+
+    function treat_hash(h) {
+        // shallow copy object:
+        h = shallow_copy(h);
+
+        if (h.parser) {
+            path.push('parser');
+            h.parser = treat_parser(h.parser);
+            path.pop();
+        }
+
+        if (h.lexer) {
+            path.push('lexer');
+            h.lexer = treat_lexer(h.lexer);
+            path.push();
+        }
+
+        return h;
+    }
+
+    function treat_error_report_info(e) {
+        // shallow copy object:
+        e = shallow_copy(e);
+        
+        if (e && e.hash) {
+            path.push('hash');
+            e.hash = treat_hash(e.hash);
+            path.pop();
+        }
+
+        if (e.parser) {
+            path.push('parser');
+            e.parser = treat_parser(e.parser);
+            path.pop();
+        }
+
+        if (e.lexer) {
+            path.push('lexer');
+            e.lexer = treat_lexer(e.lexer);
+            path.pop();
+        }    
+
+        if (e.__error_infos) {
+            path.push('__error_infos');
+            e.__error_infos = treat_value_stack(e.__error_infos);
+            path.pop();
+        }
+
+        if (e.__error_recovery_infos) {
+            path.push('__error_recovery_infos');
+            e.__error_recovery_infos = treat_value_stack(e.__error_recovery_infos);
+            path.pop();
+        }
+
+        trim_array_tail(e.symbol_stack);
+        trim_array_tail(e.state_stack);
+        trim_array_tail(e.location_stack);
+        if (e.value_stack) {
+            path.push('value_stack');
+            e.value_stack = treat_value_stack(e.value_stack);
+            path.pop();
+        }
+
+        return e;
+    }
+
+    function treat_object(e) {
+        if (e && typeof e === 'object') {
+            var idx = cycleref.indexOf(e);
+            if (idx >= 0) {
+                // cyclic reference, most probably an error instance.
+                // we still want it to be READABLE in a way, though:
+                e = shallow_copy_and_strip_depth(e, cyclerefpath[idx]);
+            } else {
+                idx = linkref.indexOf(e);
+                if (idx >= 0) {
+                    e = '[reference to sibling --> ' + linkrefpath[idx] + ']';
+                } else {
+                    cycleref.push(e);
+                    cyclerefpath.push(path.join('.'));
+                    linkref.push(e);
+                    linkrefpath.push(path.join('.'));
+
+                    e = treat_error_report_info(e);
+                    
+                    cycleref.pop();
+                    cyclerefpath.pop();
+                }
+            }
+        }
+        return e;
+    }
+
+
+    // strip off large chunks from the Error exception object before
+    // it will be fed to a test log or other output.
+    // 
+    // Internal use in the unit test rigs.
+    function trimErrorForTestReporting(e) {
+        cycleref.length = 0;
+        cyclerefpath.length = 0;
+        linkref.length = 0;
+        linkrefpath.length = 0;
+        path = ['*'];
+
+        if (e) {
+            e = treat_object(e);
+        }
+
+        cycleref.length = 0;
+        cyclerefpath.length = 0;
+        linkref.length = 0;
+        linkrefpath.length = 0;
+        path = ['*'];
+
+        return e;
+    }
+
     var helpers = {
         rmCommonWS,
         camelCase,
         mkIdentifier,
+        isLegalIdentifierInput,
+        scanRegExp,
         dquote,
+        trimErrorForTestReporting,
+
+        checkRegExp: reHelpers.checkRegExp,
+        getRegExpInfo: reHelpers.getRegExpInfo,
 
         exec: code_exec.exec,
         dump: code_exec.dump,
 
         parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,
+        compileCodeToES5: parse2AST.compileCodeToES5,
         prettyPrintAST: parse2AST.prettyPrintAST,
         checkActionBlock: parse2AST.checkActionBlock,
+        trimActionCode: parse2AST.trimActionCode,
 
         printFunctionSourceCode: stringifier.printFunctionSourceCode,
         printFunctionSourceCodeContainer: stringifier.printFunctionSourceCodeContainer,
@@ -9286,7 +9929,7 @@
     var mkIdentifier$1 = helpers.mkIdentifier;
     var code_exec$1   = helpers.exec;
 
-    var version = '0.6.1-215';                              // require('./package.json').version;
+    var version = '0.6.2-220';                              // require('./package.json').version;
 
 
 
@@ -9359,7 +10002,7 @@
     // defined as specifying a not-undefined value which is not equal to the
     // default value.
     //
-    // When the FIRST argument is STRING "NODEFAULT", then we MUST NOT mix the 
+    // When the FIRST argument is STRING "NODEFAULT", then we MUST NOT mix the
     // default values avialable in Jison.defaultJisonOptions.
     //
     // Return a fresh set of options.
@@ -9428,7 +10071,7 @@
             exportSourceCode.enabled = true;
         }
         options.exportSourceCode = exportSourceCode;
-    } 
+    }
 
     // Autodetect if the input lexer spec is in JSON or JISON
     // format when the `options.json` flag is `true`.
@@ -9440,48 +10083,85 @@
     // Otherwise return the *parsed* lexer spec as it has
     // been processed through LexParser.
     function autodetectAndConvertToJSONformat(lexerSpec, options) {
-      var chk_l = null;
-      var ex1, err;
+        var chk_l = null;
+        var ex1, err;
 
-      if (typeof lexerSpec === 'string') {
-        if (options.json) {
-          try {
-              chk_l = json5__default['default'].parse(lexerSpec);
+        if (typeof lexerSpec === 'string') {
+            if (options.json) {
+                try {
+                    chk_l = json5__default['default'].parse(lexerSpec);
 
-              // When JSON5-based parsing of the lexer spec succeeds, this implies the lexer spec is specified in `JSON mode`
-              // *OR* there's a JSON/JSON5 format error in the input:
-          } catch (e) {
-              ex1 = e;
-          }
+                    // When JSON5-based parsing of the lexer spec succeeds, this implies the lexer spec is specified in `JSON mode`
+                    // *OR* there's a JSON/JSON5 format error in the input:
+                } catch (e) {
+                    ex1 = e;
+                }
+            }
+            if (!chk_l) {
+                // // WARNING: the lexer may receive options specified in the **grammar spec file**,
+                // //          hence we should mix the options to ensure the lexParser always
+                // //          receives the full set!
+                // //
+                // // make sure all options are 'standardized' before we go and mix them together:
+                // options = mkStdOptions(grammar.options, options);
+                try {
+                    chk_l = lexParser.parse(lexerSpec, options);
+                } catch (e) {
+                    if (options.json) {
+                        // When both JSON5 and JISON input modes barf a hairball, assume the most important
+                        // error is the JISON one (show that one first!), while it MAY be a JSON5 format
+                        // error that triggered it (show that one last!).
+                        //
+                        // Also check for common JISON errors which are obviously never triggered by any
+                        // odd JSON5 input format error: when we encounter such an error here, we don't
+                        // confuse matters and forget about the JSON5 fail as it's irrelevant:
+                        const commonErrors = [
+                            /does not compile/,
+                            /you did not correctly separate trailing code/,
+                            /You did not specify/,
+                            /You cannot specify/,
+                            /must be qualified/,
+                            /%start/,
+                            /%token/,
+                            /%import/,
+                            /%include/,
+                            /%options/,
+                            /%parse-params/,
+                            /%parser-type/,
+                            /%epsilon/,
+                            /definition list error/,
+                            /token list error/,
+                            /declaration error/,
+                            /should be followed/,
+                            /should be separated/,
+                            /an error in one or more of your lexer regex rules/,
+                            /an error in your lexer epilogue/,
+                            /unsupported definition type/,
+                        ];
+                        var cmnerr = commonErrors.filter(function check(re) {
+                            return e.message.match(re);
+                        });
+                        if (cmnerr.length > 0) {
+                            err = e;
+                        } else {
+                            err = new Error('Could not parse jison lexer spec in JSON AUTODETECT mode:\nin JISON Mode we get Error: ' + e.message + '\n\nwhile JSON5 Mode produces Error: ' + ex1.message);
+                            err.secondary_exception = e;
+                            err.stack = ex1.stack;
+                        }
+                    } else {
+                        err = new Error('Could not parse lexer spec\nError: ' + e.message);
+                        err.stack = e.stack;
+                    }
+                    throw err;
+                }
+            }
+        } else {
+            chk_l = lexerSpec;
         }
-        if (!chk_l) {
-          // // WARNING: the lexer may receive options specified in the **grammar spec file**,
-          // //          hence we should mix the options to ensure the lexParser always
-          // //          receives the full set!
-          // //
-          // // make sure all options are 'standardized' before we go and mix them together:
-          // options = mkStdOptions(grammar.options, options);
-          try {
-              chk_l = lexParser.parse(lexerSpec, options);
-          } catch (e) {
-              if (options.json) {
-                  err = new Error('Could not parse lexer spec in JSON AUTODETECT mode\nError: ' + ex1.message + ' (' + e.message + ')');
-                  err.secondary_exception = e;
-                  err.stack = ex1.stack;
-              } else {
-                  err = new Error('Could not parse lexer spec\nError: ' + e.message);
-                  err.stack = e.stack;
-              }
-              throw err;
-          }
-        }
-      } else {
-        chk_l = lexerSpec;
-      }
 
-      // Save time! Don't reparse the entire lexer spec *again* inside the code generators when that's not necessary:
+        // Save time! Don't reparse the entire lexer spec *again* inside the code generators when that's not necessary:
 
-      return chk_l;
+        return chk_l;
     }
 
 
@@ -9490,7 +10170,7 @@
         var m, i, k, rule, action, conditions;
         var active_conditions;
         assert__default['default'](Array.isArray(dict.rules));
-        var rules = dict.rules.slice(0);    // shallow copy of the rules array as we MAY modify it in here!        
+        var rules = dict.rules.slice(0);    // shallow copy of the rules array as we MAY modify it in here!
         var newRules = [];
         var macros = {};
         var regular_rule_count = 0;
@@ -10179,7 +10859,7 @@
         for (sc in conditions) {
             if (conditions.hasOwnProperty(sc)) {
                 hash[sc] = {
-                    rules: [], 
+                    rules: [],
                     inclusive: !conditions[sc]
                 };
             }
@@ -10243,6 +10923,8 @@
  * @nocollapse
  */
 function JisonLexerError(msg, hash) {
+    "use strict";
+
     Object.defineProperty(this, 'name', {
         enumerable: false,
         writable: false,
@@ -10404,7 +11086,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
 
                 if (opts.options.showSource) {
                     if (typeof opts.options.showSource === 'function') {
-                        opts.options.showSource(lexer, source, opts);
+                        opts.options.showSource(lexer, source, opts, RegExpLexer);
                     } else {
                         console.log("\nGenerated lexer sourcecode:\n----------------------------------------\n", source, "\n----------------------------------------\n");
                     }
@@ -10455,7 +11137,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
                         // store the parsed rule set size so we can use that info in case
                         // this attempt also fails:
                         assert__default['default'](Array.isArray(opts.rules));
-                        rulesSpecSize = opts.rules.length; 
+                        rulesSpecSize = opts.rules.length;
 
                         // opts.conditions = [];
                         opts.rules = [];
@@ -10473,7 +11155,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
                                 // opts.conditions = [];
                                 // opts.rules = [];
                                 // opts.__in_rules_failure_analysis_mode__ = true;
-                                
+
                                 // nuke all rules' actions up to and including rule numero `i`:
                                 for (var j = 0; j <= i; j++) {
                                     // rules, when parsed, have 2 or 3 elements: [conditions, handle, action];
@@ -10590,6 +11272,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
     _input: '',                                 /// INTERNAL USE ONLY
     _more: false,                               /// INTERNAL USE ONLY
     _signaled_error_token: false,               /// INTERNAL USE ONLY
+    _clear_state: 0,                            /// INTERNAL USE ONLY; 0: clear to do, 1: clear done for lex()/next(); -1: clear done for inut()/unput()/...
 
     conditionStack: [],                         /// INTERNAL USE ONLY; managed via \`pushState()\`, \`popState()\`, \`topState()\` and \`stateStackSize()\`
 
@@ -10597,18 +11280,22 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
     matched: '',                                /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks entire input which has been matched so far
     matches: false,                             /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks RE match result for last (successful) match attempt
     yytext: '',                                 /// ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction; this value is transferred to the parser as the 'token value' when the parser consumes the lexer token produced through a call to the \`lex()\` API.
-    offset: 0,                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far
+    offset: 0,                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far. (**WARNING:** this value MAY be negative if you \`unput()\` more text than you have already lexed. This type of behaviour is generally observed for one kind of 'lexer/parser hack' where custom token-illiciting characters are pushed in front of the input stream to help simulate multiple-START-points in the parser. When this happens, \`base_position\` will be adjusted to help track the original input's starting point in the \`_input\` buffer.)
+    base_position: 0,                           /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: index to the original starting point of the input; always ZERO(0) unless \`unput()\` has pushed content before the input: see the \`offset\` **WARNING** just above.
     yyleng: 0,                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: length of matched input for the token under construction (\`yytext\`)
     yylineno: 0,                                /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: 'line number' at which the token under construction is located
     yylloc: null,                               /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks location info (lines + columns) for the token under construction
+    CRLF_Re: /\\r\\n?|\\n/,                        /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: regex used to split lines while tracking the lexer cursor position.
 
     /**
      * INTERNAL USE: construct a suitable error info hash object instance for \`parseError\`.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     constructLexErrorInfo: function lexer_constructLexErrorInfo(msg, recoverable, show_input_position) {
+        "use strict";
+    
         msg = '' + msg;
 
         // heuristic to determine if the error message already contains a (partial) source code dump
@@ -10623,7 +11310,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
                 if (!/\\n\\s*$/.test(msg)) {
                     msg += '\\n';
                 }
-                msg += '\\n  Erroneous area:\\n' + this.prettyPrintRange(this.yylloc);          
+                msg += '\\n  Erroneous area:\\n' + this.prettyPrintRange(this.yylloc);
             } else if (typeof this.showPosition === 'function') {
                 var pos_str = this.showPosition();
                 if (pos_str) {
@@ -10643,18 +11330,18 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
             token: null,
             line: this.yylineno,
             loc: this.yylloc,
-            yy: this.yy,
+            yy: this.yy,                
             lexer: this,
 
             /**
              * and make sure the error info doesn't stay due to potential
              * ref cycle via userland code manipulations.
              * These would otherwise all be memory leak opportunities!
-             * 
+             *
              * Note that only array and object references are nuked as those
              * constitute the set of elements which can produce a cyclic ref.
              * The rest of the members is kept intact as they are harmless.
-             * 
+             *
              * @public
              * @this {LexErrorInfo}
              */
@@ -10663,9 +11350,10 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
                 // info.yy = null;
                 // info.lexer = null;
                 // ...
+                "use strict";
                 var rec = !!this.recoverable;
                 for (var key in this) {
-                    if (this.hasOwnProperty(key) && typeof key === 'object') {
+                    if (this[key] && this.hasOwnProperty(key) && typeof this[key] === 'object') {
                         this[key] = undefined;
                     }
                 }
@@ -10679,11 +11367,13 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
 
     /**
      * handler which is invoked when a lexer error occurs.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     parseError: function lexer_parseError(str, hash, ExceptionClass) {
+        "use strict";
+
         if (!ExceptionClass) {
             ExceptionClass = this.JisonLexerError;
         }
@@ -10692,18 +11382,20 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
                 return this.yy.parser.parseError.call(this, str, hash, ExceptionClass) || this.ERROR;
             } else if (typeof this.yy.parseError === 'function') {
                 return this.yy.parseError.call(this, str, hash, ExceptionClass) || this.ERROR;
-            } 
+            }
         }
         throw new ExceptionClass(str, hash);
     },
 
     /**
      * method which implements \`yyerror(str, ...args)\` functionality for use inside lexer actions.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     yyerror: function yyError(str /*, ...args */) {
+        "use strict";
+
         var lineno_msg = '';
         if (this.yylloc) {
             lineno_msg = ' on line ' + (this.yylineno + 1);
@@ -10727,11 +11419,13 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
      * up these constructs, which *may* carry cyclic references which would
      * otherwise prevent the instances from being properly and timely
      * garbage-collected, i.e. this function helps prevent memory leaks!
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     cleanupAfterLex: function lexer_cleanupAfterLex(do_not_nuke_errorinfos) {
+        "use strict";
+
         // prevent lingering circular references from causing memory leaks:
         this.setInput('', {});
 
@@ -10753,20 +11447,23 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
 
     /**
      * clear the lexer token context; intended for internal use only
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     clear: function lexer_clear() {
+        "use strict";
+
         this.yytext = '';
         this.yyleng = 0;
         this.match = '';
         // - DO NOT reset \`this.matched\`
         this.matches = false;
+
         this._more = false;
         this._backtrack = false;
 
-        var col = (this.yylloc ? this.yylloc.last_column : 0);
+        var col = this.yylloc.last_column;
         this.yylloc = {
             first_line: this.yylineno + 1,
             first_column: col,
@@ -10779,11 +11476,13 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
 
     /**
      * resets the lexer, sets new input
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     setInput: function lexer_setInput(input, yy) {
+        "use strict";
+
         this.yy = yy || this.yy || {};
 
         // also check if we've fully initialized the lexer instance,
@@ -10827,8 +11526,11 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
           this.__decompressed = true;
         }
 
+        if (input && typeof input !== 'string') {
+            input = '' + input;
+        }
         this._input = input || '';
-        this.clear();
+        this._clear_state = -1;
         this._signaled_error_token = false;
         this.done = false;
         this.yylineno = 0;
@@ -10844,39 +11546,49 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
             range: [0, 0]
         };
         this.offset = 0;
+        this.base_position = 0;
+        // apply these bits of \`this.clear()\` as well:
+        this.yytext = '';
+        this.yyleng = 0;
+        this.match = '';
+        this.matches = false;
+
+        this._more = false;
+        this._backtrack = false;
+
         return this;
     },
 
     /**
      * edit the remaining input via user-specified callback.
-     * This can be used to forward-adjust the input-to-parse, 
+     * This can be used to forward-adjust the input-to-parse,
      * e.g. inserting macro expansions and alike in the
      * input which has yet to be lexed.
      * The behaviour of this API contrasts the \`unput()\` et al
      * APIs as those act on the *consumed* input, while this
      * one allows one to manipulate the future, without impacting
-     * the current \`yyloc\` cursor location or any history. 
-     * 
+     * the current \`yyloc\` cursor location or any history.
+     *
      * Use this API to help implement C-preprocessor-like
      * \`#include\` statements, etc.
-     * 
+     *
      * The provided callback must be synchronous and is
      * expected to return the edited input (string).
      *
      * The \`cpsArg\` argument value is passed to the callback
      * as-is.
      *
-     * \`callback\` interface: 
+     * \`callback\` interface:
      * \`function callback(input, cpsArg)\`
-     * 
+     *
      * - \`input\` will carry the remaining-input-to-lex string
      *   from the lexer.
      * - \`cpsArg\` is \`cpsArg\` passed into this API.
-     * 
+     *
      * The \`this\` reference for the callback will be set to
      * reference this lexer instance so that userland code
      * in the callback can easily and quickly access any lexer
-     * API. 
+     * API.
      *
      * When the callback returns a non-string-type falsey value,
      * we assume the callback did not edit the input and we
@@ -10884,36 +11596,44 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
      *
      * When the callback returns a non-string-type value, it
      * is converted to a string for lexing via the \`"" + retval\`
-     * operation. (See also why: http://2ality.com/2012/03/converting-to-string.html 
+     * operation. (See also why: http://2ality.com/2012/03/converting-to-string.html
      * -- that way any returned object's \`toValue()\` and \`toString()\`
      * methods will be invoked in a proper/desirable order.)
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     editRemainingInput: function lexer_editRemainingInput(callback, cpsArg) {
+        "use strict";
+
         var rv = callback.call(this, this._input, cpsArg);
         if (typeof rv !== 'string') {
             if (rv) {
-                this._input = '' + rv; 
+                this._input = '' + rv;
             }
-            // else: keep \`this._input\` as is. 
+            // else: keep \`this._input\` as is.
         } else {
-            this._input = rv; 
+            this._input = rv;
         }
         return this;
     },
 
     /**
      * consumes and returns one char from the input
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     input: function lexer_input() {
+        "use strict";
+
         if (!this._input) {
             //this.done = true;    -- don't set \`done\` as we want the lex()/next() API to be able to produce one custom EOF token match after this anyhow. (lexer can match special <<EOF>> tokens and perform user action code for a <<EOF>> match, but only does so *once*)
             return null;
+        }
+        if (!this._clear_state && !this._more) {
+            this._clear_state = -1;
+            this.clear();
         }
         var ch = this._input[0];
         this.yytext += ch;
@@ -10958,18 +11678,35 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
 
     /**
      * unshifts one char (or an entire string) into the input
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     unput: function lexer_unput(ch) {
+        "use strict";
+
         var len = ch.length;
-        var lines = ch.split(/(?:\\r\\n?|\\n)/g);
+        var lines = ch.split(this.CRLF_Re);
+
+        if (!this._clear_state && !this._more) {
+            this._clear_state = -1;
+            this.clear();
+        }
 
         this._input = ch + this._input;
         this.yytext = this.yytext.substr(0, this.yytext.length - len);
         this.yyleng = this.yytext.length;
         this.offset -= len;
+        // **WARNING:**
+        // The \`offset\` value MAY be negative if you \`unput()\` more text than you have already lexed.
+        // This type of behaviour is generally observed for one kind of 'lexer/parser hack'
+        // where custom token-illiciting characters are pushed in front of the input stream to help
+        // simulate multiple-START-points in the parser.
+        // When this happens, \`base_position\` will be adjusted to help track the original input's
+        // starting point in the \`_input\` buffer.
+        if (-this.offset > this.base_position) {
+            this.base_position = -this.offset;
+        }
         this.match = this.match.substr(0, this.match.length - len);
         this.matched = this.matched.substr(0, this.matched.length - len);
 
@@ -10979,13 +11716,13 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
             this.yylloc.last_line = this.yylineno + 1;
 
             // Get last entirely matched line into the \`pre_lines[]\` array's
-            // last index slot; we don't mind when other previously 
-            // matched lines end up in the array too. 
+            // last index slot; we don't mind when other previously
+            // matched lines end up in the array too.
             var pre = this.match;
-            var pre_lines = pre.split(/(?:\\r\\n?|\\n)/g);
+            var pre_lines = pre.split(this.CRLF_Re);
             if (pre_lines.length === 1) {
                 pre = this.matched;
-                pre_lines = pre.split(/(?:\\r\\n?|\\n)/g);
+                pre_lines = pre.split(this.CRLF_Re);
             }
             this.yylloc.last_column = pre_lines[pre_lines.length - 1].length;
         } else {
@@ -10999,12 +11736,39 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
     },
 
     /**
-     * cache matched text and append it on next action
+     * return the upcoming input *which has not been lexed yet*.
+     * This can, for example, be used for custom look-ahead inspection code 
+     * in your lexer.
+     * 
+     * The entire pending input string is returned.
+     *
+     * > ### NOTE ###
+     * >
+     * > When augmenting error reports and alike, you might want to
+     * > look at the \`upcomingInput()\` API instead, which offers more
+     * > features for limited input extraction and which includes the
+     * > part of the input which has been lexed by the last token a.k.a.
+     * > the *currently lexed* input.
+     * > 
      * 
      * @public
      * @this {RegExpLexer}
      */
+    lookAhead: function lexer_lookAhead() {
+        "use strict";
+
+        return this._input || '';
+    },
+
+    /**
+     * cache matched text and append it on next action
+     *
+     * @public
+     * @this {RegExpLexer}
+     */
     more: function lexer_more() {
+        "use strict";
+
         this._more = true;
         return this;
     },
@@ -11012,11 +11776,13 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
     /**
      * signal the lexer that this rule fails to match the input, so the
      * next matching rule (regex) should be tested instead.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     reject: function lexer_reject() {
+        "use strict";
+
         if (this.options.backtrack_lexer) {
             this._backtrack = true;
         } else {
@@ -11035,36 +11801,44 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
 
     /**
      * retain first n characters of the match
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     less: function lexer_less(n) {
+        "use strict";
+
         return this.unput(this.match.slice(n));
     },
 
     /**
      * return (part of the) already matched input, i.e. for error
      * messages.
-     * 
+     *
      * Limit the returned string length to \`maxSize\` (default: 20).
-     * 
+     *
      * Limit the returned string to the \`maxLines\` number of lines of
      * input (default: 1).
-     * 
-     * Negative limit values equal *unlimited*.
-     * 
+     *
+     * A negative \`maxSize\` limit value equals *unlimited*, i.e.
+     * produce the entire input that has already been lexed.
+     *
+     * A negative \`maxLines\` limit value equals *unlimited*, i.e. limit the result
+     * to the \`maxSize\` specified number of characters *only*.
+     *
      * @public
      * @this {RegExpLexer}
      */
     pastInput: function lexer_pastInput(maxSize, maxLines) {
+        "use strict";
+
         var past = this.matched.substring(0, this.matched.length - this.match.length);
         if (maxSize < 0)
-            maxSize = past.length;
+            maxSize = Infinity;
         else if (!maxSize)
             maxSize = 20;
         if (maxLines < 0)
-            maxLines = past.length;         // can't ever have more input lines than this!
+            maxLines = Infinity;         // can't ever have more input lines than this!
         else if (!maxLines)
             maxLines = 1;
         // \`substr\` anticipation: treat \\r\\n as a single character and take a little
@@ -11073,7 +11847,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
         past = past.substr(-maxSize * 2 - 2);
         // now that we have a significantly reduced string to process, transform the newlines
         // and chop them, then limit them:
-        var a = past.replace(/\\r\\n|\\r/g, '\\n').split('\\n');
+        var a = past.split(this.CRLF_Re);
         a = a.slice(-maxLines);
         past = a.join('\\n');
         // When, after limiting to maxLines, we still have too much to return,
@@ -11085,31 +11859,45 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
     },
 
     /**
-     * return (part of the) upcoming input, i.e. for error messages.
-     * 
+     * return (part of the) upcoming input *including* the input 
+     * matched by the last token (see also the NOTE below). 
+     * This can be used to augment error messages, for example.
+     *
      * Limit the returned string length to \`maxSize\` (default: 20).
-     * 
+     *
      * Limit the returned string to the \`maxLines\` number of lines of input (default: 1).
-     * 
-     * Negative limit values equal *unlimited*.
+     *
+     * A negative \`maxSize\` limit value equals *unlimited*, i.e.
+     * produce the entire input that is yet to be lexed.
+     *
+     * A negative \`maxLines\` limit value equals *unlimited*, i.e. limit the result
+     * to the \`maxSize\` specified number of characters *only*.
      *
      * > ### NOTE ###
      * >
      * > *"upcoming input"* is defined as the whole of the both
      * > the *currently lexed* input, together with any remaining input
-     * > following that. *"currently lexed"* input is the input 
+     * > following that. *"currently lexed"* input is the input
      * > already recognized by the lexer but not yet returned with
      * > the lexer token. This happens when you are invoking this API
-     * > from inside any lexer rule action code block. 
+     * > from inside any lexer rule action code block.
      * >
+     * > When you want access to the 'upcoming input' in that you want access
+     * > to the input *which has not been lexed yet* for look-ahead
+     * > inspection or likewise purposes, please consider using the
+     * > \`lookAhead()\` API instead.
+     * > 
      * 
      * @public
      * @this {RegExpLexer}
      */
     upcomingInput: function lexer_upcomingInput(maxSize, maxLines) {
+        "use strict";
+
         var next = this.match;
+        var source = this._input || '';
         if (maxSize < 0)
-            maxSize = next.length + this._input.length;
+            maxSize = next.length + source.length;
         else if (!maxSize)
             maxSize = 20;
         if (maxLines < 0)
@@ -11120,11 +11908,11 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
         // more than necessary so that we can still properly check against maxSize
         // after we've transformed and limited the newLines in here:
         if (next.length < maxSize * 2 + 2) {
-            next += this._input.substring(0, maxSize * 2 + 2);  // substring is faster on Chrome/V8
+            next += source.substring(0, maxSize * 2 + 2 - next.length);  // substring is faster on Chrome/V8
         }
         // now that we have a significantly reduced string to process, transform the newlines
         // and chop them, then limit them:
-        var a = next.replace(/\\r\\n|\\r/g, '\\n').split('\\n');
+        var a = next.split(this.CRLF_Re, maxLines + 1);     // stop splitting once we have reached just beyond the reuired number of lines.
         a = a.slice(0, maxLines);
         next = a.join('\\n');
         // When, after limiting to maxLines, we still have too much to return,
@@ -11138,11 +11926,13 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
     /**
      * return a string which displays the character position where the
      * lexing error occurred, i.e. for error messages
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     showPosition: function lexer_showPosition(maxPrefix, maxPostfix) {
+        "use strict";
+
         var pre = this.pastInput(maxPrefix).replace(/\\s/g, ' ');
         var c = new Array(pre.length + 1).join('-');
         return pre + this.upcomingInput(maxPostfix).replace(/\\s/g, ' ') + '\\n' + c + '^';
@@ -11161,11 +11951,13 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
      *
      * NOTE: \`deriveLocationInfo()\` ALWAYS produces a location info object *copy* of \`actual\`, not just
      * a *reference* hence all input location objects can be assumed to be 'constant' (function has no side-effects).
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     deriveLocationInfo: function lexer_deriveYYLLOC(actual, preceding, following, current) {
+        "use strict";
+
         var loc = {
             first_line: 1,
             first_column: 0,
@@ -11181,9 +11973,9 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
             loc.last_column = actual.last_column | 0;
 
             if (actual.range) {
-                loc.range[0] = actual.range[0] | 0; 
+                loc.range[0] = actual.range[0] | 0;
                 loc.range[1] = actual.range[1] | 0;
-            } 
+            }
         }
         if (loc.first_line <= 0 || loc.last_line < loc.first_line) {
             // plan B: heuristic using preceding and following:
@@ -11192,8 +11984,8 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
                 loc.first_column = preceding.last_column | 0;
 
                 if (preceding.range) {
-                    loc.range[0] = actual.range[1] | 0; 
-                } 
+                    loc.range[0] = actual.range[1] | 0;
+                }
             }
 
             if ((loc.last_line <= 0 || loc.last_line < loc.first_line) && following) {
@@ -11201,8 +11993,8 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
                 loc.last_column = following.first_column | 0;
 
                 if (following.range) {
-                    loc.range[1] = actual.range[0] | 0; 
-                } 
+                    loc.range[1] = actual.range[0] | 0;
+                }
             }
 
             // plan C?: see if the 'current' location is useful/sane too:
@@ -11211,8 +12003,8 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
                 loc.first_column = current.first_column | 0;
 
                 if (current.range) {
-                    loc.range[0] = current.range[0] | 0; 
-                } 
+                    loc.range[0] = current.range[0] | 0;
+                }
             }
 
             if (loc.last_line <= 0 && current && (loc.first_line <= 0 || current.first_line >= loc.first_line)) {
@@ -11220,8 +12012,8 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
                 loc.last_column = current.last_column | 0;
 
                 if (current.range) {
-                    loc.range[1] = current.range[1] | 0; 
-                } 
+                    loc.range[1] = current.range[1] | 0;
+                }
             }
         }
         // sanitize: fix last_line BEFORE we fix first_line as we use the 'raw' value of the latter
@@ -11258,63 +12050,68 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
     },
 
     /**
-     * return a string which displays the lines & columns of input which are referenced 
+     * return a string which displays the lines & columns of input which are referenced
      * by the given location info range, plus a few lines of context.
-     * 
-     * This function pretty-prints the indicated section of the input, with line numbers 
+     *
+     * This function pretty-prints the indicated section of the input, with line numbers
      * and everything!
-     * 
+     *
      * This function is very useful to provide highly readable error reports, while
      * the location range may be specified in various flexible ways:
-     * 
+     *
      * - \`loc\` is the location info object which references the area which should be
      *   displayed and 'marked up': these lines & columns of text are marked up by \`^\`
      *   characters below each character in the entire input range.
-     * 
+     *
      * - \`context_loc\` is the *optional* location info object which instructs this
      *   pretty-printer how much *leading* context should be displayed alongside
      *   the area referenced by \`loc\`. This can help provide context for the displayed
      *   error, etc.
-     * 
+     *
      *   When this location info is not provided, a default context of 3 lines is
      *   used.
-     * 
+     *
      * - \`context_loc2\` is another *optional* location info object, which serves
      *   a similar purpose to \`context_loc\`: it specifies the amount of *trailing*
      *   context lines to display in the pretty-print output.
-     * 
+     *
      *   When this location info is not provided, a default context of 1 line only is
      *   used.
-     * 
+     *
      * Special Notes:
-     * 
+     *
      * - when the \`loc\`-indicated range is very large (about 5 lines or more), then
      *   only the first and last few lines of this block are printed while a
      *   \`...continued...\` message will be printed between them.
-     * 
+     *
      *   This serves the purpose of not printing a huge amount of text when the \`loc\`
      *   range happens to be huge: this way a manageable & readable output results
      *   for arbitrary large ranges.
-     * 
+     *
      * - this function can display lines of input which whave not yet been lexed.
      *   \`prettyPrintRange()\` can access the entire input!
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     prettyPrintRange: function lexer_prettyPrintRange(loc, context_loc, context_loc2) {
-        loc = this.deriveLocationInfo(loc, context_loc, context_loc2);        
+        "use strict";
+
+        loc = this.deriveLocationInfo(loc, context_loc, context_loc2);
+
         const CONTEXT = 3;
         const CONTEXT_TAIL = 1;
         const MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT = 2;
-        var input = this.matched + this._input;
+        var input = this.matched + (this._input || '');
         var lines = input.split('\\n');
         var l0 = Math.max(1, (context_loc ? context_loc.first_line : loc.first_line - CONTEXT));
         var l1 = Math.max(1, (context_loc2 ? context_loc2.last_line : loc.last_line + CONTEXT_TAIL));
         var lineno_display_width = (1 + Math.log10(l1 | 1) | 0);
         var ws_prefix = new Array(lineno_display_width).join(' ');
-        var nonempty_line_indexes = [];
+        var nonempty_line_indexes = [[], [], []];
         var rv = lines.slice(l0 - 1, l1 + 1).map(function injectLineNumber(line, index) {
+            "use strict";
+
             var lno = index + l0;
             var lno_pfx = (ws_prefix + lno).substr(-lineno_display_width);
             var rv = lno_pfx + ': ' + line;
@@ -11335,44 +12132,59 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
               len = Math.max(2, line.length + 1);
             }
 
+            var nli;
             if (len) {
               var lead = new Array(offset).join('.');
               var mark = new Array(len).join('^');
               rv += '\\n' + errpfx + lead + mark;
 
-              if (line.trim().length > 0) {
-                nonempty_line_indexes.push(index);
-              }
+              nli = 1;
+            } else if (lno < loc.first_line) {
+              nli = 0;
+            } else if (lno > loc.last_line) {
+              nli = 2;
+            }
+
+            if (line.trim().length > 0) {
+              nonempty_line_indexes[nli].push(index);
             }
 
             rv = rv.replace(/\\t/g, ' ');
             return rv;
         });
 
-        // now make sure we don't print an overly large amount of error area: limit it 
+        // now make sure we don't print an overly large amount of lead/error/tail area: limit it
         // to the top and bottom line count:
-        if (nonempty_line_indexes.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {
-            var clip_start = nonempty_line_indexes[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
-            var clip_end = nonempty_line_indexes[nonempty_line_indexes.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
+        for (var i = 0; i <= 2; i++) {
+            var line_arr = nonempty_line_indexes[i];
+            if (line_arr.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {
+                var clip_start = line_arr[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
+                var clip_end = line_arr[line_arr.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
 
-            var intermediate_line = (new Array(lineno_display_width + 1)).join(' ') +     '  (...continued...)';
-            intermediate_line += '\\n' + (new Array(lineno_display_width + 1)).join('-') + '  (---------------)';
-            rv.splice(clip_start, clip_end - clip_start + 1, intermediate_line);
+                var intermediate_line = (new Array(lineno_display_width + 1)).join(' ') +     '  (...continued...)';
+                if (i === 1) {
+                    intermediate_line += '\\n' + (new Array(lineno_display_width + 1)).join('-') + '  (---------------)';
+                }
+                rv.splice(clip_start, clip_end - clip_start + 1, intermediate_line);
+            }
         }
+
         return rv.join('\\n');
     },
 
     /**
      * helper function, used to produce a human readable description as a string, given
      * the input \`yylloc\` location object.
-     * 
+     *
      * Set \`display_range_too\` to TRUE to include the string character index position(s)
      * in the description if the \`yylloc.range\` is available.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     describeYYLLOC: function lexer_describe_yylloc(yylloc, display_range_too) {
+        "use strict";
+
         var l1 = yylloc.first_line;
         var l2 = yylloc.last_line;
         var c1 = yylloc.first_column;
@@ -11404,23 +12216,25 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
 
     /**
      * test the lexed token: return FALSE when not a match, otherwise return token.
-     * 
+     *
      * \`match\` is supposed to be an array coming out of a regex match, i.e. \`match[0]\`
      * contains the actually matched text string.
-     * 
+     *
      * Also move the input cursor forward and update the match collectors:
-     * 
+     *
      * - \`yytext\`
      * - \`yyleng\`
      * - \`match\`
      * - \`matches\`
      * - \`yylloc\`
      * - \`offset\`
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     test_match: function lexer_test_match(match, indexed_rule) {
+        "use strict";
+
         var token,
             lines,
             backup,
@@ -11437,7 +12251,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
                     first_column: this.yylloc.first_column,
                     last_column: this.yylloc.last_column,
 
-                    range: this.yylloc.range.slice(0)
+                    range: this.yylloc.range.slice()
                 },
                 yytext: this.yytext,
                 match: this.match,
@@ -11449,24 +12263,24 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
                 _input: this._input,
                 //_signaled_error_token: this._signaled_error_token,
                 yy: this.yy,
-                conditionStack: this.conditionStack.slice(0),
+                conditionStack: this.conditionStack.slice(),
                 done: this.done
             };
         }
 
         match_str = match[0];
         match_str_len = match_str.length;
-        // if (match_str.indexOf('\\n') !== -1 || match_str.indexOf('\\r') !== -1) {
-            lines = match_str.split(/(?:\\r\\n?|\\n)/g);
-            if (lines.length > 1) {
-                this.yylineno += lines.length - 1;
 
-                this.yylloc.last_line = this.yylineno + 1;
-                this.yylloc.last_column = lines[lines.length - 1].length;
-            } else {
-                this.yylloc.last_column += match_str_len;
-            }
-        // }
+        lines = match_str.split(this.CRLF_Re);
+        if (lines.length > 1) {
+            this.yylineno += lines.length - 1;
+
+            this.yylloc.last_line = this.yylineno + 1;
+            this.yylloc.last_column = lines[lines.length - 1].length;
+        } else {
+            this.yylloc.last_column += match_str_len;
+        }
+
         this.yytext += match_str;
         this.match += match_str;
         this.matched += match_str;
@@ -11513,11 +12327,13 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
 
     /**
      * return next match in input
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     next: function lexer_next() {
+        "use strict";
+
         if (this.done) {
             this.clear();
             return this.EOF;
@@ -11531,6 +12347,9 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
             tempMatch,
             index;
         if (!this._more) {
+            if (!this._clear_state) {
+                this._clear_state = 1;
+            }
             this.clear();
         }
         var spec = this.__currentRuleSet__;
@@ -11544,7 +12363,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
             // user-programmer bugs such as https://github.com/zaach/jison-lex/issues/19
             if (!spec || !spec.rules) {
                 var lineno_msg = '';
-                if (this.options.trackPosition) {
+                if (this.yylloc) {
                     lineno_msg = ' on line ' + (this.yylineno + 1);
                 }
                 var p = this.constructLexErrorInfo('Internal lexer engine error' + lineno_msg + ': The lex grammar programmer pushed a non-existing condition name "' + this.topState() + '"; this is a fatal error and should be reported to the application programmer team!', false);
@@ -11594,7 +12413,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
             return this.EOF;
         } else {
             var lineno_msg = '';
-            if (this.options.trackPosition) {
+            if (this.yylloc) {
                 lineno_msg = ' on line ' + (this.yylineno + 1);
             }
             var p = this.constructLexErrorInfo('Lexical error' + lineno_msg + ': Unrecognized text.', this.options.lexerErrorsAreRecoverable);
@@ -11608,12 +12427,12 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
                 // we can try to recover from a lexer error that \`parseError()\` did not 'recover' for us
                 // by moving forward at least one character at a time IFF the (user-specified?) \`parseError()\`
                 // has not consumed/modified any pending input or changed state in the error handler:
-                if (!this.matches && 
+                if (!this.matches &&
                     // and make sure the input has been modified/consumed ...
                     pendingInput === this._input &&
                     // ...or the lexer state has been modified significantly enough
                     // to merit a non-consuming error handling action right now.
-                    activeCondition === this.topState() && 
+                    activeCondition === this.topState() &&
                     conditionStackDepth === this.conditionStack.length
                 ) {
                     this.input();
@@ -11625,12 +12444,17 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
 
     /**
      * return next match that has a token
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     lex: function lexer_lex() {
+        "use strict";
+
         var r;
+
+        //this._clear_state = 0;
+
         // allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:
         if (typeof this.pre_lex === 'function') {
             r = this.pre_lex.call(this, 0);
@@ -11660,22 +12484,75 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
             // (also account for a userdef function which does not return any value: keep the token as is)
             r = this.post_lex.call(this, r) || r;
         }
+
+        // 1) make sure any outside interference is detected ASAP: 
+        //    these attributes are to be treated as 'const' values
+        //    once the lexer has produced them with the token (return value \`r\`).
+        // 2) make sure any subsequent \`lex()\` API invocation CANNOT
+        //    edit the \`yytext\`, etc. token attributes for the *current*
+        //    token, i.e. provide a degree of 'closure safety' so that
+        //    code like this:
+        //    
+        //        t1 = lexer.lex();
+        //        v = lexer.yytext;
+        //        l = lexer.yylloc;
+        //        t2 = lexer.lex();
+        //        assert(lexer.yytext !== v);
+        //        assert(lexer.yylloc !== l);
+        //        
+        //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+        //    these conditions.
+        this.yytext = Object.freeze(this.yytext);
+        this.matches = Object.freeze(this.matches);
+        //this.yylloc.range = Object.freeze(this.yylloc.range);
+        this.yylloc = Object.freeze(this.yylloc);
+
+        this._clear_state = 0;
+
         return r;
     },
 
     /**
-     * return next match that has a token. Identical to the \`lex()\` API but does not invoke any of the 
+     * return next match that has a token. Identical to the \`lex()\` API but does not invoke any of the
      * \`pre_lex()\` nor any of the \`post_lex()\` callbacks.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     fastLex: function lexer_fastLex() {
+        "use strict";
+
         var r;
+
+        //this._clear_state = 0;
 
         while (!r) {
             r = this.next();
         }
+
+        // 1) make sure any outside interference is detected ASAP: 
+        //    these attributes are to be treated as 'const' values
+        //    once the lexer has produced them with the token (return value \`r\`).
+        // 2) make sure any subsequent \`lex()\` API invocation CANNOT
+        //    edit the \`yytext\`, etc. token attributes for the *current*
+        //    token, i.e. provide a degree of 'closure safety' so that
+        //    code like this:
+        //    
+        //        t1 = lexer.lex();
+        //        v = lexer.yytext;
+        //        l = lexer.yylloc;
+        //        t2 = lexer.lex();
+        //        assert(lexer.yytext !== v);
+        //        assert(lexer.yylloc !== l);
+        //        
+        //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+        //    these conditions.
+        this.yytext = Object.freeze(this.yytext);
+        this.matches = Object.freeze(this.matches);
+        //this.yylloc.range = Object.freeze(this.yylloc.range);
+        this.yylloc = Object.freeze(this.yylloc);
+
+        this._clear_state = 0;
 
         return r;
     },
@@ -11684,11 +12561,13 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
      * return info about the lexer state that can help a parser or other lexer API user to use the
      * most efficient means available. This API is provided to aid run-time performance for larger
      * systems which employ this lexer.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     canIUse: function lexer_canIUse() {
+        "use strict";
+
         var rv = {
             fastLex: !(
                 typeof this.pre_lex === 'function' ||
@@ -11707,22 +12586,26 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
      * backwards compatible alias for \`pushState()\`;
      * the latter is symmetrical with \`popState()\` and we advise to use
      * those APIs in any modern lexer code, rather than \`begin()\`.
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     begin: function lexer_begin(condition) {
+        "use strict";
+
         return this.pushState(condition);
     },
 
     /**
      * activates a new lexer condition state (pushes the new lexer
      * condition state onto the condition stack)
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     pushState: function lexer_pushState(condition) {
+        "use strict";
+
         this.conditionStack.push(condition);
         this.__currentRuleSet__ = null;
         return this;
@@ -11731,14 +12614,16 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
     /**
      * pop the previously active lexer condition state off the condition
      * stack
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     popState: function lexer_popState() {
+        "use strict";
+
         var n = this.conditionStack.length - 1;
         if (n > 0) {
-            this.__currentRuleSet__ = null; 
+            this.__currentRuleSet__ = null;
             return this.conditionStack.pop();
         } else {
             return this.conditionStack[0];
@@ -11749,11 +12634,13 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
      * return the currently active lexer condition state; when an index
      * argument is provided it produces the N-th previous condition state,
      * if available
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     topState: function lexer_topState(n) {
+        "use strict";
+
         n = this.conditionStack.length - 1 - Math.abs(n || 0);
         if (n >= 0) {
             return this.conditionStack[n];
@@ -11765,25 +12652,32 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
     /**
      * (internal) determine the lexer rule set which is active for the
      * currently active lexer condition state
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     _currentRules: function lexer__currentRules() {
-        if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
-            return this.conditions[this.conditionStack[this.conditionStack.length - 1]];
+        "use strict";
+
+        var n = this.conditionStack.length - 1;
+        var state;
+        if (n >= 0) {
+            state = this.conditionStack[n];
         } else {
-            return this.conditions['INITIAL'];
+            state = 'INITIAL';
         }
+        return this.conditions[state] || this.conditions['INITIAL'];
     },
 
     /**
      * return the number of states currently on the stack
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     stateStackSize: function lexer_stateStackSize() {
+        "use strict";
+
         return this.conditionStack.length;
     }
 }`;
@@ -11949,8 +12843,8 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
         };
 
         // only produce rule action code blocks when there are any rules at all;
-        // a "custom lexer" has ZERO rules and must be defined entirely in 
-        // other code blocks: 
+        // a "custom lexer" has ZERO rules and must be defined entirely in
+        // other code blocks:
         var code = (dict.rules ? buildActions(dict, tokens, opts) : {});
         opts.performAction = code.actions;
         opts.caseHelperInclude = code.caseHelperInclude;
@@ -12147,7 +13041,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
             assert__default['default'](typeof opt.options['case-insensitive'] === 'undefined');
 
             code.push('    options: ' + produceOptions(opt.options));
-      
+
     /*
             function isEmpty(code) {
                 switch (typeof code) {
@@ -12157,10 +13051,10 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
 
                 case 'string':
 
-                } 
+                }
             }
-    */        
-            
+    */
+
             var performActionCode = String(opt.performAction);
             var simpleCaseActionClustersCode = String(opt.caseHelperInclude);
             var rulesCode = generateRegexesInitTableCode(opt);
@@ -12221,11 +13115,11 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
      *               the real "shared state" \`yy\` passed around to
      *               the rule actions, etc. is a direct reference!
      *
-     *               This "shared context" object was passed to the lexer by way of 
+     *               This "shared context" object was passed to the lexer by way of
      *               the \`lexer.setInput(str, yy)\` API before you may use it.
      *
      *               This "shared context" object is passed to the lexer action code in \`performAction()\`
-     *               so userland code in the lexer actions may communicate with the outside world 
+     *               so userland code in the lexer actions may communicate with the outside world
      *               and/or other lexer rules' actions in more or less complex ways.
      *
      *  }
@@ -12241,7 +13135,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
      *    performAction: function lexer__performAction(yy, yyrulenumber, YY_START),
      *
      *               The function parameters and \`this\` have the following value/meaning:
-     *               - \`this\`    : reference to the \`lexer\` instance. 
+     *               - \`this\`    : reference to the \`lexer\` instance.
      *                               \`yy_\` is an alias for \`this\` lexer instance reference used internally.
      *
      *               - \`yy\`      : a reference to the \`yy\` "shared state" object which was passed to the lexer
@@ -12275,15 +13169,15 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
      *
      *               WARNING:
      *               Lexer's additional \`args...\` parameters (via lexer's \`%parse-param\`) MAY conflict with
-     *               any attributes already added to \`yy\` by the **parser** or the jison run-time; 
-     *               when such a collision is detected an exception is thrown to prevent the generated run-time 
-     *               from silently accepting this confusing and potentially hazardous situation! 
+     *               any attributes already added to \`yy\` by the **parser** or the jison run-time;
+     *               when such a collision is detected an exception is thrown to prevent the generated run-time
+     *               from silently accepting this confusing and potentially hazardous situation!
      *
      *    cleanupAfterLex: function(do_not_nuke_errorinfos),
      *               Helper function.
      *
      *               This helper API is invoked when the **parse process** has completed: it is the responsibility
-     *               of the **parser** (or the calling userland code) to invoke this method once cleanup is desired. 
+     *               of the **parser** (or the calling userland code) to invoke this method once cleanup is desired.
      *
      *               This helper may be invoked by user code to ensure the internal lexer gets properly garbage collected.
      *
@@ -12394,7 +13288,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
      * These options are available:
      *
      * (Options are permanent.)
-     *  
+     *
      *  yy: {
      *      parseError: function(str, hash, ExceptionClass)
      *                 optional: overrides the default \`parseError\` function.
@@ -12474,7 +13368,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
 
         var src = out.join('\n') + '\n';
         src = stripUnusedLexerCode(src, opt);
-        opt.exportSourceCode.all = src;   
+        opt.exportSourceCode.all = src;
         return src;
     }
 
@@ -12497,7 +13391,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
 
         var src = out.join('\n') + '\n';
         src = stripUnusedLexerCode(src, opt);
-        opt.exportSourceCode.all = src;   
+        opt.exportSourceCode.all = src;
         return src;
     }
 
@@ -12530,7 +13424,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
 
         var src = out.join('\n') + '\n';
         src = stripUnusedLexerCode(src, opt);
-        opt.exportSourceCode.all = src;   
+        opt.exportSourceCode.all = src;
         return src;
     }
 
@@ -12560,7 +13454,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
 
         var src = out.join('\n') + '\n';
         src = stripUnusedLexerCode(src, opt);
-        opt.exportSourceCode.all = src;   
+        opt.exportSourceCode.all = src;
         return src;
     }
 
