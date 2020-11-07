@@ -103,7 +103,7 @@ describe("helpers API", function () {
   });
 
   /* istanbul ignore next: test functions' code is injected and then crashes the test due to extra code coverage statements having been injected */ 
-  it("printFunctionSourceCode (direct)", function () {
+  xit("printFunctionSourceCode (direct)", function () {
     function d(i) { /* mock for linters */ }
 
     if (!helpers.detectIstanbulGlobal()) {
@@ -124,7 +124,7 @@ describe("helpers API", function () {
   });
 
   /* istanbul ignore next: test functions' code is injected and then crashes the test due to extra code coverage statements having been injected */ 
-  it("printFunctionSourceCode (indirect)", function () {
+  xit("printFunctionSourceCode (indirect)", function () {
     function d(i) { /* mock for linters */ }
 
     var f1 = function a(x) { return x; };
@@ -152,7 +152,7 @@ describe("helpers API", function () {
   });
 
   /* istanbul ignore next: test functions' code is injected and then crashes the test due to extra code coverage statements having been injected */ 
-  it("printFunctionSourceCodeContainer (direct)", function () {
+  xit("printFunctionSourceCodeContainer (direct)", function () {
     function d(i) { /* mock for linters */ }
     var x;          /* mock */
     
@@ -174,7 +174,7 @@ describe("helpers API", function () {
   });
 
   /* istanbul ignore next: test functions' code is injected and then crashes the test due to extra code coverage statements having been injected */ 
-  it("printFunctionSourceCodeContainer (indirect)", function () {
+  xit("printFunctionSourceCodeContainer (indirect)", function () {
     function d(i) { /* mock for linters */ }
     var x;          /* mock */
     

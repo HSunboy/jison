@@ -1,11 +1,16 @@
 'use strict';
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+var fs = require('fs');
+var path = require('path');
+var recast = require('recast');
+var assert = require('assert');
 
-var fs = _interopDefault(require('fs'));
-var path = _interopDefault(require('path'));
-var recast = _interopDefault(require('@gerhobbelt/recast'));
-var assert = _interopDefault(require('assert'));
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
+var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
+var recast__default = /*#__PURE__*/_interopDefaultLegacy(recast);
+var assert__default = /*#__PURE__*/_interopDefaultLegacy(assert);
 
 // Return TRUE if `src` starts with `searchString`. 
 function startsWith(src, searchString) {
@@ -45,7 +50,7 @@ function rmCommonWS(strings, ...values) {
                 var m = /^(\s*)\S/.exec(line);
                 // only non-empty ~ content-carrying lines matter re common indent calculus:
                 if (m) {
-                    if (!indent_str) {
+                    if (indent_str == null) {
                         indent_str = m[1];
                     } else if (m[1].length < indent_str.length) {
                         indent_str = m[1];
@@ -147,18 +152,7 @@ function dquote(s) {
 }
 
 //
-// Helper library for safe code execution/compilation, including dumping offending code to file for further error analysis
-// (the idea was originally coded in https://github.com/GerHobbelt/jison/commit/85e367d03b977780516d2b643afbe6f65ee758f2 )
-//
-// MIT Licensed
-//
-//
-// This code is intended to help test and diagnose arbitrary chunks of code, answering questions like this:
-//
-// the given code fails, but where exactly and why? It's precise failure conditions are 'hidden' due to 
-// the stuff running inside an `eval()` or `Function(...)` call, so we want the code dumped to file so that
-// we can test the code in a different environment so that we can see what precisely is causing the failure.
-// 
+
 
 
 function chkBugger(src) {
@@ -182,10 +176,11 @@ function pad(n, p) {
 // attempt to dump in one of several locations: first winner is *it*!
 function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
     var dumpfile;
+    options = options || {};
 
     try {
-        var dumpPaths = [(options.outfile ? path.dirname(options.outfile) : null), options.inputPath, process.cwd()];
-        var dumpName = path.basename(options.inputFilename || options.moduleName || (options.outfile ? path.dirname(options.outfile) : null) || options.defaultModuleName || errname)
+        var dumpPaths = [(options.outfile ? path__default['default'].dirname(options.outfile) : null), options.inputPath, process.cwd()];
+        var dumpName = path__default['default'].basename(options.inputFilename || options.moduleName || (options.outfile ? path__default['default'].dirname(options.outfile) : null) || options.defaultModuleName || errname)
         .replace(/\.[a-z]{1,5}$/i, '')          // remove extension .y, .yacc, .jison, ...whatever
         .replace(/[^a-z0-9_]/ig, '_');          // make sure it's legal in the destination filesystem: the least common denominator.
         if (dumpName === '' || dumpName === '_') {
@@ -211,8 +206,8 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
             }
 
             try {
-                dumpfile = path.normalize(dumpPaths[i] + '/' + dumpName);
-                fs.writeFileSync(dumpfile, sourcecode, 'utf8');
+                dumpfile = path__default['default'].normalize(dumpPaths[i] + '/' + dumpName);
+                fs__default['default'].writeFileSync(dumpfile, sourcecode, 'utf8');
                 console.error("****** offending generated " + errname + " source code dumped into file: ", dumpfile);
                 break;          // abort loop once a dump action was successful!
             } catch (ex3) {
@@ -264,13 +259,6 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
     }
     const debug = 0;
 
-    if (debug) console.warn('generated ' + errname + ' code under EXEC TEST.');
-    if (debug > 1) console.warn(`
-        ######################## source code ##########################
-        ${sourcecode}
-        ######################## source code ##########################
-        `);
-
     var p;
     try {
         // p = eval(sourcecode);
@@ -280,13 +268,6 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
         chkBugger(sourcecode);
         p = code_execution_rig.call(this, sourcecode, options, errname, debug);
     } catch (ex) {
-        if (debug > 1) console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-
-        if (debug) console.log("generated " + errname + " source code fatal error: ", ex.message);
-
-        if (debug > 1) console.log("exec-and-diagnose options:", options);
-
-        if (debug > 1) console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         
         if (options.dumpSourceCodeOnFailure) {
             dumpSourceToFile(sourcecode, errname, err_id, options, ex);
@@ -310,36 +291,25 @@ var code_exec = {
 };
 
 //
-// Parse a given chunk of code to an AST.
-//
-// MIT Licensed
-//
-//
-// This code is intended to help test and diagnose arbitrary chunks of code, answering questions like this:
-//
-// would the given code compile and possibly execute correctly, when included in a lexer, parser or other engine?
-// 
 
-
-//import astUtils from '@gerhobbelt/ast-util';
-assert(recast);
-var types = recast.types;
-assert(types);
+assert__default['default'](recast__default['default']);
+var types = recast__default['default'].types;
+assert__default['default'](types);
 var namedTypes = types.namedTypes;
-assert(namedTypes);
+assert__default['default'](namedTypes);
 var b = types.builders;
-assert(b);
+assert__default['default'](b);
 // //assert(astUtils);
 
 
 
 
 function parseCodeChunkToAST(src, options) {
-    // src = src
-    // .replace(/@/g, '\uFFDA')
-    // .replace(/#/g, '\uFFDB')
-    // ;
-    var ast = recast.parse(src);
+    src = src
+    .replace(/@/g, '\uFFDA')
+    .replace(/#/g, '\uFFDB')
+    ;
+    var ast = recast__default['default'].parse(src);
     return ast;
 }
 
@@ -348,7 +318,23 @@ function parseCodeChunkToAST(src, options) {
 
 function prettyPrintAST(ast, options) {
     var new_src;
-    var s = recast.prettyPrint(ast, { 
+    var options = options || {};
+    const defaultOptions = { 
+        tabWidth: 2,
+        quote: 'single',
+        arrowParensAlways: true,
+
+        // Do not reuse whitespace (or anything else, for that matter)
+        // when printing generically.
+        reuseWhitespace: false
+    };
+    for (var key in defaultOptions) {
+        if (options[key] === undefined) {
+            options[key] = defaultOptions[key];
+        }
+    }
+
+    var s = recast__default['default'].prettyPrint(ast, { 
         tabWidth: 2,
         quote: 'single',
         arrowParensAlways: true,
@@ -361,9 +347,9 @@ function prettyPrintAST(ast, options) {
 
     new_src = new_src
     .replace(/\r\n|\n|\r/g, '\n')    // platform dependent EOL fixup
-    // // backpatch possible jison variables extant in the prettified code:
-    // .replace(/\uFFDA/g, '@')
-    // .replace(/\uFFDB/g, '#')
+    // backpatch possible jison variables extant in the prettified code:
+    .replace(/\uFFDA/g, '@')
+    .replace(/\uFFDB/g, '#')
     ;
 
     return new_src;
@@ -391,7 +377,7 @@ function checkActionBlock(src, yylloc) {
         var rv = parseCodeChunkToAST(src);
         return false;
     } catch (ex) {
-        return ex.message || "code snippet cannot be parsed";
+        return false;
     }
 }
 
