@@ -8,7 +8,7 @@ var mkIdentifier = helpers.mkIdentifier;
 
 import RegExpLexer from './regexp-lexer.js';
 
-var version = '0.6.1-215';                              // require('./package.json').version;
+var version = '0.6.2-220';                              // require('./package.json').version;
 
 
 function getCommandlineOptions() {
@@ -21,24 +21,24 @@ function getCommandlineOptions() {
             file: {
                 flag: true,
                 position: 0,
-                help: 'file containing a lexical grammar'
+                help: 'file containing a lexical grammar.'
             },
             json: {
                 abbr: 'j',
                 flag: true,
                 default: false,
-                help: 'jison will expect a grammar in either JSON/JSON5 or JISON format: the precise format is autodetected'
+                help: 'jison will expect a grammar in either JSON/JSON5 or JISON format: the precise format is autodetected.'
             },
             outfile: {
                 abbr: 'o',
                 metavar: 'FILE',
-                help : 'Filepath and base module name of the generated parser;\nwhen terminated with a / (dir separator) it is treated as the destination directory where the generated output will be stored'
+                help: 'Filepath and base module name of the generated parser. When terminated with a "/" (dir separator) it is treated as the destination directory where the generated output will be stored.'
             },
             debug: {
-                abbr: 'd',
+                abbr: 't',
                 flag: true,
                 default: false,
-                help: 'Debug mode'
+                help: 'Debug mode.'
             },
             dumpSourceCodeOnFailure: {
                 full: 'dump-sourcecode-on-failure',
@@ -57,11 +57,11 @@ function getCommandlineOptions() {
                 abbr: 'I',
                 flag: true,
                 default: false,
-                help: 'Report some statistics about the generated parser'
+                help: 'Report some statistics about the generated parser.'
             },
             moduleType: {
                 full: 'module-type',
-                abbr: 't',
+                abbr: 'm',
                 default: 'commonjs',
                 metavar: 'TYPE',
                 choices: ['commonjs', 'amd', 'js', 'es'],
@@ -69,32 +69,37 @@ function getCommandlineOptions() {
             },
             moduleName: {
                 full: 'module-name',
-            	abbr: 'n',
-            	metavar: 'NAME',
-            	help: 'The name of the generated parser object, namespace supported'
+                abbr: 'n',
+                metavar: 'NAME',
+                help: 'The name of the generated parser object, namespace supported.'
             },
             main: {
                 full: 'main',
             	abbr: 'x',
                 flag: true,
                 default: false,
-                help: 'Include .main() entry point in generated commonjs module'
+                help: 'Include .main() entry point in generated commonjs module.'
             },
             moduleMain: {
                 full: 'module-main',
-            	abbr: 'y',
-            	metavar: 'NAME',
-            	help: 'The main module function definition'
+                abbr: 'y',
+                metavar: 'NAME',
+                help: 'The main module function definition.'
             },
             version: {
                 abbr: 'V',
                 flag: true,
-                help: 'print version and exit',
+                help: 'Print version and exit.',
                 callback: function () {
-                    return version;
+                    console.log(version);
+                    process.exit(0);
                 }
             }
         }).parse();
+
+    if (opts.debug) {
+        console.log("JISON-LEX CLI options:\n", opts);
+    }
 
     return opts;
 }

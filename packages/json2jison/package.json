@@ -1,6 +1,6 @@
 {
   "name": "@gerhobbelt/json2jison",
-  "version": "0.6.1-215",
+  "version": "0.6.2-220",
   "description": "Converts json grammar definitions to jison's own format",
   "main": "json2jison.js",
   "scripts": {
@@ -27,13 +27,13 @@
   "license": "MIT",
   "bin": "./cli.js",
   "engines": {
-    "node": ">=4.0"
+    "node": ">=8.0"
   },
   "dependencies": {
     "@gerhobbelt/nomnom": "1.8.4-24"
   },
   "devDependencies": {
     "chai": "4.1.2",
-    "mocha": "4.0.1"
+    "mocha": "5.2.0"
   }
 }

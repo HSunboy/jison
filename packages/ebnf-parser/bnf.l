@@ -1,5 +1,7 @@
 
 %code imports %{
+  import JSON5 from '@gerhobbelt/json5';
+
   import helpers from '../helpers-lib';
 %}
 
@@ -29,6 +31,10 @@ QUOTED_STRING_CONTENT                   (?:\\\'|\\[^\']|[^\\\'\r\n])*
 DOUBLEQUOTED_STRING_CONTENT             (?:\\\"|\\[^\"]|[^\\\"\r\n])*
 // backquoted ES6/ES2017 string templates MAY span multiple lines:
 ES2017_STRING_CONTENT                   (?:\\\`|\\[^\`]|[^\\\`])*
+
+// Accept any non-regex-special character as a direct literal without
+// the need to put quotes around it:
+ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`;]
 
 // Regex for matching all the possible stuff which can be placed between those `%lex.../lex` markers:
 // multiple lines of arbitrary material. Use a non-gready `*?` in there to ensure that the regex

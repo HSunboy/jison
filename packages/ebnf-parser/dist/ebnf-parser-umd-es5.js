@@ -1,4 +1,4 @@
-(function(global,factory){typeof exports==='object'&&typeof module!=='undefined'?module.exports=factory(require('@gerhobbelt/xregexp'),require('fs'),require('path'),require('recast'),require('assert')):typeof define==='function'&&define.amd?define(['@gerhobbelt/xregexp','fs','path','recast','assert'],factory):(global=typeof globalThis!=='undefined'?globalThis:global||self,global['ebnf-parser']=factory(global.XRegExp,global.fs,global.path,global.recast,global.assert$1));})(this,function(XRegExp,fs,path,recast,assert$1){'use strict';function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e};}var XRegExp__default=/*#__PURE__*/_interopDefaultLegacy(XRegExp);var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var recast__default=/*#__PURE__*/_interopDefaultLegacy(recast);var assert__default=/*#__PURE__*/_interopDefaultLegacy(assert$1);// Return TRUE if `src` starts with `searchString`. 
+(function(global,factory){typeof exports==='object'&&typeof module!=='undefined'?module.exports=factory(require('@gerhobbelt/xregexp'),require('@gerhobbelt/json5'),require('fs'),require('path'),require('recast'),require('@babel/core'),require('assert')):typeof define==='function'&&define.amd?define(['@gerhobbelt/xregexp','@gerhobbelt/json5','fs','path','recast','@babel/core','assert'],factory):(global=typeof globalThis!=='undefined'?globalThis:global||self,global['ebnf-parser']=factory(global.XRegExp,null,global.fs,global.path$1,global.recast,global.babel,global.assert$1));})(this,function(XRegExp,json5,fs,path$1,recast,babel,assert$1){'use strict';function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e};}var XRegExp__default=/*#__PURE__*/_interopDefaultLegacy(XRegExp);var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var path__default=/*#__PURE__*/_interopDefaultLegacy(path$1);var recast__default=/*#__PURE__*/_interopDefaultLegacy(recast);var assert__default=/*#__PURE__*/_interopDefaultLegacy(assert$1);// Return TRUE if `src` starts with `searchString`. 
 function startsWith(src,searchString){return src.substr(0,searchString.length)===searchString;}// tagged template string helper which removes the indentation common to all
 // non-empty lines: that indentation was added as part of the source code
 // formatting of this lexer spec file and must be removed to produce what
@@ -36,10 +36,30 @@ rv.push(src[i].join('\n'));var sv=rv.join('');return sv;}// Convert dashed optio
 /** @public */function camelCase(s){// Convert first character to lowercase
 return s.replace(/^\w/,function(match){return match.toLowerCase();}).replace(/-\w/g,function(match){var c=match.charAt(1);var rv=c.toUpperCase();// do not mutate 'a-2' to 'a2':
 if(c===rv&&c.match(/\d/)){return match;}return rv;});}// Convert dashed option keys and other inputs to Camel Cased legal JavaScript identifiers
-/** @public */function mkIdentifier(s){s=camelCase(''+s);// cleanup: replace any non-suitable character series to a single underscore:
-return s.replace(/^[^\w_]/,'_')// do not accept numerics at the leading position, despite those matching regex `\w`:
+/** @public */function mkIdentifier(s){s=''+s;return s// Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
+// e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
+.replace(/-\w/g,function(match){var c=match.charAt(1);var rv=c.toUpperCase();// do not mutate 'a-2' to 'a2':
+if(c===rv&&c.match(/\d/)){return match;}return rv;})// cleanup: replace any non-suitable character series to a single underscore:
+.replace(/^[^\w_]/,'_')// do not accept numerics at the leading position, despite those matching regex `\w`:
 .replace(/^\d/,'_').replace(/[^\w\d_]+/g,'_')// and only accept multiple (double, not triple) underscores at start or end of identifier name:
-.replace(/^__+/,'#').replace(/__+$/,'#').replace(/_+/g,'_').replace(/#/g,'__');}// properly quote and escape the given input string
+.replace(/^__+/,'#').replace(/__+$/,'#').replace(/_+/g,'_').replace(/#/g,'__');}// Check if the start of the given input matches a regex expression.
+// Return the length of the regex expression or -1 if none was found.
+/** @public */function scanRegExp(s){s=''+s;// code based on Esprima scanner: `Scanner.prototype.scanRegExpBody()`
+var index=0;var length=s.length;var ch=s[index];//assert.assert(ch === '/', 'Regular expression literal must start with a slash');
+var str=s[index++];var classMarker=false;var terminated=false;while(index<length){ch=s[index++];str+=ch;if(ch==='\\'){ch=s[index++];// https://tc39.github.io/ecma262/#sec-literals-regular-expression-literals
+if(isLineTerminator(ch.charCodeAt(0))){break;// UnterminatedRegExp
+}str+=ch;}else if(isLineTerminator(ch.charCodeAt(0))){break;// UnterminatedRegExp
+}else if(classMarker){if(ch===']'){classMarker=false;}}else{if(ch==='/'){terminated=true;break;}else if(ch==='['){classMarker=true;}}}if(!terminated){return-1;// UnterminatedRegExp
+}return index;}// https://tc39.github.io/ecma262/#sec-line-terminators
+function isLineTerminator(cp){return cp===0x0A||cp===0x0D||cp===0x2028||cp===0x2029;}// Check if the given input can be a legal identifier-to-be-camelcased:
+// use this function to check if the way the identifier is written will
+// produce a sensible & comparable identifier name using the `mkIdentifier'
+// API - for humans that transformation should be obvious/trivial in
+// order to prevent confusion.
+/** @public */function isLegalIdentifierInput(s){s=''+s;// Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
+// e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
+s=s.replace(/-\w/g,function(match){var c=match.charAt(1);var rv=c.toUpperCase();// do not mutate 'a-2' to 'a2':
+if(c===rv&&c.match(/\d/)){return match;}return rv;});var alt=mkIdentifier(s);return alt===s;}// properly quote and escape the given input string
 function dquote(s){var sq=s.indexOf('\'')>=0;var dq=s.indexOf('"')>=0;if(sq&&dq){s=s.replace(/"/g,'\\"');dq=false;}if(dq){s='\''+s+'\'';}else{s='"'+s+'"';}return s;}//
 function chkBugger(src){src=String(src);if(src.match(/\bcov_\w+/)){console.error('### ISTANBUL COVERAGE CODE DETECTED ###\n',src);}}// Helper function: pad number with leading zeroes
 function pad(n,p){p=p||2;var rv='0000'+n;return rv.slice(-p);}// attempt to dump in one of several locations: first winner is *it*!
@@ -69,7 +89,8 @@ if(ex){ex.offending_source_code=sourcecode;ex.offending_source_title=errname;ex.
 function exec_and_diagnose_this_stuff(sourcecode,code_execution_rig,options,title){options=options||{};var errname=""+(title||"exec_test");var err_id=errname.replace(/[^a-z0-9_]/ig,"_");if(err_id.length===0){err_id="exec_crash";}const debug=0;var p;try{// p = eval(sourcecode);
 if(typeof code_execution_rig!=='function'){throw new Error("safe-code-exec-and-diag: code_execution_rig MUST be a JavaScript function");}chkBugger(sourcecode);p=code_execution_rig.call(this,sourcecode,options,errname,debug);}catch(ex){if(options.dumpSourceCodeOnFailure){dumpSourceToFile(sourcecode,errname,err_id,options,ex);}if(options.throwErrorOnCompileFailure){throw ex;}}return p;}var code_exec={exec:exec_and_diagnose_this_stuff,dump:dumpSourceToFile};//
 assert__default['default'](recast__default['default']);var types=recast__default['default'].types;assert__default['default'](types);var namedTypes=types.namedTypes;assert__default['default'](namedTypes);var b=types.builders;assert__default['default'](b);// //assert(astUtils);
-function parseCodeChunkToAST(src,options){src=src.replace(/@/g,'\uFFDA').replace(/#/g,'\uFFDB');var ast=recast__default['default'].parse(src);return ast;}function prettyPrintAST(ast,options){var new_src;var options=options||{};const defaultOptions={tabWidth:2,quote:'single',arrowParensAlways:true,// Do not reuse whitespace (or anything else, for that matter)
+function parseCodeChunkToAST(src,options){src=src.replace(/@/g,'\uFFDA').replace(/#/g,'\uFFDB');var ast=recast__default['default'].parse(src);return ast;}function compileCodeToES5(src,options){options=Object.assign({},{ast:true,code:true,sourceMaps:true,comments:true,filename:'compileCodeToES5.js',sourceFileName:'compileCodeToES5.js',sourceRoot:'.',sourceType:'module',babelrc:false,ignore:["node_modules/**/*.js"],compact:false,retainLines:false,presets:[["@babel/preset-env",{targets:{browsers:["last 2 versions"],node:"8.0"}}]]},options);return babel.transformSync(src,options);// => { code, map, ast }
+}function prettyPrintAST(ast,options){var new_src;var options=options||{};const defaultOptions={tabWidth:2,quote:'single',arrowParensAlways:true,// Do not reuse whitespace (or anything else, for that matter)
 // when printing generically.
 reuseWhitespace:false};for(var key in defaultOptions){if(options[key]===undefined){options[key]=defaultOptions[key];}}var s=recast__default['default'].prettyPrint(ast,{tabWidth:2,quote:'single',arrowParensAlways:true,// Do not reuse whitespace (or anything else, for that matter)
 // when printing generically.
@@ -80,7 +101,68 @@ reuseWhitespace:false});new_src=s.code;new_src=new_src.replace(/\r\n|\n|\r/g,'\n
 // Return either the parsed AST (object) or an error message (string). 
 function checkActionBlock(src,yylloc){// make sure reasonable line numbers, etc. are reported in any
 // potential parse errors by pushing the source code down:
-if(yylloc&&yylloc.first_line>0){var cnt=yylloc.first_line;var lines=new Array(cnt);src=lines.join('\n')+src;}if(!src.trim()){return false;}try{var rv=parseCodeChunkToAST(src);return false;}catch(ex){return false;}}var parse2AST={parseCodeChunkToAST,prettyPrintAST,checkActionBlock};function chkBugger$1(src){src=String(src);if(src.match(/\bcov_\w+/)){console.error('### ISTANBUL COVERAGE CODE DETECTED ###\n',src);}}/// HELPER FUNCTION: print the function in source code form, properly indented.
+if(yylloc&&yylloc.first_line>0){var cnt=yylloc.first_line;var lines=new Array(cnt);src=lines.join('\n')+src;}if(!src.trim()){return false;}try{var rv=parseCodeChunkToAST(src);return false;}catch(ex){return false;}}// The rough-and-ready preprocessor for any action code block:
+// this one trims off any surplus whitespace and removes any
+// trailing semicolons and/or wrapping `{...}` braces,
+// when such is easily possible *without having to actually
+// **parse** the `src` code block in order to do this safely*.
+// 
+// Returns the trimmed sourcecode which was provided via `src`.
+// 
+// Note: the `startMarker` argument is special in that a lexer/parser
+// can feed us the delimiter which started the code block here:
+// when the starting delimiter actually is `{` we can safely
+// remove the outer `{...}` wrapper (which then *will* be present!),
+// while otherwise we may *not* do so as complex/specially-crafted
+// code will fail when it was wrapped in other delimiters, e.g.
+// action code specs like this one:
+// 
+//              %{
+//                  {  // trimActionCode sees this one as outer-starting: WRONG
+//                      a: 1
+//                  };
+//                  {
+//                      b: 2
+//                  }  // trimActionCode sees this one as outer-ending: WRONG
+//              %}
+//              
+// Of course the example would be 'ludicrous' action code but the
+// key point here is that users will certainly be able to come up with 
+// convoluted code that is smarter than our simple regex-based
+// `{...}` trimmer in here!
+// 
+function trimActionCode(src,startMarker){var s=src.trim();// remove outermost set of braces UNLESS there's
+// a curly brace in there anywhere: in that case
+// we should leave it up to the sophisticated
+// code analyzer to simplify the code!
+//
+// This is a very rough check as it will also look
+// inside code comments, which should not have
+// any influence.
+//
+// Nevertheless: this is a *safe* transform as
+// long as the code doesn't end with a C++-style
+// comment which happens to contain that closing
+// curly brace at the end!
+//
+// Also DO strip off any trailing optional semicolon,
+// which might have ended up here due to lexer rules
+// like this one:
+//
+//     [a-z]+              -> 'TOKEN';
+//
+// We can safely ditch any trailing semicolon(s) as
+// our code generator reckons with JavaScript's
+// ASI rules (Automatic Semicolon Insertion).
+//
+//
+// TODO: make this is real code edit without that
+// last edge case as a fault condition.
+if(startMarker==='{'){// code is wrapped in `{...}` for sure: remove the wrapping braces.
+s=s.replace(/^\{([^]*?)\}$/,'$1').trim();}else{// code may not be wrapped or otherwise non-simple: only remove
+// wrapping braces when we can guarantee they're the only ones there,
+// i.e. only exist as outer wrapping.
+s=s.replace(/^\{([^}]*)\}$/,'$1').trim();}s=s.replace(/;+$/,'').trim();return s;}var parse2AST={parseCodeChunkToAST,compileCodeToES5,prettyPrintAST,checkActionBlock,trimActionCode};function chkBugger$1(src){src=String(src);if(src.match(/\bcov_\w+/)){console.error('### ISTANBUL COVERAGE CODE DETECTED ###\n',src);}}/// HELPER FUNCTION: print the function in source code form, properly indented.
 /** @public */function printFunctionSourceCode(f){var src=String(f);chkBugger$1(src);return src;}const funcRe=/^function[\s\r\n]*[^\(]*\(([^\)]*)\)[\s\r\n]*\{([^]*?)\}$/;const arrowFuncRe=/^(?:(?:\(([^\)]*)\))|(?:([^\(\)]+)))[\s\r\n]*=>[\s\r\n]*(?:(?:\{([^]*?)\})|(?:(([^\s\r\n\{)])[^]*?)))$/;/// HELPER FUNCTION: print the function **content** in source code form, properly indented,
 /// ergo: produce the code for inlining the function.
 /// 
@@ -108,7 +190,61 @@ args=m[1].trim();}if(m[5]){// non-bracketed version: implicit `return` statement
 action=m[4].trim();action='return '+action+';';}else{action=m[3].trim();}}else{var e=new Error('Cannot extract code from function');e.subject=action;throw e;}}return{args:args,code:action};}var stringifier={printFunctionSourceCode,printFunctionSourceCodeContainer};// 
 // 
 // 
-function detectIstanbulGlobal(){const gcv="__coverage__";const globalvar=new Function('return this')();var coverage=globalvar[gcv];return coverage||false;}var helpers={rmCommonWS,camelCase,mkIdentifier,dquote,exec:code_exec.exec,dump:code_exec.dump,parseCodeChunkToAST:parse2AST.parseCodeChunkToAST,prettyPrintAST:parse2AST.prettyPrintAST,checkActionBlock:parse2AST.checkActionBlock,printFunctionSourceCode:stringifier.printFunctionSourceCode,printFunctionSourceCodeContainer:stringifier.printFunctionSourceCodeContainer,detectIstanbulGlobal};// See also:
+function detectIstanbulGlobal(){const gcv="__coverage__";const globalvar=new Function('return this')();var coverage=globalvar[gcv];return coverage||false;}//
+// Helper library for safe code execution/compilation
+//
+// MIT Licensed
+//
+//
+// This code is intended to help test and diagnose arbitrary regexes, answering questions like this:
+//
+// - is this a valid regex, i.e. does it compile?
+// - does it have captures, and if yes, how many?
+//
+//import XRegExp from '@gerhobbelt/xregexp';
+// validate the given regex.
+//
+// You can specify an (advanced or regular) regex class as a third parameter.
+// The default assumed is the standard JavaScript `RegExp` class.
+//
+// Return FALSE when there's no failure, otherwise return an `Error` info object.
+function checkRegExp(re_src,re_flags,XRegExp){var re;// were we fed a RegExp object or a string?
+if(re_src&&typeof re_src.source==='string'&&typeof re_src.flags==='string'&&typeof re_src.toString==='function'&&typeof re_src.test==='function'&&typeof re_src.exec==='function'){// we're looking at a RegExp (or XRegExp) object, so we can trust the `.source` member
+// and the `.toString()` method to produce something that's compileable by XRegExp
+// at least...
+if(!re_flags||re_flags===re_src.flags){// no change of flags: we assume it's okay as it's already contained
+// in an RegExp or XRegExp object
+return false;}}// we DO accept empty regexes: `''` but we DO NOT accept null/undefined
+if(re_src==null){return new Error('invalid regular expression source: '+re_src);}re_src=''+re_src;if(re_flags==null){re_flags=undefined;// `new RegExp(..., flags)` will barf a hairball when `flags===null`
+}else{re_flags=''+re_flags;}XRegExp=XRegExp||RegExp;try{re=new XRegExp(re_src,re_flags);}catch(ex){return ex;}return false;}// provide some info about the given regex.
+//
+// You can specify an (advanced or regular) regex class as a third parameter.
+// The default assumed is the standard JavaScript `RegExp` class.
+//
+// Return FALSE when the input is not a legal regex.
+function getRegExpInfo(re_src,re_flags,XRegExp){var re1,re2,m1,m2;// were we fed a RegExp object or a string?
+if(re_src&&typeof re_src.source==='string'&&typeof re_src.flags==='string'&&typeof re_src.toString==='function'&&typeof re_src.test==='function'&&typeof re_src.exec==='function'){// we're looking at a RegExp (or XRegExp) object, so we can trust the `.source` member
+// and the `.toString()` method to produce something that's compileable by XRegExp
+// at least...
+if(!re_flags||re_flags===re_src.flags){// no change of flags: we assume it's okay as it's already contained
+// in an RegExp or XRegExp object
+re_flags=undefined;}}else if(re_src==null){// we DO NOT accept null/undefined
+return false;}else{re_src=''+re_src;if(re_flags==null){re_flags=undefined;// `new RegExp(..., flags)` will barf a hairball when `flags===null`
+}else{re_flags=''+re_flags;}}XRegExp=XRegExp||RegExp;try{// A little trick to obtain the captures from a regex:
+// wrap it and append `(?:)` to ensure it matches
+// the empty string, then match it against it to
+// obtain the `match` array.
+re1=new XRegExp(re_src,re_flags);re2=new XRegExp('(?:'+re_src+')|(?:)',re_flags);m1=re1.exec('');m2=re2.exec('');return{acceptsEmptyString:!!m1,captureCount:m2.length-1};}catch(ex){return false;}}var reHelpers={checkRegExp:checkRegExp,getRegExpInfo:getRegExpInfo};var cycleref=[];var cyclerefpath=[];var linkref=[];var linkrefpath=[];var path=[];function shallow_copy(src){if(typeof src==='object'){if(src instanceof Array){return src.slice();}var dst={};if(src instanceof Error){dst.name=src.name;dst.message=src.message;dst.stack=src.stack;}for(var k in src){if(Object.prototype.hasOwnProperty.call(src,k)){dst[k]=src[k];}}return dst;}return src;}function shallow_copy_and_strip_depth(src,parentKey){if(typeof src==='object'){var dst;if(src instanceof Array){dst=src.slice();for(var i=0,len=dst.length;i<len;i++){path.push('['+i+']');dst[i]=shallow_copy_and_strip_depth(dst[i],parentKey+'['+i+']');path.pop();}}else{dst={};if(src instanceof Error){dst.name=src.name;dst.message=src.message;dst.stack=src.stack;}for(var k in src){if(Object.prototype.hasOwnProperty.call(src,k)){var el=src[k];if(el&&typeof el==='object'){dst[k]='[cyclic reference::attribute --> '+parentKey+'.'+k+']';}else{dst[k]=src[k];}}}}return dst;}return src;}function trim_array_tail(arr){if(arr instanceof Array){for(var len=arr.length;len>0;len--){if(arr[len-1]!=null){break;}}arr.length=len;}}function treat_value_stack(v){if(v instanceof Array){var idx=cycleref.indexOf(v);if(idx>=0){v='[cyclic reference to parent array --> '+cyclerefpath[idx]+']';}else{idx=linkref.indexOf(v);if(idx>=0){v='[reference to sibling array --> '+linkrefpath[idx]+', length = '+v.length+']';}else{cycleref.push(v);cyclerefpath.push(path.join('.'));linkref.push(v);linkrefpath.push(path.join('.'));v=treat_error_infos_array(v);cycleref.pop();cyclerefpath.pop();}}}else if(v){v=treat_object(v);}return v;}function treat_error_infos_array(arr){var inf=arr.slice();trim_array_tail(inf);for(var key=0,len=inf.length;key<len;key++){var err=inf[key];if(err){path.push('['+key+']');err=treat_object(err);if(typeof err==='object'){if(err.lexer){err.lexer='[lexer]';}if(err.parser){err.parser='[parser]';}trim_array_tail(err.symbol_stack);trim_array_tail(err.state_stack);trim_array_tail(err.location_stack);if(err.value_stack){path.push('value_stack');err.value_stack=treat_value_stack(err.value_stack);path.pop();}}inf[key]=err;path.pop();}}return inf;}function treat_lexer(l){// shallow copy object:
+l=shallow_copy(l);delete l.simpleCaseActionClusters;delete l.rules;delete l.conditions;delete l.__currentRuleSet__;if(l.__error_infos){path.push('__error_infos');l.__error_infos=treat_value_stack(l.__error_infos);path.pop();}return l;}function treat_parser(p){// shallow copy object:
+p=shallow_copy(p);delete p.productions_;delete p.table;delete p.defaultActions;if(p.__error_infos){path.push('__error_infos');p.__error_infos=treat_value_stack(p.__error_infos);path.pop();}if(p.__error_recovery_infos){path.push('__error_recovery_infos');p.__error_recovery_infos=treat_value_stack(p.__error_recovery_infos);path.pop();}if(p.lexer){path.push('lexer');p.lexer=treat_lexer(p.lexer);path.pop();}return p;}function treat_hash(h){// shallow copy object:
+h=shallow_copy(h);if(h.parser){path.push('parser');h.parser=treat_parser(h.parser);path.pop();}if(h.lexer){path.push('lexer');h.lexer=treat_lexer(h.lexer);path.push();}return h;}function treat_error_report_info(e){// shallow copy object:
+e=shallow_copy(e);if(e&&e.hash){path.push('hash');e.hash=treat_hash(e.hash);path.pop();}if(e.parser){path.push('parser');e.parser=treat_parser(e.parser);path.pop();}if(e.lexer){path.push('lexer');e.lexer=treat_lexer(e.lexer);path.pop();}if(e.__error_infos){path.push('__error_infos');e.__error_infos=treat_value_stack(e.__error_infos);path.pop();}if(e.__error_recovery_infos){path.push('__error_recovery_infos');e.__error_recovery_infos=treat_value_stack(e.__error_recovery_infos);path.pop();}trim_array_tail(e.symbol_stack);trim_array_tail(e.state_stack);trim_array_tail(e.location_stack);if(e.value_stack){path.push('value_stack');e.value_stack=treat_value_stack(e.value_stack);path.pop();}return e;}function treat_object(e){if(e&&typeof e==='object'){var idx=cycleref.indexOf(e);if(idx>=0){// cyclic reference, most probably an error instance.
+// we still want it to be READABLE in a way, though:
+e=shallow_copy_and_strip_depth(e,cyclerefpath[idx]);}else{idx=linkref.indexOf(e);if(idx>=0){e='[reference to sibling --> '+linkrefpath[idx]+']';}else{cycleref.push(e);cyclerefpath.push(path.join('.'));linkref.push(e);linkrefpath.push(path.join('.'));e=treat_error_report_info(e);cycleref.pop();cyclerefpath.pop();}}}return e;}// strip off large chunks from the Error exception object before
+// it will be fed to a test log or other output.
+// 
+// Internal use in the unit test rigs.
+function trimErrorForTestReporting(e){cycleref.length=0;cyclerefpath.length=0;linkref.length=0;linkrefpath.length=0;path=['*'];if(e){e=treat_object(e);}cycleref.length=0;cyclerefpath.length=0;linkref.length=0;linkrefpath.length=0;path=['*'];return e;}var helpers={rmCommonWS,camelCase,mkIdentifier,isLegalIdentifierInput,scanRegExp,dquote,trimErrorForTestReporting,checkRegExp:reHelpers.checkRegExp,getRegExpInfo:reHelpers.getRegExpInfo,exec:code_exec.exec,dump:code_exec.dump,parseCodeChunkToAST:parse2AST.parseCodeChunkToAST,compileCodeToES5:parse2AST.compileCodeToES5,prettyPrintAST:parse2AST.prettyPrintAST,checkActionBlock:parse2AST.checkActionBlock,trimActionCode:parse2AST.trimActionCode,printFunctionSourceCode:stringifier.printFunctionSourceCode,printFunctionSourceCodeContainer:stringifier.printFunctionSourceCodeContainer,detectIstanbulGlobal};// See also:
 // http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508
 // but we keep the prototype.constructor and prototype.name assignment lines too for compatibility
 // with userland code which might access the derived class in a 'classic' way.
@@ -179,7 +315,7 @@ if(typeof e==='function'){i++;e.apply(rv,a[i]);}else{rv.push(e);}}return rv;}var
 // --------- END OF REPORT -----------
 trace:function no_op_trace(){},JisonParserError:JisonParserError,yy:{},options:{type:"lalr",hasPartialLrUpgradeOnConflict:true,errorRecoveryTokenDiscardCount:3},symbols_:{"$accept":0,"$end":1,"(":4,")":5,"*":6,"+":8,"?":7,"ALIAS":9,"EOF":1,"SYMBOL":10,"error":2,"expression":16,"handle":13,"handle_list":12,"production":11,"rule":14,"suffix":17,"suffixed_expression":15,"|":3},terminals_:{1:"EOF",2:"error",3:"|",4:"(",5:")",6:"*",7:"?",8:"+",9:"ALIAS",10:"SYMBOL"},TERROR:2,EOF:1,// internals: defined here so the object *structure* doesn't get modified by parse() et al,
 // thus helping JIT compilers like Chrome V8.
-originalQuoteName:null,originalParseError:null,cleanupAfterParse:null,constructParseErrorInfo:null,yyMergeLocationInfo:null,__reentrant_call_depth:0,// INTERNAL USE ONLY
+originalQuoteName:null,originalParseError:null,cleanupAfterParse:null,constructParseErrorInfo:null,yyMergeLocationInfo:null,copy_yytext:null,copy_yylloc:null,__reentrant_call_depth:0,// INTERNAL USE ONLY
 __error_infos:[],// INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
 __error_recovery_infos:[],// INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
 // APIs which will be set up depending on user action code analysis:
@@ -319,7 +455,7 @@ sp--;if(typeof vstack[sp]!=='undefined'){retval=vstack[sp];}}break;}// break out
 break;}}catch(ex){// report exceptions through the parseError callback too, but keep the exception intact
 // if it is a known parser or lexer error which has been thrown by parseError() already:
 if(ex instanceof this.JisonParserError){throw ex;}else if(lexer&&typeof lexer.JisonLexerError==='function'&&ex instanceof lexer.JisonLexerError){throw ex;}p=this.constructParseErrorInfo('Parsing aborted due to exception.',ex,null,false);retval=false;r=this.parseError(p.errStr,p,this.JisonParserError);if(typeof r!=='undefined'){retval=r;}}finally{retval=this.cleanupAfterParse(retval,true,true);this.__reentrant_call_depth--;}// /finally
-return retval;}};parser.originalParseError=parser.parseError;parser.originalQuoteName=parser.quoteName;/* lexer generated by jison-lex 0.6.1-215 */ /*
+return retval;}};parser.originalParseError=parser.parseError;parser.originalQuoteName=parser.quoteName;/* lexer generated by jison-lex 0.6.2-220 */ /*
      * Returns a Lexer object of the following structure:
      *
      *  Lexer: {
@@ -1113,7 +1249,7 @@ if(typeof e==='function'){i++;e.apply(rv,a[i]);}else{rv.push(e);}}return rv;}var
 // --------- END OF REPORT -----------
 trace:function no_op_trace(){},JisonParserError:JisonParserError$1,yy:{},options:{type:"lalr",hasPartialLrUpgradeOnConflict:true,errorRecoveryTokenDiscardCount:3},symbols_:{"$accept":0,"$end":1,"%%":14,"(":7,")":8,"*":9,"+":11,":":5,";":4,"=":3,"?":10,"ACTION":15,"ACTION_BODY":43,"ALIAS":39,"ARROW_ACTION":42,"CODE":46,"DEBUG":19,"EBNF":20,"EOF":1,"EOF_ID":40,"EPSILON":38,"ID":24,"IMPORT":22,"INCLUDE":44,"INIT_CODE":23,"INTEGER":37,"LEFT":33,"LEX_BLOCK":17,"NAME":25,"NONASSOC":35,"OPTIONS":27,"OPTIONS_END":28,"OPTION_STRING_VALUE":29,"OPTION_VALUE":30,"PARSER_TYPE":32,"PARSE_PARAM":31,"PATH":45,"PREC":41,"RIGHT":34,"START":16,"STRING":26,"TOKEN":18,"TOKEN_TYPE":36,"UNKNOWN_DECL":21,"action":85,"action_body":86,"action_comments_body":87,"action_ne":84,"associativity":61,"declaration":51,"declaration_list":50,"error":2,"expression":79,"extra_parser_module_code":88,"full_token_definitions":63,"grammar":69,"handle":76,"handle_action":75,"handle_list":74,"handle_sublist":77,"id":83,"id_list":68,"import_name":53,"import_path":54,"include_macro_code":89,"init_code_name":52,"module_code_chunk":90,"one_full_token":64,"operator":60,"option":57,"option_list":56,"optional_action_header_block":49,"optional_end_block":48,"optional_module_code_chunk":91,"optional_production_description":73,"optional_token_type":65,"options":55,"parse_params":58,"parser_type":59,"prec":81,"production":71,"production_id":72,"production_list":70,"spec":47,"suffix":80,"suffixed_expression":78,"symbol":82,"token_description":67,"token_list":62,"token_value":66,"{":12,"|":6,"}":13},terminals_:{1:"EOF",2:"error",3:"=",4:";",5:":",6:"|",7:"(",8:")",9:"*",10:"?",11:"+",12:"{",13:"}",14:"%%",15:"ACTION",16:"START",17:"LEX_BLOCK",18:"TOKEN",19:"DEBUG",20:"EBNF",21:"UNKNOWN_DECL",22:"IMPORT",23:"INIT_CODE",24:"ID",25:"NAME",26:"STRING",27:"OPTIONS",28:"OPTIONS_END",29:"OPTION_STRING_VALUE",30:"OPTION_VALUE",31:"PARSE_PARAM",32:"PARSER_TYPE",33:"LEFT",34:"RIGHT",35:"NONASSOC",36:"TOKEN_TYPE",37:"INTEGER",38:"EPSILON",39:"ALIAS",40:"EOF_ID",41:"PREC",42:"ARROW_ACTION",43:"ACTION_BODY",44:"INCLUDE",45:"PATH",46:"CODE"},TERROR:2,EOF:1,// internals: defined here so the object *structure* doesn't get modified by parse() et al,
 // thus helping JIT compilers like Chrome V8.
-originalQuoteName:null,originalParseError:null,cleanupAfterParse:null,constructParseErrorInfo:null,yyMergeLocationInfo:null,__reentrant_call_depth:0,// INTERNAL USE ONLY
+originalQuoteName:null,originalParseError:null,cleanupAfterParse:null,constructParseErrorInfo:null,yyMergeLocationInfo:null,copy_yytext:null,copy_yylloc:null,__reentrant_call_depth:0,// INTERNAL USE ONLY
 __error_infos:[],// INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
 __error_recovery_infos:[],// INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
 // APIs which will be set up depending on user action code analysis:
@@ -1157,10 +1293,15 @@ this._$=yyparser.yyMergeLocationInfo(yysp-4,yysp);// END of default action (gene
 this.$=yyvstack[yysp-4];if(yyvstack[yysp-1].trim()!==''){yy.addDeclaration(this.$,{include:yyvstack[yysp-1]});}return extend(this.$,yyvstack[yysp-2]);case 2:/*! Production::    spec : declaration_list "%%" grammar error EOF */ // default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp-4];this._$=yyparser.yyMergeLocationInfo(yysp-4,yysp);// END of default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-)
 yyparser.yyError(rmCommonWS$1`
+        illegal input in the parser grammar productions definition section.
+    
         Maybe you did not correctly separate trailing code from the grammar rule set with a '%%' marker on an otherwise empty line?
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp-1],yylstack[yysp-2])}
+    
+          Technical error report:
+        ${yyvstack[yysp-1].errStr}
     `);break;case 3:/*! Production::    spec : declaration_list error EOF */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp-2];this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 yyparser.yyError(rmCommonWS$1`
@@ -1354,6 +1495,9 @@ yyparser.yyError(rmCommonWS$1`
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp],yylstack[yysp-1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);break;case 54:/*! Production::    operator : associativity token_list */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
 this.$=[yyvstack[yysp-1]];this.$.push.apply(this.$,yyvstack[yysp]);break;case 55:/*! Production::    operator : associativity error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
@@ -1364,6 +1508,9 @@ yyparser.yyError(rmCommonWS$1`
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp],yylstack[yysp-1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);break;case 56:/*! Production::    associativity : LEFT */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
 this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
 this.$='left';break;case 57:/*! Production::    associativity : RIGHT */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
@@ -1398,6 +1545,9 @@ yyparser.yyError(rmCommonWS$1`
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp-1],yylstack[yysp-2])}
+    
+          Technical error report:
+        ${yyvstack[yysp-1].errStr}
     `);break;case 77:/*! Production::    production : production_id error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp-1];this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
 // TODO ...
@@ -1406,6 +1556,9 @@ yyparser.yyError(rmCommonWS$1`
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp],yylstack[yysp-1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);break;case 78:/*! Production::    production_id : id optional_production_description ":" */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
 this.$=yyvstack[yysp-2];// TODO: carry rule description support into the parser generator...
@@ -1417,6 +1570,9 @@ yyparser.yyError(rmCommonWS$1`
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp],yylstack[yysp-2])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);break;case 81:/*! Production::    optional_production_description : %epsilon */ // default action (generated by JISON mode classic/merge :: 0,VT,VA,-,-,LT,LA,-,-):
 this.$=undefined;this._$=yyparser.yyMergeLocationInfo(null,null,null,null,true);// END of default action (generated by JISON mode classic/merge :: 0,VT,VA,-,-,LT,LA,-,-)
 break;case 82:/*! Production::    handle_list : handle_list "|" handle_action */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
@@ -1429,6 +1585,9 @@ yyparser.yyError(rmCommonWS$1`
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp],yylstack[yysp-2])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);break;case 85:/*! Production::    handle_list : handle_list ":" error */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp-2];this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 // TODO ...
@@ -1503,6 +1662,9 @@ yyparser.yyError(rmCommonWS$1`
     
           Erroneous precedence declaration:
         ${yylexer.prettyPrintRange(yylstack[yysp],yylstack[yysp-1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);break;case 106:/*! Production::    prec : %epsilon */ // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(null,null,null,null,true);// END of default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-)
 this.$=null;break;case 111:/*! Production::    action_ne : "{" action_body error */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
@@ -1923,7 +2085,7 @@ sp--;if(typeof vstack[sp]!=='undefined'){retval=vstack[sp];}}break;}// break out
 break;}}catch(ex){// report exceptions through the parseError callback too, but keep the exception intact
 // if it is a known parser or lexer error which has been thrown by parseError() already:
 if(ex instanceof this.JisonParserError){throw ex;}else if(lexer&&typeof lexer.JisonLexerError==='function'&&ex instanceof lexer.JisonLexerError){throw ex;}p=this.constructParseErrorInfo('Parsing aborted due to exception.',ex,null,false);retval=false;r=this.parseError(p.errStr,p,this.JisonParserError);if(typeof r!=='undefined'){retval=r;}}finally{retval=this.cleanupAfterParse(retval,true,true);this.__reentrant_call_depth--;}// /finally
-return retval;},yyError:1};parser$2.originalParseError=parser$2.parseError;parser$2.originalQuoteName=parser$2.quoteName;/* lexer generated by jison-lex 0.6.1-215 */ /*
+return retval;},yyError:1};parser$2.originalParseError=parser$2.parseError;parser$2.originalQuoteName=parser$2.quoteName;/* lexer generated by jison-lex 0.6.2-220 */ /*
      * Returns a Lexer object of the following structure:
      *
      *  Lexer: {
@@ -2745,7 +2907,7 @@ if(typeof e==='function'){i++;e.apply(rv,a[i]);}else{rv.push(e);}}return rv;}var
 // --------- END OF REPORT -----------
 trace:function no_op_trace(){},JisonParserError:JisonParserError$2,yy:{},options:{type:"lalr",hasPartialLrUpgradeOnConflict:true,errorRecoveryTokenDiscardCount:3},symbols_:{"$":17,"$accept":0,"$end":1,"%%":19,"(":10,")":11,"*":7,"+":12,",":8,".":15,"/":14,"/!":39,"<":5,"=":18,">":6,"?":13,"ACTION":32,"ACTION_BODY":33,"ACTION_BODY_CPP_COMMENT":35,"ACTION_BODY_C_COMMENT":34,"ACTION_BODY_WHITESPACE":36,"ACTION_END":31,"ACTION_START":28,"BRACKET_MISSING":29,"BRACKET_SURPLUS":30,"CHARACTER_LIT":46,"CODE":53,"EOF":1,"ESCAPE_CHAR":44,"IMPORT":24,"INCLUDE":51,"INCLUDE_PLACEMENT_ERROR":37,"INIT_CODE":25,"NAME":20,"NAME_BRACE":40,"OPTIONS":47,"OPTIONS_END":48,"OPTION_STRING_VALUE":49,"OPTION_VALUE":50,"PATH":52,"RANGE_REGEX":45,"REGEX_SET":43,"REGEX_SET_END":42,"REGEX_SET_START":41,"SPECIAL_GROUP":38,"START_COND":27,"START_EXC":22,"START_INC":21,"STRING_LIT":26,"UNKNOWN_DECL":23,"^":16,"action":68,"action_body":69,"any_group_regex":78,"definition":58,"definitions":57,"error":2,"escape_char":81,"extra_lexer_module_code":87,"import_name":60,"import_path":61,"include_macro_code":88,"init":56,"init_code_name":59,"lex":54,"module_code_chunk":89,"name_expansion":77,"name_list":71,"names_exclusive":63,"names_inclusive":62,"nonempty_regex_list":74,"option":86,"option_list":85,"optional_module_code_chunk":90,"options":84,"range_regex":82,"regex":72,"regex_base":76,"regex_concat":75,"regex_list":73,"regex_set":79,"regex_set_atom":80,"rule":67,"rule_block":66,"rules":64,"rules_and_epilogue":55,"rules_collective":65,"start_conditions":70,"string":83,"{":3,"|":9,"}":4},terminals_:{1:"EOF",2:"error",3:"{",4:"}",5:"<",6:">",7:"*",8:",",9:"|",10:"(",11:")",12:"+",13:"?",14:"/",15:".",16:"^",17:"$",18:"=",19:"%%",20:"NAME",21:"START_INC",22:"START_EXC",23:"UNKNOWN_DECL",24:"IMPORT",25:"INIT_CODE",26:"STRING_LIT",27:"START_COND",28:"ACTION_START",29:"BRACKET_MISSING",30:"BRACKET_SURPLUS",31:"ACTION_END",32:"ACTION",33:"ACTION_BODY",34:"ACTION_BODY_C_COMMENT",35:"ACTION_BODY_CPP_COMMENT",36:"ACTION_BODY_WHITESPACE",37:"INCLUDE_PLACEMENT_ERROR",38:"SPECIAL_GROUP",39:"/!",40:"NAME_BRACE",41:"REGEX_SET_START",42:"REGEX_SET_END",43:"REGEX_SET",44:"ESCAPE_CHAR",45:"RANGE_REGEX",46:"CHARACTER_LIT",47:"OPTIONS",48:"OPTIONS_END",49:"OPTION_STRING_VALUE",50:"OPTION_VALUE",51:"INCLUDE",52:"PATH",53:"CODE"},TERROR:2,EOF:1,// internals: defined here so the object *structure* doesn't get modified by parse() et al,
 // thus helping JIT compilers like Chrome V8.
-originalQuoteName:null,originalParseError:null,cleanupAfterParse:null,constructParseErrorInfo:null,yyMergeLocationInfo:null,__reentrant_call_depth:0,// INTERNAL USE ONLY
+originalQuoteName:null,originalParseError:null,cleanupAfterParse:null,constructParseErrorInfo:null,yyMergeLocationInfo:null,copy_yytext:null,copy_yylloc:null,__reentrant_call_depth:0,// INTERNAL USE ONLY
 __error_infos:[],// INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
 __error_recovery_infos:[],// INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
 // APIs which will be set up depending on user action code analysis:
@@ -3623,7 +3785,7 @@ sp--;if(typeof vstack[sp]!=='undefined'){retval=vstack[sp];}}break;}// break out
 break;}}catch(ex){// report exceptions through the parseError callback too, but keep the exception intact
 // if it is a known parser or lexer error which has been thrown by parseError() already:
 if(ex instanceof this.JisonParserError){throw ex;}else if(lexer&&typeof lexer.JisonLexerError==='function'&&ex instanceof lexer.JisonLexerError){throw ex;}p=this.constructParseErrorInfo('Parsing aborted due to exception.',ex,null,false);retval=false;r=this.parseError(p.errStr,p,this.JisonParserError);if(typeof r!=='undefined'){retval=r;}}finally{retval=this.cleanupAfterParse(retval,true,true);this.__reentrant_call_depth--;}// /finally
-return retval;},yyError:1};parser$3.originalParseError=parser$3.parseError;parser$3.originalQuoteName=parser$3.quoteName;/* lexer generated by jison-lex 0.6.1-215 */ /*
+return retval;},yyError:1};parser$3.originalParseError=parser$3.parseError;parser$3.originalQuoteName=parser$3.quoteName;/* lexer generated by jison-lex 0.6.2-220 */ /*
      * Returns a Lexer object of the following structure:
      *
      *  Lexer: {
@@ -4417,10 +4579,14 @@ s=s.replace(/\\\\/g,"\\");s=encodeRE(s);return s;}// convert string value to num
 // otherwise produce the string itself as value.
 function parseValue$1(v){if(v==='false'){return false;}if(v==='true'){return true;}// http://stackoverflow.com/questions/175739/is-there-a-built-in-way-in-javascript-to-check-if-a-string-is-a-valid-number
 // Note that the `v` check ensures that we do not convert `undefined`, `null` and `''` (empty string!)
-if(v&&!isNaN(v)){var rv=+v;if(isFinite(rv)){return rv;}}return v;}parser$3.warn=function p_warn(){console.warn.apply(console,arguments);};parser$3.log=function p_log(){console.log.apply(console,arguments);};parser$3.pre_parse=function p_lex(){if(parser$3.yydebug)parser$3.log('pre_parse:',arguments);};parser$3.yy.pre_parse=function p_lex(){if(parser$3.yydebug)parser$3.log('pre_parse YY:',arguments);};parser$3.yy.post_lex=function p_lex(){if(parser$3.yydebug)parser$3.log('post_lex:',arguments);};function Parser$2(){this.yy={};}Parser$2.prototype=parser$3;parser$3.Parser=Parser$2;function yyparse$2(){return parser$3.parse.apply(parser$3,arguments);}var jisonlex={parser:parser$3,Parser:Parser$2,parse:yyparse$2};var version='0.6.1-215';// require('./package.json').version;
+if(v&&!isNaN(v)){var rv=+v;if(isFinite(rv)){return rv;}}return v;}parser$3.warn=function p_warn(){console.warn.apply(console,arguments);};parser$3.log=function p_log(){console.log.apply(console,arguments);};parser$3.pre_parse=function p_lex(){if(parser$3.yydebug)parser$3.log('pre_parse:',arguments);};parser$3.yy.pre_parse=function p_lex(){if(parser$3.yydebug)parser$3.log('pre_parse YY:',arguments);};parser$3.yy.post_lex=function p_lex(){if(parser$3.yydebug)parser$3.log('post_lex:',arguments);};function Parser$2(){this.yy={};}Parser$2.prototype=parser$3;parser$3.Parser=Parser$2;function yyparse$2(){return parser$3.parse.apply(parser$3,arguments);}var jisonlex={parser:parser$3,Parser:Parser$2,parse:yyparse$2};var version='0.6.2-220';// require('./package.json').version;
 function parse(grammar){return bnf.parser.parse(grammar);}// adds a declaration to the grammar
-bnf.parser.yy.addDeclaration=function bnfAddDeclaration(grammar,decl){if(decl.start){grammar.start=decl.start;}else if(decl.lex){grammar.lex=parseLex(decl.lex.text,decl.lex.position);}else if(decl.operator){if(!grammar.operators)grammar.operators=[];grammar.operators.push(decl.operator);}else if(decl.token){if(!grammar.extra_tokens)grammar.extra_tokens=[];grammar.extra_tokens.push(decl.token);}else if(decl.token_list){if(!grammar.extra_tokens)grammar.extra_tokens=[];decl.token_list.forEach(function(tok){grammar.extra_tokens.push(tok);});}else if(decl.parseParams){if(!grammar.parseParams)grammar.parseParams=[];grammar.parseParams=grammar.parseParams.concat(decl.parseParams);}else if(decl.parserType){if(!grammar.options)grammar.options={};grammar.options.type=decl.parserType;}else if(decl.include){if(!grammar.moduleInclude)grammar.moduleInclude='';grammar.moduleInclude+=decl.include;}else if(decl.options){if(!grammar.options)grammar.options={};// last occurrence of `%options` wins:
-for(var i=0;i<decl.options.length;i++){grammar.options[decl.options[i][0]]=decl.options[i][1];}}else if(decl.unknownDecl){if(!grammar.unknownDecls)grammar.unknownDecls=[];grammar.unknownDecls.push(decl.unknownDecl);}else if(decl.imports){if(!grammar.imports)grammar.imports=[];grammar.imports.push(decl.imports);}else if(decl.actionInclude){if(!grammar.actionInclude){grammar.actionInclude='';}grammar.actionInclude+=decl.actionInclude;}else if(decl.initCode){if(!grammar.moduleInit){grammar.moduleInit=[];}grammar.moduleInit.push(decl.initCode);// {qualifier: <name>, include: <source code chunk>}
+bnf.parser.yy.addDeclaration=function bnfAddDeclaration(grammar,decl){if(!decl){return;}if(decl.start){grammar.start=decl.start;}if(decl.lex){grammar.lex=parseLex(decl.lex.text,decl.lex.position);}if(decl.grammar){grammar.grammar=decl.grammar;}if(decl.ebnf){grammar.ebnf=decl.ebnf;}if(decl.bnf){grammar.bnf=decl.bnf;}if(decl.operator){if(!grammar.operators)grammar.operators=[];grammar.operators.push(decl.operator);}if(decl.token){if(!grammar.extra_tokens)grammar.extra_tokens=[];grammar.extra_tokens.push(decl.token);}if(decl.token_list){if(!grammar.extra_tokens)grammar.extra_tokens=[];decl.token_list.forEach(function(tok){grammar.extra_tokens.push(tok);});}if(decl.parseParams){if(!grammar.parseParams)grammar.parseParams=[];grammar.parseParams=grammar.parseParams.concat(decl.parseParams);}if(decl.parserType){if(!grammar.options)grammar.options={};grammar.options.type=decl.parserType;}if(decl.include){if(!grammar.moduleInclude){grammar.moduleInclude=decl.include;}else{grammar.moduleInclude+='\n\n'+decl.include;}}if(decl.actionInclude){if(!grammar.actionInclude){grammar.actionInclude=decl.actionInclude;}else{grammar.actionInclude+='\n\n'+decl.actionInclude;}}if(decl.options){if(!grammar.options)grammar.options={};// last occurrence of `%options` wins:
+for(var i=0;i<decl.options.length;i++){grammar.options[decl.options[i][0]]=decl.options[i][1];}}if(decl.unknownDecl){if(!grammar.unknownDecls)grammar.unknownDecls=[];// [ array of {name,value} pairs ]
+grammar.unknownDecls.push(decl.unknownDecl);}if(decl.imports){if(!grammar.imports)grammar.imports=[];// [ array of {name,path} pairs ]
+grammar.imports.push(decl.imports);}if(decl.initCode){if(!grammar.moduleInit){grammar.moduleInit=[];}grammar.moduleInit.push(decl.initCode);// {qualifier: <name>, include: <source code chunk>}
+}if(decl.codeSection){if(!grammar.moduleInit){grammar.moduleInit=[];}grammar.moduleInit.push(decl.codeSection);// {qualifier: <name>, include: <source code chunk>}
+}if(decl.onErrorRecovery){if(!grammar.errorRecoveryActions){grammar.errorRecoveryActions=[];}grammar.errorRecoveryActions.push(decl.onErrorRecovery);// {qualifier: <name>, include: <source code chunk>}
 }};// parse an embedded lex section
 function parseLex(text,position){text=text.replace(/(?:^%lex)|(?:\/lex$)/g,'');// We want the lex input to start at the given 'position', if any,
 // so that error reports will produce a line number and character index

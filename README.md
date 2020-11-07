@@ -5,11 +5,14 @@
 [![NPM version](https://badge.fury.io/js/jison-gho.svg)](http://badge.fury.io/js/jison-gho)
 [![Dependency Status](https://img.shields.io/david/GerHobbelt/jison.svg)](https://david-dm.org/GerHobbelt/jison)
 [![npm](https://img.shields.io/npm/dm/jison-gho.svg?maxAge=2592000)]()
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/GerHobbelt/jison.svg)](http://isitmaintained.com/project/GerHobbelt/jison "Average time to resolve an issue")
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/GerHobbelt/jison.svg)](http://isitmaintained.com/project/GerHobbelt/jison "Percentage of issues still open")
 
 * [Issues](http://github.com/zaach/jison/issues)
 * [Discuss](https://gitter.im/jison-parsers-lexers/Lobby)
 * [Website](https://gerhobbelt.github.io/jison/)
 * [**Original** JISON Website](http://jison.org)
+* [NPM package: `jison-gho`](https://www.npmjs.com/package/jison-gho)
 
 
 
@@ -17,7 +20,7 @@
 >
 > This repository contains a fork maintained by GerHobbelt. The original JISON work has been done by Zachary Carter and is available in zaach/jison.
 >
-> For an overview of all all changes \(fixes and features\), see the section [What's New or Different?](#user-content-whats-new-or-different) further below. See also [pullreq \#338](https://github.com/zaach/jison/pull/338).
+> For an overview of all changes \(fixes and features\), see the section [What's New or Different?](#user-content-whats-new-or-different) further below. See also [pullreq \#338](https://github.com/zaach/jison/pull/338).
 
 
 
@@ -38,7 +41,7 @@ Jison can be installed for [Node](http://nodejs.org) using [`npm`](http://github
 Using npm:
 
 ```
-npm install jison -g
+npm install jison-gho -g
 ```
 
 

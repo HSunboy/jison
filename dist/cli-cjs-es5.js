@@ -4,7 +4,7 @@
 'use strict';
 
 function _templateObject122() {
-  var data = _taggedTemplateLiteral(["\n                    Specify the kind of default action that jison should include for every parser rule.\n\n                    You can specify a mode for *value handling* (\"$$\") and one for *location tracking* (\"@$\"), separated by a comma, e.g.:\n                        --default-action=ast,none\n\n                    Supported value modes:\n                    - classic : generate a parser which includes the default\n                                    $$ = $1;\n                                action for every rule.\n                    - ast     : generate a parser which produces a simple AST-like tree-of-arrays structure: every rule produces an array of its production terms' values. Otherwise it is dentical to \"classic\" mode.\n                    - none    : JISON will produce a slightly faster parser but then you are solely responsible for propagating rule action \"$$\" results. The default rule value is still deterministic though as it is set to \"undefined\": \"$$ = undefined;\"\n                    - skip    : same as \"none\" mode, except JISON does NOT INJECT a default value action ANYWHERE, hence rule results are not deterministic when you do not properly manage the \"$$\" value yourself!\n\n                    Supported location modes:\n                    - merge   : generate a parser which includes the default \"@$ = merged(@1..@n);\" location tracking action for every rule, i.e. the rule's production 'location' is the range spanning its terms.\n                    - classic : same as \"merge\" mode.\n                    - ast     : ditto.\n                    - none    : JISON will produce a slightly faster parser but then you are solely responsible for propagating rule action \"@$\" location results. The default rule location is still deterministic though, as it is set to \"undefined\": \"@$ = undefined;\"\n                    - skip    : same as \"none\" mode, except JISON does NOT INJECT a default location action ANYWHERE, hence rule location results are not deterministic when you do not properly manage the \"@$\" value yourself!\n\n                    Notes:\n                    - when you do specify a value default mode, but DO NOT specify a location value mode, the latter is assumed to be the same as the former. Hence:\n                          --default-action=ast\n                      equals:\n                          --default-action=ast,ast\n                    - when you do not specify an explicit default mode or only a \"true\"/\"1\" value, the default is assumed: \"ast,merge\".\n                    - when you specify \"false\"/\"0\" as an explicit default mode, \"none,none\" is assumed. This produces the fastest deterministic parser.\n                "], ["\n                    Specify the kind of default action that jison should include for every parser rule.\n\n                    You can specify a mode for *value handling* (\"$$\") and one for *location tracking* (\"@$\"), separated by a comma, e.g.:\n                        --default-action=ast,none\n\n                    Supported value modes:\n                    - classic : generate a parser which includes the default\n                                    $$ = $1;\n                                action for every rule.\n                    - ast     : generate a parser which produces a simple AST-like tree-of-arrays structure: every rule produces an array of its production terms' values. Otherwise it is dentical to \"classic\" mode.\n                    - none    : JISON will produce a slightly faster parser but then you are solely responsible for propagating rule action \"$$\" results. The default rule value is still deterministic though as it is set to \"undefined\": \"$$ = undefined;\"\n                    - skip    : same as \"none\" mode, except JISON does NOT INJECT a default value action ANYWHERE, hence rule results are not deterministic when you do not properly manage the \"$$\" value yourself!\n\n                    Supported location modes:\n                    - merge   : generate a parser which includes the default \"@$ = merged(@1..@n);\" location tracking action for every rule, i.e. the rule\\'s production \\'location\\' is the range spanning its terms.\n                    - classic : same as \"merge\" mode.\n                    - ast     : ditto.\n                    - none    : JISON will produce a slightly faster parser but then you are solely responsible for propagating rule action \"@$\" location results. The default rule location is still deterministic though, as it is set to \"undefined\": \"@$ = undefined;\"\n                    - skip    : same as \"none\" mode, except JISON does NOT INJECT a default location action ANYWHERE, hence rule location results are not deterministic when you do not properly manage the \"@$\" value yourself!\n\n                    Notes:\n                    - when you do specify a value default mode, but DO NOT specify a location value mode, the latter is assumed to be the same as the former. Hence:\n                          --default-action=ast\n                      equals:\n                          --default-action=ast,ast\n                    - when you do not specify an explicit default mode or only a \"true\"/\"1\" value, the default is assumed: \"ast,merge\".\n                    - when you specify \"false\"/\"0\" as an explicit default mode, \"none,none\" is assumed. This produces the fastest deterministic parser.\n                "]);
+  var data = _taggedTemplateLiteral(["\n                    Specify the kind of default action that jison should include for every parser rule.\n\n                    You can specify a mode for *value handling* (\"$$\") and one for *location tracking* (\"@$\"), separated by a comma, e.g.:\n                        --default-action=ast,none\n\n                    Supported value modes:\n                    - classic : generate a parser which includes the default\n                                    $$ = $1;\n                                action for every rule.\n                    - ast     : generate a parser which produces a simple AST-like tree-of-arrays structure: every rule produces an array of its production terms' values. Otherwise it is dentical to \"classic\" mode.\n                    - none    : JISON will produce a slightly faster parser but then you are solely responsible for propagating rule action \"$$\" results. The default rule value is still deterministic though as it is set to \"undefined\": \"$$ = undefined;\"\n                    - skip    : same as \"none\" mode, except JISON does NOT INJECT a default value action ANYWHERE, hence rule results are not deterministic when you do not properly manage the \"$$\" value yourself!\n\n                    Supported location modes:\n                    - merge   : generate a parser which includes the default \"@$ = merged(@1..@n);\" location tracking action for every rule, i.e. the rule's production 'location' is the range spanning its terms.\n                    - classic : same as \"merge\" mode.\n                    - ast     : ditto.\n                    - none    : JISON will produce a slightly faster parser but then you are solely responsible for propagating rule action \"@$\" location results. The default rule location is still deterministic though, as it is set to \"undefined\": \"@$ = undefined;\"\n                    - skip    : same as \"none\" mode, except JISON does NOT INJECT a default location action ANYWHERE, hence rule location results are not deterministic when you do not properly manage the \"@$\" value yourself!\n\n                    Notes:\n                    - when you do specify a value default mode, but DO NOT specify a location value mode, the latter is assumed to be the same as the former. Hence:\n                          --default-action=ast\n                      equals:\n                          --default-action=ast,ast\n                    - when you do not specify an explicit default mode or only a \"true\"/\"1\" value, the default is assumed: \"", "\".\n                    - when you specify \"false\"/\"0\" as an explicit default mode, \"none,none\" is assumed. This produces the fastest deterministic parser.\n                "], ["\n                    Specify the kind of default action that jison should include for every parser rule.\n\n                    You can specify a mode for *value handling* (\"$$\") and one for *location tracking* (\"@$\"), separated by a comma, e.g.:\n                        --default-action=ast,none\n\n                    Supported value modes:\n                    - classic : generate a parser which includes the default\n                                    $$ = $1;\n                                action for every rule.\n                    - ast     : generate a parser which produces a simple AST-like tree-of-arrays structure: every rule produces an array of its production terms' values. Otherwise it is dentical to \"classic\" mode.\n                    - none    : JISON will produce a slightly faster parser but then you are solely responsible for propagating rule action \"$$\" results. The default rule value is still deterministic though as it is set to \"undefined\": \"$$ = undefined;\"\n                    - skip    : same as \"none\" mode, except JISON does NOT INJECT a default value action ANYWHERE, hence rule results are not deterministic when you do not properly manage the \"$$\" value yourself!\n\n                    Supported location modes:\n                    - merge   : generate a parser which includes the default \"@$ = merged(@1..@n);\" location tracking action for every rule, i.e. the rule\\'s production \\'location\\' is the range spanning its terms.\n                    - classic : same as \"merge\" mode.\n                    - ast     : ditto.\n                    - none    : JISON will produce a slightly faster parser but then you are solely responsible for propagating rule action \"@$\" location results. The default rule location is still deterministic though, as it is set to \"undefined\": \"@$ = undefined;\"\n                    - skip    : same as \"none\" mode, except JISON does NOT INJECT a default location action ANYWHERE, hence rule location results are not deterministic when you do not properly manage the \"@$\" value yourself!\n\n                    Notes:\n                    - when you do specify a value default mode, but DO NOT specify a location value mode, the latter is assumed to be the same as the former. Hence:\n                          --default-action=ast\n                      equals:\n                          --default-action=ast,ast\n                    - when you do not specify an explicit default mode or only a \"true\"/\"1\" value, the default is assumed: \"", "\".\n                    - when you specify \"false\"/\"0\" as an explicit default mode, \"none,none\" is assumed. This produces the fastest deterministic parser.\n                "]);
 
   _templateObject122 = function _templateObject122() {
     return data;
@@ -1375,9 +1375,20 @@ function camelCase(s) {
 
 
 function mkIdentifier(s) {
-  s = camelCase('' + s); // cleanup: replace any non-suitable character series to a single underscore:
+  s = '' + s;
+  return s // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
+  // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
+  .replace(/-\w/g, function (match) {
+    var c = match.charAt(1);
+    var rv = c.toUpperCase(); // do not mutate 'a-2' to 'a2':
 
-  return s.replace(/^[^\w_]/, '_') // do not accept numerics at the leading position, despite those matching regex `\w`:
+    if (c === rv && c.match(/\d/)) {
+      return match;
+    }
+
+    return rv;
+  }) // cleanup: replace any non-suitable character series to a single underscore:
+  .replace(/^[^\w_]/, '_') // do not accept numerics at the leading position, despite those matching regex `\w`:
   .replace(/^\d/, '_').replace(/[^\w\d_]+/g, '_') // and only accept multiple (double, not triple) underscores at start or end of identifier name:
   .replace(/^__+/, '#').replace(/__+$/, '#').replace(/_+/g, '_').replace(/#/g, '__');
 } // properly quote and escape the given input string
@@ -2344,6 +2355,8 @@ var parser = {
   cleanupAfterParse: null,
   constructParseErrorInfo: null,
   yyMergeLocationInfo: null,
+  copy_yytext: null,
+  copy_yylloc: null,
   __reentrant_call_depth: 0,
   // INTERNAL USE ONLY
   __error_infos: [],
@@ -4757,7 +4770,7 @@ var parser = {
 };
 parser.originalParseError = parser.parseError;
 parser.originalQuoteName = parser.quoteName;
-/* lexer generated by jison-lex 0.6.1-215 */
+/* lexer generated by jison-lex 0.6.2-220 */
 
 /*
  * Returns a Lexer object of the following structure:
@@ -8519,7 +8532,7 @@ var setmgmt = {
 var rmCommonWS$2 = helpers.rmCommonWS;
 var mkIdentifier$2 = helpers.mkIdentifier;
 var code_exec$1 = helpers.exec;
-var version = '0.6.1-215'; // require('./package.json').version;
+var version = '0.6.2-220'; // require('./package.json').version;
 
 function chkBugger$2(src) {
   src = '' + src;
@@ -9457,7 +9470,7 @@ function buildActions(dict, tokens, opts) {
 
 function generateErrorClass() {
   // --- START lexer error class ---
-  var prelude = "/**\n * See also:\n * http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508\n * but we keep the prototype.constructor and prototype.name assignment lines too for compatibility\n * with userland code which might access the derived class in a 'classic' way.\n *\n * @public\n * @constructor\n * @nocollapse\n */\nfunction JisonLexerError(msg, hash) {\n    Object.defineProperty(this, 'name', {\n        enumerable: false,\n        writable: false,\n        value: 'JisonLexerError'\n    });\n\n    if (msg == null) msg = '???';\n\n    Object.defineProperty(this, 'message', {\n        enumerable: false,\n        writable: true,\n        value: msg\n    });\n\n    this.hash = hash;\n\n    var stacktrace;\n    if (hash && hash.exception instanceof Error) {\n        var ex2 = hash.exception;\n        this.message = ex2.message || msg;\n        stacktrace = ex2.stack;\n    }\n    if (!stacktrace) {\n        if (Error.hasOwnProperty('captureStackTrace')) { // V8\n            Error.captureStackTrace(this, this.constructor);\n        } else {\n            stacktrace = (new Error(msg)).stack;\n        }\n    }\n    if (stacktrace) {\n        Object.defineProperty(this, 'stack', {\n            enumerable: false,\n            writable: false,\n            value: stacktrace\n        });\n    }\n}\n\nif (typeof Object.setPrototypeOf === 'function') {\n    Object.setPrototypeOf(JisonLexerError.prototype, Error.prototype);\n} else {\n    JisonLexerError.prototype = Object.create(Error.prototype);\n}\nJisonLexerError.prototype.constructor = JisonLexerError;\nJisonLexerError.prototype.name = 'JisonLexerError';"; // --- END lexer error class ---
+  var prelude = "/**\n * See also:\n * http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508\n * but we keep the prototype.constructor and prototype.name assignment lines too for compatibility\n * with userland code which might access the derived class in a 'classic' way.\n *\n * @public\n * @constructor\n * @nocollapse\n */\nfunction JisonLexerError(msg, hash) {\n    \"use strict\";\n\n    Object.defineProperty(this, 'name', {\n        enumerable: false,\n        writable: false,\n        value: 'JisonLexerError'\n    });\n\n    if (msg == null) msg = '???';\n\n    Object.defineProperty(this, 'message', {\n        enumerable: false,\n        writable: true,\n        value: msg\n    });\n\n    this.hash = hash;\n\n    var stacktrace;\n    if (hash && hash.exception instanceof Error) {\n        var ex2 = hash.exception;\n        this.message = ex2.message || msg;\n        stacktrace = ex2.stack;\n    }\n    if (!stacktrace) {\n        if (Error.hasOwnProperty('captureStackTrace')) { // V8\n            Error.captureStackTrace(this, this.constructor);\n        } else {\n            stacktrace = (new Error(msg)).stack;\n        }\n    }\n    if (stacktrace) {\n        Object.defineProperty(this, 'stack', {\n            enumerable: false,\n            writable: false,\n            value: stacktrace\n        });\n    }\n}\n\nif (typeof Object.setPrototypeOf === 'function') {\n    Object.setPrototypeOf(JisonLexerError.prototype, Error.prototype);\n} else {\n    JisonLexerError.prototype = Object.create(Error.prototype);\n}\nJisonLexerError.prototype.constructor = JisonLexerError;\nJisonLexerError.prototype.name = 'JisonLexerError';"; // --- END lexer error class ---
 
   return prelude;
 }
@@ -10385,6 +10398,8 @@ var parser$1 = {
   cleanupAfterParse: null,
   constructParseErrorInfo: null,
   yyMergeLocationInfo: null,
+  copy_yytext: null,
+  copy_yylloc: null,
   __reentrant_call_depth: 0,
   // INTERNAL USE ONLY
   __error_infos: [],
@@ -11086,7 +11101,7 @@ var parser$1 = {
 };
 parser$1.originalParseError = parser$1.parseError;
 parser$1.originalQuoteName = parser$1.quoteName;
-/* lexer generated by jison-lex 0.6.1-215 */
+/* lexer generated by jison-lex 0.6.2-220 */
 
 /*
  * Returns a Lexer object of the following structure:
@@ -13522,6 +13537,8 @@ var parser$3 = {
   cleanupAfterParse: null,
   constructParseErrorInfo: null,
   yyMergeLocationInfo: null,
+  copy_yytext: null,
+  copy_yylloc: null,
   __reentrant_call_depth: 0,
   // INTERNAL USE ONLY
   __error_infos: [],
@@ -15986,7 +16003,7 @@ var parser$3 = {
 };
 parser$3.originalParseError = parser$3.parseError;
 parser$3.originalQuoteName = parser$3.quoteName;
-/* lexer generated by jison-lex 0.6.1-215 */
+/* lexer generated by jison-lex 0.6.2-220 */
 
 /*
  * Returns a Lexer object of the following structure:
@@ -18490,7 +18507,7 @@ var bnf = {
   Parser: Parser$2,
   parse: yyparse$2
 };
-var version$1 = '0.6.1-215'; // require('./package.json').version;
+var version$1 = '0.6.2-220'; // require('./package.json').version;
 
 function parse(grammar) {
   return bnf.parser.parse(grammar);
@@ -19323,7 +19340,7 @@ function grammarPrinter(raw, options) {
 var rmCommonWS$5 = helpers.rmCommonWS;
 var mkIdentifier$3 = helpers.mkIdentifier;
 var code_exec$2 = helpers.exec;
-var version$2 = '0.6.1-215';
+var version$2 = '0.6.2-220';
 var devDebug = 0;
 
 function chkBugger$3(src) {
@@ -22028,7 +22045,7 @@ generator.reportGrammarInformation = function reportGrammarInformation() {
 }; // --- START of debugTraceSrc chunk ---
 
 
-var debugTraceSrc = "\nfunction debug_trace() {\n    if (typeof Jison !== 'undefined' && Jison.print) {\n        Jison.print.apply(null, arguments);\n    } else if (typeof print !== 'undefined') {\n        print.apply(null, arguments);\n    } else if (typeof console !== 'undefined' && console.log) {\n        var args = Array.prototype.slice.call(arguments, 0);\n        args.unshift('');           // prevent `%.` printf-style expansions; see https://nodejs.org/api/console.html#console_console_log_data_args\n        console.log.apply(null, args);\n    }\n}\n"; // --- END of debugTraceSrc chunk ---
+var debugTraceSrc = "\nfunction debug_trace() {\n    \"use strict\";\n\n    if (typeof Jison !== 'undefined' && Jison.print) {\n        Jison.print.apply(null, arguments);\n    } else if (typeof print !== 'undefined') {\n        print.apply(null, arguments);\n    } else if (typeof console !== 'undefined' && console.log) {\n        var args = Array.prototype.slice.call(arguments, 0);\n        args.unshift('');           // prevent `%.` printf-style expansions; see https://nodejs.org/api/console.html#console_console_log_data_args\n        console.log.apply(null, args);\n    }\n}\n"; // --- END of debugTraceSrc chunk ---
 // Generator debug mixin
 
 var generatorDebug = {
@@ -23925,7 +23942,7 @@ lrGeneratorMixin.generateModule_ = function generateModule_() {
 
 lrGeneratorMixin.generateErrorClass = function () {
   // --- START parser error class ---
-  var prelude = "\n// See also:\n// http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508\n// but we keep the prototype.constructor and prototype.name assignment lines too for compatibility\n// with userland code which might access the derived class in a 'classic' way.\nfunction JisonParserError(msg, hash) {\n    Object.defineProperty(this, 'name', {\n        enumerable: false,\n        writable: false,\n        value: 'JisonParserError'\n    });\n\n    if (msg == null) msg = '???';\n\n    Object.defineProperty(this, 'message', {\n        enumerable: false,\n        writable: true,\n        value: msg\n    });\n\n    this.hash = hash;\n\n    var stacktrace;\n    if (hash && hash.exception instanceof Error) {\n        var ex2 = hash.exception;\n        this.message = ex2.message || msg;\n        stacktrace = ex2.stack;\n    }\n    if (!stacktrace) {\n        if (Error.hasOwnProperty('captureStackTrace')) {        // V8/Chrome engine\n            Error.captureStackTrace(this, this.constructor);\n        } else {\n            stacktrace = (new Error(msg)).stack;\n        }\n    }\n    if (stacktrace) {\n        Object.defineProperty(this, 'stack', {\n            enumerable: false,\n            writable: false,\n            value: stacktrace\n        });\n    }\n}\n\nif (typeof Object.setPrototypeOf === 'function') {\n    Object.setPrototypeOf(JisonParserError.prototype, Error.prototype);\n} else {\n    JisonParserError.prototype = Object.create(Error.prototype);\n}\nJisonParserError.prototype.constructor = JisonParserError;\nJisonParserError.prototype.name = 'JisonParserError';\n"; // --- END parser error class ---
+  var prelude = "\n// See also:\n// http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508\n// but we keep the prototype.constructor and prototype.name assignment lines too for compatibility\n// with userland code which might access the derived class in a 'classic' way.\nfunction JisonParserError(msg, hash) {\n    \"use strict\";\n\n    Object.defineProperty(this, 'name', {\n        enumerable: false,\n        writable: false,\n        value: 'JisonParserError'\n    });\n\n    if (msg == null) msg = '???';\n\n    Object.defineProperty(this, 'message', {\n        enumerable: false,\n        writable: true,\n        value: msg\n    });\n\n    this.hash = hash;\n\n    var stacktrace;\n    if (hash && hash.exception instanceof Error) {\n        var ex2 = hash.exception;\n        this.message = ex2.message || msg;\n        stacktrace = ex2.stack;\n    }\n    if (!stacktrace) {\n        if (Error.hasOwnProperty('captureStackTrace')) {        // V8/Chrome engine\n            Error.captureStackTrace(this, this.constructor);\n        } else {\n            stacktrace = (new Error(msg)).stack;\n        }\n    }\n    if (stacktrace) {\n        Object.defineProperty(this, 'stack', {\n            enumerable: false,\n            writable: false,\n            value: stacktrace\n        });\n    }\n}\n\nif (typeof Object.setPrototypeOf === 'function') {\n    Object.setPrototypeOf(JisonParserError.prototype, Error.prototype);\n} else {\n    JisonParserError.prototype = Object.create(Error.prototype);\n}\nJisonParserError.prototype.constructor = JisonParserError;\nJisonParserError.prototype.name = 'JisonParserError';\n"; // --- END parser error class ---
 
   return {
     commonCode: '',
@@ -24427,7 +24444,7 @@ lrGeneratorMixin.generateTableCode2 = function (table, defaultActions, productio
 // default main method for generated commonjs modules
 
 
-var commonJsMain = "\nfunction (args) {\n    // When the parser comes with its own `main` function, then use that one:\n    if (typeof exports.parser.main === 'function') {\n      return exports.parser.main(args);\n    }\n\n    if (!args[1]) {\n        console.log('Usage:', path.basename(args[0]) + ' FILE');\n        process.exit(1);\n    }\n    var source = fs.readFileSync(path.normalize(args[1]), 'utf8');\n    var dst = exports.parser.parse(source);\n    console.log('parser output:\\n\\n', {\n        type: typeof dst,\n        value: dst\n    });\n    try {\n        console.log(\"\\n\\nor as JSON:\\n\", JSON.stringify(dst, null, 2));\n    } catch (e) { /* ignore crashes; output MAY not be serializable! We are a generic bit of code, after all... */ }\n    var rv = 0;\n    if (typeof dst === 'number' || typeof dst === 'boolean') {\n        rv = dst;\n    }\n    return dst;\n}\n"; // --- END of commonJsMain chunk ---
+var commonJsMain = "\nfunction (args) {\n    \"use strict\";\n\n    // When the parser comes with its own `main` function, then use that one:\n    if (typeof exports.parser.main === 'function') {\n      return exports.parser.main(args);\n    }\n\n    if (!args[1]) {\n        console.log('Usage:', path.basename(args[0]) + ' FILE');\n        process.exit(1);\n    }\n    var source = fs.readFileSync(path.normalize(args[1]), 'utf8');\n    var dst = exports.parser.parse(source);\n    console.log('parser output:\\n\\n', {\n        type: typeof dst,\n        value: dst\n    });\n    try {\n        console.log(\"\\n\\nor as JSON:\\n\", JSON.stringify(dst, null, 2));\n    } catch (e) { /* ignore crashes; output MAY not be serializable! We are a generic bit of code, after all... */ }\n    var rv = 0;\n    if (typeof dst === 'number' || typeof dst === 'boolean') {\n        rv = dst;\n    }\n    return dst;\n}\n"; // --- END of commonJsMain chunk ---
 
 var commonJsMainImports = "\nvar fs = require('fs');\nvar path = require('path');\n"; // debug mixin for LR parser generators
 
@@ -24551,7 +24568,7 @@ parser$4.trace = generator.trace;
 parser$4.warn = generator.warn;
 parser$4.error = generator.error; // --- START parser Error class chunk ---
 
-var parseErrorSourceCode = "\nfunction parseError(str, hash, ExceptionClass) {\n    if (hash.recoverable) {\n        if (typeof this.trace === 'function') {\n            this.trace(str);\n        }\n        hash.destroy();             // destroy... well, *almost*!\n    } else {\n        if (typeof this.trace === 'function') {\n            this.trace(str);\n        }\n        if (!ExceptionClass) {\n            ExceptionClass = this.JisonParserError;\n        }\n        throw new ExceptionClass(str, hash);\n    }\n}\n"; // --- END of parseErrorSourceCode chunk ---
+var parseErrorSourceCode = "\nfunction parseError(str, hash, ExceptionClass) {\n    \"use strict\";\n\n    if (hash.recoverable) {\n        if (typeof this.trace === 'function') {\n            this.trace(str);\n        }\n        hash.destroy();             // destroy... well, *almost*!\n    } else {\n        if (typeof this.trace === 'function') {\n            this.trace(str);\n        }\n        if (!ExceptionClass) {\n            ExceptionClass = this.JisonParserError;\n        }\n        throw new ExceptionClass(str, hash);\n    }\n}\n"; // --- END of parseErrorSourceCode chunk ---
 
 chkBugger$3(parseErrorSourceCode);
 parser$4.parseError = lrGeneratorMixin.parseError = eval(parseErrorSourceCode + '\n\nparseError;');
@@ -24567,7 +24584,7 @@ generatorMixin.createLexer = function createLexer(lexerSpec, input, tokens, opti
 // in the generated code:
 
 
-var define_parser_APIs_1 = "\n    TERROR: 2,\n    EOF: 1,\n\n    // internals: defined here so the object *structure* doesn't get modified by parse() et al,\n    // thus helping JIT compilers like Chrome V8.\n    originalQuoteName: null,\n    originalParseError: null,\n    cleanupAfterParse: null,\n    constructParseErrorInfo: null,\n    yyMergeLocationInfo: null,\n\n    __reentrant_call_depth: 0,      // INTERNAL USE ONLY\n    __error_infos: [],              // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup\n    __error_recovery_infos: [],     // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup\n\n    // APIs which will be set up depending on user action code analysis:\n    //yyRecovering: 0,\n    //yyErrOk: 0,\n    //yyClearIn: 0,\n\n    // Helper APIs\n    // -----------\n\n    // Helper function which can be overridden by user code later on: put suitable quotes around\n    // literal IDs in a description string.\n    quoteName: function parser_quoteName(id_str) {\n        return '\"' + id_str + '\"';\n    },\n\n    // Return the name of the given symbol (terminal or non-terminal) as a string, when available.\n    //\n    // Return NULL when the symbol is unknown to the parser.\n    getSymbolName: function parser_getSymbolName(symbol) {\n        if (this.terminals_[symbol]) {\n            return this.terminals_[symbol];\n        }\n\n        // Otherwise... this might refer to a RULE token i.e. a non-terminal: see if we can dig that one up.\n        //\n        // An example of this may be where a rule's action code contains a call like this:\n        //\n        //      parser.getSymbolName(#$)\n        //\n        // to obtain a human-readable name of the current grammar rule.\n        var s = this.symbols_;\n        for (var key in s) {\n            if (s[key] === symbol) {\n                return key;\n            }\n        }\n        return null;\n    },\n\n    // Return a more-or-less human-readable description of the given symbol, when available,\n    // or the symbol itself, serving as its own 'description' for lack of something better to serve up.\n    //\n    // Return NULL when the symbol is unknown to the parser.\n    describeSymbol: function parser_describeSymbol(symbol) {\n        if (symbol !== this.EOF && this.terminal_descriptions_ && this.terminal_descriptions_[symbol]) {\n            return this.terminal_descriptions_[symbol];\n        }\n        else if (symbol === this.EOF) {\n            return 'end of input';\n        }\n        var id = this.getSymbolName(symbol);\n        if (id) {\n            return this.quoteName(id);\n        }\n        return null;\n    },\n\n    // Produce a (more or less) human-readable list of expected tokens at the point of failure.\n    //\n    // The produced list may contain token or token set descriptions instead of the tokens\n    // themselves to help turning this output into something that easier to read by humans\n    // unless `do_not_describe` parameter is set, in which case a list of the raw, *numeric*,\n    // expected terminals and nonterminals is produced.\n    //\n    // The returned list (array) will not contain any duplicate entries.\n    collect_expected_token_set: function parser_collect_expected_token_set(state, do_not_describe) {\n        var TERROR = this.TERROR;\n        var tokenset = [];\n        var check = {};\n        // Has this (error?) state been outfitted with a custom expectations description text for human consumption?\n        // If so, use that one instead of the less palatable token set.\n        if (!do_not_describe && this.state_descriptions_ && this.state_descriptions_[state]) {\n            return [\n                this.state_descriptions_[state]\n            ];\n        }\n        for (var p in this.table[state]) {\n            p = +p;\n            if (p !== TERROR) {\n                var d = do_not_describe ? p : this.describeSymbol(p);\n                if (d && !check[d]) {\n                    tokenset.push(d);\n                    check[d] = true;        // Mark this token description as already mentioned to prevent outputting duplicate entries.\n                }\n            }\n        }\n        return tokenset;\n    }\n"; // --- END of define_parser_APIs_1 chunk ---
+var define_parser_APIs_1 = "\n    TERROR: 2,\n    EOF: 1,\n\n    // internals: defined here so the object *structure* doesn't get modified by parse() et al,\n    // thus helping JIT compilers like Chrome V8.\n    originalQuoteName: null,\n    originalParseError: null,\n    cleanupAfterParse: null,\n    constructParseErrorInfo: null,\n    yyMergeLocationInfo: null,\n    copy_yytext: null,\n    copy_yylloc: null,\n\n    __reentrant_call_depth: 0,      // INTERNAL USE ONLY\n    __error_infos: [],              // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup\n    __error_recovery_infos: [],     // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup\n\n    // APIs which will be set up depending on user action code analysis:\n    //yyRecovering: 0,\n    //yyErrOk: 0,\n    //yyClearIn: 0,\n\n    // Helper APIs\n    // -----------\n\n    // Helper function which can be overridden by user code later on: put suitable quotes around\n    // literal IDs in a description string.\n    quoteName: function parser_quoteName(id_str) {\n        \"use strict\";\n\n        return '\"' + id_str + '\"';\n    },\n\n    // Return the name of the given symbol (terminal or non-terminal) as a string, when available.\n    //\n    // Return NULL when the symbol is unknown to the parser.\n    getSymbolName: function parser_getSymbolName(symbol) {\n        \"use strict\";\n\n        if (this.terminals_[symbol]) {\n            return this.terminals_[symbol];\n        }\n\n        // Otherwise... this might refer to a RULE token i.e. a non-terminal: see if we can dig that one up.\n        //\n        // An example of this may be where a rule's action code contains a call like this:\n        //\n        //      parser.getSymbolName(#$)\n        //\n        // to obtain a human-readable name of the current grammar rule.\n        var s = this.symbols_;\n        for (var key in s) {\n            if (s[key] === symbol) {\n                return key;\n            }\n        }\n        return null;\n    },\n\n    // Return a more-or-less human-readable description of the given symbol, when available,\n    // or the symbol itself, serving as its own 'description' for lack of something better to serve up.\n    //\n    // Return NULL when the symbol is unknown to the parser.\n    describeSymbol: function parser_describeSymbol(symbol) {\n        \"use strict\";\n\n        if (symbol !== this.EOF && this.terminal_descriptions_ && this.terminal_descriptions_[symbol]) {\n            return this.terminal_descriptions_[symbol];\n        }\n        else if (symbol === this.EOF) {\n            return 'end of input';\n        }\n        var id = this.getSymbolName(symbol);\n        if (id) {\n            return this.quoteName(id);\n        }\n        return null;\n    },\n\n    // Produce a (more or less) human-readable list of expected tokens at the point of failure.\n    //\n    // The produced list may contain token or token set descriptions instead of the tokens\n    // themselves to help turning this output into something that easier to read by humans\n    // unless `do_not_describe` parameter is set, in which case a list of the raw, *numeric*,\n    // expected terminals and nonterminals is produced.\n    //\n    // The returned list (array) will not contain any duplicate entries.\n    collect_expected_token_set: function parser_collect_expected_token_set(state, do_not_describe) {\n        \"use strict\";\n\n        var TERROR = this.TERROR;\n        var tokenset = [];\n        var check = {};\n        // Has this (error?) state been outfitted with a custom expectations description text for human consumption?\n        // If so, use that one instead of the less palatable token set.\n        if (!do_not_describe && this.state_descriptions_ && this.state_descriptions_[state]) {\n            return [\n                this.state_descriptions_[state]\n            ];\n        }\n        for (var p in this.table[state]) {\n            p = +p;\n            if (p !== TERROR) {\n                var d = do_not_describe ? p : this.describeSymbol(p);\n                if (d && !check[d]) {\n                    tokenset.push(d);\n                    check[d] = true;        // Mark this token description as already mentioned to prevent outputting duplicate entries.\n                }\n            }\n        }\n        return tokenset;\n    }\n"; // --- END of define_parser_APIs_1 chunk ---
 
 var api_set = new Function('', 'return { ' + define_parser_APIs_1 + ' };')();
 
@@ -25082,7 +25099,7 @@ assert__default['default'](typeof Jison.prettyPrint === 'function');
 assert__default['default'](Jison.defaultJisonOptions);
 assert__default['default'](typeof Jison.mkStdOptions === 'function');
 assert__default['default'](typeof Jison.Generator === 'function');
-var version$3 = '0.6.1-215';
+var version$3 = '0.6.2-220'; // require('./package.json').version;
 
 function getCommandlineOptions() {
   var defaults = Jison.defaultJisonOptions;
@@ -25234,7 +25251,7 @@ function getCommandlineOptions() {
 
         return v;
       },
-      help: rmCommonWS$6(_templateObject122())
+      help: rmCommonWS$6(_templateObject122(), defaults.defaultActionMode.join(","))
     },
     hasTryCatch: {
       full: 'try-catch',
@@ -25329,230 +25346,234 @@ function getCommandlineOptions() {
   return opts;
 }
 
-var cli = {
-  main: function cliMain(opts) {
-    //opts = Jison.mkStdOptions(opts);
-    function isDirectory(fp) {
-      try {
-        return fs__default['default'].lstatSync(fp).isDirectory();
-      } catch (e) {
-        return false;
-      }
+function cliMain(opts) {
+  //opts = Jison.mkStdOptions(opts);
+  function isDirectory(fp) {
+    try {
+      return fs__default['default'].lstatSync(fp).isDirectory();
+    } catch (e) {
+      return false;
     }
+  }
 
-    function mkdirp(fp) {
-      if (!fp || fp === '.' || fp.length === 0) {
-        return false;
-      }
-
-      try {
-        fs__default['default'].mkdirSync(fp);
-        return true;
-      } catch (e) {
-        if (e.code === 'ENOENT') {
-          var parent = path__default['default'].dirname(fp); // Did we hit the root directory by now? If so, abort!
-          // Else, create the parent; iff that fails, we fail too...
-
-          if (parent !== fp && mkdirp(parent)) {
-            try {
-              // Retry creating the original directory: it should succeed now
-              fs__default['default'].mkdirSync(fp);
-              return true;
-            } catch (e) {
-              return false;
-            }
-          }
-        }
-      }
-
+  function mkdirp(fp) {
+    if (!fp || fp === '.' || fp.length === 0) {
       return false;
     }
 
-    function processInputFile() {
-      // getting raw files
-      var lex;
-      var original_cwd = process__default['default'].cwd();
+    try {
+      fs__default['default'].mkdirSync(fp);
+      return true;
+    } catch (e) {
+      if (e.code === 'ENOENT') {
+        var parent = path__default['default'].dirname(fp); // Did we hit the root directory by now? If so, abort!
+        // Else, create the parent; iff that fails, we fail too...
 
-      if (opts.lexfile) {
-        lex = fs__default['default'].readFileSync(path__default['default'].normalize(opts.lexfile), 'utf8');
+        if (parent !== fp && mkdirp(parent)) {
+          try {
+            // Retry creating the original directory: it should succeed now
+            fs__default['default'].mkdirSync(fp);
+            return true;
+          } catch (e) {
+            return false;
+          }
+        }
       }
+    }
 
-      var raw = fs__default['default'].readFileSync(path__default['default'].normalize(opts.file), 'utf8'); // making best guess at json mode
+    return false;
+  }
 
-      opts.json = path__default['default'].extname(opts.file) === '.json' || opts.json; // When only the directory part of the output path was specified, then we
-      // do NOT have the target module name in there as well!
+  function processInputFile() {
+    // getting raw files
+    var lex;
+    var original_cwd = process__default['default'].cwd();
 
-      var outpath = opts.outfile;
+    if (opts.lexfile) {
+      lex = fs__default['default'].readFileSync(path__default['default'].normalize(opts.lexfile), 'utf8');
+    }
 
-      if (typeof outpath === 'string') {
-        if (/[\\\/]$/.test(outpath) || isDirectory(outpath)) {
-          opts.outfile = null;
-          outpath = outpath.replace(/[\\\/]$/, '');
+    var raw = fs__default['default'].readFileSync(path__default['default'].normalize(opts.file), 'utf8'); // making best guess at json mode
+
+    opts.json = path__default['default'].extname(opts.file) === '.json' || opts.json; // When only the directory part of the output path was specified, then we
+    // do NOT have the target module name in there as well!
+
+    var outpath = opts.outfile;
+
+    if (typeof outpath === 'string') {
+      if (/[\\\/]$/.test(outpath) || isDirectory(outpath)) {
+        opts.outfile = null;
+        outpath = outpath.replace(/[\\\/]$/, '');
+      } else {
+        outpath = path__default['default'].dirname(outpath);
+      }
+    } else {
+      outpath = null;
+    }
+
+    if (outpath && outpath.length > 0) {
+      outpath += '/';
+    } else {
+      outpath = '';
+    } // setting output file name and module name based on input file name
+    // if they aren't specified.
+
+
+    var name = path__default['default'].basename(opts.outfile || opts.file); // get the base name (i.e. the file name without extension)
+    // i.e. strip off only the extension and keep any other dots in the filename
+
+    name = path__default['default'].basename(name, path__default['default'].extname(name));
+    opts.outfile = opts.outfile || outpath + name + '.js';
+
+    if (!opts.moduleName && name) {
+      opts.moduleName = opts.defaultModuleName = mkIdentifier$4(name);
+    }
+
+    if (opts.exportAST) {
+      // When only the directory part of the AST output path was specified, then we
+      // still need to construct the JSON AST output file name!
+      var astpath, astname, ext;
+      astpath = opts.exportAST;
+
+      if (typeof astpath === 'string') {
+        if (/[\\\/]$/.test(astpath) || isDirectory(astpath)) {
+          opts.exportAST = null;
+          astpath = astpath.replace(/[\\\/]$/, '');
         } else {
-          outpath = path__default['default'].dirname(outpath);
+          astpath = path__default['default'].dirname(astpath);
         }
       } else {
-        outpath = null;
+        astpath = path__default['default'].dirname(opts.outfile);
       }
 
-      if (outpath && outpath.length > 0) {
-        outpath += '/';
+      if (astpath && astpath.length > 0) {
+        astpath = astpath.replace(/[\\\/]$/, '') + '/';
       } else {
-        outpath = '';
-      } // setting output file name and module name based on input file name
+        astpath = '';
+      } // setting AST output file name and module name based on input file name
       // if they aren't specified.
 
 
-      var name = path__default['default'].basename(opts.outfile || opts.file); // get the base name (i.e. the file name without extension)
-      // i.e. strip off only the extension and keep any other dots in the filename
+      if (typeof opts.exportAST === 'string') {
+        astname = path__default['default'].basename(opts.exportAST);
+        ext = path__default['default'].extname(astname); // get the base name (i.e. the file name without extension)
+        // i.e. strip off only the extension and keep any other dots in the filename.
 
-      name = path__default['default'].basename(name, path__default['default'].extname(name));
-      opts.outfile = opts.outfile || outpath + name + '.js';
+        astname = path__default['default'].basename(astname, ext);
+      } else {
+        // get the base name (i.e. the file name without extension)
+        // i.e. strip off only the extension and keep any other dots in the filename.
+        astname = path__default['default'].basename(opts.outfile, path__default['default'].extname(opts.outfile)); // Then add the name postfix '-AST' to ensure we won't collide with the input file.
 
-      if (!opts.moduleName && name) {
-        opts.moduleName = opts.defaultModuleName = mkIdentifier$4(name);
+        astname += '-AST';
+        ext = '.jison';
       }
 
-      if (opts.exportAST) {
-        // When only the directory part of the AST output path was specified, then we
-        // still need to construct the JSON AST output file name!
-        var astpath, astname, ext;
-        astpath = opts.exportAST;
-
-        if (typeof astpath === 'string') {
-          if (/[\\\/]$/.test(astpath) || isDirectory(astpath)) {
-            opts.exportAST = null;
-            astpath = astpath.replace(/[\\\/]$/, '');
-          } else {
-            astpath = path__default['default'].dirname(astpath);
-          }
-        } else {
-          astpath = path__default['default'].dirname(opts.outfile);
-        }
-
-        if (astpath && astpath.length > 0) {
-          astpath = astpath.replace(/[\\\/]$/, '') + '/';
-        } else {
-          astpath = '';
-        } // setting AST output file name and module name based on input file name
-        // if they aren't specified.
+      opts.exportAST = path__default['default'].normalize(astpath + astname + ext);
+    } // Change CWD to the directory where the source grammar resides: this helps us properly
+    // %include any files mentioned in the grammar with relative paths:
 
 
-        if (typeof opts.exportAST === 'string') {
-          astname = path__default['default'].basename(opts.exportAST);
-          ext = path__default['default'].extname(astname); // get the base name (i.e. the file name without extension)
-          // i.e. strip off only the extension and keep any other dots in the filename.
+    var new_cwd = path__default['default'].dirname(path__default['default'].normalize(opts.file));
+    process__default['default'].chdir(new_cwd);
+    var parser = cli.generateParserString(raw, lex, opts); // and change back to the CWD we started out with:
 
-          astname = path__default['default'].basename(astname, ext);
-        } else {
-          // get the base name (i.e. the file name without extension)
-          // i.e. strip off only the extension and keep any other dots in the filename.
-          astname = path__default['default'].basename(opts.outfile, path__default['default'].extname(opts.outfile)); // Then add the name postfix '-AST' to ensure we won't collide with the input file.
+    process__default['default'].chdir(original_cwd);
+    opts.outfile = path__default['default'].normalize(opts.outfile);
+    mkdirp(path__default['default'].dirname(opts.outfile));
+    fs__default['default'].writeFileSync(opts.outfile, parser, 'utf8');
+    console.log('JISON output', 'for module [' + opts.moduleName + '] has been written to file:', opts.outfile);
 
-          astname += '-AST';
-          ext = '.jison';
-        }
+    if (opts.exportAllTables.enabled) {
+      // Determine the output file path 'template' for use by the exportAllTables
+      // functionality:
+      var out_base_fname = path__default['default'].join(path__default['default'].dirname(opts.outfile), path__default['default'].basename(opts.outfile, path__default['default'].extname(opts.outfile)));
+      var t = opts.exportAllTables;
 
-        opts.exportAST = path__default['default'].normalize(astpath + astname + ext);
-      } // Change CWD to the directory where the source grammar resides: this helps us properly
-      // %include any files mentioned in the grammar with relative paths:
+      for (var id in t) {
+        if (t.hasOwnProperty(id) && id !== 'enabled') {
+          var content = t[id];
 
-
-      var new_cwd = path__default['default'].dirname(path__default['default'].normalize(opts.file));
-      process__default['default'].chdir(new_cwd);
-      var parser = cli.generateParserString(raw, lex, opts); // and change back to the CWD we started out with:
-
-      process__default['default'].chdir(original_cwd);
-      opts.outfile = path__default['default'].normalize(opts.outfile);
-      mkdirp(path__default['default'].dirname(opts.outfile));
-      fs__default['default'].writeFileSync(opts.outfile, parser, 'utf8');
-      console.log('JISON output', 'for module [' + opts.moduleName + '] has been written to file:', opts.outfile);
-
-      if (opts.exportAllTables.enabled) {
-        // Determine the output file path 'template' for use by the exportAllTables
-        // functionality:
-        var out_base_fname = path__default['default'].join(path__default['default'].dirname(opts.outfile), path__default['default'].basename(opts.outfile, path__default['default'].extname(opts.outfile)));
-        var t = opts.exportAllTables;
-
-        for (var id in t) {
-          if (t.hasOwnProperty(id) && id !== 'enabled') {
-            var content = t[id];
-
-            if (content) {
-              var fname = out_base_fname + '.' + id.replace(/[^a-zA-Z0-9_]/g, '_') + '.json';
-              fs__default['default'].writeFileSync(fname, JSON.stringify(content, null, 2), 'utf8');
-              console.log('JISON table export', 'for [' + id + '] has been written to file:', fname);
-            }
+          if (content) {
+            var fname = out_base_fname + '.' + id.replace(/[^a-zA-Z0-9_]/g, '_') + '.json';
+            fs__default['default'].writeFileSync(fname, JSON.stringify(content, null, 2), 'utf8');
+            console.log('JISON table export', 'for [' + id + '] has been written to file:', fname);
           }
         }
       }
+    }
 
-      if (opts.exportAST) {
-        var content = opts.exportedAST;
-        var fname = opts.exportAST;
-        var ext = path__default['default'].extname(fname);
+    if (opts.exportAST) {
+      var content = opts.exportedAST;
+      var fname = opts.exportAST;
+      var ext = path__default['default'].extname(fname);
 
-        switch (ext) {
-          case '.json5':
-          case '.jison':
-          case '.y':
-          case '.yacc':
-          case '.l':
-          case '.lex':
-            content = Jison.prettyPrint(content, {
-              format: ext.substr(1)
-            });
-            break;
+      switch (ext) {
+        case '.json5':
+        case '.jison':
+        case '.y':
+        case '.yacc':
+        case '.l':
+        case '.lex':
+          content = Jison.prettyPrint(content, {
+            format: ext.substr(1)
+          });
+          break;
 
-          default:
-          case '.json':
-            content = JSON.stringify(content, null, 2);
-            break;
-        }
-
-        mkdirp(path__default['default'].dirname(fname));
-        fs__default['default'].writeFileSync(fname, content, 'utf8');
-        console.log('Grammar AST export', 'for module [' + opts.moduleName + '] has been written to file:', fname);
+        default:
+        case '.json':
+          content = JSON.stringify(content, null, 2);
+          break;
       }
+
+      mkdirp(path__default['default'].dirname(fname));
+      fs__default['default'].writeFileSync(fname, content, 'utf8');
+      console.log('Grammar AST export', 'for module [' + opts.moduleName + '] has been written to file:', fname);
     }
-
-    function readin(cb) {
-      var stdin = process__default['default'].openStdin(),
-          data = '';
-      stdin.setEncoding('utf8');
-      stdin.addListener('data', function (chunk) {
-        data += chunk;
-      });
-      stdin.addListener('end', function () {
-        cb(data);
-      });
-    }
-
-    function processStdin() {
-      readin(function processStdinReadInCallback(raw) {
-        console.log('', cli.generateParserString(raw, null, opts));
-      });
-    } // if an input file wasn't given, assume input on stdin
-
-
-    if (opts.file) {
-      processInputFile();
-    } else {
-      processStdin();
-    }
-  },
-  generateParserString: function generateParserString(grammar, optionalLexSection, opts) {
-    //      var settings = Jison.mkStdOptions(opts);
-    var generator = new Jison.Generator(grammar, optionalLexSection, opts);
-    var srcCode = generator.generate(opts);
-    generator.reportGrammarInformation(); // as `opts` is cloned inside `generator.generate()`, we need to fetch
-    // the extra exported tables from the `options` member of the generator
-    // itself:
-
-    opts.exportAllTables = generator.options.exportAllTables;
-    opts.exportedAST = generator.grammar;
-    return srcCode;
   }
+
+  function readin(cb) {
+    var stdin = process__default['default'].openStdin(),
+        data = '';
+    stdin.setEncoding('utf8');
+    stdin.addListener('data', function (chunk) {
+      data += chunk;
+    });
+    stdin.addListener('end', function () {
+      cb(data);
+    });
+  }
+
+  function processStdin() {
+    readin(function processStdinReadInCallback(raw) {
+      console.log('', cli.generateParserString(raw, null, opts));
+    });
+  } // if an input file wasn't given, assume input on stdin
+
+
+  if (opts.file) {
+    processInputFile();
+  } else {
+    processStdin();
+  }
+}
+
+function generateParserString(grammar, optionalLexSection, opts) {
+  //      var settings = Jison.mkStdOptions(opts);
+  var generator = new Jison.Generator(grammar, optionalLexSection, opts);
+  var srcCode = generator.generate(opts);
+  generator.reportGrammarInformation(); // as `opts` is cloned inside `generator.generate()`, we need to fetch
+  // the extra exported tables from the `options` member of the generator
+  // itself:
+
+  opts.exportAllTables = generator.options.exportAllTables;
+  opts.exportedAST = generator.grammar;
+  return srcCode;
+}
+
+var cli = {
+  main: cliMain,
+  generateParserString: generateParserString
 };
 
 if (require.main === module) {

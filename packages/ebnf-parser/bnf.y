@@ -1,6 +1,7 @@
 
 %code imports %{
-  import XRegExp from '@gerhobbelt/xregexp';       // for helping out the `%options xregexp` in the lexer
+  import XRegExp from '@gerhobbelt/xregexp';        // for helping out the `%options xregexp` in the lexer
+  import JSON5 from '@gerhobbelt/json5';            // TODO: quick fix until `%code imports` works in the lexer spec!
   import helpers from '../helpers-lib';
   import fs from 'fs';
   import transform from './ebnf-transform';
@@ -16,8 +17,10 @@
 /* grammar for parsing jison grammar files */
 
 %{
-var ebnf = false;
+    var ebnf = false;
 %}
+
+
 
 
 %code error_recovery_reduction %{
@@ -43,6 +46,16 @@ var ebnf = false;
 
 %%
 
+
+%{
+    const OPTION_DOES_NOT_ACCEPT_VALUE = 0x0001;    
+    const OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES = 0x0002;
+    const OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME = 0x0004;
+    const OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS = 0x0008;
+    const OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS = 0x0010;
+%}
+
+
 spec
     : declaration_list '%%' grammar optional_end_block EOF
         {
@@ -55,10 +68,15 @@ spec
     | declaration_list '%%' grammar error EOF
         {
             yyerror(rmCommonWS`
+                illegal input in the parser grammar productions definition section.
+
                 Maybe you did not correctly separate trailing code from the grammar rule set with a '%%' marker on an otherwise empty line?
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @grammar)}
+
+                  Technical error report:
+                ${$error.errStr}
             `);
         }
     | declaration_list error EOF
@@ -176,20 +194,26 @@ declaration
             $$ = {include: $include_macro_code}; 
         }
     | parse_params
-        { $$ = {parseParams: $parse_params}; }
+        { 
+            $$ = {parseParams: $parse_params}; 
+        }
     | parser_type
         { $$ = {parserType: $parser_type}; }
     | options
         { $$ = {options: $options}; }
     | DEBUG
-        { $$ = {options: [['debug', true]]}; }
+        { 
+            $$ = {options: [['debug', true]]}; 
+        }
     | EBNF
         {
             ebnf = true; 
             $$ = {options: [['ebnf', true]]}; 
         }
     | UNKNOWN_DECL
-        { $$ = {unknownDecl: $UNKNOWN_DECL}; }
+        { 
+            $$ = {unknownDecl: $UNKNOWN_DECL}; 
+        }
     | IMPORT import_name import_path
         { $$ = {imports: {name: $import_name, path: $import_path}}; }
     | IMPORT import_name error
@@ -388,6 +412,9 @@ parser_type
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @PARSER_TYPE)}
+
+                  Technical error report:
+                ${$error.errStr}
             `);
         }
     ;
@@ -403,6 +430,9 @@ operator
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @associativity)}
+
+                  Technical error report:
+                ${$error.errStr}
             `);
         }
     ;
@@ -538,6 +568,9 @@ production
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @production_id)}
+
+                  Technical error report:
+                ${$error.errStr}
             `);
         }
     | production_id error
@@ -548,6 +581,9 @@ production
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @production_id)}
+
+                  Technical error report:
+                ${$error.errStr}
             `);
         }
     ;
@@ -567,6 +603,9 @@ production_id
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @id)}
+
+                  Technical error report:
+                ${$error.errStr}
             `);
         }
     ;
@@ -595,6 +634,9 @@ handle_list
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @handle_list)}
+
+                  Technical error report:
+                ${$error.errStr}
             `);
         }
     | handle_list ':' error
@@ -765,6 +807,9 @@ prec
 
                   Erroneous precedence declaration:
                 ${yylexer.prettyPrintRange(@error, @PREC)}
+
+                  Technical error report:
+                ${$error.errStr}
             `);
         }
     | %epsilon
