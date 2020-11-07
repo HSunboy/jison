@@ -259,7 +259,7 @@ describe("BNF parser", function () {
 
   it("test remainder and declarations code", function () {
     var grammar = "%{test;%}\n%%hello: world;%%var foo = 'bar';";
-    var expected = {bnf: {hello: ["world"]}, moduleInclude: "test;var foo = 'bar';"};
+    var expected = {bnf: {hello: ["world"]}, moduleInclude: "test;\n\nvar foo = 'bar';"};
 
     assert.deepEqual(bnf.parse(grammar), expected, "grammar should be parsed correctly");
   });
@@ -294,7 +294,7 @@ describe("BNF parser", function () {
 
   it("test windows line endings", function () {
     var grammar = "%{baz\r\n%}%% test: foo bar | {\r\naction;\r\nhi};\r\nhello: world ;%%foo;\r\nbar;";
-    var expected = {bnf: {test: ["foo bar", [ "", "\r\naction;\r\nhi" ]], hello: ["world"]}, moduleInclude: 'baz\r\nfoo;\r\nbar;'};
+    var expected = {bnf: {test: ["foo bar", [ "", "\r\naction;\r\nhi" ]], hello: ["world"]}, moduleInclude: 'baz\r\n\n\nfoo;\r\nbar;'};
 
     assert.deepEqual(bnf.parse(grammar), expected, "grammar should be parsed correctly");
   });
