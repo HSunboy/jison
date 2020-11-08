@@ -10,7 +10,7 @@
 
 %options ranges
 
-%include "with-includes.prelude1.js"
+%include "includes/with-includes.prelude1.js"
 
 %{
     // When you set up a custom lexer, this is the minimum example for one:
@@ -59,7 +59,7 @@
 
 %%
 
-%include "with-includes.prelude2.js"
+%include "includes/with-includes.prelude2.js"
 
 /lex
 
@@ -69,11 +69,11 @@
 %left '*'
 %left UNARY_PLUS UNARY_MINUS
 
-%include with-includes.prelude3.js
+%include includes/with-includes.prelude3.js
 
 %%
 
-%include with-includes.prelude4.js
+%include includes/with-includes.prelude4.js
 
 S
     : e EOF
@@ -92,10 +92,10 @@ e
     | '-' e                     %prec UNARY_MINUS 
         {$$ = ['-', $2];}
     | NAT
-        %include "with-includes.parseInt.js"  // demonstrate the ACTION block include and the ability to comment on it right here.
+        %include "includes/with-includes.parseInt.js"  // demonstrate the ACTION block include and the ability to comment on it right here.
     ;
 
 
 %%
 
-%include with-includes.main.js
+%include includes/with-includes.main.js

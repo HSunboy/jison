@@ -348,7 +348,7 @@ arglist:
 // And we end this series with the hand-optimized pretty printer:
 %include 'compiled_calc_fast_Pcode_pretty_printer.js'
 
-%include 'benchmark.js'
+%include 'includes/benchmark.js'
 
 
 

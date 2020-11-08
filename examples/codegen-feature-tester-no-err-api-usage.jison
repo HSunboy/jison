@@ -290,7 +290,7 @@ if (0) {
 
 
 
-%include benchmark.js
+%include includes/benchmark.js
 
 
 

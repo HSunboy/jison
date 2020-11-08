@@ -298,7 +298,7 @@ parser.yy.parseError = function parseError(str, hash, ExceptionClass) {
 
 
 
-%include benchmark.js
+%include includes/benchmark.js
 
 
 
