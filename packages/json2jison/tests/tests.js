@@ -10,8 +10,26 @@ describe("JSON2JISON", function () {
       "bnf": {
         "foo": [
           [
-            "bar",
-            " return true; "
+            [
+              [
+                "symbol",
+                "bar"
+              ]
+            ],
+            "return true"
+          ]
+        ]
+      },
+      "grammar": {
+        "foo": [
+          [
+            [
+              [
+                "symbol",
+                "bar"
+              ]
+            ],
+            "return true"
           ]
         ]
       }
