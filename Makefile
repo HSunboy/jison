@@ -94,8 +94,8 @@ test-nyc:
 	cd packages/lex-parser && make test-nyc
 	cd packages/jison-lex && make test-nyc
 	cd packages/ebnf-parser && make test-nyc
-	cd packages/json2jison && make test-nyc
-	cd packages/jison2json && make test-nyc
+	#cd packages/json2jison && make test-nyc
+	#cd packages/jison2json && make test-nyc
 	$(NYC) --reporter=lcov --reporter=text --exclude 'examples/issue-lex*.js' -- $(MOCHA) --timeout 18000 --check-leaks --globals assert --recursive tests/
 	-rm -rf ./coverage/
 	# report PRELIMINARY collective coverage results:
@@ -493,24 +493,24 @@ subpackages:
 	cd packages/lex-parser && make
 	cd packages/jison-lex && make
 	cd packages/ebnf-parser && make
-	cd packages/json2jison && make
-	cd packages/jison2json && make
+	#cd packages/json2jison && make
+	#cd packages/jison2json && make
 
 subpackages-build:
 	cd packages/helpers-lib && make build
 	cd packages/lex-parser && make build
 	cd packages/jison-lex && make build
 	cd packages/ebnf-parser && make build
-	cd packages/json2jison && make build
-	cd packages/jison2json && make build
+	#cd packages/json2jison && make build
+	#cd packages/jison2json && make build
 
 subpackages-prep:
 	cd packages/helpers-lib && make prep
 	cd packages/lex-parser && make prep
 	cd packages/jison-lex && make prep
 	cd packages/ebnf-parser && make prep
-	cd packages/jison2json && make prep
-	cd packages/json2jison && make prep
+	#cd packages/jison2json && make prep
+	#cd packages/json2jison && make prep
 
 
 subpackages-npm-update:
@@ -518,8 +518,8 @@ subpackages-npm-update:
 	cd packages/lex-parser && make npm-update
 	cd packages/jison-lex && make npm-update
 	cd packages/ebnf-parser && make npm-update
-	cd packages/jison2json && make npm-update
-	cd packages/json2jison && make npm-update
+	#cd packages/jison2json && make npm-update
+	#cd packages/json2jison && make npm-update
 
 
 # increment the XXX <prelease> number in the package.json file: version <major>.<minor>.<patch>-<prelease>
@@ -545,8 +545,8 @@ subpackages-publish:
 	cd packages/lex-parser && make publish
 	cd packages/jison-lex && make publish
 	cd packages/ebnf-parser && make publish
-	cd packages/jison2json && make publish
-	cd packages/json2jison && make publish
+	#cd packages/jison2json && make publish
+	#cd packages/json2jison && make publish
 
 publish: subpackages-publish
 	npm run pub
@@ -559,8 +559,8 @@ clean: clean-site
 	cd packages/lex-parser && make clean
 	cd packages/jison-lex && make clean
 	cd packages/ebnf-parser && make clean
-	cd packages/jison2json && make clean
-	cd packages/json2jison && make clean
+	#cd packages/jison2json && make clean
+	#cd packages/json2jison && make clean
 
 #
 # When you've run `make superclean` you must run `make prep`, `make` and `make deploy` to regenerate all content again.
@@ -580,8 +580,8 @@ superclean: clean clean-site
 	cd packages/lex-parser && make superclean
 	cd packages/jison-lex && make superclean
 	cd packages/ebnf-parser && make superclean
-	cd packages/jison2json && make superclean
-	cd packages/json2jison && make superclean
+	#cd packages/jison2json && make superclean
+	#cd packages/json2jison && make superclean
 
 	-rm -rf dist
 	-find . -type d -name 'node_modules' -exec rm -rf "{}" \;

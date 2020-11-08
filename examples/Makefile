@@ -32,6 +32,12 @@ ERROR_HANDLING_TARGETS =                                        \
 
 
 GITHUB_ISSUE_TARGETS =                                          \
+			issue-51-gho-1										\
+			issue-51-gho-2										\
+			issue-51-gho-3										\
+			issue-51-gho-4										\
+			issue-51-gho-5										\
+			issue-58-gho										\
 			issue-205                                           \
 			issue-205-2                                         \
 			issue-205-3                                         \
@@ -45,7 +51,8 @@ GITHUB_ISSUE_TARGETS =                                          \
 			issue-348                                           \
 			issue-357-url-lexing                                \
 			issue-360                                           \
-			issue-362
+			issue-362 											\
+			issue-387
 
 
 CODEGEN_TARGETS =                                               \
@@ -340,6 +347,32 @@ handlebars:
 inherited_y:
 	$(JISON) --main ./inherited.y
 
+issue-51-gho-1:
+	$(JISON) --main ./$@.jison
+	$(NODE) ./output/$@/$@.js
+
+issue-51-gho-2:
+	$(JISON) --main ./$@.jison
+	$(NODE) ./output/$@/$@.js
+
+issue-51-gho-3:
+	$(JISON) --main ./$@.jison
+	$(NODE) ./output/$@/$@.js
+
+issue-51-gho-4:
+	$(JISON) --main ./$@.jison
+	$(NODE) ./output/$@/$@.js
+
+issue-51-gho-5:
+	$(JISON) --main ./$@.jison
+	$(NODE) ./output/$@/$@.js
+
+issue-58-gho:
+	$(NODE) ./$@.make.js
+	$(JISON) -n parser --json ./$@.json
+	$(NODE) ./output/$@/$@.js
+	diff -u -E ./output/$@/$@.js ./output/$@/code.output.js
+
 # build *AND* run the test:
 issue-205:
 	$(JISON) --main ./$@.jison
@@ -415,6 +448,11 @@ issue-360:
 
 # build *AND* run the test:
 issue-362: documentation--custom-lexer-ULcase documentation--custom-lexer-ULcase-alt
+
+# build *AND* run the test:
+issue-387:
+	$(JISON) --main ./$@.jison
+	$(NODE) ./output/$@/$@.js
 
 jscore:
 	$(JISON) --main ./$@.jison
