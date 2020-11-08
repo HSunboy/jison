@@ -3901,6 +3901,8 @@ parseError: function parseError(str, hash, ExceptionClass) {
     }
 },
 parse: function parse(input) {
+    "use strict";
+
     var self = this;
     var stack = new Array(128);         // token stack: stores token which leads to state at the same index (column storage)
     var sstack = new Array(128);        // state stack: stores states (column storage)
@@ -3945,6 +3947,8 @@ parse: function parse(input) {
     var ASSERT;
     if (typeof assert !== 'function') {
         ASSERT = function JisonAssert(cond, msg) {
+            "use strict";
+
             if (!cond) {
                 throw new Error('assertion failed: ' + (msg || '***'));
             }
@@ -3963,9 +3967,15 @@ parse: function parse(input) {
     };
 
 
-    // shallow clone objects, straight copy of simple `src` values
+    // shallow clone objects & arrays, straight copy of simple `src` values
     // e.g. `lexer.yytext` MAY be a complex value object,
     // rather than a simple string/value.
+    //
+    // https://jsperf.com/new-array-vs-splice-vs-slice/72
+    // https://jsperf.com/instanceof-vs-typeof/20
+    // benchmark:: http://127.0.0.1:8080/example/jsperf/#testfile=test0020-typeof-instanceof-isArray.json5
+    // benchmark:: http://127.0.0.1:8080/example/jsperf/?333#testfile=test0021-shallow-clones.json5
+    //
     function shallow_copy(src) {
         if (typeof src === 'object') {
             var dst = {};
@@ -3979,6 +3989,8 @@ parse: function parse(input) {
         return src;
     }
     function shallow_copy_noclobber(dst, src) {
+        "use strict";
+
         for (var k in src) {
             if (typeof dst[k] === 'undefined' && Object.prototype.hasOwnProperty.call(src, k)) {
                 dst[k] = src[k];
@@ -3986,6 +3998,8 @@ parse: function parse(input) {
         }
     }
     function copy_yylloc(loc) {
+        "use strict";
+
         var rv = shallow_copy(loc);
         if (rv && rv.range) {
             rv.range = rv.range.slice(0);
@@ -4011,6 +4025,7 @@ parse: function parse(input) {
     // them up. Hence we MUST set them up at the start of every `parse()` run!
     if (this.yyError) {
         this.yyError = function yyError(str /*, ...args */) {
+            "use strict";
 
 
 
@@ -4069,6 +4084,8 @@ parse: function parse(input) {
     // Does the shared state override the default `parseError` that already comes with this instance?
     if (typeof sharedState_yy.parseError === 'function') {
         this.parseError = function parseErrorAlt(str, hash, ExceptionClass) {
+            "use strict";
+
             if (!ExceptionClass) {
                 ExceptionClass = this.JisonParserError;
             }
@@ -4081,6 +4098,8 @@ parse: function parse(input) {
     // Does the shared state override the default `quoteName` that already comes with this instance?
     if (typeof sharedState_yy.quoteName === 'function') {
         this.quoteName = function quoteNameAlt(id_str) {
+            "use strict";
+
             return sharedState_yy.quoteName.call(this, id_str);
         };
     } else {
@@ -4094,6 +4113,8 @@ parse: function parse(input) {
     // NOTE: as this API uses parse() as a closure, it MUST be set again on every parse() invocation,
     //       or else your `sharedState`, etc. references will be *wrong*!
     this.cleanupAfterParse = function parser_cleanupAfterParse(resultValue, invoke_post_methods, do_not_nuke_errorinfos) {
+        "use strict";
+
         var rv;
 
         if (invoke_post_methods) {
@@ -4193,6 +4214,8 @@ parse: function parse(input) {
     //
     // Note: epsilon rule's yylloc situation is detected by passing both `first_index` and `first_yylloc` as UNDEFINED/NULL.
     this.yyMergeLocationInfo = function parser_yyMergeLocationInfo(first_index, last_index, first_yylloc, last_yylloc, dont_look_back) {
+        "use strict";
+
         var i1 = first_index | 0,
             i2 = last_index | 0;
         var l1 = first_yylloc,
@@ -4311,6 +4334,8 @@ parse: function parse(input) {
     // NOTE: as this API uses parse() as a closure, it MUST be set again on every parse() invocation,
     //       or else your `lexer`, `sharedState`, etc. references will be *wrong*!
     this.constructParseErrorInfo = function parser_constructParseErrorInfo(msg, ex, expected, recoverable) {
+        "use strict";
+
         var pei = {
             errStr: msg,
             exception: ex,
@@ -4348,9 +4373,11 @@ parse: function parse(input) {
                 // info.value = null;
                 // info.value_stack = null;
                 // ...
+                "use strict";
+
                 var rec = !!this.recoverable;
                 for (var key in this) {
-                    if (this.hasOwnProperty(key) && typeof key === 'object') {
+                    if (this[key] && this.hasOwnProperty(key) && typeof this[key] === 'object') {
                         this[key] = undefined;
                     }
                 }
@@ -4365,6 +4392,8 @@ parse: function parse(input) {
     // clone some parts of the (possibly enhanced!) errorInfo object
     // to give them some persistence.
     this.shallowCopyErrorInfo = function parser_shallowCopyErrorInfo(p) {
+        "use strict";
+
         var rv = shallow_copy(p);
 
         // remove the large parts which can only cause cyclic references
@@ -4422,7 +4451,7 @@ parse: function parse(input) {
         //                  arrive at the resolving error recovery rule.**
         // - info_stack_pointer:
         //                  this stack pointer points to the **top of
-        //                  the error ecovery tracking stack space**, i.e.
+        //                  the error recovery tracking stack space**, i.e.
         //                  this stack pointer takes up the role of
         //                  the `stack_pointer` for the error recovery
         //                  process. Any mutations in the **parse stack**
@@ -4434,7 +4463,7 @@ parse: function parse(input) {
         // - root_failure_pointer:
         //                  copy of the `stack_pointer`...
         //
-        for (var i = rv.stack_pointer; typeof rv.state_stack[i] !== 'undefined'; i++) {
+        for (var i = rv.stack_pointer; rv.state_stack[i] != null; i++) {
             // empty
         }
         rv.base_pointer = i;
@@ -4449,6 +4478,8 @@ parse: function parse(input) {
     };
 
     function getNonTerminalFromCode(symbol) {
+        "use strict";
+
         var tokenName = self.getSymbolName(symbol);
         if (!tokenName) {
             tokenName = symbol;
@@ -4458,6 +4489,8 @@ parse: function parse(input) {
 
 
     function stdLex() {
+        "use strict";
+
         var token = lexer.lex();
         // if token isn't its numeric value, convert
         if (typeof token !== 'number') {
@@ -4468,6 +4501,8 @@ parse: function parse(input) {
     }
 
     function fastLex() {
+        "use strict";
+
         var token = lexer.fastLex();
         // if token isn't its numeric value, convert
         if (typeof token !== 'number') {
@@ -4496,6 +4531,8 @@ parse: function parse(input) {
     // Return the rule stack depth where the nearest error rule can be found.
     // Return -1 when no error recovery rule was found.
     function locateNearestErrorRecoveryRule(state) {
+        "use strict";
+
         var stack_probe = sp - 1;
         var depth = 0;
 
@@ -4511,7 +4548,7 @@ parse: function parse(input) {
 
 
 
-            var t = table[state][TERROR] || NO_ACTION;
+            var t = (table[state] && table[state][TERROR]) || NO_ACTION;
             if (t[0]) {
                 // We need to make sure we're not cycling forever:
                 // once we hit EOF, even when we `yyerrok()` an error, we must
@@ -4590,7 +4627,7 @@ parse: function parse(input) {
 
         lexer.setInput(input, sharedState_yy);
 
-        // NOTE: we *assume* no lexer pre/post handlers are set up *after* 
+        // NOTE: we *assume* no lexer pre/post handlers are set up *after*
         // this initial `setInput()` call: hence we can now check and decide
         // whether we'll go with the standard, slower, lex() API or the
         // `fast_lex()` one:
@@ -4599,7 +4636,7 @@ parse: function parse(input) {
             if (lexerInfo.fastLex && typeof fastLex === 'function') {
                 lex = fastLex;
             }
-        } 
+        }
 
         yyloc = lexer.yylloc;
         lstack[sp] = yyloc;
@@ -4679,7 +4716,7 @@ parse: function parse(input) {
                         p = this.constructParseErrorInfo(errStr, null, expected, (error_rule_depth >= 0));
 
                         // DO NOT cleanup the old one before we start the new error info track:
-                        // the old one will *linger* on the error stack and stay alive until we 
+                        // the old one will *linger* on the error stack and stay alive until we
                         // invoke the parser's cleanup API!
                         recoveringErrorInfo = this.shallowCopyErrorInfo(p);
 
@@ -5122,8 +5159,9 @@ parse: function parse(input) {
                             if (typeof r !== 'undefined') {
                                 // signal end of error recovery loop AND end of outer parse loop
                                 action = 3;
-                                sp = -2;      // magic number: signal outer "fast parse loop" ACCEPT state that we already have a properly set up `retval` parser return value.
                                 retval = r;
+
+                                sp = -2;      // magic number: signal outer "fast parse loop" ACCEPT state that we already have a properly set up `retval` parser return value.
                                 break;
                             }
 
@@ -5369,11 +5407,11 @@ parser.originalQuoteName = parser.quoteName;
  *               the real "shared state" `yy` passed around to
  *               the rule actions, etc. is a direct reference!
  *
- *               This "shared context" object was passed to the lexer by way of 
+ *               This "shared context" object was passed to the lexer by way of
  *               the `lexer.setInput(str, yy)` API before you may use it.
  *
  *               This "shared context" object is passed to the lexer action code in `performAction()`
- *               so userland code in the lexer actions may communicate with the outside world 
+ *               so userland code in the lexer actions may communicate with the outside world
  *               and/or other lexer rules' actions in more or less complex ways.
  *
  *  }
@@ -5389,7 +5427,7 @@ parser.originalQuoteName = parser.quoteName;
  *    performAction: function lexer__performAction(yy, yyrulenumber, YY_START),
  *
  *               The function parameters and `this` have the following value/meaning:
- *               - `this`    : reference to the `lexer` instance. 
+ *               - `this`    : reference to the `lexer` instance.
  *                               `yy_` is an alias for `this` lexer instance reference used internally.
  *
  *               - `yy`      : a reference to the `yy` "shared state" object which was passed to the lexer
@@ -5423,15 +5461,15 @@ parser.originalQuoteName = parser.quoteName;
  *
  *               WARNING:
  *               Lexer's additional `args...` parameters (via lexer's `%parse-param`) MAY conflict with
- *               any attributes already added to `yy` by the **parser** or the jison run-time; 
- *               when such a collision is detected an exception is thrown to prevent the generated run-time 
- *               from silently accepting this confusing and potentially hazardous situation! 
+ *               any attributes already added to `yy` by the **parser** or the jison run-time;
+ *               when such a collision is detected an exception is thrown to prevent the generated run-time
+ *               from silently accepting this confusing and potentially hazardous situation!
  *
  *    cleanupAfterLex: function(do_not_nuke_errorinfos),
  *               Helper function.
  *
  *               This helper API is invoked when the **parse process** has completed: it is the responsibility
- *               of the **parser** (or the calling userland code) to invoke this method once cleanup is desired. 
+ *               of the **parser** (or the calling userland code) to invoke this method once cleanup is desired.
  *
  *               This helper may be invoked by user code to ensure the internal lexer gets properly garbage collected.
  *
@@ -5542,7 +5580,7 @@ parser.originalQuoteName = parser.quoteName;
  * These options are available:
  *
  * (Options are permanent.)
- *  
+ *
  *  yy: {
  *      parseError: function(str, hash, ExceptionClass)
  *                 optional: overrides the default `parseError` function.
@@ -7081,16 +7119,22 @@ EOF: 1,
     /**
          * (internal) determine the lexer rule set which is active for the
          * currently active lexer condition state
-         * 
+         *
          * @public
          * @this {RegExpLexer}
          */
     _currentRules: function lexer__currentRules() {
-      if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
-        return this.conditions[this.conditionStack[this.conditionStack.length - 1]];
+      'use strict';
+      var n = this.conditionStack.length - 1;
+      var state;
+
+      if (n >= 0) {
+        state = this.conditionStack[n];
       } else {
-        return this.conditions['INITIAL'];
+        state = 'INITIAL';
       }
+
+      return this.conditions[state] || this.conditions['INITIAL'];
     },
 
     /**
@@ -7587,19 +7631,19 @@ EOF: 1,
       14: 38,
 
       /*! Conditions:: bnf ebnf */
-      /*! Rule::       \u0190 */
+      /*! Rule::       Ɛ */
       15: 38,
 
       /*! Conditions:: bnf ebnf */
-      /*! Rule::       \u025B */
+      /*! Rule::       ɛ */
       16: 38,
 
       /*! Conditions:: bnf ebnf */
-      /*! Rule::       \u03B5 */
+      /*! Rule::       ε */
       17: 38,
 
       /*! Conditions:: bnf ebnf */
-      /*! Rule::       \u03F5 */
+      /*! Rule::       ϵ */
       18: 38,
 
       /*! Conditions:: ebnf */
@@ -7723,10 +7767,10 @@ EOF: 1,
       /* 12: */  /^(?:%%)/,
       /* 13: */  /^(?:%empty\b)/,
       /* 14: */  /^(?:%epsilon\b)/,
-      /* 15: */  /^(?:\u0190)/,
-      /* 16: */  /^(?:\u025B)/,
-      /* 17: */  /^(?:\u03B5)/,
-      /* 18: */  /^(?:\u03F5)/,
+      /* 15: */  /^(?:Ɛ)/,
+      /* 16: */  /^(?:ɛ)/,
+      /* 17: */  /^(?:ε)/,
+      /* 18: */  /^(?:ϵ)/,
       /* 19: */  /^(?:\()/,
       /* 20: */  /^(?:\))/,
       /* 21: */  /^(?:\*)/,

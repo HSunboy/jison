@@ -159,10 +159,10 @@ describe("BNF parser", function () {
                         lex: {
                             macros: {},
                             rules: [
-                               ["foo", "return 'foo';"],
-                               ["bar", "return 'bar';"],
-                               ["baz", "return 'baz';"],
-                               ["world", "return 'world';"]
+                               ["foo", "return 'foo'"],
+                               ["bar", "return 'bar'"],
+                               ["baz", "return 'baz'"],
+                               ["world", "return 'world'"]
                             ],
                             startConditions: {},
                             unknownDecls: [],
@@ -182,10 +182,10 @@ describe("BNF parser", function () {
                         lex: {
                             macros: {},
                             rules: [
-                               ["foo\\b", "return 'foo';"],
-                               ["bar\\b", "return 'bar';"],
-                               ["baz\\b", "return 'baz';"],
-                               ["world\\b", "return 'world';"]
+                               ["foo\\b", "return 'foo'"],
+                               ["bar\\b", "return 'bar'"],
+                               ["baz\\b", "return 'baz'"],
+                               ["world\\b", "return 'world'"]
                             ],
                             options: {
                                 easy_keyword_rules: true

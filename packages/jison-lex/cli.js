@@ -158,9 +158,15 @@ cli.main = function cliMain(opts) {
         // When only the directory part of the output path was specified, then we
         // do NOT have the target module name in there as well!
         var outpath = opts.outfile;
-        if (/[\\\/]$/.test(outpath) || isDirectory(outpath)) {
-            opts.outfile = null;
-            outpath = outpath.replace(/[\\\/]$/, '');
+        if (typeof outpath === 'string') {
+            if (/[\\\/]$/.test(outpath) || isDirectory(outpath)) {
+                opts.outfile = null;
+                outpath = outpath.replace(/[\\\/]$/, '');
+            } else {
+                outpath = path.dirname(outpath);
+            }
+        } else {
+            outpath = null;
         }
         if (outpath && outpath.length > 0) {
             outpath += '/';
@@ -191,6 +197,7 @@ cli.main = function cliMain(opts) {
         // and change back to the CWD we started out with:
         process.chdir(original_cwd);
 
+        opts.outfile = path.normalize(opts.outfile);
         mkdirp(path.dirname(opts.outfile));
         fs.writeFileSync(opts.outfile, lexer);
         console.log('JISON-LEX output for module [' + opts.moduleName + '] has been written to file:', opts.outfile);

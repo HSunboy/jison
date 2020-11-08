@@ -1302,16 +1302,21 @@
     /**
      * (internal) determine the lexer rule set which is active for the
      * currently active lexer condition state
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     _currentRules: function lexer__currentRules() {
-        if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
-            return this.conditions[this.conditionStack[this.conditionStack.length - 1]];
+        "use strict";
+
+        var n = this.conditionStack.length - 1;
+        var state;
+        if (n >= 0) {
+            state = this.conditionStack[n];
         } else {
-            return this.conditions['INITIAL'];
+            state = 'INITIAL';
         }
+        return this.conditions[state] || this.conditions['INITIAL'];
     },
 
     /**

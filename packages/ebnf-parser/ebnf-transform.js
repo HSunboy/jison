@@ -382,10 +382,9 @@ function deepClone(from, sub) {
         return from;
     }
 
-    for (var i = 0, len = ref_list.length; i < len; i++) {
-        if (ref_list[i] === from) {
-            throw new Error('[Circular/Xref:' + ref_names[i] + ']');   // circular or cross reference
-        }
+    var idx = ref_list.indexOf(from);
+    if (idx >= 0) {
+        throw new Error('[Circular/Xref:' + ref_names[i] + ']');   // circular or cross reference
     }
     ref_list.push(from);
     ref_names.push(sub);

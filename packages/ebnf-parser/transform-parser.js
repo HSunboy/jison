@@ -1050,6 +1050,8 @@ parseError: function parseError(str, hash, ExceptionClass) {
     }
 },
 parse: function parse(input) {
+    "use strict";
+
     var self = this;
     var stack = new Array(128);         // token stack: stores token which leads to state at the same index (column storage)
     var sstack = new Array(128);        // state stack: stores states (column storage)
@@ -1093,6 +1095,8 @@ parse: function parse(input) {
     var ASSERT;
     if (typeof assert !== 'function') {
         ASSERT = function JisonAssert(cond, msg) {
+            "use strict";
+
             if (!cond) {
                 throw new Error('assertion failed: ' + (msg || '***'));
             }
@@ -1106,13 +1110,30 @@ parse: function parse(input) {
     };
 
 
-
-
-
-
-
-
+    // shallow clone objects & arrays, straight copy of simple `src` values
+    // e.g. `lexer.yytext` MAY be a complex value object,
+    // rather than a simple string/value.
+    //
+    // https://jsperf.com/new-array-vs-splice-vs-slice/72
+    // https://jsperf.com/instanceof-vs-typeof/20
+    // benchmark:: http://127.0.0.1:8080/example/jsperf/#testfile=test0020-typeof-instanceof-isArray.json5
+    // benchmark:: http://127.0.0.1:8080/example/jsperf/?333#testfile=test0021-shallow-clones.json5
+    //
+    function shallow_copy(src) {
+        if (typeof src === 'object') {
+            var dst = {};
+            for (var k in src) {
+                if (Object.prototype.hasOwnProperty.call(src, k)) {
+                    dst[k] = src[k];
+                }
+            }
+            return dst;
+        }
+        return src;
+    }
     function shallow_copy_noclobber(dst, src) {
+        "use strict";
+
         for (var k in src) {
             if (typeof dst[k] === 'undefined' && Object.prototype.hasOwnProperty.call(src, k)) {
                 dst[k] = src[k];
@@ -1134,6 +1155,8 @@ parse: function parse(input) {
     // Does the shared state override the default `parseError` that already comes with this instance?
     if (typeof sharedState_yy.parseError === 'function') {
         this.parseError = function parseErrorAlt(str, hash, ExceptionClass) {
+            "use strict";
+
             if (!ExceptionClass) {
                 ExceptionClass = this.JisonParserError;
             }
@@ -1146,6 +1169,8 @@ parse: function parse(input) {
     // Does the shared state override the default `quoteName` that already comes with this instance?
     if (typeof sharedState_yy.quoteName === 'function') {
         this.quoteName = function quoteNameAlt(id_str) {
+            "use strict";
+
             return sharedState_yy.quoteName.call(this, id_str);
         };
     } else {
@@ -1159,6 +1184,8 @@ parse: function parse(input) {
     // NOTE: as this API uses parse() as a closure, it MUST be set again on every parse() invocation,
     //       or else your `sharedState`, etc. references will be *wrong*!
     this.cleanupAfterParse = function parser_cleanupAfterParse(resultValue, invoke_post_methods, do_not_nuke_errorinfos) {
+        "use strict";
+
         var rv;
 
         if (invoke_post_methods) {
@@ -1366,6 +1393,8 @@ parse: function parse(input) {
     // NOTE: as this API uses parse() as a closure, it MUST be set again on every parse() invocation,
     //       or else your `lexer`, `sharedState`, etc. references will be *wrong*!
     this.constructParseErrorInfo = function parser_constructParseErrorInfo(msg, ex, expected, recoverable) {
+        "use strict";
+
         var pei = {
             errStr: msg,
             exception: ex,
@@ -1403,9 +1432,11 @@ parse: function parse(input) {
                 // info.value = null;
                 // info.value_stack = null;
                 // ...
+                "use strict";
+
                 var rec = !!this.recoverable;
                 for (var key in this) {
-                    if (this.hasOwnProperty(key) && typeof key === 'object') {
+                    if (this[key] && this.hasOwnProperty(key) && typeof this[key] === 'object') {
                         this[key] = undefined;
                     }
                 }
@@ -1430,6 +1461,8 @@ parse: function parse(input) {
 
 
     function getNonTerminalFromCode(symbol) {
+        "use strict";
+
         var tokenName = self.getSymbolName(symbol);
         if (!tokenName) {
             tokenName = symbol;
@@ -1439,6 +1472,8 @@ parse: function parse(input) {
 
 
     function stdLex() {
+        "use strict";
+
         var token = lexer.lex();
         // if token isn't its numeric value, convert
         if (typeof token !== 'number') {
@@ -1449,6 +1484,8 @@ parse: function parse(input) {
     }
 
     function fastLex() {
+        "use strict";
+
         var token = lexer.fastLex();
         // if token isn't its numeric value, convert
         if (typeof token !== 'number') {
@@ -1479,7 +1516,7 @@ parse: function parse(input) {
 
         lexer.setInput(input, sharedState_yy);
 
-        // NOTE: we *assume* no lexer pre/post handlers are set up *after* 
+        // NOTE: we *assume* no lexer pre/post handlers are set up *after*
         // this initial `setInput()` call: hence we can now check and decide
         // whether we'll go with the standard, slower, lex() API or the
         // `fast_lex()` one:
@@ -1488,7 +1525,7 @@ parse: function parse(input) {
             if (lexerInfo.fastLex && typeof fastLex === 'function') {
                 lex = fastLex;
             }
-        } 
+        }
 
 
 
@@ -1741,11 +1778,11 @@ parser.originalQuoteName = parser.quoteName;
  *               the real "shared state" `yy` passed around to
  *               the rule actions, etc. is a direct reference!
  *
- *               This "shared context" object was passed to the lexer by way of 
+ *               This "shared context" object was passed to the lexer by way of
  *               the `lexer.setInput(str, yy)` API before you may use it.
  *
  *               This "shared context" object is passed to the lexer action code in `performAction()`
- *               so userland code in the lexer actions may communicate with the outside world 
+ *               so userland code in the lexer actions may communicate with the outside world
  *               and/or other lexer rules' actions in more or less complex ways.
  *
  *  }
@@ -1761,7 +1798,7 @@ parser.originalQuoteName = parser.quoteName;
  *    performAction: function lexer__performAction(yy, yyrulenumber, YY_START),
  *
  *               The function parameters and `this` have the following value/meaning:
- *               - `this`    : reference to the `lexer` instance. 
+ *               - `this`    : reference to the `lexer` instance.
  *                               `yy_` is an alias for `this` lexer instance reference used internally.
  *
  *               - `yy`      : a reference to the `yy` "shared state" object which was passed to the lexer
@@ -1795,15 +1832,15 @@ parser.originalQuoteName = parser.quoteName;
  *
  *               WARNING:
  *               Lexer's additional `args...` parameters (via lexer's `%parse-param`) MAY conflict with
- *               any attributes already added to `yy` by the **parser** or the jison run-time; 
- *               when such a collision is detected an exception is thrown to prevent the generated run-time 
- *               from silently accepting this confusing and potentially hazardous situation! 
+ *               any attributes already added to `yy` by the **parser** or the jison run-time;
+ *               when such a collision is detected an exception is thrown to prevent the generated run-time
+ *               from silently accepting this confusing and potentially hazardous situation!
  *
  *    cleanupAfterLex: function(do_not_nuke_errorinfos),
  *               Helper function.
  *
  *               This helper API is invoked when the **parse process** has completed: it is the responsibility
- *               of the **parser** (or the calling userland code) to invoke this method once cleanup is desired. 
+ *               of the **parser** (or the calling userland code) to invoke this method once cleanup is desired.
  *
  *               This helper may be invoked by user code to ensure the internal lexer gets properly garbage collected.
  *
@@ -1914,7 +1951,7 @@ parser.originalQuoteName = parser.quoteName;
  * These options are available:
  *
  * (Options are permanent.)
- *  
+ *
  *  yy: {
  *      parseError: function(str, hash, ExceptionClass)
  *                 optional: overrides the default `parseError` function.
@@ -3453,16 +3490,22 @@ EOF: 1,
     /**
          * (internal) determine the lexer rule set which is active for the
          * currently active lexer condition state
-         * 
+         *
          * @public
          * @this {RegExpLexer}
          */
     _currentRules: function lexer__currentRules() {
-      if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
-        return this.conditions[this.conditionStack[this.conditionStack.length - 1]];
+      'use strict';
+      var n = this.conditionStack.length - 1;
+      var state;
+
+      if (n >= 0) {
+        state = this.conditionStack[n];
       } else {
-        return this.conditions['INITIAL'];
+        state = 'INITIAL';
       }
+
+      return this.conditions[state] || this.conditions['INITIAL'];
     },
 
     /**

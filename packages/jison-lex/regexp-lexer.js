@@ -3,7 +3,7 @@
 // MIT Licensed
 
 import XRegExp from '@gerhobbelt/xregexp';
-import json5 from '@gerhobbelt/json5';
+import JSON5 from '@gerhobbelt/json5';
 import lexParser from '../lex-parser';
 import setmgmt from './regexp-set-management.js';
 import helpers from '../helpers-lib';
@@ -96,7 +96,7 @@ const defaultJisonLexOptions = {
 // defined as specifying a not-undefined value which is not equal to the
 // default value.
 //
-// When the FIRST argument is STRING "NODEFAULT", then we MUST NOT mix the 
+// When the FIRST argument is STRING "NODEFAULT", then we MUST NOT mix the
 // default values avialable in Jison.defaultJisonOptions.
 //
 // Return a fresh set of options.
@@ -165,7 +165,7 @@ function prepExportStructures(options) {
         exportSourceCode.enabled = true;
     }
     options.exportSourceCode = exportSourceCode;
-} 
+}
 
 // Autodetect if the input lexer spec is in JSON or JISON
 // format when the `options.json` flag is `true`.
@@ -177,48 +177,85 @@ function prepExportStructures(options) {
 // Otherwise return the *parsed* lexer spec as it has
 // been processed through LexParser.
 function autodetectAndConvertToJSONformat(lexerSpec, options) {
-  var chk_l = null;
-  var ex1, err;
+    var chk_l = null;
+    var ex1, err;
 
-  if (typeof lexerSpec === 'string') {
-    if (options.json) {
-      try {
-          chk_l = json5.parse(lexerSpec);
+    if (typeof lexerSpec === 'string') {
+        if (options.json) {
+            try {
+                chk_l = JSON5.parse(lexerSpec);
 
-          // When JSON5-based parsing of the lexer spec succeeds, this implies the lexer spec is specified in `JSON mode`
-          // *OR* there's a JSON/JSON5 format error in the input:
-      } catch (e) {
-          ex1 = e;
-      }
+                // When JSON5-based parsing of the lexer spec succeeds, this implies the lexer spec is specified in `JSON mode`
+                // *OR* there's a JSON/JSON5 format error in the input:
+            } catch (e) {
+                ex1 = e;
+            }
+        }
+        if (!chk_l) {
+            // // WARNING: the lexer may receive options specified in the **grammar spec file**,
+            // //          hence we should mix the options to ensure the lexParser always
+            // //          receives the full set!
+            // //
+            // // make sure all options are 'standardized' before we go and mix them together:
+            // options = mkStdOptions(grammar.options, options);
+            try {
+                chk_l = lexParser.parse(lexerSpec);
+            } catch (e) {
+                if (options.json) {
+                    // When both JSON5 and JISON input modes barf a hairball, assume the most important
+                    // error is the JISON one (show that one first!), while it MAY be a JSON5 format
+                    // error that triggered it (show that one last!).
+                    //
+                    // Also check for common JISON errors which are obviously never triggered by any
+                    // odd JSON5 input format error: when we encounter such an error here, we don't
+                    // confuse matters and forget about the JSON5 fail as it's irrelevant:
+                    const commonErrors = [
+                        /does not compile/,
+                        /you did not correctly separate trailing code/,
+                        /You did not specify/,
+                        /You cannot specify/,
+                        /must be qualified/,
+                        /%start/,
+                        /%token/,
+                        /%import/,
+                        /%include/,
+                        /%options/,
+                        /%parse-params/,
+                        /%parser-type/,
+                        /%epsilon/,
+                        /definition list error/,
+                        /token list error/,
+                        /declaration error/,
+                        /should be followed/,
+                        /should be separated/,
+                        /an error in one or more of your lexer regex rules/,
+                        /an error in your lexer epilogue/,
+                        /unsupported definition type/,
+                    ];
+                    var cmnerr = commonErrors.filter(function check(re) {
+                        return e.message.match(re);
+                    });
+                    if (cmnerr.length > 0) {
+                        err = e;
+                    } else {
+                        err = new Error('Could not parse jison lexer spec in JSON AUTODETECT mode:\nin JISON Mode we get Error: ' + e.message + '\n\nwhile JSON5 Mode produces Error: ' + ex1.message);
+                        err.secondary_exception = e;
+                        err.stack = ex1.stack;
+                    }
+                } else {
+                    err = new Error('Could not parse lexer spec\nError: ' + e.message);
+                    err.stack = e.stack;
+                }
+                throw err;
+            }
+        }
+    } else {
+        chk_l = lexerSpec;
     }
-    if (!chk_l) {
-      // // WARNING: the lexer may receive options specified in the **grammar spec file**,
-      // //          hence we should mix the options to ensure the lexParser always
-      // //          receives the full set!
-      // //
-      // // make sure all options are 'standardized' before we go and mix them together:
-      // options = mkStdOptions(grammar.options, options);
-      try {
-          chk_l = lexParser.parse(lexerSpec, options);
-      } catch (e) {
-          if (options.json) {
-              err = new Error('Could not parse lexer spec in JSON AUTODETECT mode\nError: ' + ex1.message + ' (' + e.message + ')');
-              err.secondary_exception = e;
-              err.stack = ex1.stack;
-          } else {
-              err = new Error('Could not parse lexer spec\nError: ' + e.message);
-              err.stack = e.stack;
-          }
-          throw err;
-      }
-    }
-  } else {
-    chk_l = lexerSpec;
-  }
 
-  // Save time! Don't reparse the entire lexer spec *again* inside the code generators when that's not necessary:
+    // Save time! Don't reparse the entire lexer spec *again* inside the code generators when that's not necessary:
 
-  return chk_l;
+    return chk_l;
 }
 
 
@@ -227,7 +264,7 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, opts) 
     var m, i, k, rule, action, conditions;
     var active_conditions;
     assert(Array.isArray(dict.rules));
-    var rules = dict.rules.slice(0);    // shallow copy of the rules array as we MAY modify it in here!        
+    var rules = dict.rules.slice(0);    // shallow copy of the rules array as we MAY modify it in here!
     var newRules = [];
     var macros = {};
     var regular_rule_count = 0;
@@ -363,7 +400,7 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, opts) 
     }
 
     return {
-        rules: newRules,
+        rules: newRules,                // array listing only the lexer spec regexes
         macros: macros,
 
         regular_rule_count: regular_rule_count,
@@ -916,7 +953,7 @@ function prepareStartConditions(conditions) {
     for (sc in conditions) {
         if (conditions.hasOwnProperty(sc)) {
             hash[sc] = {
-                rules: [], 
+                rules: [],
                 inclusive: !conditions[sc]
             };
         }
@@ -2608,16 +2645,21 @@ return `{
     /**
      * (internal) determine the lexer rule set which is active for the
      * currently active lexer condition state
-     * 
+     *
      * @public
      * @this {RegExpLexer}
      */
     _currentRules: function lexer__currentRules() {
-        if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
-            return this.conditions[this.conditionStack[this.conditionStack.length - 1]];
+        "use strict";
+
+        var n = this.conditionStack.length - 1;
+        var state;
+        if (n >= 0) {
+            state = this.conditionStack[n];
         } else {
-            return this.conditions['INITIAL'];
+            state = 'INITIAL';
         }
+        return this.conditions[state] || this.conditions['INITIAL'];
     },
 
     /**
@@ -2637,6 +2679,8 @@ return `{
 
 chkBugger(getRegExpLexerPrototype());
 RegExpLexer.prototype = (new Function(rmCommonWS`
+    "use strict";
+
     return ${getRegExpLexerPrototype()};
 `))();
 
@@ -2844,8 +2888,8 @@ function processGrammar(dict, tokens, build_options) {
     };
 
     // only produce rule action code blocks when there are any rules at all;
-    // a "custom lexer" has ZERO rules and must be defined entirely in 
-    // other code blocks: 
+    // a "custom lexer" has ZERO rules and must be defined entirely in
+    // other code blocks:
     var code = (dict.rules ? buildActions(dict, tokens, opts) : {});
     opts.performAction = code.actions;
     opts.caseHelperInclude = code.caseHelperInclude;
@@ -3116,11 +3160,11 @@ function generateGenericHeaderComment() {
      *               the real "shared state" \`yy\` passed around to
      *               the rule actions, etc. is a direct reference!
      *
-     *               This "shared context" object was passed to the lexer by way of 
+     *               This "shared context" object was passed to the lexer by way of
      *               the \`lexer.setInput(str, yy)\` API before you may use it.
      *
      *               This "shared context" object is passed to the lexer action code in \`performAction()\`
-     *               so userland code in the lexer actions may communicate with the outside world 
+     *               so userland code in the lexer actions may communicate with the outside world
      *               and/or other lexer rules' actions in more or less complex ways.
      *
      *  }
@@ -3136,7 +3180,7 @@ function generateGenericHeaderComment() {
      *    performAction: function lexer__performAction(yy, yyrulenumber, YY_START),
      *
      *               The function parameters and \`this\` have the following value/meaning:
-     *               - \`this\`    : reference to the \`lexer\` instance. 
+     *               - \`this\`    : reference to the \`lexer\` instance.
      *                               \`yy_\` is an alias for \`this\` lexer instance reference used internally.
      *
      *               - \`yy\`      : a reference to the \`yy\` "shared state" object which was passed to the lexer
@@ -3170,15 +3214,15 @@ function generateGenericHeaderComment() {
      *
      *               WARNING:
      *               Lexer's additional \`args...\` parameters (via lexer's \`%parse-param\`) MAY conflict with
-     *               any attributes already added to \`yy\` by the **parser** or the jison run-time; 
-     *               when such a collision is detected an exception is thrown to prevent the generated run-time 
-     *               from silently accepting this confusing and potentially hazardous situation! 
+     *               any attributes already added to \`yy\` by the **parser** or the jison run-time;
+     *               when such a collision is detected an exception is thrown to prevent the generated run-time
+     *               from silently accepting this confusing and potentially hazardous situation!
      *
      *    cleanupAfterLex: function(do_not_nuke_errorinfos),
      *               Helper function.
      *
      *               This helper API is invoked when the **parse process** has completed: it is the responsibility
-     *               of the **parser** (or the calling userland code) to invoke this method once cleanup is desired. 
+     *               of the **parser** (or the calling userland code) to invoke this method once cleanup is desired.
      *
      *               This helper may be invoked by user code to ensure the internal lexer gets properly garbage collected.
      *
@@ -3289,7 +3333,7 @@ function generateGenericHeaderComment() {
      * These options are available:
      *
      * (Options are permanent.)
-     *  
+     *
      *  yy: {
      *      parseError: function(str, hash, ExceptionClass)
      *                 optional: overrides the default \`parseError\` function.

@@ -74,8 +74,8 @@ describe("LEX Parser", function () {
             "ID": "[a-zA-Z_][a-zA-Z0-9_]+"
         },
         rules: [
-            ["{D}ohhai", "print(9);"],
-            ["\\{", "return '{';"]
+            ["{D}ohhai", "print(9)"],
+            ["\\{", "return '{'"]
         ],
     });
 
@@ -91,8 +91,8 @@ describe("LEX Parser", function () {
             "ID": "[{L}_][{L}{D}_]+"
         },
         rules: [
-            ["[{D}]ohhai", "print(9);"],
-            ["\\{", "return '{';"]
+            ["[{D}]ohhai", "print(9)"],
+            ["\\{", "return '{'"]
         ],
     });
 
@@ -114,11 +114,12 @@ describe("LEX Parser", function () {
   });
 
   it("test escaped chars", function () {
-    var lexgrammar = '%%\n"\\n"+ {return \'NL\';}\n\\n+ {return \'NL2\';}\n\\s+ {/* skip */}';
+    var lexgrammar = '%%\n"\\\\n"+ {return \'NO_NL\';}\n"\\n"+ {return \'NL\';}\n\\n+ {return \'NL2\';}\n\\s+ {/* skip */}';
     var expected = mixExpected({
         rules: [
-            ["\\\\n+", "return 'NL';"],
-            ["\\n+", "return 'NL2';"],
+            ["\\\\n+", "return 'NO_NL'"],
+            ["\\n+", "return 'NL'"],
+            ["\\n+", "return 'NL2'"],
             ["\\s+", "/* skip */"]
         ],
     });
@@ -130,7 +131,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n$ {return \'EOF\';}\n. {/* skip */}\n"stuff"*/("{"|";") {/* ok */}\n(.+)[a-z]{1,2}"hi"*? {/* skip */}\n';
     var expected = mixExpected({
         rules: [
-            ["$", "return 'EOF';"],
+            ["$", "return 'EOF'"],
             [".", "/* skip */"],
             ["stuff*(?=(\\{|;))", "/* ok */"],
             ["(.+)[a-z]{1,2}hi*?", "/* skip */"]
@@ -144,9 +145,9 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n"["[^\\]]"]" {return true;}\n\'f"oo\\\'bar\'  {return \'baz2\';}\n"fo\\"obar"  {return \'baz\';}\n';
     var expected = mixExpected({
         rules: [
-            ["\\[[^\\]]\\]", "return true;"],
-            ["f\"oo'bar", "return 'baz2';"],
-            ['fo"obar', "return 'baz';"]
+            ["\\[[^\\]]\\]", "return true"],
+            ["f\"oo'bar", "return 'baz2'"],
+            ['fo"obar', "return 'baz'"]
         ],
     });
 
@@ -157,7 +158,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n"["[^\\]]"]" %{\nreturn true;\n%}\n';
     var expected = mixExpected({
         rules: [
-            ["\\[[^\\]]\\]", "return true;"]
+            ["\\[[^\\]]\\]", "return true"]
         ],
     });
 
@@ -168,18 +169,18 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n"["[^\\]]"]" {\nvar b={};return true;\n}\n';
     var expected = mixExpected({
         rules: [
-            ["\\[[^\\]]\\]", "{\nvar b={};return true;\n}"]
+            ["\\[[^\\]]\\]", "var b={};return true"]
         ],
     });
 
     assert.deepEqual(lex.parse(lexgrammar), expected, "grammar should be parsed correctly");
   });
 
-  it("test multiline action with brace in a multi-line-comment", function () {
+  it("test multiline action with brace in a multi-line comment", function () {
     var lexgrammar = '%%\n"["[^\\]]"]" {\nvar b=7; /* { */ return true;\n}\n';
     var expected = mixExpected({
         rules: [
-            ["\\[[^\\]]\\]", "var b=7; /* { */ return true;"]
+            ["\\[[^\\]]\\]", "var b=7; /* { */ return true"]
         ],
     });
 
@@ -190,7 +191,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n"["[^\\]]"]" {\nvar b={}; // { \nreturn 2 / 3;\n}\n';
     var expected = mixExpected({
         rules: [
-            ["\\[[^\\]]\\]", "{\nvar b={}; // { \nreturn 2 / 3;\n}"]
+            ["\\[[^\\]]\\]", "var b={}; // { \nreturn 2 / 3"]
         ],
     });
 
@@ -201,7 +202,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n"["[^\\]]"]" {\nvar b=\'{\' + "{"; // { \nreturn 2 / 3;\n}\n';
     var expected = mixExpected({
         rules: [
-            ["\\[[^\\]]\\]", "var b='{' + \"{\"; // { \nreturn 2 / 3;"]
+            ["\\[[^\\]]\\]", "var b='{' + \"{\"; // { \nreturn 2 / 3"]
         ],
     });
 
@@ -212,7 +213,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n"["[^\\]]"]" {\nvar b=/{/; // { \nreturn 2 / 3;\n}\n';
     var expected = mixExpected({
         rules: [
-            ["\\[[^\\]]\\]", "var b=/{/; // { \nreturn 2 / 3;"]
+            ["\\[[^\\]]\\]", "var b=/{/; // { \nreturn 2 / 3"]
         ],
     });
 
@@ -223,7 +224,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n"["[^\\]]"]"\n  var b=/{/;\n  // { \n  return 2 / 3;\n';
     var expected = mixExpected({
         rules: [
-            ["\\[[^\\]]\\]", "var b=/{/;\n  // { \n  return 2 / 3;"]
+            ["\\[[^\\]]\\]", "var b=/{/;\n  // { \n  return 2 / 3"]
         ],
     });
 
@@ -236,7 +237,7 @@ describe("LEX Parser", function () {
         macros: {"RULE": "[0-9]"},
         actionInclude: "hi; {stuff;}",
         rules: [
-            ["\\[[^\\]]\\]", "return true;"]
+            ["\\[[^\\]]\\]", "return true"]
         ],
     });
 
@@ -287,10 +288,10 @@ describe("LEX Parser", function () {
             "EAT": 1,
         },
         rules: [
-            ["enter-test", "this.begin('TEST');" ],
-            [["TEST","EAT"], "x", "return 'T';" ],
-            [["*"], "z", "return 'Z';" ],
-            [["TEST"], "y", "this.begin('INITIAL'); return 'TY';" ]
+            ["enter-test", "this.begin('TEST')" ],
+            [["TEST","EAT"], "x", "return 'T'" ],
+            [["*"], "z", "return 'Z'" ],
+            [["TEST"], "y", "this.begin('INITIAL'); return 'TY'" ]
         ],
     });
 
@@ -332,8 +333,8 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n"["[^\\]]"]" return true;\n"x" return 1;';
     var expected = mixExpected({
         rules: [
-            ["\\[[^\\]]\\]", "return true;"],
-            ["x", "return 1;"]
+            ["\\[[^\\]]\\]", "return true"],
+            ["x", "return 1"]
         ],
     });
 
@@ -344,7 +345,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n\\"\\\'"x" return 1;';
     var expected = mixExpected({
         rules: [
-            ["\"'x", "return 1;"]
+            ["\"'x", "return 1"]
         ],
     });
 
@@ -355,11 +356,11 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n\\"\\\'\\\\\\*\\i return 1;\n"a"\\b return 2;\n\\cA {}\n\\012 {}\n\\xFF {}';
     var expected = mixExpected({
         rules: [
-            ["\"'\\\\\\*i", "return 1;"],
-            ["a\\b", "return 2;"],
-            ["\\cA", ""],
-            ["\\012", ""],
-            ["\\xFF", ""]
+            ["\"'\\\\\\*i", "return 1"],
+            ["a\\b", "return 2"],
+            ["\\u0001", ""],
+            ["\\n", ""],
+            ["ÿ", ""]
         ],
     });
 
@@ -370,7 +371,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n"\\u03c0" return 1;';
     var expected = mixExpected({
         rules: [
-            ["\\u03c0", "return 1;"]
+            ["\u03c0", "return 1"]
         ],
     });
 
@@ -381,7 +382,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n"π" return 1;';
     var expected = mixExpected({
         rules: [
-            ["π", "return 1;"]
+            ["π", "return 1"]
         ],
     });
 
@@ -392,8 +393,8 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\nπ return 1;\n-abc return 2;';
     var expected = mixExpected({
         rules: [
-            ["π", "return 1;"],
-            ["-abc", "return 2;"]
+            ["π", "return 1"],
+            ["-abc", "return 2"]
         ],
     });
 
@@ -404,7 +405,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n\\\'([^\\\\\']+|\\\\(\\n|.))*?\\\' return 1;';
     var expected = mixExpected({
         rules: [
-            ["'([^\\\\']+|\\\\(\\n|.))*?'", "return 1;"]
+            ["'([^\\\\']+|\\\\(\\n|.))*?'", "return 1"]
         ],
     });
 
@@ -415,7 +416,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n(?:"foo"|"bar")\\(\\) return 1;';
     var expected = mixExpected({
         rules: [
-            ["(?:foo|bar)\\(\\)", "return 1;"]
+            ["(?:foo|bar)\\(\\)", "return 1"]
         ],
     });
 
@@ -426,9 +427,9 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%"foo"  {return bar;}\n%% var bar = 1;';
     var expected = mixExpected({
         rules: [
-            ['foo', "return bar;"]
+            ['foo', "return bar"]
         ],
-        moduleInclude: " var bar = 1;",
+        moduleInclude: "var bar = 1",
     });
 
     assert.deepEqual(lex.parse(lexgrammar), expected, "grammar should be parsed correctly");
@@ -438,7 +439,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n(|"bar")("foo"|)(|) return 1;';
     var expected = mixExpected({
         rules: [
-            ["(|bar)(foo|)(|)", "return 1;"]
+            ["(|bar)(foo|)(|)", "return 1"]
         ],
     });
 
@@ -449,7 +450,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%options flex\n%%\n"foo" return 1;';
     var expected = mixExpected({
         rules: [
-            ["foo", "return 1;"]
+            ["foo", "return 1"]
         ],
         options: {flex: true},
     });
@@ -461,9 +462,9 @@ describe("LEX Parser", function () {
     var lexgrammar = '%options token-stack\n%%\n"foo" return 1;';
     var expected = mixExpected({
         rules: [
-            ["foo", "return 1;"]
+            ["foo", "return 1"]
         ],
-        options: {"token-stack": true},
+        options: {"tokenStack": true},
     });
 
     assert.deepEqual(lex.parse(lexgrammar), expected, "grammar should be parsed correctly");
@@ -473,7 +474,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%options ping=666 bla=blub bool1 s1="s1value" s2=\'s2value\' s3=false s4="false" a-b-c="d"\n%%\n"foo" return 1;';
     var expected = mixExpected({
         rules: [
-            ["foo", "return 1;"]
+            ["foo", "return 1"]
         ],
         options: {
             ping: 666,
@@ -483,7 +484,7 @@ describe("LEX Parser", function () {
             s2: "s2value",
             s3: false,
             s4: "false",
-            "a-b-c": "d"            // `%options camel-casing` is done very late in the game: see Jison.Generator source code.
+            "aBC": "d"            // `%options camel-casing` is done very late in the game: see Jison.Generator source code.
         },
     });
 
@@ -494,7 +495,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%options ping=666\n bla=blub\n bool1\n s1="s1value"\n s2=\'s2value\'\n s3=false\n s4="false"\n a-b-c="d"\n%%\n"foo" return 1;';
     var expected = mixExpected({
         rules: [
-            ["foo", "return 1;"]
+            ["foo", "return 1"]
         ],
         options: {
             ping: 666,
@@ -504,7 +505,7 @@ describe("LEX Parser", function () {
             s2: "s2value",
             s3: false,
             s4: "false",
-            "a-b-c": "d"            // `%options camel-casing` is done very late in the game: see Jison.Generator source code.
+            "aBC": "d"            // `%options camel-casing` is done very late in the game: see Jison.Generator source code.
         },
     });
 
@@ -515,11 +516,11 @@ describe("LEX Parser", function () {
     var lexgrammar = '%options s1="s1\\"val\'ue" s2=\'s2\\\\x\\\'val\"ue\'\n%%\n"foo" return 1;';
     var expected = mixExpected({
         rules: [
-            ["foo", "return 1;"]
+            ["foo", "return 1"]
         ],
         options: {
             s1: "s1\"val'ue",
-            s2: "s2\\\\x'val\"ue"
+            s2: "s2\\x'val\"ue"
         },
     });
 
@@ -541,9 +542,9 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n"["[^\\\\]"]" {return true;}\n\'f"oo\\\'bar\'  {return \'baz2\';}\n"fo\\"obar"  {return \'baz\';}\n';
     var expected = mixExpected({
         rules: [
-            ["\\[[^\\\\]\\]", "return true;"],
-            ["f\"oo'bar", "return 'baz2';"],
-            ['fo"obar', "return 'baz';"]
+            ["\\[[^\\\\]\\]", "return true"],
+            ["f\"oo'bar", "return 'baz2'"],
+            ['fo"obar', "return 'baz'"]
         ],
     });
 
@@ -576,8 +577,8 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n"a" return true;\n  \n"b" return 1;\n   \n';
     var expected = mixExpected({
         rules: [
-            ["a", "return true;"],
-            ["b", "return 1;"]
+            ["a", "return true"],
+            ["b", "return 1"]
         ],
     });
 
@@ -589,7 +590,7 @@ describe("LEX Parser", function () {
     var expected = mixExpected({
         macros: {"BR": "\\r\\n|\\n|\\r"},
         rules: [
-            ["{BR}", "return true;"]
+            ["{BR}", "return true"]
         ],
     });
 
@@ -600,7 +601,7 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\r\n"["[^\\]]"]" %{\r\nreturn true;\r\n%}\r\n';
     var expected = mixExpected({
         rules: [
-            ["\\[[^\\]]\\]", "return true;"]
+            ["\\[[^\\]]\\]", "return true"]
         ],
     });
 
@@ -611,8 +612,8 @@ describe("LEX Parser", function () {
     var lexgrammar = '%%\n"a" %{  \nreturn true;\n%}  \n  \n"b" %{    return 1;\n%}  \n   \n';
     var expected = mixExpected({
         rules: [
-            ["a", "return true;"],
-            ["b", "return 1;"]
+            ["a", "return true"],
+            ["b", "return 1"]
         ],
     });
 
@@ -637,20 +638,20 @@ describe("LEX Parser", function () {
             "EAT": 1,
         },
         rules: [
-            ["enter-test\\b", "this.begin('TEST');" ],                 // '-' dash is accepted as it's *followed* by a word, hence the *tail* is an 'easy keyword', hence it merits an automatic `\b` word-boundary check added!
-            ["enter_test\\b", "this.begin('TEST');" ],
-            [["TEST","EAT"], "x\\b", "return 'T';" ],
-            [["*"], "z\\b", "return 'Z';" ],
-            [["TEST"], "y\\b", "this.begin('INITIAL'); return 'TY';" ],
-            ["\"'a\\b", "return 1;"],                                  // keywords *with any non-keyword prefix*, i.e. keywords 'at the tail end', get the special 'easy keyword' treatment too!
-            ["\"'\\\\\\*i\\b", "return 1;"],
-            ["a\\b", "return 2;"],
-            ["\\cA", ""],
-            ["\\012", ""],
-            ["\\xFF", ""],
-            ["\\[[^\\\\]\\]", "return true;"],
-            ["f\"oo'bar\\b", "return 'baz2';"],
-            ['fo"obar\\b', "return 'baz';"]
+            ["enter-test\\b", "this.begin('TEST')" ],                 // '-' dash is accepted as it's *followed* by a word, hence the *tail* is an 'easy keyword', hence it merits an automatic `\b` word-boundary check added!
+            ["enter_test\\b", "this.begin('TEST')" ],
+            [["TEST","EAT"], "x\\b", "return 'T'" ],
+            [["*"], "z\\b", "return 'Z'" ],
+            [["TEST"], "y\\b", "this.begin('INITIAL'); return 'TY'" ],
+            ["\"'a\\b", "return 1"],                                  // keywords *with any non-keyword prefix*, i.e. keywords 'at the tail end', get the special 'easy keyword' treatment too!
+            ["\"'\\\\\\*i\\b", "return 1"],
+            ["a\\b", "return 2"],
+            ["\\u0001", ""],
+            ["\\n", ""],
+            ["ÿ", ""],
+            ["\\[[^\\\\]\\]", "return true"],
+            ["f\"oo'bar\\b", "return 'baz2'"],
+            ['fo"obar\\b', "return 'baz'"]
         ],
         options: {
             "easy_keyword_rules": true
