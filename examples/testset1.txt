@@ -46,6 +46,7 @@
 ./compiled_calc_parse_for_fast_engine.jison
 ./compiled_calc_print.jison
 ./compiled_calc_sorcerer.jison
+./compound-include-path-must-be-in-quotes.jison
 ./delphi-ndyacc.jison
 ./dism.jison
 ./dism_lr0.jison

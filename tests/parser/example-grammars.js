@@ -20,12 +20,6 @@ var lexData = {
 
 const test_list = [
   {
-    name: 'issue-254',
-  },
-  {
-    name: 'issue-293',
-  },
-  {
     name: 'issue-289',
     __ignore__: true,
   },
@@ -43,25 +37,10 @@ const test_list = [
     ],
   },
   {
-    name: 'error-handling-and-yyerrok-loopfix',
-  },
-  {
-    name: 'error-handling-and-yyerrok-looping1',
-  },
-  {
-    name: 'error-handling-and-yyerrok-looping2',
-  },
-  {
     name: 'error-handling-and-yyerrok-macro',
     inputs: [
       'A\nB A\nA\nA\n'
     ],
-  },
-  {
-    name: 'error-handling-and-yyerrok-part1',
-  },
-  {
-    name: 'error-handling-and-yyerrok-part2',
   },
   {
     name: 'error-handling-and-yyerrok-part3',
@@ -74,15 +53,6 @@ const test_list = [
       '    zz );'     +
       '    zz ;' 
     ],
-  },
-  {
-    name: 'error-handling-and-yyerrok-part4a',
-  },
-  {
-    name: 'error-handling-and-yyerrok-part4b',
-  },
-  {
-    name: 'error-handling-and-yyerrok-part5',
   },
   {
     name: 'error-recognition-actions',
@@ -101,12 +71,6 @@ const test_list = [
   {
     name: 'with_custom_lexer',
     __ignore__: true,
-  },
-  {
-    name: 'with_includes',
-  },
-  {
-    name: 'klammergebirge',
   },
   {
     name: 'parser-to-lexer-communication-test--profiling',
@@ -132,24 +96,6 @@ const test_list = [
   {
     name: 'lr-but-not-lalr',
     type: 'lr',
-  },
-  {
-    name: 'theory-left-recurs-01',
-  },
-  {
-    name: 'test-EOF-bugfix',
-  },
-  {
-    name: 'test-epsilon-rules-early-reduce',
-  },
-  {
-    name: 'test-nonassociative-operator-0',
-  },
-  {
-    name: 'test-nonassociative-operator-1',
-  },
-  {
-    name: 'test-nonassociative-operator-2',
   },
   {
     name: 'test-propagation-rules-reduction-1',
@@ -188,7 +134,8 @@ const test_list = [
     }
   },
   {
-    name: 'test-literal-quote-tokens-in-grammar',
+    name: 'compound-include-path-must-be-in-quotes',
+    fail: true,
   },
 ];
 
@@ -204,18 +151,16 @@ testset = testset.sort().map(function (filepath) {
     var pos = filepath.indexOf(fstr);
     // console.log('pos: ', pos, filepath, fstr);
     if (pos > 0) {
-      var to = {
+      var to = Object.assign({
         path: filepath,
-      };
-      for (var k in test_list[j]) {
-        if (k !== 'name') {
-          to[k] = test_list[j][k];
-        }
-      }
+      }, test_list[j]);
       return to;
     }
   }
-  return false;
+  return {
+    name: path.basename(filepath),
+    path: filepath
+  };
 })
 .filter(function (t) {
   return !!t;
