@@ -1,6 +1,7 @@
 [
   5,
   {
+    id: ';',
     token: ';',
     yytext: ';',
     yylloc: {
@@ -15,6 +16,7 @@
     },
   },
   {
+    id: ';',
     token: ';',
     yytext: ';',
     yylloc: {
@@ -29,6 +31,7 @@
     },
   },
   {
+    id: 'ID',
     token: 'ID',
     yytext: 'a',
     yylloc: {
@@ -43,6 +46,7 @@
     },
   },
   {
+    id: ';',
     token: ';',
     yytext: ';',
     yylloc: {
@@ -57,6 +61,7 @@
     },
   },
   {
+    id: 'ID',
     token: 'ID',
     yytext: 'a',
     yylloc: {
@@ -84,10 +89,10 @@
   Erroneous area:
 1: ;;a;aBaa
 ^.......^
-    at Object.lexer_parseError [as parseError] (\regexp-lexer-cjs-es5.js:10254:23), <anonymous>:213:15)
-    at Object.lexer_next [as next] (\regexp-lexer-cjs-es5.js:10254:23), <anonymous>:1251:27)
-    at Object.lexer_lex [as lex] (\regexp-lexer-cjs-es5.js:10254:23), <anonymous>:1298:22)
-    at Context.testEachLexerExample (\regexplexer.js:3092:27)
+    at Object.lexer_parseError [as parseError] (\regexp-lexer-cjs-es5.js:3422:37), <anonymous>:213:15)
+    at Object.lexer_next [as next] (\regexp-lexer-cjs-es5.js:3422:37), <anonymous>:1251:27)
+    at Object.lexer_lex [as lex] (\regexp-lexer-cjs-es5.js:3422:37), <anonymous>:1305:22)
+    at Context.testEachLexerExample (\regexplexer.js:3534:27)
     at callFn (\runnable.js:364:21)
     at Test.Runnable.run (\runnable.js:352:5)
     at Runner.runTest (\runner.js:677:10)
@@ -95,15 +100,43 @@
     at next (\runner.js:594:14)
     at \runner.js:604:7
     at next (\runner.js:486:14)
+    at cbHookRun (\runner.js:551:7)
+    at done (\runnable.js:308:5)
+    at callFn (\runnable.js:387:7)
+    at Hook.Runnable.run (\runnable.js:352:5)
+    at next (\runner.js:510:10)
     at Immediate._onImmediate (\runner.js:572:5)
     at processImmediate (/timers.js:456:21)`,
     ex: {
+      name: 'JisonLexerError',
       message: `Lexical error on line 1: Unrecognized text.
 
   Erroneous area:
 1: ;;a;aBaa
 ^.......^`,
-      name: 'JisonLexerError',
+      stack: `JisonLexerError: Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: ;;a;aBaa
+^.......^
+    at Object.lexer_parseError [as parseError] (\regexp-lexer-cjs-es5.js:3422:37), <anonymous>:213:15)
+    at Object.lexer_next [as next] (\regexp-lexer-cjs-es5.js:3422:37), <anonymous>:1251:27)
+    at Object.lexer_lex [as lex] (\regexp-lexer-cjs-es5.js:3422:37), <anonymous>:1305:22)
+    at Context.testEachLexerExample (\regexplexer.js:3534:27)
+    at callFn (\runnable.js:364:21)
+    at Test.Runnable.run (\runnable.js:352:5)
+    at Runner.runTest (\runner.js:677:10)
+    at \runner.js:801:12
+    at next (\runner.js:594:14)
+    at \runner.js:604:7
+    at next (\runner.js:486:14)
+    at cbHookRun (\runner.js:551:7)
+    at done (\runnable.js:308:5)
+    at callFn (\runnable.js:387:7)
+    at Hook.Runnable.run (\runnable.js:352:5)
+    at next (\runner.js:510:10)
+    at Immediate._onImmediate (\runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
       hash: {
         errStr: `Lexical error on line 1: Unrecognized text.
 
@@ -128,42 +161,29 @@
         lexer: {
           EOF: 1,
           ERROR: 2,
-          __currentRuleSet__: {
-            rules: [
-              null,
-              1,
-              2,
-            ],
-            inclusive: false,
-            __rule_regexes: [
-              null,
-              {
-                re: '/^(?:a)/',
-                source: '^(?:a)',
-                flags: '',
-              },
-              {
-                re: '/^(?:;)/',
-                source: '^(?:;)',
-                flags: '',
-              },
-            ],
-            __rule_count: 2,
-          },
           __error_infos: [
             {
-              circularReference: true,
-              index: 3,
-              parentDepth: 2,
-              key: '0',
-              keyStack: [
-                '',
-                '7',
-                'ex',
-                'hash',
-                'lexer',
-                '__error_infos',
-              ],
+              errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: ;;a;aBaa
+^.......^`,
+              recoverable: false,
+              text: '',
+              token: null,
+              line: 0,
+              loc: {
+                first_line: 1,
+                first_column: 5,
+                last_line: 1,
+                last_column: 5,
+                range: [
+                  5,
+                  5,
+                ],
+              },
+              yy: {},
+              lexer: '[lexer]',
             },
           ],
           __decompressed: true,
@@ -204,84 +224,6 @@
           },
           options: {
             trackPosition: true,
-          },
-          simpleCaseActionClusters: {
-            '1': 'ID',
-            '3': 'ERROR',
-          },
-          rules: [
-            {
-              re: '/^(?:\\s+)/',
-              source: '^(?:\\s+)',
-              flags: '',
-            },
-            {
-              re: '/^(?:a)/',
-              source: '^(?:a)',
-              flags: '',
-            },
-            {
-              re: '/^(?:;)/',
-              source: '^(?:;)',
-              flags: '',
-            },
-            {
-              re: '/^(?:.)/',
-              source: '^(?:.)',
-              flags: '',
-            },
-          ],
-          conditions: {
-            MLC: {
-              rules: [
-                null,
-                1,
-                2,
-              ],
-              inclusive: false,
-              __rule_regexes: [
-                null,
-                {
-                  re: '/^(?:a)/',
-                  source: '^(?:a)',
-                  flags: '',
-                },
-                {
-                  re: '/^(?:;)/',
-                  source: '^(?:;)',
-                  flags: '',
-                },
-              ],
-              __rule_count: 2,
-            },
-            INITIAL: {
-              rules: [
-                null,
-                0,
-                2,
-                3,
-              ],
-              inclusive: true,
-              __rule_regexes: [
-                null,
-                {
-                  re: '/^(?:\\s+)/',
-                  source: '^(?:\\s+)',
-                  flags: '',
-                },
-                {
-                  re: '/^(?:;)/',
-                  source: '^(?:;)',
-                  flags: '',
-                },
-                {
-                  re: '/^(?:.)/',
-                  source: '^(?:.)',
-                  flags: '',
-                },
-              ],
-              __rule_count: 3,
-            },
           },
           yy: {},
         },

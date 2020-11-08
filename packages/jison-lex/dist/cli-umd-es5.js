@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 
-(function(global,factory){typeof exports==='object'&&typeof module!=='undefined'?module.exports=factory(require('fs'),require('path'),require('@gerhobbelt/nomnom'),require('recast'),require('@babel/core'),require('assert'),require('@gerhobbelt/xregexp'),require('@gerhobbelt/json5')):typeof define==='function'&&define.amd?define(['fs','path','@gerhobbelt/nomnom','recast','@babel/core','assert','@gerhobbelt/xregexp','@gerhobbelt/json5'],factory):(global=typeof globalThis!=='undefined'?globalThis:global||self,global['jison-lex']=factory(global.fs,global.path$1,global.nomnom,global.recast,global.babel,global.assert$1,global.XRegExp,global.JSON5));})(this,function(fs,path$1,nomnom,recast,babel,assert$1,XRegExp,JSON5){'use strict';function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e};}var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var path__default=/*#__PURE__*/_interopDefaultLegacy(path$1);var nomnom__default=/*#__PURE__*/_interopDefaultLegacy(nomnom);var recast__default=/*#__PURE__*/_interopDefaultLegacy(recast);var assert__default=/*#__PURE__*/_interopDefaultLegacy(assert$1);var XRegExp__default=/*#__PURE__*/_interopDefaultLegacy(XRegExp);var JSON5__default=/*#__PURE__*/_interopDefaultLegacy(JSON5);// Return TRUE if `src` starts with `searchString`. 
+(function(global,factory){typeof exports==='object'&&typeof module!=='undefined'?module.exports=factory(require('fs'),require('path'),require('@gerhobbelt/nomnom'),require('@gerhobbelt/xregexp'),require('recast'),require('@babel/core'),require('assert'),require('@gerhobbelt/json5')):typeof define==='function'&&define.amd?define(['fs','path','@gerhobbelt/nomnom','@gerhobbelt/xregexp','recast','@babel/core','assert','@gerhobbelt/json5'],factory):(global=typeof globalThis!=='undefined'?globalThis:global||self,global['jison-lex']=factory(global.fs,global.path$1,global.nomnom,global.XRegExp,global.recast,global.babel,global.assert$1,global.JSON5));})(this,function(fs,path$1,nomnom,XRegExp,recast,babel,assert$1,JSON5){'use strict';function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e};}var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var path__default=/*#__PURE__*/_interopDefaultLegacy(path$1);var nomnom__default=/*#__PURE__*/_interopDefaultLegacy(nomnom);var XRegExp__default=/*#__PURE__*/_interopDefaultLegacy(XRegExp);var recast__default=/*#__PURE__*/_interopDefaultLegacy(recast);var assert__default=/*#__PURE__*/_interopDefaultLegacy(assert$1);var JSON5__default=/*#__PURE__*/_interopDefaultLegacy(JSON5);// Return TRUE if `src` starts with `searchString`. 
 function startsWith(src,searchString){return src.substr(0,searchString.length)===searchString;}// tagged template string helper which removes the indentation common to all
 // non-empty lines: that indentation was added as part of the source code
 // formatting of this lexer spec file and must be removed to produce what
@@ -91,19 +91,350 @@ if(ex){ex.offending_source_code=sourcecode;ex.offending_source_title=errname;ex.
 //
 function exec_and_diagnose_this_stuff(sourcecode,code_execution_rig,options,title){options=options||{};var errname=""+(title||"exec_test");var err_id=errname.replace(/[^a-z0-9_]/ig,"_");if(err_id.length===0){err_id="exec_crash";}const debug=0;var p;try{// p = eval(sourcecode);
 if(typeof code_execution_rig!=='function'){throw new Error("safe-code-exec-and-diag: code_execution_rig MUST be a JavaScript function");}chkBugger(sourcecode);p=code_execution_rig.call(this,sourcecode,options,errname,debug);}catch(ex){if(options.dumpSourceCodeOnFailure){dumpSourceToFile(sourcecode,errname,err_id,options,ex);}if(options.throwErrorOnCompileFailure){throw ex;}}return p;}var code_exec={exec:exec_and_diagnose_this_stuff,dump:dumpSourceToFile};//
-assert__default['default'](recast__default['default']);function parseCodeChunkToAST(src,options){src=src.replace(/@/g,'\uFFDA').replace(/#/g,'\uFFDB');var ast=recast__default['default'].parse(src);return ast;}function compileCodeToES5(src,options){options=Object.assign({},{ast:true,code:true,sourceMaps:true,comments:true,filename:'compileCodeToES5.js',sourceFileName:'compileCodeToES5.js',sourceRoot:'.',sourceType:'module',babelrc:false,ignore:["node_modules/**/*.js"],compact:false,retainLines:false,presets:[["@babel/preset-env",{targets:{browsers:["last 2 versions"],node:"8.0"}}]]},options);return babel.transformSync(src,options);// => { code, map, ast }
-}function prettyPrintAST(ast,options){var new_src;var options=options||{};const defaultOptions={tabWidth:2,quote:'single',arrowParensAlways:true,// Do not reuse whitespace (or anything else, for that matter)
+assert__default['default'](recast__default['default']);//var types = recast.types;
+//assert(types);
+//var namedTypes = types.namedTypes;
+//assert(namedTypes);
+//var b = types.builders;
+//assert(b);
+//assert(astUtils);
+// WARNING: this regex MUST match the regex for `ID` in ebnf-parser::bnf.l jison language lexer spec! (`ID = [{ALPHA}]{ALNUM}*`)
+//
+// This is the base XRegExp ID regex used in many places; this should match the ID macro definition in the EBNF/BNF parser et al as well!
+const ID_REGEX_BASE='[\\p{Alphabetic}_][\\p{Alphabetic}_\\p{Number}]*';// regex set expression which can be used as part of a conditional check to find word/ID/token boundaries 
+// as this lists all characters which are not allowed in an Identifier anywhere:
+const IN_ID_CHARSET='\\p{Alphabetic}_\\p{Number}';// Determine which Unicode NonAsciiIdentifierStart characters 
+// are unused in the given sourcecode and provide a mapping array
+// from given (JISON) start/end identifier character-sequences
+// to these.
+// 
+// The purpose of this routine is to deliver a reversible
+// transform from JISON to plain JavaScript for any action
+// code chunks. 
+// 
+// This is the basic building block which helps us convert
+// jison variables such as `$id`, `$3`, `$-1` ('negative index' reference),
+// `@id`, `#id`, `#TOK#` to variable names which can be
+// parsed by a regular JavaScript parser such as esprima or babylon.
+function generateMapper4JisonGrammarIdentifiers(input){// IMPORTANT: we only want the single char Unicodes in here
+// so we can do this transformation at 'Char'-word rather than 'Code'-codepoint level.
+//const IdentifierStart = unicode4IdStart.filter((e) => e.codePointAt(0) < 0xFFFF);
+// As we will be 'encoding' the Jison Special characters @ and # into the IDStart Unicode 
+// range to make JavaScript parsers *not* barf a hairball on Jison action code chunks, we
+// must consider a few things while doing that:
+// 
+// We CAN use an escape system where we replace a single character with multiple characters,
+// as JavaScript DOES NOT discern between single characters and multi-character strings: anything
+// between quotes is a string and there's no such thing as C/C++/C#'s `'c'` vs `"c"` which is 
+// *character* 'c' vs *string* 'c'.
+// 
+// As we can safely escape characters, all we need to do is find a character (or set of characters)
+// which are in the ID_Start range and are expected to be used rarely while clearly identifyable
+// by humans for ease of debugging of the escaped intermediate values.
+// 
+// The escape scheme is simple and borrowed from ancient serial communication protocols and
+// the JavaScript string spec alike:
+// 
+// - assume the escape character is A
+// - then if the original input stream includes an A, we output AA
+// - if the original input includes a character #, which must be escaped, it is encoded/output as A
+// 
+// This is the same as the way the backslash escape in JavaScript strings works and has a minor issue:
+// sequences of AAA with an odd number of A's CAN occur in the output, which might be a little hard to read.
+// Those are, however, easily machine-decodable and that's what's most important here.
+// 
+// To help with that AAA... issue AND because we need to escape multiple Jison markers, we choose to 
+// a slightly tweaked approach: we are going to use a set of 2-char wide escape codes, where the
+// first character is fixed and the second character is chosen such that the escape code 
+// DOES NOT occur in the original input -- unless someone would have intentionally fed nasty input 
+// to the encoder as we will pick the 2 characters in the escape from 2 utterly different *human languages*:
+// 
+// - the first character is ဩ which is highly visible and allows us to quickly search through a 
+//   source to see if and where there are *any* Jison escapes.
+// - the second character is taken from the Unicode CANADIAN SYLLABICS range (0x1400-0x1670) as far as
+//   those are part of ID_Start (0x1401-0x166C or there-abouts) and, unless an attack is attempted at jison,
+//   we can be pretty sure that this 2-character sequence won't ever occur in real life: even when one
+//   writes such a escape in the comments to document this system, e.g. 'ဩᐅ', then there's still plenty
+//   alternatives for the second character left.
+// - the second character represents the escape type: $-n, $#, #n, @n, #ID#, etc. and each type will
+//   pick a different base shape from that CANADIAN SYLLABICS charset. 
+// - note that the trailing '#' in Jison's '#TOKEN#' escape will be escaped as a different code to 
+//   signal '#' as a token terminator there.
+// - meanwhile, only the initial character in the escape needs to be escaped if encountered in the
+//   original text: ဩ -> ဩဩ as the 2nd and 3rd character are only there to *augment* the escape.
+//   Any CANADIAN SYLLABICS in the original input don't need escaping, as these only have special meaning
+//   when prefixed with ဩ
+// - if the ဩ character is used often in the text, the alternative ℹ இ ண ஐ Ϟ ല ઊ characters MAY be considered 
+//   for the initial escape code, hence we start with analyzing the entire source input to see which
+//   escapes we'll come up with this time.
+//
+// The basic shapes are:
+// 
+// - 1401-141B:  ᐁ             1
+// - 142F-1448:  ᐯ             2
+// - 144C-1465:  ᑌ             3
+// - 146B-1482:  ᑫ             4
+// - 1489-14A0:  ᒉ             5  
+// - 14A3-14BA:  ᒣ             6 
+// - 14C0-14CF:  ᓀ             
+// - 14D3-14E9:  ᓓ             7
+// - 14ED-1504:  ᓭ             8
+// - 1510-1524:  ᔐ             9
+// - 1526-153D:  ᔦ 
+// - 1542-154F:  ᕂ
+// - 1553-155C:  ᕓ
+// - 155E-1569:  ᕞ
+// - 15B8-15C3:  ᖸ
+// - 15DC-15ED:  ᗜ            10
+// - 15F5-1600:  ᗵ
+// - 1614-1621:  ᘔ
+// - 1622-162D:  ᘢ
+//
+// ## JISON identifier formats ##
+// 
+// - direct symbol references, e.g. `#NUMBER#` when there's a `%token NUMBER` for your grammar.
+//   These represent the token ID number.
+//   
+//   -> (1+2) start-# + end-#
+//   
+// - alias/token value references, e.g. `$token`, `$2`
+// 
+//   -> $ is an accepted starter, so no encoding required
+// 
+// - alias/token location reference, e.g. `@token`, `@2`
+// 
+//   -> (6) single-@
+// 
+// - alias/token id numbers, e.g. `#token`, `#2`
+// 
+//   -> (3) single-#
+// 
+// - alias/token stack indexes, e.g. `##token`, `##2`
+// 
+//   -> (4) double-#
+// 
+// - result value reference `$$`
+// 
+//   -> $ is an accepted starter, so no encoding required
+// 
+// - result location reference `@$`
+// 
+//   -> (6) single-@
+// 
+// - rule id number `#$`
+// 
+//   -> (3) single-#
+//   
+// - result stack index `##$`
+// 
+//   -> (4) double-#
+// 
+// - 'negative index' value references, e.g. `$-2`
+// 
+//   -> (8) single-negative-$
+//   
+// - 'negative index' location reference, e.g. `@-2`
+// 
+//   -> (7) single-negative-@
+//   
+// - 'negative index' stack indexes, e.g. `##-2`
+// 
+//   -> (5) double-negative-#
+// 
+// count the number of occurrences of ch in src:
+// 
+// function countOccurrences(ch, src) {
+//     let cnt = 0;
+//     let offset = 0;
+//     for (;;) {
+//         let pos = src.indexOf(ch, offset);
+//         if (pos === -1) {
+//             return cnt;
+//         }
+//         cnt++;
+//         offset = pos + 1;
+//     }
+// }
+function countOccurrences(ch,src){let i=ch.codePointAt(0);return hash[i]||0;}// pick an infrequent occurring character from the given `set`.
+// Preferrably has ZERO occurrences in the given `input`, but otherwise
+// deliver the one with the least number of occurrences.
+function pickChar(set,input){// strip out the spaces:
+set=set.replace(/\s+/g,'');assert__default['default'](set.length>=1);let lsidx=0;let lsfreq=Infinity;for(let i=0,l=set.length;i<l;i++){let ch=set[i];let freq=countOccurrences(ch);if(freq===0){return ch;}if(freq<lsfreq){lsfreq=freq;lsidx=i;}}return set[lsidx];}const escCharSet="ဩ ℹ இ ண ஐ Ϟ ല ઊ";// Currently we only need 7 rows of typeIdCharSets. The other rows are commented out but available for future use:
+const typeIdCharSets=["ᐁ  ᐂ  ᐃ  ᐄ  ᐅ  ᐆ  ᐇ  ᐈ  ᐉ  ᐊ  ᐋ  ᐌ  ᐍ  ᐎ  ᐏ  ᐐ  ᐑ  ᐒ  ᐓ  ᐔ  ᐕ  ᐖ  ᐗ  ᐘ  ᐙ  ᐚ  ᐛ  ᐫ  ᐬ  ᐭ  ᐮ",//"ᐯ  ᐰ  ᐱ  ᐲ  ᐳ  ᐴ  ᐵ  ᐶ  ᐷ  ᐸ  ᐹ  ᐺ  ᐻ  ᐼ  ᐽ  ᐾ  ᐿ  ᑀ  ᑁ  ᑂ  ᑃ  ᑄ  ᑅ  ᑆ  ᑇ  ᑈ",
+"ᑌ  ᑍ  ᑎ  ᑏ  ᑐ  ᑑ  ᑒ  ᑓ  ᑔ  ᑕ  ᑖ  ᑗ  ᑘ  ᑙ  ᑚ  ᑛ  ᑜ  ᑝ  ᑞ  ᑟ  ᑠ  ᑡ  ᑢ  ᑣ  ᑤ  ᑥ  ᑧ  ᑨ  ᑩ  ᑪ","ᑫ  ᑬ  ᑭ  ᑮ  ᑯ  ᑰ  ᑱ  ᑲ  ᑳ  ᑴ  ᑵ  ᑶ  ᑷ  ᑸ  ᑹ  ᑺ  ᑻ  ᑼ  ᑽ  ᑾ  ᑿ  ᒀ  ᒁ  ᒂ  ᒅ  ᒆ  ᒇ  ᒈ",//"ᒉ  ᒊ  ᒋ  ᒌ  ᒍ  ᒎ  ᒏ  ᒐ  ᒑ  ᒒ  ᒓ  ᒔ  ᒕ  ᒖ  ᒗ  ᒘ  ᒙ  ᒚ  ᒛ  ᒜ  ᒝ  ᒞ  ᒟ  ᒠ",
+//"ᒣ  ᒤ  ᒥ  ᒦ  ᒧ  ᒨ  ᒩ  ᒪ  ᒫ  ᒬ  ᒭ  ᒮ  ᒯ  ᒰ  ᒱ  ᒲ  ᒳ  ᒴ  ᒵ  ᒶ  ᒷ  ᒸ  ᒹ  ᒺ",
+//"ᓓ  ᓔ  ᓕ  ᓖ  ᓗ  ᓘ  ᓙ  ᓚ  ᓛ  ᓜ  ᓝ  ᓞ  ᓟ  ᓠ  ᓡ  ᓢ  ᓣ  ᓤ  ᓥ  ᓦ  ᓧ  ᓨ  ᓩ",
+//"ᓭ  ᓮ  ᓯ  ᓰ  ᓱ  ᓲ  ᓳ  ᓴ  ᓵ  ᓶ  ᓷ  ᓸ  ᓹ  ᓺ  ᓻ  ᓼ  ᓽ  ᓾ  ᓿ  ᔀ  ᔁ  ᔂ  ᔃ  ᔄ",
+//"ᔐ  ᔑ  ᔒ  ᔓ  ᔔ  ᔕ  ᔖ  ᔗ  ᔘ  ᔙ  ᔚ  ᔛ  ᔜ  ᔝ  ᔞ  ᔟ  ᔠ  ᔡ  ᔢ  ᔣ  ᔤ",
+"ᔦ  ᔧ  ᔨ  ᔩ  ᔪ  ᔫ  ᔬ  ᔭ  ᔮ  ᔯ  ᔰ  ᔱ  ᔲ  ᔳ  ᔴ  ᔵ  ᔶ  ᔷ  ᔸ  ᔹ  ᔺ  ᔻ  ᔼ  ᔽ",//"ᓀ  ᓁ  ᓂ  ᓃ  ᓄ  ᓅ  ᓆ  ᓇ  ᓈ  ᓉ  ᓊ  ᓋ  ᓌ  ᓍ  ᓎ  ᓏ",
+//"ᕂ  ᕃ  ᕄ  ᕅ  ᕆ  ᕇ  ᕈ  ᕉ  ᕊ  ᕋ  ᕌ  ᕍ  ᕎ  ᕏ",
+//"ᕞ  ᕟ  ᕠ  ᕡ  ᕢ  ᕣ  ᕤ  ᕥ  ᕦ  ᕧ  ᕨ  ᕩ",
+//"ᖸ  ᖹ  ᖺ  ᖻ  ᖼ  ᖽ  ᖾ  ᖿ  ᗀ  ᗁ  ᗂ  ᗃ",
+"ᗜ  ᗝ  ᗞ  ᗟ  ᗠ  ᗡ  ᗢ  ᗣ  ᗤ  ᗥ  ᗦ  ᗧ  ᗨ  ᗩ  ᗪ  ᗫ  ᗬ  ᗭ",//"ᗯ  ᗰ  ᗱ  ᗲ  ᗳ  ᗴ  ᗵ  ᗶ  ᗷ  ᗸ  ᗹ  ᗺ  ᗻ  ᗼ  ᗽ  ᗾ  ᗿ  ᘀ",
+"ᘔ  ᘕ  ᘖ  ᘗ  ᘘ  ᘙ  ᘚ  ᘛ  ᘜ  ᘝ  ᘞ  ᘟ  ᘠ  ᘡ",//"ᘢ  ᘣ  ᘤ  ᘥ  ᘦ  ᘧ  ᘨ  ᘩ  ᘪ  ᘫ  ᘬ  ᘭ  ᘴ  ᘵ  ᘶ  ᘷ  ᘸ  ᘹ",
+//"ᕓ  ᕔ  ᕕ  ᕖ  ᕗ  ᕘ  ᕙ  ᕚ  ᕛ  ᕜ",
+"ᗄ  ᗅ  ᗆ  ᗇ  ᗈ  ᗉ  ᗊ  ᗋ  ᗌ  ᗍ  ᗎ  ᗏ  ᗐ  ᗑ  ᗒ  ᗓ  ᗔ  ᗕ  ᗖ  ᗗ  ᗘ  ᗙ  ᗚ  ᗛ"];//const I = 'ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ';   // 1..12, but accepted as IdentifierStart in JavaScript :-) 
+// Probable speed improvement: scan a single time through the (probably large) input source,
+// looking for all characters in parallel, instead of scanning N times through there:
+// construct a regex to dig out all potential occurrences and take it from there.
+let reStr=escCharSet+typeIdCharSets.join("");reStr=reStr.replace(/\s+/g,'');const re=new RegExp(`[${reStr}]`,'g');var hash=new Array(0xD800);let m;while((m=re.exec(input))!==null){let i=m[0].codePointAt();hash[i]=(hash[i]||0)+1;}//
+// The basic shapes are:
+// 
+// - 1401-141B:  ᐁ             1
+// - 142F-1448:  ᐯ             2
+// - 144C-1465:  ᑌ             3
+// - 146B-1482:  ᑫ             4
+// - 1489-14A0:  ᒉ             5  
+// - 14A3-14BA:  ᒣ             6 
+// - 14C0-14CF:  ᓀ             
+// - 14D3-14E9:  ᓓ             7
+// - 14ED-1504:  ᓭ             8
+// - 1510-1524:  ᔐ             9
+// - 1526-153D:  ᔦ 
+// - 1542-154F:  ᕂ
+// - 1553-155C:  ᕓ
+// - 155E-1569:  ᕞ
+// - 15B8-15C3:  ᖸ
+// - 15DC-15ED:  ᗜ            10
+// - 15F5-1600:  ᗵ
+// - 1614-1621:  ᘔ
+// - 1622-162D:  ᘢ
+//
+// ## JISON identifier formats ##
+// 
+// - direct symbol references, e.g. `#NUMBER#` when there's a `%token NUMBER` for your grammar.
+//   These represent the token ID number.
+//   
+//   -> (1+2) start-# + end-#
+//   
+// - alias/token value references, e.g. `$token`, `$2`
+// 
+//   -> $ is an accepted starter, so no encoding required
+// 
+// - alias/token location reference, e.g. `@token`, `@2`
+// 
+//   -> (6) single-@
+// 
+// - alias/token id numbers, e.g. `#token`, `#2`
+// 
+//   -> (3) single-#
+// 
+// - alias/token stack indexes, e.g. `##token`, `##2`
+// 
+//   -> (4) double-#
+// 
+// - result value reference `$$`
+// 
+//   -> $ is an accepted starter, so no encoding required
+// 
+// - result location reference `@$`
+// 
+//   -> (6) single-@
+// 
+// - rule id number `#$`
+// 
+//   -> (3) single-#
+//   
+// - result stack index `##$`
+// 
+//   -> (4) double-#
+// 
+// - 'negative index' value references, e.g. `$-2`
+// 
+//   -> (8) single-negative-$
+//   
+// - 'negative index' location reference, e.g. `@-2`
+// 
+//   -> (7) single-negative-@
+//   
+// - 'negative index' stack indexes, e.g. `##-2`
+// 
+//   -> (5) double-negative-#
+// 
+const escChar=pickChar(escCharSet);let typeIdChar=[];for(let i=0,l=typeIdCharSets.length;i<l;i++){typeIdChar[i]=pickChar(typeIdCharSets[i]);}// produce a function set for encoding and decoding content, 
+// plus the basic strings to build regexes for matching the various jison
+// identifier types:
+return{// - direct symbol references, e.g. `#NUMBER#` when there's a `%token NUMBER` for your grammar.
+//   These represent the token ID number.
+//   
+//   -> (1) start-#
+tokenDirectIdentifierStart:escChar+typeIdChar[0],tokenDirectIdentifierRe:new XRegExp__default['default'](`#(${ID_REGEX_BASE})#`,'g'),// - alias/token value references, e.g. `$token`, `$2`
+// 
+//   -> $ is an accepted starter, so no encoding required
+// - result value reference `$$`
+// 
+//   -> $ is an accepted starter, so no encoding required
+tokenValueReferenceStart:'$',tokenValueReferenceRe:new XRegExp__default['default'](`$(${ID_REGEX_BASE})|$([0-9]+)`,'g'),// - alias/token location reference, e.g. `@token`, `@2`
+// 
+//   -> (6) single-@
+// - result location reference `@$`
+// 
+//   -> (6) single-@
+tokenLocationStart:escChar+typeIdChar[1],tokenLocationRe:new XRegExp__default['default'](`@(${ID_REGEX_BASE})|@([0-9]+)`,'g'),// - alias/token id numbers, e.g. `#token`, `#2`
+// 
+//   -> (3) single-#
+// - rule id number `#$`
+// 
+//   -> (3) single-#
+tokenIdentifierStart:escChar+typeIdChar[2],tokenIdentifierRe:new XRegExp__default['default'](`#(${ID_REGEX_BASE})|#([0-9]+)`,'g'),// - alias/token stack indexes, e.g. `##token`, `##2`
+// 
+//   -> (4) double-#
+// - result stack index `##$`
+// 
+//   -> (4) double-#
+tokenStackIndexStart:escChar+typeIdChar[3],tokenStackIndexRe:new XRegExp__default['default'](`##(${ID_REGEX_BASE})|##([0-9]+)`,'g'),// - 'negative index' value references, e.g. `$-2`
+// 
+//   -> (8) single-negative-$
+tokenNegativeValueReferenceStart:escChar+typeIdChar[4],tokenValueReferenceRe:new XRegExp__default['default'](`$-([0-9]+)`,'g'),// - 'negative index' location reference, e.g. `@-2`
+// 
+//   -> (7) single-negative-@
+tokenNegativeLocationStart:escChar+typeIdChar[5],tokenNegativeLocationRe:new XRegExp__default['default'](`@-([0-9]+)`,'g'),// - 'negative index' stack indexes, e.g. `##-2`
+// 
+//   -> (5) double-negative-#
+tokenNegativeStackIndexStart:escChar+typeIdChar[6],tokenNegativeStackIndexRe:new XRegExp__default['default'](`#-([0-9]+)`,'g'),// combined regex for encoding direction
+tokenDetect4EncodeRe:new XRegExp__default['default'](`([^$@#${IN_ID_CHARSET}])([$@#]|##)(${ID_REGEX_BASE}|[$]|-?[0-9]+)(#?)(?![$@#${IN_ID_CHARSET}])`,'g'),// combined regex for decoding direction
+tokenDetect4DecodeRe:new XRegExp__default['default'](`([^$${IN_ID_CHARSET}])(${escChar}[${typeIdChar.slice(0,7).join('')}])(${ID_REGEX_BASE}|[$]|[0-9]+)(?![$@#${IN_ID_CHARSET}])`,'g'),encode:function encodeJisonTokens(src,locationOffsetSpec){let re=this.tokenDetect4EncodeRe;// reset regex
+re.lastIndex=0;// patch `src` for the lookbehind emulation in the main regex used:
+src=' '+src;// Perform the encoding, one token at a time via callback function.
+// 
+// Note: all erroneous inputs are IGNORED as those MAY be part of a string
+// or comment, where they are perfectly legal.
+// This is a tad sub-optimal as we won't be able to report errors early 
+// but otherwise we would be rejecting some potentially *legal* action code
+// and we DO NOT want to be pedantically strict while we are unable to parse
+// the input very precisely yet.
+src=src.replace(re,(m,p1,p2,p3,p4,offset)=>{// p1 is only serving as lookbehind emulation
+switch(p2){case'$':// no encoding required UNLESS it's a negative index; p4 MUST be empty
+if(p4!==''){if(locationOffsetSpec){locationOffsetSpec.reportLocation(`syntax error: ${p2+p3} cannot be followed by ${p4}`,src,offset+p1.length+p2.length+p3.length);}return p1+p2+p3+p4;}if(p3[0]==='-'){return p1+this.tokenNegativeValueReferenceStart+p3.substring(1);}return p1+p2+p3;case'##':// p4 MUST be empty
+if(p4!==''){if(locationOffsetSpec){locationOffsetSpec.reportLocation(`syntax error: ${p2+p3} cannot be followed by ${p4}`,src,offset+p1.length+p2.length+p3.length);}return p1+p2+p3+p4;}if(p3[0]==='-'){return p1+this.tokenNegativeStackIndexStart+p3.substring(1);}return p1+this.tokenStackIndexStart+p3;case'@':// p4 MUST be empty
+if(p4!==''){if(locationOffsetSpec){locationOffsetSpec.reportLocation(`syntax error: ${p2+p3} cannot be followed by ${p4}`,src,offset+p1.length+p2.length+p3.length);}return p1+p2+p3+p4;}if(p3[0]==='-'){return p1+this.tokenNegativeLocationStart+p3.substring(1);}return p1+this.tokenLocationStart+p3;case'#':// p4 MAY be non-empty; p3 CANNOT be a negative value or token ID
+if(p3[0]==='-'){if(locationOffsetSpec){locationOffsetSpec.reportLocation(`syntax error: ${p2+p3+p4} is an illegal negative reference type`,src,offset+p1.length+p2.length);}return p1+p2+p3+p4;}if(p4!==''){return p1+this.tokenDirectIdentifierStart+p3;}return p1+this.tokenIdentifierStart+p3;// no default case needed as all possible matches are handled in the cases above.
+}});// and remove the added prefix which was used for lookbehind emulation:
+return src.substring(1);},decode:function decodeJisonTokens(src,locationOffsetSpec){let re=this.tokenDetect4DecodeRe;// reset regex
+re.lastIndex=0;// patch `src` for the lookbehind emulation in the main regex used:
+src=' '+src;// Perform the encoding, one token at a time via callback function.
+// 
+// Note: all erroneous inputs are IGNORED as those MAY be part of a string
+// or comment, where they are perfectly legal.
+// This is a tad sub-optimal as we won't be able to report errors early 
+// but otherwise we would be rejecting some potentially *legal* action code
+// and we DO NOT want to be pedantically strict while we are unable to parse
+// the input very precisely yet.
+src=src.replace(re,(m,p1,p2,p3,offset)=>{// p1 is only serving as lookbehind emulation
+switch(p2){case this.tokenNegativeValueReferenceStart:return p1+"$-"+p3;case this.tokenNegativeStackIndexStart:return p1+"##-"+p3;case this.tokenStackIndexStart:return p1+"##"+p3;case this.tokenNegativeLocationStart:return p1+"@-"+p3;case this.tokenLocationStart:return p1+"@"+p3;case this.tokenDirectIdentifierStart:// p3 CANNOT be a negative value or token ID
+if(p3[0]==='-'){if(locationOffsetSpec){locationOffsetSpec.reportLocation(`syntax error: ${p2+p3+p4} is an illegal negative reference type`,src,offset+p1.length+p2.length);}return p1+p2+p3;}return p1+'#'+p3+'#';case this.tokenIdentifierStart:// p3 CANNOT be a negative value or token ID
+if(p3[0]==='-'){if(locationOffsetSpec){locationOffsetSpec.reportLocation(`syntax error: ${p2+p3+p4} is an illegal negative reference type`,src,offset+p1.length+p2.length);}return p1+p2+p3;}return p1+'#'+p3;default:if(locationOffsetSpec){locationOffsetSpec.reportLocation(`syntax error: unexpected jison token sentinel escape ${p2} at ${p2+p3}`,src,offset+p1.length);}return p1+p2+p3;}});// and remove the added prefix which was used for lookbehind emulation:
+return src.substring(1);}};}function parseCodeChunkToAST(src,options){src=src.replace(/@/g,'\uFFDA').replace(/#/g,'\uFFDB');var ast=recast__default['default'].parse(src);return ast;}function compileCodeToES5(src,options){options=Object.assign({},{ast:true,code:true,sourceMaps:true,comments:true,filename:'compileCodeToES5.js',sourceFileName:'compileCodeToES5.js',sourceRoot:'.',sourceType:'module',babelrc:false,ignore:["node_modules/**/*.js"],compact:false,retainLines:false,presets:[["@babel/preset-env",{targets:{browsers:["last 2 versions"],node:"8.0"}}]]},options);return babel.transformSync(src,options);// => { code, map, ast }
+}function prettyPrintAST(ast,options){var options=options||{};const defaultOptions={tabWidth:2,quote:'single',arrowParensAlways:true,// Do not reuse whitespace (or anything else, for that matter)
 // when printing generically.
-reuseWhitespace:false};for(var key in defaultOptions){if(options[key]===undefined){options[key]=defaultOptions[key];}}var s=recast__default['default'].prettyPrint(ast,{tabWidth:2,quote:'single',arrowParensAlways:true,// Do not reuse whitespace (or anything else, for that matter)
-// when printing generically.
-reuseWhitespace:false});new_src=s.code;new_src=new_src.replace(/\r\n|\n|\r/g,'\n')// platform dependent EOL fixup
+reuseWhitespace:false};for(var key in defaultOptions){if(options[key]===undefined){options[key]=defaultOptions[key];}}let s=recast__default['default'].prettyPrint(ast,defaultOptions);let new_src=s.code;new_src=new_src.replace(/\r\n|\n|\r/g,'\n')// platform dependent EOL fixup
 // backpatch possible jison variables extant in the prettified code:
 .replace(/\uFFDA/g,'@').replace(/\uFFDB/g,'#');return new_src;}// validate the given JISON+JavaScript snippet: does it compile?
 // 
 // Return either the parsed AST (object) or an error message (string). 
-function checkActionBlock(src,yylloc){// make sure reasonable line numbers, etc. are reported in any
+function checkActionBlock(src,yylloc,options){// make sure reasonable line numbers, etc. are reported in any
 // potential parse errors by pushing the source code down:
-if(yylloc&&yylloc.first_line>0){var cnt=yylloc.first_line;var lines=new Array(cnt);src=lines.join('\n')+src;}if(!src.trim()){return false;}try{var rv=parseCodeChunkToAST(src);return false;}catch(ex){return ex.message||"code snippet cannot be parsed";}}// The rough-and-ready preprocessor for any action code block:
+if(yylloc&&yylloc.first_line>0){var cnt=yylloc.first_line;var lines=new Array(cnt);src=lines.join('\n')+src;}if(!src.trim()){return false;}try{var rv=parseCodeChunkToAST(src,options);return false;}catch(ex){return ex.message||"code snippet cannot be parsed";}}// The rough-and-ready preprocessor for any action code block:
 // this one trims off any surplus whitespace and removes any
 // trailing semicolons and/or wrapping `{...}` braces,
 // when such is easily possible *without having to actually
@@ -164,7 +495,7 @@ if(startMarker==='{'){// code is wrapped in `{...}` for sure: remove the wrappin
 s=s.replace(/^\{([^]*?)\}$/,'$1').trim();}else{// code may not be wrapped or otherwise non-simple: only remove
 // wrapping braces when we can guarantee they're the only ones there,
 // i.e. only exist as outer wrapping.
-s=s.replace(/^\{([^}]*)\}$/,'$1').trim();}s=s.replace(/;+$/,'').trim();return s;}var parse2AST={parseCodeChunkToAST,compileCodeToES5,prettyPrintAST,checkActionBlock,trimActionCode};function chkBugger$1(src){src=String(src);if(src.match(/\bcov_\w+/)){console.error('### ISTANBUL COVERAGE CODE DETECTED ###\n',src);}}/// HELPER FUNCTION: print the function in source code form, properly indented.
+s=s.replace(/^\{([^}]*)\}$/,'$1').trim();}s=s.replace(/;+$/,'').trim();return s;}var parse2AST={generateMapper4JisonGrammarIdentifiers,parseCodeChunkToAST,compileCodeToES5,prettyPrintAST,checkActionBlock,trimActionCode,ID_REGEX_BASE,IN_ID_CHARSET};function chkBugger$1(src){src=String(src);if(src.match(/\bcov_\w+/)){console.error('### ISTANBUL COVERAGE CODE DETECTED ###\n',src);}}/// HELPER FUNCTION: print the function in source code form, properly indented.
 /** @public */function printFunctionSourceCode(f){var src=String(f);chkBugger$1(src);return src;}const funcRe=/^function[\s\r\n]*[^\(]*\(([^\)]*)\)[\s\r\n]*\{([^]*?)\}$/;const arrowFuncRe=/^(?:(?:\(([^\)]*)\))|(?:([^\(\)]+)))[\s\r\n]*=>[\s\r\n]*(?:(?:\{([^]*?)\})|(?:(([^\s\r\n\{)])[^]*?)))$/;/// HELPER FUNCTION: print the function **content** in source code form, properly indented,
 /// ergo: produce the code for inlining the function.
 /// 
@@ -246,7 +577,7 @@ e=shallow_copy_and_strip_depth(e,cyclerefpath[idx]);}else{idx=linkref.indexOf(e)
 // it will be fed to a test log or other output.
 // 
 // Internal use in the unit test rigs.
-function trimErrorForTestReporting(e){cycleref.length=0;cyclerefpath.length=0;linkref.length=0;linkrefpath.length=0;path=['*'];if(e){e=treat_object(e);}cycleref.length=0;cyclerefpath.length=0;linkref.length=0;linkrefpath.length=0;path=['*'];return e;}var helpers={rmCommonWS,camelCase,mkIdentifier,isLegalIdentifierInput,scanRegExp,dquote,trimErrorForTestReporting,checkRegExp:reHelpers.checkRegExp,getRegExpInfo:reHelpers.getRegExpInfo,exec:code_exec.exec,dump:code_exec.dump,parseCodeChunkToAST:parse2AST.parseCodeChunkToAST,compileCodeToES5:parse2AST.compileCodeToES5,prettyPrintAST:parse2AST.prettyPrintAST,checkActionBlock:parse2AST.checkActionBlock,trimActionCode:parse2AST.trimActionCode,printFunctionSourceCode:stringifier.printFunctionSourceCode,printFunctionSourceCodeContainer:stringifier.printFunctionSourceCodeContainer,detectIstanbulGlobal};// See also:
+function trimErrorForTestReporting(e){cycleref.length=0;cyclerefpath.length=0;linkref.length=0;linkrefpath.length=0;path=['*'];if(e){e=treat_object(e);}cycleref.length=0;cyclerefpath.length=0;linkref.length=0;linkrefpath.length=0;path=['*'];return e;}var helpers={rmCommonWS,camelCase,mkIdentifier,isLegalIdentifierInput,scanRegExp,dquote,trimErrorForTestReporting,checkRegExp:reHelpers.checkRegExp,getRegExpInfo:reHelpers.getRegExpInfo,exec:code_exec.exec,dump:code_exec.dump,generateMapper4JisonGrammarIdentifiers:parse2AST.generateMapper4JisonGrammarIdentifiers,parseCodeChunkToAST:parse2AST.parseCodeChunkToAST,compileCodeToES5:parse2AST.compileCodeToES5,prettyPrintAST:parse2AST.prettyPrintAST,checkActionBlock:parse2AST.checkActionBlock,trimActionCode:parse2AST.trimActionCode,ID_REGEX_BASE:parse2AST.ID_REGEX_BASE,IN_ID_CHARSET:parse2AST.IN_ID_CHARSET,printFunctionSourceCode:stringifier.printFunctionSourceCode,printFunctionSourceCodeContainer:stringifier.printFunctionSourceCodeContainer,detectIstanbulGlobal};// See also:
 // http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508
 // but we keep the prototype.constructor and prototype.name assignment lines too for compatibility
 // with userland code which might access the derived class in a 'classic' way.
@@ -2790,7 +3121,7 @@ function chkBugger$2(src){src=''+src;if(src.match(/\bcov_\w+/)){console.error('#
 const CHR_RE$1=setmgmt.CHR_RE;const SET_PART_RE$1=setmgmt.SET_PART_RE;const NOTHING_SPECIAL_RE$1=setmgmt.NOTHING_SPECIAL_RE;const UNICODE_BASE_PLANE_MAX_CP$1=setmgmt.UNICODE_BASE_PLANE_MAX_CP;// WARNING: this regex MUST match the regex for `ID` in ebnf-parser::bnf.l jison language lexer spec! (`ID = [{ALPHA}]{ALNUM}*`)
 //
 // This is the base XRegExp ID regex used in many places; this should match the ID macro definition in the EBNF/BNF parser et al as well!
-const ID_REGEX_BASE='[\\p{Alphabetic}_][\\p{Alphabetic}_\\p{Number}]*';// see also ./lib/cli.js
+const ID_REGEX_BASE$1='[\\p{Alphabetic}_][\\p{Alphabetic}_\\p{Number}]*';// see also ./lib/cli.js
 /**
     @public
     @nocollapse
@@ -4341,6 +4672,13 @@ return`{
 
         //this._clear_state = 0;
 
+        if (!this._more) {
+            if (!this._clear_state) {
+                this._clear_state = 1;
+            }
+            this.clear();
+        }
+
         // allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:
         if (typeof this.pre_lex === 'function') {
             r = this.pre_lex.call(this, 0);
@@ -4371,29 +4709,33 @@ return`{
             r = this.post_lex.call(this, r) || r;
         }
 
-        // 1) make sure any outside interference is detected ASAP: 
-        //    these attributes are to be treated as 'const' values
-        //    once the lexer has produced them with the token (return value \`r\`).
-        // 2) make sure any subsequent \`lex()\` API invocation CANNOT
-        //    edit the \`yytext\`, etc. token attributes for the *current*
-        //    token, i.e. provide a degree of 'closure safety' so that
-        //    code like this:
-        //    
-        //        t1 = lexer.lex();
-        //        v = lexer.yytext;
-        //        l = lexer.yylloc;
-        //        t2 = lexer.lex();
-        //        assert(lexer.yytext !== v);
-        //        assert(lexer.yylloc !== l);
-        //        
-        //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
-        //    these conditions.
-        this.yytext = Object.freeze(this.yytext);
-        this.matches = Object.freeze(this.matches);
-        //this.yylloc.range = Object.freeze(this.yylloc.range);
-        this.yylloc = Object.freeze(this.yylloc);
+        if (!this._more) {
+            //
+            // 1) make sure any outside interference is detected ASAP: 
+            //    these attributes are to be treated as 'const' values
+            //    once the lexer has produced them with the token (return value \`r\`).
+            // 2) make sure any subsequent \`lex()\` API invocation CANNOT
+            //    edit the \`yytext\`, etc. token attributes for the *current*
+            //    token, i.e. provide a degree of 'closure safety' so that
+            //    code like this:
+            //    
+            //        t1 = lexer.lex();
+            //        v = lexer.yytext;
+            //        l = lexer.yylloc;
+            //        t2 = lexer.lex();
+            //        assert(lexer.yytext !== v);
+            //        assert(lexer.yylloc !== l);
+            //        
+            //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+            //    these conditions.
+            //    
+            this.yytext = Object.freeze(this.yytext);
+            this.matches = Object.freeze(this.matches);
+            this.yylloc.range = Object.freeze(this.yylloc.range);
+            this.yylloc = Object.freeze(this.yylloc);
 
-        this._clear_state = 0;
+            this._clear_state = 0;
+        }
 
         return r;
     },
@@ -4416,30 +4758,34 @@ return`{
             r = this.next();
         }
 
-        // 1) make sure any outside interference is detected ASAP: 
-        //    these attributes are to be treated as 'const' values
-        //    once the lexer has produced them with the token (return value \`r\`).
-        // 2) make sure any subsequent \`lex()\` API invocation CANNOT
-        //    edit the \`yytext\`, etc. token attributes for the *current*
-        //    token, i.e. provide a degree of 'closure safety' so that
-        //    code like this:
-        //    
-        //        t1 = lexer.lex();
-        //        v = lexer.yytext;
-        //        l = lexer.yylloc;
-        //        t2 = lexer.lex();
-        //        assert(lexer.yytext !== v);
-        //        assert(lexer.yylloc !== l);
-        //        
-        //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
-        //    these conditions.
-        this.yytext = Object.freeze(this.yytext);
-        this.matches = Object.freeze(this.matches);
-        //this.yylloc.range = Object.freeze(this.yylloc.range);
-        this.yylloc = Object.freeze(this.yylloc);
+        if (!this._more) {
+            //
+            // 1) make sure any outside interference is detected ASAP: 
+            //    these attributes are to be treated as 'const' values
+            //    once the lexer has produced them with the token (return value \`r\`).
+            // 2) make sure any subsequent \`lex()\` API invocation CANNOT
+            //    edit the \`yytext\`, etc. token attributes for the *current*
+            //    token, i.e. provide a degree of 'closure safety' so that
+            //    code like this:
+            //    
+            //        t1 = lexer.lex();
+            //        v = lexer.yytext;
+            //        l = lexer.yylloc;
+            //        t2 = lexer.lex();
+            //        assert(lexer.yytext !== v);
+            //        assert(lexer.yylloc !== l);
+            //        
+            //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+            //    these conditions.
+            //    
+            this.yytext = Object.freeze(this.yytext);
+            this.matches = Object.freeze(this.matches);
+            this.yylloc.range = Object.freeze(this.yylloc.range);
+            this.yylloc = Object.freeze(this.yylloc);
 
-        this._clear_state = 0;
-
+            this._clear_state = 0;
+        }
+        
         return r;
     },
 
@@ -4657,7 +5003,7 @@ opts.options=mkStdOptions(build_options,dict.options);opts.moduleType=opts.optio
 // a "custom lexer" has ZERO rules and must be defined entirely in
 // other code blocks:
 var code=dict.rules?buildActions(dict,tokens,opts):{};opts.performAction=code.actions;opts.caseHelperInclude=code.caseHelperInclude;opts.rules=code.rules||[];opts.macros=code.macros;opts.regular_rule_count=code.regular_rule_count;opts.simple_rule_count=code.simple_rule_count;opts.conditionStack=['INITIAL'];opts.actionInclude=dict.actionInclude||'';opts.moduleInclude=(opts.moduleInclude||'')+(dict.moduleInclude||'').trim();return opts;}// Assemble the final source from the processed grammar
-/**  @public */function generateFromOpts(opt){var code='';switch(opt.moduleType){case'js':code=generateModule(opt);break;case'amd':code=generateAMDModule(opt);break;case'es':code=generateESModule(opt);break;case'commonjs':default:code=generateCommonJSModule(opt);break;}return code;}function generateRegexesInitTableCode(opt){var a=opt.rules;var print_xregexp=opt.options&&opt.options.xregexp;var id_display_width=1+Math.log10(a.length|1)|0;var ws_prefix=new Array(id_display_width).join(' ');var b=a.map(function generateXRegExpInitCode(re,idx){var idx_str=(ws_prefix+idx).substr(-id_display_width);if(re instanceof XRegExp__default['default']){// When we don't need the special XRegExp sauce at run-time, we do with the original
+/**  @public */function generateFromOpts(opt){var code='';switch(opt.moduleType){case'js':code=generateModule(opt);break;case'amd':code=generateAMDModule(opt);break;case'es':code=generateESModule(opt);break;case'commonjs':code=generateCommonJSModule(opt);break;default:throw new Error('unsupported moduleType: '+opt.moduleType);}return code;}function generateRegexesInitTableCode(opt){var a=opt.rules;var print_xregexp=opt.options&&opt.options.xregexp;var id_display_width=1+Math.log10(a.length|1)|0;var ws_prefix=new Array(id_display_width).join(' ');var b=a.map(function generateXRegExpInitCode(re,idx){var idx_str=(ws_prefix+idx).substr(-id_display_width);if(re instanceof XRegExp__default['default']){// When we don't need the special XRegExp sauce at run-time, we do with the original
 // JavaScript RegExp instance a.k.a. 'native regex':
 if(re.xregexp.isNative||!print_xregexp){return`/* ${idx_str}: */  ${re}`;}// And make sure to escape the regex to make it suitable for placement inside a *string*
 // as it is passed as a string argument to the XRegExp constructor here.
@@ -4666,7 +5012,7 @@ function cleanupJSON(str){str=str.replace(/  "rules": \[/g,'  rules: [');str=str
 enableDebugLogs:1,json:1,_:1,noMain:1,dumpSourceCodeOnFailure:1,throwErrorOnCompileFailure:1,reportStats:1,file:1,outfile:1,inputPath:1,inputFilename:1,defaultModuleName:1,moduleName:1,moduleType:1,lexerErrorsAreRecoverable:0,flex:0,backtrack_lexer:0,caseInsensitive:0,showSource:1,exportAST:1,exportAllTables:1,exportSourceCode:1,prettyCfg:1,parseActionsUseYYLENG:1,parseActionsUseYYLINENO:1,parseActionsUseYYTEXT:1,parseActionsUseYYLOC:1,parseActionsUseParseError:1,parseActionsUseYYERROR:1,parseActionsUseYYRECOVERING:1,parseActionsUseYYERROK:1,parseActionsUseYYCLEARIN:1,parseActionsUseValueTracking:1,parseActionsUseValueAssignment:1,parseActionsUseLocationTracking:1,parseActionsUseLocationAssignment:1,parseActionsUseYYSTACK:1,parseActionsUseYYSSTACK:1,parseActionsUseYYSTACKPOINTER:1,parseActionsUseYYRULELENGTH:1,parseActionsUseYYMERGELOCATIONINFO:1,parserHasErrorRecovery:1,parserHasErrorReporting:1,lexerActionsUseYYLENG:1,lexerActionsUseYYLINENO:1,lexerActionsUseYYTEXT:1,lexerActionsUseYYLOC:1,lexerActionsUseParseError:1,lexerActionsUseYYERROR:1,lexerActionsUseLocationTracking:1,lexerActionsUseMore:1,lexerActionsUseUnput:1,lexerActionsUseReject:1,lexerActionsUseLess:1,lexerActionsUseDisplayAPIs:1,lexerActionsUseDescribeYYLOC:1};for(var k in opts){if(!do_not_pass[k]&&opts[k]!=null&&opts[k]!==false){// make sure numeric values are encoded as numeric, the rest as boolean/string.
 if(typeof opts[k]==='string'){var f=parseFloat(opts[k]);if(f==opts[k]){obj[k]=f;continue;}}obj[k]=opts[k];}}// And now some options which should receive some special processing:
 var pre=obj.pre_lex;var post=obj.post_lex;// since JSON cannot encode functions, we'll have to do it manually at run-time, i.e. later on:
-if(pre){obj.pre_lex=true;}if(post){obj.post_lex=true;}var js=JSON.stringify(obj,null,2);js=js.replace(new XRegExp__default['default'](`  "(${ID_REGEX_BASE})": `,'g'),'  $1: ');js=js.replace(/^( +)pre_lex: true(,)?$/gm,function(m,ls,tc){return ls+'pre_lex: '+String(pre)+(tc||'');});js=js.replace(/^( +)post_lex: true(,)?$/gm,function(m,ls,tc){return ls+'post_lex: '+String(post)+(tc||'');});return js;}var out;if(opt.rules.length>0||opt.__in_rules_failure_analysis_mode__){// we don't mind that the `test_me()` code above will have this `lexer` variable re-defined:
+if(pre){obj.pre_lex=true;}if(post){obj.post_lex=true;}var js=JSON.stringify(obj,null,2);js=js.replace(new XRegExp__default['default'](`  "(${ID_REGEX_BASE$1})": `,'g'),'  $1: ');js=js.replace(/^( +)pre_lex: true(,)?$/gm,function(m,ls,tc){return ls+'pre_lex: '+String(pre)+(tc||'');});js=js.replace(/^( +)post_lex: true(,)?$/gm,function(m,ls,tc){return ls+'post_lex: '+String(post)+(tc||'');});return js;}var out;if(opt.rules.length>0||opt.__in_rules_failure_analysis_mode__){// we don't mind that the `test_me()` code above will have this `lexer` variable re-defined:
 // JavaScript is fine with that.
 var code=[rmCommonWS$2`
             var lexer = {
@@ -4928,12 +5274,79 @@ return out;}function generateGenericHeaderComment(){var out=rmCommonWS$2`
      */
      `;return out;}function prepareOptions(opt){opt=opt||{};// check for illegal identifier
 if(!opt.moduleName||!opt.moduleName.match(/^[a-zA-Z_$][a-zA-Z0-9_$\.]*$/)){if(opt.moduleName){var msg='WARNING: The specified moduleName "'+opt.moduleName+'" is illegal (only characters [a-zA-Z0-9_$] and "." dot are accepted); using the default moduleName "lexer" instead.';if(typeof opt.warn_cb==='function'){opt.warn_cb(msg);}else{// do not treat as warning; barf hairball instead so that this oddity gets noticed right away!
-throw new Error(msg);}}opt.moduleName='lexer';}prepExportStructures(opt);return opt;}function generateModule(opt){opt=prepareOptions(opt);var out=[generateGenericHeaderComment(),'','var '+opt.moduleName+' = (function () {',jisonLexerErrorDefinition,'',generateModuleBody(opt),'',opt.moduleInclude?opt.moduleInclude+';':'','','return lexer;','})();'];var src=out.join('\n')+'\n';src=stripUnusedLexerCode(src,opt);opt.exportSourceCode.all=src;return src;}function generateAMDModule(opt){opt=prepareOptions(opt);var out=[generateGenericHeaderComment(),'','define([], function () {',jisonLexerErrorDefinition,'',generateModuleBody(opt),'',opt.moduleInclude?opt.moduleInclude+';':'','','return lexer;','});'];var src=out.join('\n')+'\n';src=stripUnusedLexerCode(src,opt);opt.exportSourceCode.all=src;return src;}function generateESModule(opt){opt=prepareOptions(opt);var out=[generateGenericHeaderComment(),'','var lexer = (function () {',jisonLexerErrorDefinition,'',generateModuleBody(opt),'',opt.moduleInclude?opt.moduleInclude+';':'','','return lexer;','})();','','function yylex() {','    return lexer.lex.apply(lexer, arguments);','}',rmCommonWS$2`
-            export {
-                lexer,
-                yylex as lex
+throw new Error(msg);}}opt.moduleName='lexer';}prepExportStructures(opt);return opt;}function generateModule(opt){opt=prepareOptions(opt);var modIncSrc=opt.moduleInclude?opt.moduleInclude+';':'';var src=rmCommonWS$2`
+        ${generateGenericHeaderComment()}
+
+        var ${opt.moduleName} = (function () {
+            "use strict";
+
+            ${jisonLexerErrorDefinition}
+
+            ${generateModuleBody(opt)}
+
+            ${modIncSrc}
+
+            return lexer;
+        })();
+    `;src=stripUnusedLexerCode(src,opt);opt.exportSourceCode.all=src;return src;}function generateAMDModule(opt){opt=prepareOptions(opt);var modIncSrc=opt.moduleInclude?opt.moduleInclude+';':'';var src=rmCommonWS$2`
+        ${generateGenericHeaderComment()}
+
+        define([], function () {
+            "use strict";
+
+            ${jisonLexerErrorDefinition}
+
+            ${generateModuleBody(opt)}
+
+            ${modIncSrc}
+
+            return lexer;
+        });
+    `;src=stripUnusedLexerCode(src,opt);opt.exportSourceCode.all=src;return src;}function generateESModule(opt){opt=prepareOptions(opt);var modIncSrc=opt.moduleInclude?opt.moduleInclude+';':'';var src=rmCommonWS$2`
+        ${generateGenericHeaderComment()}
+
+        var lexer = (function () {
+            "use strict";
+
+            ${jisonLexerErrorDefinition}
+
+            ${generateModuleBody(opt)}
+
+            ${modIncSrc}
+
+            return lexer;
+        })();
+
+        function yylex() {
+            return lexer.lex.apply(lexer, arguments);
+        }
+
+        export {
+            lexer,
+            yylex as lex
+        };
+    `;src=stripUnusedLexerCode(src,opt);opt.exportSourceCode.all=src;return src;}function generateCommonJSModule(opt){opt=prepareOptions(opt);var modIncSrc=opt.moduleInclude?opt.moduleInclude+';':'';var src=rmCommonWS$2`
+        ${generateGenericHeaderComment()}
+
+        var ${opt.moduleName} = (function () {
+            "use strict";
+
+            ${jisonLexerErrorDefinition}
+
+            ${generateModuleBody(opt)}
+
+            ${modIncSrc}
+
+            return lexer;
+        })();
+
+        if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
+            exports.lexer = ${opt.moduleName};
+            exports.lex = function () {
+                return ${opt.moduleName}.lex.apply(lexer, arguments);
             };
-        `];var src=out.join('\n')+'\n';src=stripUnusedLexerCode(src,opt);opt.exportSourceCode.all=src;return src;}function generateCommonJSModule(opt){opt=prepareOptions(opt);var out=[generateGenericHeaderComment(),'','var '+opt.moduleName+' = (function () {',jisonLexerErrorDefinition,'',generateModuleBody(opt),'',opt.moduleInclude?opt.moduleInclude+';':'','','return lexer;','})();','','if (typeof require !== \'undefined\' && typeof exports !== \'undefined\') {','  exports.lexer = '+opt.moduleName+';','  exports.lex = function () {','    return '+opt.moduleName+'.lex.apply(lexer, arguments);','  };','}'];var src=out.join('\n')+'\n';src=stripUnusedLexerCode(src,opt);opt.exportSourceCode.all=src;return src;}RegExpLexer.generate=generate;RegExpLexer.version=version;RegExpLexer.defaultJisonLexOptions=defaultJisonLexOptions;RegExpLexer.mkStdOptions=mkStdOptions;RegExpLexer.camelCase=helpers.camelCase;RegExpLexer.mkIdentifier=mkIdentifier$2;RegExpLexer.autodetectAndConvertToJSONformat=autodetectAndConvertToJSONformat;var mkIdentifier$3=helpers.mkIdentifier;var version$1='0.6.2-220';// require('./package.json').version;
+        }
+    `;src=stripUnusedLexerCode(src,opt);opt.exportSourceCode.all=src;return src;}RegExpLexer.generate=generate;RegExpLexer.version=version;RegExpLexer.defaultJisonLexOptions=defaultJisonLexOptions;RegExpLexer.mkStdOptions=mkStdOptions;RegExpLexer.camelCase=helpers.camelCase;RegExpLexer.mkIdentifier=mkIdentifier$2;RegExpLexer.autodetectAndConvertToJSONformat=autodetectAndConvertToJSONformat;var mkIdentifier$3=helpers.mkIdentifier;var version$1='0.6.2-220';// require('./package.json').version;
 function getCommandlineOptions(){var opts=nomnom__default['default'].script('jison-lex').unknownOptionTreatment(false)// do not accept unknown options!
 .options({file:{flag:true,position:0,help:'file containing a lexical grammar.'},json:{abbr:'j',flag:true,default:false,help:'jison will expect a grammar in either JSON/JSON5 or JISON format: the precise format is autodetected.'},outfile:{abbr:'o',metavar:'FILE',help:'Filepath and base module name of the generated parser. When terminated with a "/" (dir separator) it is treated as the destination directory where the generated output will be stored.'},debug:{abbr:'t',flag:true,default:false,help:'Debug mode.'},dumpSourceCodeOnFailure:{full:'dump-sourcecode-on-failure',flag:true,default:true,help:'Dump the generated source code to a special named file when the internal generator tests fail, i.e. when the generated source code does not compile in the JavaScript engine. Enabling this option helps you to diagnose/debug crashes (thrown exceptions) in the code generator due to various reasons: you can, for example, load the dumped sourcecode in another environment (e.g. NodeJS) to get more info on the precise location and cause of the compile failure.'},throwErrorOnCompileFailure:{full:'throw-on-compile-failure',flag:true,default:true,help:'Throw an exception when the generated source code fails to compile in the JavaScript engine. **WARNING**: Turning this feature OFF permits the code generator to produce non-working source code and treat that as SUCCESS. This MAY be desirable code generator behaviour, but only rarely.'},reportStats:{full:'info',abbr:'I',flag:true,default:false,help:'Report some statistics about the generated parser.'},moduleType:{full:'module-type',abbr:'m',default:'commonjs',metavar:'TYPE',choices:['commonjs','amd','js','es'],help:'The type of module to generate (commonjs, amd, es, js)'},moduleName:{full:'module-name',abbr:'n',metavar:'NAME',help:'The name of the generated parser object, namespace supported.'},main:{full:'main',abbr:'x',flag:true,default:false,help:'Include .main() entry point in generated commonjs module.'},moduleMain:{full:'module-main',abbr:'y',metavar:'NAME',help:'The main module function definition.'},version:{abbr:'V',flag:true,help:'Print version and exit.',callback:function(){console.log(version$1);process.exit(0);}}}).parse();if(opts.debug){console.log("JISON-LEX CLI options:\n",opts);}return opts;}function cliMain(opts){opts=RegExpLexer.mkStdOptions(opts);function isDirectory(fp){try{return fs__default['default'].lstatSync(fp).isDirectory();}catch(e){return false;}}function mkdirp(fp){if(!fp||fp==='.'||fp.length===0){return false;}try{fs__default['default'].mkdirSync(fp);return true;}catch(e){if(e.code==='ENOENT'){var parent=path__default['default'].dirname(fp);// Did we hit the root directory by now? If so, abort!
 // Else, create the parent; iff that fails, we fail too...

@@ -364,9 +364,6 @@ parser.main = function (args) {
 
 // End Of Include by Jison: includes/with-includes.main.js`,
   __in_rules_failure_analysis_mode__: false,
-  exportSourceCode: {
-    enabled: false,
-  },
   is_custom_lexer: true,
 }
 

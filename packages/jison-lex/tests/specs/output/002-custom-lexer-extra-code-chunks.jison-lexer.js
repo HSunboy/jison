@@ -141,9 +141,6 @@ var YYSTATE = YY_START;
   }`,
   moduleInclude: '',
   __in_rules_failure_analysis_mode__: false,
-  exportSourceCode: {
-    enabled: false,
-  },
   is_custom_lexer: true,
 }
 
