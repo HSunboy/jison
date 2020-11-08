@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@gerhobbelt/lex-parser": "0.6.2-220",
-    "@gerhobbelt/xregexp": "3.2.0-22",
+    "@gerhobbelt/xregexp": "4.2.0-30",
     "jison-helpers-lib": "0.6.2-220"
   },
   "devDependencies": {

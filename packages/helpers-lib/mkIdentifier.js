@@ -19,7 +19,7 @@ export default function mkIdentifier(s) {
     .replace(/^[^\w_]/, '_')
     // do not accept numerics at the leading position, despite those matching regex `\w`:
     .replace(/^\d/, '_')
-    .replace(/[^\w\d_]+/g, '_')
+    .replace(/[^\w\d_]/g, '_')
     // and only accept multiple (double, not triple) underscores at start or end of identifier name:
     .replace(/^__+/, '#')
     .replace(/__+$/, '#')

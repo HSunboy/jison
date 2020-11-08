@@ -215,7 +215,10 @@ function transformProduction(id, production, grammar) {
             opts = handle[2];
             handle = handle[0];
         }
-        var expressions = parser.parse(handle);
+        var expressions = handle;
+        if (typeof expressions === 'string') {
+            expressions = parser.parse(handle);
+        }
 
         if (devDebug > 1) console.log('\n================\nEBNF transform expressions:\n ', handle, opts, JSON.stringify(expressions, null, 2));
 
@@ -388,11 +391,19 @@ function deepClone(from, sub) {
     }
     ref_list.push(from);
     ref_names.push(sub);
-    sub += '.';
 
-    var to = new from.constructor();
-    for (var name in from) {
-        to[name] = deepClone(from[name], sub + name);
+    if (from.constructor === Array) {
+        var to = from.slice();
+        for (var i = 0, len = to.length; i < len; i++) {
+            to[i] = deepClone(from[i], sub + '[' + i + ']');
+        }
+    } else {
+        sub += '.';
+
+        var to = new from.constructor();
+        for (var name in from) {
+            to[name] = deepClone(from[name], sub + name);
+        }
     }
     return to;
 }

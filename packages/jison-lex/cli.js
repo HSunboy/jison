@@ -104,10 +104,8 @@ function getCommandlineOptions() {
     return opts;
 }
 
-var cli = module.exports;
 
-cli.main = function cliMain(opts) {
-    'use strict';
+function cliMain(opts) {
 
     opts = RegExpLexer.mkStdOptions(opts);
 
@@ -228,16 +226,25 @@ cli.main = function cliMain(opts) {
     } else {
         processStdin();
     }
-};
+}
 
-cli.generateLexerString = function generateLexerString(lexerSpec, opts) {
+
+function generateLexerString(lexerSpec, opts) {
     'use strict';
 
     // var settings = RegExpLexer.mkStdOptions(opts);
     var predefined_tokens = null;
 
     return RegExpLexer.generate(lexerSpec, predefined_tokens, opts);
+}
+
+var cli = {
+    main: cliMain,
+    generateLexerString: generateLexerString
 };
+
+
+export default cli;
 
 
 if (require.main === module) {
