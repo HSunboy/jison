@@ -1,3 +1,5 @@
+var fs = require('fs');
+var XRegExp = require('@gerhobbelt/xregexp');
 var assert = require("chai").assert;
 // NodeJS doesn't support ES2015 import statements yet, so we must use the compiled/rollup-ed version instead:
 var helpers = require('../dist/helpers-lib-cjs-es5');
@@ -79,6 +81,53 @@ describe("helpers API", function () {
       '\n' +
       '  Erroneous area:\n' +
       'PRETTY RANGE');
+  });
+
+  it ("rmCommonWS: applied to zero-indent initial line input string (bug regression check)", function () {
+    var rmCommonWS = helpers.rmCommonWS;
+
+    // the key part of the next chunk is the ZERO INDENT of the yyerror... line!
+    assert.strictEqual(rmCommonWS`
+yyerror(rmCommonWS\`
+            There's probably an error in one or more of your lexer regex rules.
+            The lexer rule spec should have this structure:
+
+                    regex  action_code
+
+            where 'regex' is a lex-style regex expression (see the
+            jison and jison-lex documentation) which is intended to match a chunk
+            of the input to lex, while the 'action_code' block is the JS code
+            which will be invoked when the regex is matched. The 'action_code' block
+            may be any (indented!) set of JS statements, optionally surrounded
+            by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
+
+              Erroneous code:
+            $\{yylexer.prettyPrintRange(ဩerror)}
+
+              Technical error report:
+            $\{$error.errStr}
+        \`);
+    `, '\n' + `
+yyerror(rmCommonWS\`
+            There's probably an error in one or more of your lexer regex rules.
+            The lexer rule spec should have this structure:
+
+                    regex  action_code
+
+            where 'regex' is a lex-style regex expression (see the
+            jison and jison-lex documentation) which is intended to match a chunk
+            of the input to lex, while the 'action_code' block is the JS code
+            which will be invoked when the regex is matched. The 'action_code' block
+            may be any (indented!) set of JS statements, optionally surrounded
+            by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
+
+              Erroneous code:
+            $\{yylexer.prettyPrintRange(ဩerror)}
+
+              Technical error report:
+            $\{$error.errStr}
+        \`);
+    `.trim() + '\n');
   });
 
   it("detectIstanbulGlobal", function () {
@@ -202,15 +251,157 @@ describe("helpers API", function () {
     } 
   });
 
+  // remove all whitespace from input string `src`
+  function rmAllWS(src) {
+    return src.replace(/\s+/g, '');
+  }
+
+  it("generateMapper4JisonGrammarIdentifiers(input) picks a reasonable set of escapes to use", () => {
+    let source = fs.readFileSync(__dirname + '/../../ebnf-parser/bnf.y');
+    let g = helpers.generateMapper4JisonGrammarIdentifiers(source);
+
+    function matchIdRegexBase(re) {
+      //let ist = re.toString();
+      //console.error('RE:', ist);
+      //return /^\/#\(.+\)#\/g$/.test(ist);
+      return re instanceof XRegExp;
+    }
+
+    function matchGeneralIdRe(re) {
+      //let ist = re.toString();
+      //return /^\/#\(.+?\)#\/g$/.test(ist);
+      return re instanceof XRegExp;
+    }
+
+    assert.ok(g);
+    assert.equal(typeof g, 'object');
+    assert.equal(typeof g.decode, 'function');
+    assert.equal(typeof g.encode, 'function');
+    assert.deepEqual(g.tokenDirectIdentifierStart, 'ဩᐁ');
+    assert.ok(matchIdRegexBase(g.tokenDirectIdentifierRe));
+    assert.deepEqual(g.tokenValueReferenceStart, '$');
+    assert.ok(matchIdRegexBase(g.tokenValueReferenceRe));
+    assert.deepEqual(g.tokenLocationStart, 'ဩᑌ');
+    assert.ok(matchIdRegexBase(g.tokenLocationRe));
+    assert.deepEqual(g.tokenIdentifierStart, 'ဩᑫ');
+    assert.ok(matchIdRegexBase(g.tokenIdentifierRe));
+    assert.deepEqual(g.tokenStackIndexStart, 'ဩᔦ');
+    assert.ok(matchIdRegexBase(g.tokenStackIndexRe));
+    assert.deepEqual(g.tokenNegativeValueReferenceStart, 'ဩᗜ');
+    assert.ok(matchIdRegexBase(g.tokenValueReferenceRe));
+    assert.deepEqual(g.tokenNegativeLocationStart, 'ဩᘔ');
+    assert.ok(matchIdRegexBase(g.tokenNegativeLocationRe));
+    assert.deepEqual(g.tokenNegativeStackIndexStart, 'ဩᗄ');
+    assert.ok(matchIdRegexBase(g.tokenNegativeStackIndexRe));
+    assert.ok(matchGeneralIdRe(g.tokenDetect4EncodeRe));
+    assert.ok(matchGeneralIdRe(g.tokenDetect4DecodeRe));
+  });
+
+  it("generateMapper4JisonGrammarIdentifiers(input) picks a reasonable set of escapes to use when confronted with Unicode collisions in the input", () => {
+    let source = fs.readFileSync(__dirname + '/../../ebnf-parser/bnf.y', 'utf8');
+
+    source = source
+    .replace(/@/g, rmAllWS('ဩ ℹ ᐁ ᐯ ᑌ ᑍ ᑎ ᑏ ᔦ ᔧ ᔨ ᔩ ᔪ ᔫ ᔬ ᔭ ᔮ'))
+    .replace(/$$/g, rmAllWS('ℹ'))
+    .replace(/$/g, rmAllWS('இ ண ஐ ᐂ  ᐃ  ᐄ  ᐅ  ᐆ  ᐇ  ᐈ  ᐉ  ᐊ  ᐋ  ᐌ  ᐍ  ᐎ  ᐏ  ᐐ  ᐑ'));
+
+    let g = helpers.generateMapper4JisonGrammarIdentifiers(source);
+
+    function matchIdRegexBase(re) {
+      //let ist = re.toString();
+      //console.error('RE:', ist);
+      //return /^\/#\(.+\)#\/g$/.test(ist);
+      return re instanceof XRegExp;
+    }
+
+    function matchGeneralIdRe(re) {
+      //let ist = re.toString();
+      //return /^\/#\(.+?\)#\/g$/.test(ist);
+      return re instanceof XRegExp;
+    }
+
+    assert.ok(g);
+    assert.equal(typeof g, 'object');
+    assert.equal(typeof g.decode, 'function');
+    assert.equal(typeof g.encode, 'function');
+    assert.deepEqual(g.tokenDirectIdentifierStart, 'Ϟᐒ');
+    assert.ok(matchIdRegexBase(g.tokenDirectIdentifierRe));
+    assert.deepEqual(g.tokenValueReferenceStart, '$');
+    assert.ok(matchIdRegexBase(g.tokenValueReferenceRe));
+    assert.deepEqual(g.tokenLocationStart, 'Ϟᑐ');
+    assert.ok(matchIdRegexBase(g.tokenLocationRe));
+    assert.deepEqual(g.tokenIdentifierStart, 'Ϟᑫ');
+    assert.ok(matchIdRegexBase(g.tokenIdentifierRe));
+    assert.deepEqual(g.tokenStackIndexStart, 'Ϟᔯ');
+    assert.ok(matchIdRegexBase(g.tokenStackIndexRe));
+    assert.deepEqual(g.tokenNegativeValueReferenceStart, 'Ϟᗜ');
+    assert.ok(matchIdRegexBase(g.tokenValueReferenceRe));
+    assert.deepEqual(g.tokenNegativeLocationStart, 'Ϟᘔ');
+    assert.ok(matchIdRegexBase(g.tokenNegativeLocationRe));
+    assert.deepEqual(g.tokenNegativeStackIndexStart, 'Ϟᗄ');
+    assert.ok(matchIdRegexBase(g.tokenNegativeStackIndexRe));
+    assert.ok(matchGeneralIdRe(g.tokenDetect4EncodeRe));
+    assert.ok(matchGeneralIdRe(g.tokenDetect4DecodeRe));
+  });
+
+  it("generateMapper4JisonGrammarIdentifiers(input) properly encodes and decodes jison variables (1)", () => {
+    let source = fs.readFileSync(__dirname + '/fixtures/Mapper4JisonGrammarIdentifiers.sample.txt', 'utf8');
+    let g = helpers.generateMapper4JisonGrammarIdentifiers(source);
+
+    assert.ok(g);
+    assert.equal(typeof g, 'object');
+    assert.equal(typeof g.decode, 'function');
+    assert.equal(typeof g.encode, 'function');
+
+    let im = g.encode(source);
+    assert.notEqual(im, source);
+    let cvt = g.decode(im);
+    assert.deepEqual(cvt, source);
+  });
+
+  it("generateMapper4JisonGrammarIdentifiers(input) properly encodes and decodes jison variables (2)", () => {
+    let source = fs.readFileSync(__dirname + '/../../ebnf-parser/bnf.y', 'utf8');
+    let g = helpers.generateMapper4JisonGrammarIdentifiers(source);
+
+    assert.ok(g);
+    assert.equal(typeof g, 'object');
+    assert.equal(typeof g.decode, 'function');
+    assert.equal(typeof g.encode, 'function');
+
+    let im = g.encode(source);
+    let cvt = g.decode(im);
+    assert.deepEqual(cvt, source);
+  });
+
+  // auto-init the Unicode mapper:
+  var mapper;
+  function autoInitUnicodeMapper() {
+    return {
+      encode: function (source) {
+        if (!mapper) {
+          mapper = helpers.generateMapper4JisonGrammarIdentifiers(source);
+        }
+        return mapper.encode(source);
+      },
+      decode: function (source) {
+        return mapper.decode(source);
+      }
+    }
+  }
+  
   it("parseCodeChunkToAST + prettyPrintAST", function () {
     var rmCommonWS = helpers.rmCommonWS;
+
+    var options = { 
+      mapper4JisonGrammarIdentifiers: autoInitUnicodeMapper() 
+    };
 
     var ast = helpers.parseCodeChunkToAST(`
         for (var i = 0, len = 10; i < len; i++) {
             console.log(i);
         }
-    `);
-    var rv = helpers.prettyPrintAST(ast);
+    `, options);
+    var rv = helpers.prettyPrintAST(ast, options);
     var sollwert_src = rmCommonWS`
         for (var i = 0, len = 10; i < len; i++) {
           console.log(i);
@@ -219,11 +410,14 @@ describe("helpers API", function () {
     assert.strictEqual(rv, sollwert_src.trim());
   });
 
-  // regression test: recast-0.15.1-32 is boogered and MUST NOT be used!
-  it("parseCodeChunkToAST must parse valid jison action code correctly (or your babel/recast version(s) will be boogered!)", function () {
+  it("parseCodeChunkToAST + prettyPrintAST backticked code snippets with Unicode variable", function () {
     var rmCommonWS = helpers.rmCommonWS;
 
-    var ast = helpers.parseCodeChunkToAST(`
+    var options = { 
+      mapper4JisonGrammarIdentifiers: autoInitUnicodeMapper() 
+    };
+
+    let src = rmCommonWS`
 yyerror(rmCommonWS\`
             There's probably an error in one or more of your lexer regex rules.
             The lexer rule spec should have this structure:
@@ -238,34 +432,52 @@ yyerror(rmCommonWS\`
             by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
 
               Erroneous code:
-            $\{yylexer.prettyPrintRange(@error)}
-
-              Technical error report:
-            $\{$error.errStr}
-        \`);
-    `);
-    var rv = helpers.prettyPrintAST(ast);
-    var sollwert_src = rmCommonWS`
-yyerror(rmCommonWS\`
-            There's probably an error in one or more of your lexer regex rules.
-            The lexer rule spec should have this structure:
-
-                    regex  action_code
-
-            where 'regex' is a lex-style regex expression (see the
-            jison and jison-lex documentation) which is intended to match a chunk
-            of the input to lex, while the 'action_code' block is the JS code
-            which will be invoked when the regex is matched. The 'action_code' block
-            may be any (indented!) set of JS statements, optionally surrounded
-            by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
-
-              Erroneous code:
-            $\{yylexer.prettyPrintRange(@error)}
+            $\{yylexer.prettyPrintRange(ဩerror)}
 
               Technical error report:
             $\{$error.errStr}
         \`);
     `;
+
+    var ast = helpers.parseCodeChunkToAST(src, options);
+    var rv = helpers.prettyPrintAST(ast, options);
+    var sollwert_src = src;
+    assert.strictEqual(rv, sollwert_src.trim());
+  });
+
+  // regression test: recast-0.15.1-32 is boogered and MUST NOT be used!
+  it("parseCodeChunkToAST must parse valid jison action code correctly (or your babel/recast version(s) will be boogered!)", function () {
+    var rmCommonWS = helpers.rmCommonWS;
+
+    var options = { 
+      mapper4JisonGrammarIdentifiers: autoInitUnicodeMapper() 
+    };
+
+    let src = rmCommonWS`
+yyerror(rmCommonWS\`
+            There's probably an error in one or more of your lexer regex rules.
+            The lexer rule spec should have this structure:
+
+                    regex  action_code
+
+            where 'regex' is a lex-style regex expression (see the
+            jison and jison-lex documentation) which is intended to match a chunk
+            of the input to lex, while the 'action_code' block is the JS code
+            which will be invoked when the regex is matched. The 'action_code' block
+            may be any (indented!) set of JS statements, optionally surrounded
+            by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
+
+              Erroneous code:
+            $\{yylexer.prettyPrintRange(@error)}
+
+              Technical error report:
+            $\{$error.errStr}
+        \`);
+    `;;
+
+    var ast = helpers.parseCodeChunkToAST(src, options);
+    var rv = helpers.prettyPrintAST(ast, options);
+    var sollwert_src = src;
     assert.strictEqual(rv.replace(/\s+/g, ' '), sollwert_src.trim().replace(/\s+/g, ' '));
   });
 

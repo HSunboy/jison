@@ -33,7 +33,7 @@ describe("JISON2JSON", function () {
               "return true"
             ]
           ]
-        }
+      }
     };
     var rv = JSON.parse(json);
     assert.deepEqual(rv, expected);

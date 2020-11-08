@@ -4,14 +4,19 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var yaml = require('@gerhobbelt/js-yaml');
 var JSON5 = require('@gerhobbelt/json5');
-var globby = require("globby");
+//var globby = require("globby");
 var lex = require("../dist/lex-parser-cjs-es5");
+var helpers = require('../../helpers-lib/dist/helpers-lib-cjs-es5');
+var trimErrorForTestReporting = helpers.trimErrorForTestReporting;
 
 
 
 
 
 function lexer_reset() {
+    var lexer = lex.parser.lexer;
+    lexer.cleanupAfterLex();
+    
     if (lex.parser.yy) {
         var y = lex.parser.yy;
         if (y.parser) {
@@ -236,7 +241,7 @@ describe("LEX spec lexer", function () {
         // save the error:
         err = ex;
         // and make sure ast !== undefined:
-        tokens.push({ fail: 1, meta: filespec.spec.meta, err: err });
+        tokens.push({ fail: 1, meta: filespec.spec.meta, err: trimErrorForTestReporting(err) });
       } finally {
         process.chdir(original_cwd);
       }
@@ -310,7 +315,7 @@ describe("LEX parser", function () {
         // save the error:
         err = ex;
         // and make sure ast !== undefined:
-        ast = { fail: 1, spec: filespec.grammar, err: err };
+        ast = { fail: 1, spec: filespec.grammar, err: trimErrorForTestReporting(err) };
       } finally {
         process.chdir(original_cwd);
       }

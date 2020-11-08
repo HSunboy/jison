@@ -24,3 +24,4 @@
 ./with-includes.jison
 ./with-includes.test.lex
 ./with_custom_lexer.jison
+./xregexp.jison

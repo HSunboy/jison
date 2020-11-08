@@ -2549,6 +2549,13 @@ return `{
 
         //this._clear_state = 0;
 
+        if (!this._more) {
+            if (!this._clear_state) {
+                this._clear_state = 1;
+            }
+            this.clear();
+        }
+
         // allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:
         if (typeof this.pre_lex === 'function') {
             r = this.pre_lex.call(this, 0);
@@ -2579,29 +2586,33 @@ return `{
             r = this.post_lex.call(this, r) || r;
         }
 
-        // 1) make sure any outside interference is detected ASAP: 
-        //    these attributes are to be treated as 'const' values
-        //    once the lexer has produced them with the token (return value \`r\`).
-        // 2) make sure any subsequent \`lex()\` API invocation CANNOT
-        //    edit the \`yytext\`, etc. token attributes for the *current*
-        //    token, i.e. provide a degree of 'closure safety' so that
-        //    code like this:
-        //    
-        //        t1 = lexer.lex();
-        //        v = lexer.yytext;
-        //        l = lexer.yylloc;
-        //        t2 = lexer.lex();
-        //        assert(lexer.yytext !== v);
-        //        assert(lexer.yylloc !== l);
-        //        
-        //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
-        //    these conditions.
-        this.yytext = Object.freeze(this.yytext);
-        this.matches = Object.freeze(this.matches);
-        //this.yylloc.range = Object.freeze(this.yylloc.range);
-        this.yylloc = Object.freeze(this.yylloc);
+        if (!this._more) {
+            //
+            // 1) make sure any outside interference is detected ASAP: 
+            //    these attributes are to be treated as 'const' values
+            //    once the lexer has produced them with the token (return value \`r\`).
+            // 2) make sure any subsequent \`lex()\` API invocation CANNOT
+            //    edit the \`yytext\`, etc. token attributes for the *current*
+            //    token, i.e. provide a degree of 'closure safety' so that
+            //    code like this:
+            //    
+            //        t1 = lexer.lex();
+            //        v = lexer.yytext;
+            //        l = lexer.yylloc;
+            //        t2 = lexer.lex();
+            //        assert(lexer.yytext !== v);
+            //        assert(lexer.yylloc !== l);
+            //        
+            //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+            //    these conditions.
+            //    
+            this.yytext = Object.freeze(this.yytext);
+            this.matches = Object.freeze(this.matches);
+            this.yylloc.range = Object.freeze(this.yylloc.range);
+            this.yylloc = Object.freeze(this.yylloc);
 
-        this._clear_state = 0;
+            this._clear_state = 0;
+        }
 
         return r;
     },
@@ -2624,30 +2635,34 @@ return `{
             r = this.next();
         }
 
-        // 1) make sure any outside interference is detected ASAP: 
-        //    these attributes are to be treated as 'const' values
-        //    once the lexer has produced them with the token (return value \`r\`).
-        // 2) make sure any subsequent \`lex()\` API invocation CANNOT
-        //    edit the \`yytext\`, etc. token attributes for the *current*
-        //    token, i.e. provide a degree of 'closure safety' so that
-        //    code like this:
-        //    
-        //        t1 = lexer.lex();
-        //        v = lexer.yytext;
-        //        l = lexer.yylloc;
-        //        t2 = lexer.lex();
-        //        assert(lexer.yytext !== v);
-        //        assert(lexer.yylloc !== l);
-        //        
-        //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
-        //    these conditions.
-        this.yytext = Object.freeze(this.yytext);
-        this.matches = Object.freeze(this.matches);
-        //this.yylloc.range = Object.freeze(this.yylloc.range);
-        this.yylloc = Object.freeze(this.yylloc);
+        if (!this._more) {
+            //
+            // 1) make sure any outside interference is detected ASAP: 
+            //    these attributes are to be treated as 'const' values
+            //    once the lexer has produced them with the token (return value \`r\`).
+            // 2) make sure any subsequent \`lex()\` API invocation CANNOT
+            //    edit the \`yytext\`, etc. token attributes for the *current*
+            //    token, i.e. provide a degree of 'closure safety' so that
+            //    code like this:
+            //    
+            //        t1 = lexer.lex();
+            //        v = lexer.yytext;
+            //        l = lexer.yylloc;
+            //        t2 = lexer.lex();
+            //        assert(lexer.yytext !== v);
+            //        assert(lexer.yylloc !== l);
+            //        
+            //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+            //    these conditions.
+            //    
+            this.yytext = Object.freeze(this.yytext);
+            this.matches = Object.freeze(this.matches);
+            this.yylloc.range = Object.freeze(this.yylloc.range);
+            this.yylloc = Object.freeze(this.yylloc);
 
-        this._clear_state = 0;
-
+            this._clear_state = 0;
+        }
+        
         return r;
     },
 
@@ -3053,9 +3068,10 @@ function generateFromOpts(opt) {
         code = generateESModule(opt);
         break;
     case 'commonjs':
-    default:
         code = generateCommonJSModule(opt);
         break;
+    default:
+        throw new Error('unsupported moduleType: ' + opt.moduleType);
     }
 
     return code;
@@ -3526,22 +3542,24 @@ function prepareOptions(opt) {
 
 function generateModule(opt) {
     opt = prepareOptions(opt);
+    var modIncSrc = (opt.moduleInclude ? opt.moduleInclude + ';' : '');
 
-    var out = [
-        generateGenericHeaderComment(),
-        '',
-        'var ' + opt.moduleName + ' = (function () {',
-        jisonLexerErrorDefinition,
-        '',
-        generateModuleBody(opt),
-        '',
-        (opt.moduleInclude ? opt.moduleInclude + ';' : ''),
-        '',
-        'return lexer;',
-        '})();'
-    ];
+    var src = rmCommonWS`
+        ${generateGenericHeaderComment()}
 
-    var src = out.join('\n') + '\n';
+        var ${opt.moduleName} = (function () {
+            "use strict";
+
+            ${jisonLexerErrorDefinition}
+
+            ${generateModuleBody(opt)}
+
+            ${modIncSrc}
+
+            return lexer;
+        })();
+    `;
+
     src = stripUnusedLexerCode(src, opt);
     opt.exportSourceCode.all = src;
     return src;
@@ -3549,22 +3567,24 @@ function generateModule(opt) {
 
 function generateAMDModule(opt) {
     opt = prepareOptions(opt);
+    var modIncSrc = (opt.moduleInclude ? opt.moduleInclude + ';' : '');
 
-    var out = [
-        generateGenericHeaderComment(),
-        '',
-        'define([], function () {',
-        jisonLexerErrorDefinition,
-        '',
-        generateModuleBody(opt),
-        '',
-        (opt.moduleInclude ? opt.moduleInclude + ';' : ''),
-        '',
-        'return lexer;',
-        '});'
-    ];
+    var src = rmCommonWS`
+        ${generateGenericHeaderComment()}
 
-    var src = out.join('\n') + '\n';
+        define([], function () {
+            "use strict";
+
+            ${jisonLexerErrorDefinition}
+
+            ${generateModuleBody(opt)}
+
+            ${modIncSrc}
+
+            return lexer;
+        });
+    `;
+
     src = stripUnusedLexerCode(src, opt);
     opt.exportSourceCode.all = src;
     return src;
@@ -3572,32 +3592,33 @@ function generateAMDModule(opt) {
 
 function generateESModule(opt) {
     opt = prepareOptions(opt);
+    var modIncSrc = (opt.moduleInclude ? opt.moduleInclude + ';' : '');
 
-    var out = [
-        generateGenericHeaderComment(),
-        '',
-        'var lexer = (function () {',
-        jisonLexerErrorDefinition,
-        '',
-        generateModuleBody(opt),
-        '',
-        (opt.moduleInclude ? opt.moduleInclude + ';' : ''),
-        '',
-        'return lexer;',
-        '})();',
-        '',
-        'function yylex() {',
-        '    return lexer.lex.apply(lexer, arguments);',
-        '}',
-        rmCommonWS`
-            export {
-                lexer,
-                yylex as lex
-            };
-        `
-    ];
+    var src = rmCommonWS`
+        ${generateGenericHeaderComment()}
 
-    var src = out.join('\n') + '\n';
+        var lexer = (function () {
+            "use strict";
+
+            ${jisonLexerErrorDefinition}
+
+            ${generateModuleBody(opt)}
+
+            ${modIncSrc}
+
+            return lexer;
+        })();
+
+        function yylex() {
+            return lexer.lex.apply(lexer, arguments);
+        }
+
+        export {
+            lexer,
+            yylex as lex
+        };
+    `;
+
     src = stripUnusedLexerCode(src, opt);
     opt.exportSourceCode.all = src;
     return src;
@@ -3605,29 +3626,31 @@ function generateESModule(opt) {
 
 function generateCommonJSModule(opt) {
     opt = prepareOptions(opt);
+    var modIncSrc = (opt.moduleInclude ? opt.moduleInclude + ';' : '');
 
-    var out = [
-        generateGenericHeaderComment(),
-        '',
-        'var ' + opt.moduleName + ' = (function () {',
-        jisonLexerErrorDefinition,
-        '',
-        generateModuleBody(opt),
-        '',
-        (opt.moduleInclude ? opt.moduleInclude + ';' : ''),
-        '',
-        'return lexer;',
-        '})();',
-        '',
-        'if (typeof require !== \'undefined\' && typeof exports !== \'undefined\') {',
-        '  exports.lexer = ' + opt.moduleName + ';',
-        '  exports.lex = function () {',
-        '    return ' + opt.moduleName + '.lex.apply(lexer, arguments);',
-        '  };',
-        '}'
-    ];
+    var src = rmCommonWS`
+        ${generateGenericHeaderComment()}
 
-    var src = out.join('\n') + '\n';
+        var ${opt.moduleName} = (function () {
+            "use strict";
+
+            ${jisonLexerErrorDefinition}
+
+            ${generateModuleBody(opt)}
+
+            ${modIncSrc}
+
+            return lexer;
+        })();
+
+        if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
+            exports.lexer = ${opt.moduleName};
+            exports.lex = function () {
+                return ${opt.moduleName}.lex.apply(lexer, arguments);
+            };
+        }
+    `;
+
     src = stripUnusedLexerCode(src, opt);
     opt.exportSourceCode.all = src;
     return src;

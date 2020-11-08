@@ -141,7 +141,7 @@
       return rv;
     }) // cleanup: replace any non-suitable character series to a single underscore:
     .replace(/^[^\w_]/, '_') // do not accept numerics at the leading position, despite those matching regex `\w`:
-    .replace(/^\d/, '_').replace(/[^\w\d_]+/g, '_') // and only accept multiple (double, not triple) underscores at start or end of identifier name:
+    .replace(/^\d/, '_').replace(/[^\w\d_]/g, '_') // and only accept multiple (double, not triple) underscores at start or end of identifier name:
     .replace(/^__+/, '#').replace(/__+$/, '#').replace(/_+/g, '_').replace(/#/g, '__');
   } // Check if the start of the given input matches a regex expression.
   // Return the length of the regex expression or -1 if none was found.
@@ -364,13 +364,7 @@
     dump: dumpSourceToFile
   }; //
 
-  assert__default['default'](recast__default['default']); //var types = recast.types;
-  //assert(types);
-  //var namedTypes = types.namedTypes;
-  //assert(namedTypes);
-  //var b = types.builders;
-  //assert(b);
-  //assert(astUtils);
+  assert__default['default'](recast__default['default']);
 
   function parseCodeChunkToAST(src, options) {
     src = src.replace(/@/g, '\uFFDA').replace(/#/g, '\uFFDB');
@@ -433,7 +427,7 @@
     // backpatch possible jison variables extant in the prettified code:
     .replace(/\uFFDA/g, '@').replace(/\uFFDB/g, '#');
     return new_src;
-  } // validate the given JavaScript snippet: does it compile?
+  } // validate the given JISON+JavaScript snippet: does it compile?
   // 
   // Return either the parsed AST (object) or an error message (string). 
 
