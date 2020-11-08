@@ -180,7 +180,7 @@ describe("Lexer Kernel", function () {
       assert.equal(lexer.lex(), lexer.EOF);
     });
 
-    xit("parses literal rule strings with escapes correctly", function () {
+    it("parses literal rule strings with escapes correctly", function () {
       var dict = [
         "%%",
         "'x'     {return 'X';}",
@@ -193,6 +193,7 @@ describe("Lexer Kernel", function () {
         "'\\x42'     {return 'SC';}",
         "'\\u0043'     {return 'SD';}",
         "'\\ '     {return 'SE';}",
+        "\\        {return 'SW';}",
         "[^]       {return this.ERROR;}",
       ].join('\n');
 
@@ -200,7 +201,7 @@ describe("Lexer Kernel", function () {
       var JisonLexerError = lexer.JisonLexerError; 
       assert(JisonLexerError);
 
-      var input = "x\nx\rx\vx\ax\fx\bx\x42x\u0043x xxx\\nx\\rx\\vx\\ax\\fx\\bx\\x42x\\u0043x\\ ";
+      var input = "x\nx\rx\vx\ax\fx\bx\x42x\u0043x xxx\\nx\\rx\\vx\\ax\\fx\\bx\\x42x\\u0043x\\  ";
 
       // help us monitor/debug lexer output:
       var old_lex_f = lexer.lex;
@@ -218,49 +219,69 @@ describe("Lexer Kernel", function () {
       assert.equal(lexer.lex(), 'X');
 
       // \n
-      assert.equal(lexer.lex(), lexer.ERROR);
+      assert.equal(lexer.lex(), 'SN');
       assert.equal(lexer.lex(), 'X');
       // \r
-      assert.equal(lexer.lex(), lexer.ERROR);
+      assert.equal(lexer.lex(), 'SR');
       assert.equal(lexer.lex(), 'X');
       // \v
-      assert.equal(lexer.lex(), lexer.ERROR);
+      assert.equal(lexer.lex(), 'SV');
       assert.equal(lexer.lex(), 'X');
       // \a
       assert.equal(lexer.lex(), lexer.ERROR);
       assert.equal(lexer.lex(), 'X');
       // \f
-      assert.equal(lexer.lex(), lexer.ERROR);
+      assert.equal(lexer.lex(), 'SF');
       assert.equal(lexer.lex(), 'X');
       // \b
-      assert.equal(lexer.lex(), lexer.ERROR);
+      assert.equal(lexer.lex(), 'SB');
       assert.equal(lexer.lex(), 'X');
       // \x42
-      assert.equal(lexer.lex(), lexer.ERROR);
+      assert.equal(lexer.lex(), 'SC');
       assert.equal(lexer.lex(), 'X');
       // \u0043
       assert.equal(lexer.lex(), 'SD');
       assert.equal(lexer.lex(), 'X');
       // \_
+      assert.equal(lexer.lex(), 'SW');
+
+      assert.equal(lexer.lex(), 'X');
+      assert.equal(lexer.lex(), 'X');
+      assert.equal(lexer.lex(), 'X');
+
+      // \\n
       assert.equal(lexer.lex(), lexer.ERROR);
-
+      assert.equal(lexer.yytext, '\\');
+      assert.equal(lexer.lex(), lexer.ERROR);
+      assert.equal(lexer.yytext, 'n');
       assert.equal(lexer.lex(), 'X');
+      // \\r
+      assert.equal(lexer.lex(), lexer.ERROR);
+      assert.equal(lexer.lex(), lexer.ERROR);
       assert.equal(lexer.lex(), 'X');
+      // \\v
+      assert.equal(lexer.lex(), lexer.ERROR);
+      assert.equal(lexer.lex(), lexer.ERROR);
       assert.equal(lexer.lex(), 'X');
-
-      assert.equal(lexer.lex(), 'SN');
+      // \\a
+      assert.equal(lexer.lex(), lexer.ERROR);
+      assert.equal(lexer.lex(), lexer.ERROR);
       assert.equal(lexer.lex(), 'X');
-      assert.equal(lexer.lex(), 'SR');
+      // \\f
+      assert.equal(lexer.lex(), lexer.ERROR);
+      assert.equal(lexer.lex(), lexer.ERROR);
       assert.equal(lexer.lex(), 'X');
-      assert.equal(lexer.lex(), 'SV');
+      // \\b
+      assert.equal(lexer.lex(), lexer.ERROR);
+      assert.equal(lexer.lex(), lexer.ERROR);
       assert.equal(lexer.lex(), 'X');
-      assert.equal(lexer.lex(), 'SA');
+      // \\x42
+      assert.equal(lexer.lex(), lexer.ERROR);  // \\
       assert.equal(lexer.lex(), 'X');
-      assert.equal(lexer.lex(), 'SF');
-      assert.equal(lexer.lex(), 'X');
-      assert.equal(lexer.lex(), 'SB');
-      assert.equal(lexer.lex(), 'X');
-      assert.equal(lexer.lex(), 'SC');
+      assert.equal(lexer.lex(), lexer.ERROR);  // 4
+      assert.equal(lexer.yytext, '4');
+      assert.equal(lexer.lex(), lexer.ERROR);  // 2
+      assert.equal(lexer.yytext, '2');
       assert.equal(lexer.lex(), 'X');
       // \\u0043
       assert.equal(lexer.lex(), lexer.ERROR);
@@ -270,7 +291,10 @@ describe("Lexer Kernel", function () {
       assert.equal(lexer.lex(), lexer.ERROR);
       assert.equal(lexer.lex(), lexer.ERROR);
       assert.equal(lexer.lex(), 'X');
+      // \\_
       assert.equal(lexer.lex(), 'SE');
+      // _
+      assert.equal(lexer.lex(), 'SW');
 
       assert.equal(lexer.lex(), lexer.EOF);
     });
@@ -2819,7 +2843,7 @@ describe("prettyPrintRange() API", function () {
     );
   });
 
-  xit("is invoked when lexer cannot find the end of a rule's action code block (alt 1)", function () {
+  it("is invoked when lexer cannot find the end of a rule's action code block (alt 1)", function () {
     var dict = [
         '%%',
         // %{...%} action code blocks can contain ANYTHING, so 
@@ -2835,11 +2859,11 @@ describe("prettyPrintRange() API", function () {
         });
       }, 
       Error,
-      /The rule\'s action code section does not compile[^]*?\n  Erroneous area:\n1: %%\n2: "a" %\{ return true; \n\^\.\.\.\.\.\.\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\n3: "b" %\{ return 1; %\}\n\^\.\.\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^/
+      /The lexer rule's action code section does not compile: Line 3: Unexpected number/
     );
   });
 
-  xit("is invoked when lexer cannot find the end of a rule's action code block (alt 2)", function () {
+  it("is invoked when lexer cannot find the end of a rule's action code block (alt 2)", function () {
     var dict = [
         '%%',
         // %{...%} action code blocks can contain ANYTHING.
@@ -2855,11 +2879,11 @@ describe("prettyPrintRange() API", function () {
         });
       }, 
       Error,
-      /Error: Lexical error on line 3:[^]*?missing 1 closing curly braces in lexer rule action block.[^]*?help jison grok more or less complex action code chunks.\n\n  Erroneous area:\n1: %%\n2: "a" %{ return true; %}\n3: "b" %{ return 1;\s*\n\^\.\.\.\.\.\.\.\.\.\.\.\.\.\.\.\.\.\.\.\^/
+      /Could not parse lexer spec\nError: Lexical error on line 3: \nIncorrectly terminated action code block/
     );
   });
 
-  xit("is invoked when lexer finds an epilogue that's not parsable as JavaScript", function () {
+  it("is invoked when lexer finds an epilogue that's not parsable as JavaScript", function () {
     var dict = [
         '%%',
         '"a" %{ return true; %}',
@@ -2874,11 +2898,11 @@ describe("prettyPrintRange() API", function () {
         });
       }, 
       Error,
-      /The extra lexer module code section \(a\.k\.a\. 'epilogue'\) does not compile[^]*?\n  Erroneous area:\n1: %%\n2: "a" %\{ return true; %\}\n3: "b" %\{ return 1; %\}\n4: %%\n\^\.\.\.\.\^\n5: \*\*This is gibberish!\*\*\n\^\.\.\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^/
+      /Could not parse lexer spec\nError: \nThe '%%' lexer epilogue code does not compile: Line 4: Unexpected token/
     );
   });
 
-  xit("is invoked when lexer finds a %code section that's not parsable as JavaScript", function () {
+  it("is invoked when lexer finds a %code section that's not parsable as JavaScript", function () {
     var dict = [
         '%%',
         '"a" %{ return true; %}',
@@ -2892,7 +2916,7 @@ describe("prettyPrintRange() API", function () {
         });
       }, 
       Error,
-      /There's probably an error in one or more of your lexer regex rules[^]*?\n  Erroneous code:\n1: %%\n2: "a" %\{ return true; %\}\n3: "b" %\{ return 1; %\}\n4: %code bugger %\{ \*\*This is gibberish!\*\* %\}\n\^\.\.\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\n[^]*?\n  Technical error report:\nParse error on line 4:[^]*?Expecting end of input, [^]*? got unexpected "INIT_CODE"/
+      /Could not parse lexer spec\nError: \n`%code` statements must be placed in\nthe top section of the lexer spec file, above the first '%%'\nseparator\. You cannot specify any in the second section as has been\ndone here/
     );
   });
 });

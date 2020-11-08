@@ -375,13 +375,13 @@ var code_exec = {
   dump: dumpSourceToFile
 }; //
 
-assert__default['default'](recast__default['default']);
-var types = recast__default['default'].types;
-assert__default['default'](types);
-var namedTypes = types.namedTypes;
-assert__default['default'](namedTypes);
-var b = types.builders;
-assert__default['default'](b); // //assert(astUtils);
+assert__default['default'](recast__default['default']); //var types = recast.types;
+//assert(types);
+//var namedTypes = types.namedTypes;
+//assert(namedTypes);
+//var b = types.builders;
+//assert(b);
+//assert(astUtils);
 
 function parseCodeChunkToAST(src, options) {
   src = src.replace(/@/g, '\uFFDA').replace(/#/g, '\uFFDB');
@@ -466,7 +466,7 @@ function checkActionBlock(src, yylloc) {
     var rv = parseCodeChunkToAST(src);
     return false;
   } catch (ex) {
-    return false;
+    return ex.message || "code snippet cannot be parsed";
   }
 } // The rough-and-ready preprocessor for any action code block:
 // this one trims off any surplus whitespace and removes any
@@ -1695,7 +1695,7 @@ var parser = {
         There's probably an error in one or more of your lexer regex rules.
         There's an error in your lexer regex rules section.
         Maybe you did not correctly separate the lexer sections with
-        a '%%' on an otherwise empty line? Did you correctly 
+        a '%%' on an otherwise empty line? Did you correctly
         delimit every rule's action code block?
         The lexer spec file should have this structure:
     
@@ -2048,9 +2048,9 @@ var parser = {
         var marker_msg = start_marker ? ' or similar, such as ' + start_marker : '';
         yyparser.yyError(rmCommonWS$1`
         The '%{...%}' lexer setup action code section MUST have its action
-        block start marker (\`%{\`${marker_msg}) positioned 
+        block start marker (\`%{\`${marker_msg}) positioned
         at the start of a line to be accepted: *indented* action code blocks
-        (such as this one) are always related to an immediately preceding lexer spec item, 
+        (such as this one) are always related to an immediately preceding lexer spec item,
         e.g. a lexer match rule expression (see 'lexer rules').
     
           Erroneous area:
@@ -2071,9 +2071,9 @@ var parser = {
         var marker_msg = start_marker ? ' or similar, such as ' + start_marker : '';
         yyparser.yyError(rmCommonWS$1`
         The '%{...%}' lexer setup action code section MUST have its action
-        block start marker (\`%{\`${marker_msg}) positioned 
+        block start marker (\`%{\`${marker_msg}) positioned
         at the start of a line to be accepted: *indented* action code blocks
-        (such as this one) are always related to an immediately preceding lexer spec item, 
+        (such as this one) are always related to an immediately preceding lexer spec item,
         e.g. a lexer match rule expression (see 'lexer rules').
     
           Erroneous area:
@@ -2271,8 +2271,8 @@ var parser = {
         yyparser.yyError(rmCommonWS$1`
         illegal input in the lexer spec definitions section.
     
-        This might be stuff incorrectly dangling off the previous 
-        '${yy.__options_category_description__}' definition statement, so please do check above 
+        This might be stuff incorrectly dangling off the previous
+        '${yy.__options_category_description__}' definition statement, so please do check above
         when the mistake isn't immediately obvious from this error spot itself.
     
           Erroneous code:
@@ -2440,9 +2440,9 @@ var parser = {
           var marker_msg = start_marker ? ' or similar, such as ' + start_marker : '';
           yyparser.yyError(rmCommonWS$1`
             The '%{...%}' lexer setup action code section MUST have its action
-            block start marker (\`%{\`${marker_msg}) positioned 
+            block start marker (\`%{\`${marker_msg}) positioned
             at the start of a line to be accepted: *indented* action code blocks
-            (such as this one) are always related to an immediately preceding lexer spec item, 
+            (such as this one) are always related to an immediately preceding lexer spec item,
             e.g. a lexer match rule expression (see 'lexer rules').
     
               Erroneous area:
@@ -2454,7 +2454,7 @@ var parser = {
         } else {
           yyparser.yyError(rmCommonWS$1`
             There's probably an error in one or more of your lexer regex rules.
-            Did you perhaps indent the rule regex? Note that all rule regexes 
+            Did you perhaps indent the rule regex? Note that all rule regexes
             MUST start at the start of the line, i.e. text column 1. Indented text
             is perceived as JavaScript action code related to the last lexer
             rule regex.
@@ -2726,25 +2726,25 @@ var parser = {
         yyparser.yyError(rmCommonWS$1`
         A lexer rule regex action code must be properly terminated and must contain a JavaScript statement block (or anything that does parse as such), e.g.:
     
-            /rule/      
-            %{ 
-                invokeHooHaw(); 
-                return 'TOKEN'; 
+            /rule/
+            %{
+                invokeHooHaw();
+                return 'TOKEN';
             %}
     
         You may indent the initial '%{' to disambiguate this as being a rule action code block instead of a lexer init code block:
     
-            /rule/      
-              %{ 
-                invokeHooHaw(); 
-                return 'TOKEN'; 
+            /rule/
+              %{
+                invokeHooHaw();
+                return 'TOKEN';
             %}
     
         You can also accomplish this by placing the '%{' on the same line as the regex:
     
-            /rule/      %{ 
-                invokeHooHaw(); 
-                return 'TOKEN'; 
+            /rule/      %{
+                invokeHooHaw();
+                return 'TOKEN';
             %}
     
         NOTE: when you have very simple action code, wrapping it in '%{...}%' or equivalent is not required as long as you keep the code indented, e.g.:
@@ -3547,7 +3547,7 @@ var parser = {
           }
         } // Since the epilogue is concatenated as-is (see the `epilogue_chunks` rule above)
         // we append those protective double newlines right now, as the calling site
-        // won't do it for us: 
+        // won't do it for us:
 
 
         this.$ = '\n\n' + srcCode + '\n\n';
@@ -3577,7 +3577,7 @@ var parser = {
         // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp]; // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
         // these code chunks are very probably incomplete, hence compile-testing
-        // for these should be deferred until we've collected the entire epilogue. 
+        // for these should be deferred until we've collected the entire epilogue.
 
         this.$ = yyvstack[yysp];
         break;
@@ -6768,13 +6768,13 @@ var lexer = function () {
           /* @ Start Of File */
           || precedingStr === '\n'; // Make sure we've the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
 
-          var endMarker = this.setupDelimitedActionChunkLexerRegex(marker); // Early sanity check for better error reporting: 
+          var endMarker = this.setupDelimitedActionChunkLexerRegex(marker); // Early sanity check for better error reporting:
           // we'd better make sure that end marker indeed does exist in the
           // remainder of the input! When it's not, we'll have the `action`
           // lexer state running past its due date as it'll then go and spit
           // out a 'too may closing braces' error report at some spot way
           // beyond the intended end of the action code chunk.
-          // 
+          //
           // Writing the wrong end marker is a common user mistake, we can
           // easily look ahead and check for it now and report a proper hint
           // to cover this failure mode in a more helpful manner.
@@ -6809,7 +6809,7 @@ var lexer = function () {
 
           this.unput(marker); // Now RESET `yy_.yytext` to what it was originally, i.e. un-unput that lexer variable explicitly:
 
-          yy_.yytext = marker; // and allow the next lexer round to match and execute the suitable lexer rule(s) to parse this incoming action code block. 
+          yy_.yytext = marker; // and allow the next lexer round to match and execute the suitable lexer rule(s) to parse this incoming action code block.
 
           if (atSOL) {
             return 23;
@@ -6853,7 +6853,7 @@ var lexer = function () {
 
           this.pushState('action'); // Do a bit of magic that's useful for the parser when we
           // call `trimActionCode()` in there to perform a bit of
-          // rough initial action code chunk cleanup: 
+          // rough initial action code chunk cleanup:
           // when we start the action block -- hence *delimit* the
           // action block -- with a plain old '{' brace, we can
           // throw that one and its counterpart out safely without
@@ -6879,7 +6879,7 @@ var lexer = function () {
           var la = this.lookAhead();
 
           if (la[0] === '{') {
-            yy_.yytext = '{'; // hint the parser 
+            yy_.yytext = '{'; // hint the parser
           }
 
           return 26;
@@ -7782,8 +7782,8 @@ var lexer = function () {
 
   lexer.setupDelimitedActionChunkLexerRegex = function lexer__setupDelimitedActionChunkLexerRegex(marker) {
     // Special: when we encounter `{` as the start of the action code block,
-    // we DO NOT patch the `%{...%}` lexer rule as we will handle `{...}` 
-    // elsewhere in the lexer anyway: we cannot use a simple regex like 
+    // we DO NOT patch the `%{...%}` lexer rule as we will handle `{...}`
+    // elsewhere in the lexer anyway: we cannot use a simple regex like
     // `/{[^]*?}/` to match an entire action code block after all!
     var doNotPatch = marker === '{';
     var action_end_marker = marker.replace(/\{/g, '}');
@@ -7791,7 +7791,7 @@ var lexer = function () {
     if (!doNotPatch) {
       // Note: this bit comes straight from the lexer kernel!
       //
-      // Get us the currently active set of lexer rules. 
+      // Get us the currently active set of lexer rules.
       // (This is why we push the 'action' lexer condition state above *before*
       // we commence and work on the ruleset itself.)
       var spec = this.__currentRuleSet__;
@@ -7808,7 +7808,7 @@ var lexer = function () {
       var len = spec.__rule_count;
       var rules = spec.rules;
       var i;
-      var action_chunk_regex; // Must we still locate the rule to patch or have we done 
+      var action_chunk_regex; // Must we still locate the rule to patch or have we done
       // that already during a previous encounter?
       //
       // WARNING: our cache/patch must live beyond the current lexer+parser invocation:
@@ -7848,7 +7848,7 @@ var lexer = function () {
         spec.__cached_action_chunk_rule = {}; // set up empty cache
       }
 
-      i = spec.__action_chunk_rule_idx; // Must we build the lexer rule or did we already run this variant 
+      i = spec.__action_chunk_rule_idx; // Must we build the lexer rule or did we already run this variant
       // through this lexer before? When the latter, fetch the cached version!
 
       action_chunk_regex = spec.__cached_action_chunk_rule[marker];
@@ -10619,11 +10619,11 @@ function getRegExpLexerPrototype() {
     yyerror: function yyError(str /*, ...args */) {
         "use strict";
 
-        var lineno_msg = '';
+        var lineno_msg = 'Lexical error';
         if (this.yylloc) {
-            lineno_msg = ' on line ' + (this.yylineno + 1);
+            lineno_msg += ' on line ' + (this.yylineno + 1);
         }
-        var p = this.constructLexErrorInfo('Lexical error' + lineno_msg + ': ' + str, this.options.lexerErrorsAreRecoverable);
+        var p = this.constructLexErrorInfo(lineno_msg + ': ' + str, this.options.lexerErrorsAreRecoverable);
 
         // Add any extra args to the hash under the name \`extra_error_attributes\`:
         var args = Array.prototype.slice.call(arguments, 1);
@@ -10983,11 +10983,11 @@ function getRegExpLexerPrototype() {
             // when the \`parseError()\` call returns, we MUST ensure that the error is registered.
             // We accomplish this by signaling an 'error' token to be produced for the current
             // \`.lex()\` run.
-            var lineno_msg = '';
+            var lineno_msg = 'Lexical error';
             if (this.yylloc) {
-                lineno_msg = ' on line ' + (this.yylineno + 1);
+                lineno_msg += ' on line ' + (this.yylineno + 1);
             }
-            var p = this.constructLexErrorInfo('Lexical error' + lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).', false);
+            var p = this.constructLexErrorInfo(lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).', false);
             this._signaled_error_token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
         }
         return this;
@@ -11591,11 +11591,11 @@ function getRegExpLexerPrototype() {
             this.clear();
             return this.EOF;
         } else {
-            var lineno_msg = '';
+            var lineno_msg = 'Lexical error';
             if (this.options.trackPosition) {
-                lineno_msg = ' on line ' + (this.yylineno + 1);
+                lineno_msg += ' on line ' + (this.yylineno + 1);
             }
-            var p = this.constructLexErrorInfo('Lexical error' + lineno_msg + ': Unrecognized text.', this.options.lexerErrorsAreRecoverable);
+            var p = this.constructLexErrorInfo(lineno_msg + ': Unrecognized text.', this.options.lexerErrorsAreRecoverable);
 
             var pendingInput = this._input;
             var activeCondition = this.topState();

@@ -381,13 +381,13 @@
     //
 
     assert__default['default'](recast__default['default']);
-    var types = recast__default['default'].types;
-    assert__default['default'](types);
-    var namedTypes = types.namedTypes;
-    assert__default['default'](namedTypes);
-    var b = types.builders;
-    assert__default['default'](b);
-    // //assert(astUtils);
+    //var types = recast.types;
+    //assert(types);
+    //var namedTypes = types.namedTypes;
+    //assert(namedTypes);
+    //var b = types.builders;
+    //assert(b);
+    //assert(astUtils);
 
 
 
@@ -495,7 +495,7 @@
             var rv = parseCodeChunkToAST(src);
             return false;
         } catch (ex) {
-            return false;
+            return ex.message || "code snippet cannot be parsed";
         }
     }
 

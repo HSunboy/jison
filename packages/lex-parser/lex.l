@@ -65,11 +65,11 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 // Here we recognize the action code blocks in a grammar parser spec, including those chunks of
 // user-defined action code which are wrapped in `%{...%}` or `{{...}}`.
 //
-// These `%{...%}` and `{{...}}` chunks are special in that *anything 
-// **except the given 'end marker' (`%}` and `}}` respectively)** may 
+// These `%{...%}` and `{{...}}` chunks are special in that *anything
+// **except the given 'end marker' (`%}` and `}}` respectively)** may
 // exist within the markers: those contents will be copied verbatim.
 //
-// Note the 'fringe case' where one or more of those end markers 
+// Note the 'fringe case' where one or more of those end markers
 // is an integral part of your action code: you then have the choice to
 // either use the other chunk format *or* not wrap [that part of] your
 // code in any special marker block, but rely on the lexer rules for
@@ -89,7 +89,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 // `{ return '%}'; }`
 // `{ return '{{}}'; }`
 //
-// Since 0.6.5 we also allow another approach, which can be used instead: 
+// Since 0.6.5 we also allow another approach, which can be used instead:
 // 'repeated `{` markers', which is like the `%{...%}` and `{{...}}` in that
 // anything that's not the corresponding end marker is accepted as content
 // as far as the lexer is concerned (the parser will want to check the validity
@@ -104,8 +104,8 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 // To speed up the lexer and keep things simple, we test these lexer rules
 // *only when we're sure to match them*, while we use an advanced
 // feature of the lexer kernel by *generating the proper lexer rule regex on the fly*
-// at the moment when we find we need it: for this we employ some 
-// intimate knowledge of the lexer kernel which will be generated for this 
+// at the moment when we find we need it: for this we employ some
+// intimate knowledge of the lexer kernel which will be generated for this
 // lexer spec: for this we only the lexer rule for `%{...%}` to exist, as
 // we will pick up that one and modify it on the fly as the need occurs.
 //
@@ -161,8 +161,8 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 // simply scan using an Esprima-equivalent regex scanner: when the next
 // bit turns out to be a regex, assume it is one and pass it on.
 //
-// To prevent trouble with confusing this with a divide operator, 
-// only accept regexes which at least start with a non-whitespace 
+// To prevent trouble with confusing this with a divide operator,
+// only accept regexes which at least start with a non-whitespace
 // character, otherwise we can bet it's a divide operator most
 // probably.
 "/"/\s                                  return 'ACTION_BODY';       // most probably a `/` divide operator.
@@ -182,9 +182,9 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 \"{DOUBLEQUOTED_STRING_CONTENT}\"|\'{QUOTED_STRING_CONTENT}\'|\`{ES2017_STRING_CONTENT}\`
                                         yy.include_command_allowed = false;
                                         return 'ACTION_BODY';
-// Gobble an entire line of code unless there's chance there's 
+// Gobble an entire line of code unless there's chance there's
 // a regex, string, comment, {...} block start or end brace or sentinel
-// in it: then only gobble everything up to that particular 
+// in it: then only gobble everything up to that particular
 // character and let the lexer handle that one, and what follows,
 // in the round. Meanwhile we have us some action code pass on.
 [^/"'`%\{\}\/{BR}]+                     yy.include_command_allowed = false;
@@ -255,12 +255,12 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 //
 // Recognize any of these action code start markers:
 // `%{`, `{{`, `%{{`, `{{{`, `%{{{`, ...
-// and modify the lexer engine to provide the proper matching rule for the case at hand 
+// and modify the lexer engine to provide the proper matching rule for the case at hand
 // (which is NIL in case the action code chunk starts with `{`!) as described near the
 // top of this lexer spec file, where the action state lexer rules reside.
 //
 <INITIAL,rules,code,options>[%\{]\{+
-                                    {  
+                                    {
                                         yy.depth = 0;
                                         yy.include_command_allowed = false;
                                         this.pushState('action');
@@ -282,13 +282,13 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
                                         // Make sure we've the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
                                         var endMarker = this.setupDelimitedActionChunkLexerRegex(marker);
 
-                                        // Early sanity check for better error reporting: 
+                                        // Early sanity check for better error reporting:
                                         // we'd better make sure that end marker indeed does exist in the
                                         // remainder of the input! When it's not, we'll have the `action`
                                         // lexer state running past its due date as it'll then go and spit
                                         // out a 'too may closing braces' error report at some spot way
                                         // beyond the intended end of the action code chunk.
-                                        // 
+                                        //
                                         // Writing the wrong end marker is a common user mistake, we can
                                         // easily look ahead and check for it now and report a proper hint
                                         // to cover this failure mode in a more helpful manner.
@@ -318,11 +318,11 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 
                                         // Allow the start marker to be re-matched by the generated lexer rule regex:
                                         this.unput(marker);
-                                        
+
                                         // Now RESET `yytext` to what it was originally, i.e. un-unput that lexer variable explicitly:
                                         yytext = marker;
 
-                                        // and allow the next lexer round to match and execute the suitable lexer rule(s) to parse this incoming action code block. 
+                                        // and allow the next lexer round to match and execute the suitable lexer rule(s) to parse this incoming action code block.
                                         if (atSOL) {
                                             return 'ACTION_START_AT_SOL';
                                         }
@@ -344,23 +344,23 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
                                         return 'ARROW_ACTION_START';
 
 
-// 
+//
 // This rule is "specially made" as we want to recognize `{{` markers as special markers, just like `%{`,
-// while we also want to recognize `{` markers, but only while we are parsing lexer 
+// while we also want to recognize `{` markers, but only while we are parsing lexer
 // match rules.
 // Meanwhile, the `<rules>{WS}+/!(?:"|"|"%"|"->"|"=>"|"→"|{WS}|{BR})` rule here
-// had to be done this way to allow other modes to recognize indented `{...}` 
+// had to be done this way to allow other modes to recognize indented `{...}`
 // simple wrapped action code, while it now has been written as
-// `<rules>{WS}+/!(?:"{{"|"|"|"%"|"->"|"=>"|"→"|{WS}|{BR})` to prevent the lexer 
-// from entering 'action' mode on the leading whitespace alone, thus turning `{{...}}` into the equivalent of 
+// `<rules>{WS}+/!(?:"{{"|"|"|"%"|"->"|"=>"|"→"|{WS}|{BR})` to prevent the lexer
+// from entering 'action' mode on the leading whitespace alone, thus turning `{{...}}` into the equivalent of
 // `{ { ... } }`, which would **not** produce the same result as then we then won't be able
 // to apply the patched `%{...%}` grab-all-at-once rule near the top of this file.
 // (See also the code in the `setupDelimitedActionChunkLexerRegex()` function: with
 // `{{` we intend to reap the same benefits as we do when using `%{` and friends,
 // while we want `{` to act as a regular flavor curly brace everywhere.
-// 
+//
 // To accomplish that, we have to have this particular post-condition check set
-// in this rule so we don't steal the `[%\{]\{+` rule's thunder when we hit upon 
+// in this rule so we don't steal the `[%\{]\{+` rule's thunder when we hit upon
 // whitespace-leaded `{{`: that rule must match the `{{` during the next round, while
 // we now only ignore/skip the leading whitespace using another simple lexer
 // rule further below.
@@ -369,23 +369,23 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 //
 // ACTION code chunks follow rules and are generally indented and
 // may not start with the '%' character which is special to the JISON lex language itself:
-// - `%` can start options, commands, etc., e.g. `%include` or `%options`, 
+// - `%` can start options, commands, etc., e.g. `%include` or `%options`,
 //   of which only `%include` is allowed inside an action chunk (and recognized in another rule in this lexer).
 // - `|` starts a rule alternative, never a chunk of action code.
 // - `%%` delimits a lexer spec section and should always be placed at the start
 //   of a new line, as are most other lexer spec entities.
-// - also don't forget about the arrows: those should be lexed via whispace-skip and then 
+// - also don't forget about the arrows: those should be lexed via whispace-skip and then
 //   matching one of the rules above in the next `lex()` call.
 //
 // The `{WS}` and `{BR}` chunks in the postcondition of the lexer regex below is there to prevent
-// it from matching all the whitepace up to, but not including, the last whitespace 
+// it from matching all the whitepace up to, but not including, the last whitespace
 // character on the line and consequently triggering the 'action' mode unwantedly.
 // Writing this one was hard, while the same can be accomplished with some extra
 // action code which calls `upcomingInput()`, `unput()` and `reject()` lexer kernel APIs,
 // but we have decided to do it this way for educational purposes: this is the classic
-// way to write non-trivial lexer specs and sometimes it's bloody tough. [GHo] 
+// way to write non-trivial lexer specs and sometimes it's bloody tough. [GHo]
 <rules>{WS}+/!(?:"{{"|"|"|"%"|"->"|"=>"|"→"|{WS}|{BR})
-                                        {{      
+                                        {{
                                             yy.depth = 0;
                                             yy.include_command_allowed = true;
                                             //console.error('*** ACTION start @ 355:', yytext);
@@ -393,7 +393,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 
                                             // Do a bit of magic that's useful for the parser when we
                                             // call `trimActionCode()` in there to perform a bit of
-                                            // rough initial action code chunk cleanup: 
+                                            // rough initial action code chunk cleanup:
                                             // when we start the action block -- hence *delimit* the
                                             // action block -- with a plain old '{' brace, we can
                                             // throw that one and its counterpart out safely without
@@ -417,7 +417,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
                                             // upcoming action code block.
                                             var la = this.lookAhead();
                                             if (la[0] === '{') {
-                                                yytext = '{';           // hint the parser 
+                                                yytext = '{';           // hint the parser
                                             }
 
                                             return 'ACTION_START';
@@ -451,8 +451,8 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 
 // some options may be followed by an action block or `%include`d action block:
 // when this happens, let the parser cope by stacking an 'action' mode inside
-// the 'options' mode. 
-// This is necessary to get a different lexer token stream for these two scenarios, 
+// the 'options' mode.
+// This is necessary to get a different lexer token stream for these two scenarios,
 // which are functionally different:
 //
 //     1:  %code option(s)... %{ action %}
@@ -460,12 +460,12 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 //     2:  %code option(s)...
 //         %{ action %}
 //
-// NOTE: we do not worry about *deep nesting* 'action' and 'options' modes 
+// NOTE: we do not worry about *deep nesting* 'action' and 'options' modes
 // via `%include` lexing, e.g.:
 //
 //     %code option(s)... %include 2nd_level_option(s) %include(illegal!) 3rd_level...
 //
-// While the lexer may not object (and thus *incorrectly reset `yy.depth` to 
+// While the lexer may not object (and thus *incorrectly reset `yy.depth` to
 // ZERO(0) in the inner `%include` lex action above, for example!) the grammar/parser
 // should be able to check against this eventuality and barf an appropriately
 // formulated hairball. <wink>
@@ -483,7 +483,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 // We don't mind and allow the lexer to be 'dumb' here as the parser will
 // catch any abuse / incorrect input and report accordingly.
 ">"                                     this.popState();
-                                        this.unput(yytext);     
+                                        this.unput(yytext);
                                         return 'OPTIONS_END';
 ","                                     return ',';
 "*"                                     return '*';
@@ -606,7 +606,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 "%import"                               this.pushState('options');
                                         return 'IMPORT';
 "%pointer"                              return 'FLEX_POINTER_MODE';
-"%array"                                return 'FLEX_ARRAY_MODE';                                    
+"%array"                                return 'FLEX_ARRAY_MODE';
 
 <INITIAL,rules,code>"%include"          yy.depth = 0;
                                         yy.include_command_allowed = true;
@@ -780,8 +780,8 @@ var scanRegExp = helpers.scanRegExp;
 // lexer rule to match when the need arrises:
 lexer.setupDelimitedActionChunkLexerRegex = function lexer__setupDelimitedActionChunkLexerRegex(marker) {
     // Special: when we encounter `{` as the start of the action code block,
-    // we DO NOT patch the `%{...%}` lexer rule as we will handle `{...}` 
-    // elsewhere in the lexer anyway: we cannot use a simple regex like 
+    // we DO NOT patch the `%{...%}` lexer rule as we will handle `{...}`
+    // elsewhere in the lexer anyway: we cannot use a simple regex like
     // `/{[^]*?}/` to match an entire action code block after all!
     var doNotPatch = (marker === '{');
 
@@ -790,7 +790,7 @@ lexer.setupDelimitedActionChunkLexerRegex = function lexer__setupDelimitedAction
     if (!doNotPatch) {
         // Note: this bit comes straight from the lexer kernel!
         //
-        // Get us the currently active set of lexer rules. 
+        // Get us the currently active set of lexer rules.
         // (This is why we push the 'action' lexer condition state above *before*
         // we commence and work on the ruleset itself.)
         var spec = this.__currentRuleSet__;
@@ -808,7 +808,7 @@ lexer.setupDelimitedActionChunkLexerRegex = function lexer__setupDelimitedAction
         var i;
         var action_chunk_regex;
 
-        // Must we still locate the rule to patch or have we done 
+        // Must we still locate the rule to patch or have we done
         // that already during a previous encounter?
         //
         // WARNING: our cache/patch must live beyond the current lexer+parser invocation:
@@ -849,7 +849,7 @@ lexer.setupDelimitedActionChunkLexerRegex = function lexer__setupDelimitedAction
 
         i = spec.__action_chunk_rule_idx;
 
-        // Must we build the lexer rule or did we already run this variant 
+        // Must we build the lexer rule or did we already run this variant
         // through this lexer before? When the latter, fetch the cached version!
         action_chunk_regex = spec.__cached_action_chunk_rule[marker];
         if (!action_chunk_regex) {
@@ -860,7 +860,7 @@ lexer.setupDelimitedActionChunkLexerRegex = function lexer__setupDelimitedAction
         // and patch the lexer regex table for the current lexer condition state:
         regexes[i] = action_chunk_regex;
     }
-    
+
     return action_end_marker;
 };
 

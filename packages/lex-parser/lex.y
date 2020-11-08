@@ -100,13 +100,13 @@ rules_and_epilogue
       {
         $$ = { rules: $rules };
       }
-    | '%%' error 
+    | '%%' error
       {
         yyerror(rmCommonWS`
             There's probably an error in one or more of your lexer regex rules.
             There's an error in your lexer regex rules section.
             Maybe you did not correctly separate the lexer sections with
-            a '%%' on an otherwise empty line? Did you correctly 
+            a '%%' on an otherwise empty line? Did you correctly
             delimit every rule's action code block?
             The lexer spec file should have this structure:
 
@@ -367,9 +367,9 @@ definition
     //        console.log('setup info message');
     //     %}
     //
-    // **Note** that the action block start marker `%{` MUST be positioned 
+    // **Note** that the action block start marker `%{` MUST be positioned
     // at the start of a line to be accepted; indented action code blocks
-    // are always related to a preceding lexer spec item, such as a 
+    // are always related to a preceding lexer spec item, such as a
     // lexer match rule expression (see 'lexer rules').
     //
     | ACTION_START_AT_SOL action ACTION_END
@@ -418,7 +418,7 @@ definition
             `);
             $$ = null;
         %}
-    | ACTION_START include_macro_code ACTION_END 
+    | ACTION_START include_macro_code ACTION_END
         {
             yy.actionInclude.push($include_macro_code);
             $$ = null;
@@ -436,9 +436,9 @@ definition
             var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
             yyerror(rmCommonWS`
                 The '%{...%\}' lexer setup action code section MUST have its action
-                block start marker (\`%{\`${marker_msg}) positioned 
+                block start marker (\`%{\`${marker_msg}) positioned
                 at the start of a line to be accepted: *indented* action code blocks
-                (such as this one) are always related to an immediately preceding lexer spec item, 
+                (such as this one) are always related to an immediately preceding lexer spec item,
                 e.g. a lexer match rule expression (see 'lexer rules').
 
                   Erroneous area:
@@ -462,9 +462,9 @@ definition
             var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
             yyerror(rmCommonWS`
                 The '%{...%\}' lexer setup action code section MUST have its action
-                block start marker (\`%{\`${marker_msg}) positioned 
+                block start marker (\`%{\`${marker_msg}) positioned
                 at the start of a line to be accepted: *indented* action code blocks
-                (such as this one) are always related to an immediately preceding lexer spec item, 
+                (such as this one) are always related to an immediately preceding lexer spec item,
                 e.g. a lexer match rule expression (see 'lexer rules').
 
                   Erroneous area:
@@ -622,8 +622,8 @@ definition
             yyerror(rmCommonWS`
                 illegal input in the lexer spec definitions section.
 
-                This might be stuff incorrectly dangling off the previous 
-                '${yy.__options_category_description__}' definition statement, so please do check above 
+                This might be stuff incorrectly dangling off the previous
+                '${yy.__options_category_description__}' definition statement, so please do check above
                 when the mistake isn't immediately obvious from this error spot itself.
 
                   Erroneous code:
@@ -693,12 +693,12 @@ start_conditions_marker
 
 rules
     : rules scoped_rules_collective
-        { 
-            $$ = $rules.concat($scoped_rules_collective); 
+        {
+            $$ = $rules.concat($scoped_rules_collective);
         }
     | rules rule
         {
-            $$ = $rules.concat([$rule]); 
+            $$ = $rules.concat([$rule]);
         }
     //
     // may be a *lexer setup code section*, e.g.
@@ -707,9 +707,9 @@ rules
     //        console.log('setup info message');
     //     %}
     //
-    // **Note** that the action block start marker `%{` MUST be positioned 
+    // **Note** that the action block start marker `%{` MUST be positioned
     // at the start of a line to be accepted; indented action code blocks
-    // are always related to a preceding lexer spec item, such as a 
+    // are always related to a preceding lexer spec item, such as a
     // lexer match rule expression (see 'lexer rules').
     //
     | rules ACTION_START_AT_SOL action ACTION_END
@@ -758,7 +758,7 @@ rules
             `);
             $$ = $rules;
         %}
-    | rules ACTION_START include_macro_code ACTION_END 
+    | rules ACTION_START include_macro_code ACTION_END
         {
             yy.actionInclude.push($include_macro_code);
             $$ = $rules;
@@ -781,9 +781,9 @@ rules
                 var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
                 yyerror(rmCommonWS`
                     The '%{...%\}' lexer setup action code section MUST have its action
-                    block start marker (\`%{\`${marker_msg}) positioned 
+                    block start marker (\`%{\`${marker_msg}) positioned
                     at the start of a line to be accepted: *indented* action code blocks
-                    (such as this one) are always related to an immediately preceding lexer spec item, 
+                    (such as this one) are always related to an immediately preceding lexer spec item,
                     e.g. a lexer match rule expression (see 'lexer rules').
 
                       Erroneous area:
@@ -795,7 +795,7 @@ rules
             } else {
                 yyerror(rmCommonWS`
                     There's probably an error in one or more of your lexer regex rules.
-                    Did you perhaps indent the rule regex? Note that all rule regexes 
+                    Did you perhaps indent the rule regex? Note that all rule regexes
                     MUST start at the start of the line, i.e. text column 1. Indented text
                     is perceived as JavaScript action code related to the last lexer
                     rule regex.
@@ -809,7 +809,7 @@ rules
             }
             $$ = $rules;
         %}
-    | rules start_inclusive_keyword 
+    | rules start_inclusive_keyword
         {
             yyerror(rmCommonWS`
                 \`${yy.__options_category_description__}\` statements must be placed in
@@ -835,7 +835,7 @@ rules
             `);
             $$ = $rules;
         }
-    | rules option_keyword 
+    | rules option_keyword
         {
             yyerror(rmCommonWS`
                 \`${yy.__options_category_description__}\` statements must be placed in
@@ -1070,25 +1070,25 @@ rule
             yyerror(rmCommonWS`
                 A lexer rule regex action code must be properly terminated and must contain a JavaScript statement block (or anything that does parse as such), e.g.:
 
-                    /rule/      
-                    %{ 
-                        invokeHooHaw(); 
-                        return 'TOKEN'; 
+                    /rule/
+                    %{
+                        invokeHooHaw();
+                        return 'TOKEN';
                     %}
 
                 You may indent the initial '%{' to disambiguate this as being a rule action code block instead of a lexer init code block:
 
-                    /rule/      
-                      %{ 
-                        invokeHooHaw(); 
-                        return 'TOKEN'; 
+                    /rule/
+                      %{
+                        invokeHooHaw();
+                        return 'TOKEN';
                     %}
 
                 You can also accomplish this by placing the '%{' on the same line as the regex:
 
-                    /rule/      %{ 
-                        invokeHooHaw(); 
-                        return 'TOKEN'; 
+                    /rule/      %{
+                        invokeHooHaw();
+                        return 'TOKEN';
                     %}
 
                 NOTE: when you have very simple action code, wrapping it in '%{...}%' or equivalent is not required as long as you keep the code indented, e.g.:
@@ -1600,7 +1600,7 @@ epilogue
         {
             $$ = '';
         }
-    | '%%' epilogue_chunks 
+    | '%%' epilogue_chunks
         {
             var srcCode = trimActionCode($epilogue_chunks);
             if (srcCode) {
@@ -1659,15 +1659,15 @@ epilogue_chunk
     //
     // `%include` automatically injects a `ACTION_START` token, even when it's placed
     // at the start of a line (column 1).
-    // Otherwise we don't tolerate the other source of `ACTION_START` 
+    // Otherwise we don't tolerate the other source of `ACTION_START`
     // tokens -- indented `%{` markers -- in the epilogue, hence we have this special
     // production rule for includes only.
     //
-    // To help epilogue code to delineate code chunks from %include blocks in 
-    // pathological condition, we do support wrapping chunks of epilogue 
-    // in `%{...%}`: see the ACTION_START_AT_SOL production alternative further below. 
+    // To help epilogue code to delineate code chunks from %include blocks in
+    // pathological condition, we do support wrapping chunks of epilogue
+    // in `%{...%}`: see the ACTION_START_AT_SOL production alternative further below.
     //
-    : ACTION_START include_macro_code ACTION_END 
+    : ACTION_START include_macro_code ACTION_END
         {
             $$ = '\n\n' + $include_macro_code + '\n\n';
         }
@@ -1687,7 +1687,7 @@ epilogue_chunk
             }
             // Since the epilogue is concatenated as-is (see the `epilogue_chunks` rule above)
             // we append those protective double newlines right now, as the calling site
-            // won't do it for us: 
+            // won't do it for us:
             $$ = '\n\n' + srcCode + '\n\n';
         }
     //
@@ -1722,8 +1722,8 @@ epilogue_chunk
     | TRAILING_CODE_CHUNK
         {
             // these code chunks are very probably incomplete, hence compile-testing
-            // for these should be deferred until we've collected the entire epilogue. 
-            $$ = $TRAILING_CODE_CHUNK; 
+            // for these should be deferred until we've collected the entire epilogue.
+            $$ = $TRAILING_CODE_CHUNK;
         }
     ;
 

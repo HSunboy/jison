@@ -374,13 +374,13 @@ var code_exec = {
 //
 
 assert(recast);
-var types = recast.types;
-assert(types);
-var namedTypes = types.namedTypes;
-assert(namedTypes);
-var b = types.builders;
-assert(b);
-// //assert(astUtils);
+//var types = recast.types;
+//assert(types);
+//var namedTypes = types.namedTypes;
+//assert(namedTypes);
+//var b = types.builders;
+//assert(b);
+//assert(astUtils);
 
 
 
@@ -488,7 +488,7 @@ function checkActionBlock(src, yylloc) {
         var rv = parseCodeChunkToAST(src);
         return false;
     } catch (ex) {
-        return false;
+        return ex.message || "code snippet cannot be parsed";
     }
 }
 

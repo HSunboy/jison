@@ -367,13 +367,13 @@ var code_exec = {
   dump: dumpSourceToFile
 }; //
 
-assert__default['default'](recast__default['default']);
-var types = recast__default['default'].types;
-assert__default['default'](types);
-var namedTypes = types.namedTypes;
-assert__default['default'](namedTypes);
-var b = types.builders;
-assert__default['default'](b); // //assert(astUtils);
+assert__default['default'](recast__default['default']); //var types = recast.types;
+//assert(types);
+//var namedTypes = types.namedTypes;
+//assert(namedTypes);
+//var b = types.builders;
+//assert(b);
+//assert(astUtils);
 
 function parseCodeChunkToAST(src, options) {
   src = src.replace(/@/g, '\uFFDA').replace(/#/g, '\uFFDB');
@@ -458,7 +458,7 @@ function checkActionBlock(src, yylloc) {
     var rv = parseCodeChunkToAST(src);
     return false;
   } catch (ex) {
-    return false;
+    return ex.message || "code snippet cannot be parsed";
   }
 } // The rough-and-ready preprocessor for any action code block:
 // this one trims off any surplus whitespace and removes any
