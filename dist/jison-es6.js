@@ -14455,8 +14455,36 @@ function stripUnusedLexerCode(src, opt) {
     //        ............................. ${opt.lexerActionsUseDisplayAPIs}
     //   uses describeYYLLOC() API: ....... ${opt.lexerActionsUseDescribeYYLOC}
 
-    var ast = helpers.parseCodeChunkToAST(src, opt);
-    var new_src = helpers.prettyPrintAST(ast, opt);
+    var new_src;
+    try {
+        var ast = helpers.parseCodeChunkToAST(src, opt);
+        new_src = helpers.prettyPrintAST(ast, opt);
+    }
+    catch (ex) {
+        let line = ex.lineNumber || 0;
+        let a = src.split(/\r?\n/g);
+        let len = a.length;
+        let minl = Math.max(0, line - 10);
+        let b = a.slice(minl, line + 10);
+        let c = b.splice(line - minl, 0, "", "^^^^^^^^^^^ source line above is reported as erroneous ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^", "");
+        let offendingChunk = '        ' + b.join('\n        ');
+        console.error(rmCommonWS$2`
+            stripUnusedLexerCode WARNING: 
+
+                JISON failed to reformat the generated lexer.
+                Using the generated code as-is instead and pray it works in your final output!
+
+                Internal error report:
+
+                    ${ex}
+
+                The offending action code chunk as reported above:
+
+            ${offendingChunk}
+        `);
+        
+        new_src = src;
+    }
 
 
 
