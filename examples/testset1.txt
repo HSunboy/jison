@@ -4,7 +4,6 @@
 ./basic2_lex.jison
 ./basic_lex.jison
 ./basic_w_error_rule.jison
-./benchmark-formula.jison
 ./bison-$index-test.jison
 ./bison-like-negative-or-zero-$index.jison
 ./bison-mysterious-conflicts-test-1.jison
