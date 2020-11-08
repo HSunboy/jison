@@ -1,6 +1,6 @@
 // title: Simple lexer example
 //  
-// test input: "πyαε";
+// test_input: "πyαε"
 
 %code imports %{
   import XRegExp from '@gerhobbelt/xregexp';        // for helping out the `%options xregexp` in the lexer

@@ -3383,6 +3383,7 @@ function lexer_reset() {
         return '';
       });
 
+      //console.error("YAML safeload:", { header, filepath });
       var doc = yaml.safeLoad(header, {
         filename: filepath,
       });
