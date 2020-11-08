@@ -182,7 +182,7 @@ describe("Lexer Kernel", function () {
       assert.equal(lexer.lex(), lexer.EOF);
     });
 
-    xit("parses literal rule strings with escapes correctly", function () {
+    it("parses literal rule strings with escapes correctly", function () {
       var dict = [
         "%%",
         "'x'     {return 'X';}",
@@ -241,6 +241,9 @@ describe("Lexer Kernel", function () {
       assert.equal(lexer.lex(), 'SV');
       assert.equal(lexer.lex(), 'X');
       // \a
+      assert.equal(lexer.lex(), lexer.ERROR);
+      assert.equal(lexer.lex(), 'X');
+      // \x07
       assert.equal(lexer.lex(), 'SA');
       assert.equal(lexer.lex(), 'X');
       // \f
@@ -266,38 +269,27 @@ describe("Lexer Kernel", function () {
       assert.equal(lexer.lex(), 'X');
 
       // \\n
-      assert.equal(lexer.lex(), lexer.ERROR);
       assert.equal(lexer.lex(), 'LN');
-      assert.equal(lexer.lex(), lexer.ERROR);
-      assert.equal(lexer.yytext, 'n');
+      assert.equal(lexer.yytext, '\\n');
       assert.equal(lexer.lex(), 'X');
       // \\r
       assert.equal(lexer.lex(), 'LR');
-      assert.equal(lexer.lex(), lexer.ERROR);
       assert.equal(lexer.lex(), 'X');
       // \\v
       assert.equal(lexer.lex(), 'LV');
-      assert.equal(lexer.lex(), lexer.ERROR);
       assert.equal(lexer.lex(), 'X');
       // \\a
       assert.equal(lexer.lex(), 'LA');
-      assert.equal(lexer.lex(), lexer.ERROR);
       assert.equal(lexer.lex(), 'X');
       // \\f
       assert.equal(lexer.lex(), 'LF');
-      assert.equal(lexer.lex(), lexer.ERROR);
       assert.equal(lexer.lex(), 'X');
       // \\b
-      assert.equal(lexer.lex(), lexer.ERROR);
-      assert.equal(lexer.lex(), lexer.ERROR);
-      assert.equal(lexer.lex(), 'SB');
-      // \\x42
-      assert.equal(lexer.lex(), lexer.ERROR);  // \\
+      assert.equal(lexer.lex(), 'LB');
       assert.equal(lexer.lex(), 'X');
-      assert.equal(lexer.lex(), lexer.ERROR);  // 4
-      assert.equal(lexer.lex(), 'SC');
-      assert.equal(lexer.lex(), lexer.ERROR);  // 2
-      assert.equal(lexer.yytext, '2');
+      // \\x42
+      assert.equal(lexer.lex(), 'LC');
+      assert.equal(lexer.yytext, '\\x42');
       assert.equal(lexer.lex(), 'X');
       // \\u0043
       assert.equal(lexer.lex(), 'LD');
