@@ -1,6 +1,7 @@
 'use strict';
 
 var XRegExp = require('@gerhobbelt/xregexp');
+require('@gerhobbelt/json5');
 var fs = require('fs');
 var path$1 = require('path');
 var recast = require('recast');

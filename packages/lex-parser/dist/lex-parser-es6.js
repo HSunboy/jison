@@ -1,4 +1,5 @@
 import XRegExp from '@gerhobbelt/xregexp';
+import '@gerhobbelt/json5';
 import fs from 'fs';
 import path$1 from 'path';
 import recast from 'recast';
