@@ -22,6 +22,15 @@ var assert__default = /*#__PURE__*/_interopDefaultLegacy(assert$1);
 var XRegExp__default = /*#__PURE__*/_interopDefaultLegacy(XRegExp);
 var JSON5__default = /*#__PURE__*/_interopDefaultLegacy(JSON5);
 
+    var exxx = new Error('x');
+    try
+    {
+        throw exxx;
+    }
+    catch (exxx2) {
+    //console.error(exxx2, "APP INIT A")
+}
+
 // Return TRUE if `src` starts with `searchString`. 
 function startsWith(src, searchString) {
     return src.substr(0, searchString.length) === searchString;
@@ -408,6 +417,15 @@ function parseCodeChunkToAST(src, options) {
     .replace(/@/g, '\uFFDA')
     .replace(/#/g, '\uFFDB')
     ;
+
+    var exxx = new Error('x');
+    try
+    {
+        throw exxx;
+    }
+    catch (exxx2) {
+    //console.error(exxx2, {src})
+}
     var ast = recast__default['default'].parse(src);
     return ast;
 }
@@ -506,6 +524,7 @@ function checkActionBlock(src, yylloc) {
         var rv = parseCodeChunkToAST(src);
         return false;
     } catch (ex) {
+        console.error("checkActionBlock: ", ex, {src});
         return ex.message || "code snippet cannot be parsed";
     }
 }
@@ -8923,6 +8942,36 @@ EOF: 1,
 
     performAction: function lexer__performAction(yy, yyrulenumber, YY_START) {
       var yy_ = this;
+if (0)      
+      console.error("lexer parse action:", {
+        yyrulenumber, 
+        yy_: {
+           yy: {
+            parseError: yy_.yy.parseError,
+            quoteName: yy_.yy.quoteName,
+            actionInclude: yy_.yy.actionInclude,
+            __options_flags__: yy_.yy.__options_flags__,
+            __options_category_description__: yy_.yy.__options_category_description__,
+            startConditions: yy_.yy.startConditions,
+            __context_description__: yy_.yy.__context_description__,
+            depth: yy_.yy.depth,
+            include_command_allowed: yy_.yy.include_command_allowed
+          },
+          __decompressed: yy_.__decompressed,
+          _input: yy_._input.substr(Math.max(0, yy_.offset - yy_.yyleng), 120),
+          yytext: yy_.yytext,
+          yyleng: yy_.yyleng,
+          match: yy_.match,
+          _more: yy_._more,
+          _backtrack: yy_._backtrack,
+          yylloc: yy_.yylloc,
+          _signaled_error_token: yy_._signaled_error_token,
+          done: yy_.done,
+          yylineno: yy_.yylineno,
+          conditionStack: yy_.conditionStack,
+          offset: yy_.offset
+      }
+})
 
       switch (yyrulenumber) {
       case 0:
@@ -9375,6 +9424,7 @@ EOF: 1,
         /*! Conditions:: rules macro INITIAL */
         /*! Rule::       \\(?:([0-7]{1,3})|c([A-Z])|x([0-9a-fA-F]{2})|u([0-9a-fA-F]{4})|u\{([0-9a-fA-F]{1,8})\}) */
         var m = this.matches;
+        console.error("Rule 69:", m)
 
         yy_.yytext = NaN;
 
@@ -11723,6 +11773,15 @@ function autodetectAndConvertToJSONformat(lexerSpec, options) {
             // // make sure all options are 'standardized' before we go and mix them together:
             // options = mkStdOptions(grammar.options, options);
             try {
+
+    var exxx = new Error('x');
+    try
+    {
+        throw exxx;
+    }
+    catch (exxx2) {
+    //console.error(exxx2, {lexerSpec})
+}
                 chk_l = lexParser.parse(lexerSpec);
             } catch (e) {
                 if (options.json) {
@@ -14226,8 +14285,23 @@ function stripUnusedLexerCode(src, opt) {
     //        ............................. ${opt.lexerActionsUseDisplayAPIs}
     //   uses describeYYLLOC() API: ....... ${opt.lexerActionsUseDescribeYYLOC}
 
+    var new_src;
+    try
+    {
     var ast = helpers.parseCodeChunkToAST(src, opt);
-    var new_src = helpers.prettyPrintAST(ast, opt);
+     new_src = helpers.prettyPrintAST(ast, opt);
+ }
+ catch (exx2){
+     let line = exx2.lineNumber || 0;
+     let a = src.split(/\r?\n/g);
+     let len2 = a.length;
+     let minl = Math.max(0, line - 5);
+     let b = a.slice(minl, line + 5);
+     let c = b.splice(line - minl, 0, "", "^^^^^^^^^^^ source line above is reported as erroneous ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^", "");
+     let offendingChunk = b.join('\n');
+     console.error("stripUnusedLexerCode: failed to rewrite action code block:", exx2, {src, a, offendingChunk, minl, line, b, c, offset: line - minl, len2});
+new_src = src;
+ }
 
 
 

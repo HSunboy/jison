@@ -5,12 +5,12 @@
 
 var fs = require('fs');
 var path$1 = require('path');
-var recast = require('recast');
-var babel = require('@babel/core');
+var recast = 1; // require('recast');
+var babel = 1; // require('@babel/core');
 var assert$1 = require('assert');
 var XRegExp = require('@gerhobbelt/xregexp');
 var json5 = require('@gerhobbelt/json5');
-var astUtils = require('ast-util');
+var astUtils = 1; // require('ast-util');
 var process$1 = require('process');
 var nomnom = require('@gerhobbelt/nomnom');
 
@@ -25,6 +25,15 @@ var json5__default = /*#__PURE__*/_interopDefaultLegacy(json5);
 var astUtils__default = /*#__PURE__*/_interopDefaultLegacy(astUtils);
 var process__default = /*#__PURE__*/_interopDefaultLegacy(process$1);
 var nomnom__default = /*#__PURE__*/_interopDefaultLegacy(nomnom);
+
+    var exxx = new Error('x');
+    try
+    {
+        throw exxx;
+    }
+    catch (exxx2) {
+    console.error(exxx2, "APP INIT A")
+}
 
 // Return TRUE if `src` starts with `searchString`. 
 function startsWith(src, searchString) {
@@ -412,6 +421,15 @@ function parseCodeChunkToAST(src, options) {
     .replace(/@/g, '\uFFDA')
     .replace(/#/g, '\uFFDB')
     ;
+
+    var exxx = new Error('x');
+    try
+    {
+        throw exxx;
+    }
+    catch (exxx2) {
+    console.error(exxx2, {src})
+}
     var ast = recast__default['default'].parse(src);
     return ast;
 }
@@ -9171,6 +9189,7 @@ EOF: 1,
 
     performAction: function lexer__performAction(yy, yyrulenumber, YY_START) {
       var yy_ = this;
+      console.error("lexer parse action:", {yyrulenumber, yy_, yy})
 
       switch (yyrulenumber) {
       case 0:
@@ -9623,6 +9642,7 @@ EOF: 1,
         /*! Conditions:: rules macro INITIAL */
         /*! Rule::       \\(?:([0-7]{1,3})|c([A-Z])|x([0-9a-fA-F]{2})|u([0-9a-fA-F]{4})|u\{([0-9a-fA-F]{1,8})\}) */
         var m = this.matches;
+        console.error("Rule 69:", m)
 
         yy_.yytext = NaN;
 
@@ -11971,6 +11991,14 @@ function autodetectAndConvertToJSONformat(lexerSpec, options) {
             // // make sure all options are 'standardized' before we go and mix them together:
             // options = mkStdOptions(grammar.options, options);
             try {
+    var exxx = new Error('x');
+    try
+    {
+        throw exxx;
+    }
+    catch (exxx2) {
+    console.error(exxx2, {lexerSpec})
+}
                 chk_l = lexParser.parse(lexerSpec);
             } catch (e) {
                 if (options.json) {
@@ -18598,6 +18626,14 @@ function transformProduction(id, production, grammar) {
             opts = handle[2];
             handle = handle[0];
         }
+    var exxx = new Error('x');
+    try
+    {
+        throw exxx;
+    }
+    catch (exxx2) {
+    console.error(exxx2, {handle, action, opts})
+}
         var expressions = parser$2.parse(handle);
 
         var list = transformExpressionList(expressions, transform_opts);
@@ -26487,6 +26523,14 @@ var bnf = {
 var version$1 = '0.6.2-220';                              // require('./package.json').version;
 
 function parse(grammar) {
+    var exxx = new Error('x');
+    try
+    {
+        throw exxx;
+    }
+    catch (exxx2) {
+    console.error(exxx2, {grammar})
+}
     return bnf.parser.parse(grammar);
 }
 
@@ -26600,6 +26644,14 @@ function parseLex(text, position) {
     if (c > 3) {
         prelude = '// ' + (new Array(c - 3)).join('.') + prelude;
     }
+    var exxx = new Error('x');
+    try
+    {
+        throw exxx;
+    }
+    catch (exxx2) {
+    console.error(exxx2, {text: prelude + text})
+}
     return lexParser.parse(prelude + text);
 }
 
@@ -27706,6 +27758,14 @@ function autodetectAndConvertToJSONformat$1(grammar, optionalLexerSection, optio
       }
       if (!chk_g) {
         try {
+    var exxx = new Error('x');
+    try
+    {
+        throw exxx;
+    }
+    catch (exxx2) {
+    console.error(exxx2, {grammar})
+}
             chk_g = ebnfParser.parse(grammar);
         } catch (e) {
             if (options.json) {
@@ -27790,6 +27850,14 @@ function autodetectAndConvertToJSONformat$1(grammar, optionalLexerSection, optio
           // // make sure all options are 'standardized' before we go and mix them together:
           // options = mkStdOptions(grammar.options, options);
           try {
+    var exxx = new Error('x');
+    try
+    {
+        throw exxx;
+    }
+    catch (exxx2) {
+    console.error(exxx2, {optionalLexerSection})
+}
               chk_l = lexParser.parse(optionalLexerSection);
           } catch (e) {
               if (options.json) {
@@ -36503,9 +36571,26 @@ var cli = {
     generateParserString: generateParserString
 };
 
+    var exxx = new Error('x');
+    try
+    {
+        throw exxx;
+    }
+    catch (exxx2) {
+    console.error(exxx2, "APP INIT B")
+}
+
 
 if (require.main === module) {
     var opts = getCommandlineOptions();
+    var exxx = new Error('x');
+    try
+    {
+        throw exxx;
+    }
+    catch (exxx2) {
+    console.error(exxx2, {opts})
+}
     cli.main(opts);
 }
 
