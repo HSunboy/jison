@@ -7928,16 +7928,13 @@ EOF: 1,
          * @this {RegExpLexer}
          */
     yyerror: function yyError(str /*, ...args */) {
-      var lineno_msg = '';
+      var lineno_msg = 'Lexical error';
 
       if (this.yylloc) {
-        lineno_msg = ' on line ' + (this.yylineno + 1);
+        lineno_msg += ' on line ' + (this.yylineno + 1);
       }
 
-      var p = this.constructLexErrorInfo(
-        'Lexical error' + lineno_msg + ': ' + str,
-        this.options.lexerErrorsAreRecoverable
-      );
+      var p = this.constructLexErrorInfo(lineno_msg + ': ' + str, this.options.lexerErrorsAreRecoverable);
 
       // Add any extra args to the hash under the name `extra_error_attributes`:
       var args = Array.prototype.slice.call(arguments, 1);
@@ -8295,14 +8292,14 @@ EOF: 1,
         // when the `parseError()` call returns, we MUST ensure that the error is registered.
         // We accomplish this by signaling an 'error' token to be produced for the current
         // `.lex()` run.
-        var lineno_msg = '';
+        var lineno_msg = 'Lexical error';
 
         if (this.yylloc) {
-          lineno_msg = ' on line ' + (this.yylineno + 1);
+          lineno_msg += ' on line ' + (this.yylineno + 1);
         }
 
         var p = this.constructLexErrorInfo(
-          'Lexical error' + lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).',
+          lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).',
           false
         );
 
@@ -8941,14 +8938,14 @@ EOF: 1,
         this.clear();
         return this.EOF;
       } else {
-        var lineno_msg = '';
+        var lineno_msg = 'Lexical error';
 
         if (this.options.trackPosition) {
-          lineno_msg = ' on line ' + (this.yylineno + 1);
+          lineno_msg += ' on line ' + (this.yylineno + 1);
         }
 
         var p = this.constructLexErrorInfo(
-          'Lexical error' + lineno_msg + ': Unrecognized text.',
+          lineno_msg + ': Unrecognized text.',
           this.options.lexerErrorsAreRecoverable
         );
 
@@ -17036,16 +17033,13 @@ EOF: 1,
          * @this {RegExpLexer}
          */
     yyerror: function yyError(str /*, ...args */) {
-      var lineno_msg = '';
+      var lineno_msg = 'Lexical error';
 
       if (this.yylloc) {
-        lineno_msg = ' on line ' + (this.yylineno + 1);
+        lineno_msg += ' on line ' + (this.yylineno + 1);
       }
 
-      var p = this.constructLexErrorInfo(
-        'Lexical error' + lineno_msg + ': ' + str,
-        this.options.lexerErrorsAreRecoverable
-      );
+      var p = this.constructLexErrorInfo(lineno_msg + ': ' + str, this.options.lexerErrorsAreRecoverable);
 
       // Add any extra args to the hash under the name `extra_error_attributes`:
       var args = Array.prototype.slice.call(arguments, 1);
@@ -17403,14 +17397,14 @@ EOF: 1,
         // when the `parseError()` call returns, we MUST ensure that the error is registered.
         // We accomplish this by signaling an 'error' token to be produced for the current
         // `.lex()` run.
-        var lineno_msg = '';
+        var lineno_msg = 'Lexical error';
 
         if (this.yylloc) {
-          lineno_msg = ' on line ' + (this.yylineno + 1);
+          lineno_msg += ' on line ' + (this.yylineno + 1);
         }
 
         var p = this.constructLexErrorInfo(
-          'Lexical error' + lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).',
+          lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).',
           false
         );
 
@@ -18049,14 +18043,14 @@ EOF: 1,
         this.clear();
         return this.EOF;
       } else {
-        var lineno_msg = '';
+        var lineno_msg = 'Lexical error';
 
         if (this.options.trackPosition) {
-          lineno_msg = ' on line ' + (this.yylineno + 1);
+          lineno_msg += ' on line ' + (this.yylineno + 1);
         }
 
         var p = this.constructLexErrorInfo(
-          'Lexical error' + lineno_msg + ': Unrecognized text.',
+          lineno_msg + ': Unrecognized text.',
           this.options.lexerErrorsAreRecoverable
         );
 
@@ -24226,16 +24220,13 @@ EOF: 1,
          * @this {RegExpLexer}
          */
     yyerror: function yyError(str /*, ...args */) {
-      var lineno_msg = '';
+      var lineno_msg = 'Lexical error';
 
       if (this.yylloc) {
-        lineno_msg = ' on line ' + (this.yylineno + 1);
+        lineno_msg += ' on line ' + (this.yylineno + 1);
       }
 
-      var p = this.constructLexErrorInfo(
-        'Lexical error' + lineno_msg + ': ' + str,
-        this.options.lexerErrorsAreRecoverable
-      );
+      var p = this.constructLexErrorInfo(lineno_msg + ': ' + str, this.options.lexerErrorsAreRecoverable);
 
       // Add any extra args to the hash under the name `extra_error_attributes`:
       var args = Array.prototype.slice.call(arguments, 1);
@@ -24593,14 +24584,14 @@ EOF: 1,
         // when the `parseError()` call returns, we MUST ensure that the error is registered.
         // We accomplish this by signaling an 'error' token to be produced for the current
         // `.lex()` run.
-        var lineno_msg = '';
+        var lineno_msg = 'Lexical error';
 
         if (this.yylloc) {
-          lineno_msg = ' on line ' + (this.yylineno + 1);
+          lineno_msg += ' on line ' + (this.yylineno + 1);
         }
 
         var p = this.constructLexErrorInfo(
-          'Lexical error' + lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).',
+          lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).',
           false
         );
 
@@ -25239,14 +25230,14 @@ EOF: 1,
         this.clear();
         return this.EOF;
       } else {
-        var lineno_msg = '';
+        var lineno_msg = 'Lexical error';
 
         if (this.options.trackPosition) {
-          lineno_msg = ' on line ' + (this.yylineno + 1);
+          lineno_msg += ' on line ' + (this.yylineno + 1);
         }
 
         var p = this.constructLexErrorInfo(
-          'Lexical error' + lineno_msg + ': Unrecognized text.',
+          lineno_msg + ': Unrecognized text.',
           this.options.lexerErrorsAreRecoverable
         );
 

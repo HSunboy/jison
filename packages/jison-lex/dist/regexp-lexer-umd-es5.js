@@ -1926,7 +1926,7 @@ this.__error_infos.push(pei);return pei;},/**
              *
              * @public
              * @this {RegExpLexer}
-             */yyerror:function yyError(str/*, ...args */){var lineno_msg='';if(this.yylloc){lineno_msg=' on line '+(this.yylineno+1);}var p=this.constructLexErrorInfo('Lexical error'+lineno_msg+': '+str,this.options.lexerErrorsAreRecoverable);// Add any extra args to the hash under the name `extra_error_attributes`:
+             */yyerror:function yyError(str/*, ...args */){var lineno_msg='Lexical error';if(this.yylloc){lineno_msg+=' on line '+(this.yylineno+1);}var p=this.constructLexErrorInfo(lineno_msg+': '+str,this.options.lexerErrorsAreRecoverable);// Add any extra args to the hash under the name `extra_error_attributes`:
 var args=Array.prototype.slice.call(arguments,1);if(args.length){p.extra_error_attributes=args;}return this.parseError(p.errStr,p,this.JisonLexerError)||this.ERROR;},/**
              * final cleanup function for when we have completed lexing the input;
              * make it an API so that external code can use this one once userland
@@ -2054,7 +2054,7 @@ var pre=this.match;var pre_lines=pre.split(/(?:\r\n?|\n)/g);if(pre_lines.length=
              */reject:function lexer_reject(){if(this.options.backtrack_lexer){this._backtrack=true;}else{// when the `parseError()` call returns, we MUST ensure that the error is registered.
 // We accomplish this by signaling an 'error' token to be produced for the current
 // `.lex()` run.
-var lineno_msg='';if(this.yylloc){lineno_msg=' on line '+(this.yylineno+1);}var p=this.constructLexErrorInfo('Lexical error'+lineno_msg+': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).',false);this._signaled_error_token=this.parseError(p.errStr,p,this.JisonLexerError)||this.ERROR;}return this;},/**
+var lineno_msg='Lexical error';if(this.yylloc){lineno_msg+=' on line '+(this.yylineno+1);}var p=this.constructLexErrorInfo(lineno_msg+': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).',false);this._signaled_error_token=this.parseError(p.errStr,p,this.JisonLexerError)||this.ERROR;}return this;},/**
              * retain first n characters of the match
              *
              * @public
@@ -2258,7 +2258,7 @@ return this.parseError(p.errStr,p,this.JisonLexerError)||this.ERROR;}}var rule_i
 for(var i=1;i<=len;i++){tempMatch=this._input.match(regexes[i]);if(tempMatch&&(!match||tempMatch[0].length>match[0].length)){match=tempMatch;index=i;if(this.options.backtrack_lexer){token=this.test_match(tempMatch,rule_ids[i]);if(token!==false){return token;}else if(this._backtrack){match=undefined;continue;// rule action called reject() implying a rule MISmatch.
 }else{// else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
 return false;}}else if(!this.options.flex){break;}}}if(match){token=this.test_match(match,rule_ids[index]);if(token!==false){return token;}// else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-return false;}if(!this._input){this.done=true;this.clear();return this.EOF;}else{var lineno_msg='';if(this.options.trackPosition){lineno_msg=' on line '+(this.yylineno+1);}var p=this.constructLexErrorInfo('Lexical error'+lineno_msg+': Unrecognized text.',this.options.lexerErrorsAreRecoverable);var pendingInput=this._input;var activeCondition=this.topState();var conditionStackDepth=this.conditionStack.length;token=this.parseError(p.errStr,p,this.JisonLexerError)||this.ERROR;if(token===this.ERROR){// we can try to recover from a lexer error that `parseError()` did not 'recover' for us
+return false;}if(!this._input){this.done=true;this.clear();return this.EOF;}else{var lineno_msg='Lexical error';if(this.options.trackPosition){lineno_msg+=' on line '+(this.yylineno+1);}var p=this.constructLexErrorInfo(lineno_msg+': Unrecognized text.',this.options.lexerErrorsAreRecoverable);var pendingInput=this._input;var activeCondition=this.topState();var conditionStackDepth=this.conditionStack.length;token=this.parseError(p.errStr,p,this.JisonLexerError)||this.ERROR;if(token===this.ERROR){// we can try to recover from a lexer error that `parseError()` did not 'recover' for us
 // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
 // has not consumed/modified any pending input or changed state in the error handler:
 if(!this.matches&&// and make sure the input has been modified/consumed ...

@@ -114,12 +114,12 @@ describe("helpers API", function () {
       assert.strictEqual(helpers.printFunctionSourceCode((x) => (d(1), d(2), x)), "(x) => (d(1), d(2), x)");
       assert.strictEqual(helpers.printFunctionSourceCode(x => x + 7), "x => x + 7");
     } else {
-      assert.strictEqual(helpers.printFunctionSourceCode(function a(x) { return x; }), "function a(x){return x;}");
-      assert.strictEqual(helpers.printFunctionSourceCode(function (x)  { return x; }), "function (x){return x;}");
-      assert.strictEqual(helpers.printFunctionSourceCode((x) => { return x; }), "x=>{return x;}");
-      assert.strictEqual(helpers.printFunctionSourceCode((x) => x), "x=>x");
-      assert.strictEqual(helpers.printFunctionSourceCode((x) => (d(1), d(2), x)), "x=>(d(1),d(2),x)");
-      assert.strictEqual(helpers.printFunctionSourceCode(x => x + 7), "x=>x+7");
+      assert.strictEqual(helpers.printFunctionSourceCode(function a(x) { return x; }), "function a(x) { return x; }");
+      assert.strictEqual(helpers.printFunctionSourceCode(function (x)  { return x; }), "function (x)  { return x; }");
+      assert.strictEqual(helpers.printFunctionSourceCode((x) => { return x; }), "(x) => { return x; }");
+      assert.strictEqual(helpers.printFunctionSourceCode((x) => x), "(x) => x");
+      assert.strictEqual(helpers.printFunctionSourceCode((x) => (d(1), d(2), x)), "(x) => (d(1), d(2), x)");
+      assert.strictEqual(helpers.printFunctionSourceCode(x => x + 7), "x => x + 7");
     }
   });
 
@@ -142,12 +142,12 @@ describe("helpers API", function () {
       assert.strictEqual(helpers.printFunctionSourceCode(f5), "(x) => (d(1), d(2), x)");
       assert.strictEqual(helpers.printFunctionSourceCode(f6), "x => x + 7");
     } else {
-      assert.strictEqual(helpers.printFunctionSourceCode(f1), "function a(x){return x;}");
-      assert.strictEqual(helpers.printFunctionSourceCode(f2), "function (x){return x;}");
-      assert.strictEqual(helpers.printFunctionSourceCode(f3), "x=>{return x;}");
-      assert.strictEqual(helpers.printFunctionSourceCode(f4), "x=>x");
-      assert.strictEqual(helpers.printFunctionSourceCode(f5), "x=>(d(1),d(2),x)");
-      assert.strictEqual(helpers.printFunctionSourceCode(f6), "x=>x+7");
+      assert.strictEqual(helpers.printFunctionSourceCode(f1), "function a(x) { return x; }");
+      assert.strictEqual(helpers.printFunctionSourceCode(f2), "function (x)  { return x; }");
+      assert.strictEqual(helpers.printFunctionSourceCode(f3), "(x) => { return x; }");
+      assert.strictEqual(helpers.printFunctionSourceCode(f4), "(x) => x");
+      assert.strictEqual(helpers.printFunctionSourceCode(f5), "(x) => (d(1), d(2), x)");
+      assert.strictEqual(helpers.printFunctionSourceCode(f6), "x => x + 7");
     } 
   });
 
@@ -168,8 +168,8 @@ describe("helpers API", function () {
       assert.deepEqual(helpers.printFunctionSourceCodeContainer(function (x)  { return x; }), { args: "x", code: "return x;" });
       assert.deepEqual(helpers.printFunctionSourceCodeContainer((x) => { return x; }), { args: "x", code: "return x;" });
       assert.deepEqual(helpers.printFunctionSourceCodeContainer((x) => x), { args: "x", code: "return x;" });
-      assert.deepEqual(helpers.printFunctionSourceCodeContainer((x) => (d(1), d(2), x)), { args: "x", code: "return (d(1),d(2),x);" });
-      assert.deepEqual(helpers.printFunctionSourceCodeContainer(x => x + 7), { args: "x", code: "return x+7;" });
+      assert.deepEqual(helpers.printFunctionSourceCodeContainer((x) => (d(1), d(2), x)), { args: "x", code: "return (d(1), d(2), x);" });
+      assert.deepEqual(helpers.printFunctionSourceCodeContainer(x => x + 7), { args: "x", code: "return x + 7;" });
     } 
   });
 
@@ -197,8 +197,8 @@ describe("helpers API", function () {
       assert.deepEqual(helpers.printFunctionSourceCodeContainer(f2), { args: "x", code: "return x;" });
       assert.deepEqual(helpers.printFunctionSourceCodeContainer(f3), { args: "x", code: "return x;" });
       assert.deepEqual(helpers.printFunctionSourceCodeContainer(f4), { args: "x", code: "return x;" });
-      assert.deepEqual(helpers.printFunctionSourceCodeContainer(f5), { args: "x", code: "return (d(1),d(2),x);" });
-      assert.deepEqual(helpers.printFunctionSourceCodeContainer(f6), { args: "x", code: "return x+7;" });
+      assert.deepEqual(helpers.printFunctionSourceCodeContainer(f5), { args: "x", code: "return (d(1), d(2), x);" });
+      assert.deepEqual(helpers.printFunctionSourceCodeContainer(f6), { args: "x", code: "return x + 7;" });
     } 
   });
 
