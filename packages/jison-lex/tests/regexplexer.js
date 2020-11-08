@@ -2152,21 +2152,21 @@ console.error('lexer:', typeof lexer);
     assert.equal(lexer.yytext, "x");
     assert.equal(counter, 6);
     assert.equal(lexer.lex(), "a:PRE");
-    // as our PRE handler causes the lexer to produce another token immediately
-    // without entering the lexer proper, `yytext` et al are NOT RESET:
-    assert.equal(lexer.yytext, "x");
+    // while our PRE handler causes the lexer to produce another token immediately
+    // without entering the lexer proper, `yytext` et al will be RESET nevertheless:
+    assert.equal(lexer.yytext, "");
     assert.equal(counter, 9);
     assert.equal(lexer.lex(), "a:t");
     assert.equal(lexer.yytext, "y");
     assert.equal(counter, 12);
     assert.equal(lexer.lex(), "a:PRE");
-    assert.equal(lexer.yytext, "y");
+    assert.equal(lexer.yytext, "");
     assert.equal(counter, 15);
     assert.equal(lexer.lex(), "a:t");
     assert.equal(lexer.yytext, "z");
     assert.equal(counter, 18);
     assert.equal(lexer.lex(), "a:PRE");
-    assert.equal(lexer.yytext, "z");
+    assert.equal(lexer.yytext, "");
     assert.equal(counter, 21);
     assert.equal(lexer.EOF, 1);
     assert.equal(lexer.lex(), "a:1");
@@ -2220,9 +2220,9 @@ console.error('lexer:', typeof lexer);
     assert.equal(lexer.yytext, "x");
     assert.equal(counter, 6);
     assert.equal(lexer.lex(), "a:PRE");
-    // as our PRE handler causes the lexer to produce another token immediately
-    // without entering the lexer proper, `yytext` et al are NOT RESET:
-    assert.equal(lexer.yytext, "x");
+    // while our PRE handler causes the lexer to produce another token immediately
+    // without entering the lexer proper, `yytext` et al will be RESET nevertheless:
+    assert.equal(lexer.yytext, "");
     assert.equal(counter, 9);
 
     lexer.options.pre_lex = null;
