@@ -66,7 +66,7 @@ lex
     ;
 
 rules_and_epilogue
-    : '%%' rules epilogue
+    : start_productions_marker rules epilogue
       {
         if ($epilogue) {
             $$ = { rules: $rules, moduleInclude: $epilogue };
@@ -74,7 +74,7 @@ rules_and_epilogue
             $$ = { rules: $rules };
         }
       }
-    | '%%' error epilogue
+    | start_productions_marker error epilogue
       {
         yyerror(rmCommonWS`
             There's probably an error in one or more of your lexer regex rules.
@@ -96,11 +96,11 @@ rules_and_epilogue
             ${$error.errStr}
         `);
       }
-    | '%%' rules
+    | start_productions_marker rules
       {
         $$ = { rules: $rules };
       }
-    | '%%' error
+    | start_productions_marker error
       {
         yyerror(rmCommonWS`
             There's probably an error in one or more of your lexer regex rules.
@@ -418,11 +418,6 @@ definition
             `);
             $$ = null;
         %}
-    | ACTION_START include_macro_code ACTION_END
-        {
-            yy.actionInclude.push($include_macro_code);
-            $$ = null;
-        }
     //
     // see the alternative above: this rule is added to aid error
     // diagnosis of user coding.
@@ -446,29 +441,6 @@ definition
 
                   Technical error report:
                 ${$error.errStr}
-            `);
-            $$ = null;
-        %}
-    //
-    // see the alternative above: this rule is added to aid error
-    // diagnosis of user coding.
-    //
-    // This rule detects the presence of an unattached *indented*
-    // action code block.
-    //
-    | ACTION_START DUMMY
-        %{
-            var start_marker = $ACTION_START.trim();
-            var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
-            yyerror(rmCommonWS`
-                The '%{...%\}' lexer setup action code section MUST have its action
-                block start marker (\`%{\`${marker_msg}) positioned
-                at the start of a line to be accepted: *indented* action code blocks
-                (such as this one) are always related to an immediately preceding lexer spec item,
-                e.g. a lexer match rule expression (see 'lexer rules').
-
-                  Erroneous area:
-                ${yylexer.prettyPrintRange(@ACTION_START)}
             `);
             $$ = null;
         %}
@@ -543,7 +515,7 @@ definition
                 body: body
             };
         }
-    | import_keyword error
+    | import_keyword error OPTIONS_END
         {
             yyerror(rmCommonWS`
                 %import name or source filename missing maybe?
@@ -603,11 +575,50 @@ definition
                 }
             };
         }
-    | init_code_keyword option_list ACTION_START error /* OPTIONS_END */
-    | init_code_keyword error /* OPTIONS_END */
+    | init_code_keyword option_list ACTION_START error OPTIONS_END
+        {
+            var start_marker = $ACTION_START.trim();
+            var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
+            var end_marker_msg = marker_msg.replace(/\{/g, '}');
+            yyerror(rmCommonWS`
+                The '%code ID %{...%\}' initialization code section must be properly 
+                wrapped in block start markers (\`%{\`${marker_msg}) 
+                and matching end markers (\`%}\`${end_marker_msg}). Expected format:
+
+                    %code qualifier_name {action code}
+
+                  Erroneous code:
+                ${yylexer.prettyPrintRange(@error, @init_code_keyword)}
+
+                  Technical error report:
+                ${$error.errStr}
+            `);
+        }
+    | init_code_keyword error ACTION_START /* ...action */ error OPTIONS_END
         {
             yyerror(rmCommonWS`
-                Each '%code' initialization code section must be qualified by a name, e.g. 'required' before the action code itself:
+                Each '%code' initialization code section must be qualified by a name, 
+				e.g. 'required' before the action code itself:
+				
+                    %code qualifier_name {action code}
+
+                  Erroneous code:
+                ${yylexer.prettyPrintRange(@error1, @init_code_keyword)}
+
+                  Technical error report:
+                ${$error1.errStr}
+            `);
+        }
+    | init_code_keyword error OPTIONS_END
+        {
+            yyerror(rmCommonWS`
+                Each '%code' initialization code section must be qualified by a name, 
+				e.g. 'required' before the action code itself.
+
+                The '%code ID %{...%\}' initialization code section must be properly 
+                wrapped in block start markers (e.g. \`%{\`) and matching end markers 
+				(e.g. \`%}\`). Expected format:
+
                     %code qualifier_name {action code}
 
                   Erroneous code:
@@ -691,6 +702,22 @@ start_conditions_marker
         }
     ;
 
+start_productions_marker
+    : '%%'
+        {
+            yy.__options_flags__ = 0;
+            yy.__options_category_description__ = 'the lexer rules definition section';
+        }
+    ;
+
+start_epilogue_marker
+    : '%%'
+        {
+            yy.__options_flags__ = 0;
+            yy.__options_category_description__ = 'the lexer epilogue section';
+        }
+    ;
+
 rules
     : rules scoped_rules_collective
         {
@@ -758,11 +785,6 @@ rules
             `);
             $$ = $rules;
         %}
-    | rules ACTION_START include_macro_code ACTION_END
-        {
-            yy.actionInclude.push($include_macro_code);
-            $$ = $rules;
-        }
     //
     // see the alternative above: this rule is added to aid error
     // diagnosis of user coding.
@@ -1031,9 +1053,13 @@ rule
         {
             $$ = [$regex, $error];
             yyerror(rmCommonWS`
-                A lexer rule action arrow must be followed by a JavaScript expression specifying the lexer token to produce, e.g.:
+                A lexer rule action arrow must be followed by a single JavaScript expression specifying the lexer token to produce, e.g.:
 
-                    /rule/   -> 'BUGGABOO'    // eqv. to \`return 'BUGGABOO';\`
+                    /rule/   -> 'BUGGABOO'
+
+                which is equivalent to:
+
+                    /rule/      %{ return 'BUGGABOO'; %}
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @regex)}
@@ -1596,11 +1622,11 @@ option_value
     ;
 
 epilogue
-    : '%%'
+    : start_epilogue_marker
         {
             $$ = '';
         }
-    | '%%' epilogue_chunks
+    | start_epilogue_marker epilogue_chunks 
         {
             var srcCode = trimActionCode($epilogue_chunks);
             if (srcCode) {
@@ -1616,7 +1642,7 @@ epilogue
             }
             $$ = srcCode;
         }
-    | '%%' error
+    | start_epilogue_marker error
       {
         yyerror(rmCommonWS`
             There's an error in your lexer epilogue code block.
@@ -1657,21 +1683,14 @@ epilogue_chunks
 
 epilogue_chunk
     //
-    // `%include` automatically injects a `ACTION_START` token, even when it's placed
-    // at the start of a line (column 1).
-    // Otherwise we don't tolerate the other source of `ACTION_START`
-    // tokens -- indented `%{` markers -- in the epilogue, hence we have this special
-    // production rule for includes only.
+    // `%include` automatically injects a `ACTION_START` / `ACTION_START_AT_SOL` token.
+    // We don't tolerate `ACTION_START` tokens -- indented `%{` markers -- in the epilogue.
     //
-    // To help epilogue code to delineate code chunks from %include blocks in
-    // pathological condition, we do support wrapping chunks of epilogue
-    // in `%{...%}`: see the ACTION_START_AT_SOL production alternative further below.
+    // To help epilogue code to delineate code chunks from %include blocks in 
+    // pathological condition, we do support wrapping chunks of epilogue 
+    // in `%{...%}`. 
     //
-    : ACTION_START include_macro_code ACTION_END
-        {
-            $$ = '\n\n' + $include_macro_code + '\n\n';
-        }
-    | ACTION_START_AT_SOL action ACTION_END
+    : ACTION_START_AT_SOL action ACTION_END
         {
             var srcCode = trimActionCode($action, $ACTION_START_AT_SOL);
             if (srcCode) {

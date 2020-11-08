@@ -253,10 +253,6 @@ declaration
             `);
             $$ = null;
         %}
-    | ACTION_START include_macro_code ACTION_END 
-        {
-            $$ = {include: $include_macro_code + $ACTION_END}; 
-        }
     //
     // see the alternative above: this rule is added to aid error
     // diagnosis of user coding.
@@ -280,29 +276,6 @@ declaration
 
                   Technical error report:
                 ${$error.errStr}
-            `);
-            $$ = null;
-        %}
-    //
-    // see the alternative above: this rule is added to aid error
-    // diagnosis of user coding.
-    //
-    // This rule detects the presence of an unattached *indented*
-    // action code block.
-    //
-    | ACTION_START DUMMY
-        %{
-            var start_marker = $ACTION_START.trim();
-            var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
-            yyerror(rmCommonWS`
-                The '%{...%\}' lexer setup action code section MUST have its action
-                block start marker (\`%{\`${marker_msg}) positioned 
-                at the start of a line to be accepted: *indented* action code blocks
-                (such as this one) are always related to an immediately preceding lexer spec item, 
-                e.g. a lexer match rule expression (see 'lexer rules').
-
-                  Erroneous area:
-                ${yylexer.prettyPrintRange(@ACTION_START)}
             `);
             $$ = null;
         %}
@@ -386,7 +359,7 @@ declaration
                 imports: body
             }; 
         }
-    | import_keyword error
+    | import_keyword error OPTIONS_END
         {
             yyerror(rmCommonWS`
                 %import name or source filename missing maybe?
@@ -445,7 +418,7 @@ declaration
                 }
             };
         }
-    | init_code_keyword option_list ACTION_START error /* OPTIONS_END */
+    | init_code_keyword option_list ACTION_START error OPTIONS_END
         {
             var start_marker = $ACTION_START.trim();
             var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
@@ -464,10 +437,31 @@ declaration
                 ${$error.errStr}
             `);
         }
-    | init_code_keyword error ACTION_START /* ...action ACTION_END */
+    | init_code_keyword error ACTION_START /* ...action */ error OPTIONS_END
         {
             yyerror(rmCommonWS`
-                Each '%code' initialization code section must be qualified by a name, e.g. 'required' before the action code itself:
+                Each '%code' initialization code section must be qualified by a name, 
+				e.g. 'required' before the action code itself:
+				
+                    %code qualifier_name {action code}
+
+                  Erroneous code:
+                ${yylexer.prettyPrintRange(@error1, @init_code_keyword)}
+
+                  Technical error report:
+                ${$error1.errStr}
+            `);
+        }
+    | init_code_keyword error OPTIONS_END
+        {
+            yyerror(rmCommonWS`
+                Each '%code' initialization code section must be qualified by a name, 
+				e.g. 'required' before the action code itself.
+
+                The '%code ID %{...%\}' initialization code section must be properly 
+                wrapped in block start markers (e.g. \`%{\`) and matching end markers 
+				(e.g. \`%}\`). Expected format:
+
                     %code qualifier_name {action code}
 
                   Erroneous code:
@@ -730,12 +724,14 @@ production_list
     | setup_action_block
         {
             $$ = {};
+            var actionInclude = $$.actionInclude || [];
 
             // source code has already been checked!
             var srcCode = $setup_action_block;
             if (srcCode) {
-                $$.actionInclude = [srcCode];
+                actionInclude.push(srcCode);
             }
+            $$.actionInclude = actionInclude;
         }
     | on_error_recovery_statement
         {
@@ -1260,6 +1256,37 @@ id_list
         { $$ = [$ID]; }
     ;
 
+setup_action_block
+	//
+    // may be a *parser setup code section*, e.g.
+    //
+    //     %{
+    //        console.log('setup info message');
+    //     %}
+    //
+    // **Note** that the action block start marker `%{` MUST be positioned 
+    // at the start of a line to be accepted; indented action code blocks
+    // are always related to a preceding parser spec item, such as a 
+    // grammar production rule.
+    //
+    : ACTION_START_AT_SOL action ACTION_END
+        { 
+            var srcCode = trimActionCode($action + $ACTION_END, $ACTION_START_AT_SOL);
+            if (srcCode) {
+                var rv = checkActionBlock(srcCode, @action, yy);
+                if (rv) {
+                    yyerror(rmCommonWS`
+                        The '%{...%}' grammar setup action code section does not compile: ${rv}
+
+                          Erroneous area:
+                        ${yylexer.prettyPrintRange(@action, @ACTION_START_AT_SOL)}
+                    `);
+                }
+			}
+            $$ = srcCode; 
+        }
+	;
+
 action
     : action ACTION_BODY
         { $$ = $action + $ACTION_BODY; }
@@ -1572,21 +1599,14 @@ epilogue_chunks
 
 epilogue_chunk
     //
-    // `%include` automatically injects a `ACTION_START` token, even when it's placed
-    // at the start of a line (column 1).
-    // Otherwise we don't tolerate the other source of `ACTION_START` 
-    // tokens -- indented `%{` markers -- in the epilogue, hence we have this special
-    // production rule for includes only.
+    // `%include` automatically injects a `ACTION_START` / `ACTION_START_AT_SOL` token.
+    // We don't tolerate `ACTION_START` tokens -- indented `%{` markers -- in the epilogue.
     //
     // To help epilogue code to delineate code chunks from %include blocks in 
     // pathological condition, we do support wrapping chunks of epilogue 
-    // in `%{...%}`: see the ACTION_START_AT_SOL production alternative further below. 
+    // in `%{...%}`. 
     //
-    : ACTION_START include_macro_code ACTION_END 
-        {
-            $$ = '\n\n' + $include_macro_code + '\n\n' + $ACTION_END + '\n\n';
-        }
-    | ACTION_START_AT_SOL action ACTION_END
+    : ACTION_START_AT_SOL action ACTION_END
         {
             var srcCode = trimActionCode($action + $ACTION_END, $ACTION_START_AT_SOL);
             if (srcCode) {
@@ -1712,7 +1732,6 @@ include_macro_code
 
 
 var rmCommonWS = helpers.rmCommonWS;
-var dquote = helpers.dquote;
 var checkActionBlock = helpers.checkActionBlock;
 var mkIdentifier = helpers.mkIdentifier;
 var isLegalIdentifierInput = helpers.isLegalIdentifierInput;

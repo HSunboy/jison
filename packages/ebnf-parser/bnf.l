@@ -576,14 +576,29 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 "%import"                               this.pushState('options');
                                         return 'IMPORT';
 
-<INITIAL,ebnf,code>"%include"           yy.depth = 0;
-                                        yy.include_command_allowed = true;
-                                        this.pushState('action');
-                                        // push the parsed '%include' back into the input-to-parse
-                                        // to trigger the `<action>` state to re-parse it
-                                        // and issue the desired follow-up token: 'INCLUDE':
-                                        this.unput(yytext);
-                                        return 'ACTION_START';
+<INITIAL,ebnf,code>"%include"           %{
+                                            yy.depth = 0;
+                                            yy.include_command_allowed = true;
+
+                                            // check whether this `%include` command was located at the start of the line:
+                                            // if it is, we treat it as a different token to signal the grammar we've
+                                            // got an action which stands on its own.
+                                            var precedingStr = this.matched[this.matched.length - this.match.length - 1];
+
+                                            var atSOL = (!precedingStr /* @ Start Of File */ || precedingStr === '\n');
+
+                                            this.pushState('action');
+                                            // push the parsed '%include' back into the input-to-parse
+                                            // to trigger the `<action>` state to re-parse it
+                                            // and issue the desired follow-up token: 'INCLUDE':
+                                            this.unput(yytext);
+
+                                            // and allow the next lexer round to match and execute the suitable lexer rule(s) to parse this incoming action code block.
+                                            if (atSOL) {
+                                                return 'ACTION_START_AT_SOL';
+                                            }
+                                            return 'ACTION_START';
+                                        %}
 
 <INITIAL,ebnf,code>"%"{NAME}([^\r\n]*)
                                         %{
