@@ -1,7 +1,7 @@
 var assert = require("chai").assert;
 var Jison = require('../setup').Jison;
 var Lexer = require('../setup').Lexer;
-var glob = require('globby');
+//var globby = require('globby');
 var fs = require('fs');
 var path = require('path');
 var helpers = require('../../packages/helpers-lib');
@@ -192,11 +192,12 @@ const test_list = [
   },
 ];
 
-console.log('exec glob....', __dirname);
-var testset = glob.sync([
-  __dirname + '/../../examples/*.jison',
-  __dirname + '/../../examples/issue-lex-*.js', 
-]);
+console.log('exec globby....', __dirname);
+// var testset = globby.sync([
+//   __dirname + '/../../examples/*.jison',
+//   __dirname + '/../../examples/issue-lex-*.js', 
+// ]);
+var testset = fs.readFileSync(__dirname + '/../../examples/testset1.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/../../examples' + l.trim().replace(/^\./, ''));
 testset = testset.sort().map(function (filepath) {
   for (var j = 0, lj = test_list.length; j < lj; j++) {
     var fstr = test_list[j].name;
@@ -219,7 +220,7 @@ testset = testset.sort().map(function (filepath) {
 .filter(function (t) {
   return !!t;
 });
-// console.log('testset....', testset);
+console.log('testset....', testset);
 
 var original_cwd = process.cwd();
 

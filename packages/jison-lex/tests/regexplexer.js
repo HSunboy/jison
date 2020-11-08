@@ -3,7 +3,7 @@ var RegExpLexer = require("../dist/regexp-lexer-cjs-es5");
 var XRegExp = require("@gerhobbelt/xregexp");
 var yaml = require('@gerhobbelt/js-yaml');
 var JSON5 = require('@gerhobbelt/json5');
-var globby = require('globby');
+//var globby = require('globby');
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
@@ -2946,20 +2946,24 @@ describe("prettyPrintRange() API", function () {
 //
 describe("Test Lexer Grammars", function () {
   console.log('exec glob....', __dirname);
-  var testset = globby.sync([
-    __dirname + '/specs/*.jison',
-    __dirname + '/specs/*.json5',
-    '!'+ __dirname + '/specs/*-ref.json5',
-    __dirname + '/specs/*.js',
-  ]);
+  // var testset = globby.sync([
+  //   __dirname + '/specs/*.jison',
+  //   __dirname + '/specs/*.json5',
+  //   '!'+ __dirname + '/specs/*-ref.json5',
+  //   __dirname + '/specs/*.js',
+  // ]);
+  var testset = fs.readFileSync(__dirname + '/specs/testset.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/specs' + l.trim().replace(/^\./, ''));
+  console.error({testset});
   // also compile and run the lexers in the /examples/ directory:
-  var testset2 = globby.sync([
-    __dirname + '/../examples/*.jison',
-    __dirname + '/../examples/*.json5',
-    __dirname + '/../examples/*.l',
-    __dirname + '/../examples/*.lex',
-    __dirname + '/../examples/*.jisonlex',
-  ]);
+  // var testset2 = globby.sync([
+  //   __dirname + '/../examples/*.jison',
+  //   __dirname + '/../examples/*.json5',
+  //   __dirname + '/../examples/*.l',
+  //   __dirname + '/../examples/*.lex',
+  //   __dirname + '/../examples/*.jisonlex',
+  // ]);
+  var testset2 = fs.readFileSync(__dirname + '/../examples/testset.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/../examples' + l.trim().replace(/^\./, ''));
+  console.error({testset2});
   var original_cwd = process.cwd();
 
   testset = testset.sort();

@@ -4,7 +4,7 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var yaml = require('@gerhobbelt/js-yaml');
 var JSON5 = require('@gerhobbelt/json5');
-var globby = require('globby');
+//var globby = require('globby');
 var bnf = require("../dist/ebnf-parser-cjs-es5");
 
 
@@ -47,14 +47,16 @@ function parser_reset() {
 
 
   console.log('exec glob....', __dirname);
-  var testset = globby.sync([
-    __dirname + '/specs/0*.jison',
-    __dirname + '/specs/0*.bnf',
-    __dirname + '/specs/0*.ebnf',
-    __dirname + '/specs/0*.json5',
-    '!'+ __dirname + '/specs/0*-ref.json5',
-    __dirname + '/specs/0*.js',
-  ]);
+  // var testset = globby.sync([
+  //   __dirname + '/specs/0*.jison',
+  //   __dirname + '/specs/0*.bnf',
+  //   __dirname + '/specs/0*.ebnf',
+  //   __dirname + '/specs/0*.json5',
+  //   '!'+ __dirname + '/specs/0*-ref.json5',
+  //   __dirname + '/specs/0*.js',
+  // ]);
+  var testset = fs.readFileSync(__dirname + '/specs/testset.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/specs' + l.trim().replace(/^\./, ''));
+  console.error({testset});
   var original_cwd = process.cwd();
 
   testset = testset.sort();

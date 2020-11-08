@@ -1,0 +1,12 @@
+./1001-test.jison
+./1002-test.jison
+./1003-test.jison
+./1004-test.jison
+./1005-test.jison
+./1006-test.jison
+./1007-test.jison
+./1008-test.jison
+./1009-test.jison
+./1010-test.jison
+./1011-test.jison
+./1012-test.jison

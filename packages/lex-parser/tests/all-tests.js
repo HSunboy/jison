@@ -55,18 +55,12 @@ function lexer_reset() {
 
 
   console.log('exec glob....', __dirname);
-  var testset = globby.sync([
-    __dirname + '/specs/*.jison',
-    __dirname + '/specs/*.lex',
-    __dirname + '/specs/*.jisonlex',
-    __dirname + '/specs/*.json5',
-    '!'+ __dirname + '/specs/*-ref.json5',
-    __dirname + '/specs/*.js',
-    __dirname + '/lex/*.jisonlex',
-  ]);
+  //var testset = globby.sync(__dirname + '/specs/*.jisonlex');
+  var testset = fs.readFileSync(__dirname + '/specs/testset.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/specs' + l.trim().replace(/^\./, ''));
   var original_cwd = process.cwd();
 
   testset = testset.sort();
+  console.error({testset});
 
   testset = testset.map(function (filepath) {
     // Get document, or throw exception on error
