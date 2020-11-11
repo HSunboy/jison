@@ -62,10 +62,11 @@ function lexer_reset() {
   console.log('exec glob....', __dirname);
   //var testset = globby.sync(__dirname + '/specs/*.jisonlex');
   var testset = fs.readFileSync(__dirname + '/specs/testset.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/specs' + l.trim().replace(/^\./, ''));
+  var testset2 = fs.readFileSync(__dirname + '/lex/testset.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/lex' + l.trim().replace(/^\./, ''));
+  testset.push(...testset2);
   var original_cwd = process.cwd();
 
   testset = testset.sort();
-  console.error({testset});
 
   testset = testset.map(function (filepath) {
     // Get document, or throw exception on error
@@ -147,8 +148,7 @@ function lexer_reset() {
   .filter(function (info) {
     return !!info;
   });
-
-  var original_cwd = process.cwd();
+  console.error({testset});
 
   function stripErrorStackPaths(msg) {
     // strip away devbox-specific paths in error stack traces in the output:
