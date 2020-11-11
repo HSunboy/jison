@@ -1452,14 +1452,11 @@ var lexer = {
     performAction: function lexer__performAction(yy, yyrulenumber, YY_START) {
             var yy_ = this;
 
-            
-// Included by Jison: includes/with-includes.prelude1.js:
+            // Included by Jison: includes/with-includes.prelude1.js:
 
 // ................. include #1
 
 // End Of Include by Jison: includes/with-includes.prelude1.js
-
-
 var YYSTATE = YY_START;
 switch(yyrulenumber) {
 case 0 : 
@@ -1608,14 +1605,11 @@ return 666
     options: {
       ranges: true,
     },
-    actionInclude: `
-// Included by Jison: includes/with-includes.prelude1.js:
+    actionInclude: `// Included by Jison: includes/with-includes.prelude1.js:
 
 // ................. include #1
 
-// End Of Include by Jison: includes/with-includes.prelude1.js
-
-`,
+// End Of Include by Jison: includes/with-includes.prelude1.js`,
   },
   options: {
     moduleType: 'commonjs',
@@ -1655,14 +1649,11 @@ return 666
   performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
             var yy_ = this;
 
-            
-// Included by Jison: includes/with-includes.prelude1.js:
+            // Included by Jison: includes/with-includes.prelude1.js:
 
 // ................. include #1
 
 // End Of Include by Jison: includes/with-includes.prelude1.js
-
-
 var YYSTATE = YY_START;
 switch(yyrulenumber) {
 case 0 : 
@@ -1815,14 +1806,11 @@ default:
   conditionStack: [
     'INITIAL',
   ],
-  actionInclude: `
-// Included by Jison: includes/with-includes.prelude1.js:
+  actionInclude: `// Included by Jison: includes/with-includes.prelude1.js:
 
 // ................. include #1
 
-// End Of Include by Jison: includes/with-includes.prelude1.js
-
-`,
+// End Of Include by Jison: includes/with-includes.prelude1.js`,
   moduleInclude: `// Included by Jison: includes/with-includes.prelude2.js:
 
 // ................. include #2

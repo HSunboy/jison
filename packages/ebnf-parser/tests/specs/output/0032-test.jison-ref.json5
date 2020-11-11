@@ -5,22 +5,7 @@
   ],
   bnf: {
     hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
-    ],
-  },
-  grammar: {
-    hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
+      'world',
     ],
   },
   __original_input__: `%parse-param first second 

@@ -4,88 +4,21 @@
   },
   ebnf: {
     top: [
-      [
-        [
-          '()',
-          [
-            [
-              [
-                '()',
-                [
-                  [
-                    [
-                      'symbol',
-                      'word',
-                    ],
-                    [
-                      'symbol',
-                      'word',
-                    ],
-                  ],
-                ],
-              ],
-            ],
-            [
-              [
-                'symbol',
-                'word',
-              ],
-            ],
-          ],
-        ],
-        [
-          'symbol',
-          'EOF',
-        ],
-      ],
+      '((word word) | word) EOF',
     ],
   },
   bnf: {
     top: [
-      [
-        '',
-        [
-          'symbol',
-          'EOF',
-        ],
-      ],
+      'top_group EOF',
     ],
-  },
-  grammar: {
-    top: [
+    top_group: [
       [
-        [
-          '()',
-          [
-            [
-              [
-                '()',
-                [
-                  [
-                    [
-                      'symbol',
-                      'word',
-                    ],
-                    [
-                      'symbol',
-                      'word',
-                    ],
-                  ],
-                ],
-              ],
-            ],
-            [
-              [
-                'symbol',
-                'word',
-              ],
-            ],
-          ],
-        ],
-        [
-          'symbol',
-          'EOF',
-        ],
+        'word word',
+        '$$ = [$1, $2];',
+      ],
+      [
+        'word',
+        '$$ = $1;',
       ],
     ],
   },

@@ -1,6 +1,6 @@
 [
   {
-    id: 28,
+    id: 26,
     token: '"UNKNOWN_DECL"',
     yytext: {
       name: 'a',
@@ -18,7 +18,7 @@
     },
   },
   {
-    id: 28,
+    id: 26,
     token: '"UNKNOWN_DECL"',
     yytext: {
       name: 'foo',
@@ -36,7 +36,7 @@
     },
   },
   {
-    id: 28,
+    id: 26,
     token: '"UNKNOWN_DECL"',
     yytext: {
       name: 'a',
@@ -54,7 +54,7 @@
     },
   },
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -84,7 +84,7 @@
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
@@ -99,7 +99,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '//',
     yylloc: {
@@ -114,7 +114,7 @@
     },
   },
   {
-    id: 24,
+    id: 23,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -129,7 +129,7 @@
     },
   },
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {

@@ -1,6 +1,6 @@
 [
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 41,
+    id: 40,
     token: '"SPECIAL_GROUP"',
     yytext: '(?:',
     yylloc: {
@@ -30,7 +30,7 @@
     },
   },
   {
-    id: 50,
+    id: 49,
     token: '"STRING_LIT"',
     yytext: '"foo"',
     yylloc: {
@@ -60,7 +60,7 @@
     },
   },
   {
-    id: 50,
+    id: 49,
     token: '"STRING_LIT"',
     yytext: '"bar"',
     yylloc: {
@@ -90,7 +90,7 @@
     },
   },
   {
-    id: 43,
+    id: 42,
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\(',
     yylloc: {
@@ -105,7 +105,7 @@
     },
   },
   {
-    id: 43,
+    id: 42,
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\)',
     yylloc: {
@@ -120,7 +120,7 @@
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
@@ -135,7 +135,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: 'return 1;',
     yylloc: {
@@ -150,7 +150,7 @@
     },
   },
   {
-    id: 24,
+    id: 23,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -165,7 +165,7 @@
     },
   },
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {

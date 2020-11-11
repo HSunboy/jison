@@ -647,7 +647,7 @@ if(typeof e==='function'){i++;e.apply(rv,a[i]);}else{rv.push(e);}}return rv;}var
 //   has error reporting: ............. true
 //
 // --------- END OF REPORT -----------
-trace:function no_op_trace(){},JisonParserError:JisonParserError,yy:{},options:{type:"lalr",hasPartialLrUpgradeOnConflict:true,errorRecoveryTokenDiscardCount:3,ebnf:true},symbols_:{"$":16,"$accept":0,"$end":1,"%%":19,"(":8,")":9,"*":11,"+":10,",":17,".":14,"/":13,"/!":42,"<":3,"=":18,">":6,"?":12,"ACTION_BODY":36,"ACTION_END":24,"ACTION_START":26,"ACTION_START_AT_SOL":23,"ARROW_ACTION_START":35,"BRACKET_MISSING":38,"BRACKET_SURPLUS":39,"CHARACTER_LIT":51,"CODE":31,"DUMMY":27,"DUMMY3":52,"EOF":1,"ESCAPED_CHAR":44,"IMPORT":30,"INCLUDE":32,"INCLUDE_PLACEMENT_ERROR":37,"MACRO_END":21,"MACRO_NAME":20,"NAME_BRACE":45,"OPTIONS":29,"OPTIONS_END":22,"OPTION_STRING":53,"OPTION_VALUE":54,"RANGE_REGEX":49,"REGEX_SET":48,"REGEX_SET_END":47,"REGEX_SET_START":46,"REGEX_SPECIAL_CHAR":43,"SPECIAL_GROUP":41,"START_EXC":34,"START_INC":33,"STRING_LIT":50,"TRAILING_CODE_CHUNK":55,"UNKNOWN_DECL":28,"UNTERMINATED_ACTION_BLOCK":25,"UNTERMINATED_STRING_ERROR":40,"^":15,"action":72,"any_group_regex":80,"definition":60,"definitions":59,"epilogue":89,"epilogue_chunk":91,"epilogue_chunks":90,"error":2,"import_keyword":62,"include_keyword":64,"include_macro_code":92,"init":58,"init_code_keyword":63,"lex":56,"literal_string":84,"name_expansion":79,"nonempty_regex_list":76,"option":86,"option_keyword":61,"option_list":85,"option_name":87,"option_value":88,"range_regex":83,"regex":74,"regex_base":78,"regex_concat":77,"regex_list":75,"regex_set":81,"regex_set_atom":82,"rule":71,"rule_block":70,"rules":68,"rules_and_epilogue":57,"scoped_rules_collective":69,"start_conditions":73,"start_conditions_marker":67,"start_exclusive_keyword":66,"start_inclusive_keyword":65,"{":4,"|":7,"}":5},terminals_:{1:"EOF",2:"error",3:"<",4:"{",5:"}",6:">",7:"|",8:"(",9:")",10:"+",11:"*",12:"?",13:"/",14:".",15:"^",16:"$",17:",",18:"=",19:"%%",20:"MACRO_NAME",21:"MACRO_END",22:"OPTIONS_END",23:"ACTION_START_AT_SOL",24:"ACTION_END",25:"UNTERMINATED_ACTION_BLOCK",26:"ACTION_START",27:"DUMMY",28:"UNKNOWN_DECL",29:"OPTIONS",30:"IMPORT",31:"CODE",32:"INCLUDE",33:"START_INC",34:"START_EXC",35:"ARROW_ACTION_START",36:"ACTION_BODY",37:"INCLUDE_PLACEMENT_ERROR",38:"BRACKET_MISSING",39:"BRACKET_SURPLUS",40:"UNTERMINATED_STRING_ERROR",41:"SPECIAL_GROUP",42:"/!",43:"REGEX_SPECIAL_CHAR",44:"ESCAPED_CHAR",45:"NAME_BRACE",46:"REGEX_SET_START",47:"REGEX_SET_END",48:"REGEX_SET",49:"RANGE_REGEX",50:"STRING_LIT",51:"CHARACTER_LIT",52:"DUMMY3",53:"OPTION_STRING",54:"OPTION_VALUE",55:"TRAILING_CODE_CHUNK"},terminal_descriptions_:{45:"macro name in '{...}' curly braces"},TERROR:2,EOF:1,// internals: defined here so the object *structure* doesn't get modified by parse() et al,
+trace:function no_op_trace(){},JisonParserError:JisonParserError,yy:{},options:{type:"lalr",hasPartialLrUpgradeOnConflict:true,errorRecoveryTokenDiscardCount:3,ebnf:true},symbols_:{"$":16,"$accept":0,"$end":1,"%%":33,"(":8,")":9,"*":11,"+":10,",":17,".":14,"/":13,"/!":41,"<":3,"=":18,">":6,"?":12,"ACTION_BODY":35,"ACTION_END":23,"ACTION_START":25,"ACTION_START_AT_SOL":22,"ARROW_ACTION_START":34,"BRACKET_MISSING":37,"BRACKET_SURPLUS":38,"CHARACTER_LIT":50,"CODE":29,"DUMMY3":51,"EOF":1,"ESCAPED_CHAR":43,"IMPORT":28,"INCLUDE":30,"INCLUDE_PLACEMENT_ERROR":36,"MACRO_END":20,"MACRO_NAME":19,"NAME_BRACE":44,"OPTIONS":27,"OPTIONS_END":21,"OPTION_STRING":52,"OPTION_VALUE":53,"RANGE_REGEX":48,"REGEX_SET":47,"REGEX_SET_END":46,"REGEX_SET_START":45,"REGEX_SPECIAL_CHAR":42,"SPECIAL_GROUP":40,"START_EXC":32,"START_INC":31,"STRING_LIT":49,"TRAILING_CODE_CHUNK":54,"UNKNOWN_DECL":26,"UNTERMINATED_ACTION_BLOCK":24,"UNTERMINATED_STRING_ERROR":39,"^":15,"action":73,"any_group_regex":81,"definition":59,"definitions":58,"epilogue":90,"epilogue_chunk":92,"epilogue_chunks":91,"error":2,"import_keyword":61,"include_keyword":63,"include_macro_code":93,"init":57,"init_code_keyword":62,"lex":55,"literal_string":85,"name_expansion":80,"nonempty_regex_list":77,"option":87,"option_keyword":60,"option_list":86,"option_name":88,"option_value":89,"range_regex":84,"regex":75,"regex_base":79,"regex_concat":78,"regex_list":76,"regex_set":82,"regex_set_atom":83,"rule":72,"rule_block":71,"rules":69,"rules_and_epilogue":56,"scoped_rules_collective":70,"start_conditions":74,"start_conditions_marker":66,"start_epilogue_marker":68,"start_exclusive_keyword":65,"start_inclusive_keyword":64,"start_productions_marker":67,"{":4,"|":7,"}":5},terminals_:{1:"EOF",2:"error",3:"<",4:"{",5:"}",6:">",7:"|",8:"(",9:")",10:"+",11:"*",12:"?",13:"/",14:".",15:"^",16:"$",17:",",18:"=",19:"MACRO_NAME",20:"MACRO_END",21:"OPTIONS_END",22:"ACTION_START_AT_SOL",23:"ACTION_END",24:"UNTERMINATED_ACTION_BLOCK",25:"ACTION_START",26:"UNKNOWN_DECL",27:"OPTIONS",28:"IMPORT",29:"CODE",30:"INCLUDE",31:"START_INC",32:"START_EXC",33:"%%",34:"ARROW_ACTION_START",35:"ACTION_BODY",36:"INCLUDE_PLACEMENT_ERROR",37:"BRACKET_MISSING",38:"BRACKET_SURPLUS",39:"UNTERMINATED_STRING_ERROR",40:"SPECIAL_GROUP",41:"/!",42:"REGEX_SPECIAL_CHAR",43:"ESCAPED_CHAR",44:"NAME_BRACE",45:"REGEX_SET_START",46:"REGEX_SET_END",47:"REGEX_SET",48:"RANGE_REGEX",49:"STRING_LIT",50:"CHARACTER_LIT",51:"DUMMY3",52:"OPTION_STRING",53:"OPTION_VALUE",54:"TRAILING_CODE_CHUNK"},terminal_descriptions_:{44:"macro name in '{...}' curly braces"},TERROR:2,EOF:1,// internals: defined here so the object *structure* doesn't get modified by parse() et al,
 // thus helping JIT compilers like Chrome V8.
 originalQuoteName:null,originalParseError:null,cleanupAfterParse:null,constructParseErrorInfo:null,yyMergeLocationInfo:null,copy_yytext:null,copy_yylloc:null,__reentrant_call_depth:0,// INTERNAL USE ONLY
 __error_infos:[],// INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
@@ -685,7 +685,7 @@ describeSymbol:function parser_describeSymbol(symbol){if(symbol!==this.EOF&&this
 collect_expected_token_set:function parser_collect_expected_token_set(state,do_not_describe){var TERROR=this.TERROR;var tokenset=[];var check={};// Has this (error?) state been outfitted with a custom expectations description text for human consumption?
 // If so, use that one instead of the less palatable token set.
 if(!do_not_describe&&this.state_descriptions_&&this.state_descriptions_[state]){return[this.state_descriptions_[state]];}for(var p in this.table[state]){p=+p;if(p!==TERROR){var d=do_not_describe?p:this.describeSymbol(p);if(d&&!check[d]){tokenset.push(d);check[d]=true;// Mark this token description as already mentioned to prevent outputting duplicate entries.
-}}}return tokenset;},productions_:bp({pop:u([56,s,[57,5],58,59,59,s,[60,21],s,[61,8,1],s,[68,13],s,[69,5],70,70,s,[71,7],s,[72,7],73,73,74,75,75,s,[76,5],77,77,s,[78,18],79,80,80,81,81,82,82,83,84,84,s,[85,3],s,[86,4],87,87,88,88,s,[89,3],s,[90,3],s,[91,5],92,92]),rule:u([4,3,3,2,2,0,0,2,0,3,2,3,2,c,[4,3],1,c,[5,3],c,[3,3],1,3,2,6,4,2,s,[1,8],2,2,4,2,3,4,c,[25,3],s,[2,4],0,2,4,c,[53,4],0,s,[4,3],s,[3,3],s,[2,7],0,4,3,1,1,c,[68,3],c,[51,3],c,[60,3],c,[24,8],c,[12,3],s,[1,7],c,[17,3],c,[9,7],c,[8,3],c,[13,8],c,[35,5],c,[13,5],3,2])}),performAction:function parser__PerformAction(yyloc,yystate/* action[1] */,yysp,yyvstack,yylstack){/* this == yyval */ // the JS engine itself can go and remove these statements when `yy` turns out to be unused in any action code!
+}}}return tokenset;},productions_:bp({pop:u([55,s,[56,5],57,58,58,s,[59,20],s,[60,10,1],s,[69,12],s,[70,5],71,71,s,[72,7],s,[73,7],74,74,75,76,76,s,[77,5],78,78,s,[79,18],80,81,81,82,82,83,83,84,85,85,s,[86,3],s,[87,4],88,88,89,89,s,[90,3],s,[91,3],s,[92,4],93,93]),rule:u([4,3,3,2,2,0,0,2,0,3,2,3,2,c,[4,3],1,2,c,[6,3],1,3,3,6,5,5,3,s,[1,10],2,2,4,2,c,[41,4],s,[2,4],0,2,4,c,[53,4],0,s,[4,3],s,[3,3],s,[2,7],0,4,c,[46,3],c,[68,3],2,c,[44,3],c,[62,3],c,[24,7],c,[12,3],s,[1,7],c,[17,3],c,[9,7],c,[8,3],c,[13,8],c,[35,5],c,[17,5],2])}),performAction:function parser__PerformAction(yyloc,yystate/* action[1] */,yysp,yyvstack,yylstack){/* this == yyval */ // the JS engine itself can go and remove these statements when `yy` turns out to be unused in any action code!
 var yy=this.yy;var yyparser=yy.parser;var yylexer=yy.lexer;const OPTION_DOES_NOT_ACCEPT_VALUE=0x0001;const OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES=0x0002;const OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME=0x0004;const OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS=0x0008;const OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS=0x0010;switch(yystate){case 0:/*! Production::    $accept : lex $end */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp-1];this._$=yylstack[yysp-1];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
 break;case 1:/*! Production::    lex : init definitions rules_and_epilogue EOF */ // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
@@ -693,9 +693,9 @@ this._$=yyparser.yyMergeLocationInfo(yysp-3,yysp);// END of default action (gene
 this.$=yyvstack[yysp-1];for(var key in yyvstack[yysp-2]){this.$[key]=yyvstack[yysp-2][key];}// if there are any options, add them all, otherwise set options to NULL:
 // can't check for 'empty object' by `if (yy.options) ...` so we do it this way:
 for(key in yy.options){this.$.options=yy.options;break;}if(yy.actionInclude){var asrc=yy.actionInclude.join('\n\n');// Only a non-empty action code chunk should actually make it through:
-if(asrc.trim()!==''){this.$.actionInclude=asrc;}}delete yy.options;delete yy.actionInclude;return this.$;case 2:/*! Production::    rules_and_epilogue : "%%" rules epilogue */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+if(asrc.trim()!==''){this.$.actionInclude=asrc;}}delete yy.options;delete yy.actionInclude;return this.$;case 2:/*! Production::    rules_and_epilogue : start_productions_marker rules epilogue */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
-if(yyvstack[yysp]){this.$={rules:yyvstack[yysp-1],moduleInclude:yyvstack[yysp]};}else{this.$={rules:yyvstack[yysp-1]};}break;case 3:/*! Production::    rules_and_epilogue : "%%" error epilogue */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+if(yyvstack[yysp]){this.$={rules:yyvstack[yysp-1],moduleInclude:yyvstack[yysp]};}else{this.$={rules:yyvstack[yysp-1]};}break;case 3:/*! Production::    rules_and_epilogue : start_productions_marker error epilogue */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp-2];this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 yyparser.yyError(rmCommonWS$1`
         There's probably an error in one or more of your lexer regex rules.
@@ -715,9 +715,9 @@ yyparser.yyError(rmCommonWS$1`
     
           Technical error report:
         ${yyvstack[yysp-1].errStr}
-    `);break;case 4:/*! Production::    rules_and_epilogue : "%%" rules */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    `);break;case 4:/*! Production::    rules_and_epilogue : start_productions_marker rules */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
-this.$={rules:yyvstack[yysp]};break;case 5:/*! Production::    rules_and_epilogue : "%%" error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+this.$={rules:yyvstack[yysp]};break;case 5:/*! Production::    rules_and_epilogue : start_productions_marker error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp-1];this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
 yyparser.yyError(rmCommonWS$1`
         There's probably an error in one or more of your lexer regex rules.
@@ -845,7 +845,7 @@ var srcCode=trimActionCode$1(yyvstack[yysp-1],yyvstack[yysp-2]);if(srcCode){var 
     
                   Erroneous area:
                 ${yylexer.prettyPrintRange(yylstack[yysp-1],yylstack[yysp-2])}
-            `);}yy.actionInclude.push(srcCode);}this.$=null;break;case 17:/*! Production::    definition : UNTERMINATED_ACTION_BLOCK */case 133:/*! Production::    epilogue_chunk : UNTERMINATED_ACTION_BLOCK */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+            `);}yy.actionInclude.push(srcCode);}this.$=null;break;case 17:/*! Production::    definition : UNTERMINATED_ACTION_BLOCK */case 132:/*! Production::    epilogue_chunk : UNTERMINATED_ACTION_BLOCK */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
 this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
 // The issue has already been reported by the lexer. No need to repeat
 // ourselves with another error report from here.
@@ -859,9 +859,7 @@ var start_marker=yyvstack[yysp-1].trim();var marker_msg=start_marker?' or simila
     
           Technical error report:
         ${yyvstack[yysp].errStr}
-    `);this.$=null;break;case 19:/*! Production::    definition : ACTION_START include_macro_code ACTION_END */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
-this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
-yy.actionInclude.push(yyvstack[yysp-1]);this.$=null;break;case 20:/*! Production::    definition : ACTION_START error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+    `);this.$=null;break;case 19:/*! Production::    definition : ACTION_START error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
 var start_marker=yyvstack[yysp-1].trim();var marker_msg=start_marker?' or similar, such as '+start_marker:'';yyparser.yyError(rmCommonWS$1`
         The '%{...%}' lexer setup action code section MUST have its action
@@ -875,20 +873,9 @@ var start_marker=yyvstack[yysp-1].trim();var marker_msg=start_marker?' or simila
     
           Technical error report:
         ${yyvstack[yysp].errStr}
-    `);this.$=null;break;case 21:/*! Production::    definition : ACTION_START DUMMY */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
-this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
-var start_marker=yyvstack[yysp-1].trim();var marker_msg=start_marker?' or similar, such as '+start_marker:'';yyparser.yyError(rmCommonWS$1`
-        The '%{...%}' lexer setup action code section MUST have its action
-        block start marker (\`%{\`${marker_msg}) positioned
-        at the start of a line to be accepted: *indented* action code blocks
-        (such as this one) are always related to an immediately preceding lexer spec item,
-        e.g. a lexer match rule expression (see 'lexer rules').
-    
-          Erroneous area:
-        ${yylexer.prettyPrintRange(yylstack[yysp-1])}
-    `);this.$=null;break;case 22:/*! Production::    definition : option_keyword option_list OPTIONS_END */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    `);this.$=null;break;case 20:/*! Production::    definition : option_keyword option_list OPTIONS_END */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
-var lst=yyvstack[yysp-1];for(var i=0,len=lst.length;i<len;i++){yy.options[lst[i][0]]=lst[i][1];}this.$=null;break;case 23:/*! Production::    definition : option_keyword error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+var lst=yyvstack[yysp-1];for(var i=0,len=lst.length;i<len;i++){yy.options[lst[i][0]]=lst[i][1];}this.$=null;break;case 21:/*! Production::    definition : option_keyword error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp-1];this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
 yyparser.yyError(rmCommonWS$1`
         ill defined %options line.
@@ -898,9 +885,9 @@ yyparser.yyError(rmCommonWS$1`
     
           Technical error report:
         ${yyvstack[yysp].errStr}
-    `);break;case 24:/*! Production::    definition : UNKNOWN_DECL */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    `);break;case 22:/*! Production::    definition : UNKNOWN_DECL */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
 this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-this.$={type:'unknown',body:yyvstack[yysp]};break;case 25:/*! Production::    definition : import_keyword option_list OPTIONS_END */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+this.$={type:'unknown',body:yyvstack[yysp]};break;case 23:/*! Production::    definition : import_keyword option_list OPTIONS_END */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
 // check if there are two unvalued options: 'name path'
 var lst=yyvstack[yysp-1];var len=lst.length;var body;if(len===2&&lst[0][1]===true&&lst[1][1]===true){// `name path`:
@@ -916,8 +903,8 @@ body={name:lst[0][0],path:lst[1][0]};}else if(len<=2){yyparser.yyError(rmCommonW
     
               Erroneous code:
             ${yylexer.prettyPrintRange(yylstack[yysp-1],yylstack[yysp-2])}
-        `);}this.$={type:'imports',body:body};break;case 26:/*! Production::    definition : import_keyword error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
-this.$=yyvstack[yysp-1];this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+        `);}this.$={type:'imports',body:body};break;case 24:/*! Production::    definition : import_keyword error OPTIONS_END */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+this.$=yyvstack[yysp-2];this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 yyparser.yyError(rmCommonWS$1`
         %import name or source filename missing maybe?
     
@@ -925,11 +912,11 @@ yyparser.yyError(rmCommonWS$1`
             %import qualifier_name file_path
     
           Erroneous code:
-        ${yylexer.prettyPrintRange(yylstack[yysp],yylstack[yysp-1])}
+        ${yylexer.prettyPrintRange(yylstack[yysp-1],yylstack[yysp-2])}
     
           Technical error report:
-        ${yyvstack[yysp].errStr}
-    `);break;case 27:/*! Production::    definition : init_code_keyword option_list ACTION_START action ACTION_END OPTIONS_END */ // default action (generated by JISON mode classic/merge :: 6,VT,VA,VU,-,LT,LA,-,-):
+        ${yyvstack[yysp-1].errStr}
+    `);break;case 25:/*! Production::    definition : init_code_keyword option_list ACTION_START action ACTION_END OPTIONS_END */ // default action (generated by JISON mode classic/merge :: 6,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-5,yysp);// END of default action (generated by JISON mode classic/merge :: 6,VT,VA,VU,-,LT,LA,-,-)
 // check there's only 1 option which is an identifier
 var lst=yyvstack[yysp-4];var len=lst.length;var name;if(len===1&&lst[0][1]===true){// `name`:
@@ -950,20 +937,51 @@ name=lst[0][0];}else if(len<=1){yyparser.yyError(rmCommonWS$1`
     
               Erroneous area:
             ${yylexer.prettyPrintRange(yylstack[yysp-2],yylstack[yysp-5])}
-        `);}this.$={type:'codeSection',body:{qualifier:name,include:srcCode}};break;case 28:/*! Production::    definition : init_code_keyword option_list ACTION_START error */ // default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-):
-this.$=yyvstack[yysp-3];this._$=yyparser.yyMergeLocationInfo(yysp-3,yysp);// END of default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-)
-break;case 29:/*! Production::    definition : init_code_keyword error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
-this.$=yyvstack[yysp-1];this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
-yyparser.yyError(rmCommonWS$1`
-        Each '%code' initialization code section must be qualified by a name, e.g. 'required' before the action code itself:
+        `);}this.$={type:'codeSection',body:{qualifier:name,include:srcCode}};break;case 26:/*! Production::    definition : init_code_keyword option_list ACTION_START error OPTIONS_END */ // default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-):
+this.$=yyvstack[yysp-4];this._$=yyparser.yyMergeLocationInfo(yysp-4,yysp);// END of default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-)
+var start_marker=yyvstack[yysp-2].trim();var marker_msg=start_marker?' or similar, such as '+start_marker:'';var end_marker_msg=marker_msg.replace(/\{/g,'}');yyparser.yyError(rmCommonWS$1`
+        The '%code ID %{...%\}' initialization code section must be properly 
+        wrapped in block start markers (\`%{\`${marker_msg}) 
+        and matching end markers (\`%}\`${end_marker_msg}). Expected format:
+    
             %code qualifier_name {action code}
     
           Erroneous code:
-        ${yylexer.prettyPrintRange(yylstack[yysp],yylstack[yysp-1])}
+        ${yylexer.prettyPrintRange(yylstack[yysp-1],yylstack[yysp-4])}
     
           Technical error report:
-        ${yyvstack[yysp].errStr}
-    `);break;case 30:/*! Production::    definition : error */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+        ${yyvstack[yysp-1].errStr}
+    `);break;case 27:/*! Production::    definition : init_code_keyword error ACTION_START error OPTIONS_END */ // default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-):
+this.$=yyvstack[yysp-4];this._$=yyparser.yyMergeLocationInfo(yysp-4,yysp);// END of default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-)
+yyparser.yyError(rmCommonWS$1`
+        Each '%code' initialization code section must be qualified by a name, 
+        e.g. 'required' before the action code itself:
+    
+            %code qualifier_name {action code}
+    
+          Erroneous code:
+        ${yylexer.prettyPrintRange(yylstack[yysp-3],yylstack[yysp-4])}
+    
+          Technical error report:
+        ${yyvstack[yysp-3].errStr}
+    `);break;case 28:/*! Production::    definition : init_code_keyword error OPTIONS_END */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+this.$=yyvstack[yysp-2];this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+yyparser.yyError(rmCommonWS$1`
+        Each '%code' initialization code section must be qualified by a name, 
+        e.g. 'required' before the action code itself.
+    
+        The '%code ID %{...%\}' initialization code section must be properly 
+        wrapped in block start markers (e.g. \`%{\`) and matching end markers 
+        (e.g. \`%}\`). Expected format:
+    
+            %code qualifier_name {action code}
+    
+          Erroneous code:
+        ${yylexer.prettyPrintRange(yylstack[yysp-1],yylstack[yysp-2])}
+    
+          Technical error report:
+        ${yyvstack[yysp-1].errStr}
+    `);break;case 29:/*! Production::    definition : error */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp];this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
 yyparser.yyError(rmCommonWS$1`
         illegal input in the lexer spec definitions section.
@@ -977,34 +995,38 @@ yyparser.yyError(rmCommonWS$1`
     
           Technical error report:
         ${yyvstack[yysp].errStr}
-    `);break;case 31:/*! Production::    option_keyword : OPTIONS */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+    `);break;case 30:/*! Production::    option_keyword : OPTIONS */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp];this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
-yy.__options_flags__=OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;yy.__options_category_description__=yyvstack[yysp];break;case 32:/*! Production::    import_keyword : IMPORT */case 34:/*! Production::    include_keyword : INCLUDE */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+yy.__options_flags__=OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;yy.__options_category_description__=yyvstack[yysp];break;case 31:/*! Production::    import_keyword : IMPORT */case 33:/*! Production::    include_keyword : INCLUDE */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp];this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
-yy.__options_flags__=OPTION_DOES_NOT_ACCEPT_VALUE|OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;yy.__options_category_description__=yyvstack[yysp];break;case 33:/*! Production::    init_code_keyword : CODE */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+yy.__options_flags__=OPTION_DOES_NOT_ACCEPT_VALUE|OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;yy.__options_category_description__=yyvstack[yysp];break;case 32:/*! Production::    init_code_keyword : CODE */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp];this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
-yy.__options_flags__=OPTION_DOES_NOT_ACCEPT_VALUE|OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS|OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;yy.__options_category_description__=yyvstack[yysp];break;case 35:/*! Production::    start_inclusive_keyword : START_INC */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+yy.__options_flags__=OPTION_DOES_NOT_ACCEPT_VALUE|OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS|OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;yy.__options_category_description__=yyvstack[yysp];break;case 34:/*! Production::    start_inclusive_keyword : START_INC */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp];this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
-yy.__options_flags__=OPTION_DOES_NOT_ACCEPT_VALUE|OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;yy.__options_category_description__='the inclusive lexer start conditions set (%s)';break;case 36:/*! Production::    start_exclusive_keyword : START_EXC */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+yy.__options_flags__=OPTION_DOES_NOT_ACCEPT_VALUE|OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;yy.__options_category_description__='the inclusive lexer start conditions set (%s)';break;case 35:/*! Production::    start_exclusive_keyword : START_EXC */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp];this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
-yy.__options_flags__=OPTION_DOES_NOT_ACCEPT_VALUE|OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;yy.__options_category_description__='the exclusive lexer start conditions set (%x)';break;case 37:/*! Production::    start_conditions_marker : "<" */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+yy.__options_flags__=OPTION_DOES_NOT_ACCEPT_VALUE|OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;yy.__options_category_description__='the exclusive lexer start conditions set (%x)';break;case 36:/*! Production::    start_conditions_marker : "<" */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp];this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
-yy.__options_flags__=OPTION_DOES_NOT_ACCEPT_VALUE|OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES|OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME;yy.__options_category_description__='the <...> delimited set of lexer start conditions';break;case 38:/*! Production::    rules : rules scoped_rules_collective */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+yy.__options_flags__=OPTION_DOES_NOT_ACCEPT_VALUE|OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES|OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME;yy.__options_category_description__='the <...> delimited set of lexer start conditions';break;case 37:/*! Production::    start_productions_marker : "%%" */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+this.$=yyvstack[yysp];this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+yy.__options_flags__=0;yy.__options_category_description__='the lexer rules definition section';break;case 38:/*! Production::    start_epilogue_marker : "%%" */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+this.$=yyvstack[yysp];this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+yy.__options_flags__=0;yy.__options_category_description__='the lexer epilogue section';break;case 39:/*! Production::    rules : rules scoped_rules_collective */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
-this.$=yyvstack[yysp-1].concat(yyvstack[yysp]);break;case 39:/*! Production::    rules : rules rule */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+this.$=yyvstack[yysp-1].concat(yyvstack[yysp]);break;case 40:/*! Production::    rules : rules rule */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
-this.$=yyvstack[yysp-1].concat([yyvstack[yysp]]);break;case 40:/*! Production::    rules : rules ACTION_START_AT_SOL action ACTION_END */ // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
+this.$=yyvstack[yysp-1].concat([yyvstack[yysp]]);break;case 41:/*! Production::    rules : rules ACTION_START_AT_SOL action ACTION_END */ // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-3,yysp);// END of default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-)
 var srcCode=trimActionCode$1(yyvstack[yysp-1],yyvstack[yysp-2]);if(srcCode){var rv=checkActionBlock$1(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$1`
                 The '%{...%}' lexer setup action code section does not compile: ${rv}
     
                   Erroneous area:
                 ${yylexer.prettyPrintRange(yylstack[yysp-1],yylstack[yysp-2])}
-            `);}yy.actionInclude.push(srcCode);}this.$=yyvstack[yysp-3];break;case 41:/*! Production::    rules : rules UNTERMINATED_ACTION_BLOCK */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+            `);}yy.actionInclude.push(srcCode);}this.$=yyvstack[yysp-3];break;case 42:/*! Production::    rules : rules UNTERMINATED_ACTION_BLOCK */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
 // The issue has already been reported by the lexer. No need to repeat
 // ourselves with another error report from here.
-this.$=yyvstack[yysp-1];break;case 42:/*! Production::    rules : rules ACTION_START_AT_SOL error */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+this.$=yyvstack[yysp-1];break;case 43:/*! Production::    rules : rules ACTION_START_AT_SOL error */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
 var start_marker=yyvstack[yysp-1].trim();var marker_msg=start_marker?' or similar, such as '+start_marker:'';yyparser.yyError(rmCommonWS$1`
         There's very probably a problem with this '%{...%}' lexer setup action code section.
@@ -1014,9 +1036,7 @@ var start_marker=yyvstack[yysp-1].trim();var marker_msg=start_marker?' or simila
     
           Technical error report:
         ${yyvstack[yysp].errStr}
-    `);this.$=yyvstack[yysp-2];break;case 43:/*! Production::    rules : rules ACTION_START include_macro_code ACTION_END */ // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
-this._$=yyparser.yyMergeLocationInfo(yysp-3,yysp);// END of default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-)
-yy.actionInclude.push(yyvstack[yysp-1]);this.$=yyvstack[yysp-3];break;case 44:/*! Production::    rules : rules ACTION_START error */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    `);this.$=yyvstack[yysp-2];break;case 44:/*! Production::    rules : rules ACTION_START error */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
 var start_marker=yyvstack[yysp-1].trim();// When the start_marker is not an explicit `%{`, `{` or similar, the error
 // is more probably due to indenting the rule regex, rather than an error
@@ -1134,9 +1154,13 @@ if(/^[^\r\n;\/]+$/.test(srcCode)){srcCode='return '+srcCode;}else{srcCode='retur
         `);}this.$=[yyvstack[yysp-3],srcCode];break;case 62:/*! Production::    rule : regex ARROW_ACTION_START error */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
 this.$=[yyvstack[yysp-2],yyvstack[yysp]];yyparser.yyError(rmCommonWS$1`
-        A lexer rule action arrow must be followed by a JavaScript expression specifying the lexer token to produce, e.g.:
+        A lexer rule action arrow must be followed by a single JavaScript expression specifying the lexer token to produce, e.g.:
     
-            /rule/   -> 'BUGGABOO'    // eqv. to \`return 'BUGGABOO';\`
+            /rule/   -> 'BUGGABOO'
+    
+        which is equivalent to:
+    
+            /rule/      %{ return 'BUGGABOO'; %}
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp],yylstack[yysp-2])}
@@ -1471,16 +1495,16 @@ if(!(yy.__options_flags__&OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES)||yy.__options_fl
 this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
 this.$=JSON5__default['default'].parse(yyvstack[yysp]);break;case 123:/*! Production::    option_value : OPTION_VALUE */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
 this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-this.$=parseValue(yyvstack[yysp]);break;case 124:/*! Production::    epilogue : "%%" */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+this.$=parseValue(yyvstack[yysp]);break;case 124:/*! Production::    epilogue : start_epilogue_marker */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
 this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
-this.$='';break;case 125:/*! Production::    epilogue : "%%" epilogue_chunks */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+this.$='';break;case 125:/*! Production::    epilogue : start_epilogue_marker epilogue_chunks */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
 var srcCode=trimActionCode$1(yyvstack[yysp]);if(srcCode){var rv=checkActionBlock$1(srcCode,yylstack[yysp],yy);if(rv){yyparser.yyError(rmCommonWS$1`
                 The '%%' lexer epilogue code does not compile: ${rv}
     
                   Erroneous area:
                 ${yylexer.prettyPrintRange(yylstack[yysp],yylstack[yysp-1])}
-            `);}}this.$=srcCode;break;case 126:/*! Production::    epilogue : "%%" error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+            `);}}this.$=srcCode;break;case 126:/*! Production::    epilogue : start_epilogue_marker error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp-1];this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
 yyparser.yyError(rmCommonWS$1`
         There's an error in your lexer epilogue code block.
@@ -1501,9 +1525,7 @@ yyparser.yyError(rmCommonWS$1`
     
           Technical error report:
         ${yyvstack[yysp].errStr}
-    `);this.$='';break;case 130:/*! Production::    epilogue_chunk : ACTION_START include_macro_code ACTION_END */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
-this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
-this.$='\n\n'+yyvstack[yysp-1]+'\n\n';break;case 131:/*! Production::    epilogue_chunk : ACTION_START_AT_SOL action ACTION_END */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+    `);this.$='';break;case 130:/*! Production::    epilogue_chunk : ACTION_START_AT_SOL action ACTION_END */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
 var srcCode=trimActionCode$1(yyvstack[yysp-1],yyvstack[yysp-2]);if(srcCode){var rv=checkActionBlock$1(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$1`
                 The '%{...%}' lexer epilogue code chunk does not compile: ${rv}
@@ -1513,7 +1535,7 @@ var srcCode=trimActionCode$1(yyvstack[yysp-1],yyvstack[yysp-2]);if(srcCode){var 
             `);}}// Since the epilogue is concatenated as-is (see the `epilogue_chunks` rule above)
 // we append those protective double newlines right now, as the calling site
 // won't do it for us:
-this.$='\n\n'+srcCode+'\n\n';break;case 132:/*! Production::    epilogue_chunk : ACTION_START_AT_SOL error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+this.$='\n\n'+srcCode+'\n\n';break;case 131:/*! Production::    epilogue_chunk : ACTION_START_AT_SOL error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
 var start_marker=yyvstack[yysp-1].trim();var marker_msg=start_marker?' or similar, such as '+start_marker:'';yyparser.yyError(rmCommonWS$1`
         There's very probably a problem with this '%{...%}' lexer setup action code section.
@@ -1523,11 +1545,11 @@ var start_marker=yyvstack[yysp-1].trim();var marker_msg=start_marker?' or simila
     
           Technical error report:
         ${yyvstack[yysp].errStr}
-    `);this.$='';break;case 134:/*! Production::    epilogue_chunk : TRAILING_CODE_CHUNK */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+    `);this.$='';break;case 133:/*! Production::    epilogue_chunk : TRAILING_CODE_CHUNK */ // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
 this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
 // these code chunks are very probably incomplete, hence compile-testing
 // for these should be deferred until we've collected the entire epilogue.
-this.$=yyvstack[yysp];break;case 135:/*! Production::    include_macro_code : include_keyword option_list OPTIONS_END */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,LU,LUbA):
+this.$=yyvstack[yysp];break;case 134:/*! Production::    include_macro_code : include_keyword option_list OPTIONS_END */ // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,LU,LUbA):
 this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,LU,LUbA)
 // check if there is only 1 unvalued options: 'path'
 var lst=yyvstack[yysp-1];var len=lst.length;var path;if(len===1&&lst[0][1]===true){// `path`:
@@ -1555,7 +1577,7 @@ var fileContent=fs__default['default'].readFileSync(path,{encoding:'utf-8'});var
     
                   Erroneous area:
                 ${yylexer.prettyPrintRange(this._$)}
-            `);}}this.$='\n// Included by Jison: '+path+':\n\n'+srcCode+'\n\n// End Of Include by Jison: '+path+'\n\n';break;case 136:/*! Production::    include_macro_code : include_keyword error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+            `);}}this.$='\n// Included by Jison: '+path+':\n\n'+srcCode+'\n\n// End Of Include by Jison: '+path+'\n\n';break;case 135:/*! Production::    include_macro_code : include_keyword error */ // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp-1];this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
 yyparser.yyError(rmCommonWS$1`
         %include MUST be followed by a valid file path.
@@ -1565,7 +1587,7 @@ yyparser.yyError(rmCommonWS$1`
     
           Technical error report:
         ${yyvstack[yysp].errStr}
-    `);break;}},table:bt({len:u([15,1,14,20,1,13,28,22,s,[9,3],13,5,9,13,c,[6,3],s,[31,5],1,43,3,1,13,6,25,24,25,23,23,17,17,s,[24,8],26,5,24,24,9,13,8,9,1,s,[9,5],13,9,13,1,13,13,9,c,[53,4],c,[11,4],26,26,9,26,4,s,[26,6],8,24,4,8,4,1,13,c,[62,3],s,[24,5],2,3,2,25,25,6,s,[4,3],13,7,8,4,8,13,13,s,[7,6],13,9,7,c,[62,3],9,26,1,26,7,1,6,3,9,6,6,26,17,c,[88,4],27,10,s,[24,7],4,s,[8,3],7,9,13,26,26,6,6,1,9,6,23,27,26,9,27,9,27,9,27,1,16,1,c,[43,3],15,26,s,[27,3],16,13]),symbol:u([1,2,19,20,23,25,26,s,[28,4,1],33,34,56,58,1,c,[16,13],59,c,[14,13],57,s,[60,4,1],65,66,c,[35,14],1,2,3,7,8,s,[13,4,1],19,c,[19,9],s,[41,6,1],50,51,68,2,c,[26,6],c,[16,8],74,s,[76,5,1],84,2,11,52,53,54,s,[85,4,1],c,[9,10],24,32,s,[36,5,1],72,c,[90,13],2,27,32,64,92,c,[36,9],c,[27,14],c,[67,17],c,[148,18],11,c,[149,22],c,[48,3],c,[31,125],1,c,[303,25],c,[349,5],s,[67,4,2],c,[296,7],89,1,19,89,21,c,[247,14],7,21,23,26,35,c,[342,3],9,c,[66,4],c,[12,4],c,[60,8],c,[345,6],c,[25,19],c,[24,8],s,[10,7,1],c,[27,10],49,50,51,83,c,[49,8],c,[45,8],s,[75,6,1],c,[72,9],c,[23,15],c,[460,13],c,[17,21],c,[105,24],c,[24,189],s,[47,5,1],45,48,79,81,82,c,[79,48],11,17,22,c,[498,3],c,[700,18],17,22,26,c,[24,3],c,[8,3],18,c,[9,6],c,[10,10],c,[9,26],c,[76,22],c,[824,7],64,92,c,[22,14],c,[781,15],c,[825,25],c,[85,22],c,[22,24],c,[135,4],c,[874,17],c,[719,26],c,[26,26],c,[1007,10],c,[35,26],c,[1019,3],c,[91,52],c,[26,105],2,c,[19,3],55,90,91,2,4,c,[1251,14],71,c,[1252,8],c,[520,3],c,[363,8],c,[8,4],c,[1332,14],c,[962,78],c,[810,117],9,2,7,9,c,[5,4],c,[152,47],83,2,45,47,48,79,82,c,[6,4],c,[4,8],c,[614,14],c,[612,6],c,[804,9],53,54,c,[12,9],c,[725,26],c,[591,7],c,[7,35],c,[744,22],c,[29,20],c,[432,14],c,[689,8],c,[880,10],c,[538,25],24,c,[565,32],91,c,[524,3],c,[8,4],c,[1757,4],c,[1784,10],c,[18,4],c,[6,7],c,[789,26],5,c,[621,14],70,5,c,[65,9],c,[9,18],s,[1,4,2],c,[72,24],c,[250,9],c,[624,48],c,[24,121],c,[556,4],c,[1336,10],c,[8,13],c,[482,14],c,[1291,15],c,[988,58],c,[6,6],24,c,[87,11],c,[16,4],c,[386,15],c,[1007,8],c,[365,27],c,[554,27],c,[589,10],c,[62,25],c,[36,72],6,c,[1193,16],22,c,[627,38],c,[240,15],c,[335,28],c,[258,27],c,[27,52],c,[177,16],c,[471,13]]),type:u([s,[2,13],0,0,1,c,[16,14],c,[30,15],s,[0,5],s,[2,41],c,[42,16],c,[64,12],c,[9,18],c,[49,19],c,[29,3],c,[36,17],c,[79,14],c,[31,27],s,[2,177],s,[0,17],c,[273,19],c,[60,29],c,[25,24],c,[416,40],c,[481,24],c,[23,20],c,[17,34],s,[2,207],c,[223,57],c,[280,76],c,[485,25],c,[617,49],c,[85,33],c,[22,44],c,[206,56],c,[165,30],c,[532,164],c,[964,24],c,[790,50],c,[962,70],c,[281,136],c,[25,29],c,[275,31],c,[670,15],c,[984,139],c,[42,8],c,[668,61],c,[540,11],c,[228,63],c,[55,10],c,[74,18],c,[83,35],c,[624,51],c,[915,180],c,[87,92],c,[1007,16],c,[178,88],c,[36,72],s,[2,200]]),state:u([s,[1,5,1],13,15,16,8,9,s,[24,4,2],31,36,37,42,48,50,51,53,57,c,[4,3],59,64,61,66,c,[7,3],68,c,[4,3],70,c,[4,3],80,82,83,78,79,87,73,74,85,86,c,[39,6],72,89,92,c,[7,4],93,c,[4,3],97,99,100,c,[19,5],101,c,[7,6],102,c,[4,3],103,c,[4,3],107,104,105,110,51,53,c,[3,3],64,116,122,c,[65,3],c,[12,6],c,[3,3],127,64,129,131,133,138,c,[71,7],145,c,[26,3],146,c,[73,9],97,97,107,153,154,51,53,155,c,[38,3],158,64,116,162,64,164,165,167,170,172,174,c,[14,3],c,[30,4],64,116,64,116,182,c,[55,7],c,[12,4],64,116]),mode:u([s,[2,27],s,[1,13],c,[27,15],c,[53,38],c,[66,27],c,[46,14],c,[67,23],s,[2,170],c,[246,26],c,[315,23],c,[25,4],c,[27,6],c,[237,10],c,[20,20],c,[12,5],c,[66,18],c,[89,5],c,[102,14],s,[1,38],s,[2,218],c,[220,50],c,[274,30],c,[25,6],c,[85,37],c,[709,26],c,[822,39],c,[47,6],c,[76,30],c,[187,43],c,[259,43],c,[343,83],c,[889,134],c,[1139,25],c,[889,62],c,[733,122],c,[1099,8],c,[151,24],c,[24,20],c,[549,29],c,[29,12],c,[1050,92],c,[684,39],c,[34,8],c,[1193,33],c,[75,28],c,[59,12],c,[211,47],c,[46,16],c,[72,10],c,[511,42],c,[594,31],c,[1362,177],c,[186,82],c,[271,14],c,[944,17],c,[109,51],c,[166,34],c,[34,69],c,[1338,50],s,[2,156]]),goto:u([s,[7,13],s,[9,13],6,17,6,7,10,11,12,14,20,21,22,18,19,23,s,[8,13],51,25,s,[51,25],27,29,32,34,38,39,40,33,35,41,s,[43,5,1],49,54,52,55,56,58,c,[5,4],60,s,[72,7],s,[17,13],62,63,65,67,c,[29,4],s,[24,13],69,c,[18,4],71,c,[5,4],s,[30,13],s,[35,31],s,[36,31],s,[31,31],s,[32,31],s,[33,31],1,4,88,c,[247,6],84,75,76,77,81,c,[305,5],c,[257,8],5,84,90,s,[11,13],75,91,s,[75,4],81,81,32,81,c,[48,4],s,[81,4],c,[42,8],82,82,32,82,c,[20,4],s,[82,4],c,[20,8],s,[84,4],94,95,96,s,[84,14],98,84,84,77,29,32,77,c,[359,12],c,[16,16],c,[388,13],c,[13,13],s,[94,24],s,[96,24],s,[97,24],s,[98,24],s,[99,24],s,[100,24],s,[101,24],s,[102,24],s,[103,26],44,106,s,[111,24],s,[112,24],54,109,108,c,[613,3],s,[13,13],s,[115,8],s,[116,3],111,s,[116,5],112,s,[120,9],s,[121,9],s,[122,9],s,[123,9],54,109,113,c,[73,3],s,[15,13],114,65,115,s,[117,4,1],s,[18,13],121,s,[20,13],s,[21,13],123,c,[751,4],s,[34,5],54,109,124,c,[11,3],s,[23,13],54,109,125,c,[19,3],s,[26,13],54,109,126,c,[19,3],s,[29,13],2,s,[38,26],s,[39,26],128,s,[72,7],s,[41,26],130,65,s,[45,26],s,[46,26],s,[47,26],s,[48,26],s,[49,26],s,[50,26],124,132,135,136,134,137,140,139,c,[1142,14],144,142,141,143,c,[337,4],s,[37,4],3,s,[10,13],79,79,32,79,c,[42,4],s,[79,4],c,[46,8],80,80,32,80,c,[20,4],s,[80,4],c,[20,8],s,[83,4],c,[889,3],s,[83,14],98,83,83,s,[89,24],s,[90,24],s,[91,24],s,[95,24],s,[110,24],148,147,76,91,76,150,149,s,[92,4],c,[151,3],s,[92,14],98,92,92,s,[93,4],c,[24,3],s,[93,14],98,93,93,152,44,151,106,s,[107,4],s,[108,4],s,[109,4],s,[12,13],c,[290,4],s,[114,8],156,55,56,s,[119,8],s,[14,13],s,[16,13],s,[66,7],s,[67,7],s,[68,7],s,[69,7],s,[70,7],s,[71,7],s,[19,13],54,109,157,c,[106,3],s,[136,7],s,[22,13],s,[25,13],159,s,[72,7],160,c,[826,6],s,[42,26],161,s,[44,26],125,163,c,[527,4],126,s,[129,6],65,166,s,[72,7],s,[133,6],s,[134,6],s,[52,26],168,s,[58,15],169,171,s,[72,7],173,s,[72,7],175,s,[72,7],s,[65,27],177,54,109,176,c,[236,3],78,78,32,78,c,[594,4],s,[78,4],c,[594,8],s,[85,24],s,[87,24],s,[86,24],s,[88,24],s,[104,24],s,[105,24],s,[106,4],s,[113,8],s,[117,8],s,[118,8],s,[135,7],178,c,[394,6],s,[28,13],s,[40,26],s,[43,26],s,[127,6],s,[128,6],179,180,c,[85,6],s,[132,6],181,c,[952,14],55,55,183,s,[55,24],s,[56,26],184,c,[81,6],s,[63,27],185,c,[34,6],s,[64,27],186,c,[34,6],s,[62,27],187,s,[74,16],188,s,[130,6],s,[131,6],s,[53,26],s,[57,15],s,[54,26],s,[59,27],s,[60,27],s,[61,27],s,[73,16],s,[27,13]])}),defaultActions:bda({idx:u([0,2,5,11,14,s,[17,7,1],27,s,[36,9,1],46,47,49,50,s,[53,4,1],58,60,62,s,[63,5,2],72,73,74,76,s,[78,6,1],88,89,90,s,[94,5,1],s,[105,4,1],110,s,[112,10,1],123,124,125,128,130,132,133,136,137,138,144,s,[147,11,1],s,[159,5,1],166,s,[169,6,2],s,[180,9,1]]),goto:u([7,9,8,17,24,30,35,36,31,32,33,1,11,94,s,[96,8,1],111,112,13,115,s,[120,4,1],15,18,20,21,34,23,26,29,2,38,39,41,s,[45,6,1],37,3,10,89,90,91,95,110,107,108,109,12,114,119,14,16,s,[66,6,1],19,136,22,25,42,44,126,129,133,134,52,65,85,87,86,88,104,105,106,113,117,118,135,28,40,43,127,128,132,56,63,64,62,74,130,131,53,57,54,59,60,61,73,27])}),parseError:function parseError(str,hash,ExceptionClass){if(hash.recoverable){if(typeof this.trace==='function'){this.trace(str);}hash.destroy();// destroy... well, *almost*!
+    `);break;}},table:bt({len:u([15,1,14,21,1,13,28,22,s,[9,3],13,1,9,13,c,[6,3],27,s,[31,5],1,44,4,1,13,6,25,24,25,23,23,17,17,s,[24,8],26,5,24,24,9,13,8,9,1,s,[9,5],13,9,13,c,[3,3],c,[13,3],2,1,26,26,9,26,c,[5,3],s,[26,4],7,24,4,5,8,c,[60,3],c,[59,3],s,[24,5],2,3,2,25,25,6,s,[4,3],13,7,8,4,8,13,13,s,[7,6],9,5,s,[13,3],9,1,13,9,26,26,6,1,5,9,5,5,26,17,c,[85,4],27,10,s,[24,7],4,s,[8,3],9,7,9,1,1,26,5,c,[30,3],23,27,26,9,27,9,27,9,27,1,16,7,1,13,13,5,26,15,26,s,[27,3],16,13]),symbol:u([1,2,19,22,s,[24,6,1],31,32,33,55,57,1,c,[16,13],58,c,[14,13],56,s,[59,4,1],64,65,67,c,[36,14],1,2,3,7,8,s,[13,4,1],c,[19,10],s,[40,6,1],49,50,69,2,c,[26,6],c,[16,8],75,s,[77,5,1],85,2,11,51,52,53,s,[86,4,1],c,[9,10],23,30,s,[35,5,1],73,c,[90,13],2,c,[32,9],c,[23,14],c,[63,17],c,[144,40],c,[27,5],11,c,[28,22],c,[75,3],c,[31,125],1,c,[182,25],c,[373,5],s,[66,5,2],c,[320,7],90,1,33,68,90,20,c,[276,14],7,20,22,25,34,c,[367,3],9,c,[68,4],c,[12,4],c,[62,8],c,[370,6],c,[25,19],c,[24,8],s,[10,7,1],c,[27,10],48,49,50,84,c,[49,8],c,[45,8],s,[76,6,1],c,[72,9],c,[23,15],c,[485,13],c,[17,21],c,[105,24],c,[24,189],s,[46,5,1],44,47,80,82,83,c,[79,48],11,17,21,c,[500,3],c,[729,18],17,21,25,c,[24,3],c,[8,3],18,c,[9,6],c,[10,10],c,[9,26],c,[76,22],c,[849,7],63,93,c,[796,15],c,[13,11],c,[57,22],c,[22,9],21,11,17,c,[95,4],c,[10,4],25,c,[670,27],c,[26,26],c,[981,10],c,[35,26],c,[88,52],c,[26,105],2,22,24,54,91,92,2,4,c,[1221,14],72,c,[1222,8],c,[465,3],c,[35,5],c,[1158,8],c,[8,4],c,[1307,14],c,[912,78],c,[760,117],9,2,7,9,c,[5,4],c,[152,47],84,2,44,46,47,80,83,c,[6,4],c,[4,8],c,[614,14],c,[602,6],c,[754,9],52,53,c,[12,9],c,[689,26],c,[592,7],c,[7,35],c,[1571,14],c,[82,26],c,[430,14],c,[688,8],2,c,[842,23],c,[580,56],92,c,[534,3],c,[7,3],c,[1765,11],c,[14,3],c,[5,6],c,[794,26],5,c,[630,14],71,5,c,[159,10],c,[9,17],s,[1,4,2],c,[72,24],c,[976,9],c,[628,48],c,[24,121],c,[560,4],c,[1290,10],c,[8,13],c,[205,9],c,[495,14],63,93,21,21,c,[388,31],c,[5,5],c,[1301,11],c,[14,3],c,[354,15],c,[984,8],c,[333,27],c,[100,26],c,[549,11],c,[62,25],c,[36,72],6,c,[1170,16],c,[53,7],21,c,[744,28],c,[621,29],c,[266,15],c,[745,28],c,[284,27],c,[27,52],c,[203,16],c,[182,13]]),type:u([s,[2,13],0,0,1,c,[16,14],c,[30,15],s,[0,6],s,[2,41],c,[42,16],c,[64,12],c,[9,18],c,[49,19],c,[32,16],c,[22,19],c,[145,45],s,[2,181],s,[0,18],c,[20,4],c,[62,45],c,[25,24],c,[441,40],c,[442,13],c,[23,31],c,[17,34],c,[416,210],c,[57,111],c,[76,42],c,[98,34],c,[57,22],c,[22,10],c,[165,66],c,[509,189],c,[756,25],c,[740,56],c,[912,70],c,[286,136],c,[25,29],c,[275,31],c,[240,14],c,[227,82],c,[1144,56],c,[53,22],c,[775,59],c,[58,15],c,[149,63],c,[1837,18],c,[81,35],c,[628,51],c,[1393,171],c,[197,47],c,[268,26],c,[272,64],c,[62,36],c,[36,72],s,[2,226]]),state:u([s,[1,5,1],13,15,16,8,9,6,s,[25,4,2],32,37,38,43,49,51,52,54,58,c,[4,3],60,63,c,[5,3],65,c,[4,3],67,c,[4,3],77,79,80,75,76,85,81,70,71,82,83,c,[38,6],69,81,87,90,c,[8,4],91,c,[4,3],95,97,98,c,[20,5],99,c,[7,6],100,c,[4,3],101,c,[4,3],105,102,103,108,52,54,c,[3,3],119,114,c,[8,6],c,[3,3],127,130,132,136,c,[66,7],143,c,[87,3],144,c,[67,9],95,95,105,151,152,52,54,153,155,c,[22,3],157,119,114,161,163,165,168,170,172,c,[49,3],c,[29,4],c,[67,5],119,114,182,c,[57,7],c,[12,4],119,114]),mode:u([s,[2,27],s,[1,13],c,[27,15],c,[53,38],c,[66,27],c,[46,12],c,[65,23],s,[2,197],c,[271,26],c,[340,23],c,[25,4],c,[27,6],c,[264,10],c,[20,20],c,[12,5],c,[66,18],c,[89,5],c,[102,14],s,[1,38],s,[2,218],c,[220,50],c,[274,30],c,[25,6],c,[85,37],c,[736,26],c,[52,52],c,[427,61],c,[54,34],c,[515,158],c,[696,29],c,[1120,25],c,[845,62],c,[689,122],c,[1055,8],c,[151,24],c,[24,20],c,[539,29],c,[29,12],c,[1006,79],c,[660,49],c,[45,8],c,[793,47],c,[131,31],c,[439,50],c,[44,16],c,[125,9],c,[161,22],c,[663,28],c,[599,24],c,[1703,174],c,[875,16],c,[920,43],c,[1192,22],c,[260,51],c,[123,34],c,[34,69],c,[1284,181],s,[2,51]]),goto:u([s,[7,13],s,[9,13],6,17,7,10,11,12,14,21,22,23,19,20,18,24,s,[8,13],51,26,s,[51,25],28,30,33,35,39,40,41,34,36,42,s,[44,5,1],50,55,53,56,57,59,c,[5,4],61,s,[72,7],s,[17,13],62,64,c,[27,4],s,[22,13],66,c,[18,4],68,c,[5,4],s,[29,13],s,[37,27],s,[34,31],s,[35,31],s,[30,31],s,[31,31],s,[32,31],1,4,86,c,[272,6],72,73,74,78,c,[330,5],84,c,[282,8],5,84,88,s,[11,13],75,89,s,[75,4],81,81,33,81,c,[48,4],s,[81,4],c,[42,8],82,82,33,82,c,[20,4],s,[82,4],c,[20,8],s,[84,4],92,93,94,s,[84,14],96,84,84,77,30,33,77,c,[384,12],c,[16,16],c,[413,13],c,[13,13],s,[94,24],s,[96,24],s,[97,24],s,[98,24],s,[99,24],s,[100,24],s,[101,24],s,[102,24],s,[103,26],45,104,s,[111,24],s,[112,24],55,107,106,c,[640,3],s,[13,13],s,[115,8],s,[116,3],109,s,[116,5],110,s,[120,9],s,[121,9],s,[122,9],s,[123,9],55,107,111,c,[73,3],s,[15,13],112,120,113,s,[115,4,1],s,[18,13],s,[19,13],55,107,121,c,[52,3],s,[21,13],55,107,122,c,[19,3],c,[78,3],124,c,[7,3],126,125,2,s,[39,26],s,[40,26],128,s,[72,7],s,[42,26],129,s,[45,26],s,[46,26],s,[47,26],s,[48,26],s,[49,26],s,[50,26],124,131,133,134,135,138,137,c,[1118,14],142,140,139,141,s,[38,5],c,[1071,4],s,[36,4],3,s,[10,13],79,79,33,79,c,[47,4],s,[79,4],c,[51,8],80,80,33,80,c,[20,4],s,[80,4],c,[20,8],s,[83,4],c,[845,3],s,[83,14],96,83,83,s,[89,24],s,[90,24],s,[91,24],s,[95,24],s,[110,24],146,145,76,89,76,148,147,s,[92,5],93,94,s,[92,14],96,c,[19,3],s,[93,3],c,[24,3],s,[93,14],96,93,93,150,45,149,104,s,[107,4],s,[108,4],s,[109,4],s,[12,13],c,[290,4],s,[114,8],154,56,57,s,[119,8],s,[14,13],s,[16,13],s,[66,7],s,[67,7],s,[68,7],s,[69,7],s,[70,7],s,[71,7],156,c,[92,4],s,[33,5],s,[20,13],s,[23,13],s,[24,13],158,s,[72,7],159,s,[28,13],160,c,[793,6],s,[43,26],s,[44,26],125,162,c,[541,3],126,s,[129,5],164,s,[72,7],s,[132,5],s,[133,5],s,[52,26],166,s,[58,15],167,169,s,[72,7],171,s,[72,7],173,s,[72,7],s,[65,27],175,55,107,174,c,[255,3],78,78,33,78,c,[599,4],s,[78,4],c,[599,8],s,[85,24],s,[87,24],s,[86,24],s,[88,24],s,[104,24],s,[105,24],s,[106,4],s,[113,8],s,[117,8],s,[118,8],55,107,176,c,[198,3],s,[135,7],177,c,[394,6],178,179,s,[41,26],s,[127,5],s,[128,5],180,c,[45,6],s,[131,5],181,c,[927,14],55,55,183,s,[55,24],s,[56,26],184,c,[80,6],s,[63,27],185,c,[34,6],s,[64,27],186,c,[34,6],s,[62,27],187,s,[74,16],s,[134,7],188,s,[26,13],s,[27,13],s,[130,5],s,[53,26],s,[57,15],s,[54,26],s,[59,27],s,[60,27],s,[61,27],s,[73,16],s,[25,13]])}),defaultActions:bda({idx:u([0,2,5,11,14,s,[17,8,1],28,s,[37,9,1],47,48,50,51,s,[54,4,1],59,61,62,64,69,70,71,73,s,[75,6,1],84,86,87,88,s,[92,5,1],s,[103,4,1],108,s,[110,9,1],s,[120,4,1],126,128,129,131,132,134,135,136,142,s,[145,10,1],156,160,161,162,164,s,[167,5,2],176,s,[178,11,1]]),goto:u([7,9,8,17,22,29,37,34,35,30,31,32,1,11,94,s,[96,8,1],111,112,13,115,s,[120,4,1],15,18,19,21,2,39,40,42,s,[45,6,1],38,36,3,10,89,90,91,95,110,107,108,109,12,114,119,14,16,s,[66,6,1],33,20,23,24,28,43,44,126,129,132,133,52,65,85,87,86,88,104,105,106,113,117,118,135,41,127,128,131,56,63,64,62,74,134,26,27,130,53,57,54,59,60,61,73,25])}),parseError:function parseError(str,hash,ExceptionClass){if(hash.recoverable){if(typeof this.trace==='function'){this.trace(str);}hash.destroy();// destroy... well, *almost*!
 }else{if(typeof this.trace==='function'){this.trace(str);}if(!ExceptionClass){ExceptionClass=this.JisonParserError;}throw new ExceptionClass(str,hash);}},parse:function parse(input){var self=this;var stack=new Array(128);// token stack: stores token which leads to state at the same index (column storage)
 var sstack=new Array(128);// state stack: stores states (column storage)
 var vstack=new Array(128);// semantic value stack
@@ -1582,8 +1604,19 @@ var TERROR=this.TERROR;var EOF=this.EOF;var ERROR_RECOVERY_TOKEN_DISCARD_COUNT=t
 // benchmark:: http://127.0.0.1:8080/example/jsperf/#testfile=test0020-typeof-instanceof-isArray.json5
 // benchmark:: http://127.0.0.1:8080/example/jsperf/?333#testfile=test0021-shallow-clones.json5
 //
-function shallow_copy(src){if(typeof src==='object'){var dst={};for(var k in src){if(Object.prototype.hasOwnProperty.call(src,k)){dst[k]=src[k];}}return dst;}return src;}function shallow_copy_noclobber(dst,src){for(var k in src){if(typeof dst[k]==='undefined'&&Object.prototype.hasOwnProperty.call(src,k)){dst[k]=src[k];}}}function copy_yylloc(loc){var rv=shallow_copy(loc);if(rv&&rv.range){rv.range=rv.range.slice(0);}return rv;}// copy state
-shallow_copy_noclobber(sharedState_yy,this.yy);sharedState_yy.lexer=lexer;sharedState_yy.parser=this;// *Always* setup `yyError`, `YYRECOVERING`, `yyErrOk` and `yyClearIn` functions as it is paramount
+function shallow_copy(src){if(src&&typeof src==='object'){// non-Object-type objects, e.g. RegExp, Date, etc., can usually be shallow cloned
+// using their constructor:
+if(src.constructor!==Object){if(Array.isArray(src)){return src.slice();}var dst=new src.constructor(src);// and make sure all custom attributes are added to the clone:
+shallow_copy_noclobber(dst,src);return dst;}// native objects must be cloned a different way:
+//
+//return Object.assign({}, src);
+var dst={};shallow_copy_noclobber(dst,src);return dst;}return src;}// add elements from `src` to `dst` when:
+// - either the element does not yet exist in `src`
+// - or exists in `src` but is NULL or UNDEFINED there, while its value is non-NULL in `dst`
+function shallow_copy_noclobber(dst,src){const chk=Object.prototype.hasOwnProperty;for(var k in src){if(!(k in dst)){if(chk.call(src,k)){dst[k]=src[k];}}else{if(src[k]!=null&&dst[k]==null&&chk.call(src,k)){dst[k]=src[k];}}}}function copy_yylloc_native(loc){var rv=shallow_copy(loc);// shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
+if(rv){rv.range=rv.range.slice();}return rv;}// copy state
+shallow_copy_noclobber(sharedState_yy,this.yy);sharedState_yy.lexer=lexer;sharedState_yy.parser=this;// allow userland code to override the yytext and yylloc copy/clone functions:
+this.copy_yytext=this.options.copy_yytext||sharedState_yy.copy_yytext||shallow_copy;this.copy_yylloc=this.options.copy_yylloc||sharedState_yy.copy_yylloc||copy_yylloc_native;// *Always* setup `yyError`, `YYRECOVERING`, `yyErrOk` and `yyClearIn` functions as it is paramount
 // to have *their* closure match ours -- if we only set them up once,
 // any subsequent `parse()` runs will fail in very obscure ways when
 // these functions are invoked in the user action code block(s) as
@@ -1591,7 +1624,7 @@ shallow_copy_noclobber(sharedState_yy,this.yy);sharedState_yy.lexer=lexer;shared
 // them up. Hence we MUST set them up at the start of every `parse()` run!
 if(this.yyError){this.yyError=function yyError(str/*, ...args */){var error_rule_depth=this.options.parserErrorsAreRecoverable?locateNearestErrorRecoveryRule(state):-1;var expected=this.collect_expected_token_set(state);var hash=this.constructParseErrorInfo(str,null,expected,error_rule_depth>=0);// append to the old one?
 if(recoveringErrorInfo){var esp=recoveringErrorInfo.info_stack_pointer;recoveringErrorInfo.symbol_stack[esp]=symbol;var v=this.shallowCopyErrorInfo(hash);v.yyError=true;v.errorRuleDepth=error_rule_depth;v.recovering=recovering;// v.stackSampleLength = error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH;
-recoveringErrorInfo.value_stack[esp]=v;recoveringErrorInfo.location_stack[esp]=copy_yylloc(lexer.yylloc);recoveringErrorInfo.state_stack[esp]=newState||NO_ACTION[1];++esp;recoveringErrorInfo.info_stack_pointer=esp;}else{recoveringErrorInfo=this.shallowCopyErrorInfo(hash);recoveringErrorInfo.yyError=true;recoveringErrorInfo.errorRuleDepth=error_rule_depth;recoveringErrorInfo.recovering=recovering;}// Add any extra args to the hash under the name `extra_error_attributes`:
+recoveringErrorInfo.value_stack[esp]=v;recoveringErrorInfo.location_stack[esp]=this.copy_yylloc(lexer.yylloc);recoveringErrorInfo.state_stack[esp]=newState||NO_ACTION[1];++esp;recoveringErrorInfo.info_stack_pointer=esp;}else{recoveringErrorInfo=this.shallowCopyErrorInfo(hash);recoveringErrorInfo.yyError=true;recoveringErrorInfo.errorRuleDepth=error_rule_depth;recoveringErrorInfo.recovering=recovering;}// Add any extra args to the hash under the name `extra_error_attributes`:
 var args=Array.prototype.slice.call(arguments,1);if(args.length){hash.extra_error_attributes=args;}return this.parseError(str,hash,this.JisonParserError);};}// Does the shared state override the default `parseError` that already comes with this instance?
 if(typeof sharedState_yy.parseError==='function'){this.parseError=function parseErrorAlt(str,hash,ExceptionClass){if(!ExceptionClass){ExceptionClass=this.JisonParserError;}return sharedState_yy.parseError.call(this,str,hash,ExceptionClass);};}else{this.parseError=this.originalParseError;}// Does the shared state override the default `quoteName` that already comes with this instance?
 if(typeof sharedState_yy.quoteName==='function'){this.quoteName=function quoteNameAlt(id_str){return sharedState_yy.quoteName.call(this,id_str);};}else{this.quoteName=this.originalQuoteName;}// set up the cleanup function; make it an API so that external code can re-use this one in case of
@@ -1635,20 +1668,13 @@ if(!dont_look_back){for(var i=(i1||sp)-1;i>=0;i--){l1=lstack[i];if(l1){break;}}}
 // in that case we ca do nothing but return NULL/UNDEFINED:
 return undefined;}else{// shallow-copy L2: after all, we MAY be looking
 // at unconventional yylloc info objects...
-rv=shallow_copy(l2);if(rv.range){// shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-rv.range=rv.range.slice(0);}return rv;}}else{// shallow-copy L1, then adjust first col/row 1 column past the end.
-rv=shallow_copy(l1);rv.first_line=rv.last_line;rv.first_column=rv.last_column;if(rv.range){// shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-rv.range=rv.range.slice(0);rv.range[0]=rv.range[1];}if(l2){// shallow-mixin L2, then adjust last col/row accordingly.
-shallow_copy_noclobber(rv,l2);rv.last_line=l2.last_line;rv.last_column=l2.last_column;if(rv.range&&l2.range){rv.range[1]=l2.range[1];}}return rv;}}if(!l1){l1=l2;l2=null;}if(!l1){return undefined;}// shallow-copy L1|L2, before we try to adjust the yylloc values: after all, we MAY be looking
+rv=this.copy_yylloc(l2);return rv;}}else{// shallow-copy L1, then adjust first col/row 1 column past the end.
+rv=this.copy_yylloc(l1);rv.first_line=rv.last_line;rv.first_column=rv.last_column;rv.range[0]=rv.range[1];if(l2){// shallow-mixin L2, then adjust last col/row accordingly.
+shallow_copy_noclobber(rv,l2);rv.last_line=l2.last_line;rv.last_column=l2.last_column;rv.range[1]=l2.range[1];}return rv;}}if(!l1){l1=l2;l2=null;}if(!l1){return undefined;}// shallow-copy L1|L2, before we try to adjust the yylloc values: after all, we MAY be looking
 // at unconventional yylloc info objects...
-rv=shallow_copy(l1);// first_line: ...,
-// first_column: ...,
-// last_line: ...,
-// last_column: ...,
-if(rv.range){// shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-rv.range=rv.range.slice(0);}if(l2){shallow_copy_noclobber(rv,l2);rv.last_line=l2.last_line;rv.last_column=l2.last_column;if(rv.range&&l2.range){rv.range[1]=l2.range[1];}}return rv;};// NOTE: as this API uses parse() as a closure, it MUST be set again on every parse() invocation,
+rv=this.copy_yylloc(l1);if(l2){shallow_copy_noclobber(rv,l2);rv.last_line=l2.last_line;rv.last_column=l2.last_column;rv.range[1]=l2.range[1];}return rv;};// NOTE: as this API uses parse() as a closure, it MUST be set again on every parse() invocation,
 //       or else your `lexer`, `sharedState`, etc. references will be *wrong*!
-this.constructParseErrorInfo=function parser_constructParseErrorInfo(msg,ex,expected,recoverable){var pei={errStr:msg,exception:ex,text:lexer.match,value:lexer.yytext,token:this.describeSymbol(symbol)||symbol,token_id:symbol,line:lexer.yylineno,loc:copy_yylloc(lexer.yylloc),expected:expected,recoverable:recoverable,state:state,action:action,new_state:newState,symbol_stack:stack,state_stack:sstack,value_stack:vstack,location_stack:lstack,stack_pointer:sp,yy:sharedState_yy,lexer:lexer,parser:this,// and make sure the error info doesn't stay due to potential
+this.constructParseErrorInfo=function parser_constructParseErrorInfo(msg,ex,expected,recoverable){var pei={errStr:msg,exception:ex,text:lexer.match,value:this.copy_yytext(lexer.yytext),token:this.describeSymbol(symbol)||symbol,token_id:symbol,line:lexer.yylineno,loc:this.copy_yylloc(lexer.yylloc),expected:expected,recoverable:recoverable,state:state,action:action,new_state:newState,symbol_stack:stack,state_stack:sstack,value_stack:vstack,location_stack:lstack,stack_pointer:sp,yy:sharedState_yy,lexer:lexer,parser:this,// and make sure the error info doesn't stay due to potential
 // ref cycle via userland code manipulations.
 // These would otherwise all be memory leak opportunities!
 //
@@ -1661,15 +1687,15 @@ this.__error_infos.push(pei);return pei;};// clone some parts of the (possibly e
 this.shallowCopyErrorInfo=function parser_shallowCopyErrorInfo(p){var rv=shallow_copy(p);// remove the large parts which can only cause cyclic references
 // and are otherwise available from the parser kernel anyway.
 delete rv.sharedState_yy;delete rv.parser;delete rv.lexer;// lexer.yytext MAY be a complex value object, rather than a simple string/value:
-rv.value=shallow_copy(rv.value);// yylloc info:
-rv.loc=copy_yylloc(rv.loc);// the 'expected' set won't be modified, so no need to clone it:
-//rv.expected = rv.expected.slice(0);
+rv.value=this.copy_yytext(rv.value);// yylloc info:
+rv.loc=this.copy_yylloc(rv.loc);// the 'expected' set won't be modified, so no need to clone it:
+//rv.expected = rv.expected.slice();
 //symbol stack is a simple array:
-rv.symbol_stack=rv.symbol_stack.slice(0);// ditto for state stack:
-rv.state_stack=rv.state_stack.slice(0);// clone the yylloc's in the location stack?:
-rv.location_stack=rv.location_stack.map(copy_yylloc);// and the value stack may carry both simple and complex values:
+rv.symbol_stack=rv.symbol_stack.slice();// ditto for state stack:
+rv.state_stack=rv.state_stack.slice();// clone the yylloc's in the location stack?:
+rv.location_stack=rv.location_stack.map(this.copy_yylloc);// and the value stack may carry both simple and complex values:
 // shallow-copy the latter.
-rv.value_stack=rv.value_stack.map(shallow_copy);// and we don't bother with the sharedState_yy reference:
+rv.value_stack=rv.value_stack.map(this.copy_yytext);// and we don't bother with the sharedState_yy reference:
 //delete rv.yy;
 // now we prepare for tracking the COMBINE actions
 // in the error recovery code path:
@@ -1712,9 +1738,9 @@ rv.value_stack=rv.value_stack.map(shallow_copy);// and we don't bother with the 
 //
 for(var i=rv.stack_pointer;rv.state_stack[i]!=null;i++){// empty
 }rv.base_pointer=i;rv.info_stack_pointer=i;rv.root_failure_pointer=rv.stack_pointer;// track this instance so we can `destroy()` it once we deem it superfluous and ready for garbage collection!
-this.__error_recovery_infos.push(rv);return rv;};function stdLex(){var token=lexer.lex();// if token isn't its numeric value, convert
-if(typeof token!=='number'){token=self.symbols_[token]||token;}return token||EOF;}function fastLex(){var token=lexer.fastLex();// if token isn't its numeric value, convert
-if(typeof token!=='number'){token=self.symbols_[token]||token;}return token||EOF;}var lex=stdLex;var state,action,r,t;var yyval={$:true,_$:undefined,yy:sharedState_yy};var p;var yyrulelen;var this_production;var newState;var retval=false;// Return the rule stack depth where the nearest error rule can be found.
+this.__error_recovery_infos.push(rv);return rv;};function getNonTerminalFromCode(symbol){var tokenName=self.getSymbolName(symbol);if(!tokenName){tokenName=symbol;}return tokenName;}function stdLex(){var token=lexer.lex();// if token isn't its numeric value, convert
+if(typeof token!=='number'){token=self.symbols_[token]||token;}if(typeof Jison!=='undefined'&&Jison.lexDebugger){var tokenName=self.getSymbolName(token||EOF);if(!tokenName){tokenName=token;}Jison.lexDebugger.push({tokenName:tokenName,tokenText:lexer.match,tokenValue:lexer.yytext});}return token||EOF;}function fastLex(){var token=lexer.fastLex();// if token isn't its numeric value, convert
+if(typeof token!=='number'){token=self.symbols_[token]||token;}if(typeof Jison!=='undefined'&&Jison.lexDebugger){var tokenName=self.getSymbolName(token||EOF);if(!tokenName){tokenName=token;}Jison.lexDebugger.push({tokenName:tokenName,tokenText:lexer.match,tokenValue:lexer.yytext});}return token||EOF;}var lex=stdLex;var state,action,r,t;var yyval={$:true,_$:undefined,yy:sharedState_yy};var p;var yyrulelen;var this_production;var newState;var retval=false;// Return the rule stack depth where the nearest error rule can be found.
 // Return -1 when no error recovery rule was found.
 function locateNearestErrorRecoveryRule(state){var stack_probe=sp-1;var depth=0;// try to recover from error
 while(stack_probe>=0){// check for error recovery rule in this state
@@ -1739,7 +1765,7 @@ state=sstack[stack_probe];++depth;}return-1;// No suitable error recovery rule a
 // this initial `setInput()` call: hence we can now check and decide
 // whether we'll go with the standard, slower, lex() API or the
 // `fast_lex()` one:
-if(typeof lexer.canIUse==='function'){var lexerInfo=lexer.canIUse();if(lexerInfo.fastLex&&typeof fastLex==='function'){lex=fastLex;}}yyloc=lexer.yylloc;lstack[sp]=yyloc;vstack[sp]=null;sstack[sp]=0;stack[sp]=0;++sp;if(this.pre_parse){this.pre_parse.call(this,sharedState_yy);}if(sharedState_yy.pre_parse){sharedState_yy.pre_parse.call(this,sharedState_yy);}newState=sstack[sp-1];for(;;){// retrieve state number from top of stack
+if(typeof lexer.canIUse==='function'){var lexerInfo=lexer.canIUse();if(lexerInfo.fastLex&&typeof fastLex==='function'){lex=fastLex;}}yyloc=this.copy_yylloc(lexer.yylloc);lstack[sp]=yyloc;vstack[sp]=null;sstack[sp]=0;stack[sp]=0;++sp;if(this.pre_parse){this.pre_parse.call(this,sharedState_yy);}if(sharedState_yy.pre_parse){sharedState_yy.pre_parse.call(this,sharedState_yy);}newState=sstack[sp-1];for(;;){// retrieve state number from top of stack
 state=newState;// sstack[sp - 1];
 // use default actions if available
 if(this.defaultActions[state]){action=2;newState=this.defaultActions[state];}else{// The single `==` condition below covers both these `===` comparisons in a single
@@ -1758,19 +1784,19 @@ recoveringErrorInfo=this.shallowCopyErrorInfo(p);r=this.parseError(p.errStr,p,th
 // we always terminate the parse when there's no recovery rule available anyhow!
 if(!p.recoverable||error_rule_depth<0){break;}else{// TODO: allow parseError callback to edit symbol and or state at the start of the error recovery process...
 }}var esp=recoveringErrorInfo.info_stack_pointer;// just recovered from another error
-if(recovering===ERROR_RECOVERY_TOKEN_DISCARD_COUNT&&error_rule_depth>=0){// SHIFT current lookahead and grab another
-recoveringErrorInfo.symbol_stack[esp]=symbol;recoveringErrorInfo.value_stack[esp]=shallow_copy(lexer.yytext);recoveringErrorInfo.location_stack[esp]=copy_yylloc(lexer.yylloc);recoveringErrorInfo.state_stack[esp]=newState;// push state
-++esp;// Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
-yyloc=lexer.yylloc;preErrorSymbol=0;symbol=lex();}// try to recover from error
+if(recovering===ERROR_RECOVERY_TOKEN_DISCARD_COUNT&&error_rule_depth>=0){// Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
+yyloc=this.copy_yylloc(lexer.yylloc);// SHIFT current lookahead and grab another
+recoveringErrorInfo.symbol_stack[esp]=symbol;recoveringErrorInfo.location_stack[esp]=yyloc;recoveringErrorInfo.state_stack[esp]=newState;// push state
+++esp;preErrorSymbol=0;symbol=lex();}// try to recover from error
 if(error_rule_depth<0){ASSERT(recovering>0,"line 897");recoveringErrorInfo.info_stack_pointer=esp;// barf a fatal hairball when we're out of look-ahead symbols and none hit a match
 // while we are still busy recovering from another error:
 var po=this.__error_infos[this.__error_infos.length-1];// Report error
 if(typeof lexer.yylineno==='number'){errStr='Parsing halted on line '+(lexer.yylineno+1)+' while starting to recover from another error';}else{errStr='Parsing halted while starting to recover from another error';}if(po){errStr+=' -- previous error which resulted in this fatal result: '+po.errStr;}else{errStr+=': ';}if(typeof lexer.showPosition==='function'){errStr+='\n'+lexer.showPosition(79-10,10)+'\n';}if(expected.length){errStr+='Expecting '+expected.join(', ')+', got unexpected '+errSymbolDescr;}else{errStr+='Unexpected '+errSymbolDescr;}p=this.constructParseErrorInfo(errStr,null,expected,false);if(po){p.extra_error_attributes=po;}r=this.parseError(p.errStr,p,this.JisonParserError);if(typeof r!=='undefined'){retval=r;}break;}preErrorSymbol=symbol===TERROR?0:symbol;// save the lookahead token
 symbol=TERROR;// insert generic error symbol as new lookahead
 const EXTRA_STACK_SAMPLE_DEPTH=3;// REDUCE/COMBINE the pushed terms/tokens to a new ERROR token:
-recoveringErrorInfo.symbol_stack[esp]=preErrorSymbol;if(errStr){recoveringErrorInfo.value_stack[esp]={yytext:shallow_copy(lexer.yytext),errorRuleDepth:error_rule_depth,errStr:errStr,errorSymbolDescr:errSymbolDescr,expectedStr:expected,stackSampleLength:error_rule_depth+EXTRA_STACK_SAMPLE_DEPTH};}else{recoveringErrorInfo.value_stack[esp]={yytext:shallow_copy(lexer.yytext),errorRuleDepth:error_rule_depth,stackSampleLength:error_rule_depth+EXTRA_STACK_SAMPLE_DEPTH};}recoveringErrorInfo.location_stack[esp]=copy_yylloc(lexer.yylloc);recoveringErrorInfo.state_stack[esp]=newState||NO_ACTION[1];++esp;recoveringErrorInfo.info_stack_pointer=esp;yyval.$=recoveringErrorInfo;yyval._$=undefined;yyrulelen=error_rule_depth;r=this.performAction.call(yyval,yyloc,NO_ACTION[1],sp-1,vstack,lstack);if(typeof r!=='undefined'){retval=r;break;}// pop off stack
+recoveringErrorInfo.symbol_stack[esp]=preErrorSymbol;if(errStr){recoveringErrorInfo.value_stack[esp]={yytext:this.copy_yytext(lexer.yytext),errorRuleDepth:error_rule_depth,errStr:errStr,errorSymbolDescr:errSymbolDescr,expectedStr:expected,stackSampleLength:error_rule_depth+EXTRA_STACK_SAMPLE_DEPTH};}else{recoveringErrorInfo.value_stack[esp]={yytext:this.copy_yytext(lexer.yytext),errorRuleDepth:error_rule_depth,stackSampleLength:error_rule_depth+EXTRA_STACK_SAMPLE_DEPTH};}recoveringErrorInfo.location_stack[esp]=this.copy_yylloc(lexer.yylloc);recoveringErrorInfo.state_stack[esp]=newState||NO_ACTION[1];++esp;recoveringErrorInfo.info_stack_pointer=esp;yyval.$=recoveringErrorInfo;yyval._$=undefined;yyrulelen=error_rule_depth;r=this.performAction.call(yyval,yyloc,NO_ACTION[1],sp-1,vstack,lstack);if(typeof r!=='undefined'){retval=r;break;}// pop off stack
 sp-=yyrulelen;// and move the top entries + discarded part of the parse stacks onto the error info stack:
-for(var idx=sp-EXTRA_STACK_SAMPLE_DEPTH,top=idx+yyrulelen;idx<top;idx++,esp++){recoveringErrorInfo.symbol_stack[esp]=stack[idx];recoveringErrorInfo.value_stack[esp]=shallow_copy(vstack[idx]);recoveringErrorInfo.location_stack[esp]=copy_yylloc(lstack[idx]);recoveringErrorInfo.state_stack[esp]=sstack[idx];}recoveringErrorInfo.symbol_stack[esp]=TERROR;recoveringErrorInfo.value_stack[esp]=shallow_copy(yyval.$);recoveringErrorInfo.location_stack[esp]=copy_yylloc(yyval._$);// goto new state = table[STATE][NONTERMINAL]
+for(var idx=sp-EXTRA_STACK_SAMPLE_DEPTH,top=idx+yyrulelen;idx<top;idx++,esp++){recoveringErrorInfo.symbol_stack[esp]=stack[idx];recoveringErrorInfo.value_stack[esp]=vstack[idx];recoveringErrorInfo.location_stack[esp]=lstack[idx];recoveringErrorInfo.state_stack[esp]=sstack[idx];}recoveringErrorInfo.symbol_stack[esp]=TERROR;recoveringErrorInfo.value_stack[esp]=this.copy_yytext(yyval.$);recoveringErrorInfo.location_stack[esp]=this.copy_yylloc(yyval._$);// goto new state = table[STATE][NONTERMINAL]
 newState=sstack[sp-1];if(this.defaultActions[newState]){recoveringErrorInfo.state_stack[esp]=this.defaultActions[newState];}else{t=table[newState]&&table[newState][symbol]||NO_ACTION;recoveringErrorInfo.state_stack[esp]=t[1];}++esp;recoveringErrorInfo.info_stack_pointer=esp;// allow N (default: 3) real symbols to be shifted before reporting a new error
 recovering=ERROR_RECOVERY_TOKEN_DISCARD_COUNT;// Now duplicate the standard parse machine here, at least its initial
 // couple of rounds until the TERROR symbol is **pushed onto the parse stack**,
@@ -1832,15 +1858,15 @@ case 1:stack[sp]=symbol;// ### Note/Warning ###
 if(symbol===TERROR&&errorSymbolFromParser){// Push a special value onto the stack when we're
 // shifting the `error` symbol that is related to the
 // error we're recovering from.
-ASSERT(recoveringErrorInfo,"line 1131");vstack[sp]=recoveringErrorInfo;lstack[sp]=this.yyMergeLocationInfo(null,null,recoveringErrorInfo.loc,lexer.yylloc,true);}else{ASSERT(symbol!==0,"line 1135");ASSERT(preErrorSymbol===0,"line 1136");vstack[sp]=lexer.yytext;lstack[sp]=copy_yylloc(lexer.yylloc);}sstack[sp]=newState;// push state
-++sp;symbol=0;// **Warning: Edge Case**: the *lexer* may have produced
+ASSERT(recoveringErrorInfo,"line 1131");vstack[sp]=recoveringErrorInfo;lstack[sp]=this.yyMergeLocationInfo(null,null,recoveringErrorInfo.loc,lexer.yylloc,true);}else{ASSERT(symbol!==0,"line 1135");ASSERT(preErrorSymbol===0,"line 1136");vstack[sp]=lexer.yytext;lstack[sp]=this.copy_yylloc(lexer.yylloc);}sstack[sp]=newState;// push state
+++sp;if(typeof Jison!=='undefined'&&Jison.parserDebugger){var tokenName=this.getSymbolName(symbol||EOF);if(!tokenName){tokenName=symbol;}Jison.parserDebugger.push({action:'shift',text:lexer.yytext,terminal:tokenName,terminal_id:symbol});}symbol=0;// **Warning: Edge Case**: the *lexer* may have produced
 // TERROR tokens of its own volition: *those* TERROR
 // tokens should be treated like *regular tokens*
 // i.e. tokens which have a lexer-provided `yyvalue`
 // and `yylloc`:
 errorSymbolFromParser=false;if(!preErrorSymbol){// normal execution / no error
 // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
-yyloc=lexer.yylloc;if(recovering>0){recovering--;}}else{// error just occurred, resume old lookahead f/ before error, *unless* that drops us straight back into error mode:
+yyloc=this.copy_yylloc(lexer.yylloc);if(recovering>0){recovering--;}}else{// error just occurred, resume old lookahead f/ before error, *unless* that drops us straight back into error mode:
 ASSERT(recovering>0,"line 1163");symbol=preErrorSymbol;preErrorSymbol=0;// read action for current state and first input
 t=table[newState]&&table[newState][symbol]||NO_ACTION;if(!t[0]||symbol===TERROR){// forget about that symbol and move forward: this wasn't a 'forgot to insert' error type where
 // (simple) stuff might have been missing before the token which caused the error we're
@@ -1863,8 +1889,10 @@ symbol=0;}}// once we have pushed the special ERROR token value,
 // when *both* conditions are met!
 ASSERT(preErrorSymbol===0,"line 1194");if(recovering===0){break;}continue;// reduce:
 case 2:this_production=this.productions_[newState-1];// `this.productions_[]` is zero-based indexed while states start from 1 upwards...
-yyrulelen=this_production[1];r=this.performAction.call(yyval,yyloc,newState,sp-1,vstack,lstack);if(typeof r!=='undefined'){// signal end of error recovery loop AND end of outer parse loop
-action=3;retval=r;sp=-2;// magic number: signal outer "fast parse loop" ACCEPT state that we already have a properly set up `retval` parser return value.
+yyrulelen=this_production[1];r=this.performAction.call(yyval,yyloc,newState,sp-1,vstack,lstack);if(typeof Jison!=='undefined'&&Jison.parserDebugger){var prereduceValue=vstack.slice(sp-yyrulelen,sp);var debuggableProductions=[];for(var debugIdx=yyrulelen-1;debugIdx>=0;debugIdx--){var debuggableProduction=getNonTerminalFromCode(stack[sp-debugIdx]);debuggableProductions.push(debuggableProduction);}// find the current nonterminal name (- nolan)
+var currentNonterminalCode=this_production[0];// WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];
+var currentNonterminal=getNonTerminalFromCode(currentNonterminalCode);Jison.parserDebugger.push({action:'reduce',nonterminal:currentNonterminal,nonterminal_id:currentNonterminalCode,prereduce:prereduceValue,result:r,productions:debuggableProductions,text:yyval.$});}if(typeof r!=='undefined'){// signal end of error recovery loop AND end of outer parse loop
+action=3;retval=r;if(typeof Jison!=='undefined'&&Jison.parserDebugger){Jison.parserDebugger.push({action:'accept',text:retval});console.log(Jison.parserDebugger[Jison.parserDebugger.length-1]);}sp=-2;// magic number: signal outer "fast parse loop" ACCEPT state that we already have a properly set up `retval` parser return value.
 break;}// pop off stack
 sp-=yyrulelen;// don't overwrite the `symbol` variable: use a local var to speed things up:
 var ntsymbol=this_production[0];// push nonterminal (reduce)
@@ -1891,7 +1919,7 @@ case 3:retval=true;// Return the `$accept` rule's `$$` result, if available.
 //                      else
 //                          return true;           // the default parse result if the rule actions don't produce anything
 //                  %}
-sp--;if(sp>=0&&typeof vstack[sp]!=='undefined'){retval=vstack[sp];}sp=-2;// magic number: signal outer "fast parse loop" ACCEPT state that we already have a properly set up `retval` parser return value.
+sp--;if(sp>=0&&typeof vstack[sp]!=='undefined'){retval=vstack[sp];}if(typeof Jison!=='undefined'&&Jison.parserDebugger){Jison.parserDebugger.push({action:'accept',text:retval});console.log(Jison.parserDebugger[Jison.parserDebugger.length-1]);}sp=-2;// magic number: signal outer "fast parse loop" ACCEPT state that we already have a properly set up `retval` parser return value.
 break;}// break out of loop: we accept or fail with error
 break;}// should we also break out of the regular/outer parse loop,
 // i.e. did the parser already produce a parse result in here?!
@@ -1902,15 +1930,17 @@ default:// this shouldn't happen, unless resolve defaults are off
 if(action instanceof Array){p=this.constructParseErrorInfo('Parse Error: multiple actions possible at state: '+state+', token: '+symbol,null,null,false);r=this.parseError(p.errStr,p,this.JisonParserError);if(typeof r!=='undefined'){retval=r;}break;}// Another case of better safe than sorry: in case state transitions come out of another error recovery process
 // or a buggy LUT (LookUp Table):
 p=this.constructParseErrorInfo('Parsing halted. No viable error recovery approach available due to internal system failure.',null,null,false);r=this.parseError(p.errStr,p,this.JisonParserError);if(typeof r!=='undefined'){retval=r;}break;// shift:
-case 1:stack[sp]=symbol;vstack[sp]=lexer.yytext;lstack[sp]=copy_yylloc(lexer.yylloc);sstack[sp]=newState;// push state
-++sp;symbol=0;ASSERT(preErrorSymbol===0,"line 1352");// normal execution / no error
+case 1:stack[sp]=symbol;vstack[sp]=lexer.yytext;lstack[sp]=this.copy_yylloc(lexer.yylloc);sstack[sp]=newState;// push state
+if(typeof Jison!=='undefined'&&Jison.parserDebugger){var tokenName=this.getSymbolName(symbol||EOF);if(!tokenName){tokenName=symbol;}Jison.parserDebugger.push({action:'shift',text:lexer.yytext,terminal:tokenName,terminal_id:symbol});}++sp;symbol=0;ASSERT(preErrorSymbol===0,"line 1352");// normal execution / no error
 ASSERT(recovering===0,"line 1353");// normal execution / no error
 // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
-yyloc=lexer.yylloc;continue;// reduce:
+yyloc=this.copy_yylloc(lexer.yylloc);continue;// reduce:
 case 2:ASSERT(preErrorSymbol===0,"line 1364");// normal execution / no error
 ASSERT(recovering===0,"line 1365");// normal execution / no error
 this_production=this.productions_[newState-1];// `this.productions_[]` is zero-based indexed while states start from 1 upwards...
-yyrulelen=this_production[1];r=this.performAction.call(yyval,yyloc,newState,sp-1,vstack,lstack);if(typeof r!=='undefined'){retval=r;break;}// pop off stack
+yyrulelen=this_production[1];r=this.performAction.call(yyval,yyloc,newState,sp-1,vstack,lstack);if(typeof Jison!=='undefined'&&Jison.parserDebugger){var prereduceValue=vstack.slice(sp-yyrulelen,sp);var debuggableProductions=[];for(var debugIdx=yyrulelen-1;debugIdx>=0;debugIdx--){var debuggableProduction=getNonTerminalFromCode(stack[sp-debugIdx]);debuggableProductions.push(debuggableProduction);}// find the current nonterminal name (- nolan)
+var currentNonterminalCode=this_production[0];// WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];
+var currentNonterminal=getNonTerminalFromCode(currentNonterminalCode);Jison.parserDebugger.push({action:'reduce',nonterminal:currentNonterminal,nonterminal_id:currentNonterminalCode,prereduce:prereduceValue,result:r,productions:debuggableProductions,text:yyval.$});}if(typeof r!=='undefined'){retval=r;if(typeof Jison!=='undefined'&&Jison.parserDebugger){Jison.parserDebugger.push({action:'accept',text:retval});console.log(Jison.parserDebugger[Jison.parserDebugger.length-1]);}break;}// pop off stack
 sp-=yyrulelen;// don't overwrite the `symbol` variable: use a local var to speed things up:
 var ntsymbol=this_production[0];// push nonterminal (reduce)
 stack[sp]=ntsymbol;vstack[sp]=yyval.$;lstack[sp]=yyval._$;// goto new state = table[STATE][NONTERMINAL]
@@ -1936,10 +1966,10 @@ case 3:if(sp!==-2){retval=true;// Return the `$accept` rule's `$$` result, if av
 //                      else
 //                          return true;           // the default parse result if the rule actions don't produce anything
 //                  %}
-sp--;if(typeof vstack[sp]!=='undefined'){retval=vstack[sp];}}break;}// break out of loop: we accept or fail with error
+sp--;if(typeof vstack[sp]!=='undefined'){retval=vstack[sp];}}if(typeof Jison!=='undefined'&&Jison.parserDebugger){Jison.parserDebugger.push({action:'accept',text:retval});console.log(Jison.parserDebugger[Jison.parserDebugger.length-1]);}break;}// break out of loop: we accept or fail with error
 break;}}catch(ex){// report exceptions through the parseError callback too, but keep the exception intact
 // if it is a known parser or lexer error which has been thrown by parseError() already:
-if(ex instanceof this.JisonParserError){throw ex;}else if(lexer&&typeof lexer.JisonLexerError==='function'&&ex instanceof lexer.JisonLexerError){throw ex;}p=this.constructParseErrorInfo('Parsing aborted due to exception.',ex,null,false);retval=false;r=this.parseError(p.errStr,p,this.JisonParserError);if(typeof r!=='undefined'){retval=r;}}finally{retval=this.cleanupAfterParse(retval,true,true);this.__reentrant_call_depth--;}// /finally
+if(ex instanceof this.JisonParserError){throw ex;}else if(lexer&&typeof lexer.JisonLexerError==='function'&&ex instanceof lexer.JisonLexerError){throw ex;}p=this.constructParseErrorInfo('Parsing aborted due to exception.',ex,null,false);retval=false;r=this.parseError(p.errStr,p,this.JisonParserError);if(typeof r!=='undefined'){retval=r;}}finally{retval=this.cleanupAfterParse(retval,true,true);this.__reentrant_call_depth--;if(typeof Jison!=='undefined'&&Jison.parserDebugger){Jison.parserDebugger.push({action:'return',text:retval});console.log(Jison.parserDebugger[Jison.parserDebugger.length-1]);}}// /finally
 return retval;},yyError:1};parser.originalParseError=parser.parseError;parser.originalQuoteName=parser.quoteName;/* lexer generated by jison-lex 0.6.2-220 */ /*
  * Returns a Lexer object of the following structure:
  *
@@ -2214,16 +2244,19 @@ done:false,/// INTERNAL USE ONLY
 _backtrack:false,/// INTERNAL USE ONLY
 _input:'',/// INTERNAL USE ONLY
 _more:false,/// INTERNAL USE ONLY
-_signaled_error_token:false,/// INTERNAL USE ONLY; managed via `pushState()`, `popState()`, `topState()` and `stateStackSize()`
+_signaled_error_token:false,/// INTERNAL USE ONLY; 0: clear to do, 1: clear done for lex()/next(); -1: clear done for inut()/unput()/...
+_clear_state:0,/// INTERNAL USE ONLY; managed via `pushState()`, `popState()`, `topState()` and `stateStackSize()`
 conditionStack:[],/// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction. `match` is identical to `yytext` except that this one still contains the matched input string after `lexer.performAction()` has been invoked, where userland code MAY have changed/replaced the `yytext` value entirely!
 match:'',/// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks entire input which has been matched so far
 matched:'',/// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks RE match result for last (successful) match attempt
 matches:false,/// ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction; this value is transferred to the parser as the 'token value' when the parser consumes the lexer token produced through a call to the `lex()` API.
-yytext:'',/// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far
-offset:0,/// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: length of matched input for the token under construction (`yytext`)
+yytext:'',/// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far. (**WARNING:** this value MAY be negative if you `unput()` more text than you have already lexed. This type of behaviour is generally observed for one kind of 'lexer/parser hack' where custom token-illiciting characters are pushed in front of the input stream to help simulate multiple-START-points in the parser. When this happens, `base_position` will be adjusted to help track the original input's starting point in the `_input` buffer.)
+offset:0,/// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: index to the original starting point of the input; always ZERO(0) unless `unput()` has pushed content before the input: see the `offset` **WARNING** just above.
+base_position:0,/// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: length of matched input for the token under construction (`yytext`)
 yyleng:0,/// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: 'line number' at which the token under construction is located
 yylineno:0,/// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks location info (lines + columns) for the token under construction
-yylloc:null,/**
+yylloc:null,/// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: regex used to split lines while tracking the lexer cursor position.
+CRLF_Re:/\r\n?|\n/,/**
          * INTERNAL USE: construct a suitable error info hash object instance for `parseError`.
          *
          * @public
@@ -2275,7 +2308,7 @@ if(!do_not_nuke_errorinfos){for(var i=this.__error_infos.length-1;i>=0;i--){var 
          * @public
          * @this {RegExpLexer}
          */clear:function lexer_clear(){this.yytext='';this.yyleng=0;this.match='';// - DO NOT reset `this.matched`
-this.matches=false;this._more=false;this._backtrack=false;var col=this.yylloc?this.yylloc.last_column:0;this.yylloc={first_line:this.yylineno+1,first_column:col,last_line:this.yylineno+1,last_column:col,range:[this.offset,this.offset]};},/**
+this.matches=false;this._more=false;this._backtrack=false;var col=this.yylloc.last_column;this.yylloc={first_line:this.yylineno+1,first_column:col,last_line:this.yylineno+1,last_column:col,range:[this.offset,this.offset]};},/**
          * resets the lexer, sets new input
          *
          * @public
@@ -2287,7 +2320,8 @@ if(!this.__decompressed){// step 1: decompress the regex list:
 var rules=this.rules;for(var i=0,len=rules.length;i<len;i++){var rule_re=rules[i];// compression: is the RE an xref to another RE slot in the rules[] table?
 if(typeof rule_re==='number'){rules[i]=rules[rule_re];}}// step 2: unfold the conditions[] set to make these ready for use:
 var conditions=this.conditions;for(var k in conditions){var spec=conditions[k];var rule_ids=spec.rules;var len=rule_ids.length;var rule_regexes=new Array(len+1);// slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
-var rule_new_ids=new Array(len+1);for(var i=0;i<len;i++){var idx=rule_ids[i];var rule_re=rules[idx];rule_regexes[i+1]=rule_re;rule_new_ids[i+1]=idx;}spec.rules=rule_new_ids;spec.__rule_regexes=rule_regexes;spec.__rule_count=len;}this.__decompressed=true;}if(input&&typeof input!=='string'){input=''+input;}this._input=input||'';this.clear();this._signaled_error_token=false;this.done=false;this.yylineno=0;this.matched='';this.conditionStack=['INITIAL'];this.__currentRuleSet__=null;this.yylloc={first_line:1,first_column:0,last_line:1,last_column:0,range:[0,0]};this.offset=0;return this;},/**
+var rule_new_ids=new Array(len+1);for(var i=0;i<len;i++){var idx=rule_ids[i];var rule_re=rules[idx];rule_regexes[i+1]=rule_re;rule_new_ids[i+1]=idx;}spec.rules=rule_new_ids;spec.__rule_regexes=rule_regexes;spec.__rule_count=len;}this.__decompressed=true;}if(input&&typeof input!=='string'){input=''+input;}this._input=input||'';this._clear_state=-1;this._signaled_error_token=false;this.done=false;this.yylineno=0;this.matched='';this.conditionStack=['INITIAL'];this.__currentRuleSet__=null;this.yylloc={first_line:1,first_column:0,last_line:1,last_column:0,range:[0,0]};this.offset=0;this.base_position=0;// apply these bits of `this.clear()` as well:
+this.yytext='';this.yyleng=0;this.match='';this.matches=false;this._more=false;this._backtrack=false;return this;},/**
          * edit the remaining input via user-specified callback.
          * This can be used to forward-adjust the input-to-parse,
          * e.g. inserting macro expansions and alike in the
@@ -2337,7 +2371,7 @@ var rule_new_ids=new Array(len+1);for(var i=0;i<len;i++){var idx=rule_ids[i];var
          * @public
          * @this {RegExpLexer}
          */input:function lexer_input(){if(!this._input){//this.done = true;    -- don't set `done` as we want the lex()/next() API to be able to produce one custom EOF token match after this anyhow. (lexer can match special <<EOF>> tokens and perform user action code for a <<EOF>> match, but only does so *once*)
-return null;}var ch=this._input[0];this.yytext+=ch;this.yyleng++;this.offset++;this.match+=ch;this.matched+=ch;// Count the linenumber up when we hit the LF (or a stand-alone CR).
+return null;}if(!this._clear_state&&!this._more){this._clear_state=-1;this.clear();}var ch=this._input[0];this.yytext+=ch;this.yyleng++;this.offset++;this.match+=ch;this.matched+=ch;// Count the linenumber up when we hit the LF (or a stand-alone CR).
 // On CRLF, the linenumber is incremented when you fetch the CR or the CRLF combo
 // and we advance immediately past the LF as well, returning both together as if
 // it was all a single 'character' only.
@@ -2346,10 +2380,17 @@ var slice_len=1;var lines=false;if(ch==='\n'){lines=true;}else if(ch==='\r'){lin
          *
          * @public
          * @this {RegExpLexer}
-         */unput:function lexer_unput(ch){var len=ch.length;var lines=ch.split(/(?:\r\n?|\n)/g);this._input=ch+this._input;this.yytext=this.yytext.substr(0,this.yytext.length-len);this.yyleng=this.yytext.length;this.offset-=len;this.match=this.match.substr(0,this.match.length-len);this.matched=this.matched.substr(0,this.matched.length-len);if(lines.length>1){this.yylineno-=lines.length-1;this.yylloc.last_line=this.yylineno+1;// Get last entirely matched line into the `pre_lines[]` array's
+         */unput:function lexer_unput(ch){var len=ch.length;var lines=ch.split(this.CRLF_Re);if(!this._clear_state&&!this._more){this._clear_state=-1;this.clear();}this._input=ch+this._input;this.yytext=this.yytext.substr(0,this.yytext.length-len);this.yyleng=this.yytext.length;this.offset-=len;// **WARNING:**
+// The `offset` value MAY be negative if you `unput()` more text than you have already lexed.
+// This type of behaviour is generally observed for one kind of 'lexer/parser hack'
+// where custom token-illiciting characters are pushed in front of the input stream to help
+// simulate multiple-START-points in the parser.
+// When this happens, `base_position` will be adjusted to help track the original input's
+// starting point in the `_input` buffer.
+if(-this.offset>this.base_position){this.base_position=-this.offset;}this.match=this.match.substr(0,this.match.length-len);this.matched=this.matched.substr(0,this.matched.length-len);if(lines.length>1){this.yylineno-=lines.length-1;this.yylloc.last_line=this.yylineno+1;// Get last entirely matched line into the `pre_lines[]` array's
 // last index slot; we don't mind when other previously
 // matched lines end up in the array too.
-var pre=this.match;var pre_lines=pre.split(/(?:\r\n?|\n)/g);if(pre_lines.length===1){pre=this.matched;pre_lines=pre.split(/(?:\r\n?|\n)/g);}this.yylloc.last_column=pre_lines[pre_lines.length-1].length;}else{this.yylloc.last_column-=len;}this.yylloc.range[1]=this.yylloc.range[0]+this.yyleng;this.done=false;return this;},/**
+var pre=this.match;var pre_lines=pre.split(this.CRLF_Re);if(pre_lines.length===1){pre=this.matched;pre_lines=pre.split(this.CRLF_Re);}this.yylloc.last_column=pre_lines[pre_lines.length-1].length;}else{this.yylloc.last_column-=len;}this.yylloc.range[1]=this.yylloc.range[0]+this.yyleng;this.done=false;return this;},/**
          * return the upcoming input *which has not been lexed yet*.
          * This can, for example, be used for custom look-ahead inspection code 
          * in your lexer.
@@ -2409,7 +2450,7 @@ else if(!maxLines)maxLines=1;// `substr` anticipation: treat \r\n as a single ch
 // after we've transformed and limited the newLines in here:
 past=past.substr(-maxSize*2-2);// now that we have a significantly reduced string to process, transform the newlines
 // and chop them, then limit them:
-var a=past.replace(/\r\n|\r/g,'\n').split('\n');a=a.slice(-maxLines);past=a.join('\n');// When, after limiting to maxLines, we still have too much to return,
+var a=past.split(this.CRLF_Re);a=a.slice(-maxLines);past=a.join('\n');// When, after limiting to maxLines, we still have too much to return,
 // do add an ellipsis prefix...
 if(past.length>maxSize){past='...'+past.substr(-maxSize);}return past;},/**
          * return (part of the) upcoming input *including* the input 
@@ -2450,7 +2491,7 @@ else if(!maxLines)maxLines=1;// `substring` anticipation: treat \r\n as a single
 if(next.length<maxSize*2+2){next+=source.substring(0,maxSize*2+2-next.length);// substring is faster on Chrome/V8
 }// now that we have a significantly reduced string to process, transform the newlines
 // and chop them, then limit them:
-var a=next.split(/\r\n|\r/g,maxLines+1);// stop splitting once we have reached just beyond the reuired number of lines.
+var a=next.split(this.CRLF_Re,maxLines+1);// stop splitting once we have reached just beyond the reuired number of lines.
 a=a.slice(0,maxLines);next=a.join('\n');// When, after limiting to maxLines, we still have too much to return,
 // do add an ellipsis postfix...
 if(next.length>maxSize){next=next.substring(0,maxSize)+'...';}return next;},/**
@@ -2524,9 +2565,9 @@ loc.range[1]=loc.range[0];}if(loc.first_column<0){loc.first_column=0;}if(loc.las
          *
          * @public
          * @this {RegExpLexer}
-         */prettyPrintRange:function lexer_prettyPrintRange(loc,context_loc,context_loc2){loc=this.deriveLocationInfo(loc,context_loc,context_loc2);const CONTEXT=3;const CONTEXT_TAIL=1;const MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT=2;var input=this.matched+(this._input||'');var lines=input.split('\n');var l0=Math.max(1,context_loc?context_loc.first_line:loc.first_line-CONTEXT);var l1=Math.max(1,context_loc2?context_loc2.last_line:loc.last_line+CONTEXT_TAIL);var lineno_display_width=1+Math.log10(l1|1)|0;var ws_prefix=new Array(lineno_display_width).join(' ');var nonempty_line_indexes=[];var rv=lines.slice(l0-1,l1+1).map(function injectLineNumber(line,index){var lno=index+l0;var lno_pfx=(ws_prefix+lno).substr(-lineno_display_width);var rv=lno_pfx+': '+line;var errpfx=new Array(lineno_display_width+1).join('^');var offset=2+1;var len=0;if(lno===loc.first_line){offset+=loc.first_column;len=Math.max(2,(lno===loc.last_line?loc.last_column:line.length)-loc.first_column+1);}else if(lno===loc.last_line){len=Math.max(2,loc.last_column+1);}else if(lno>loc.first_line&&lno<loc.last_line){len=Math.max(2,line.length+1);}if(len){var lead=new Array(offset).join('.');var mark=new Array(len).join('^');rv+='\n'+errpfx+lead+mark;if(line.trim().length>0){nonempty_line_indexes.push(index);}}rv=rv.replace(/\t/g,' ');return rv;});// now make sure we don't print an overly large amount of error area: limit it 
+         */prettyPrintRange:function lexer_prettyPrintRange(loc,context_loc,context_loc2){loc=this.deriveLocationInfo(loc,context_loc,context_loc2);const CONTEXT=3;const CONTEXT_TAIL=1;const MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT=2;var input=this.matched+(this._input||'');var lines=input.split('\n');var l0=Math.max(1,context_loc?context_loc.first_line:loc.first_line-CONTEXT);var l1=Math.max(1,context_loc2?context_loc2.last_line:loc.last_line+CONTEXT_TAIL);var lineno_display_width=1+Math.log10(l1|1)|0;var ws_prefix=new Array(lineno_display_width).join(' ');var nonempty_line_indexes=[[],[],[]];var rv=lines.slice(l0-1,l1+1).map(function injectLineNumber(line,index){var lno=index+l0;var lno_pfx=(ws_prefix+lno).substr(-lineno_display_width);var rv=lno_pfx+': '+line;var errpfx=new Array(lineno_display_width+1).join('^');var offset=2+1;var len=0;if(lno===loc.first_line){offset+=loc.first_column;len=Math.max(2,(lno===loc.last_line?loc.last_column:line.length)-loc.first_column+1);}else if(lno===loc.last_line){len=Math.max(2,loc.last_column+1);}else if(lno>loc.first_line&&lno<loc.last_line){len=Math.max(2,line.length+1);}var nli;if(len){var lead=new Array(offset).join('.');var mark=new Array(len).join('^');rv+='\n'+errpfx+lead+mark;nli=1;}else if(lno<loc.first_line){nli=0;}else if(lno>loc.last_line){nli=2;}if(line.trim().length>0){nonempty_line_indexes[nli].push(index);}rv=rv.replace(/\t/g,' ');return rv;});// now make sure we don't print an overly large amount of lead/error/tail area: limit it
 // to the top and bottom line count:
-if(nonempty_line_indexes.length>2*MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT){var clip_start=nonempty_line_indexes[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT-1]+1;var clip_end=nonempty_line_indexes[nonempty_line_indexes.length-MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT]-1;var intermediate_line=new Array(lineno_display_width+1).join(' ')+'  (...continued...)';intermediate_line+='\n'+new Array(lineno_display_width+1).join('-')+'  (---------------)';rv.splice(clip_start,clip_end-clip_start+1,intermediate_line);}return rv.join('\n');},/**
+for(var i=0;i<=2;i++){var line_arr=nonempty_line_indexes[i];if(line_arr.length>2*MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT){var clip_start=line_arr[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT-1]+1;var clip_end=line_arr[line_arr.length-MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT]-1;var intermediate_line=new Array(lineno_display_width+1).join(' ')+'  (...continued...)';if(i===1){intermediate_line+='\n'+new Array(lineno_display_width+1).join('-')+'  (---------------)';}rv.splice(clip_start,clip_end-clip_start+1,intermediate_line);}}return rv.join('\n');},/**
          * helper function, used to produce a human readable description as a string, given
          * the input `yylloc` location object.
          *
@@ -2553,10 +2594,8 @@ if(nonempty_line_indexes.length>2*MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT){var clip_
          * @public
          * @this {RegExpLexer}
          */test_match:function lexer_test_match(match,indexed_rule){var token,lines,backup,match_str,match_str_len;if(this.options.backtrack_lexer){// save context
-backup={yylineno:this.yylineno,yylloc:{first_line:this.yylloc.first_line,last_line:this.yylloc.last_line,first_column:this.yylloc.first_column,last_column:this.yylloc.last_column,range:this.yylloc.range.slice(0)},yytext:this.yytext,match:this.match,matches:this.matches,matched:this.matched,yyleng:this.yyleng,offset:this.offset,_more:this._more,_input:this._input,//_signaled_error_token: this._signaled_error_token,
-yy:this.yy,conditionStack:this.conditionStack.slice(0),done:this.done};}match_str=match[0];match_str_len=match_str.length;// if (match_str.indexOf('\n') !== -1 || match_str.indexOf('\r') !== -1) {
-lines=match_str.split(/(?:\r\n?|\n)/g);if(lines.length>1){this.yylineno+=lines.length-1;this.yylloc.last_line=this.yylineno+1;this.yylloc.last_column=lines[lines.length-1].length;}else{this.yylloc.last_column+=match_str_len;}// }
-this.yytext+=match_str;this.match+=match_str;this.matched+=match_str;this.matches=match;this.yyleng=this.yytext.length;this.yylloc.range[1]+=match_str_len;// previous lex rules MAY have invoked the `more()` API rather than producing a token:
+backup={yylineno:this.yylineno,yylloc:{first_line:this.yylloc.first_line,last_line:this.yylloc.last_line,first_column:this.yylloc.first_column,last_column:this.yylloc.last_column,range:this.yylloc.range.slice()},yytext:this.yytext,match:this.match,matches:this.matches,matched:this.matched,yyleng:this.yyleng,offset:this.offset,_more:this._more,_input:this._input,//_signaled_error_token: this._signaled_error_token,
+yy:this.yy,conditionStack:this.conditionStack.slice(),done:this.done};}match_str=match[0];match_str_len=match_str.length;lines=match_str.split(this.CRLF_Re);if(lines.length>1){this.yylineno+=lines.length-1;this.yylloc.last_line=this.yylineno+1;this.yylloc.last_column=lines[lines.length-1].length;}else{this.yylloc.last_column+=match_str_len;}this.yytext+=match_str;this.match+=match_str;this.matched+=match_str;this.matches=match;this.yyleng=this.yytext.length;this.yylloc.range[1]+=match_str_len;// previous lex rules MAY have invoked the `more()` API rather than producing a token:
 // those rules will already have moved this `offset` forward matching their match lengths,
 // hence we must only add our own match length now:
 this.offset+=match_str_len;this._more=false;this._backtrack=false;this._input=this._input.slice(match_str_len);// calling this method:
@@ -2573,19 +2612,19 @@ token=this._signaled_error_token;this._signaled_error_token=false;return token;}
          *
          * @public
          * @this {RegExpLexer}
-         */next:function lexer_next(){if(this.done){this.clear();return this.EOF;}if(!this._input){this.done=true;}var token,match,tempMatch,index;if(!this._more){this.clear();}var spec=this.__currentRuleSet__;if(!spec){// Update the ruleset cache as we apparently encountered a state change or just started lexing.
+         */next:function lexer_next(){if(this.done){this.clear();return this.EOF;}if(!this._input){this.done=true;}var token,match,tempMatch,index;if(!this._more){if(!this._clear_state){this._clear_state=1;}this.clear();}var spec=this.__currentRuleSet__;if(!spec){// Update the ruleset cache as we apparently encountered a state change or just started lexing.
 // The cache is set up for fast lookup -- we assume a lexer will switch states much less often than it will
 // invoke the `lex()` token-producing API and related APIs, hence caching the set for direct access helps
 // speed up those activities a tiny bit.
 spec=this.__currentRuleSet__=this._currentRules();// Check whether a *sane* condition has been pushed before: this makes the lexer robust against
 // user-programmer bugs such as https://github.com/zaach/jison-lex/issues/19
-if(!spec||!spec.rules){var lineno_msg='';if(this.options.trackPosition){lineno_msg=' on line '+(this.yylineno+1);}var p=this.constructLexErrorInfo('Internal lexer engine error'+lineno_msg+': The lex grammar programmer pushed a non-existing condition name "'+this.topState()+'"; this is a fatal error and should be reported to the application programmer team!',false);// produce one 'error' token until this situation has been resolved, most probably by parse termination!
+if(!spec||!spec.rules){var lineno_msg='';if(this.yylloc){lineno_msg=' on line '+(this.yylineno+1);}var p=this.constructLexErrorInfo('Internal lexer engine error'+lineno_msg+': The lex grammar programmer pushed a non-existing condition name "'+this.topState()+'"; this is a fatal error and should be reported to the application programmer team!',false);// produce one 'error' token until this situation has been resolved, most probably by parse termination!
 return this.parseError(p.errStr,p,this.JisonLexerError)||this.ERROR;}}var rule_ids=spec.rules;var regexes=spec.__rule_regexes;var len=spec.__rule_count;// Note: the arrays are 1-based, while `len` itself is a valid index,
 // hence the non-standard less-or-equal check in the next loop condition!
 for(var i=1;i<=len;i++){tempMatch=this._input.match(regexes[i]);if(tempMatch&&(!match||tempMatch[0].length>match[0].length)){match=tempMatch;index=i;if(this.options.backtrack_lexer){token=this.test_match(tempMatch,rule_ids[i]);if(token!==false){return token;}else if(this._backtrack){match=undefined;continue;// rule action called reject() implying a rule MISmatch.
 }else{// else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
 return false;}}else if(!this.options.flex){break;}}}if(match){token=this.test_match(match,rule_ids[index]);if(token!==false){return token;}// else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-return false;}if(!this._input){this.done=true;this.clear();return this.EOF;}else{var lineno_msg='Lexical error';if(this.options.trackPosition){lineno_msg+=' on line '+(this.yylineno+1);}var p=this.constructLexErrorInfo(lineno_msg+': Unrecognized text.',this.options.lexerErrorsAreRecoverable);var pendingInput=this._input;var activeCondition=this.topState();var conditionStackDepth=this.conditionStack.length;token=this.parseError(p.errStr,p,this.JisonLexerError)||this.ERROR;if(token===this.ERROR){// we can try to recover from a lexer error that `parseError()` did not 'recover' for us
+return false;}if(!this._input){this.done=true;this.clear();return this.EOF;}else{var lineno_msg='Lexical error';if(this.yylloc){lineno_msg+=' on line '+(this.yylineno+1);}var p=this.constructLexErrorInfo(lineno_msg+': Unrecognized text.',this.options.lexerErrorsAreRecoverable);var pendingInput=this._input;var activeCondition=this.topState();var conditionStackDepth=this.conditionStack.length;token=this.parseError(p.errStr,p,this.JisonLexerError)||this.ERROR;if(token===this.ERROR){// we can try to recover from a lexer error that `parseError()` did not 'recover' for us
 // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
 // has not consumed/modified any pending input or changed state in the error handler:
 if(!this.matches&&// and make sure the input has been modified/consumed ...
@@ -2596,19 +2635,59 @@ activeCondition===this.topState()&&conditionStackDepth===this.conditionStack.len
          *
          * @public
          * @this {RegExpLexer}
-         */lex:function lexer_lex(){var r;// allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:
+         */lex:function lexer_lex(){var r;//this._clear_state = 0;
+if(!this._more){if(!this._clear_state){this._clear_state=1;}this.clear();}// allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:
 if(typeof this.pre_lex==='function'){r=this.pre_lex.call(this,0);}if(typeof this.options.pre_lex==='function'){// (also account for a userdef function which does not return any value: keep the token as is)
 r=this.options.pre_lex.call(this,r)||r;}if(this.yy&&typeof this.yy.pre_lex==='function'){// (also account for a userdef function which does not return any value: keep the token as is)
 r=this.yy.pre_lex.call(this,r)||r;}while(!r){r=this.next();}if(this.yy&&typeof this.yy.post_lex==='function'){// (also account for a userdef function which does not return any value: keep the token as is)
 r=this.yy.post_lex.call(this,r)||r;}if(typeof this.options.post_lex==='function'){// (also account for a userdef function which does not return any value: keep the token as is)
 r=this.options.post_lex.call(this,r)||r;}if(typeof this.post_lex==='function'){// (also account for a userdef function which does not return any value: keep the token as is)
-r=this.post_lex.call(this,r)||r;}return r;},/**
+r=this.post_lex.call(this,r)||r;}if(!this._more){//
+// 1) make sure any outside interference is detected ASAP: 
+//    these attributes are to be treated as 'const' values
+//    once the lexer has produced them with the token (return value `r`).
+// 2) make sure any subsequent `lex()` API invocation CANNOT
+//    edit the `yytext`, etc. token attributes for the *current*
+//    token, i.e. provide a degree of 'closure safety' so that
+//    code like this:
+//    
+//        t1 = lexer.lex();
+//        v = lexer.yytext;
+//        l = lexer.yylloc;
+//        t2 = lexer.lex();
+//        assert(lexer.yytext !== v);
+//        assert(lexer.yylloc !== l);
+//        
+//    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+//    these conditions.
+//    
+this.yytext=Object.freeze(this.yytext);this.matches=Object.freeze(this.matches);this.yylloc.range=Object.freeze(this.yylloc.range);this.yylloc=Object.freeze(this.yylloc);this._clear_state=0;}return r;},/**
          * return next match that has a token. Identical to the `lex()` API but does not invoke any of the
          * `pre_lex()` nor any of the `post_lex()` callbacks.
          *
          * @public
          * @this {RegExpLexer}
-         */fastLex:function lexer_fastLex(){var r;while(!r){r=this.next();}return r;},/**
+         */fastLex:function lexer_fastLex(){var r;//this._clear_state = 0;
+while(!r){r=this.next();}if(!this._more){//
+// 1) make sure any outside interference is detected ASAP: 
+//    these attributes are to be treated as 'const' values
+//    once the lexer has produced them with the token (return value `r`).
+// 2) make sure any subsequent `lex()` API invocation CANNOT
+//    edit the `yytext`, etc. token attributes for the *current*
+//    token, i.e. provide a degree of 'closure safety' so that
+//    code like this:
+//    
+//        t1 = lexer.lex();
+//        v = lexer.yytext;
+//        l = lexer.yylloc;
+//        t2 = lexer.lex();
+//        assert(lexer.yytext !== v);
+//        assert(lexer.yylloc !== l);
+//        
+//    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+//    these conditions.
+//    
+this.yytext=Object.freeze(this.yytext);this.matches=Object.freeze(this.matches);this.yylloc.range=Object.freeze(this.yylloc.range);this.yylloc=Object.freeze(this.yylloc);this._clear_state=0;}return r;},/**
          * return info about the lexer state that can help a parser or other lexer API user to use the
          * most efficient means available. This API is provided to aid run-time performance for larger
          * systems which employ this lexer.
@@ -2652,19 +2731,19 @@ r=this.post_lex.call(this,r)||r;}return r;},/**
          *
          * @public
          * @this {RegExpLexer}
-         */stateStackSize:function lexer_stateStackSize(){return this.conditionStack.length;},options:{xregexp:true,ranges:true,trackPosition:true,easy_keyword_rules:true},JisonLexerError:JisonLexerError,performAction:function lexer__performAction(yy,yyrulenumber,YY_START){var yy_=this;switch(yyrulenumber){case 0:/*! Conditions:: INITIAL macro options rules */ /*! Rule::       \/\/[^\r\n]* */ /* skip single-line comment */break;case 1:/*! Conditions:: INITIAL macro options rules */ /*! Rule::       \/\*[^]*?\*\/ */ /* skip multi-line comment */break;case 2:/*! Conditions:: action */ /*! Rule::       %\{([^]*?)%\}(?!\}) */yy_.yytext=this.matches[1];yy.include_command_allowed=false;return 36;case 3:/*! Conditions:: action */ /*! Rule::       %include\b */if(yy.include_command_allowed){// This is an include instruction in place of (part of) an action:
-this.pushState('options');return 32;}else{// TODO
+         */stateStackSize:function lexer_stateStackSize(){return this.conditionStack.length;},options:{xregexp:true,ranges:true,trackPosition:true,easy_keyword_rules:true},JisonLexerError:JisonLexerError,performAction:function lexer__performAction(yy,yyrulenumber,YY_START){var yy_=this;switch(yyrulenumber){case 0:/*! Conditions:: INITIAL macro options rules */ /*! Rule::       \/\/[^\r\n]* */ /* skip single-line comment */break;case 1:/*! Conditions:: INITIAL macro options rules */ /*! Rule::       \/\*[^]*?\*\/ */ /* skip multi-line comment */break;case 2:/*! Conditions:: action */ /*! Rule::       %\{([^]*?)%\}(?!\}) */yy_.yytext=this.matches[1];yy.include_command_allowed=false;return 35;case 3:/*! Conditions:: action */ /*! Rule::       %include\b */if(yy.include_command_allowed){// This is an include instruction in place of (part of) an action:
+this.pushState('options');return 30;}else{// TODO
 yy_.yyerror(rmCommonWS`
                                                 %include statements must occur on a line on their own and cannot occur inside an action code block.
                                                 Its use is not permitted at this position.
 
                                                   Erroneous area:
-                                                `+this.prettyPrintRange(yy_.yylloc));return 37;}case 4:/*! Conditions:: action */ /*! Rule::       \/\*[^]*?\*\/ */ //yy.include_command_allowed = false; -- doesn't impact include-allowed state
-return 36;case 5:/*! Conditions:: action */ /*! Rule::       \/\/.* */yy.include_command_allowed=false;return 36;case 6:/*! Conditions:: action */ /*! Rule::       \| */if(yy.depth===0){this.popState();this.unput(yy_.yytext);// yy_.yytext = '';    --- ommitted as this is the side-effect of .unput(yy_.yytext) already!
-return 24;}else{return 36;}case 7:/*! Conditions:: action */ /*! Rule::       %% */if(yy.depth===0){this.popState();this.unput(yy_.yytext);// yy_.yytext = '';    --- ommitted as this is the side-effect of .unput(yy_.yytext) already!
-return 24;}else{return 36;}case 8:/*! Conditions:: action */ /*! Rule::       \/(?=\s) */return 36;// most probably a `/` divide operator. 
+                                                `+this.prettyPrintRange(yy_.yylloc));return 36;}case 4:/*! Conditions:: action */ /*! Rule::       \/\*[^]*?\*\/ */ //yy.include_command_allowed = false; -- doesn't impact include-allowed state
+return 35;case 5:/*! Conditions:: action */ /*! Rule::       \/\/.* */yy.include_command_allowed=false;return 35;case 6:/*! Conditions:: action */ /*! Rule::       \| */if(yy.depth===0){this.popState();this.unput(yy_.yytext);// yy_.yytext = '';    --- ommitted as this is the side-effect of .unput(yy_.yytext) already!
+return 23;}else{return 35;}case 7:/*! Conditions:: action */ /*! Rule::       %% */if(yy.depth===0){this.popState();this.unput(yy_.yytext);// yy_.yytext = '';    --- ommitted as this is the side-effect of .unput(yy_.yytext) already!
+return 23;}else{return 35;}case 8:/*! Conditions:: action */ /*! Rule::       \/(?=\s) */return 35;// most probably a `/` divide operator. 
 case 9:/*! Conditions:: action */ /*! Rule::       \/.* */yy.include_command_allowed=false;var l=scanRegExp(yy_.yytext);if(l>0){this.unput(yy_.yytext.substring(l));yy_.yytext=yy_.yytext.substring(0,l);}else{// assume it's a division operator:
-this.unput(yy_.yytext.substring(1));yy_.yytext=yy_.yytext[0];}return 36;case 10:/*! Conditions:: action */ /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}"|'{QUOTED_STRING_CONTENT}'|`{ES2017_STRING_CONTENT}` */yy.include_command_allowed=false;return 36;case 11:/*! Conditions:: action */ /*! Rule::       [^/"'`%\{\}\/{BR}]+ */yy.include_command_allowed=false;return 36;case 12:/*! Conditions:: action */ /*! Rule::       % */yy.include_command_allowed=false;return 36;case 13:/*! Conditions:: action */ /*! Rule::       \{ */yy.depth++;yy.include_command_allowed=false;return 36;case 14:/*! Conditions:: action */ /*! Rule::       \} */yy.include_command_allowed=false;if(yy.depth<=0){yy_.yyerror(rmCommonWS`
+this.unput(yy_.yytext.substring(1));yy_.yytext=yy_.yytext[0];}return 35;case 10:/*! Conditions:: action */ /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}"|'{QUOTED_STRING_CONTENT}'|`{ES2017_STRING_CONTENT}` */yy.include_command_allowed=false;return 35;case 11:/*! Conditions:: action */ /*! Rule::       [^/"'`%\{\}\/{BR}]+ */yy.include_command_allowed=false;return 35;case 12:/*! Conditions:: action */ /*! Rule::       % */yy.include_command_allowed=false;return 35;case 13:/*! Conditions:: action */ /*! Rule::       \{ */yy.depth++;yy.include_command_allowed=false;return 35;case 14:/*! Conditions:: action */ /*! Rule::       \} */yy.include_command_allowed=false;if(yy.depth<=0){yy_.yyerror(rmCommonWS`
                                                 too many closing curly braces in lexer rule action block.
 
                                                 Note: the action code chunk may be too complex for jison to parse
@@ -2672,11 +2751,11 @@ this.unput(yy_.yytext.substring(1));yy_.yytext=yy_.yytext[0];}return 36;case 10:
                                                 to help jison grok more or less complex action code chunks.
 
                                                   Erroneous area:
-                                                `+this.prettyPrintRange(yy_.yylloc));return 39;}else{yy.depth--;}return 36;case 15:/*! Conditions:: action */ /*! Rule::       (?:[\s\r\n]*?){BR}+{WS}+ */yy.include_command_allowed=true;return 36;// keep empty lines as-is inside action code blocks. 
-case 17:/*! Conditions:: action */ /*! Rule::       {BR} */if(yy.depth>0){yy.include_command_allowed=true;return 36;// keep empty lines as-is inside action code blocks.
+                                                `+this.prettyPrintRange(yy_.yylloc));return 38;}else{yy.depth--;}return 35;case 15:/*! Conditions:: action */ /*! Rule::       (?:[\s\r\n]*?){BR}+{WS}+ */yy.include_command_allowed=true;return 35;// keep empty lines as-is inside action code blocks. 
+case 17:/*! Conditions:: action */ /*! Rule::       {BR} */if(yy.depth>0){yy.include_command_allowed=true;return 35;// keep empty lines as-is inside action code blocks.
 }else{// end of action code chunk; allow parent mode to see this mode-terminating linebreak too.
 this.popState();this.unput(yy_.yytext);// yy_.yytext = '';    --- ommitted as this is the side-effect of .unput(yy_.yytext) already!
-return 24;}case 18:/*! Conditions:: action */ /*! Rule::       $ */yy.include_command_allowed=false;if(yy.depth!==0){yy_.yyerror(rmCommonWS`
+return 23;}case 18:/*! Conditions:: action */ /*! Rule::       $ */yy.include_command_allowed=false;if(yy.depth!==0){yy_.yyerror(rmCommonWS`
                                                 missing ${yy.depth} closing curly braces in lexer rule action block.
 
                                                 Note: the action code chunk may be too complex for jison to parse
@@ -2684,7 +2763,7 @@ return 24;}case 18:/*! Conditions:: action */ /*! Rule::       $ */yy.include_co
                                                 to help jison grok more or less complex action code chunks.
 
                                                   Erroneous area:
-                                                `+this.prettyPrintRange(yy_.yylloc));return 38;}this.popState();yy_.yytext='';return 24;case 19:/*! Conditions:: INITIAL rules code options */ /*! Rule::       [%\{]\{+ */yy.depth=0;yy.include_command_allowed=false;this.pushState('action');// keep matched string in local variable as the `unput()` call at the end will also 'unput' `yy_.yytext`,
+                                                `+this.prettyPrintRange(yy_.yylloc));return 37;}this.popState();yy_.yytext='';return 23;case 19:/*! Conditions:: INITIAL rules code options */ /*! Rule::       [%\{]\{+ */yy.depth=0;yy.include_command_allowed=false;this.pushState('action');// keep matched string in local variable as the `unput()` call at the end will also 'unput' `yy_.yytext`,
 // which for our purposes here is highly undesirable (see trimActionCode() use in the BNF parser spec).
 var marker=yy_.yytext;// check whether this `%{` marker was located at the start of the line:
 // if it is, we treat it as a different token to signal the grammar we've
@@ -2711,10 +2790,10 @@ if(endMarkerIndex>=0&&remaining[endMarkerIndex+endMarker.length]==='}'){prevEnd=
                                                     Regrettably, it does not exist in the remainder of the input.
 
                                                       Erroneous area:
-                                                `+this.prettyPrintRange(yy_.yylloc));return 25;}break;}// Allow the start marker to be re-matched by the generated lexer rule regex:
+                                                `+this.prettyPrintRange(yy_.yylloc));return 24;}break;}// Allow the start marker to be re-matched by the generated lexer rule regex:
 this.unput(marker);// Now RESET `yy_.yytext` to what it was originally, i.e. un-unput that lexer variable explicitly:
 yy_.yytext=marker;// and allow the next lexer round to match and execute the suitable lexer rule(s) to parse this incoming action code block.
-if(atSOL){return 23;}return 26;case 20:/*! Conditions:: rules macro INITIAL */ /*! Rule::       -> */yy.depth=0;yy.include_command_allowed=false;this.pushState('action');return 35;case 21:/*! Conditions:: rules macro INITIAL */ /*! Rule::       → */yy.depth=0;yy.include_command_allowed=false;this.pushState('action');return 35;case 22:/*! Conditions:: rules macro INITIAL */ /*! Rule::       => */yy.depth=0;yy.include_command_allowed=false;this.pushState('action');return 35;case 23:/*! Conditions:: rules */ /*! Rule::       {WS}+(?!(?:\{\{|\||%|->|=>|→|{WS}|{BR})) */yy.depth=0;yy.include_command_allowed=true;//console.error('*** ACTION start @ 355:', yy_.yytext);
+if(atSOL){return 22;}return 25;case 20:/*! Conditions:: rules macro INITIAL */ /*! Rule::       -> */yy.depth=0;yy.include_command_allowed=false;this.pushState('action');return 34;case 21:/*! Conditions:: rules macro INITIAL */ /*! Rule::       → */yy.depth=0;yy.include_command_allowed=false;this.pushState('action');return 34;case 22:/*! Conditions:: rules macro INITIAL */ /*! Rule::       => */yy.depth=0;yy.include_command_allowed=false;this.pushState('action');return 34;case 23:/*! Conditions:: rules */ /*! Rule::       {WS}+(?!(?:\{\{|\||%|->|=>|→|{WS}|{BR})) */yy.depth=0;yy.include_command_allowed=true;//console.error('*** ACTION start @ 355:', yy_.yytext);
 this.pushState('action');// Do a bit of magic that's useful for the parser when we
 // call `trimActionCode()` in there to perform a bit of
 // rough initial action code chunk cleanup:
@@ -2740,70 +2819,74 @@ this.pushState('action');// Do a bit of magic that's useful for the parser when 
 // get to the parser productions which process this
 // upcoming action code block.
 var la=this.lookAhead();if(la[0]==='{'){yy_.yytext='{';// hint the parser
-}return 26;case 24:/*! Conditions:: rules */ /*! Rule::       %% */this.popState();this.pushState('code');return 19;case 25:/*! Conditions:: rules */ /*! Rule::       $ */this.popState();this.pushState('code');return 19;case 30:/*! Conditions:: options */ /*! Rule::       %%|\||; */this.popState();this.unput(yy_.yytext);return 22;case 31:/*! Conditions:: options */ /*! Rule::       %include\b */yy.depth=0;yy.include_command_allowed=true;this.pushState('action');// push the parsed '%include' back into the input-to-parse
+}return 25;case 24:/*! Conditions:: rules */ /*! Rule::       %% */this.popState();this.pushState('code');return 33;case 25:/*! Conditions:: rules */ /*! Rule::       $ */this.popState();this.pushState('code');return 33;case 30:/*! Conditions:: options */ /*! Rule::       %%|\||; */this.popState();this.unput(yy_.yytext);return 21;case 31:/*! Conditions:: options */ /*! Rule::       %include\b */yy.depth=0;yy.include_command_allowed=true;this.pushState('action');// push the parsed '%include' back into the input-to-parse
 // to trigger the `<action>` state to re-parse it
 // and issue the desired follow-up token: 'INCLUDE':
-this.unput(yy_.yytext);return 26;case 32:/*! Conditions:: options */ /*! Rule::       > */this.popState();this.unput(yy_.yytext);return 22;case 35:/*! Conditions:: options */ /*! Rule::       <{ID}> */yy_.yytext=this.matches[1];return'TOKEN_TYPE';case 37:/*! Conditions:: options */ /*! Rule::       {BR}{WS}+(?=\S) */ /* ignore */break;case 38:/*! Conditions:: options */ /*! Rule::       {BR} */this.popState();this.unput(yy_.yytext);return 22;case 39:/*! Conditions:: options */ /*! Rule::       {WS}+ */ /* skip whitespace */break;case 40:/*! Conditions:: INITIAL */ /*! Rule::       {ID} */this.pushState('macro');return 20;case 41:/*! Conditions:: macro */ /*! Rule::       {BR}+ */this.popState();this.unput(yy_.yytext);return 21;case 42:/*! Conditions:: macro */ /*! Rule::       $ */this.popState();this.unput(yy_.yytext);return 21;case 43:/*! Conditions:: rules macro INITIAL */ /*! Rule::       {BR}+ */ /* skip newlines */break;case 44:/*! Conditions:: rules macro INITIAL */ /*! Rule::       {WS}+ */ /* skip whitespace */break;case 48:/*! Conditions:: rules macro INITIAL */ /*! Rule::       {ANY_LITERAL_CHAR}+ */ // accept any non-regex, non-lex, non-string-delim,
+this.unput(yy_.yytext);return 25;case 32:/*! Conditions:: options */ /*! Rule::       > */this.popState();this.unput(yy_.yytext);return 21;case 35:/*! Conditions:: options */ /*! Rule::       <{ID}> */yy_.yytext=this.matches[1];return'TOKEN_TYPE';case 37:/*! Conditions:: options */ /*! Rule::       {BR}{WS}+(?=\S) */ /* ignore */break;case 38:/*! Conditions:: options */ /*! Rule::       {BR} */this.popState();this.unput(yy_.yytext);return 21;case 39:/*! Conditions:: options */ /*! Rule::       {WS}+ */ /* skip whitespace */break;case 40:/*! Conditions:: INITIAL */ /*! Rule::       {ID} */this.pushState('macro');return 19;case 41:/*! Conditions:: macro */ /*! Rule::       {BR}+ */this.popState();this.unput(yy_.yytext);return 20;case 42:/*! Conditions:: macro */ /*! Rule::       $ */this.popState();this.unput(yy_.yytext);return 20;case 43:/*! Conditions:: rules macro INITIAL */ /*! Rule::       {BR}+ */ /* skip newlines */break;case 44:/*! Conditions:: rules macro INITIAL */ /*! Rule::       {WS}+ */ /* skip whitespace */break;case 48:/*! Conditions:: rules macro INITIAL */ /*! Rule::       {ANY_LITERAL_CHAR}+ */ // accept any non-regex, non-lex, non-string-delim,
 // non-escape-starter, non-space character as-is
-return 51;case 49:/*! Conditions:: rules macro INITIAL */ /*! Rule::       \[ */this.pushState('set');return 46;case 64:/*! Conditions:: rules macro INITIAL */ /*! Rule::       < */this.pushState('options');return 3;case 66:/*! Conditions:: rules macro INITIAL */ /*! Rule::       \/! */return 42;// treated as `(?!atom)` 
+return 50;case 49:/*! Conditions:: rules macro INITIAL */ /*! Rule::       \[ */this.pushState('set');return 45;case 64:/*! Conditions:: rules macro INITIAL */ /*! Rule::       < */this.pushState('options');return 3;case 66:/*! Conditions:: rules macro INITIAL */ /*! Rule::       \/! */return 41;// treated as `(?!atom)` 
 case 67:/*! Conditions:: rules macro INITIAL */ /*! Rule::       \/ */return 13;// treated as `(?=atom)` 
 case 69:/*! Conditions:: rules macro INITIAL */ /*! Rule::       \\(?:([0-7]{1,3})|c([A-Z])|x([0-9a-fA-F]{2})|u([0-9a-fA-F]{4})|u\{([0-9a-fA-F]{1,8})\}) */var m=this.matches;yy_.yytext=NaN;if(m[1]){// [1]: octal char: `\012` --> \x0A
 var v=parseInt(m[1],8);yy_.yytext=v;}else if(m[2]){// [2]: CONTROL char: `\cA` --> \u0001
 var v=m[2].charCodeAt(0)-64;yy_.yytext=v;}else if(m[3]){// [3]: hex char: `\x41` --> A
 var v=parseInt(m[3],16);yy_.yytext=v;}else if(m[4]){// [4]: unicode/UTS2 char: `\u03c0` --> PI
 var v=parseInt(m[4],16);yy_.yytext=v;}else if(m[5]){// [5]: unicode code point: `\u{00003c0}` --> PI
-var v=parseInt(m[5],16);yy_.yytext=v;}return 44;case 70:/*! Conditions:: rules macro INITIAL */ /*! Rule::       \\. */yy_.yytext=yy_.yytext.substring(1);return 51;case 73:/*! Conditions:: rules macro INITIAL */ /*! Rule::       %option[s]? */this.pushState('options');return 29;case 74:/*! Conditions:: rules macro INITIAL */ /*! Rule::       %s\b */this.pushState('options');return 33;case 75:/*! Conditions:: rules macro INITIAL */ /*! Rule::       %x\b */this.pushState('options');return 34;case 76:/*! Conditions:: rules macro INITIAL */ /*! Rule::       %code\b */this.pushState('options');return 31;case 77:/*! Conditions:: rules macro INITIAL */ /*! Rule::       %import\b */this.pushState('options');return 30;case 80:/*! Conditions:: INITIAL rules code */ /*! Rule::       %include\b */yy.depth=0;yy.include_command_allowed=true;this.pushState('action');// push the parsed '%include' back into the input-to-parse
+var v=parseInt(m[5],16);yy_.yytext=v;}return 43;case 70:/*! Conditions:: rules macro INITIAL */ /*! Rule::       \\. */yy_.yytext=yy_.yytext.substring(1);return 50;case 73:/*! Conditions:: rules macro INITIAL */ /*! Rule::       %option[s]? */this.pushState('options');return 27;case 74:/*! Conditions:: rules macro INITIAL */ /*! Rule::       %s\b */this.pushState('options');return 31;case 75:/*! Conditions:: rules macro INITIAL */ /*! Rule::       %x\b */this.pushState('options');return 32;case 76:/*! Conditions:: rules macro INITIAL */ /*! Rule::       %code\b */this.pushState('options');return 29;case 77:/*! Conditions:: rules macro INITIAL */ /*! Rule::       %import\b */this.pushState('options');return 28;case 80:/*! Conditions:: INITIAL rules code */ /*! Rule::       %include\b */yy.depth=0;yy.include_command_allowed=true;// check whether this `%include` command was located at the start of the line:
+// if it is, we treat it as a different token to signal the grammar we've
+// got an action which stands on its own.
+var precedingStr=this.matched[this.matched.length-this.match.length-1];var atSOL=!precedingStr/* @ Start Of File */||precedingStr==='\n';this.pushState('action');// push the parsed '%include' back into the input-to-parse
 // to trigger the `<action>` state to re-parse it
 // and issue the desired follow-up token: 'INCLUDE':
-this.unput(yy_.yytext);return 26;case 81:/*! Conditions:: INITIAL rules code */ /*! Rule::       %{NAME}([^\r\n]*) */ /* ignore unrecognized decl */this.warn(rmCommonWS`
+this.unput(yy_.yytext);// and allow the next lexer round to match and execute the suitable lexer rule(s) to parse this incoming action code block.
+if(atSOL){return 22;}return 25;case 81:/*! Conditions:: INITIAL rules code */ /*! Rule::       %{NAME}([^\r\n]*) */ /* ignore unrecognized decl */this.warn(rmCommonWS`
                                                 ignoring unsupported lexer option ${dquote(yy_.yytext)}
                                                 while lexing in ${dquote(this.topState())} state.
 
                                                   Erroneous area:
                                                 `+this.prettyPrintRange(yy_.yylloc));yy_.yytext={// {NAME}
 name:this.matches[1],// optional value/parameters
-value:this.matches[2].trim()};return 28;case 82:/*! Conditions:: rules macro INITIAL */ /*! Rule::       %% */this.pushState('rules');return 19;case 90:/*! Conditions:: set */ /*! Rule::       \] */this.popState();return 47;case 91:/*! Conditions:: code */ /*! Rule::       (?:[^%{BR}][^{BR}]*{BR}+)+ */return 55;// shortcut to grab a large bite at once when we're sure not to encounter any `%include` in there at start-of-line. 
-case 93:/*! Conditions:: code */ /*! Rule::       [^{BR}]+ */return 55;// the bit of CODE just before EOF... 
+value:this.matches[2].trim()};return 26;case 82:/*! Conditions:: rules macro INITIAL */ /*! Rule::       %% */this.pushState('rules');return 33;case 90:/*! Conditions:: set */ /*! Rule::       \] */this.popState();return 46;case 91:/*! Conditions:: code */ /*! Rule::       (?:[^%{BR}][^{BR}]*{BR}+)+ */return 54;// shortcut to grab a large bite at once when we're sure not to encounter any `%include` in there at start-of-line. 
+case 93:/*! Conditions:: code */ /*! Rule::       [^{BR}]+ */return 54;// the bit of CODE just before EOF... 
 case 94:/*! Conditions:: action */ /*! Rule::       " */yy_.yyerror(rmCommonWS`
                                             unterminated string constant in lexer rule action block.
 
                                               Erroneous area:
-                                            `+this.prettyPrintRange(yy_.yylloc));return 40;case 95:/*! Conditions:: action */ /*! Rule::       ' */yy_.yyerror(rmCommonWS`
+                                            `+this.prettyPrintRange(yy_.yylloc));return 39;case 95:/*! Conditions:: action */ /*! Rule::       ' */yy_.yyerror(rmCommonWS`
                                             unterminated string constant in lexer rule action block.
 
                                               Erroneous area:
-                                            `+this.prettyPrintRange(yy_.yylloc));return 40;case 96:/*! Conditions:: action */ /*! Rule::       ` */yy_.yyerror(rmCommonWS`
+                                            `+this.prettyPrintRange(yy_.yylloc));return 39;case 96:/*! Conditions:: action */ /*! Rule::       ` */yy_.yyerror(rmCommonWS`
                                             unterminated string constant in lexer rule action block.
 
                                               Erroneous area:
-                                            `+this.prettyPrintRange(yy_.yylloc));return 40;case 97:/*! Conditions:: options */ /*! Rule::       " */yy_.yyerror(rmCommonWS`
+                                            `+this.prettyPrintRange(yy_.yylloc));return 39;case 97:/*! Conditions:: options */ /*! Rule::       " */yy_.yyerror(rmCommonWS`
                                             unterminated string constant in %options entry.
 
                                               Erroneous area:
-                                            `+this.prettyPrintRange(yy_.yylloc));return 40;case 98:/*! Conditions:: options */ /*! Rule::       ' */yy_.yyerror(rmCommonWS`
+                                            `+this.prettyPrintRange(yy_.yylloc));return 39;case 98:/*! Conditions:: options */ /*! Rule::       ' */yy_.yyerror(rmCommonWS`
                                             unterminated string constant in %options entry.
 
                                               Erroneous area:
-                                            `+this.prettyPrintRange(yy_.yylloc));return 40;case 99:/*! Conditions:: options */ /*! Rule::       ` */yy_.yyerror(rmCommonWS`
+                                            `+this.prettyPrintRange(yy_.yylloc));return 39;case 99:/*! Conditions:: options */ /*! Rule::       ` */yy_.yyerror(rmCommonWS`
                                             unterminated string constant in %options entry.
 
                                               Erroneous area:
-                                            `+this.prettyPrintRange(yy_.yylloc));return 40;case 100:/*! Conditions:: * */ /*! Rule::       " */var rules=this.topState()==='macro'?'macro\'s':this.topState();yy_.yyerror(rmCommonWS`
+                                            `+this.prettyPrintRange(yy_.yylloc));return 39;case 100:/*! Conditions:: * */ /*! Rule::       " */var rules=this.topState()==='macro'?'macro\'s':this.topState();yy_.yyerror(rmCommonWS`
                                             unterminated string constant encountered while lexing
                                             ${rules}.
 
                                               Erroneous area:
-                                            `+this.prettyPrintRange(yy_.yylloc));return 40;case 101:/*! Conditions:: * */ /*! Rule::       ' */var rules=this.topState()==='macro'?'macro\'s':this.topState();yy_.yyerror(rmCommonWS`
+                                            `+this.prettyPrintRange(yy_.yylloc));return 39;case 101:/*! Conditions:: * */ /*! Rule::       ' */var rules=this.topState()==='macro'?'macro\'s':this.topState();yy_.yyerror(rmCommonWS`
                                             unterminated string constant encountered while lexing
                                             ${rules}.
 
                                               Erroneous area:
-                                            `+this.prettyPrintRange(yy_.yylloc));return 40;case 102:/*! Conditions:: * */ /*! Rule::       ` */var rules=this.topState()==='macro'?'macro\'s':this.topState();yy_.yyerror(rmCommonWS`
+                                            `+this.prettyPrintRange(yy_.yylloc));return 39;case 102:/*! Conditions:: * */ /*! Rule::       ` */var rules=this.topState()==='macro'?'macro\'s':this.topState();yy_.yyerror(rmCommonWS`
                                             unterminated string constant encountered while lexing
                                             ${rules}.
 
                                               Erroneous area:
-                                            `+this.prettyPrintRange(yy_.yylloc));return 40;case 103:/*! Conditions:: macro rules */ /*! Rule::       . */ /* b0rk on bad characters */var rules=this.topState()==='macro'?'macro\'s':this.topState();yy_.yyerror(rmCommonWS`
+                                            `+this.prettyPrintRange(yy_.yylloc));return 39;case 103:/*! Conditions:: macro rules */ /*! Rule::       . */ /* b0rk on bad characters */var rules=this.topState()==='macro'?'macro\'s':this.topState();yy_.yyerror(rmCommonWS`
                                             unsupported lexer input encountered while lexing
                                             ${rules} (i.e. jison lex regexes) in ${dquote(this.topState())} state.
 
@@ -2829,7 +2912,7 @@ case 94:/*! Conditions:: action */ /*! Rule::       " */yy_.yyerror(rmCommonWS`
                                             while lexing in ${dquote(this.topState())} state.
 
                                               Erroneous area:
-                                            `+this.prettyPrintRange(yy_.yylloc));return 2;default:return this.simpleCaseActionClusters[yyrulenumber];}},simpleCaseActionClusters:{/*! Conditions:: action */ /*! Rule::       {WS}+ */16:36,/*! Conditions:: options */ /*! Rule::       = */26:18,/*! Conditions:: options */ /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */27:53,/*! Conditions:: options */ /*! Rule::       '{QUOTED_STRING_CONTENT}' */28:53,/*! Conditions:: options */ /*! Rule::       `{ES2017_STRING_CONTENT}` */29:53,/*! Conditions:: options */ /*! Rule::       , */33:17,/*! Conditions:: options */ /*! Rule::       \* */34:11,/*! Conditions:: options */ /*! Rule::       {ANY_LITERAL_CHAR}+ */36:54,/*! Conditions:: rules macro INITIAL */ /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */45:50,/*! Conditions:: rules macro INITIAL */ /*! Rule::       '{QUOTED_STRING_CONTENT}' */46:50,/*! Conditions:: rules macro INITIAL */ /*! Rule::       `{ES2017_STRING_CONTENT}` */47:50,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \| */50:7,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \(\?: */51:41,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \(\?= */52:41,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \(\?! */53:41,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \(\?<= */54:41,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \(\?<! */55:41,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \( */56:8,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \) */57:9,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \+ */58:10,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \* */59:11,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \? */60:12,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \^ */61:15,/*! Conditions:: rules macro INITIAL */ /*! Rule::       , */62:17,/*! Conditions:: rules macro INITIAL */ /*! Rule::       <<EOF>> */63:16,/*! Conditions:: rules macro INITIAL */ /*! Rule::       > */65:6,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \\(?:[sSbBwWdDpP]|[rfntv\\*+()${}|[\]\/.^?]) */68:43,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \$ */71:16,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \. */72:14,/*! Conditions:: rules macro INITIAL */ /*! Rule::       %pointer\b */78:'FLEX_POINTER_MODE',/*! Conditions:: rules macro INITIAL */ /*! Rule::       %array\b */79:'FLEX_ARRAY_MODE',/*! Conditions:: rules macro INITIAL */ /*! Rule::       \{\d+(,\s*\d+|,)?\} */83:49,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \{{ID}\} */84:45,/*! Conditions:: set options */ /*! Rule::       \{{ID}\} */85:45,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \{ */86:4,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \} */87:5,/*! Conditions:: set */ /*! Rule::       (?:\\[^{BR}]|[^\]{])+ */88:48,/*! Conditions:: set */ /*! Rule::       \{ */89:48,/*! Conditions:: code */ /*! Rule::       [^{BR}]*{BR}+ */92:55,/*! Conditions:: * */ /*! Rule::       $ */106:1},rules:[/*   0: */ /^(?:\/\/[^\r\n]*)/,/*   1: */ /^(?:\/\*[\s\S]*?\*\/)/,/*   2: */ /^(?:%\{([\s\S]*?)%\}(?!\}))/,/*   3: */ /^(?:%include\b)/,/*   4: */ /^(?:\/\*[\s\S]*?\*\/)/,/*   5: */ /^(?:\/\/.*)/,/*   6: */ /^(?:\|)/,/*   7: */ /^(?:%%)/,/*   8: */ /^(?:\/(?=\s))/,/*   9: */ /^(?:\/.*)/,/*  10: */ /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)"|'((?:\\'|\\[^']|[^\n\r'\\])*)'|`((?:\\`|\\[^`]|[^\\`])*)`)/,/*  11: */ /^(?:[^\n\r"%'/`{}]+)/,/*  12: */ /^(?:%)/,/*  13: */ /^(?:\{)/,/*  14: */ /^(?:\})/,/*  15: */ /^(?:(?:\s*?)(\r\n|\n|\r)+([^\S\n\r])+)/,/*  16: */ /^(?:([^\S\n\r])+)/,/*  17: */ /^(?:(\r\n|\n|\r))/,/*  18: */ /^(?:$)/,/*  19: */ /^(?:[%{]\{+)/,/*  20: */ /^(?:->)/,/*  21: */ /^(?:→)/,/*  22: */ /^(?:=>)/,/*  23: */ /^(?:([^\S\n\r])+(?!(?:\{\{|\||%|->|=>|→|([^\S\n\r])|(\r\n|\n|\r))))/,/*  24: */ /^(?:%%)/,/*  25: */ /^(?:$)/,/*  26: */ /^(?:=)/,/*  27: */ /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)")/,/*  28: */ /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,/*  29: */ /^(?:`((?:\\`|\\[^`]|[^\\`])*)`)/,/*  30: */ /^(?:%%|\||;)/,/*  31: */ /^(?:%include\b)/,/*  32: */ /^(?:>)/,/*  33: */ /^(?:,)/,/*  34: */ /^(?:\*)/,/*  35: */new XRegExp__default['default']('^(?:<([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*)>)',''),/*  36: */ /^(?:([^\s!"$%'-,./:-?\[-\^`{-}])+)/,/*  37: */ /^(?:(\r\n|\n|\r)([^\S\n\r])+(?=\S))/,/*  38: */ /^(?:(\r\n|\n|\r))/,/*  39: */ /^(?:([^\S\n\r])+)/,/*  40: */new XRegExp__default['default']('^(?:([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*))',''),/*  41: */ /^(?:(\r\n|\n|\r)+)/,/*  42: */ /^(?:$)/,/*  43: */ /^(?:(\r\n|\n|\r)+)/,/*  44: */ /^(?:([^\S\n\r])+)/,/*  45: */ /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)")/,/*  46: */ /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,/*  47: */ /^(?:`((?:\\`|\\[^`]|[^\\`])*)`)/,/*  48: */ /^(?:([^\s!"$%'-,./:-?\[-\^`{-}])+)/,/*  49: */ /^(?:\[)/,/*  50: */ /^(?:\|)/,/*  51: */ /^(?:\(\?:)/,/*  52: */ /^(?:\(\?=)/,/*  53: */ /^(?:\(\?!)/,/*  54: */ /^(?:\(\?<=)/,/*  55: */ /^(?:\(\?<!)/,/*  56: */ /^(?:\()/,/*  57: */ /^(?:\))/,/*  58: */ /^(?:\+)/,/*  59: */ /^(?:\*)/,/*  60: */ /^(?:\?)/,/*  61: */ /^(?:\^)/,/*  62: */ /^(?:,)/,/*  63: */ /^(?:<<EOF>>)/,/*  64: */ /^(?:<)/,/*  65: */ /^(?:>)/,/*  66: */ /^(?:\/!)/,/*  67: */ /^(?:\/)/,/*  68: */ /^(?:\\(?:[BDPSWbdpsw]|[$(-+./?\[-\^fnrtv{-}]))/,/*  69: */ /^(?:\\(?:([0-7]{1,3})|c([A-Z])|x([\dA-Fa-f]{2})|u([\dA-Fa-f]{4})|u\{([\dA-Fa-f]{1,8})\}))/,/*  70: */ /^(?:\\.)/,/*  71: */ /^(?:\$)/,/*  72: */ /^(?:\.)/,/*  73: */ /^(?:%option[s]?)/,/*  74: */ /^(?:%s\b)/,/*  75: */ /^(?:%x\b)/,/*  76: */ /^(?:%code\b)/,/*  77: */ /^(?:%import\b)/,/*  78: */ /^(?:%pointer\b)/,/*  79: */ /^(?:%array\b)/,/*  80: */ /^(?:%include\b)/,/*  81: */new XRegExp__default['default']('^(?:%([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}\\-_]*(?:[\\p{Alphabetic}\\p{Number}_]))?)([^\\n\\r]*))',''),/*  82: */ /^(?:%%)/,/*  83: */ /^(?:\{\d+(,\s*\d+|,)?\})/,/*  84: */new XRegExp__default['default']('^(?:\\{([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*)\\})',''),/*  85: */new XRegExp__default['default']('^(?:\\{([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*)\\})',''),/*  86: */ /^(?:\{)/,/*  87: */ /^(?:\})/,/*  88: */ /^(?:(?:\\[^\n\r]|[^\]{])+)/,/*  89: */ /^(?:\{)/,/*  90: */ /^(?:\])/,/*  91: */ /^(?:(?:[^\n\r%][^\n\r]*(\r\n|\n|\r)+)+)/,/*  92: */ /^(?:[^\n\r]*(\r\n|\n|\r)+)/,/*  93: */ /^(?:[^\n\r]+)/,/*  94: */ /^(?:")/,/*  95: */ /^(?:')/,/*  96: */ /^(?:`)/,/*  97: */ /^(?:")/,/*  98: */ /^(?:')/,/*  99: */ /^(?:`)/,/* 100: */ /^(?:")/,/* 101: */ /^(?:')/,/* 102: */ /^(?:`)/,/* 103: */ /^(?:.)/,/* 104: */ /^(?:.)/,/* 105: */ /^(?:.)/,/* 106: */ /^(?:$)/],conditions:{'rules':{rules:[0,1,19,20,21,22,23,24,25,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,86,87,100,101,102,103,105,106],inclusive:true},'macro':{rules:[0,1,20,21,22,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,82,83,84,86,87,100,101,102,103,105,106],inclusive:true},'code':{rules:[19,80,81,91,92,93,100,101,102,105,106],inclusive:false},'options':{rules:[0,1,19,26,27,28,29,30,31,32,33,34,35,36,37,38,39,85,97,98,99,100,101,102,104,105,106],inclusive:false},'action':{rules:[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,94,95,96,100,101,102,105,106],inclusive:false},'set':{rules:[85,88,89,90,100,101,102,105,106],inclusive:false},'INITIAL':{rules:[0,1,19,20,21,22,40,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,86,87,100,101,102,105,106],inclusive:true}}};var rmCommonWS=helpers.rmCommonWS;var dquote=helpers.dquote;var scanRegExp=helpers.scanRegExp;// Calculate the end marker to match and produce a
+                                            `+this.prettyPrintRange(yy_.yylloc));return 2;default:return this.simpleCaseActionClusters[yyrulenumber];}},simpleCaseActionClusters:{/*! Conditions:: action */ /*! Rule::       {WS}+ */16:35,/*! Conditions:: options */ /*! Rule::       = */26:18,/*! Conditions:: options */ /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */27:52,/*! Conditions:: options */ /*! Rule::       '{QUOTED_STRING_CONTENT}' */28:52,/*! Conditions:: options */ /*! Rule::       `{ES2017_STRING_CONTENT}` */29:52,/*! Conditions:: options */ /*! Rule::       , */33:17,/*! Conditions:: options */ /*! Rule::       \* */34:11,/*! Conditions:: options */ /*! Rule::       {ANY_LITERAL_CHAR}+ */36:53,/*! Conditions:: rules macro INITIAL */ /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */45:49,/*! Conditions:: rules macro INITIAL */ /*! Rule::       '{QUOTED_STRING_CONTENT}' */46:49,/*! Conditions:: rules macro INITIAL */ /*! Rule::       `{ES2017_STRING_CONTENT}` */47:49,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \| */50:7,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \(\?: */51:40,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \(\?= */52:40,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \(\?! */53:40,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \(\?<= */54:40,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \(\?<! */55:40,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \( */56:8,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \) */57:9,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \+ */58:10,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \* */59:11,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \? */60:12,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \^ */61:15,/*! Conditions:: rules macro INITIAL */ /*! Rule::       , */62:17,/*! Conditions:: rules macro INITIAL */ /*! Rule::       <<EOF>> */63:16,/*! Conditions:: rules macro INITIAL */ /*! Rule::       > */65:6,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \\(?:[sSbBwWdDpP]|[rfntv\\*+()${}|[\]\/.^?]) */68:42,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \$ */71:16,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \. */72:14,/*! Conditions:: rules macro INITIAL */ /*! Rule::       %pointer\b */78:'FLEX_POINTER_MODE',/*! Conditions:: rules macro INITIAL */ /*! Rule::       %array\b */79:'FLEX_ARRAY_MODE',/*! Conditions:: rules macro INITIAL */ /*! Rule::       \{\d+(,\s*\d+|,)?\} */83:48,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \{{ID}\} */84:44,/*! Conditions:: set options */ /*! Rule::       \{{ID}\} */85:44,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \{ */86:4,/*! Conditions:: rules macro INITIAL */ /*! Rule::       \} */87:5,/*! Conditions:: set */ /*! Rule::       (?:\\[^{BR}]|[^\]{])+ */88:47,/*! Conditions:: set */ /*! Rule::       \{ */89:47,/*! Conditions:: code */ /*! Rule::       [^{BR}]*{BR}+ */92:54,/*! Conditions:: * */ /*! Rule::       $ */106:1},rules:[/*   0: */ /^(?:\/\/[^\r\n]*)/,/*   1: */ /^(?:\/\*[\s\S]*?\*\/)/,/*   2: */ /^(?:%\{([\s\S]*?)%\}(?!\}))/,/*   3: */ /^(?:%include\b)/,/*   4: */ /^(?:\/\*[\s\S]*?\*\/)/,/*   5: */ /^(?:\/\/.*)/,/*   6: */ /^(?:\|)/,/*   7: */ /^(?:%%)/,/*   8: */ /^(?:\/(?=\s))/,/*   9: */ /^(?:\/.*)/,/*  10: */ /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)"|'((?:\\'|\\[^']|[^\n\r'\\])*)'|`((?:\\`|\\[^`]|[^\\`])*)`)/,/*  11: */ /^(?:[^\n\r"%'/`{}]+)/,/*  12: */ /^(?:%)/,/*  13: */ /^(?:\{)/,/*  14: */ /^(?:\})/,/*  15: */ /^(?:(?:\s*?)(\r\n|\n|\r)+([^\S\n\r])+)/,/*  16: */ /^(?:([^\S\n\r])+)/,/*  17: */ /^(?:(\r\n|\n|\r))/,/*  18: */ /^(?:$)/,/*  19: */ /^(?:[%{]\{+)/,/*  20: */ /^(?:->)/,/*  21: */ /^(?:→)/,/*  22: */ /^(?:=>)/,/*  23: */ /^(?:([^\S\n\r])+(?!(?:\{\{|\||%|->|=>|→|([^\S\n\r])|(\r\n|\n|\r))))/,/*  24: */ /^(?:%%)/,/*  25: */ /^(?:$)/,/*  26: */ /^(?:=)/,/*  27: */ /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)")/,/*  28: */ /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,/*  29: */ /^(?:`((?:\\`|\\[^`]|[^\\`])*)`)/,/*  30: */ /^(?:%%|\||;)/,/*  31: */ /^(?:%include\b)/,/*  32: */ /^(?:>)/,/*  33: */ /^(?:,)/,/*  34: */ /^(?:\*)/,/*  35: */new XRegExp__default['default']('^(?:<([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*)>)',''),/*  36: */ /^(?:([^\s!"$%'-,./:-?\[-\^`{-}])+)/,/*  37: */ /^(?:(\r\n|\n|\r)([^\S\n\r])+(?=\S))/,/*  38: */ /^(?:(\r\n|\n|\r))/,/*  39: */ /^(?:([^\S\n\r])+)/,/*  40: */new XRegExp__default['default']('^(?:([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*))',''),/*  41: */ /^(?:(\r\n|\n|\r)+)/,/*  42: */ /^(?:$)/,/*  43: */ /^(?:(\r\n|\n|\r)+)/,/*  44: */ /^(?:([^\S\n\r])+)/,/*  45: */ /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)")/,/*  46: */ /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,/*  47: */ /^(?:`((?:\\`|\\[^`]|[^\\`])*)`)/,/*  48: */ /^(?:([^\s!"$%'-,./:-?\[-\^`{-}])+)/,/*  49: */ /^(?:\[)/,/*  50: */ /^(?:\|)/,/*  51: */ /^(?:\(\?:)/,/*  52: */ /^(?:\(\?=)/,/*  53: */ /^(?:\(\?!)/,/*  54: */ /^(?:\(\?<=)/,/*  55: */ /^(?:\(\?<!)/,/*  56: */ /^(?:\()/,/*  57: */ /^(?:\))/,/*  58: */ /^(?:\+)/,/*  59: */ /^(?:\*)/,/*  60: */ /^(?:\?)/,/*  61: */ /^(?:\^)/,/*  62: */ /^(?:,)/,/*  63: */ /^(?:<<EOF>>)/,/*  64: */ /^(?:<)/,/*  65: */ /^(?:>)/,/*  66: */ /^(?:\/!)/,/*  67: */ /^(?:\/)/,/*  68: */ /^(?:\\(?:[BDPSWbdpsw]|[$(-+./?\[-\^fnrtv{-}]))/,/*  69: */ /^(?:\\(?:([0-7]{1,3})|c([A-Z])|x([\dA-Fa-f]{2})|u([\dA-Fa-f]{4})|u\{([\dA-Fa-f]{1,8})\}))/,/*  70: */ /^(?:\\.)/,/*  71: */ /^(?:\$)/,/*  72: */ /^(?:\.)/,/*  73: */ /^(?:%option[s]?)/,/*  74: */ /^(?:%s\b)/,/*  75: */ /^(?:%x\b)/,/*  76: */ /^(?:%code\b)/,/*  77: */ /^(?:%import\b)/,/*  78: */ /^(?:%pointer\b)/,/*  79: */ /^(?:%array\b)/,/*  80: */ /^(?:%include\b)/,/*  81: */new XRegExp__default['default']('^(?:%([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}\\-_]*(?:[\\p{Alphabetic}\\p{Number}_]))?)([^\\n\\r]*))',''),/*  82: */ /^(?:%%)/,/*  83: */ /^(?:\{\d+(,\s*\d+|,)?\})/,/*  84: */new XRegExp__default['default']('^(?:\\{([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*)\\})',''),/*  85: */new XRegExp__default['default']('^(?:\\{([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*)\\})',''),/*  86: */ /^(?:\{)/,/*  87: */ /^(?:\})/,/*  88: */ /^(?:(?:\\[^\n\r]|[^\]{])+)/,/*  89: */ /^(?:\{)/,/*  90: */ /^(?:\])/,/*  91: */ /^(?:(?:[^\n\r%][^\n\r]*(\r\n|\n|\r)+)+)/,/*  92: */ /^(?:[^\n\r]*(\r\n|\n|\r)+)/,/*  93: */ /^(?:[^\n\r]+)/,/*  94: */ /^(?:")/,/*  95: */ /^(?:')/,/*  96: */ /^(?:`)/,/*  97: */ /^(?:")/,/*  98: */ /^(?:')/,/*  99: */ /^(?:`)/,/* 100: */ /^(?:")/,/* 101: */ /^(?:')/,/* 102: */ /^(?:`)/,/* 103: */ /^(?:.)/,/* 104: */ /^(?:.)/,/* 105: */ /^(?:.)/,/* 106: */ /^(?:$)/],conditions:{'rules':{rules:[0,1,19,20,21,22,23,24,25,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,86,87,100,101,102,103,105,106],inclusive:true},'macro':{rules:[0,1,20,21,22,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,82,83,84,86,87,100,101,102,103,105,106],inclusive:true},'code':{rules:[19,80,81,91,92,93,100,101,102,105,106],inclusive:false},'options':{rules:[0,1,19,26,27,28,29,30,31,32,33,34,35,36,37,38,39,85,97,98,99,100,101,102,104,105,106],inclusive:false},'action':{rules:[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,94,95,96,100,101,102,105,106],inclusive:false},'set':{rules:[85,88,89,90,100,101,102,105,106],inclusive:false},'INITIAL':{rules:[0,1,19,20,21,22,40,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,86,87,100,101,102,105,106],inclusive:true}}};var rmCommonWS=helpers.rmCommonWS;var dquote=helpers.dquote;var scanRegExp=helpers.scanRegExp;// Calculate the end marker to match and produce a
 // lexer rule to match when the need arrises:
 lexer.setupDelimitedActionChunkLexerRegex=function lexer__setupDelimitedActionChunkLexerRegex(marker){// Special: when we encounter `{` as the start of the action code block,
 // we DO NOT patch the `%{...%}` lexer rule as we will handle `{...}`

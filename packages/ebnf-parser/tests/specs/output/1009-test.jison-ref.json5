@@ -4,63 +4,12 @@
   },
   ebnf: {
     top: [
-      [
-        [
-          '()',
-          [
-            [
-              [
-                'symbol',
-                'word',
-              ],
-              [
-                'symbol',
-                'word',
-              ],
-            ],
-          ],
-        ],
-        [
-          'symbol',
-          'EOF',
-        ],
-      ],
+      '(word word) EOF',
     ],
   },
   bnf: {
     top: [
-      [
-        '',
-        [
-          'symbol',
-          'EOF',
-        ],
-      ],
-    ],
-  },
-  grammar: {
-    top: [
-      [
-        [
-          '()',
-          [
-            [
-              [
-                'symbol',
-                'word',
-              ],
-              [
-                'symbol',
-                'word',
-              ],
-            ],
-          ],
-        ],
-        [
-          'symbol',
-          'EOF',
-        ],
-      ],
+      'word word EOF',
     ],
   },
   __original_input__: `%ebnf

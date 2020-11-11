@@ -1,6 +1,6 @@
 [
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 50,
+    id: 49,
     token: '"STRING_LIT"',
     yytext: '"["',
     yylloc: {
@@ -30,7 +30,7 @@
     },
   },
   {
-    id: 46,
+    id: 45,
     token: '"REGEX_SET_START"',
     yytext: '[',
     yylloc: {
@@ -45,7 +45,7 @@
     },
   },
   {
-    id: 48,
+    id: 47,
     token: '"REGEX_SET"',
     yytext: '^\\]',
     yylloc: {
@@ -60,7 +60,7 @@
     },
   },
   {
-    id: 47,
+    id: 46,
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
@@ -75,7 +75,7 @@
     },
   },
   {
-    id: 50,
+    id: 49,
     token: '"STRING_LIT"',
     yytext: '"]"',
     yylloc: {
@@ -115,12 +115,12 @@ Regrettably, it does not exist in the remainder of the input.
 ^..............^^
 3: return true;
 4: %}}
-    at Object.lexer_parseError [as parseError] (\lex-parser-cjs-es5.js:5902:13)
-    at Object.yyError [as yyerror] (\lex-parser-cjs-es5.js:5928:19)
-    at Object.lexer__performAction [as performAction] (\lex-parser-cjs-es5.js:7315:19)
-    at Object.lexer_test_match [as test_match] (\lex-parser-cjs-es5.js:6736:34)
-    at Object.lexer_next [as next] (\lex-parser-cjs-es5.js:6842:22)
-    at Object.lexer_lex [as lex] (\lex-parser-cjs-es5.js:6909:18)
+    at Object.lexer_parseError [as parseError] (\lex-parser-cjs-es5.js:6085:13)
+    at Object.yyError [as yyerror] (\lex-parser-cjs-es5.js:6111:19)
+    at Object.lexer__performAction [as performAction] (\lex-parser-cjs-es5.js:7608:19)
+    at Object.lexer_test_match [as test_match] (\lex-parser-cjs-es5.js:6962:34)
+    at Object.lexer_next [as next] (\lex-parser-cjs-es5.js:7072:22)
+    at Object.lexer_lex [as lex] (\lex-parser-cjs-es5.js:7148:18)
     at Context.testEachParserExample (\all-tests.js:224:27)
     at callFn (\runnable.js:364:21)
     at Test.Runnable.run (\runnable.js:352:5)
@@ -213,6 +213,7 @@ return true;
 `,
           _more: false,
           _signaled_error_token: false,
+          _clear_state: 1,
           conditionStack: [
             'INITIAL',
             'rules',
@@ -226,6 +227,7 @@ return true;
           ],
           yytext: '%{',
           offset: 17,
+          base_position: 0,
           yyleng: 2,
           yylineno: 1,
           yylloc: {
@@ -237,6 +239,11 @@ return true;
               15,
               17,
             ],
+          },
+          CRLF_Re: {
+            re: '/\\r\\n?|\\n/',
+            source: '\\r\\n?|\\n',
+            flags: '',
           },
           options: {
             xregexp: true,

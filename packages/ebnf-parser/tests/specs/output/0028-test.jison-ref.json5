@@ -1,25 +1,14 @@
 {
+  moduleInclude: `test;
+
+var foo = 'bar';
+
+`,
   bnf: {
     hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
+      'world',
     ],
   },
-  grammar: {
-    hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
-    ],
-  },
-  moduleInclude: "var foo = 'bar'",
   __original_input__: `%{test;%}
 %%hello: world;%%var foo = 'bar';
 

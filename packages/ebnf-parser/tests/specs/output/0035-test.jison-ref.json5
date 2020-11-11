@@ -10,22 +10,7 @@
   },
   bnf: {
     hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
-    ],
-  },
-  grammar: {
-    hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
+      'world',
     ],
   },
   __original_input__: `%options ping=666 bla=blub bool1 s1="s1value" s2='s2value' s3=false s4="false" 

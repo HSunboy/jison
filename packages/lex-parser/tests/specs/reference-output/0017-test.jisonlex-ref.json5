@@ -39,16 +39,16 @@ to help jison grok more or less complex action code chunks.
 ^...^
 6: 
 7: 
-    at Object.parseError (\lex-parser-cjs-es5.js:4209:13)
-    at Object.lexer_parseError [as parseError] (\lex-parser-cjs-es5.js:5896:44)
-    at Object.yyError [as yyerror] (\lex-parser-cjs-es5.js:5928:19)
-    at Object.lexer__performAction [as performAction] (\lex-parser-cjs-es5.js:7207:17)
-    at Object.lexer_test_match [as test_match] (\lex-parser-cjs-es5.js:6736:34)
-    at Object.lexer_next [as next] (\lex-parser-cjs-es5.js:6842:22)
-    at Object.lexer_fastLex [as fastLex] (\lex-parser-cjs-es5.js:6941:18)
-    at fastLex (\lex-parser-cjs-es5.js:4764:25)
-    at Object.parse (\lex-parser-cjs-es5.js:4885:22)
-    at Object.yyparse [as parse] (\lex-parser-cjs-es5.js:8667:23)
+    at Object.parseError (\lex-parser-cjs-es5.js:4229:13)
+    at Object.lexer_parseError [as parseError] (\lex-parser-cjs-es5.js:6079:44)
+    at Object.yyError [as yyerror] (\lex-parser-cjs-es5.js:6111:19)
+    at Object.lexer__performAction [as performAction] (\lex-parser-cjs-es5.js:7500:17)
+    at Object.lexer_test_match [as test_match] (\lex-parser-cjs-es5.js:6962:34)
+    at Object.lexer_next [as next] (\lex-parser-cjs-es5.js:7072:22)
+    at Object.lexer_fastLex [as fastLex] (\lex-parser-cjs-es5.js:7207:18)
+    at fastLex (\lex-parser-cjs-es5.js:4807:25)
+    at Object.parse (\lex-parser-cjs-es5.js:4942:22)
+    at Object.yyparse [as parse] (\lex-parser-cjs-es5.js:8972:23)
     at Context.testEachParserExample (\all-tests.js:312:19)
     at callFn (\runnable.js:364:21)
     at Test.Runnable.run (\runnable.js:352:5)
@@ -98,7 +98,7 @@ to help jison grok more or less complex action code chunks.
         actionInclude: [],
         options: {},
         __options_flags__: 0,
-        __options_category_description__: '???',
+        __options_category_description__: 'the lexer rules definition section',
         startConditions: {},
         __context_description__: [
           '???CONTEXT???',
@@ -109,12 +109,14 @@ to help jison grok more or less complex action code chunks.
       lexer: {
         yy: {},
         _input: '',
-        yytext: '',
-        yyleng: 0,
-        match: '',
-        matches: false,
-        _more: false,
-        _backtrack: false,
+        _clear_state: -1,
+        _signaled_error_token: false,
+        done: false,
+        yylineno: 0,
+        matched: '',
+        conditionStack: [
+          'INITIAL',
+        ],
         yylloc: {
           first_line: 1,
           first_column: 0,
@@ -125,14 +127,14 @@ to help jison grok more or less complex action code chunks.
             0,
           ],
         },
-        _signaled_error_token: false,
-        done: false,
-        yylineno: 0,
-        matched: '',
-        conditionStack: [
-          'INITIAL',
-        ],
         offset: 0,
+        base_position: 0,
+        yytext: '',
+        yyleng: 0,
+        match: '',
+        matches: false,
+        _more: false,
+        _backtrack: false,
       },
     },
   },

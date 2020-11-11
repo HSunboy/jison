@@ -1,6 +1,6 @@
 [
   {
-    id: 20,
+    id: 19,
     token: '"MACRO_NAME"',
     yytext: 'BR',
     yylloc: {
@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 43,
+    id: 42,
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\r',
     yylloc: {
@@ -30,7 +30,7 @@
     },
   },
   {
-    id: 43,
+    id: 42,
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\n',
     yylloc: {
@@ -60,7 +60,7 @@
     },
   },
   {
-    id: 43,
+    id: 42,
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\n',
     yylloc: {
@@ -90,7 +90,7 @@
     },
   },
   {
-    id: 43,
+    id: 42,
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\r',
     yylloc: {
@@ -105,7 +105,7 @@
     },
   },
   {
-    id: 21,
+    id: 20,
     token: '"MACRO_END"',
     yytext: '',
     yylloc: {
@@ -120,7 +120,7 @@
     },
   },
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -135,7 +135,7 @@
     },
   },
   {
-    id: 45,
+    id: 44,
     token: "macro name in '{...}' curly braces",
     yytext: '{BR}',
     yylloc: {
@@ -150,7 +150,7 @@
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: '%{',
     yylloc: {
@@ -165,7 +165,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: `
 return true;
@@ -182,7 +182,7 @@ return true;
     },
   },
   {
-    id: 24,
+    id: 23,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -197,7 +197,7 @@ return true;
     },
   },
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {

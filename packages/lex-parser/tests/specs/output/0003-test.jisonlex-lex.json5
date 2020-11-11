@@ -1,6 +1,6 @@
 [
   {
-    id: 28,
+    id: 26,
     token: '"UNKNOWN_DECL"',
     yytext: {
       name: 'export',
@@ -18,7 +18,7 @@
     },
   },
   {
-    id: 20,
+    id: 19,
     token: '"MACRO_NAME"',
     yytext: 'D',
     yylloc: {
@@ -33,7 +33,7 @@
     },
   },
   {
-    id: 46,
+    id: 45,
     token: '"REGEX_SET_START"',
     yytext: '[',
     yylloc: {
@@ -48,7 +48,7 @@
     },
   },
   {
-    id: 48,
+    id: 47,
     token: '"REGEX_SET"',
     yytext: '0-9',
     yylloc: {
@@ -63,7 +63,7 @@
     },
   },
   {
-    id: 47,
+    id: 46,
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
@@ -78,7 +78,7 @@
     },
   },
   {
-    id: 21,
+    id: 20,
     token: '"MACRO_END"',
     yytext: '',
     yylloc: {

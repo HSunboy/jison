@@ -218,6 +218,8 @@
 
 
 var lexer = function() {
+  'use strict';
+
   /**
    * See also:
    * http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508
@@ -320,6 +322,7 @@ var lexer = function() {
       input_offset = 0;
     }
   };
+
 
   // Included by Jison: includes/with-includes.main.js:
 

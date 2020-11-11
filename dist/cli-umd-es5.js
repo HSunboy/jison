@@ -3,8 +3,48 @@
 
 "use strict";
 
-function _templateObject157() {
+function _templateObject161() {
   var data = _taggedTemplateLiteral(["\n                    Specify the kind of default action that jison should include for every parser rule.\n\n                    You can specify a mode for *value handling* (\"$$\") and one for *location tracking* (\"@$\"), separated by a comma, e.g.:\n                        --default-action=ast,none\n\n                    Supported value modes:\n                    - classic : generate a parser which includes the default\n                                    $$ = $1;\n                                action for every rule.\n                    - ast     : generate a parser which produces a simple AST-like tree-of-arrays structure: every rule produces an array of its production terms' values. Otherwise it is dentical to \"classic\" mode.\n                    - none    : JISON will produce a slightly faster parser but then you are solely responsible for propagating rule action \"$$\" results. The default rule value is still deterministic though as it is set to \"undefined\": \"$$ = undefined;\"\n                    - skip    : same as \"none\" mode, except JISON does NOT INJECT a default value action ANYWHERE, hence rule results are not deterministic when you do not properly manage the \"$$\" value yourself!\n\n                    Supported location modes:\n                    - merge   : generate a parser which includes the default \"@$ = merged(@1..@n);\" location tracking action for every rule, i.e. the rule's production 'location' is the range spanning its terms.\n                    - classic : same as \"merge\" mode.\n                    - ast     : ditto.\n                    - none    : JISON will produce a slightly faster parser but then you are solely responsible for propagating rule action \"@$\" location results. The default rule location is still deterministic though, as it is set to \"undefined\": \"@$ = undefined;\"\n                    - skip    : same as \"none\" mode, except JISON does NOT INJECT a default location action ANYWHERE, hence rule location results are not deterministic when you do not properly manage the \"@$\" value yourself!\n\n                    Notes:\n                    - when you do specify a value default mode, but DO NOT specify a location value mode, the latter is assumed to be the same as the former. Hence:\n                          --default-action=ast\n                      equals:\n                          --default-action=ast,ast\n                    - when you do not specify an explicit default mode or only a \"true\"/\"1\" value, the default is assumed: \"", "\".\n                    - when you specify \"false\"/\"0\" as an explicit default mode, \"none,none\" is assumed. This produces the fastest deterministic parser.\n                "], ["\n                    Specify the kind of default action that jison should include for every parser rule.\n\n                    You can specify a mode for *value handling* (\"$$\") and one for *location tracking* (\"@$\"), separated by a comma, e.g.:\n                        --default-action=ast,none\n\n                    Supported value modes:\n                    - classic : generate a parser which includes the default\n                                    $$ = $1;\n                                action for every rule.\n                    - ast     : generate a parser which produces a simple AST-like tree-of-arrays structure: every rule produces an array of its production terms' values. Otherwise it is dentical to \"classic\" mode.\n                    - none    : JISON will produce a slightly faster parser but then you are solely responsible for propagating rule action \"$$\" results. The default rule value is still deterministic though as it is set to \"undefined\": \"$$ = undefined;\"\n                    - skip    : same as \"none\" mode, except JISON does NOT INJECT a default value action ANYWHERE, hence rule results are not deterministic when you do not properly manage the \"$$\" value yourself!\n\n                    Supported location modes:\n                    - merge   : generate a parser which includes the default \"@$ = merged(@1..@n);\" location tracking action for every rule, i.e. the rule\\'s production \\'location\\' is the range spanning its terms.\n                    - classic : same as \"merge\" mode.\n                    - ast     : ditto.\n                    - none    : JISON will produce a slightly faster parser but then you are solely responsible for propagating rule action \"@$\" location results. The default rule location is still deterministic though, as it is set to \"undefined\": \"@$ = undefined;\"\n                    - skip    : same as \"none\" mode, except JISON does NOT INJECT a default location action ANYWHERE, hence rule location results are not deterministic when you do not properly manage the \"@$\" value yourself!\n\n                    Notes:\n                    - when you do specify a value default mode, but DO NOT specify a location value mode, the latter is assumed to be the same as the former. Hence:\n                          --default-action=ast\n                      equals:\n                          --default-action=ast,ast\n                    - when you do not specify an explicit default mode or only a \"true\"/\"1\" value, the default is assumed: \"", "\".\n                    - when you specify \"false\"/\"0\" as an explicit default mode, \"none,none\" is assumed. This produces the fastest deterministic parser.\n                "]);
+
+  _templateObject161 = function _templateObject161() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject160() {
+  var data = _taggedTemplateLiteral(["\n        ", "\n\n        var yy__parser = ", ";\n\n        // produce the generated parser function/class as the last value\n        // in this chunk of code so that we can be sure to produce *that*\n        // one as the 'return value' of the `eval()` call we'll submit\n        // this code to.\n        //\n        // See also: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval\n\n        yy__parser;\n    "], ["\n        ", "\n\n        var yy__parser = ", ";\n\n        // produce the generated parser function/class as the last value\n        // in this chunk of code so that we can be sure to produce *that*\n        // one as the 'return value' of the \\`eval()\\` call we'll submit\n        // this code to.\n        //\n        // See also: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval\n\n        yy__parser;\n    "]);
+
+  _templateObject160 = function _templateObject160() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject159() {
+  var data = _taggedTemplateLiteral(["\n\n\n        if (typeof require !== 'undefined' && typeof exports !== 'undefined') {\n          exports.parser = ", ";\n          exports.Parser = ", ".Parser;\n          exports.parse = function () {\n            return ", ".parse.apply(", ", arguments);\n          };\n          ", "\n        }\n        "]);
+
+  _templateObject159 = function _templateObject159() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject158() {
+  var data = _taggedTemplateLiteral(["\n\n            ", "\n\n            exports.main = ", ";\n\n            // IFF this is the main module executed by NodeJS,\n            // then run 'main()' immediately:\n            if (typeof module !== 'undefined' && require.main === module) {\n              exports.main(process.argv.slice(1));\n            }\n        "]);
+
+  _templateObject158 = function _templateObject158() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject157() {
+  var data = _taggedTemplateLiteral(["\n        function Parser() {\n            this.yy = {};\n        }\n        Parser.prototype = parser;\n        parser.Parser = Parser;\n\n        function yyparse() {\n            return parser.parse.apply(parser, arguments);\n        }\n\n        ", "\n\n        export default {\n            parser,\n            Parser,\n            parse: yyparse,\n            ", "\n        };\n    "]);
 
   _templateObject157 = function _templateObject157() {
     return data;
@@ -14,7 +54,7 @@ function _templateObject157() {
 }
 
 function _templateObject156() {
-  var data = _taggedTemplateLiteral(["\n        ", "\n\n        var yy__parser = ", ";\n\n        // produce the generated parser function/class as the last value\n        // in this chunk of code so that we can be sure to produce *that*\n        // one as the 'return value' of the `eval()` call we'll submit\n        // this code to.\n        //\n        // See also: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval\n\n        yy__parser;\n    "], ["\n        ", "\n\n        var yy__parser = ", ";\n\n        // produce the generated parser function/class as the last value\n        // in this chunk of code so that we can be sure to produce *that*\n        // one as the 'return value' of the \\`eval()\\` call we'll submit\n        // this code to.\n        //\n        // See also: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval\n\n        yy__parser;\n    "]);
+  var data = _taggedTemplateLiteral(["\n            // IFF this is the main module executed by NodeJS,\n            // then run 'main()' immediately:\n            if (typeof module !== 'undefined' && require.main === module) {\n              yyExecMain();\n            }\n        "]);
 
   _templateObject156 = function _templateObject156() {
     return data;
@@ -24,7 +64,7 @@ function _templateObject156() {
 }
 
 function _templateObject155() {
-  var data = _taggedTemplateLiteral(["\n\n\n        if (typeof require !== 'undefined' && typeof exports !== 'undefined') {\n          exports.parser = ", ";\n          exports.Parser = ", ".Parser;\n          exports.parse = function () {\n            return ", ".parse.apply(", ", arguments);\n          };\n          ", "\n        }\n        "]);
+  var data = _taggedTemplateLiteral(["\n\n            ", "\n\n            var yymain = ", ";\n\n            function yyExecMain() {\n              yymain(process.argv.slice(1));\n            }\n        "]);
 
   _templateObject155 = function _templateObject155() {
     return data;
@@ -34,7 +74,7 @@ function _templateObject155() {
 }
 
 function _templateObject154() {
-  var data = _taggedTemplateLiteral(["\n\n            ", "\n\n            exports.main = ", ";\n\n            // IFF this is the main module executed by NodeJS,\n            // then run 'main()' immediately:\n            if (typeof module !== 'undefined' && require.main === module) {\n              exports.main(process.argv.slice(1));\n            }\n        "]);
+  var data = _taggedTemplateLiteral(["\n\n                    // START code section \"", "\"\n                    ", "\n                    // END code section \"", "\"\n\n                "]);
 
   _templateObject154 = function _templateObject154() {
     return data;
@@ -44,7 +84,7 @@ function _templateObject154() {
 }
 
 function _templateObject153() {
-  var data = _taggedTemplateLiteral(["\n        function Parser() {\n            this.yy = {};\n        }\n        Parser.prototype = parser;\n        parser.Parser = Parser;\n\n        function yyparse() {\n            return parser.parse.apply(parser, arguments);\n        }\n\n        ", "\n\n        export default {\n            parser,\n            Parser,\n            parse: yyparse,\n            ", "\n        };\n    "]);
+  var data = _taggedTemplateLiteral(["\n            //\n            // JISON says:\n            //\n            // The JISON ", " has been\n            // reproduced here for your convenience:\n            //\n            // ---------------------------- START ---------------------------\n            ", "\n            // ---------------------------- END -----------------------------\n            //\n\n        "]);
 
   _templateObject153 = function _templateObject153() {
     return data;
@@ -54,7 +94,7 @@ function _templateObject153() {
 }
 
 function _templateObject152() {
-  var data = _taggedTemplateLiteral(["\n            // IFF this is the main module executed by NodeJS,\n            // then run 'main()' immediately:\n            if (typeof module !== 'undefined' && require.main === module) {\n              yyExecMain();\n            }\n        "]);
+  var data = _taggedTemplateLiteral(["\n\n                %%\n\n            "]);
 
   _templateObject152 = function _templateObject152() {
     return data;
@@ -64,7 +104,7 @@ function _templateObject152() {
 }
 
 function _templateObject151() {
-  var data = _taggedTemplateLiteral(["\n\n            ", "\n\n            var yymain = ", ";\n\n            function yyExecMain() {\n              yymain(process.argv.slice(1));\n            }\n        "]);
+  var data = _taggedTemplateLiteral(["\n                    //\n                    // JISON says:\n                    //\n                    // This is a EBNF grammar. The resulting **BNF** grammar has been\n                    // reproduced here for your convenience:\n                    //\n                    // ---------------------------- START ---------------------------\n                    ", "\n                    // ---------------------------- END OF BNF grammar --------------\n                    //\n\n\n                "]);
 
   _templateObject151 = function _templateObject151() {
     return data;
@@ -74,7 +114,7 @@ function _templateObject151() {
 }
 
 function _templateObject150() {
-  var data = _taggedTemplateLiteral(["\n\n                    // START code section \"", "\"\n                    ", "\n                    // END code section \"", "\"\n\n                "]);
+  var data = _taggedTemplateLiteral(["\n\n            %%\n\n        "]);
 
   _templateObject150 = function _templateObject150() {
     return data;
@@ -84,7 +124,7 @@ function _templateObject150() {
 }
 
 function _templateObject149() {
-  var data = _taggedTemplateLiteral(["\n            //\n            // JISON says:\n            //\n            // The JISON ", " has been\n            // reproduced here for your convenience:\n            //\n            // ---------------------------- START ---------------------------\n            ", "\n            // ---------------------------- END -----------------------------\n            //\n\n        "]);
+  var data = _taggedTemplateLiteral(["\n            /*\n             * Parser stuff that's unknown to the JISON prettyPrint service:\n             *\n             * ", "\n             */\n            \n        "]);
 
   _templateObject149 = function _templateObject149() {
     return data;
@@ -94,7 +134,7 @@ function _templateObject149() {
 }
 
 function _templateObject148() {
-  var data = _taggedTemplateLiteral(["\n\n                %%\n\n            "]);
+  var data = _taggedTemplateLiteral(["\n            // ============================== START lexer section =========================== \n            \n            %lex\n            \n            ", "\n\n            /lex\n\n            // ============================== END lexer section =============================\n\n        "]);
 
   _templateObject148 = function _templateObject148() {
     return data;
@@ -104,7 +144,7 @@ function _templateObject148() {
 }
 
 function _templateObject147() {
-  var data = _taggedTemplateLiteral(["\n                    //\n                    // JISON says:\n                    //\n                    // This is a EBNF grammar. The resulting **BNF** grammar has been\n                    // reproduced here for your convenience:\n                    //\n                    // ---------------------------- START ---------------------------\n                    ", "\n                    // ---------------------------- END OF BNF grammar --------------\n                    //\n\n\n                "]);
+  var data = _taggedTemplateLiteral(["\n            // END of unknown declarations.\n        "]);
 
   _templateObject147 = function _templateObject147() {
     return data;
@@ -114,7 +154,7 @@ function _templateObject147() {
 }
 
 function _templateObject146() {
-  var data = _taggedTemplateLiteral(["\n\n            %%\n\n        "]);
+  var data = _taggedTemplateLiteral(["\n            // unknown declarations:\n        "]);
 
   _templateObject146 = function _templateObject146() {
     return data;
@@ -124,7 +164,7 @@ function _templateObject146() {
 }
 
 function _templateObject145() {
-  var data = _taggedTemplateLiteral(["\n            /*\n             * Parser stuff that's unknown to the JISON prettyPrint service:\n             *\n             * ", "\n             */\n            \n        "]);
+  var data = _taggedTemplateLiteral(["\n\n                %%\n\n            "]);
 
   _templateObject145 = function _templateObject145() {
     return data;
@@ -134,7 +174,7 @@ function _templateObject145() {
 }
 
 function _templateObject144() {
-  var data = _taggedTemplateLiteral(["\n            // ============================== START lexer section =========================== \n            \n            %lex\n            \n            ", "\n\n            /lex\n\n            // ============================== END lexer section =============================\n\n        "]);
+  var data = _taggedTemplateLiteral(["\n\n            %%\n\n        "]);
 
   _templateObject144 = function _templateObject144() {
     return data;
@@ -144,7 +184,7 @@ function _templateObject144() {
 }
 
 function _templateObject143() {
-  var data = _taggedTemplateLiteral(["\n            // END of unknown declarations.\n        "]);
+  var data = _taggedTemplateLiteral(["\n                /*\n                 * Lexer stuff that's unknown to the JISON prettyPrint service:\n                 *\n                 * ", "\n                 */\n                \n            "]);
 
   _templateObject143 = function _templateObject143() {
     return data;
@@ -154,7 +194,7 @@ function _templateObject143() {
 }
 
 function _templateObject142() {
-  var data = _taggedTemplateLiteral(["\n            // unknown declarations:\n        "]);
+  var data = _taggedTemplateLiteral(["\n                // options:\n            "]);
 
   _templateObject142 = function _templateObject142() {
     return data;
@@ -164,7 +204,7 @@ function _templateObject142() {
 }
 
 function _templateObject141() {
-  var data = _taggedTemplateLiteral(["\n\n                %%\n\n            "]);
+  var data = _taggedTemplateLiteral(["\n                // END of unknown declarations.\n            "]);
 
   _templateObject141 = function _templateObject141() {
     return data;
@@ -174,7 +214,7 @@ function _templateObject141() {
 }
 
 function _templateObject140() {
-  var data = _taggedTemplateLiteral(["\n\n            %%\n\n        "]);
+  var data = _taggedTemplateLiteral(["\n                // unknown declarations:\n            "]);
 
   _templateObject140 = function _templateObject140() {
     return data;
@@ -184,7 +224,7 @@ function _templateObject140() {
 }
 
 function _templateObject139() {
-  var data = _taggedTemplateLiteral(["\n                /*\n                 * Lexer stuff that's unknown to the JISON prettyPrint service:\n                 *\n                 * ", "\n                 */\n                \n            "]);
+  var data = _taggedTemplateLiteral(["\n                // END of the lexer macros.\n            "]);
 
   _templateObject139 = function _templateObject139() {
     return data;
@@ -194,7 +234,7 @@ function _templateObject139() {
 }
 
 function _templateObject138() {
-  var data = _taggedTemplateLiteral(["\n                // options:\n            "]);
+  var data = _taggedTemplateLiteral(["\n                // macros:\n            "]);
 
   _templateObject138 = function _templateObject138() {
     return data;
@@ -204,7 +244,7 @@ function _templateObject138() {
 }
 
 function _templateObject137() {
-  var data = _taggedTemplateLiteral(["\n                // END of unknown declarations.\n            "]);
+  var data = _taggedTemplateLiteral(["\n                                                unsupported parser input: ", "\n                                                while lexing in ", " state.\n                                                \n                                                  Erroneous area:\n                                                "]);
 
   _templateObject137 = function _templateObject137() {
     return data;
@@ -214,7 +254,7 @@ function _templateObject137() {
 }
 
 function _templateObject136() {
-  var data = _taggedTemplateLiteral(["\n                // unknown declarations:\n            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant  encountered while lexing\n                                            ", ".\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject136 = function _templateObject136() {
     return data;
@@ -224,7 +264,7 @@ function _templateObject136() {
 }
 
 function _templateObject135() {
-  var data = _taggedTemplateLiteral(["\n                // END of the lexer macros.\n            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant  encountered while lexing\n                                            ", ".\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject135 = function _templateObject135() {
     return data;
@@ -234,7 +274,7 @@ function _templateObject135() {
 }
 
 function _templateObject134() {
-  var data = _taggedTemplateLiteral(["\n                // macros:\n            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant  encountered while lexing\n                                            ", ".\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject134 = function _templateObject134() {
     return data;
@@ -244,7 +284,7 @@ function _templateObject134() {
 }
 
 function _templateObject133() {
-  var data = _taggedTemplateLiteral(["\n                                                unsupported parser input: ", "\n                                                while lexing in ", " state.\n                                                \n                                                  Erroneous area:\n                                                "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in %options entry.\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject133 = function _templateObject133() {
     return data;
@@ -254,7 +294,7 @@ function _templateObject133() {
 }
 
 function _templateObject132() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant  encountered while lexing\n                                            ", ".\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in %options entry.\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject132 = function _templateObject132() {
     return data;
@@ -264,7 +304,7 @@ function _templateObject132() {
 }
 
 function _templateObject131() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant  encountered while lexing\n                                            ", ".\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in %options entry.\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject131 = function _templateObject131() {
     return data;
@@ -274,7 +314,7 @@ function _templateObject131() {
 }
 
 function _templateObject130() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant  encountered while lexing\n                                            ", ".\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in lexer rule action block.\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject130 = function _templateObject130() {
     return data;
@@ -284,7 +324,7 @@ function _templateObject130() {
 }
 
 function _templateObject129() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in %options entry.\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in lexer rule action block.\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject129 = function _templateObject129() {
     return data;
@@ -294,7 +334,7 @@ function _templateObject129() {
 }
 
 function _templateObject128() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in %options entry.\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in lexer rule action block.\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject128 = function _templateObject128() {
     return data;
@@ -304,7 +344,7 @@ function _templateObject128() {
 }
 
 function _templateObject127() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in %options entry.\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                                EBNF: ignoring unsupported parser option ", "\n                                                while lexing in ", " state.\n\n                                                  Erroneous area:\n                                                "]);
 
   _templateObject127 = function _templateObject127() {
     return data;
@@ -314,7 +354,7 @@ function _templateObject127() {
 }
 
 function _templateObject126() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in lexer rule action block.\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n        module code declaration error?\n    \n          Erroneous area:\n        "]);
 
   _templateObject126 = function _templateObject126() {
     return data;
@@ -324,7 +364,7 @@ function _templateObject126() {
 }
 
 function _templateObject125() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in lexer rule action block.\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n    %include MUST be followed by a valid file path.\n    \n      Erroneous path:\n    "]);
 
   _templateObject125 = function _templateObject125() {
     return data;
@@ -334,7 +374,7 @@ function _templateObject125() {
 }
 
 function _templateObject124() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in lexer rule action block.\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n            included action code file \"", "\" does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject124 = function _templateObject124() {
     return data;
@@ -344,7 +384,7 @@ function _templateObject124() {
 }
 
 function _templateObject123() {
-  var data = _taggedTemplateLiteral(["\n                                                EBNF: ignoring unsupported parser option ", "\n                                                while lexing in ", " state.\n\n                                                  Erroneous area:\n                                                "]);
+  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly match curly braces '{ ... }' in a parser rule action block.\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject123 = function _templateObject123() {
     return data;
@@ -354,7 +394,7 @@ function _templateObject123() {
 }
 
 function _templateObject122() {
-  var data = _taggedTemplateLiteral(["\n        module code declaration error?\n    \n          Erroneous area:\n        "]);
+  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly bracket a parser rule action block in curly braces: '{ ... }'.\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject122 = function _templateObject122() {
     return data;
@@ -364,7 +404,7 @@ function _templateObject122() {
 }
 
 function _templateObject121() {
-  var data = _taggedTemplateLiteral(["\n    %include MUST be followed by a valid file path.\n    \n      Erroneous path:\n    "]);
+  var data = _taggedTemplateLiteral(["\n        %prec precedence override declaration error?\n    \n          Erroneous precedence declaration:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject121 = function _templateObject121() {
     return data;
@@ -374,7 +414,7 @@ function _templateObject121() {
 }
 
 function _templateObject120() {
-  var data = _taggedTemplateLiteral(["\n            included action code file \"", "\" does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly bracket a grammar rule sublist in '( ... )' brackets.\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject120 = function _templateObject120() {
     return data;
@@ -384,7 +424,7 @@ function _templateObject120() {
 }
 
 function _templateObject119() {
-  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly match curly braces '{ ... }' in a parser rule action block.\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        %epsilon rule action declaration error?\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject119 = function _templateObject119() {
     return data;
@@ -394,7 +434,7 @@ function _templateObject119() {
 }
 
 function _templateObject118() {
-  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly bracket a parser rule action block in curly braces: '{ ... }'.\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n                epsilon production rule action code block does not compile: ", "\n    \n                  Erroneous area:\n                ", "\n            "]);
 
   _templateObject118 = function _templateObject118() {
     return data;
@@ -404,7 +444,7 @@ function _templateObject118() {
 }
 
 function _templateObject117() {
-  var data = _taggedTemplateLiteral(["\n        %prec precedence override declaration error?\n    \n          Erroneous precedence declaration:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n                You cannot specify a precedence override for an epsilon (a.k.a. empty) rule!\n    \n                  Erroneous area:\n                ", "\n            "]);
 
   _templateObject117 = function _templateObject117() {
     return data;
@@ -414,7 +454,7 @@ function _templateObject117() {
 }
 
 function _templateObject116() {
-  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly bracket a grammar rule sublist in '( ... )' brackets.\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n                production rule action code block does not compile: ", "\n    \n                  Erroneous area:\n                ", "\n            "]);
 
   _templateObject116 = function _templateObject116() {
     return data;
@@ -424,7 +464,7 @@ function _templateObject116() {
 }
 
 function _templateObject115() {
-  var data = _taggedTemplateLiteral(["\n        %epsilon rule action declaration error?\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        multiple alternative rule productions should be separated by a '|' pipe character, not a ':' colon!\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject115 = function _templateObject115() {
     return data;
@@ -434,7 +474,7 @@ function _templateObject115() {
 }
 
 function _templateObject114() {
-  var data = _taggedTemplateLiteral(["\n                epsilon production rule action code block does not compile: ", "\n    \n                  Erroneous area:\n                ", "\n            "]);
+  var data = _taggedTemplateLiteral(["\n        rule alternative production declaration error?\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject114 = function _templateObject114() {
     return data;
@@ -444,7 +484,7 @@ function _templateObject114() {
 }
 
 function _templateObject113() {
-  var data = _taggedTemplateLiteral(["\n                You cannot specify a precedence override for an epsilon (a.k.a. empty) rule!\n    \n                  Erroneous area:\n                ", "\n            "]);
+  var data = _taggedTemplateLiteral(["\n        rule id should be followed by a colon, but that one seems missing?\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject113 = function _templateObject113() {
     return data;
@@ -454,7 +494,7 @@ function _templateObject113() {
 }
 
 function _templateObject112() {
-  var data = _taggedTemplateLiteral(["\n                production rule action code block does not compile: ", "\n    \n                  Erroneous area:\n                ", "\n            "]);
+  var data = _taggedTemplateLiteral(["\n        rule production declaration error: did you terminate the rule production set with a semicolon?\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject112 = function _templateObject112() {
     return data;
@@ -464,7 +504,7 @@ function _templateObject112() {
 }
 
 function _templateObject111() {
-  var data = _taggedTemplateLiteral(["\n        multiple alternative rule productions should be separated by a '|' pipe character, not a ':' colon!\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        rule production declaration error?\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject111 = function _templateObject111() {
     return data;
@@ -474,7 +514,7 @@ function _templateObject111() {
 }
 
 function _templateObject110() {
-  var data = _taggedTemplateLiteral(["\n        rule alternative production declaration error?\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        operator token list error in an associativity statement?\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject110 = function _templateObject110() {
     return data;
@@ -484,7 +524,7 @@ function _templateObject110() {
 }
 
 function _templateObject109() {
-  var data = _taggedTemplateLiteral(["\n        rule id should be followed by a colon, but that one seems missing?\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        %parser-type declaration error?\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject109 = function _templateObject109() {
     return data;
@@ -494,7 +534,7 @@ function _templateObject109() {
 }
 
 function _templateObject108() {
-  var data = _taggedTemplateLiteral(["\n        rule production declaration error: did you terminate the rule production set with a semicolon?\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        %parse-params declaration error?\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject108 = function _templateObject108() {
     return data;
@@ -504,7 +544,7 @@ function _templateObject108() {
 }
 
 function _templateObject107() {
-  var data = _taggedTemplateLiteral(["\n        rule production declaration error?\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        named %option value assignment error?\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject107 = function _templateObject107() {
     return data;
@@ -514,7 +554,7 @@ function _templateObject107() {
 }
 
 function _templateObject106() {
-  var data = _taggedTemplateLiteral(["\n        operator token list error in an associativity statement?\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        named %option value error for ", "?\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject106 = function _templateObject106() {
     return data;
@@ -524,7 +564,7 @@ function _templateObject106() {
 }
 
 function _templateObject105() {
-  var data = _taggedTemplateLiteral(["\n        %parser-type declaration error?\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        %options don't seem terminated?\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject105 = function _templateObject105() {
     return data;
@@ -534,7 +574,7 @@ function _templateObject105() {
 }
 
 function _templateObject104() {
-  var data = _taggedTemplateLiteral(["\n        %parse-params declaration error?\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        %options ill defined / error?\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject104 = function _templateObject104() {
     return data;
@@ -544,7 +584,7 @@ function _templateObject104() {
 }
 
 function _templateObject103() {
-  var data = _taggedTemplateLiteral(["\n        named %option value assignment error?\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        %import name or source filename missing maybe?\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject103 = function _templateObject103() {
     return data;
@@ -554,7 +594,7 @@ function _templateObject103() {
 }
 
 function _templateObject102() {
-  var data = _taggedTemplateLiteral(["\n        named %option value error for ", "?\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        %token definition list error?\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject102 = function _templateObject102() {
     return data;
@@ -564,7 +604,7 @@ function _templateObject102() {
 }
 
 function _templateObject101() {
-  var data = _taggedTemplateLiteral(["\n        %options don't seem terminated?\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        %start token error?\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject101 = function _templateObject101() {
     return data;
@@ -574,7 +614,7 @@ function _templateObject101() {
 }
 
 function _templateObject100() {
-  var data = _taggedTemplateLiteral(["\n        %options ill defined / error?\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        Each '%code' initialization code section must be qualified by a name, e.g. 'required' before the action code itself:\n    \n            %code qualifier_name {action code}\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject100 = function _templateObject100() {
     return data;
@@ -584,7 +624,7 @@ function _templateObject100() {
 }
 
 function _templateObject99() {
-  var data = _taggedTemplateLiteral(["\n        %import name or source filename missing maybe?\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n            %code \"", "\" initialization section action code block does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject99 = function _templateObject99() {
     return data;
@@ -594,7 +634,7 @@ function _templateObject99() {
 }
 
 function _templateObject98() {
-  var data = _taggedTemplateLiteral(["\n        %token definition list error?\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        Each '%import'-ed initialization code section must be qualified by a name, e.g. 'required' before the import path itself:\n    \n            %import qualifier_name file_path\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject98 = function _templateObject98() {
     return data;
@@ -604,7 +644,7 @@ function _templateObject98() {
 }
 
 function _templateObject97() {
-  var data = _taggedTemplateLiteral(["\n        %start token error?\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        You did not specify a legal file path for the '%import' initialization code statement, which must have the format:\n    \n            %import qualifier_name file_path\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject97 = function _templateObject97() {
     return data;
@@ -614,7 +654,7 @@ function _templateObject97() {
 }
 
 function _templateObject96() {
-  var data = _taggedTemplateLiteral(["\n        Each '%code' initialization code section must be qualified by a name, e.g. 'required' before the action code itself:\n    \n            %code qualifier_name {action code}\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n            action header code block does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject96 = function _templateObject96() {
     return data;
@@ -624,7 +664,7 @@ function _templateObject96() {
 }
 
 function _templateObject95() {
-  var data = _taggedTemplateLiteral(["\n            %code \"", "\" initialization section action code block does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n            action code block does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject95 = function _templateObject95() {
     return data;
@@ -634,7 +674,7 @@ function _templateObject95() {
 }
 
 function _templateObject94() {
-  var data = _taggedTemplateLiteral(["\n        Each '%import'-ed initialization code section must be qualified by a name, e.g. 'required' before the import path itself:\n    \n            %import qualifier_name file_path\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        declaration list error?\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject94 = function _templateObject94() {
     return data;
@@ -644,7 +684,7 @@ function _templateObject94() {
 }
 
 function _templateObject93() {
-  var data = _taggedTemplateLiteral(["\n        You did not specify a legal file path for the '%import' initialization code statement, which must have the format:\n    \n            %import qualifier_name file_path\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n            action header code block does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject93 = function _templateObject93() {
     return data;
@@ -654,7 +694,7 @@ function _templateObject93() {
 }
 
 function _templateObject92() {
-  var data = _taggedTemplateLiteral(["\n            action header code block does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n            The extra parser module code section (a.k.a. 'epilogue') does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject92 = function _templateObject92() {
     return data;
@@ -664,7 +704,7 @@ function _templateObject92() {
 }
 
 function _templateObject91() {
-  var data = _taggedTemplateLiteral(["\n            action code block does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n        Maybe you did not correctly separate the parse 'header section' (token definitions, options, lexer spec, etc.) from the grammar rule set with a '%%' on an otherwise empty line?\n    \n          Erroneous area:\n        ", "\n    "]);
 
   _templateObject91 = function _templateObject91() {
     return data;
@@ -674,7 +714,7 @@ function _templateObject91() {
 }
 
 function _templateObject90() {
-  var data = _taggedTemplateLiteral(["\n        declaration list error?\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        illegal input in the parser grammar productions definition section.\n    \n        Maybe you did not correctly separate trailing code from the grammar rule set with a '%%' marker on an otherwise empty line?\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject90 = function _templateObject90() {
     return data;
@@ -684,7 +724,7 @@ function _templateObject90() {
 }
 
 function _templateObject89() {
-  var data = _taggedTemplateLiteral(["\n            action header code block does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n        ", "\n\n        var ", " = (function () {\n            \"use strict\";\n\n            ", "\n\n            ", "\n\n            ", "\n\n            return lexer;\n        })();\n\n        if (typeof require !== 'undefined' && typeof exports !== 'undefined') {\n            exports.lexer = ", ";\n            exports.lex = function () {\n                return ", ".lex.apply(lexer, arguments);\n            };\n        }\n    "]);
 
   _templateObject89 = function _templateObject89() {
     return data;
@@ -694,7 +734,7 @@ function _templateObject89() {
 }
 
 function _templateObject88() {
-  var data = _taggedTemplateLiteral(["\n            The extra parser module code section (a.k.a. 'epilogue') does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n        ", "\n\n        var lexer = (function () {\n            \"use strict\";\n\n            ", "\n\n            ", "\n\n            ", "\n\n            return lexer;\n        })();\n\n        function yylex() {\n            return lexer.lex.apply(lexer, arguments);\n        }\n\n        export {\n            lexer,\n            yylex as lex\n        };\n    "]);
 
   _templateObject88 = function _templateObject88() {
     return data;
@@ -704,7 +744,7 @@ function _templateObject88() {
 }
 
 function _templateObject87() {
-  var data = _taggedTemplateLiteral(["\n        Maybe you did not correctly separate the parse 'header section' (token definitions, options, lexer spec, etc.) from the grammar rule set with a '%%' on an otherwise empty line?\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        ", "\n\n        define([], function () {\n            \"use strict\";\n\n            ", "\n\n            ", "\n\n            ", "\n\n            return lexer;\n        });\n    "]);
 
   _templateObject87 = function _templateObject87() {
     return data;
@@ -714,7 +754,7 @@ function _templateObject87() {
 }
 
 function _templateObject86() {
-  var data = _taggedTemplateLiteral(["\n        illegal input in the parser grammar productions definition section.\n    \n        Maybe you did not correctly separate trailing code from the grammar rule set with a '%%' marker on an otherwise empty line?\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        ", "\n\n        var ", " = (function () {\n            \"use strict\";\n\n            ", "\n\n            ", "\n\n            ", "\n\n            return lexer;\n        })();\n    "]);
 
   _templateObject86 = function _templateObject86() {
     return data;
@@ -724,7 +764,7 @@ function _templateObject86() {
 }
 
 function _templateObject85() {
-  var data = _taggedTemplateLiteral(["\n            export {\n                lexer,\n                yylex as lex\n            };\n        "]);
+  var data = _taggedTemplateLiteral(["\n    /* lexer generated by jison-lex ", " */\n\n    /*\n     * Returns a Lexer object of the following structure:\n     *\n     *  Lexer: {\n     *    yy: {}     The so-called \"shared state\" or rather the *source* of it;\n     *               the real \"shared state\" `yy` passed around to\n     *               the rule actions, etc. is a direct reference!\n     *\n     *               This \"shared context\" object was passed to the lexer by way of\n     *               the `lexer.setInput(str, yy)` API before you may use it.\n     *\n     *               This \"shared context\" object is passed to the lexer action code in `performAction()`\n     *               so userland code in the lexer actions may communicate with the outside world\n     *               and/or other lexer rules' actions in more or less complex ways.\n     *\n     *  }\n     *\n     *  Lexer.prototype: {\n     *    EOF: 1,\n     *    ERROR: 2,\n     *\n     *    yy:        The overall \"shared context\" object reference.\n     *\n     *    JisonLexerError: function(msg, hash),\n     *\n     *    performAction: function lexer__performAction(yy, yyrulenumber, YY_START),\n     *\n     *               The function parameters and `this` have the following value/meaning:\n     *               - `this`    : reference to the `lexer` instance.\n     *                               `yy_` is an alias for `this` lexer instance reference used internally.\n     *\n     *               - `yy`      : a reference to the `yy` \"shared state\" object which was passed to the lexer\n     *                             by way of the `lexer.setInput(str, yy)` API before.\n     *\n     *                             Note:\n     *                             The extra arguments you specified in the `%parse-param` statement in your\n     *                             **parser** grammar definition file are passed to the lexer via this object\n     *                             reference as member variables.\n     *\n     *               - `yyrulenumber`   : index of the matched lexer rule (regex), used internally.\n     *\n     *               - `YY_START`: the current lexer \"start condition\" state.\n     *\n     *    parseError: function(str, hash, ExceptionClass),\n     *\n     *    constructLexErrorInfo: function(error_message, is_recoverable),\n     *               Helper function.\n     *               Produces a new errorInfo 'hash object' which can be passed into `parseError()`.\n     *               See it's use in this lexer kernel in many places; example usage:\n     *\n     *                   var infoObj = lexer.constructParseErrorInfo('fail!', true);\n     *                   var retVal = lexer.parseError(infoObj.errStr, infoObj, lexer.JisonLexerError);\n     *\n     *    options: { ... lexer %options ... },\n     *\n     *    lex: function(),\n     *               Produce one token of lexed input, which was passed in earlier via the `lexer.setInput()` API.\n     *               You MAY use the additional `args...` parameters as per `%parse-param` spec of the **lexer** grammar:\n     *               these extra `args...` are added verbatim to the `yy` object reference as member variables.\n     *\n     *               WARNING:\n     *               Lexer's additional `args...` parameters (via lexer's `%parse-param`) MAY conflict with\n     *               any attributes already added to `yy` by the **parser** or the jison run-time;\n     *               when such a collision is detected an exception is thrown to prevent the generated run-time\n     *               from silently accepting this confusing and potentially hazardous situation!\n     *\n     *    cleanupAfterLex: function(do_not_nuke_errorinfos),\n     *               Helper function.\n     *\n     *               This helper API is invoked when the **parse process** has completed: it is the responsibility\n     *               of the **parser** (or the calling userland code) to invoke this method once cleanup is desired.\n     *\n     *               This helper may be invoked by user code to ensure the internal lexer gets properly garbage collected.\n     *\n     *    setInput: function(input, [yy]),\n     *\n     *\n     *    input: function(),\n     *\n     *\n     *    unput: function(str),\n     *\n     *\n     *    more: function(),\n     *\n     *\n     *    reject: function(),\n     *\n     *\n     *    less: function(n),\n     *\n     *\n     *    pastInput: function(n),\n     *\n     *\n     *    upcomingInput: function(n),\n     *\n     *\n     *    showPosition: function(),\n     *\n     *\n     *    test_match: function(regex_match_array, rule_index),\n     *\n     *\n     *    next: function(),\n     *\n     *\n     *    begin: function(condition),\n     *\n     *\n     *    pushState: function(condition),\n     *\n     *\n     *    popState: function(),\n     *\n     *\n     *    topState: function(),\n     *\n     *\n     *    _currentRules: function(),\n     *\n     *\n     *    stateStackSize: function(),\n     *\n     *\n     *    performAction: function(yy, yy_, yyrulenumber, YY_START),\n     *\n     *\n     *    rules: [...],\n     *\n     *\n     *    conditions: {associative list: name ==> set},\n     *  }\n     *\n     *\n     *  token location info (`yylloc`): {\n     *    first_line: n,\n     *    last_line: n,\n     *    first_column: n,\n     *    last_column: n,\n     *    range: [start_number, end_number]\n     *               (where the numbers are indexes into the input string, zero-based)\n     *  }\n     *\n     * ---\n     *\n     * The `parseError` function receives a 'hash' object with these members for lexer errors:\n     *\n     *  {\n     *    text:        (matched text)\n     *    token:       (the produced terminal token, if any)\n     *    token_id:    (the produced terminal token numeric ID, if any)\n     *    line:        (yylineno)\n     *    loc:         (yylloc)\n     *    recoverable: (boolean: TRUE when the parser MAY have an error recovery rule\n     *                  available for this particular error)\n     *    yy:          (object: the current parser internal \"shared state\" `yy`\n     *                  as is also available in the rule actions; this can be used,\n     *                  for instance, for advanced error analysis and reporting)\n     *    lexer:       (reference to the current lexer instance used by the parser)\n     *  }\n     *\n     * while `this` will reference the current lexer instance.\n     *\n     * When `parseError` is invoked by the lexer, the default implementation will\n     * attempt to invoke `yy.parser.parseError()`; when this callback is not provided\n     * it will try to invoke `yy.parseError()` instead. When that callback is also not\n     * provided, a `JisonLexerError` exception will be thrown containing the error\n     * message and `hash`, as constructed by the `constructLexErrorInfo()` API.\n     *\n     * Note that the lexer's `JisonLexerError` error class is passed via the\n     * `ExceptionClass` argument, which is invoked to construct the exception\n     * instance to be thrown, so technically `parseError` will throw the object\n     * produced by the `new ExceptionClass(str, hash)` JavaScript expression.\n     *\n     * ---\n     *\n     * You can specify lexer options by setting / modifying the `.options` object of your Lexer instance.\n     * These options are available:\n     *\n     * (Options are permanent.)\n     *\n     *  yy: {\n     *      parseError: function(str, hash, ExceptionClass)\n     *                 optional: overrides the default `parseError` function.\n     *  }\n     *\n     *  lexer.options: {\n     *      pre_lex:  function()\n     *                 optional: is invoked before the lexer is invoked to produce another token.\n     *                 `this` refers to the Lexer object.\n     *      post_lex: function(token) { return token; }\n     *                 optional: is invoked when the lexer has produced a token `token`;\n     *                 this function can override the returned token value by returning another.\n     *                 When it does not return any (truthy) value, the lexer will return\n     *                 the original `token`.\n     *                 `this` refers to the Lexer object.\n     *\n     * WARNING: the next set of options are not meant to be changed. They echo the abilities of\n     * the lexer as per when it was compiled!\n     *\n     *      ranges: boolean\n     *                 optional: `true` ==> token location info will include a .range[] member.\n     *      flex: boolean\n     *                 optional: `true` ==> flex-like lexing behaviour where the rules are tested\n     *                 exhaustively to find the longest match.\n     *      backtrack_lexer: boolean\n     *                 optional: `true` ==> lexer regexes are tested in order and for invoked;\n     *                 the lexer terminates the scan when a token is returned by the action code.\n     *      xregexp: boolean\n     *                 optional: `true` ==> lexer rule regexes are \"extended regex format\" requiring the\n     *                 `XRegExp` library. When this %option has not been specified at compile time, all lexer\n     *                 rule regexes have been written as standard JavaScript RegExp expressions.\n     *  }\n     */\n     "], ["\n    /* lexer generated by jison-lex ", " */\n\n    /*\n     * Returns a Lexer object of the following structure:\n     *\n     *  Lexer: {\n     *    yy: {}     The so-called \"shared state\" or rather the *source* of it;\n     *               the real \"shared state\" \\`yy\\` passed around to\n     *               the rule actions, etc. is a direct reference!\n     *\n     *               This \"shared context\" object was passed to the lexer by way of\n     *               the \\`lexer.setInput(str, yy)\\` API before you may use it.\n     *\n     *               This \"shared context\" object is passed to the lexer action code in \\`performAction()\\`\n     *               so userland code in the lexer actions may communicate with the outside world\n     *               and/or other lexer rules' actions in more or less complex ways.\n     *\n     *  }\n     *\n     *  Lexer.prototype: {\n     *    EOF: 1,\n     *    ERROR: 2,\n     *\n     *    yy:        The overall \"shared context\" object reference.\n     *\n     *    JisonLexerError: function(msg, hash),\n     *\n     *    performAction: function lexer__performAction(yy, yyrulenumber, YY_START),\n     *\n     *               The function parameters and \\`this\\` have the following value/meaning:\n     *               - \\`this\\`    : reference to the \\`lexer\\` instance.\n     *                               \\`yy_\\` is an alias for \\`this\\` lexer instance reference used internally.\n     *\n     *               - \\`yy\\`      : a reference to the \\`yy\\` \"shared state\" object which was passed to the lexer\n     *                             by way of the \\`lexer.setInput(str, yy)\\` API before.\n     *\n     *                             Note:\n     *                             The extra arguments you specified in the \\`%parse-param\\` statement in your\n     *                             **parser** grammar definition file are passed to the lexer via this object\n     *                             reference as member variables.\n     *\n     *               - \\`yyrulenumber\\`   : index of the matched lexer rule (regex), used internally.\n     *\n     *               - \\`YY_START\\`: the current lexer \"start condition\" state.\n     *\n     *    parseError: function(str, hash, ExceptionClass),\n     *\n     *    constructLexErrorInfo: function(error_message, is_recoverable),\n     *               Helper function.\n     *               Produces a new errorInfo \\'hash object\\' which can be passed into \\`parseError()\\`.\n     *               See it\\'s use in this lexer kernel in many places; example usage:\n     *\n     *                   var infoObj = lexer.constructParseErrorInfo(\\'fail!\\', true);\n     *                   var retVal = lexer.parseError(infoObj.errStr, infoObj, lexer.JisonLexerError);\n     *\n     *    options: { ... lexer %options ... },\n     *\n     *    lex: function(),\n     *               Produce one token of lexed input, which was passed in earlier via the \\`lexer.setInput()\\` API.\n     *               You MAY use the additional \\`args...\\` parameters as per \\`%parse-param\\` spec of the **lexer** grammar:\n     *               these extra \\`args...\\` are added verbatim to the \\`yy\\` object reference as member variables.\n     *\n     *               WARNING:\n     *               Lexer's additional \\`args...\\` parameters (via lexer's \\`%parse-param\\`) MAY conflict with\n     *               any attributes already added to \\`yy\\` by the **parser** or the jison run-time;\n     *               when such a collision is detected an exception is thrown to prevent the generated run-time\n     *               from silently accepting this confusing and potentially hazardous situation!\n     *\n     *    cleanupAfterLex: function(do_not_nuke_errorinfos),\n     *               Helper function.\n     *\n     *               This helper API is invoked when the **parse process** has completed: it is the responsibility\n     *               of the **parser** (or the calling userland code) to invoke this method once cleanup is desired.\n     *\n     *               This helper may be invoked by user code to ensure the internal lexer gets properly garbage collected.\n     *\n     *    setInput: function(input, [yy]),\n     *\n     *\n     *    input: function(),\n     *\n     *\n     *    unput: function(str),\n     *\n     *\n     *    more: function(),\n     *\n     *\n     *    reject: function(),\n     *\n     *\n     *    less: function(n),\n     *\n     *\n     *    pastInput: function(n),\n     *\n     *\n     *    upcomingInput: function(n),\n     *\n     *\n     *    showPosition: function(),\n     *\n     *\n     *    test_match: function(regex_match_array, rule_index),\n     *\n     *\n     *    next: function(),\n     *\n     *\n     *    begin: function(condition),\n     *\n     *\n     *    pushState: function(condition),\n     *\n     *\n     *    popState: function(),\n     *\n     *\n     *    topState: function(),\n     *\n     *\n     *    _currentRules: function(),\n     *\n     *\n     *    stateStackSize: function(),\n     *\n     *\n     *    performAction: function(yy, yy_, yyrulenumber, YY_START),\n     *\n     *\n     *    rules: [...],\n     *\n     *\n     *    conditions: {associative list: name ==> set},\n     *  }\n     *\n     *\n     *  token location info (\\`yylloc\\`): {\n     *    first_line: n,\n     *    last_line: n,\n     *    first_column: n,\n     *    last_column: n,\n     *    range: [start_number, end_number]\n     *               (where the numbers are indexes into the input string, zero-based)\n     *  }\n     *\n     * ---\n     *\n     * The \\`parseError\\` function receives a \\'hash\\' object with these members for lexer errors:\n     *\n     *  {\n     *    text:        (matched text)\n     *    token:       (the produced terminal token, if any)\n     *    token_id:    (the produced terminal token numeric ID, if any)\n     *    line:        (yylineno)\n     *    loc:         (yylloc)\n     *    recoverable: (boolean: TRUE when the parser MAY have an error recovery rule\n     *                  available for this particular error)\n     *    yy:          (object: the current parser internal \"shared state\" \\`yy\\`\n     *                  as is also available in the rule actions; this can be used,\n     *                  for instance, for advanced error analysis and reporting)\n     *    lexer:       (reference to the current lexer instance used by the parser)\n     *  }\n     *\n     * while \\`this\\` will reference the current lexer instance.\n     *\n     * When \\`parseError\\` is invoked by the lexer, the default implementation will\n     * attempt to invoke \\`yy.parser.parseError()\\`; when this callback is not provided\n     * it will try to invoke \\`yy.parseError()\\` instead. When that callback is also not\n     * provided, a \\`JisonLexerError\\` exception will be thrown containing the error\n     * message and \\`hash\\`, as constructed by the \\`constructLexErrorInfo()\\` API.\n     *\n     * Note that the lexer\\'s \\`JisonLexerError\\` error class is passed via the\n     * \\`ExceptionClass\\` argument, which is invoked to construct the exception\n     * instance to be thrown, so technically \\`parseError\\` will throw the object\n     * produced by the \\`new ExceptionClass(str, hash)\\` JavaScript expression.\n     *\n     * ---\n     *\n     * You can specify lexer options by setting / modifying the \\`.options\\` object of your Lexer instance.\n     * These options are available:\n     *\n     * (Options are permanent.)\n     *\n     *  yy: {\n     *      parseError: function(str, hash, ExceptionClass)\n     *                 optional: overrides the default \\`parseError\\` function.\n     *  }\n     *\n     *  lexer.options: {\n     *      pre_lex:  function()\n     *                 optional: is invoked before the lexer is invoked to produce another token.\n     *                 \\`this\\` refers to the Lexer object.\n     *      post_lex: function(token) { return token; }\n     *                 optional: is invoked when the lexer has produced a token \\`token\\`;\n     *                 this function can override the returned token value by returning another.\n     *                 When it does not return any (truthy) value, the lexer will return\n     *                 the original \\`token\\`.\n     *                 \\`this\\` refers to the Lexer object.\n     *\n     * WARNING: the next set of options are not meant to be changed. They echo the abilities of\n     * the lexer as per when it was compiled!\n     *\n     *      ranges: boolean\n     *                 optional: \\`true\\` ==> token location info will include a .range[] member.\n     *      flex: boolean\n     *                 optional: \\`true\\` ==> flex-like lexing behaviour where the rules are tested\n     *                 exhaustively to find the longest match.\n     *      backtrack_lexer: boolean\n     *                 optional: \\`true\\` ==> lexer regexes are tested in order and for invoked;\n     *                 the lexer terminates the scan when a token is returned by the action code.\n     *      xregexp: boolean\n     *                 optional: \\`true\\` ==> lexer rule regexes are \"extended regex format\" requiring the\n     *                 \\`XRegExp\\` library. When this %option has not been specified at compile time, all lexer\n     *                 rule regexes have been written as standard JavaScript RegExp expressions.\n     *  }\n     */\n     "]);
 
   _templateObject85 = function _templateObject85() {
     return data;
@@ -734,7 +774,7 @@ function _templateObject85() {
 }
 
 function _templateObject84() {
-  var data = _taggedTemplateLiteral(["\n    /* lexer generated by jison-lex ", " */\n\n    /*\n     * Returns a Lexer object of the following structure:\n     *\n     *  Lexer: {\n     *    yy: {}     The so-called \"shared state\" or rather the *source* of it;\n     *               the real \"shared state\" `yy` passed around to\n     *               the rule actions, etc. is a direct reference!\n     *\n     *               This \"shared context\" object was passed to the lexer by way of\n     *               the `lexer.setInput(str, yy)` API before you may use it.\n     *\n     *               This \"shared context\" object is passed to the lexer action code in `performAction()`\n     *               so userland code in the lexer actions may communicate with the outside world\n     *               and/or other lexer rules' actions in more or less complex ways.\n     *\n     *  }\n     *\n     *  Lexer.prototype: {\n     *    EOF: 1,\n     *    ERROR: 2,\n     *\n     *    yy:        The overall \"shared context\" object reference.\n     *\n     *    JisonLexerError: function(msg, hash),\n     *\n     *    performAction: function lexer__performAction(yy, yyrulenumber, YY_START),\n     *\n     *               The function parameters and `this` have the following value/meaning:\n     *               - `this`    : reference to the `lexer` instance.\n     *                               `yy_` is an alias for `this` lexer instance reference used internally.\n     *\n     *               - `yy`      : a reference to the `yy` \"shared state\" object which was passed to the lexer\n     *                             by way of the `lexer.setInput(str, yy)` API before.\n     *\n     *                             Note:\n     *                             The extra arguments you specified in the `%parse-param` statement in your\n     *                             **parser** grammar definition file are passed to the lexer via this object\n     *                             reference as member variables.\n     *\n     *               - `yyrulenumber`   : index of the matched lexer rule (regex), used internally.\n     *\n     *               - `YY_START`: the current lexer \"start condition\" state.\n     *\n     *    parseError: function(str, hash, ExceptionClass),\n     *\n     *    constructLexErrorInfo: function(error_message, is_recoverable),\n     *               Helper function.\n     *               Produces a new errorInfo 'hash object' which can be passed into `parseError()`.\n     *               See it's use in this lexer kernel in many places; example usage:\n     *\n     *                   var infoObj = lexer.constructParseErrorInfo('fail!', true);\n     *                   var retVal = lexer.parseError(infoObj.errStr, infoObj, lexer.JisonLexerError);\n     *\n     *    options: { ... lexer %options ... },\n     *\n     *    lex: function(),\n     *               Produce one token of lexed input, which was passed in earlier via the `lexer.setInput()` API.\n     *               You MAY use the additional `args...` parameters as per `%parse-param` spec of the **lexer** grammar:\n     *               these extra `args...` are added verbatim to the `yy` object reference as member variables.\n     *\n     *               WARNING:\n     *               Lexer's additional `args...` parameters (via lexer's `%parse-param`) MAY conflict with\n     *               any attributes already added to `yy` by the **parser** or the jison run-time;\n     *               when such a collision is detected an exception is thrown to prevent the generated run-time\n     *               from silently accepting this confusing and potentially hazardous situation!\n     *\n     *    cleanupAfterLex: function(do_not_nuke_errorinfos),\n     *               Helper function.\n     *\n     *               This helper API is invoked when the **parse process** has completed: it is the responsibility\n     *               of the **parser** (or the calling userland code) to invoke this method once cleanup is desired.\n     *\n     *               This helper may be invoked by user code to ensure the internal lexer gets properly garbage collected.\n     *\n     *    setInput: function(input, [yy]),\n     *\n     *\n     *    input: function(),\n     *\n     *\n     *    unput: function(str),\n     *\n     *\n     *    more: function(),\n     *\n     *\n     *    reject: function(),\n     *\n     *\n     *    less: function(n),\n     *\n     *\n     *    pastInput: function(n),\n     *\n     *\n     *    upcomingInput: function(n),\n     *\n     *\n     *    showPosition: function(),\n     *\n     *\n     *    test_match: function(regex_match_array, rule_index),\n     *\n     *\n     *    next: function(),\n     *\n     *\n     *    begin: function(condition),\n     *\n     *\n     *    pushState: function(condition),\n     *\n     *\n     *    popState: function(),\n     *\n     *\n     *    topState: function(),\n     *\n     *\n     *    _currentRules: function(),\n     *\n     *\n     *    stateStackSize: function(),\n     *\n     *\n     *    performAction: function(yy, yy_, yyrulenumber, YY_START),\n     *\n     *\n     *    rules: [...],\n     *\n     *\n     *    conditions: {associative list: name ==> set},\n     *  }\n     *\n     *\n     *  token location info (`yylloc`): {\n     *    first_line: n,\n     *    last_line: n,\n     *    first_column: n,\n     *    last_column: n,\n     *    range: [start_number, end_number]\n     *               (where the numbers are indexes into the input string, zero-based)\n     *  }\n     *\n     * ---\n     *\n     * The `parseError` function receives a 'hash' object with these members for lexer errors:\n     *\n     *  {\n     *    text:        (matched text)\n     *    token:       (the produced terminal token, if any)\n     *    token_id:    (the produced terminal token numeric ID, if any)\n     *    line:        (yylineno)\n     *    loc:         (yylloc)\n     *    recoverable: (boolean: TRUE when the parser MAY have an error recovery rule\n     *                  available for this particular error)\n     *    yy:          (object: the current parser internal \"shared state\" `yy`\n     *                  as is also available in the rule actions; this can be used,\n     *                  for instance, for advanced error analysis and reporting)\n     *    lexer:       (reference to the current lexer instance used by the parser)\n     *  }\n     *\n     * while `this` will reference the current lexer instance.\n     *\n     * When `parseError` is invoked by the lexer, the default implementation will\n     * attempt to invoke `yy.parser.parseError()`; when this callback is not provided\n     * it will try to invoke `yy.parseError()` instead. When that callback is also not\n     * provided, a `JisonLexerError` exception will be thrown containing the error\n     * message and `hash`, as constructed by the `constructLexErrorInfo()` API.\n     *\n     * Note that the lexer's `JisonLexerError` error class is passed via the\n     * `ExceptionClass` argument, which is invoked to construct the exception\n     * instance to be thrown, so technically `parseError` will throw the object\n     * produced by the `new ExceptionClass(str, hash)` JavaScript expression.\n     *\n     * ---\n     *\n     * You can specify lexer options by setting / modifying the `.options` object of your Lexer instance.\n     * These options are available:\n     *\n     * (Options are permanent.)\n     *\n     *  yy: {\n     *      parseError: function(str, hash, ExceptionClass)\n     *                 optional: overrides the default `parseError` function.\n     *  }\n     *\n     *  lexer.options: {\n     *      pre_lex:  function()\n     *                 optional: is invoked before the lexer is invoked to produce another token.\n     *                 `this` refers to the Lexer object.\n     *      post_lex: function(token) { return token; }\n     *                 optional: is invoked when the lexer has produced a token `token`;\n     *                 this function can override the returned token value by returning another.\n     *                 When it does not return any (truthy) value, the lexer will return\n     *                 the original `token`.\n     *                 `this` refers to the Lexer object.\n     *\n     * WARNING: the next set of options are not meant to be changed. They echo the abilities of\n     * the lexer as per when it was compiled!\n     *\n     *      ranges: boolean\n     *                 optional: `true` ==> token location info will include a .range[] member.\n     *      flex: boolean\n     *                 optional: `true` ==> flex-like lexing behaviour where the rules are tested\n     *                 exhaustively to find the longest match.\n     *      backtrack_lexer: boolean\n     *                 optional: `true` ==> lexer regexes are tested in order and for invoked;\n     *                 the lexer terminates the scan when a token is returned by the action code.\n     *      xregexp: boolean\n     *                 optional: `true` ==> lexer rule regexes are \"extended regex format\" requiring the\n     *                 `XRegExp` library. When this %option has not been specified at compile time, all lexer\n     *                 rule regexes have been written as standard JavaScript RegExp expressions.\n     *  }\n     */\n     "], ["\n    /* lexer generated by jison-lex ", " */\n\n    /*\n     * Returns a Lexer object of the following structure:\n     *\n     *  Lexer: {\n     *    yy: {}     The so-called \"shared state\" or rather the *source* of it;\n     *               the real \"shared state\" \\`yy\\` passed around to\n     *               the rule actions, etc. is a direct reference!\n     *\n     *               This \"shared context\" object was passed to the lexer by way of\n     *               the \\`lexer.setInput(str, yy)\\` API before you may use it.\n     *\n     *               This \"shared context\" object is passed to the lexer action code in \\`performAction()\\`\n     *               so userland code in the lexer actions may communicate with the outside world\n     *               and/or other lexer rules' actions in more or less complex ways.\n     *\n     *  }\n     *\n     *  Lexer.prototype: {\n     *    EOF: 1,\n     *    ERROR: 2,\n     *\n     *    yy:        The overall \"shared context\" object reference.\n     *\n     *    JisonLexerError: function(msg, hash),\n     *\n     *    performAction: function lexer__performAction(yy, yyrulenumber, YY_START),\n     *\n     *               The function parameters and \\`this\\` have the following value/meaning:\n     *               - \\`this\\`    : reference to the \\`lexer\\` instance.\n     *                               \\`yy_\\` is an alias for \\`this\\` lexer instance reference used internally.\n     *\n     *               - \\`yy\\`      : a reference to the \\`yy\\` \"shared state\" object which was passed to the lexer\n     *                             by way of the \\`lexer.setInput(str, yy)\\` API before.\n     *\n     *                             Note:\n     *                             The extra arguments you specified in the \\`%parse-param\\` statement in your\n     *                             **parser** grammar definition file are passed to the lexer via this object\n     *                             reference as member variables.\n     *\n     *               - \\`yyrulenumber\\`   : index of the matched lexer rule (regex), used internally.\n     *\n     *               - \\`YY_START\\`: the current lexer \"start condition\" state.\n     *\n     *    parseError: function(str, hash, ExceptionClass),\n     *\n     *    constructLexErrorInfo: function(error_message, is_recoverable),\n     *               Helper function.\n     *               Produces a new errorInfo \\'hash object\\' which can be passed into \\`parseError()\\`.\n     *               See it\\'s use in this lexer kernel in many places; example usage:\n     *\n     *                   var infoObj = lexer.constructParseErrorInfo(\\'fail!\\', true);\n     *                   var retVal = lexer.parseError(infoObj.errStr, infoObj, lexer.JisonLexerError);\n     *\n     *    options: { ... lexer %options ... },\n     *\n     *    lex: function(),\n     *               Produce one token of lexed input, which was passed in earlier via the \\`lexer.setInput()\\` API.\n     *               You MAY use the additional \\`args...\\` parameters as per \\`%parse-param\\` spec of the **lexer** grammar:\n     *               these extra \\`args...\\` are added verbatim to the \\`yy\\` object reference as member variables.\n     *\n     *               WARNING:\n     *               Lexer's additional \\`args...\\` parameters (via lexer's \\`%parse-param\\`) MAY conflict with\n     *               any attributes already added to \\`yy\\` by the **parser** or the jison run-time;\n     *               when such a collision is detected an exception is thrown to prevent the generated run-time\n     *               from silently accepting this confusing and potentially hazardous situation!\n     *\n     *    cleanupAfterLex: function(do_not_nuke_errorinfos),\n     *               Helper function.\n     *\n     *               This helper API is invoked when the **parse process** has completed: it is the responsibility\n     *               of the **parser** (or the calling userland code) to invoke this method once cleanup is desired.\n     *\n     *               This helper may be invoked by user code to ensure the internal lexer gets properly garbage collected.\n     *\n     *    setInput: function(input, [yy]),\n     *\n     *\n     *    input: function(),\n     *\n     *\n     *    unput: function(str),\n     *\n     *\n     *    more: function(),\n     *\n     *\n     *    reject: function(),\n     *\n     *\n     *    less: function(n),\n     *\n     *\n     *    pastInput: function(n),\n     *\n     *\n     *    upcomingInput: function(n),\n     *\n     *\n     *    showPosition: function(),\n     *\n     *\n     *    test_match: function(regex_match_array, rule_index),\n     *\n     *\n     *    next: function(),\n     *\n     *\n     *    begin: function(condition),\n     *\n     *\n     *    pushState: function(condition),\n     *\n     *\n     *    popState: function(),\n     *\n     *\n     *    topState: function(),\n     *\n     *\n     *    _currentRules: function(),\n     *\n     *\n     *    stateStackSize: function(),\n     *\n     *\n     *    performAction: function(yy, yy_, yyrulenumber, YY_START),\n     *\n     *\n     *    rules: [...],\n     *\n     *\n     *    conditions: {associative list: name ==> set},\n     *  }\n     *\n     *\n     *  token location info (\\`yylloc\\`): {\n     *    first_line: n,\n     *    last_line: n,\n     *    first_column: n,\n     *    last_column: n,\n     *    range: [start_number, end_number]\n     *               (where the numbers are indexes into the input string, zero-based)\n     *  }\n     *\n     * ---\n     *\n     * The \\`parseError\\` function receives a \\'hash\\' object with these members for lexer errors:\n     *\n     *  {\n     *    text:        (matched text)\n     *    token:       (the produced terminal token, if any)\n     *    token_id:    (the produced terminal token numeric ID, if any)\n     *    line:        (yylineno)\n     *    loc:         (yylloc)\n     *    recoverable: (boolean: TRUE when the parser MAY have an error recovery rule\n     *                  available for this particular error)\n     *    yy:          (object: the current parser internal \"shared state\" \\`yy\\`\n     *                  as is also available in the rule actions; this can be used,\n     *                  for instance, for advanced error analysis and reporting)\n     *    lexer:       (reference to the current lexer instance used by the parser)\n     *  }\n     *\n     * while \\`this\\` will reference the current lexer instance.\n     *\n     * When \\`parseError\\` is invoked by the lexer, the default implementation will\n     * attempt to invoke \\`yy.parser.parseError()\\`; when this callback is not provided\n     * it will try to invoke \\`yy.parseError()\\` instead. When that callback is also not\n     * provided, a \\`JisonLexerError\\` exception will be thrown containing the error\n     * message and \\`hash\\`, as constructed by the \\`constructLexErrorInfo()\\` API.\n     *\n     * Note that the lexer\\'s \\`JisonLexerError\\` error class is passed via the\n     * \\`ExceptionClass\\` argument, which is invoked to construct the exception\n     * instance to be thrown, so technically \\`parseError\\` will throw the object\n     * produced by the \\`new ExceptionClass(str, hash)\\` JavaScript expression.\n     *\n     * ---\n     *\n     * You can specify lexer options by setting / modifying the \\`.options\\` object of your Lexer instance.\n     * These options are available:\n     *\n     * (Options are permanent.)\n     *\n     *  yy: {\n     *      parseError: function(str, hash, ExceptionClass)\n     *                 optional: overrides the default \\`parseError\\` function.\n     *  }\n     *\n     *  lexer.options: {\n     *      pre_lex:  function()\n     *                 optional: is invoked before the lexer is invoked to produce another token.\n     *                 \\`this\\` refers to the Lexer object.\n     *      post_lex: function(token) { return token; }\n     *                 optional: is invoked when the lexer has produced a token \\`token\\`;\n     *                 this function can override the returned token value by returning another.\n     *                 When it does not return any (truthy) value, the lexer will return\n     *                 the original \\`token\\`.\n     *                 \\`this\\` refers to the Lexer object.\n     *\n     * WARNING: the next set of options are not meant to be changed. They echo the abilities of\n     * the lexer as per when it was compiled!\n     *\n     *      ranges: boolean\n     *                 optional: \\`true\\` ==> token location info will include a .range[] member.\n     *      flex: boolean\n     *                 optional: \\`true\\` ==> flex-like lexing behaviour where the rules are tested\n     *                 exhaustively to find the longest match.\n     *      backtrack_lexer: boolean\n     *                 optional: \\`true\\` ==> lexer regexes are tested in order and for invoked;\n     *                 the lexer terminates the scan when a token is returned by the action code.\n     *      xregexp: boolean\n     *                 optional: \\`true\\` ==> lexer rule regexes are \"extended regex format\" requiring the\n     *                 \\`XRegExp\\` library. When this %option has not been specified at compile time, all lexer\n     *                 rule regexes have been written as standard JavaScript RegExp expressions.\n     *  }\n     */\n     "]);
+  var data = _taggedTemplateLiteral([",\n            JisonLexerError: JisonLexerError,\n            performAction: ", ",\n            simpleCaseActionClusters: ", ",\n            rules: [\n                ", "\n            ],\n            conditions: ", "\n        };\n        "]);
 
   _templateObject84 = function _templateObject84() {
     return data;
@@ -744,7 +784,7 @@ function _templateObject84() {
 }
 
 function _templateObject83() {
-  var data = _taggedTemplateLiteral([",\n            JisonLexerError: JisonLexerError,\n            performAction: ", ",\n            simpleCaseActionClusters: ", ",\n            rules: [\n                ", "\n            ],\n            conditions: ", "\n        };\n        "]);
+  var data = _taggedTemplateLiteral(["\n            var lexer = {\n            "]);
 
   _templateObject83 = function _templateObject83() {
     return data;
@@ -754,7 +794,7 @@ function _templateObject83() {
 }
 
 function _templateObject82() {
-  var data = _taggedTemplateLiteral(["\n            var lexer = {\n            "]);
+  var data = _taggedTemplateLiteral(["\n        // Code Generator Information Report\n        // ---------------------------------\n        //\n        // Options:\n        //\n        //   backtracking: .................... ", "\n        //   location.ranges: ................. ", "\n        //   location line+column tracking: ... ", "\n        //\n        //\n        // Forwarded Parser Analysis flags:\n        //\n        //   uses yyleng: ..................... ", "\n        //   uses yylineno: ................... ", "\n        //   uses yytext: ..................... ", "\n        //   uses yylloc: ..................... ", "\n        //   uses lexer values: ............... ", " / ", "\n        //   location tracking: ............... ", "\n        //   location assignment: ............. ", "\n        //\n        //\n        // Lexer Analysis flags:\n        //\n        //   uses yyleng: ..................... ", "\n        //   uses yylineno: ................... ", "\n        //   uses yytext: ..................... ", "\n        //   uses yylloc: ..................... ", "\n        //   uses ParseError API: ............. ", "\n        //   uses yyerror: .................... ", "\n        //   uses location tracking & editing:  ", "\n        //   uses more() API: ................. ", "\n        //   uses unput() API: ................ ", "\n        //   uses reject() API: ............... ", "\n        //   uses less() API: ................. ", "\n        //   uses display APIs pastInput(), upcomingInput(), showPosition():\n        //        ............................. ", "\n        //   uses describeYYLLOC() API: ....... ", "\n        //\n        // --------- END OF REPORT -----------\n\n    "]);
 
   _templateObject82 = function _templateObject82() {
     return data;
@@ -764,7 +804,7 @@ function _templateObject82() {
 }
 
 function _templateObject81() {
-  var data = _taggedTemplateLiteral(["\n        // Code Generator Information Report\n        // ---------------------------------\n        //\n        // Options:\n        //\n        //   backtracking: .................... ", "\n        //   location.ranges: ................. ", "\n        //   location line+column tracking: ... ", "\n        //\n        //\n        // Forwarded Parser Analysis flags:\n        //\n        //   uses yyleng: ..................... ", "\n        //   uses yylineno: ................... ", "\n        //   uses yytext: ..................... ", "\n        //   uses yylloc: ..................... ", "\n        //   uses lexer values: ............... ", " / ", "\n        //   location tracking: ............... ", "\n        //   location assignment: ............. ", "\n        //\n        //\n        // Lexer Analysis flags:\n        //\n        //   uses yyleng: ..................... ", "\n        //   uses yylineno: ................... ", "\n        //   uses yytext: ..................... ", "\n        //   uses yylloc: ..................... ", "\n        //   uses ParseError API: ............. ", "\n        //   uses yyerror: .................... ", "\n        //   uses location tracking & editing:  ", "\n        //   uses more() API: ................. ", "\n        //   uses unput() API: ................ ", "\n        //   uses reject() API: ............... ", "\n        //   uses less() API: ................. ", "\n        //   uses display APIs pastInput(), upcomingInput(), showPosition():\n        //        ............................. ", "\n        //   uses describeYYLLOC() API: ....... ", "\n        //\n        // --------- END OF REPORT -----------\n\n    "]);
+  var data = _taggedTemplateLiteral(["\n            stripUnusedLexerCode WARNING: \n\n                JISON failed to reformat the generated lexer.\n                Using the generated code as-is instead and pray it works in your final output!\n\n                Internal error report:\n\n                    ", "\n\n                The offending action code chunk as reported above:\n\n            ", "\n        "]);
 
   _templateObject81 = function _templateObject81() {
     return data;
@@ -774,7 +814,7 @@ function _templateObject81() {
 }
 
 function _templateObject80() {
-  var data = _taggedTemplateLiteral(["\n            stripUnusedLexerCode WARNING: \n\n                JISON failed to reformat the generated lexer.\n                Using the generated code as-is instead and pray it works in your final output!\n\n                Internal error report:\n\n                    ", "\n\n                The offending action code chunk as reported above:\n\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n    \"use strict\";\n\n    return ", ";\n"]);
 
   _templateObject80 = function _templateObject80() {
     return data;
@@ -784,7 +824,7 @@ function _templateObject80() {
 }
 
 function _templateObject79() {
-  var data = _taggedTemplateLiteral(["\n    \"use strict\";\n\n    return ", ";\n"]);
+  var data = _taggedTemplateLiteral(["\n        var __hacky_counter__ = 0;\n\n        /**\n         * @constructor\n         * @nocollapse\n         */\n        function XRegExp(re, f) {\n            this.re = re;\n            this.flags = f;\n            this._getUnicodeProperty = function (k) {};\n            var fake = /./;    // WARNING: this exact 'fake' is also depended upon by the xregexp unit test!\n            __hacky_counter__++;\n            fake.__hacky_backy__ = __hacky_counter__;\n            return fake;\n        }\n    "]);
 
   _templateObject79 = function _templateObject79() {
     return data;
@@ -794,7 +834,7 @@ function _templateObject79() {
 }
 
 function _templateObject78() {
-  var data = _taggedTemplateLiteral(["\n        var __hacky_counter__ = 0;\n\n        /**\n         * @constructor\n         * @nocollapse\n         */\n        function XRegExp(re, f) {\n            this.re = re;\n            this.flags = f;\n            this._getUnicodeProperty = function (k) {};\n            var fake = /./;    // WARNING: this exact 'fake' is also depended upon by the xregexp unit test!\n            __hacky_counter__++;\n            fake.__hacky_backy__ = __hacky_counter__;\n            return fake;\n        }\n    "]);
+  var data = _taggedTemplateLiteral(["\n                                            unsupported lexer input: ", "\n                                            while lexing in ", " state.\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject78 = function _templateObject78() {
     return data;
@@ -804,7 +844,7 @@ function _templateObject78() {
 }
 
 function _templateObject77() {
-  var data = _taggedTemplateLiteral(["\n                                            unsupported lexer input: ", "\n                                            while lexing in ", " state.\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unsupported lexer input: ", "\n                                            while lexing in ", " state.\n\n                                            If this input was intentional, you might want to put quotes around\n                                            it; any JavaScript string quoting style is accepted (single quotes,\n                                            double quotes *or* backtick quotes a la ES6 string templates).\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject77 = function _templateObject77() {
     return data;
@@ -814,7 +854,7 @@ function _templateObject77() {
 }
 
 function _templateObject76() {
-  var data = _taggedTemplateLiteral(["\n                                            unsupported lexer input: ", "\n                                            while lexing in ", " state.\n\n                                            If this input was intentional, you might want to put quotes around\n                                            it; any JavaScript string quoting style is accepted (single quotes,\n                                            double quotes *or* backtick quotes a la ES6 string templates).\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unsupported lexer input encountered while lexing\n                                            ", " (i.e. jison lex regexes) in ", " state.\n\n                                                NOTE: When you want this input to be interpreted as a LITERAL part\n                                                      of a lex rule regex, you MUST enclose it in double or\n                                                      single quotes.\n\n                                                      If not, then know that this input is not accepted as a valid\n                                                      regex expression here in jison-lex ", ".\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject76 = function _templateObject76() {
     return data;
@@ -824,7 +864,7 @@ function _templateObject76() {
 }
 
 function _templateObject75() {
-  var data = _taggedTemplateLiteral(["\n                                            unsupported lexer input encountered while lexing\n                                            ", " (i.e. jison lex regexes) in ", " state.\n\n                                                NOTE: When you want this input to be interpreted as a LITERAL part\n                                                      of a lex rule regex, you MUST enclose it in double or\n                                                      single quotes.\n\n                                                      If not, then know that this input is not accepted as a valid\n                                                      regex expression here in jison-lex ", ".\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant encountered while lexing\n                                            ", ".\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject75 = function _templateObject75() {
     return data;
@@ -854,7 +894,7 @@ function _templateObject73() {
 }
 
 function _templateObject72() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant encountered while lexing\n                                            ", ".\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in %options entry.\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject72 = function _templateObject72() {
     return data;
@@ -884,7 +924,7 @@ function _templateObject70() {
 }
 
 function _templateObject69() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in %options entry.\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in lexer rule action block.\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject69 = function _templateObject69() {
     return data;
@@ -914,7 +954,7 @@ function _templateObject67() {
 }
 
 function _templateObject66() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in lexer rule action block.\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                                ignoring unsupported lexer option ", "\n                                                while lexing in ", " state.\n\n                                                  Erroneous area:\n                                                "]);
 
   _templateObject66 = function _templateObject66() {
     return data;
@@ -924,7 +964,7 @@ function _templateObject66() {
 }
 
 function _templateObject65() {
-  var data = _taggedTemplateLiteral(["\n                                                ignoring unsupported lexer option ", "\n                                                while lexing in ", " state.\n\n                                                  Erroneous area:\n                                                "]);
+  var data = _taggedTemplateLiteral(["\n                                                    Incorrectly terminated action code block. We're expecting the\n                                                    '", "' end marker to go with the given start marker.\n                                                    Regrettably, it does not exist in the remainder of the input.\n\n                                                      Erroneous area:\n                                                "]);
 
   _templateObject65 = function _templateObject65() {
     return data;
@@ -934,7 +974,7 @@ function _templateObject65() {
 }
 
 function _templateObject64() {
-  var data = _taggedTemplateLiteral(["\n                                                    Incorrectly terminated action code block. We're expecting the\n                                                    '", "' end marker to go with the given start marker.\n                                                    Regrettably, it does not exist in the remainder of the input.\n\n                                                      Erroneous area:\n                                                "]);
+  var data = _taggedTemplateLiteral(["\n                                                missing ", " closing curly braces in lexer rule action block.\n\n                                                Note: the action code chunk may be too complex for jison to parse\n                                                easily; we suggest you wrap the action code chunk in '%{...%}'\n                                                to help jison grok more or less complex action code chunks.\n\n                                                  Erroneous area:\n                                                "]);
 
   _templateObject64 = function _templateObject64() {
     return data;
@@ -944,7 +984,7 @@ function _templateObject64() {
 }
 
 function _templateObject63() {
-  var data = _taggedTemplateLiteral(["\n                                                missing ", " closing curly braces in lexer rule action block.\n\n                                                Note: the action code chunk may be too complex for jison to parse\n                                                easily; we suggest you wrap the action code chunk in '%{...%}'\n                                                to help jison grok more or less complex action code chunks.\n\n                                                  Erroneous area:\n                                                "]);
+  var data = _taggedTemplateLiteral(["\n                                                too many closing curly braces in lexer rule action block.\n\n                                                Note: the action code chunk may be too complex for jison to parse\n                                                easily; we suggest you wrap the action code chunk in '%{...%}'\n                                                to help jison grok more or less complex action code chunks.\n\n                                                  Erroneous area:\n                                                "]);
 
   _templateObject63 = function _templateObject63() {
     return data;
@@ -954,7 +994,7 @@ function _templateObject63() {
 }
 
 function _templateObject62() {
-  var data = _taggedTemplateLiteral(["\n                                                too many closing curly braces in lexer rule action block.\n\n                                                Note: the action code chunk may be too complex for jison to parse\n                                                easily; we suggest you wrap the action code chunk in '%{...%}'\n                                                to help jison grok more or less complex action code chunks.\n\n                                                  Erroneous area:\n                                                "]);
+  var data = _taggedTemplateLiteral(["\n                                                %include statements must occur on a line on their own and cannot occur inside an action code block.\n                                                Its use is not permitted at this position.\n\n                                                  Erroneous area:\n                                                "]);
 
   _templateObject62 = function _templateObject62() {
     return data;
@@ -964,7 +1004,7 @@ function _templateObject62() {
 }
 
 function _templateObject61() {
-  var data = _taggedTemplateLiteral(["\n                                                %include statements must occur on a line on their own and cannot occur inside an action code block.\n                                                Its use is not permitted at this position.\n\n                                                  Erroneous area:\n                                                "]);
+  var data = _taggedTemplateLiteral(["\n        %include MUST be followed by a valid file path.\n    \n          Erroneous path:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject61 = function _templateObject61() {
     return data;
@@ -974,7 +1014,7 @@ function _templateObject61() {
 }
 
 function _templateObject60() {
-  var data = _taggedTemplateLiteral(["\n        %include MUST be followed by a valid file path.\n    \n          Erroneous path:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n                The source code included from file '", "' does not compile: ", "\n    \n                  Erroneous area:\n                ", "\n            "]);
 
   _templateObject60 = function _templateObject60() {
     return data;
@@ -984,7 +1024,7 @@ function _templateObject60() {
 }
 
 function _templateObject59() {
-  var data = _taggedTemplateLiteral(["\n                The source code included from file '", "' does not compile: ", "\n    \n                  Erroneous area:\n                ", "\n            "]);
+  var data = _taggedTemplateLiteral(["\n            You did specify too many attributes for the '%include' statement, which must have the format:\n                %include file_path\n    \n              Erroneous code:\n            ", "\n    \n              Technical error report:\n            ", "\n        "]);
 
   _templateObject59 = function _templateObject59() {
     return data;
@@ -994,7 +1034,7 @@ function _templateObject59() {
 }
 
 function _templateObject58() {
-  var data = _taggedTemplateLiteral(["\n            You did specify too many attributes for the '%include' statement, which must have the format:\n                %include file_path\n    \n              Erroneous code:\n            ", "\n    \n              Technical error report:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n            You did not specify a legal file path for the '%include' statement, which must have the format:\n                %include file_path\n    \n              Erroneous code:\n            ", "\n    \n              Technical error report:\n            ", "\n        "]);
 
   _templateObject58 = function _templateObject58() {
     return data;
@@ -1004,7 +1044,7 @@ function _templateObject58() {
 }
 
 function _templateObject57() {
-  var data = _taggedTemplateLiteral(["\n            You did not specify a legal file path for the '%include' statement, which must have the format:\n                %include file_path\n    \n              Erroneous code:\n            ", "\n    \n              Technical error report:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n        There's very probably a problem with this '%{...%}' lexer setup action code section.\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject57 = function _templateObject57() {
     return data;
@@ -1014,7 +1054,7 @@ function _templateObject57() {
 }
 
 function _templateObject56() {
-  var data = _taggedTemplateLiteral(["\n        There's very probably a problem with this '%{...%}' lexer setup action code section.\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n                The '%{...%}' lexer epilogue code chunk does not compile: ", "\n    \n                  Erroneous area:\n                ", "\n            "]);
 
   _templateObject56 = function _templateObject56() {
     return data;
@@ -1024,7 +1064,7 @@ function _templateObject56() {
 }
 
 function _templateObject55() {
-  var data = _taggedTemplateLiteral(["\n                The '%{...%}' lexer epilogue code chunk does not compile: ", "\n    \n                  Erroneous area:\n                ", "\n            "]);
+  var data = _taggedTemplateLiteral(["\n        Module code declaration error?\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject55 = function _templateObject55() {
     return data;
@@ -1034,7 +1074,7 @@ function _templateObject55() {
 }
 
 function _templateObject54() {
-  var data = _taggedTemplateLiteral(["\n        Module code declaration error?\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        There's an error in your lexer epilogue code block.\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject54 = function _templateObject54() {
     return data;
@@ -1044,7 +1084,7 @@ function _templateObject54() {
 }
 
 function _templateObject53() {
-  var data = _taggedTemplateLiteral(["\n        There's an error in your lexer epilogue code block.\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n                The '%%' lexer epilogue code does not compile: ", "\n    \n                  Erroneous area:\n                ", "\n            "]);
 
   _templateObject53 = function _templateObject53() {
     return data;
@@ -1054,7 +1094,7 @@ function _templateObject53() {
 }
 
 function _templateObject52() {
-  var data = _taggedTemplateLiteral(["\n                The '%%' lexer epilogue code does not compile: ", "\n    \n                  Erroneous area:\n                ", "\n            "]);
+  var data = _taggedTemplateLiteral(["\n            Expected a valid name/argument", " in a ", " statement.\n            Entries (names) must look like regular programming language\n            identifiers, with the addition that option names MAY contain\n            '-' dashes, e.g. 'example-option-1'\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject52 = function _templateObject52() {
     return data;
@@ -1064,7 +1104,7 @@ function _templateObject52() {
 }
 
 function _templateObject51() {
-  var data = _taggedTemplateLiteral(["\n            Expected a valid name/argument", " in a ", " statement.\n            Entries (names) must look like regular programming language\n            identifiers, with the addition that option names MAY contain\n            '-' dashes, e.g. 'example-option-1'\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n                Expected a valid name/argument", " in a ", " statement.\n                Entries (names) must look like regular programming language\n                identifiers, with the addition that option names MAY contain\n                '-' dashes, e.g. 'example-option-1'.\n    \n                  Erroneous area:\n                ", "\n            "]);
 
   _templateObject51 = function _templateObject51() {
     return data;
@@ -1074,7 +1114,7 @@ function _templateObject51() {
 }
 
 function _templateObject50() {
-  var data = _taggedTemplateLiteral(["\n                Expected a valid name/argument", " in a ", " statement.\n                Entries (names) must look like regular programming language\n                identifiers, with the addition that option names MAY contain\n                '-' dashes, e.g. 'example-option-1'.\n    \n                  Erroneous area:\n                ", "\n            "]);
+  var data = _taggedTemplateLiteral(["\n        Expected a valid option name", " in a ", " statement.\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject50 = function _templateObject50() {
     return data;
@@ -1084,7 +1124,7 @@ function _templateObject50() {
 }
 
 function _templateObject49() {
-  var data = _taggedTemplateLiteral(["\n        Expected a valid option name", " in a ", " statement.\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        Internal error: option \"", "\" value assignment failure in a ", " statement.\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject49 = function _templateObject49() {
     return data;
@@ -1094,7 +1134,7 @@ function _templateObject49() {
 }
 
 function _templateObject48() {
-  var data = _taggedTemplateLiteral(["\n        Internal error: option \"", "\" value assignment failure in a ", " statement.\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n            The entries in a ", " statement MUST NOT be assigned values, such as '", "=", "'.\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject48 = function _templateObject48() {
     return data;
@@ -1104,7 +1144,7 @@ function _templateObject48() {
 }
 
 function _templateObject47() {
-  var data = _taggedTemplateLiteral(["\n            The entries in a ", " statement MUST NOT be assigned values, such as '", "=", "'.\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n            You may only specify one name/argument in a ", " statement.\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject47 = function _templateObject47() {
     return data;
@@ -1114,7 +1154,7 @@ function _templateObject47() {
 }
 
 function _templateObject46() {
-  var data = _taggedTemplateLiteral(["\n            You may only specify one name/argument in a ", " statement.\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n            You may not separate entries in a ", " statement using commas.\n            Use whitespace instead, e.g.:\n    \n                ", " ", " ...\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject46 = function _templateObject46() {
     return data;
@@ -1124,7 +1164,7 @@ function _templateObject46() {
 }
 
 function _templateObject45() {
-  var data = _taggedTemplateLiteral(["\n            You may not separate entries in a ", " statement using commas.\n            Use whitespace instead, e.g.:\n    \n                ", " ", " ...\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n            You may only specify one name/argument in a ", " statement.\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject45 = function _templateObject45() {
     return data;
@@ -1134,7 +1174,7 @@ function _templateObject45() {
 }
 
 function _templateObject44() {
-  var data = _taggedTemplateLiteral(["\n            You may only specify one name/argument in a ", " statement.\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly bracket a lex rule regex set in '[...]' brackets.\n    \n          Unterminated regex set:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject44 = function _templateObject44() {
     return data;
@@ -1144,7 +1184,7 @@ function _templateObject44() {
 }
 
 function _templateObject43() {
-  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly bracket a lex rule regex set in '[...]' brackets.\n    \n          Unterminated regex set:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly bracket a lex rule regex part in '(...)' braces.\n    \n          Unterminated regex part:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject43 = function _templateObject43() {
     return data;
@@ -1154,7 +1194,7 @@ function _templateObject43() {
 }
 
 function _templateObject42() {
-  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly bracket a lex rule regex part in '(...)' braces.\n    \n          Unterminated regex part:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly terminate the start condition set\n            <", ",???>\n        with a terminating '>'\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject42 = function _templateObject42() {
     return data;
@@ -1164,7 +1204,7 @@ function _templateObject42() {
 }
 
 function _templateObject41() {
-  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly terminate the start condition set\n            <", ",???>\n        with a terminating '>'\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n                You specified an unknown lexer condition state '", "'.\n                Is this a typo or did you forget to include this one in the '%s' and '%x'\n                inclusive and exclusive condition state sets specifications at the top of\n                the lexer spec?\n    \n                As a rough example, things should look something like this in your lexer\n                spec file:\n    \n                    %s ", "\n                    %%\n                    <", ">LEXER_RULE_REGEX    return 'TOK';\n    \n                  Erroneous code:\n                ", "\n            "]);
 
   _templateObject41 = function _templateObject41() {
     return data;
@@ -1174,7 +1214,7 @@ function _templateObject41() {
 }
 
 function _templateObject40() {
-  var data = _taggedTemplateLiteral(["\n                You specified an unknown lexer condition state '", "'.\n                Is this a typo or did you forget to include this one in the '%s' and '%x'\n                inclusive and exclusive condition state sets specifications at the top of\n                the lexer spec?\n    \n                As a rough example, things should look something like this in your lexer\n                spec file:\n    \n                    %s ", "\n                    %%\n                    <", ">LEXER_RULE_REGEX    return 'TOK';\n    \n                  Erroneous code:\n                ", "\n            "]);
+  var data = _taggedTemplateLiteral(["\n        Unterminated string constant in lexer rule action block.\n    \n        When your action code is as intended, it may help to enclose\n        your rule action block code in a '%{...%}' block.\n    \n          Offending action body:\n        ", "\n    "]);
 
   _templateObject40 = function _templateObject40() {
     return data;
@@ -1184,7 +1224,7 @@ function _templateObject40() {
 }
 
 function _templateObject39() {
-  var data = _taggedTemplateLiteral(["\n        Unterminated string constant in lexer rule action block.\n    \n        When your action code is as intended, it may help to enclose\n        your rule action block code in a '%{...%}' block.\n    \n          Offending action body:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        Too many curly braces: seems you did not correctly bracket a lexer rule action block in curly braces: '{ ... }'.\n    \n          Offending action body:\n        ", "\n    "]);
 
   _templateObject39 = function _templateObject39() {
     return data;
@@ -1194,7 +1234,7 @@ function _templateObject39() {
 }
 
 function _templateObject38() {
-  var data = _taggedTemplateLiteral(["\n        Too many curly braces: seems you did not correctly bracket a lexer rule action block in curly braces: '{ ... }'.\n    \n          Offending action body:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        Missing curly braces: seems you did not correctly bracket a lexer rule action block in curly braces: '{ ... }'.\n    \n          Offending action body:\n        ", "\n    "]);
 
   _templateObject38 = function _templateObject38() {
     return data;
@@ -1204,7 +1244,7 @@ function _templateObject38() {
 }
 
 function _templateObject37() {
-  var data = _taggedTemplateLiteral(["\n        Missing curly braces: seems you did not correctly bracket a lexer rule action block in curly braces: '{ ... }'.\n    \n          Offending action body:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        You may place the '%include' instruction only at the start/front of a line.\n    \n          Its use is not permitted at this position:\n        ", "\n    "]);
 
   _templateObject37 = function _templateObject37() {
     return data;
@@ -1214,7 +1254,7 @@ function _templateObject37() {
 }
 
 function _templateObject36() {
-  var data = _taggedTemplateLiteral(["\n        You may place the '%include' instruction only at the start/front of a line.\n    \n          Its use is not permitted at this position:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        Lexer rule regex action code declaration error?\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject36 = function _templateObject36() {
     return data;
@@ -1224,7 +1264,7 @@ function _templateObject36() {
 }
 
 function _templateObject35() {
-  var data = _taggedTemplateLiteral(["\n        Lexer rule regex action code declaration error?\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        A lexer rule regex action code must be properly terminated and must contain a JavaScript statement block (or anything that does parse as such), e.g.:\n    \n            /rule/\n            %{\n                invokeHooHaw();\n                return 'TOKEN';\n            %}\n    \n        You may indent the initial '%{' to disambiguate this as being a rule action code block instead of a lexer init code block:\n    \n            /rule/\n              %{\n                invokeHooHaw();\n                return 'TOKEN';\n            %}\n    \n        You can also accomplish this by placing the '%{' on the same line as the regex:\n    \n            /rule/      %{\n                invokeHooHaw();\n                return 'TOKEN';\n            %}\n    \n        NOTE: when you have very simple action code, wrapping it in '%{...}%' or equivalent is not required as long as you keep the code indented, e.g.:\n    \n            /rule/      invokeHooHaw();\n                        return 'TOKEN';\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject35 = function _templateObject35() {
     return data;
@@ -1234,7 +1274,7 @@ function _templateObject35() {
 }
 
 function _templateObject34() {
-  var data = _taggedTemplateLiteral(["\n        A lexer rule regex action code must be properly terminated and must contain a JavaScript statement block (or anything that does parse as such), e.g.:\n    \n            /rule/\n            %{\n                invokeHooHaw();\n                return 'TOKEN';\n            %}\n    \n        You may indent the initial '%{' to disambiguate this as being a rule action code block instead of a lexer init code block:\n    \n            /rule/\n              %{\n                invokeHooHaw();\n                return 'TOKEN';\n            %}\n    \n        You can also accomplish this by placing the '%{' on the same line as the regex:\n    \n            /rule/      %{\n                invokeHooHaw();\n                return 'TOKEN';\n            %}\n    \n        NOTE: when you have very simple action code, wrapping it in '%{...}%' or equivalent is not required as long as you keep the code indented, e.g.:\n    \n            /rule/      invokeHooHaw();\n                        return 'TOKEN';\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        A lexer rule regex action code must be properly terminated and must contain a JavaScript statement block (or anything that does parse as such), e.g.:\n    \n            /rule/      %{ invokeHooHaw(); return 'TOKEN'; %}\n    \n        NOTE: when you have very simple action code, wrapping it in '%{...}%' or equivalent is not required as long as you keep the code indented, e.g.:\n    \n            /rule/      invokeHooHaw();\n                        return 'TOKEN';\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject34 = function _templateObject34() {
     return data;
@@ -1244,7 +1284,7 @@ function _templateObject34() {
 }
 
 function _templateObject33() {
-  var data = _taggedTemplateLiteral(["\n        A lexer rule regex action code must be properly terminated and must contain a JavaScript statement block (or anything that does parse as such), e.g.:\n    \n            /rule/      %{ invokeHooHaw(); return 'TOKEN'; %}\n    \n        NOTE: when you have very simple action code, wrapping it in '%{...}%' or equivalent is not required as long as you keep the code indented, e.g.:\n    \n            /rule/      invokeHooHaw();\n                        return 'TOKEN';\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        A lexer rule action arrow must be followed by a single JavaScript expression specifying the lexer token to produce, e.g.:\n    \n            /rule/   -> 'BUGGABOO'\n    \n        which is equivalent to:\n    \n            /rule/      %{ return 'BUGGABOO'; %}\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject33 = function _templateObject33() {
     return data;
@@ -1254,7 +1294,7 @@ function _templateObject33() {
 }
 
 function _templateObject32() {
-  var data = _taggedTemplateLiteral(["\n        A lexer rule action arrow must be followed by a JavaScript expression specifying the lexer token to produce, e.g.:\n    \n            /rule/   -> 'BUGGABOO'    // eqv. to `return 'BUGGABOO';`\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "], ["\n        A lexer rule action arrow must be followed by a JavaScript expression specifying the lexer token to produce, e.g.:\n    \n            /rule/   -> 'BUGGABOO'    // eqv. to \\`return 'BUGGABOO';\\`\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n            The lexer rule's 'arrow' action code section does not compile: ", "\n    \n            # NOTE that the arrow action automatically wraps the action code\n            # in a `return (...);` statement to prevent hard-to-diagnose run-time\n            # errors down the line.\n    \n              Erroneous area:\n            ", "\n        "], ["\n            The lexer rule's 'arrow' action code section does not compile: ", "\n    \n            # NOTE that the arrow action automatically wraps the action code\n            # in a \\`return (...);\\` statement to prevent hard-to-diagnose run-time\n            # errors down the line.\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject32 = function _templateObject32() {
     return data;
@@ -1264,7 +1304,7 @@ function _templateObject32() {
 }
 
 function _templateObject31() {
-  var data = _taggedTemplateLiteral(["\n            The lexer rule's 'arrow' action code section does not compile: ", "\n    \n            # NOTE that the arrow action automatically wraps the action code\n            # in a `return (...);` statement to prevent hard-to-diagnose run-time\n            # errors down the line.\n    \n              Erroneous area:\n            ", "\n        "], ["\n            The lexer rule's 'arrow' action code section does not compile: ", "\n    \n            # NOTE that the arrow action automatically wraps the action code\n            # in a \\`return (...);\\` statement to prevent hard-to-diagnose run-time\n            # errors down the line.\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n            The lexer rule's action code section does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject31 = function _templateObject31() {
     return data;
@@ -1274,7 +1314,7 @@ function _templateObject31() {
 }
 
 function _templateObject30() {
-  var data = _taggedTemplateLiteral(["\n            The lexer rule's action code section does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly bracket a lexer rules set inside\n        the start condition\n          <", "> { rules... }\n        as a terminating curly brace '}' could not be found.\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject30 = function _templateObject30() {
     return data;
@@ -1294,7 +1334,7 @@ function _templateObject29() {
 }
 
 function _templateObject28() {
-  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly bracket a lexer rules set inside\n        the start condition\n          <", "> { rules... }\n        as a terminating curly brace '}' could not be found.\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        Seems you made a mistake while specifying one of the lexer rules inside\n        the start condition\n           <", "> { rules... }\n        block.\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject28 = function _templateObject28() {
     return data;
@@ -1304,7 +1344,7 @@ function _templateObject28() {
 }
 
 function _templateObject27() {
-  var data = _taggedTemplateLiteral(["\n        Seems you made a mistake while specifying one of the lexer rules inside\n        the start condition\n           <", "> { rules... }\n        block.\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        `", "` statements must be placed in\n        the top section of the lexer spec file, above the first '%%'\n        separator. You cannot specify any in the second section as has been\n        done here.\n    \n          Erroneous code:\n        ", "\n    "], ["\n        \\`", "\\` statements must be placed in\n        the top section of the lexer spec file, above the first '%%'\n        separator. You cannot specify any in the second section as has been\n        done here.\n    \n          Erroneous code:\n        ", "\n    "]);
 
   _templateObject27 = function _templateObject27() {
     return data;
@@ -1314,7 +1354,7 @@ function _templateObject27() {
 }
 
 function _templateObject26() {
-  var data = _taggedTemplateLiteral(["\n        `", "` statements must be placed in\n        the top section of the lexer spec file, above the first '%%'\n        separator. You cannot specify any in the second section as has been\n        done here.\n    \n          Erroneous code:\n        ", "\n    "], ["\n        \\`", "\\` statements must be placed in\n        the top section of the lexer spec file, above the first '%%'\n        separator. You cannot specify any in the second section as has been\n        done here.\n    \n          Erroneous code:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n            There's probably an error in one or more of your lexer regex rules.\n            Did you perhaps indent the rule regex? Note that all rule regexes\n            MUST start at the start of the line, i.e. text column 1. Indented text\n            is perceived as JavaScript action code related to the last lexer\n            rule regex.\n    \n              Erroneous code:\n            ", "\n    \n              Technical error report:\n            ", "\n        "]);
 
   _templateObject26 = function _templateObject26() {
     return data;
@@ -1324,7 +1364,7 @@ function _templateObject26() {
 }
 
 function _templateObject25() {
-  var data = _taggedTemplateLiteral(["\n            There's probably an error in one or more of your lexer regex rules.\n            Did you perhaps indent the rule regex? Note that all rule regexes\n            MUST start at the start of the line, i.e. text column 1. Indented text\n            is perceived as JavaScript action code related to the last lexer\n            rule regex.\n    \n              Erroneous code:\n            ", "\n    \n              Technical error report:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n            The '%{...%}' lexer setup action code section MUST have its action\n            block start marker (`%{`", ") positioned\n            at the start of a line to be accepted: *indented* action code blocks\n            (such as this one) are always related to an immediately preceding lexer spec item,\n            e.g. a lexer match rule expression (see 'lexer rules').\n    \n              Erroneous area:\n            ", "\n    \n              Technical error report:\n            ", "\n        "], ["\n            The '%{...%}' lexer setup action code section MUST have its action\n            block start marker (\\`%{\\`", ") positioned\n            at the start of a line to be accepted: *indented* action code blocks\n            (such as this one) are always related to an immediately preceding lexer spec item,\n            e.g. a lexer match rule expression (see 'lexer rules').\n    \n              Erroneous area:\n            ", "\n    \n              Technical error report:\n            ", "\n        "]);
 
   _templateObject25 = function _templateObject25() {
     return data;
@@ -1334,7 +1374,7 @@ function _templateObject25() {
 }
 
 function _templateObject24() {
-  var data = _taggedTemplateLiteral(["\n            The '%{...%}' lexer setup action code section MUST have its action\n            block start marker (`%{`", ") positioned\n            at the start of a line to be accepted: *indented* action code blocks\n            (such as this one) are always related to an immediately preceding lexer spec item,\n            e.g. a lexer match rule expression (see 'lexer rules').\n    \n              Erroneous area:\n            ", "\n    \n              Technical error report:\n            ", "\n        "], ["\n            The '%{...%}' lexer setup action code section MUST have its action\n            block start marker (\\`%{\\`", ") positioned\n            at the start of a line to be accepted: *indented* action code blocks\n            (such as this one) are always related to an immediately preceding lexer spec item,\n            e.g. a lexer match rule expression (see 'lexer rules').\n    \n              Erroneous area:\n            ", "\n    \n              Technical error report:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n        There's very probably a problem with this '%{...%}' lexer setup action code section.\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject24 = function _templateObject24() {
     return data;
@@ -1344,7 +1384,7 @@ function _templateObject24() {
 }
 
 function _templateObject23() {
-  var data = _taggedTemplateLiteral(["\n        There's very probably a problem with this '%{...%}' lexer setup action code section.\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n                The '%{...%}' lexer setup action code section does not compile: ", "\n    \n                  Erroneous area:\n                ", "\n            "]);
 
   _templateObject23 = function _templateObject23() {
     return data;
@@ -1354,7 +1394,7 @@ function _templateObject23() {
 }
 
 function _templateObject22() {
-  var data = _taggedTemplateLiteral(["\n                The '%{...%}' lexer setup action code section does not compile: ", "\n    \n                  Erroneous area:\n                ", "\n            "]);
+  var data = _taggedTemplateLiteral(["\n        illegal input in the lexer spec definitions section.\n    \n        This might be stuff incorrectly dangling off the previous\n        '", "' definition statement, so please do check above\n        when the mistake isn't immediately obvious from this error spot itself.\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject22 = function _templateObject22() {
     return data;
@@ -1364,7 +1404,7 @@ function _templateObject22() {
 }
 
 function _templateObject21() {
-  var data = _taggedTemplateLiteral(["\n        illegal input in the lexer spec definitions section.\n    \n        This might be stuff incorrectly dangling off the previous\n        '", "' definition statement, so please do check above\n        when the mistake isn't immediately obvious from this error spot itself.\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        Each '%code' initialization code section must be qualified by a name, \n        e.g. 'required' before the action code itself.\n    \n        The '%code ID %{...%}' initialization code section must be properly \n        wrapped in block start markers (e.g. `%{`) and matching end markers \n        (e.g. `%}`). Expected format:\n    \n            %code qualifier_name {action code}\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "], ["\n        Each '%code' initialization code section must be qualified by a name, \n        e.g. 'required' before the action code itself.\n    \n        The '%code ID %{...%\\}' initialization code section must be properly \n        wrapped in block start markers (e.g. \\`%{\\`) and matching end markers \n        (e.g. \\`%}\\`). Expected format:\n    \n            %code qualifier_name {action code}\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject21 = function _templateObject21() {
     return data;
@@ -1374,7 +1414,7 @@ function _templateObject21() {
 }
 
 function _templateObject20() {
-  var data = _taggedTemplateLiteral(["\n        Each '%code' initialization code section must be qualified by a name, e.g. 'required' before the action code itself:\n            %code qualifier_name {action code}\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        Each '%code' initialization code section must be qualified by a name, \n        e.g. 'required' before the action code itself:\n    \n            %code qualifier_name {action code}\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject20 = function _templateObject20() {
     return data;
@@ -1384,7 +1424,7 @@ function _templateObject20() {
 }
 
 function _templateObject19() {
-  var data = _taggedTemplateLiteral(["\n            The '%code ", "' initialization code section does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n        The '%code ID %{...%}' initialization code section must be properly \n        wrapped in block start markers (`%{`", ") \n        and matching end markers (`%}`", "). Expected format:\n    \n            %code qualifier_name {action code}\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "], ["\n        The '%code ID %{...%\\}' initialization code section must be properly \n        wrapped in block start markers (\\`%{\\`", ") \n        and matching end markers (\\`%}\\`", "). Expected format:\n    \n            %code qualifier_name {action code}\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject19 = function _templateObject19() {
     return data;
@@ -1394,7 +1434,7 @@ function _templateObject19() {
 }
 
 function _templateObject18() {
-  var data = _taggedTemplateLiteral(["\n            You did specify too many attributes for the '%code' initialization code statement, which must have the format:\n                %code qualifier_name %{...code...%}\n    \n              Erroneous code:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n            The '%code ", "' initialization code section does not compile: ", "\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject18 = function _templateObject18() {
     return data;
@@ -1404,7 +1444,7 @@ function _templateObject18() {
 }
 
 function _templateObject17() {
-  var data = _taggedTemplateLiteral(["\n            You did not specify a legal qualifier name for the '%code' initialization code statement, which must have the format:\n                %code qualifier_name %{...code...%}\n    \n              Erroneous code:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n            You did specify too many attributes for the '%code' initialization code statement, which must have the format:\n                %code qualifier_name %{...code...%}\n    \n              Erroneous code:\n            ", "\n        "]);
 
   _templateObject17 = function _templateObject17() {
     return data;
@@ -1414,7 +1454,7 @@ function _templateObject17() {
 }
 
 function _templateObject16() {
-  var data = _taggedTemplateLiteral(["\n        %import name or source filename missing maybe?\n    \n        Note: each '%import' must be qualified by a name, e.g. 'required' before the import path itself:\n            %import qualifier_name file_path\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n            You did not specify a legal qualifier name for the '%code' initialization code statement, which must have the format:\n                %code qualifier_name %{...code...%}\n    \n              Erroneous code:\n            ", "\n        "]);
 
   _templateObject16 = function _templateObject16() {
     return data;
@@ -1424,7 +1464,7 @@ function _templateObject16() {
 }
 
 function _templateObject15() {
-  var data = _taggedTemplateLiteral(["\n            You did specify too many attributes for the '%import' statement, which must have the format:\n                %import qualifier_name file_path\n    \n              Erroneous code:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n        %import name or source filename missing maybe?\n    \n        Note: each '%import' must be qualified by a name, e.g. 'required' before the import path itself:\n            %import qualifier_name file_path\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject15 = function _templateObject15() {
     return data;
@@ -1434,7 +1474,7 @@ function _templateObject15() {
 }
 
 function _templateObject14() {
-  var data = _taggedTemplateLiteral(["\n            You did not specify a legal qualifier name and/or file path for the '%import' statement, which must have the format:\n                %import qualifier_name file_path\n    \n              Erroneous code:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n            You did specify too many attributes for the '%import' statement, which must have the format:\n                %import qualifier_name file_path\n    \n              Erroneous code:\n            ", "\n        "]);
 
   _templateObject14 = function _templateObject14() {
     return data;
@@ -1444,7 +1484,7 @@ function _templateObject14() {
 }
 
 function _templateObject13() {
-  var data = _taggedTemplateLiteral(["\n        ill defined %options line.\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n            You did not specify a legal qualifier name and/or file path for the '%import' statement, which must have the format:\n                %import qualifier_name file_path\n    \n              Erroneous code:\n            ", "\n        "]);
 
   _templateObject13 = function _templateObject13() {
     return data;
@@ -1454,7 +1494,7 @@ function _templateObject13() {
 }
 
 function _templateObject12() {
-  var data = _taggedTemplateLiteral(["\n        The '%{...%}' lexer setup action code section MUST have its action\n        block start marker (`%{`", ") positioned\n        at the start of a line to be accepted: *indented* action code blocks\n        (such as this one) are always related to an immediately preceding lexer spec item,\n        e.g. a lexer match rule expression (see 'lexer rules').\n    \n          Erroneous area:\n        ", "\n    "], ["\n        The '%{...%}' lexer setup action code section MUST have its action\n        block start marker (\\`%{\\`", ") positioned\n        at the start of a line to be accepted: *indented* action code blocks\n        (such as this one) are always related to an immediately preceding lexer spec item,\n        e.g. a lexer match rule expression (see 'lexer rules').\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        ill defined %options line.\n    \n          Erroneous code:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject12 = function _templateObject12() {
     return data;
@@ -1575,11 +1615,13 @@ function _templateObject() {
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 (function (global, factory) {
-  (typeof exports === "undefined" ? "undefined" : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('fs'), require('path'), require('recast'), require('@babel/core'), require('assert'), require('@gerhobbelt/xregexp'), require('@gerhobbelt/json5'), require('ast-util'), require('process'), require('@gerhobbelt/nomnom')) : typeof define === 'function' && define.amd ? define(['fs', 'path', 'recast', '@babel/core', 'assert', '@gerhobbelt/xregexp', '@gerhobbelt/json5', 'ast-util', 'process', '@gerhobbelt/nomnom'], factory) : (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global['jison-cli'] = factory(global.fs, global.path$1, global.recast, global.babel, global.assert$1, global.XRegExp, global.json5, global.astUtils, global.process$1, global.nomnom));
-})(void 0, function (fs, path$1, recast, babel, assert$1, XRegExp, json5, astUtils, process$1, nomnom) {
+  (typeof exports === "undefined" ? "undefined" : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('fs'), require('path'), require('@gerhobbelt/xregexp'), require('recast'), require('@babel/core'), require('assert'), require('@gerhobbelt/json5'), require('ast-util'), require('process'), require('@gerhobbelt/nomnom')) : typeof define === 'function' && define.amd ? define(['fs', 'path', '@gerhobbelt/xregexp', 'recast', '@babel/core', 'assert', '@gerhobbelt/json5', 'ast-util', 'process', '@gerhobbelt/nomnom'], factory) : (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global['jison-cli'] = factory(global.fs, global.path$1, global.XRegExp, global.recast, global.babel, global.assert$1, global.json5, global.astUtils, global.process$1, global.nomnom));
+})(void 0, function (fs, path$1, XRegExp, recast, babel, assert$1, json5, astUtils, process$1, nomnom) {
   'use strict';
 
   function _interopDefaultLegacy(e) {
@@ -1592,11 +1634,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
   var path__default = /*#__PURE__*/_interopDefaultLegacy(path$1);
 
+  var XRegExp__default = /*#__PURE__*/_interopDefaultLegacy(XRegExp);
+
   var recast__default = /*#__PURE__*/_interopDefaultLegacy(recast);
 
   var assert__default = /*#__PURE__*/_interopDefaultLegacy(assert$1);
-
-  var XRegExp__default = /*#__PURE__*/_interopDefaultLegacy(XRegExp);
 
   var json5__default = /*#__PURE__*/_interopDefaultLegacy(json5);
 
@@ -1726,7 +1768,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       return rv;
     }) // cleanup: replace any non-suitable character series to a single underscore:
     .replace(/^[^\w_]/, '_') // do not accept numerics at the leading position, despite those matching regex `\w`:
-    .replace(/^\d/, '_').replace(/[^\w\d_]+/g, '_') // and only accept multiple (double, not triple) underscores at start or end of identifier name:
+    .replace(/^\d/, '_').replace(/[^\w\d_]/g, '_') // and only accept multiple (double, not triple) underscores at start or end of identifier name:
     .replace(/^__+/, '#').replace(/__+$/, '#').replace(/_+/g, '_').replace(/#/g, '__');
   } // Check if the start of the given input matches a regex expression.
   // Return the length of the regex expression or -1 if none was found.
@@ -1956,6 +1998,516 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   //var b = types.builders;
   //assert(b);
   //assert(astUtils);
+  // WARNING: this regex MUST match the regex for `ID` in ebnf-parser::bnf.l jison language lexer spec! (`ID = [{ALPHA}]{ALNUM}*`)
+  //
+  // This is the base XRegExp ID regex used in many places; this should match the ID macro definition in the EBNF/BNF parser et al as well!
+
+  var ID_REGEX_BASE = '[\\p{Alphabetic}_][\\p{Alphabetic}_\\p{Number}]*'; // regex set expression which can be used as part of a conditional check to find word/ID/token boundaries 
+  // as this lists all characters which are not allowed in an Identifier anywhere:
+
+  var IN_ID_CHARSET = '\\p{Alphabetic}_\\p{Number}'; // Determine which Unicode NonAsciiIdentifierStart characters 
+  // are unused in the given sourcecode and provide a mapping array
+  // from given (JISON) start/end identifier character-sequences
+  // to these.
+  // 
+  // The purpose of this routine is to deliver a reversible
+  // transform from JISON to plain JavaScript for any action
+  // code chunks. 
+  // 
+  // This is the basic building block which helps us convert
+  // jison variables such as `$id`, `$3`, `$-1` ('negative index' reference),
+  // `@id`, `#id`, `#TOK#` to variable names which can be
+  // parsed by a regular JavaScript parser such as esprima or babylon.
+
+  function generateMapper4JisonGrammarIdentifiers(input) {
+    var _ref;
+
+    // IMPORTANT: we only want the single char Unicodes in here
+    // so we can do this transformation at 'Char'-word rather than 'Code'-codepoint level.
+    //const IdentifierStart = unicode4IdStart.filter((e) => e.codePointAt(0) < 0xFFFF);
+    // As we will be 'encoding' the Jison Special characters @ and # into the IDStart Unicode 
+    // range to make JavaScript parsers *not* barf a hairball on Jison action code chunks, we
+    // must consider a few things while doing that:
+    // 
+    // We CAN use an escape system where we replace a single character with multiple characters,
+    // as JavaScript DOES NOT discern between single characters and multi-character strings: anything
+    // between quotes is a string and there's no such thing as C/C++/C#'s `'c'` vs `"c"` which is 
+    // *character* 'c' vs *string* 'c'.
+    // 
+    // As we can safely escape characters, all we need to do is find a character (or set of characters)
+    // which are in the ID_Start range and are expected to be used rarely while clearly identifyable
+    // by humans for ease of debugging of the escaped intermediate values.
+    // 
+    // The escape scheme is simple and borrowed from ancient serial communication protocols and
+    // the JavaScript string spec alike:
+    // 
+    // - assume the escape character is A
+    // - then if the original input stream includes an A, we output AA
+    // - if the original input includes a character #, which must be escaped, it is encoded/output as A
+    // 
+    // This is the same as the way the backslash escape in JavaScript strings works and has a minor issue:
+    // sequences of AAA with an odd number of A's CAN occur in the output, which might be a little hard to read.
+    // Those are, however, easily machine-decodable and that's what's most important here.
+    // 
+    // To help with that AAA... issue AND because we need to escape multiple Jison markers, we choose to 
+    // a slightly tweaked approach: we are going to use a set of 2-char wide escape codes, where the
+    // first character is fixed and the second character is chosen such that the escape code 
+    // DOES NOT occur in the original input -- unless someone would have intentionally fed nasty input 
+    // to the encoder as we will pick the 2 characters in the escape from 2 utterly different *human languages*:
+    // 
+    // - the first character is ဩ which is highly visible and allows us to quickly search through a 
+    //   source to see if and where there are *any* Jison escapes.
+    // - the second character is taken from the Unicode CANADIAN SYLLABICS range (0x1400-0x1670) as far as
+    //   those are part of ID_Start (0x1401-0x166C or there-abouts) and, unless an attack is attempted at jison,
+    //   we can be pretty sure that this 2-character sequence won't ever occur in real life: even when one
+    //   writes such a escape in the comments to document this system, e.g. 'ဩᐅ', then there's still plenty
+    //   alternatives for the second character left.
+    // - the second character represents the escape type: $-n, $#, #n, @n, #ID#, etc. and each type will
+    //   pick a different base shape from that CANADIAN SYLLABICS charset. 
+    // - note that the trailing '#' in Jison's '#TOKEN#' escape will be escaped as a different code to 
+    //   signal '#' as a token terminator there.
+    // - meanwhile, only the initial character in the escape needs to be escaped if encountered in the
+    //   original text: ဩ -> ဩဩ as the 2nd and 3rd character are only there to *augment* the escape.
+    //   Any CANADIAN SYLLABICS in the original input don't need escaping, as these only have special meaning
+    //   when prefixed with ဩ
+    // - if the ဩ character is used often in the text, the alternative ℹ இ ண ஐ Ϟ ല ઊ characters MAY be considered 
+    //   for the initial escape code, hence we start with analyzing the entire source input to see which
+    //   escapes we'll come up with this time.
+    //
+    // The basic shapes are:
+    // 
+    // - 1401-141B:  ᐁ             1
+    // - 142F-1448:  ᐯ             2
+    // - 144C-1465:  ᑌ             3
+    // - 146B-1482:  ᑫ             4
+    // - 1489-14A0:  ᒉ             5  
+    // - 14A3-14BA:  ᒣ             6 
+    // - 14C0-14CF:  ᓀ             
+    // - 14D3-14E9:  ᓓ             7
+    // - 14ED-1504:  ᓭ             8
+    // - 1510-1524:  ᔐ             9
+    // - 1526-153D:  ᔦ 
+    // - 1542-154F:  ᕂ
+    // - 1553-155C:  ᕓ
+    // - 155E-1569:  ᕞ
+    // - 15B8-15C3:  ᖸ
+    // - 15DC-15ED:  ᗜ            10
+    // - 15F5-1600:  ᗵ
+    // - 1614-1621:  ᘔ
+    // - 1622-162D:  ᘢ
+    //
+    // ## JISON identifier formats ##
+    // 
+    // - direct symbol references, e.g. `#NUMBER#` when there's a `%token NUMBER` for your grammar.
+    //   These represent the token ID number.
+    //   
+    //   -> (1+2) start-# + end-#
+    //   
+    // - alias/token value references, e.g. `$token`, `$2`
+    // 
+    //   -> $ is an accepted starter, so no encoding required
+    // 
+    // - alias/token location reference, e.g. `@token`, `@2`
+    // 
+    //   -> (6) single-@
+    // 
+    // - alias/token id numbers, e.g. `#token`, `#2`
+    // 
+    //   -> (3) single-#
+    // 
+    // - alias/token stack indexes, e.g. `##token`, `##2`
+    // 
+    //   -> (4) double-#
+    // 
+    // - result value reference `$$`
+    // 
+    //   -> $ is an accepted starter, so no encoding required
+    // 
+    // - result location reference `@$`
+    // 
+    //   -> (6) single-@
+    // 
+    // - rule id number `#$`
+    // 
+    //   -> (3) single-#
+    //   
+    // - result stack index `##$`
+    // 
+    //   -> (4) double-#
+    // 
+    // - 'negative index' value references, e.g. `$-2`
+    // 
+    //   -> (8) single-negative-$
+    //   
+    // - 'negative index' location reference, e.g. `@-2`
+    // 
+    //   -> (7) single-negative-@
+    //   
+    // - 'negative index' stack indexes, e.g. `##-2`
+    // 
+    //   -> (5) double-negative-#
+    // 
+    // count the number of occurrences of ch in src:
+    // 
+    // function countOccurrences(ch, src) {
+    //     let cnt = 0;
+    //     let offset = 0;
+    //     for (;;) {
+    //         let pos = src.indexOf(ch, offset);
+    //         if (pos === -1) {
+    //             return cnt;
+    //         }
+    //         cnt++;
+    //         offset = pos + 1;
+    //     }
+    // }
+    function countOccurrences(ch, src) {
+      var i = ch.codePointAt(0);
+      return hash[i] || 0;
+    } // pick an infrequent occurring character from the given `set`.
+    // Preferrably has ZERO occurrences in the given `input`, but otherwise
+    // deliver the one with the least number of occurrences.
+
+
+    function pickChar(set, input) {
+      // strip out the spaces:
+      set = set.replace(/\s+/g, '');
+      assert__default['default'](set.length >= 1);
+      var lsidx = 0;
+      var lsfreq = Infinity;
+
+      for (var i = 0, l = set.length; i < l; i++) {
+        var ch = set[i];
+        var freq = countOccurrences(ch);
+
+        if (freq === 0) {
+          return ch;
+        }
+
+        if (freq < lsfreq) {
+          lsfreq = freq;
+          lsidx = i;
+        }
+      }
+
+      return set[lsidx];
+    }
+
+    var escCharSet = "ဩ ℹ இ ண ஐ Ϟ ല ઊ"; // Currently we only need 7 rows of typeIdCharSets. The other rows are commented out but available for future use:
+
+    var typeIdCharSets = ["ᐁ  ᐂ  ᐃ  ᐄ  ᐅ  ᐆ  ᐇ  ᐈ  ᐉ  ᐊ  ᐋ  ᐌ  ᐍ  ᐎ  ᐏ  ᐐ  ᐑ  ᐒ  ᐓ  ᐔ  ᐕ  ᐖ  ᐗ  ᐘ  ᐙ  ᐚ  ᐛ  ᐫ  ᐬ  ᐭ  ᐮ", //"ᐯ  ᐰ  ᐱ  ᐲ  ᐳ  ᐴ  ᐵ  ᐶ  ᐷ  ᐸ  ᐹ  ᐺ  ᐻ  ᐼ  ᐽ  ᐾ  ᐿ  ᑀ  ᑁ  ᑂ  ᑃ  ᑄ  ᑅ  ᑆ  ᑇ  ᑈ",
+    "ᑌ  ᑍ  ᑎ  ᑏ  ᑐ  ᑑ  ᑒ  ᑓ  ᑔ  ᑕ  ᑖ  ᑗ  ᑘ  ᑙ  ᑚ  ᑛ  ᑜ  ᑝ  ᑞ  ᑟ  ᑠ  ᑡ  ᑢ  ᑣ  ᑤ  ᑥ  ᑧ  ᑨ  ᑩ  ᑪ", "ᑫ  ᑬ  ᑭ  ᑮ  ᑯ  ᑰ  ᑱ  ᑲ  ᑳ  ᑴ  ᑵ  ᑶ  ᑷ  ᑸ  ᑹ  ᑺ  ᑻ  ᑼ  ᑽ  ᑾ  ᑿ  ᒀ  ᒁ  ᒂ  ᒅ  ᒆ  ᒇ  ᒈ", //"ᒉ  ᒊ  ᒋ  ᒌ  ᒍ  ᒎ  ᒏ  ᒐ  ᒑ  ᒒ  ᒓ  ᒔ  ᒕ  ᒖ  ᒗ  ᒘ  ᒙ  ᒚ  ᒛ  ᒜ  ᒝ  ᒞ  ᒟ  ᒠ",
+    //"ᒣ  ᒤ  ᒥ  ᒦ  ᒧ  ᒨ  ᒩ  ᒪ  ᒫ  ᒬ  ᒭ  ᒮ  ᒯ  ᒰ  ᒱ  ᒲ  ᒳ  ᒴ  ᒵ  ᒶ  ᒷ  ᒸ  ᒹ  ᒺ",
+    //"ᓓ  ᓔ  ᓕ  ᓖ  ᓗ  ᓘ  ᓙ  ᓚ  ᓛ  ᓜ  ᓝ  ᓞ  ᓟ  ᓠ  ᓡ  ᓢ  ᓣ  ᓤ  ᓥ  ᓦ  ᓧ  ᓨ  ᓩ",
+    //"ᓭ  ᓮ  ᓯ  ᓰ  ᓱ  ᓲ  ᓳ  ᓴ  ᓵ  ᓶ  ᓷ  ᓸ  ᓹ  ᓺ  ᓻ  ᓼ  ᓽ  ᓾ  ᓿ  ᔀ  ᔁ  ᔂ  ᔃ  ᔄ",
+    //"ᔐ  ᔑ  ᔒ  ᔓ  ᔔ  ᔕ  ᔖ  ᔗ  ᔘ  ᔙ  ᔚ  ᔛ  ᔜ  ᔝ  ᔞ  ᔟ  ᔠ  ᔡ  ᔢ  ᔣ  ᔤ",
+    "ᔦ  ᔧ  ᔨ  ᔩ  ᔪ  ᔫ  ᔬ  ᔭ  ᔮ  ᔯ  ᔰ  ᔱ  ᔲ  ᔳ  ᔴ  ᔵ  ᔶ  ᔷ  ᔸ  ᔹ  ᔺ  ᔻ  ᔼ  ᔽ", //"ᓀ  ᓁ  ᓂ  ᓃ  ᓄ  ᓅ  ᓆ  ᓇ  ᓈ  ᓉ  ᓊ  ᓋ  ᓌ  ᓍ  ᓎ  ᓏ",
+    //"ᕂ  ᕃ  ᕄ  ᕅ  ᕆ  ᕇ  ᕈ  ᕉ  ᕊ  ᕋ  ᕌ  ᕍ  ᕎ  ᕏ",
+    //"ᕞ  ᕟ  ᕠ  ᕡ  ᕢ  ᕣ  ᕤ  ᕥ  ᕦ  ᕧ  ᕨ  ᕩ",
+    //"ᖸ  ᖹ  ᖺ  ᖻ  ᖼ  ᖽ  ᖾ  ᖿ  ᗀ  ᗁ  ᗂ  ᗃ",
+    "ᗜ  ᗝ  ᗞ  ᗟ  ᗠ  ᗡ  ᗢ  ᗣ  ᗤ  ᗥ  ᗦ  ᗧ  ᗨ  ᗩ  ᗪ  ᗫ  ᗬ  ᗭ", //"ᗯ  ᗰ  ᗱ  ᗲ  ᗳ  ᗴ  ᗵ  ᗶ  ᗷ  ᗸ  ᗹ  ᗺ  ᗻ  ᗼ  ᗽ  ᗾ  ᗿ  ᘀ",
+    "ᘔ  ᘕ  ᘖ  ᘗ  ᘘ  ᘙ  ᘚ  ᘛ  ᘜ  ᘝ  ᘞ  ᘟ  ᘠ  ᘡ", //"ᘢ  ᘣ  ᘤ  ᘥ  ᘦ  ᘧ  ᘨ  ᘩ  ᘪ  ᘫ  ᘬ  ᘭ  ᘴ  ᘵ  ᘶ  ᘷ  ᘸ  ᘹ",
+    //"ᕓ  ᕔ  ᕕ  ᕖ  ᕗ  ᕘ  ᕙ  ᕚ  ᕛ  ᕜ",
+    "ᗄ  ᗅ  ᗆ  ᗇ  ᗈ  ᗉ  ᗊ  ᗋ  ᗌ  ᗍ  ᗎ  ᗏ  ᗐ  ᗑ  ᗒ  ᗓ  ᗔ  ᗕ  ᗖ  ᗗ  ᗘ  ᗙ  ᗚ  ᗛ"]; //const I = 'ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ';   // 1..12, but accepted as IdentifierStart in JavaScript :-) 
+    // Probable speed improvement: scan a single time through the (probably large) input source,
+    // looking for all characters in parallel, instead of scanning N times through there:
+    // construct a regex to dig out all potential occurrences and take it from there.
+
+    var reStr = escCharSet + typeIdCharSets.join("");
+    reStr = reStr.replace(/\s+/g, '');
+    var re = new RegExp("[".concat(reStr, "]"), 'g');
+    var hash = new Array(0xD800);
+    var m;
+
+    while ((m = re.exec(input)) !== null) {
+      var i = m[0].codePointAt();
+      hash[i] = (hash[i] || 0) + 1;
+    } //
+    // The basic shapes are:
+    // 
+    // - 1401-141B:  ᐁ             1
+    // - 142F-1448:  ᐯ             2
+    // - 144C-1465:  ᑌ             3
+    // - 146B-1482:  ᑫ             4
+    // - 1489-14A0:  ᒉ             5  
+    // - 14A3-14BA:  ᒣ             6 
+    // - 14C0-14CF:  ᓀ             
+    // - 14D3-14E9:  ᓓ             7
+    // - 14ED-1504:  ᓭ             8
+    // - 1510-1524:  ᔐ             9
+    // - 1526-153D:  ᔦ 
+    // - 1542-154F:  ᕂ
+    // - 1553-155C:  ᕓ
+    // - 155E-1569:  ᕞ
+    // - 15B8-15C3:  ᖸ
+    // - 15DC-15ED:  ᗜ            10
+    // - 15F5-1600:  ᗵ
+    // - 1614-1621:  ᘔ
+    // - 1622-162D:  ᘢ
+    //
+    // ## JISON identifier formats ##
+    // 
+    // - direct symbol references, e.g. `#NUMBER#` when there's a `%token NUMBER` for your grammar.
+    //   These represent the token ID number.
+    //   
+    //   -> (1+2) start-# + end-#
+    //   
+    // - alias/token value references, e.g. `$token`, `$2`
+    // 
+    //   -> $ is an accepted starter, so no encoding required
+    // 
+    // - alias/token location reference, e.g. `@token`, `@2`
+    // 
+    //   -> (6) single-@
+    // 
+    // - alias/token id numbers, e.g. `#token`, `#2`
+    // 
+    //   -> (3) single-#
+    // 
+    // - alias/token stack indexes, e.g. `##token`, `##2`
+    // 
+    //   -> (4) double-#
+    // 
+    // - result value reference `$$`
+    // 
+    //   -> $ is an accepted starter, so no encoding required
+    // 
+    // - result location reference `@$`
+    // 
+    //   -> (6) single-@
+    // 
+    // - rule id number `#$`
+    // 
+    //   -> (3) single-#
+    //   
+    // - result stack index `##$`
+    // 
+    //   -> (4) double-#
+    // 
+    // - 'negative index' value references, e.g. `$-2`
+    // 
+    //   -> (8) single-negative-$
+    //   
+    // - 'negative index' location reference, e.g. `@-2`
+    // 
+    //   -> (7) single-negative-@
+    //   
+    // - 'negative index' stack indexes, e.g. `##-2`
+    // 
+    //   -> (5) double-negative-#
+    // 
+
+
+    var escChar = pickChar(escCharSet);
+    var typeIdChar = [];
+
+    for (var _i = 0, l = typeIdCharSets.length; _i < l; _i++) {
+      typeIdChar[_i] = pickChar(typeIdCharSets[_i]);
+    } // produce a function set for encoding and decoding content, 
+    // plus the basic strings to build regexes for matching the various jison
+    // identifier types:
+
+
+    return _ref = {
+      // - direct symbol references, e.g. `#NUMBER#` when there's a `%token NUMBER` for your grammar.
+      //   These represent the token ID number.
+      //   
+      //   -> (1) start-#
+      tokenDirectIdentifierStart: escChar + typeIdChar[0],
+      tokenDirectIdentifierRe: new XRegExp__default['default']("#(".concat(ID_REGEX_BASE, ")#"), 'g'),
+      // - alias/token value references, e.g. `$token`, `$2`
+      // 
+      //   -> $ is an accepted starter, so no encoding required
+      // - result value reference `$$`
+      // 
+      //   -> $ is an accepted starter, so no encoding required
+      tokenValueReferenceStart: '$',
+      tokenValueReferenceRe: new XRegExp__default['default']("$(".concat(ID_REGEX_BASE, ")|$([0-9]+)"), 'g'),
+      // - alias/token location reference, e.g. `@token`, `@2`
+      // 
+      //   -> (6) single-@
+      // - result location reference `@$`
+      // 
+      //   -> (6) single-@
+      tokenLocationStart: escChar + typeIdChar[1],
+      tokenLocationRe: new XRegExp__default['default']("@(".concat(ID_REGEX_BASE, ")|@([0-9]+)"), 'g'),
+      // - alias/token id numbers, e.g. `#token`, `#2`
+      // 
+      //   -> (3) single-#
+      // - rule id number `#$`
+      // 
+      //   -> (3) single-#
+      tokenIdentifierStart: escChar + typeIdChar[2],
+      tokenIdentifierRe: new XRegExp__default['default']("#(".concat(ID_REGEX_BASE, ")|#([0-9]+)"), 'g'),
+      // - alias/token stack indexes, e.g. `##token`, `##2`
+      // 
+      //   -> (4) double-#
+      // - result stack index `##$`
+      // 
+      //   -> (4) double-#
+      tokenStackIndexStart: escChar + typeIdChar[3],
+      tokenStackIndexRe: new XRegExp__default['default']("##(".concat(ID_REGEX_BASE, ")|##([0-9]+)"), 'g'),
+      // - 'negative index' value references, e.g. `$-2`
+      // 
+      //   -> (8) single-negative-$
+      tokenNegativeValueReferenceStart: escChar + typeIdChar[4]
+    }, _defineProperty(_ref, "tokenValueReferenceRe", new XRegExp__default['default']("$-([0-9]+)", 'g')), _defineProperty(_ref, "tokenNegativeLocationStart", escChar + typeIdChar[5]), _defineProperty(_ref, "tokenNegativeLocationRe", new XRegExp__default['default']("@-([0-9]+)", 'g')), _defineProperty(_ref, "tokenNegativeStackIndexStart", escChar + typeIdChar[6]), _defineProperty(_ref, "tokenNegativeStackIndexRe", new XRegExp__default['default']("#-([0-9]+)", 'g')), _defineProperty(_ref, "tokenDetect4EncodeRe", new XRegExp__default['default']("([^$@#".concat(IN_ID_CHARSET, "])([$@#]|##)(").concat(ID_REGEX_BASE, "|[$]|-?[0-9]+)(#?)(?![$@#").concat(IN_ID_CHARSET, "])"), 'g')), _defineProperty(_ref, "tokenDetect4DecodeRe", new XRegExp__default['default']("([^$".concat(IN_ID_CHARSET, "])(").concat(escChar, "[").concat(typeIdChar.slice(0, 7).join(''), "])(").concat(ID_REGEX_BASE, "|[$]|[0-9]+)(?![$@#").concat(IN_ID_CHARSET, "])"), 'g')), _defineProperty(_ref, "encode", function encodeJisonTokens(src, locationOffsetSpec) {
+      var _this = this;
+
+      var re = this.tokenDetect4EncodeRe; // reset regex
+
+      re.lastIndex = 0; // patch `src` for the lookbehind emulation in the main regex used:
+
+      src = ' ' + src; // Perform the encoding, one token at a time via callback function.
+      // 
+      // Note: all erroneous inputs are IGNORED as those MAY be part of a string
+      // or comment, where they are perfectly legal.
+      // This is a tad sub-optimal as we won't be able to report errors early 
+      // but otherwise we would be rejecting some potentially *legal* action code
+      // and we DO NOT want to be pedantically strict while we are unable to parse
+      // the input very precisely yet.
+
+      src = src.replace(re, function (m, p1, p2, p3, p4, offset) {
+        // p1 is only serving as lookbehind emulation
+        switch (p2) {
+          case '$':
+            // no encoding required UNLESS it's a negative index; p4 MUST be empty
+            if (p4 !== '') {
+              if (locationOffsetSpec) {
+                locationOffsetSpec.reportLocation("syntax error: ".concat(p2 + p3, " cannot be followed by ").concat(p4), src, offset + p1.length + p2.length + p3.length);
+              }
+
+              return p1 + p2 + p3 + p4;
+            }
+
+            if (p3[0] === '-') {
+              return p1 + _this.tokenNegativeValueReferenceStart + p3.substring(1);
+            }
+
+            return p1 + p2 + p3;
+
+          case '##':
+            // p4 MUST be empty
+            if (p4 !== '') {
+              if (locationOffsetSpec) {
+                locationOffsetSpec.reportLocation("syntax error: ".concat(p2 + p3, " cannot be followed by ").concat(p4), src, offset + p1.length + p2.length + p3.length);
+              }
+
+              return p1 + p2 + p3 + p4;
+            }
+
+            if (p3[0] === '-') {
+              return p1 + _this.tokenNegativeStackIndexStart + p3.substring(1);
+            }
+
+            return p1 + _this.tokenStackIndexStart + p3;
+
+          case '@':
+            // p4 MUST be empty
+            if (p4 !== '') {
+              if (locationOffsetSpec) {
+                locationOffsetSpec.reportLocation("syntax error: ".concat(p2 + p3, " cannot be followed by ").concat(p4), src, offset + p1.length + p2.length + p3.length);
+              }
+
+              return p1 + p2 + p3 + p4;
+            }
+
+            if (p3[0] === '-') {
+              return p1 + _this.tokenNegativeLocationStart + p3.substring(1);
+            }
+
+            return p1 + _this.tokenLocationStart + p3;
+
+          case '#':
+            // p4 MAY be non-empty; p3 CANNOT be a negative value or token ID
+            if (p3[0] === '-') {
+              if (locationOffsetSpec) {
+                locationOffsetSpec.reportLocation("syntax error: ".concat(p2 + p3 + p4, " is an illegal negative reference type"), src, offset + p1.length + p2.length);
+              }
+
+              return p1 + p2 + p3 + p4;
+            }
+
+            if (p4 !== '') {
+              return p1 + _this.tokenDirectIdentifierStart + p3;
+            }
+
+            return p1 + _this.tokenIdentifierStart + p3;
+          // no default case needed as all possible matches are handled in the cases above.
+        }
+      }); // and remove the added prefix which was used for lookbehind emulation:
+
+      return src.substring(1);
+    }), _defineProperty(_ref, "decode", function decodeJisonTokens(src, locationOffsetSpec) {
+      var _this2 = this;
+
+      var re = this.tokenDetect4DecodeRe; // reset regex
+
+      re.lastIndex = 0; // patch `src` for the lookbehind emulation in the main regex used:
+
+      src = ' ' + src; // Perform the encoding, one token at a time via callback function.
+      // 
+      // Note: all erroneous inputs are IGNORED as those MAY be part of a string
+      // or comment, where they are perfectly legal.
+      // This is a tad sub-optimal as we won't be able to report errors early 
+      // but otherwise we would be rejecting some potentially *legal* action code
+      // and we DO NOT want to be pedantically strict while we are unable to parse
+      // the input very precisely yet.
+
+      src = src.replace(re, function (m, p1, p2, p3, offset) {
+        // p1 is only serving as lookbehind emulation
+        switch (p2) {
+          case _this2.tokenNegativeValueReferenceStart:
+            return p1 + "$-" + p3;
+
+          case _this2.tokenNegativeStackIndexStart:
+            return p1 + "##-" + p3;
+
+          case _this2.tokenStackIndexStart:
+            return p1 + "##" + p3;
+
+          case _this2.tokenNegativeLocationStart:
+            return p1 + "@-" + p3;
+
+          case _this2.tokenLocationStart:
+            return p1 + "@" + p3;
+
+          case _this2.tokenDirectIdentifierStart:
+            // p3 CANNOT be a negative value or token ID
+            if (p3[0] === '-') {
+              if (locationOffsetSpec) {
+                locationOffsetSpec.reportLocation("syntax error: ".concat(p2 + p3 + p4, " is an illegal negative reference type"), src, offset + p1.length + p2.length);
+              }
+
+              return p1 + p2 + p3;
+            }
+
+            return p1 + '#' + p3 + '#';
+
+          case _this2.tokenIdentifierStart:
+            // p3 CANNOT be a negative value or token ID
+            if (p3[0] === '-') {
+              if (locationOffsetSpec) {
+                locationOffsetSpec.reportLocation("syntax error: ".concat(p2 + p3 + p4, " is an illegal negative reference type"), src, offset + p1.length + p2.length);
+              }
+
+              return p1 + p2 + p3;
+            }
+
+            return p1 + '#' + p3;
+
+          default:
+            if (locationOffsetSpec) {
+              locationOffsetSpec.reportLocation("syntax error: unexpected jison token sentinel escape ".concat(p2, " at ").concat(p2 + p3), src, offset + p1.length);
+            }
+
+            return p1 + p2 + p3;
+        }
+      }); // and remove the added prefix which was used for lookbehind emulation:
+
+      return src.substring(1);
+    }), _ref;
+  }
 
   function parseCodeChunkToAST(src, options) {
     src = src.replace(/@/g, "\uFFDA").replace(/#/g, "\uFFDB");
@@ -1988,7 +2540,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   }
 
   function prettyPrintAST(ast, options) {
-    var new_src;
     var options = options || {};
     var defaultOptions = {
       tabWidth: 2,
@@ -2005,25 +2556,18 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
     }
 
-    var s = recast__default['default'].prettyPrint(ast, {
-      tabWidth: 2,
-      quote: 'single',
-      arrowParensAlways: true,
-      // Do not reuse whitespace (or anything else, for that matter)
-      // when printing generically.
-      reuseWhitespace: false
-    });
-    new_src = s.code;
+    var s = recast__default['default'].prettyPrint(ast, defaultOptions);
+    var new_src = s.code;
     new_src = new_src.replace(/\r\n|\n|\r/g, '\n') // platform dependent EOL fixup
     // backpatch possible jison variables extant in the prettified code:
     .replace(/\uFFDA/g, '@').replace(/\uFFDB/g, '#');
     return new_src;
-  } // validate the given JavaScript snippet: does it compile?
+  } // validate the given JISON+JavaScript snippet: does it compile?
   // 
   // Return either the parsed AST (object) or an error message (string). 
 
 
-  function checkActionBlock(src, yylloc) {
+  function checkActionBlock(src, yylloc, options) {
     // make sure reasonable line numbers, etc. are reported in any
     // potential parse errors by pushing the source code down:
     if (yylloc && yylloc.first_line > 0) {
@@ -2037,7 +2581,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }
 
     try {
-      var rv = parseCodeChunkToAST(src);
+      var rv = parseCodeChunkToAST(src, options);
       return false;
     } catch (ex) {
       return ex.message || "code snippet cannot be parsed";
@@ -2118,11 +2662,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   }
 
   var parse2AST = {
+    generateMapper4JisonGrammarIdentifiers: generateMapper4JisonGrammarIdentifiers,
     parseCodeChunkToAST: parseCodeChunkToAST,
     compileCodeToES5: compileCodeToES5,
     prettyPrintAST: prettyPrintAST,
     checkActionBlock: checkActionBlock,
-    trimActionCode: trimActionCode
+    trimActionCode: trimActionCode,
+    ID_REGEX_BASE: ID_REGEX_BASE,
+    IN_ID_CHARSET: IN_ID_CHARSET
   };
 
   function chkBugger$1(src) {
@@ -2657,11 +3204,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     getRegExpInfo: reHelpers.getRegExpInfo,
     exec: code_exec.exec,
     dump: code_exec.dump,
+    generateMapper4JisonGrammarIdentifiers: parse2AST.generateMapper4JisonGrammarIdentifiers,
     parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,
     compileCodeToES5: parse2AST.compileCodeToES5,
     prettyPrintAST: parse2AST.prettyPrintAST,
     checkActionBlock: parse2AST.checkActionBlock,
     trimActionCode: parse2AST.trimActionCode,
+    ID_REGEX_BASE: parse2AST.ID_REGEX_BASE,
+    IN_ID_CHARSET: parse2AST.IN_ID_CHARSET,
     printFunctionSourceCode: stringifier.printFunctionSourceCode,
     printFunctionSourceCodeContainer: stringifier.printFunctionSourceCodeContainer,
     detectIstanbulGlobal: detectIstanbulGlobal
@@ -3149,7 +3699,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       "$": 16,
       "$accept": 0,
       "$end": 1,
-      "%%": 19,
+      "%%": 33,
       "(": 8,
       ")": 9,
       "*": 11,
@@ -3157,86 +3707,87 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       ",": 17,
       ".": 14,
       "/": 13,
-      "/!": 42,
+      "/!": 41,
       "<": 3,
       "=": 18,
       ">": 6,
       "?": 12,
-      "ACTION_BODY": 36,
-      "ACTION_END": 24,
-      "ACTION_START": 26,
-      "ACTION_START_AT_SOL": 23,
-      "ARROW_ACTION_START": 35,
-      "BRACKET_MISSING": 38,
-      "BRACKET_SURPLUS": 39,
-      "CHARACTER_LIT": 51,
-      "CODE": 31,
-      "DUMMY": 27,
-      "DUMMY3": 52,
+      "ACTION_BODY": 35,
+      "ACTION_END": 23,
+      "ACTION_START": 25,
+      "ACTION_START_AT_SOL": 22,
+      "ARROW_ACTION_START": 34,
+      "BRACKET_MISSING": 37,
+      "BRACKET_SURPLUS": 38,
+      "CHARACTER_LIT": 50,
+      "CODE": 29,
+      "DUMMY3": 51,
       "EOF": 1,
-      "ESCAPED_CHAR": 44,
-      "IMPORT": 30,
-      "INCLUDE": 32,
-      "INCLUDE_PLACEMENT_ERROR": 37,
-      "MACRO_END": 21,
-      "MACRO_NAME": 20,
-      "NAME_BRACE": 45,
-      "OPTIONS": 29,
-      "OPTIONS_END": 22,
-      "OPTION_STRING": 53,
-      "OPTION_VALUE": 54,
-      "RANGE_REGEX": 49,
-      "REGEX_SET": 48,
-      "REGEX_SET_END": 47,
-      "REGEX_SET_START": 46,
-      "REGEX_SPECIAL_CHAR": 43,
-      "SPECIAL_GROUP": 41,
-      "START_EXC": 34,
-      "START_INC": 33,
-      "STRING_LIT": 50,
-      "TRAILING_CODE_CHUNK": 55,
-      "UNKNOWN_DECL": 28,
-      "UNTERMINATED_ACTION_BLOCK": 25,
-      "UNTERMINATED_STRING_ERROR": 40,
+      "ESCAPED_CHAR": 43,
+      "IMPORT": 28,
+      "INCLUDE": 30,
+      "INCLUDE_PLACEMENT_ERROR": 36,
+      "MACRO_END": 20,
+      "MACRO_NAME": 19,
+      "NAME_BRACE": 44,
+      "OPTIONS": 27,
+      "OPTIONS_END": 21,
+      "OPTION_STRING": 52,
+      "OPTION_VALUE": 53,
+      "RANGE_REGEX": 48,
+      "REGEX_SET": 47,
+      "REGEX_SET_END": 46,
+      "REGEX_SET_START": 45,
+      "REGEX_SPECIAL_CHAR": 42,
+      "SPECIAL_GROUP": 40,
+      "START_EXC": 32,
+      "START_INC": 31,
+      "STRING_LIT": 49,
+      "TRAILING_CODE_CHUNK": 54,
+      "UNKNOWN_DECL": 26,
+      "UNTERMINATED_ACTION_BLOCK": 24,
+      "UNTERMINATED_STRING_ERROR": 39,
       "^": 15,
-      "action": 72,
-      "any_group_regex": 80,
-      "definition": 60,
-      "definitions": 59,
-      "epilogue": 89,
-      "epilogue_chunk": 91,
-      "epilogue_chunks": 90,
+      "action": 73,
+      "any_group_regex": 81,
+      "definition": 59,
+      "definitions": 58,
+      "epilogue": 90,
+      "epilogue_chunk": 92,
+      "epilogue_chunks": 91,
       "error": 2,
-      "import_keyword": 62,
-      "include_keyword": 64,
-      "include_macro_code": 92,
-      "init": 58,
-      "init_code_keyword": 63,
-      "lex": 56,
-      "literal_string": 84,
-      "name_expansion": 79,
-      "nonempty_regex_list": 76,
-      "option": 86,
-      "option_keyword": 61,
-      "option_list": 85,
-      "option_name": 87,
-      "option_value": 88,
-      "range_regex": 83,
-      "regex": 74,
-      "regex_base": 78,
-      "regex_concat": 77,
-      "regex_list": 75,
-      "regex_set": 81,
-      "regex_set_atom": 82,
-      "rule": 71,
-      "rule_block": 70,
-      "rules": 68,
-      "rules_and_epilogue": 57,
-      "scoped_rules_collective": 69,
-      "start_conditions": 73,
-      "start_conditions_marker": 67,
-      "start_exclusive_keyword": 66,
-      "start_inclusive_keyword": 65,
+      "import_keyword": 61,
+      "include_keyword": 63,
+      "include_macro_code": 93,
+      "init": 57,
+      "init_code_keyword": 62,
+      "lex": 55,
+      "literal_string": 85,
+      "name_expansion": 80,
+      "nonempty_regex_list": 77,
+      "option": 87,
+      "option_keyword": 60,
+      "option_list": 86,
+      "option_name": 88,
+      "option_value": 89,
+      "range_regex": 84,
+      "regex": 75,
+      "regex_base": 79,
+      "regex_concat": 78,
+      "regex_list": 76,
+      "regex_set": 82,
+      "regex_set_atom": 83,
+      "rule": 72,
+      "rule_block": 71,
+      "rules": 69,
+      "rules_and_epilogue": 56,
+      "scoped_rules_collective": 70,
+      "start_conditions": 74,
+      "start_conditions_marker": 66,
+      "start_epilogue_marker": 68,
+      "start_exclusive_keyword": 65,
+      "start_inclusive_keyword": 64,
+      "start_productions_marker": 67,
       "{": 4,
       "|": 7,
       "}": 5
@@ -3260,46 +3811,45 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       16: "$",
       17: ",",
       18: "=",
-      19: "%%",
-      20: "MACRO_NAME",
-      21: "MACRO_END",
-      22: "OPTIONS_END",
-      23: "ACTION_START_AT_SOL",
-      24: "ACTION_END",
-      25: "UNTERMINATED_ACTION_BLOCK",
-      26: "ACTION_START",
-      27: "DUMMY",
-      28: "UNKNOWN_DECL",
-      29: "OPTIONS",
-      30: "IMPORT",
-      31: "CODE",
-      32: "INCLUDE",
-      33: "START_INC",
-      34: "START_EXC",
-      35: "ARROW_ACTION_START",
-      36: "ACTION_BODY",
-      37: "INCLUDE_PLACEMENT_ERROR",
-      38: "BRACKET_MISSING",
-      39: "BRACKET_SURPLUS",
-      40: "UNTERMINATED_STRING_ERROR",
-      41: "SPECIAL_GROUP",
-      42: "/!",
-      43: "REGEX_SPECIAL_CHAR",
-      44: "ESCAPED_CHAR",
-      45: "NAME_BRACE",
-      46: "REGEX_SET_START",
-      47: "REGEX_SET_END",
-      48: "REGEX_SET",
-      49: "RANGE_REGEX",
-      50: "STRING_LIT",
-      51: "CHARACTER_LIT",
-      52: "DUMMY3",
-      53: "OPTION_STRING",
-      54: "OPTION_VALUE",
-      55: "TRAILING_CODE_CHUNK"
+      19: "MACRO_NAME",
+      20: "MACRO_END",
+      21: "OPTIONS_END",
+      22: "ACTION_START_AT_SOL",
+      23: "ACTION_END",
+      24: "UNTERMINATED_ACTION_BLOCK",
+      25: "ACTION_START",
+      26: "UNKNOWN_DECL",
+      27: "OPTIONS",
+      28: "IMPORT",
+      29: "CODE",
+      30: "INCLUDE",
+      31: "START_INC",
+      32: "START_EXC",
+      33: "%%",
+      34: "ARROW_ACTION_START",
+      35: "ACTION_BODY",
+      36: "INCLUDE_PLACEMENT_ERROR",
+      37: "BRACKET_MISSING",
+      38: "BRACKET_SURPLUS",
+      39: "UNTERMINATED_STRING_ERROR",
+      40: "SPECIAL_GROUP",
+      41: "/!",
+      42: "REGEX_SPECIAL_CHAR",
+      43: "ESCAPED_CHAR",
+      44: "NAME_BRACE",
+      45: "REGEX_SET_START",
+      46: "REGEX_SET_END",
+      47: "REGEX_SET",
+      48: "RANGE_REGEX",
+      49: "STRING_LIT",
+      50: "CHARACTER_LIT",
+      51: "DUMMY3",
+      52: "OPTION_STRING",
+      53: "OPTION_VALUE",
+      54: "TRAILING_CODE_CHUNK"
     },
     terminal_descriptions_: {
-      45: "macro name in '{...}' curly braces"
+      44: "macro name in '{...}' curly braces"
     },
     TERROR: 2,
     EOF: 1,
@@ -3407,8 +3957,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       return tokenset;
     },
     productions_: bp({
-      pop: u([56, s, [57, 5], 58, 59, 59, s, [60, 21], s, [61, 8, 1], s, [68, 13], s, [69, 5], 70, 70, s, [71, 7], s, [72, 7], 73, 73, 74, 75, 75, s, [76, 5], 77, 77, s, [78, 18], 79, 80, 80, 81, 81, 82, 82, 83, 84, 84, s, [85, 3], s, [86, 4], 87, 87, 88, 88, s, [89, 3], s, [90, 3], s, [91, 5], 92, 92]),
-      rule: u([4, 3, 3, 2, 2, 0, 0, 2, 0, 3, 2, 3, 2, c, [4, 3], 1, c, [5, 3], c, [3, 3], 1, 3, 2, 6, 4, 2, s, [1, 8], 2, 2, 4, 2, 3, 4, c, [25, 3], s, [2, 4], 0, 2, 4, c, [53, 4], 0, s, [4, 3], s, [3, 3], s, [2, 7], 0, 4, 3, 1, 1, c, [68, 3], c, [51, 3], c, [60, 3], c, [24, 8], c, [12, 3], s, [1, 7], c, [17, 3], c, [9, 7], c, [8, 3], c, [13, 8], c, [35, 5], c, [13, 5], 3, 2])
+      pop: u([55, s, [56, 5], 57, 58, 58, s, [59, 20], s, [60, 10, 1], s, [69, 12], s, [70, 5], 71, 71, s, [72, 7], s, [73, 7], 74, 74, 75, 76, 76, s, [77, 5], 78, 78, s, [79, 18], 80, 81, 81, 82, 82, 83, 83, 84, 85, 85, s, [86, 3], s, [87, 4], 88, 88, 89, 89, s, [90, 3], s, [91, 3], s, [92, 4], 93, 93]),
+      rule: u([4, 3, 3, 2, 2, 0, 0, 2, 0, 3, 2, 3, 2, c, [4, 3], 1, 2, c, [6, 3], 1, 3, 3, 6, 5, 5, 3, s, [1, 10], 2, 2, 4, 2, c, [41, 4], s, [2, 4], 0, 2, 4, c, [53, 4], 0, s, [4, 3], s, [3, 3], s, [2, 7], 0, 4, c, [46, 3], c, [68, 3], 2, c, [44, 3], c, [62, 3], c, [24, 7], c, [12, 3], s, [1, 7], c, [17, 3], c, [9, 7], c, [8, 3], c, [13, 8], c, [35, 5], c, [17, 5], 2])
     }),
     performAction: function parser__PerformAction(yyloc, yystate
     /* action[1] */
@@ -3464,7 +4014,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           return this.$;
 
         case 2:
-          /*! Production::    rules_and_epilogue : "%%" rules epilogue */
+          /*! Production::    rules_and_epilogue : start_productions_marker rules epilogue */
           // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
 
@@ -3482,7 +4032,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           break;
 
         case 3:
-          /*! Production::    rules_and_epilogue : "%%" error epilogue */
+          /*! Production::    rules_and_epilogue : start_productions_marker error epilogue */
           // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
           this.$ = yyvstack[yysp - 2];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
@@ -3491,7 +4041,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           break;
 
         case 4:
-          /*! Production::    rules_and_epilogue : "%%" rules */
+          /*! Production::    rules_and_epilogue : start_productions_marker rules */
           // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
 
@@ -3501,7 +4051,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           break;
 
         case 5:
-          /*! Production::    rules_and_epilogue : "%%" error */
+          /*! Production::    rules_and_epilogue : start_productions_marker error */
           // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
           this.$ = yyvstack[yysp - 1];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
@@ -3740,7 +4290,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         case 17:
         /*! Production::    definition : UNTERMINATED_ACTION_BLOCK */
 
-        case 133:
+        case 132:
           /*! Production::    epilogue_chunk : UNTERMINATED_ACTION_BLOCK */
           // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yylstack[yysp]; // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
@@ -3762,15 +4312,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           break;
 
         case 19:
-          /*! Production::    definition : ACTION_START include_macro_code ACTION_END */
-          // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
-          this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
-
-          yy.actionInclude.push(yyvstack[yysp - 1]);
-          this.$ = null;
-          break;
-
-        case 20:
           /*! Production::    definition : ACTION_START error */
           // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
@@ -3781,18 +4322,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = null;
           break;
 
-        case 21:
-          /*! Production::    definition : ACTION_START DUMMY */
-          // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
-          this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
-
-          var start_marker = yyvstack[yysp - 1].trim();
-          var marker_msg = start_marker ? ' or similar, such as ' + start_marker : '';
-          yyparser.yyError(rmCommonWS$1(_templateObject12(), marker_msg, yylexer.prettyPrintRange(yylstack[yysp - 1])));
-          this.$ = null;
-          break;
-
-        case 22:
+        case 20:
           /*! Production::    definition : option_keyword option_list OPTIONS_END */
           // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
@@ -3806,16 +4336,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = null;
           break;
 
-        case 23:
+        case 21:
           /*! Production::    definition : option_keyword error */
           // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
           this.$ = yyvstack[yysp - 1];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject13(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject12(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
           break;
 
-        case 24:
+        case 22:
           /*! Production::    definition : UNKNOWN_DECL */
           // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yylstack[yysp]; // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
@@ -3826,7 +4356,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           };
           break;
 
-        case 25:
+        case 23:
           /*! Production::    definition : import_keyword option_list OPTIONS_END */
           // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
@@ -3843,9 +4373,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               path: lst[1][0]
             };
           } else if (len <= 2) {
-            yyparser.yyError(rmCommonWS$1(_templateObject14(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])));
+            yyparser.yyError(rmCommonWS$1(_templateObject13(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])));
           } else {
-            yyparser.yyError(rmCommonWS$1(_templateObject15(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])));
+            yyparser.yyError(rmCommonWS$1(_templateObject14(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])));
           }
 
           this.$ = {
@@ -3854,16 +4384,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           };
           break;
 
-        case 26:
-          /*! Production::    definition : import_keyword error */
-          // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
-          this.$ = yyvstack[yysp - 1];
-          this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+        case 24:
+          /*! Production::    definition : import_keyword error OPTIONS_END */
+          // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+          this.$ = yyvstack[yysp - 2];
+          this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject16(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject15(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2]), yyvstack[yysp - 1].errStr));
           break;
 
-        case 27:
+        case 25:
           /*! Production::    definition : init_code_keyword option_list ACTION_START action ACTION_END OPTIONS_END */
           // default action (generated by JISON mode classic/merge :: 6,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 5, yysp); // END of default action (generated by JISON mode classic/merge :: 6,VT,VA,VU,-,LT,LA,-,-)
@@ -3877,16 +4407,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             // `name`:
             name = lst[0][0];
           } else if (len <= 1) {
-            yyparser.yyError(rmCommonWS$1(_templateObject17(), yylexer.prettyPrintRange(yylstack[yysp - 4], yylstack[yysp - 5])));
+            yyparser.yyError(rmCommonWS$1(_templateObject16(), yylexer.prettyPrintRange(yylstack[yysp - 4], yylstack[yysp - 5])));
           } else {
-            yyparser.yyError(rmCommonWS$1(_templateObject18(), yylexer.prettyPrintRange(yylstack[yysp - 4], yylstack[yysp - 5])));
+            yyparser.yyError(rmCommonWS$1(_templateObject17(), yylexer.prettyPrintRange(yylstack[yysp - 4], yylstack[yysp - 5])));
           }
 
           var srcCode = trimActionCode$1(yyvstack[yysp - 2], yyvstack[yysp - 3]);
           var rv = checkActionBlock$1(srcCode, yylstack[yysp - 2], yy);
 
           if (rv) {
-            yyparser.yyError(rmCommonWS$1(_templateObject19(), name, rv, yylexer.prettyPrintRange(yylstack[yysp - 2], yylstack[yysp - 5])));
+            yyparser.yyError(rmCommonWS$1(_templateObject18(), name, rv, yylexer.prettyPrintRange(yylstack[yysp - 2], yylstack[yysp - 5])));
           }
 
           this.$ = {
@@ -3898,33 +4428,46 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           };
           break;
 
-        case 28:
-          /*! Production::    definition : init_code_keyword option_list ACTION_START error */
-          // default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-):
-          this.$ = yyvstack[yysp - 3];
-          this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp); // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-)
+        case 26:
+          /*! Production::    definition : init_code_keyword option_list ACTION_START error OPTIONS_END */
+          // default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-):
+          this.$ = yyvstack[yysp - 4];
+          this._$ = yyparser.yyMergeLocationInfo(yysp - 4, yysp); // END of default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-)
 
+          var start_marker = yyvstack[yysp - 2].trim();
+          var marker_msg = start_marker ? ' or similar, such as ' + start_marker : '';
+          var end_marker_msg = marker_msg.replace(/\{/g, '}');
+          yyparser.yyError(rmCommonWS$1(_templateObject19(), marker_msg, end_marker_msg, yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 4]), yyvstack[yysp - 1].errStr));
+          break;
+
+        case 27:
+          /*! Production::    definition : init_code_keyword error ACTION_START error OPTIONS_END */
+          // default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-):
+          this.$ = yyvstack[yysp - 4];
+          this._$ = yyparser.yyMergeLocationInfo(yysp - 4, yysp); // END of default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-)
+
+          yyparser.yyError(rmCommonWS$1(_templateObject20(), yylexer.prettyPrintRange(yylstack[yysp - 3], yylstack[yysp - 4]), yyvstack[yysp - 3].errStr));
+          break;
+
+        case 28:
+          /*! Production::    definition : init_code_keyword error OPTIONS_END */
+          // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+          this.$ = yyvstack[yysp - 2];
+          this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+
+          yyparser.yyError(rmCommonWS$1(_templateObject21(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2]), yyvstack[yysp - 1].errStr));
           break;
 
         case 29:
-          /*! Production::    definition : init_code_keyword error */
-          // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
-          this.$ = yyvstack[yysp - 1];
-          this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
-
-          yyparser.yyError(rmCommonWS$1(_templateObject20(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
-          break;
-
-        case 30:
           /*! Production::    definition : error */
           // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
           this.$ = yyvstack[yysp];
           this._$ = yylstack[yysp]; // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject21(), yy.__options_category_description__, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject22(), yy.__options_category_description__, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
           break;
 
-        case 31:
+        case 30:
           /*! Production::    option_keyword : OPTIONS */
           // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
           this.$ = yyvstack[yysp];
@@ -3934,10 +4477,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           yy.__options_category_description__ = yyvstack[yysp];
           break;
 
-        case 32:
+        case 31:
         /*! Production::    import_keyword : IMPORT */
 
-        case 34:
+        case 33:
           /*! Production::    include_keyword : INCLUDE */
           // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
           this.$ = yyvstack[yysp];
@@ -3947,7 +4490,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           yy.__options_category_description__ = yyvstack[yysp];
           break;
 
-        case 33:
+        case 32:
           /*! Production::    init_code_keyword : CODE */
           // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
           this.$ = yyvstack[yysp];
@@ -3957,7 +4500,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           yy.__options_category_description__ = yyvstack[yysp];
           break;
 
-        case 35:
+        case 34:
           /*! Production::    start_inclusive_keyword : START_INC */
           // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
           this.$ = yyvstack[yysp];
@@ -3967,7 +4510,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           yy.__options_category_description__ = 'the inclusive lexer start conditions set (%s)';
           break;
 
-        case 36:
+        case 35:
           /*! Production::    start_exclusive_keyword : START_EXC */
           // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
           this.$ = yyvstack[yysp];
@@ -3977,7 +4520,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           yy.__options_category_description__ = 'the exclusive lexer start conditions set (%x)';
           break;
 
-        case 37:
+        case 36:
           /*! Production::    start_conditions_marker : "<" */
           // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
           this.$ = yyvstack[yysp];
@@ -3987,7 +4530,27 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           yy.__options_category_description__ = 'the <...> delimited set of lexer start conditions';
           break;
 
+        case 37:
+          /*! Production::    start_productions_marker : "%%" */
+          // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+          this.$ = yyvstack[yysp];
+          this._$ = yylstack[yysp]; // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+
+          yy.__options_flags__ = 0;
+          yy.__options_category_description__ = 'the lexer rules definition section';
+          break;
+
         case 38:
+          /*! Production::    start_epilogue_marker : "%%" */
+          // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+          this.$ = yyvstack[yysp];
+          this._$ = yylstack[yysp]; // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+
+          yy.__options_flags__ = 0;
+          yy.__options_category_description__ = 'the lexer epilogue section';
+          break;
+
+        case 39:
           /*! Production::    rules : rules scoped_rules_collective */
           // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
@@ -3995,7 +4558,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 1].concat(yyvstack[yysp]);
           break;
 
-        case 39:
+        case 40:
           /*! Production::    rules : rules rule */
           // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
@@ -4003,7 +4566,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 1].concat([yyvstack[yysp]]);
           break;
 
-        case 40:
+        case 41:
           /*! Production::    rules : rules ACTION_START_AT_SOL action ACTION_END */
           // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp); // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-)
@@ -4014,7 +4577,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             var rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
 
             if (rv) {
-              yyparser.yyError(rmCommonWS$1(_templateObject22(), rv, yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])));
+              yyparser.yyError(rmCommonWS$1(_templateObject23(), rv, yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])));
             }
 
             yy.actionInclude.push(srcCode);
@@ -4023,7 +4586,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 3];
           break;
 
-        case 41:
+        case 42:
           /*! Production::    rules : rules UNTERMINATED_ACTION_BLOCK */
           // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
@@ -4033,24 +4596,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 1];
           break;
 
-        case 42:
+        case 43:
           /*! Production::    rules : rules ACTION_START_AT_SOL error */
           // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
 
           var start_marker = yyvstack[yysp - 1].trim();
           var marker_msg = start_marker ? ' or similar, such as ' + start_marker : '';
-          yyparser.yyError(rmCommonWS$1(_templateObject23(), yylexer.prettyPrintRange(yylstack[yysp - 1]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject24(), yylexer.prettyPrintRange(yylstack[yysp - 1]), yyvstack[yysp].errStr));
           this.$ = yyvstack[yysp - 2];
-          break;
-
-        case 43:
-          /*! Production::    rules : rules ACTION_START include_macro_code ACTION_END */
-          // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
-          this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp); // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-)
-
-          yy.actionInclude.push(yyvstack[yysp - 1]);
-          this.$ = yyvstack[yysp - 3];
           break;
 
         case 44:
@@ -4066,9 +4620,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
           if (start_marker.indexOf('{') >= 0) {
             var marker_msg = start_marker ? ' or similar, such as ' + start_marker : '';
-            yyparser.yyError(rmCommonWS$1(_templateObject24(), marker_msg, yylexer.prettyPrintRange(yylstack[yysp - 1]), yyvstack[yysp].errStr));
+            yyparser.yyError(rmCommonWS$1(_templateObject25(), marker_msg, yylexer.prettyPrintRange(yylstack[yysp - 1]), yyvstack[yysp].errStr));
           } else {
-            yyparser.yyError(rmCommonWS$1(_templateObject25(), yylexer.prettyPrintRange(yylstack[yysp]), yyvstack[yysp].errStr));
+            yyparser.yyError(rmCommonWS$1(_templateObject26(), yylexer.prettyPrintRange(yylstack[yysp]), yyvstack[yysp].errStr));
           }
 
           this.$ = yyvstack[yysp - 2];
@@ -4094,7 +4648,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject26(), yy.__options_category_description__, yylexer.prettyPrintRange(yylstack[yysp])));
+          yyparser.yyError(rmCommonWS$1(_templateObject27(), yy.__options_category_description__, yylexer.prettyPrintRange(yylstack[yysp])));
           this.$ = yyvstack[yysp - 1];
           break;
 
@@ -4141,7 +4695,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 3];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp); // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject27(), yyvstack[yysp - 3].join(','), yylexer.prettyPrintRange(yyparser.mergeLocationInfo(yysp - 3, yysp), yylstack[yysp - 3]), yyvstack[yysp - 1].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject28(), yyvstack[yysp - 3].join(','), yylexer.prettyPrintRange(yyparser.mergeLocationInfo(yysp - 3, yysp), yylstack[yysp - 3]), yyvstack[yysp - 1].errStr));
           break;
 
         case 55:
@@ -4150,7 +4704,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 2];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject28(), yyvstack[yysp - 2].join(','), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject29(), yyvstack[yysp - 2].join(','), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
           break;
 
         case 56:
@@ -4159,7 +4713,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 2];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject29(), yyvstack[yysp - 2].join(','), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2]), yyvstack[yysp - 1].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject30(), yyvstack[yysp - 2].join(','), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2]), yyvstack[yysp - 1].errStr));
           break;
 
         case 57:
@@ -4183,7 +4737,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           var rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
 
           if (rv) {
-            yyparser.yyError(rmCommonWS$1(_templateObject30(), rv, yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 3])));
+            yyparser.yyError(rmCommonWS$1(_templateObject31(), rv, yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 3])));
           }
 
           this.$ = [yyvstack[yysp - 3], srcCode];
@@ -4215,7 +4769,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           var rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
 
           if (rv) {
-            yyparser.yyError(rmCommonWS$1(_templateObject31(), rv, yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 3])));
+            yyparser.yyError(rmCommonWS$1(_templateObject32(), rv, yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 3])));
           }
 
           this.$ = [yyvstack[yysp - 3], srcCode];
@@ -4227,7 +4781,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
 
           this.$ = [yyvstack[yysp - 2], yyvstack[yysp]];
-          yyparser.yyError(rmCommonWS$1(_templateObject32(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject33(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
           break;
 
         case 63:
@@ -4237,7 +4791,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           // TODO: REWRITE
 
           this.$ = [yyvstack[yysp - 2], yyvstack[yysp]];
-          yyparser.yyError(rmCommonWS$1(_templateObject33(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject34(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
           break;
 
         case 64:
@@ -4247,7 +4801,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           // TODO: REWRITE
 
           this.$ = [yyvstack[yysp - 2], yyvstack[yysp]];
-          yyparser.yyError(rmCommonWS$1(_templateObject34(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject35(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
           break;
 
         case 65:
@@ -4256,7 +4810,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
 
           this.$ = [yyvstack[yysp - 1], yyvstack[yysp]];
-          yyparser.yyError(rmCommonWS$1(_templateObject35(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject36(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
           break;
 
         case 66:
@@ -4293,7 +4847,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 1];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject36(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])));
+          yyparser.yyError(rmCommonWS$1(_templateObject37(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])));
           break;
 
         case 69:
@@ -4302,7 +4856,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 1];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject37(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])));
+          yyparser.yyError(rmCommonWS$1(_templateObject38(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])));
           break;
 
         case 70:
@@ -4311,7 +4865,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 1];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject38(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])));
+          yyparser.yyError(rmCommonWS$1(_templateObject39(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])));
           break;
 
         case 71:
@@ -4320,7 +4874,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 1];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject39(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])));
+          yyparser.yyError(rmCommonWS$1(_templateObject40(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])));
           break;
 
         case 72:
@@ -4345,7 +4899,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             // accordingly:
 
             if (name !== '*' && name !== 'INITIAL' && !(name in yy.startConditions)) {
-              yyparser.yyError(rmCommonWS$1(_templateObject40(), name, name, name, yylexer.prettyPrintRange(yylstack[yysp - 2], yylstack[yysp - 3], yylstack[yysp])));
+              yyparser.yyError(rmCommonWS$1(_templateObject41(), name, name, name, yylexer.prettyPrintRange(yylstack[yysp - 2], yylstack[yysp - 3], yylstack[yysp])));
             }
 
             return name;
@@ -4364,7 +4918,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           var lst = yyvstack[yysp - 1].map(function (el) {
             return el[0];
           });
-          yyparser.yyError(rmCommonWS$1(_templateObject41(), lst.join(','), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject42(), lst.join(','), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
           break;
 
         case 75:
@@ -4513,7 +5067,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 2];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject42(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject43(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
           break;
 
         case 89:
@@ -4625,7 +5179,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 2];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject43(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject44(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
           break;
 
         case 109:
@@ -4670,7 +5224,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           // validate that this is legal behaviour under the given circumstances, i.e. parser context:
 
           if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS) {
-            yyparser.yyError(rmCommonWS$1(_templateObject44(), yy.__options_category_description__, yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp - 1], yylstack[yysp]), yylstack[yysp - 4])));
+            yyparser.yyError(rmCommonWS$1(_templateObject45(), yy.__options_category_description__, yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp - 1], yylstack[yysp]), yylstack[yysp - 4])));
           }
 
           if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS) {
@@ -4678,7 +5232,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               return opt[0];
             });
             optlist.push(yyvstack[yysp][0]);
-            yyparser.yyError(rmCommonWS$1(_templateObject45(), yy.__options_category_description__, yyvstack[yysp - 4], optlist.join(' '), yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp - 1], yylstack[yysp - 2]), yylstack[yysp - 4])));
+            yyparser.yyError(rmCommonWS$1(_templateObject46(), yy.__options_category_description__, yyvstack[yysp - 4], optlist.join(' '), yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp - 1], yylstack[yysp - 2]), yylstack[yysp - 4])));
           }
 
           this.$ = yyvstack[yysp - 2];
@@ -4692,7 +5246,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           // validate that this is legal behaviour under the given circumstances, i.e. parser context:
 
           if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS) {
-            yyparser.yyError(rmCommonWS$1(_templateObject46(), yy.__options_category_description__, yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp]), yylstack[yysp - 3])));
+            yyparser.yyError(rmCommonWS$1(_templateObject47(), yy.__options_category_description__, yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp]), yylstack[yysp - 3])));
           }
 
           this.$ = yyvstack[yysp - 1];
@@ -4722,7 +5276,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           // validate that this is legal behaviour under the given circumstances, i.e. parser context:
 
           if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
-            yyparser.yyError(rmCommonWS$1(_templateObject47(), yy.__options_category_description__, $option_name, $option_value, yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp], yylstack[yysp - 2]), yylstack[yysp - 4])));
+            yyparser.yyError(rmCommonWS$1(_templateObject48(), yy.__options_category_description__, $option_name, $option_value, yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp], yylstack[yysp - 2]), yylstack[yysp - 4])));
           }
 
           this.$ = [yyvstack[yysp - 2], yyvstack[yysp]];
@@ -4735,7 +5289,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$1(_templateObject48(), $option, yy.__options_category_description__, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 4]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject49(), $option, yy.__options_category_description__, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 4]), yyvstack[yysp].errStr));
           break;
 
         case 119:
@@ -4750,7 +5304,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             with_value_msg = '';
           }
 
-          yyparser.yyError(rmCommonWS$1(_templateObject49(), with_value_msg, yy.__options_category_description__, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject50(), with_value_msg, yy.__options_category_description__, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3]), yyvstack[yysp].errStr));
           break;
 
         case 120:
@@ -4772,7 +5326,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                 with_value_msg = '';
               }
 
-              yyparser.yyError(rmCommonWS$1(_templateObject50(), with_value_msg, yy.__options_category_description__, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
+              yyparser.yyError(rmCommonWS$1(_templateObject51(), with_value_msg, yy.__options_category_description__, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
             }
           } else {
             this.$ = yyvstack[yysp];
@@ -4795,7 +5349,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               with_value_msg = '';
             }
 
-            yyparser.yyError(rmCommonWS$1(_templateObject51(), with_value_msg, yy.__options_category_description__, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
+            yyparser.yyError(rmCommonWS$1(_templateObject52(), with_value_msg, yy.__options_category_description__, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
           }
 
           break;
@@ -4817,7 +5371,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           break;
 
         case 124:
-          /*! Production::    epilogue : "%%" */
+          /*! Production::    epilogue : start_epilogue_marker */
           // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yylstack[yysp]; // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
 
@@ -4825,7 +5379,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           break;
 
         case 125:
-          /*! Production::    epilogue : "%%" epilogue_chunks */
+          /*! Production::    epilogue : start_epilogue_marker epilogue_chunks */
           // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
 
@@ -4835,7 +5389,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             var rv = checkActionBlock$1(srcCode, yylstack[yysp], yy);
 
             if (rv) {
-              yyparser.yyError(rmCommonWS$1(_templateObject52(), rv, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
+              yyparser.yyError(rmCommonWS$1(_templateObject53(), rv, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
             }
           }
 
@@ -4843,12 +5397,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           break;
 
         case 126:
-          /*! Production::    epilogue : "%%" error */
+          /*! Production::    epilogue : start_epilogue_marker error */
           // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
           this.$ = yyvstack[yysp - 1];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject53(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject54(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
           break;
 
         case 128:
@@ -4857,19 +5411,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$1(_templateObject54(), yylexer.prettyPrintRange(yylstack[yysp]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject55(), yylexer.prettyPrintRange(yylstack[yysp]), yyvstack[yysp].errStr));
           this.$ = '';
           break;
 
         case 130:
-          /*! Production::    epilogue_chunk : ACTION_START include_macro_code ACTION_END */
-          // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
-          this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
-
-          this.$ = '\n\n' + yyvstack[yysp - 1] + '\n\n';
-          break;
-
-        case 131:
           /*! Production::    epilogue_chunk : ACTION_START_AT_SOL action ACTION_END */
           // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
@@ -4880,7 +5426,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             var rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
 
             if (rv) {
-              yyparser.yyError(rmCommonWS$1(_templateObject55(), rv, yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])));
+              yyparser.yyError(rmCommonWS$1(_templateObject56(), rv, yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])));
             }
           } // Since the epilogue is concatenated as-is (see the `epilogue_chunks` rule above)
           // we append those protective double newlines right now, as the calling site
@@ -4890,18 +5436,18 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = '\n\n' + srcCode + '\n\n';
           break;
 
-        case 132:
+        case 131:
           /*! Production::    epilogue_chunk : ACTION_START_AT_SOL error */
           // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
 
           var start_marker = yyvstack[yysp - 1].trim();
           var marker_msg = start_marker ? ' or similar, such as ' + start_marker : '';
-          yyparser.yyError(rmCommonWS$1(_templateObject56(), yylexer.prettyPrintRange(yylstack[yysp - 1]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject57(), yylexer.prettyPrintRange(yylstack[yysp - 1]), yyvstack[yysp].errStr));
           this.$ = '';
           break;
 
-        case 134:
+        case 133:
           /*! Production::    epilogue_chunk : TRAILING_CODE_CHUNK */
           // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
           this._$ = yylstack[yysp]; // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
@@ -4911,7 +5457,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp];
           break;
 
-        case 135:
+        case 134:
           /*! Production::    include_macro_code : include_keyword option_list OPTIONS_END */
           // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,LU,LUbA):
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,LU,LUbA)
@@ -4925,9 +5471,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             // `path`:
             path = lst[0][0];
           } else if (len <= 1) {
-            yyparser.yyError(rmCommonWS$1(_templateObject57(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2]), $error.errStr));
-          } else {
             yyparser.yyError(rmCommonWS$1(_templateObject58(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2]), $error.errStr));
+          } else {
+            yyparser.yyError(rmCommonWS$1(_templateObject59(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2]), $error.errStr));
           } // **Aside**: And no, we don't support nested '%include'!
 
 
@@ -4940,34 +5486,34 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             var rv = checkActionBlock$1(srcCode, this._$, yy);
 
             if (rv) {
-              yyparser.yyError(rmCommonWS$1(_templateObject59(), path, rv, yylexer.prettyPrintRange(this._$)));
+              yyparser.yyError(rmCommonWS$1(_templateObject60(), path, rv, yylexer.prettyPrintRange(this._$)));
             }
           }
 
           this.$ = '\n// Included by Jison: ' + path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + path + '\n\n';
           break;
 
-        case 136:
+        case 135:
           /*! Production::    include_macro_code : include_keyword error */
           // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
           this.$ = yyvstack[yysp - 1];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$1(_templateObject60(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$1(_templateObject61(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
           break;
       }
     },
     table: bt({
-      len: u([15, 1, 14, 20, 1, 13, 28, 22, s, [9, 3], 13, 5, 9, 13, c, [6, 3], s, [31, 5], 1, 43, 3, 1, 13, 6, 25, 24, 25, 23, 23, 17, 17, s, [24, 8], 26, 5, 24, 24, 9, 13, 8, 9, 1, s, [9, 5], 13, 9, 13, 1, 13, 13, 9, c, [53, 4], c, [11, 4], 26, 26, 9, 26, 4, s, [26, 6], 8, 24, 4, 8, 4, 1, 13, c, [62, 3], s, [24, 5], 2, 3, 2, 25, 25, 6, s, [4, 3], 13, 7, 8, 4, 8, 13, 13, s, [7, 6], 13, 9, 7, c, [62, 3], 9, 26, 1, 26, 7, 1, 6, 3, 9, 6, 6, 26, 17, c, [88, 4], 27, 10, s, [24, 7], 4, s, [8, 3], 7, 9, 13, 26, 26, 6, 6, 1, 9, 6, 23, 27, 26, 9, 27, 9, 27, 9, 27, 1, 16, 1, c, [43, 3], 15, 26, s, [27, 3], 16, 13]),
-      symbol: u([1, 2, 19, 20, 23, 25, 26, s, [28, 4, 1], 33, 34, 56, 58, 1, c, [16, 13], 59, c, [14, 13], 57, s, [60, 4, 1], 65, 66, c, [35, 14], 1, 2, 3, 7, 8, s, [13, 4, 1], 19, c, [19, 9], s, [41, 6, 1], 50, 51, 68, 2, c, [26, 6], c, [16, 8], 74, s, [76, 5, 1], 84, 2, 11, 52, 53, 54, s, [85, 4, 1], c, [9, 10], 24, 32, s, [36, 5, 1], 72, c, [90, 13], 2, 27, 32, 64, 92, c, [36, 9], c, [27, 14], c, [67, 17], c, [148, 18], 11, c, [149, 22], c, [48, 3], c, [31, 125], 1, c, [303, 25], c, [349, 5], s, [67, 4, 2], c, [296, 7], 89, 1, 19, 89, 21, c, [247, 14], 7, 21, 23, 26, 35, c, [342, 3], 9, c, [66, 4], c, [12, 4], c, [60, 8], c, [345, 6], c, [25, 19], c, [24, 8], s, [10, 7, 1], c, [27, 10], 49, 50, 51, 83, c, [49, 8], c, [45, 8], s, [75, 6, 1], c, [72, 9], c, [23, 15], c, [460, 13], c, [17, 21], c, [105, 24], c, [24, 189], s, [47, 5, 1], 45, 48, 79, 81, 82, c, [79, 48], 11, 17, 22, c, [498, 3], c, [700, 18], 17, 22, 26, c, [24, 3], c, [8, 3], 18, c, [9, 6], c, [10, 10], c, [9, 26], c, [76, 22], c, [824, 7], 64, 92, c, [22, 14], c, [781, 15], c, [825, 25], c, [85, 22], c, [22, 24], c, [135, 4], c, [874, 17], c, [719, 26], c, [26, 26], c, [1007, 10], c, [35, 26], c, [1019, 3], c, [91, 52], c, [26, 105], 2, c, [19, 3], 55, 90, 91, 2, 4, c, [1251, 14], 71, c, [1252, 8], c, [520, 3], c, [363, 8], c, [8, 4], c, [1332, 14], c, [962, 78], c, [810, 117], 9, 2, 7, 9, c, [5, 4], c, [152, 47], 83, 2, 45, 47, 48, 79, 82, c, [6, 4], c, [4, 8], c, [614, 14], c, [612, 6], c, [804, 9], 53, 54, c, [12, 9], c, [725, 26], c, [591, 7], c, [7, 35], c, [744, 22], c, [29, 20], c, [432, 14], c, [689, 8], c, [880, 10], c, [538, 25], 24, c, [565, 32], 91, c, [524, 3], c, [8, 4], c, [1757, 4], c, [1784, 10], c, [18, 4], c, [6, 7], c, [789, 26], 5, c, [621, 14], 70, 5, c, [65, 9], c, [9, 18], s, [1, 4, 2], c, [72, 24], c, [250, 9], c, [624, 48], c, [24, 121], c, [556, 4], c, [1336, 10], c, [8, 13], c, [482, 14], c, [1291, 15], c, [988, 58], c, [6, 6], 24, c, [87, 11], c, [16, 4], c, [386, 15], c, [1007, 8], c, [365, 27], c, [554, 27], c, [589, 10], c, [62, 25], c, [36, 72], 6, c, [1193, 16], 22, c, [627, 38], c, [240, 15], c, [335, 28], c, [258, 27], c, [27, 52], c, [177, 16], c, [471, 13]]),
-      type: u([s, [2, 13], 0, 0, 1, c, [16, 14], c, [30, 15], s, [0, 5], s, [2, 41], c, [42, 16], c, [64, 12], c, [9, 18], c, [49, 19], c, [29, 3], c, [36, 17], c, [79, 14], c, [31, 27], s, [2, 177], s, [0, 17], c, [273, 19], c, [60, 29], c, [25, 24], c, [416, 40], c, [481, 24], c, [23, 20], c, [17, 34], s, [2, 207], c, [223, 57], c, [280, 76], c, [485, 25], c, [617, 49], c, [85, 33], c, [22, 44], c, [206, 56], c, [165, 30], c, [532, 164], c, [964, 24], c, [790, 50], c, [962, 70], c, [281, 136], c, [25, 29], c, [275, 31], c, [670, 15], c, [984, 139], c, [42, 8], c, [668, 61], c, [540, 11], c, [228, 63], c, [55, 10], c, [74, 18], c, [83, 35], c, [624, 51], c, [915, 180], c, [87, 92], c, [1007, 16], c, [178, 88], c, [36, 72], s, [2, 200]]),
-      state: u([s, [1, 5, 1], 13, 15, 16, 8, 9, s, [24, 4, 2], 31, 36, 37, 42, 48, 50, 51, 53, 57, c, [4, 3], 59, 64, 61, 66, c, [7, 3], 68, c, [4, 3], 70, c, [4, 3], 80, 82, 83, 78, 79, 87, 73, 74, 85, 86, c, [39, 6], 72, 89, 92, c, [7, 4], 93, c, [4, 3], 97, 99, 100, c, [19, 5], 101, c, [7, 6], 102, c, [4, 3], 103, c, [4, 3], 107, 104, 105, 110, 51, 53, c, [3, 3], 64, 116, 122, c, [65, 3], c, [12, 6], c, [3, 3], 127, 64, 129, 131, 133, 138, c, [71, 7], 145, c, [26, 3], 146, c, [73, 9], 97, 97, 107, 153, 154, 51, 53, 155, c, [38, 3], 158, 64, 116, 162, 64, 164, 165, 167, 170, 172, 174, c, [14, 3], c, [30, 4], 64, 116, 64, 116, 182, c, [55, 7], c, [12, 4], 64, 116]),
-      mode: u([s, [2, 27], s, [1, 13], c, [27, 15], c, [53, 38], c, [66, 27], c, [46, 14], c, [67, 23], s, [2, 170], c, [246, 26], c, [315, 23], c, [25, 4], c, [27, 6], c, [237, 10], c, [20, 20], c, [12, 5], c, [66, 18], c, [89, 5], c, [102, 14], s, [1, 38], s, [2, 218], c, [220, 50], c, [274, 30], c, [25, 6], c, [85, 37], c, [709, 26], c, [822, 39], c, [47, 6], c, [76, 30], c, [187, 43], c, [259, 43], c, [343, 83], c, [889, 134], c, [1139, 25], c, [889, 62], c, [733, 122], c, [1099, 8], c, [151, 24], c, [24, 20], c, [549, 29], c, [29, 12], c, [1050, 92], c, [684, 39], c, [34, 8], c, [1193, 33], c, [75, 28], c, [59, 12], c, [211, 47], c, [46, 16], c, [72, 10], c, [511, 42], c, [594, 31], c, [1362, 177], c, [186, 82], c, [271, 14], c, [944, 17], c, [109, 51], c, [166, 34], c, [34, 69], c, [1338, 50], s, [2, 156]]),
-      goto: u([s, [7, 13], s, [9, 13], 6, 17, 6, 7, 10, 11, 12, 14, 20, 21, 22, 18, 19, 23, s, [8, 13], 51, 25, s, [51, 25], 27, 29, 32, 34, 38, 39, 40, 33, 35, 41, s, [43, 5, 1], 49, 54, 52, 55, 56, 58, c, [5, 4], 60, s, [72, 7], s, [17, 13], 62, 63, 65, 67, c, [29, 4], s, [24, 13], 69, c, [18, 4], 71, c, [5, 4], s, [30, 13], s, [35, 31], s, [36, 31], s, [31, 31], s, [32, 31], s, [33, 31], 1, 4, 88, c, [247, 6], 84, 75, 76, 77, 81, c, [305, 5], c, [257, 8], 5, 84, 90, s, [11, 13], 75, 91, s, [75, 4], 81, 81, 32, 81, c, [48, 4], s, [81, 4], c, [42, 8], 82, 82, 32, 82, c, [20, 4], s, [82, 4], c, [20, 8], s, [84, 4], 94, 95, 96, s, [84, 14], 98, 84, 84, 77, 29, 32, 77, c, [359, 12], c, [16, 16], c, [388, 13], c, [13, 13], s, [94, 24], s, [96, 24], s, [97, 24], s, [98, 24], s, [99, 24], s, [100, 24], s, [101, 24], s, [102, 24], s, [103, 26], 44, 106, s, [111, 24], s, [112, 24], 54, 109, 108, c, [613, 3], s, [13, 13], s, [115, 8], s, [116, 3], 111, s, [116, 5], 112, s, [120, 9], s, [121, 9], s, [122, 9], s, [123, 9], 54, 109, 113, c, [73, 3], s, [15, 13], 114, 65, 115, s, [117, 4, 1], s, [18, 13], 121, s, [20, 13], s, [21, 13], 123, c, [751, 4], s, [34, 5], 54, 109, 124, c, [11, 3], s, [23, 13], 54, 109, 125, c, [19, 3], s, [26, 13], 54, 109, 126, c, [19, 3], s, [29, 13], 2, s, [38, 26], s, [39, 26], 128, s, [72, 7], s, [41, 26], 130, 65, s, [45, 26], s, [46, 26], s, [47, 26], s, [48, 26], s, [49, 26], s, [50, 26], 124, 132, 135, 136, 134, 137, 140, 139, c, [1142, 14], 144, 142, 141, 143, c, [337, 4], s, [37, 4], 3, s, [10, 13], 79, 79, 32, 79, c, [42, 4], s, [79, 4], c, [46, 8], 80, 80, 32, 80, c, [20, 4], s, [80, 4], c, [20, 8], s, [83, 4], c, [889, 3], s, [83, 14], 98, 83, 83, s, [89, 24], s, [90, 24], s, [91, 24], s, [95, 24], s, [110, 24], 148, 147, 76, 91, 76, 150, 149, s, [92, 4], c, [151, 3], s, [92, 14], 98, 92, 92, s, [93, 4], c, [24, 3], s, [93, 14], 98, 93, 93, 152, 44, 151, 106, s, [107, 4], s, [108, 4], s, [109, 4], s, [12, 13], c, [290, 4], s, [114, 8], 156, 55, 56, s, [119, 8], s, [14, 13], s, [16, 13], s, [66, 7], s, [67, 7], s, [68, 7], s, [69, 7], s, [70, 7], s, [71, 7], s, [19, 13], 54, 109, 157, c, [106, 3], s, [136, 7], s, [22, 13], s, [25, 13], 159, s, [72, 7], 160, c, [826, 6], s, [42, 26], 161, s, [44, 26], 125, 163, c, [527, 4], 126, s, [129, 6], 65, 166, s, [72, 7], s, [133, 6], s, [134, 6], s, [52, 26], 168, s, [58, 15], 169, 171, s, [72, 7], 173, s, [72, 7], 175, s, [72, 7], s, [65, 27], 177, 54, 109, 176, c, [236, 3], 78, 78, 32, 78, c, [594, 4], s, [78, 4], c, [594, 8], s, [85, 24], s, [87, 24], s, [86, 24], s, [88, 24], s, [104, 24], s, [105, 24], s, [106, 4], s, [113, 8], s, [117, 8], s, [118, 8], s, [135, 7], 178, c, [394, 6], s, [28, 13], s, [40, 26], s, [43, 26], s, [127, 6], s, [128, 6], 179, 180, c, [85, 6], s, [132, 6], 181, c, [952, 14], 55, 55, 183, s, [55, 24], s, [56, 26], 184, c, [81, 6], s, [63, 27], 185, c, [34, 6], s, [64, 27], 186, c, [34, 6], s, [62, 27], 187, s, [74, 16], 188, s, [130, 6], s, [131, 6], s, [53, 26], s, [57, 15], s, [54, 26], s, [59, 27], s, [60, 27], s, [61, 27], s, [73, 16], s, [27, 13]])
+      len: u([15, 1, 14, 21, 1, 13, 28, 22, s, [9, 3], 13, 1, 9, 13, c, [6, 3], 27, s, [31, 5], 1, 44, 4, 1, 13, 6, 25, 24, 25, 23, 23, 17, 17, s, [24, 8], 26, 5, 24, 24, 9, 13, 8, 9, 1, s, [9, 5], 13, 9, 13, c, [3, 3], c, [13, 3], 2, 1, 26, 26, 9, 26, c, [5, 3], s, [26, 4], 7, 24, 4, 5, 8, c, [60, 3], c, [59, 3], s, [24, 5], 2, 3, 2, 25, 25, 6, s, [4, 3], 13, 7, 8, 4, 8, 13, 13, s, [7, 6], 9, 5, s, [13, 3], 9, 1, 13, 9, 26, 26, 6, 1, 5, 9, 5, 5, 26, 17, c, [85, 4], 27, 10, s, [24, 7], 4, s, [8, 3], 9, 7, 9, 1, 1, 26, 5, c, [30, 3], 23, 27, 26, 9, 27, 9, 27, 9, 27, 1, 16, 7, 1, 13, 13, 5, 26, 15, 26, s, [27, 3], 16, 13]),
+      symbol: u([1, 2, 19, 22, s, [24, 6, 1], 31, 32, 33, 55, 57, 1, c, [16, 13], 58, c, [14, 13], 56, s, [59, 4, 1], 64, 65, 67, c, [36, 14], 1, 2, 3, 7, 8, s, [13, 4, 1], c, [19, 10], s, [40, 6, 1], 49, 50, 69, 2, c, [26, 6], c, [16, 8], 75, s, [77, 5, 1], 85, 2, 11, 51, 52, 53, s, [86, 4, 1], c, [9, 10], 23, 30, s, [35, 5, 1], 73, c, [90, 13], 2, c, [32, 9], c, [23, 14], c, [63, 17], c, [144, 40], c, [27, 5], 11, c, [28, 22], c, [75, 3], c, [31, 125], 1, c, [182, 25], c, [373, 5], s, [66, 5, 2], c, [320, 7], 90, 1, 33, 68, 90, 20, c, [276, 14], 7, 20, 22, 25, 34, c, [367, 3], 9, c, [68, 4], c, [12, 4], c, [62, 8], c, [370, 6], c, [25, 19], c, [24, 8], s, [10, 7, 1], c, [27, 10], 48, 49, 50, 84, c, [49, 8], c, [45, 8], s, [76, 6, 1], c, [72, 9], c, [23, 15], c, [485, 13], c, [17, 21], c, [105, 24], c, [24, 189], s, [46, 5, 1], 44, 47, 80, 82, 83, c, [79, 48], 11, 17, 21, c, [500, 3], c, [729, 18], 17, 21, 25, c, [24, 3], c, [8, 3], 18, c, [9, 6], c, [10, 10], c, [9, 26], c, [76, 22], c, [849, 7], 63, 93, c, [796, 15], c, [13, 11], c, [57, 22], c, [22, 9], 21, 11, 17, c, [95, 4], c, [10, 4], 25, c, [670, 27], c, [26, 26], c, [981, 10], c, [35, 26], c, [88, 52], c, [26, 105], 2, 22, 24, 54, 91, 92, 2, 4, c, [1221, 14], 72, c, [1222, 8], c, [465, 3], c, [35, 5], c, [1158, 8], c, [8, 4], c, [1307, 14], c, [912, 78], c, [760, 117], 9, 2, 7, 9, c, [5, 4], c, [152, 47], 84, 2, 44, 46, 47, 80, 83, c, [6, 4], c, [4, 8], c, [614, 14], c, [602, 6], c, [754, 9], 52, 53, c, [12, 9], c, [689, 26], c, [592, 7], c, [7, 35], c, [1571, 14], c, [82, 26], c, [430, 14], c, [688, 8], 2, c, [842, 23], c, [580, 56], 92, c, [534, 3], c, [7, 3], c, [1765, 11], c, [14, 3], c, [5, 6], c, [794, 26], 5, c, [630, 14], 71, 5, c, [159, 10], c, [9, 17], s, [1, 4, 2], c, [72, 24], c, [976, 9], c, [628, 48], c, [24, 121], c, [560, 4], c, [1290, 10], c, [8, 13], c, [205, 9], c, [495, 14], 63, 93, 21, 21, c, [388, 31], c, [5, 5], c, [1301, 11], c, [14, 3], c, [354, 15], c, [984, 8], c, [333, 27], c, [100, 26], c, [549, 11], c, [62, 25], c, [36, 72], 6, c, [1170, 16], c, [53, 7], 21, c, [744, 28], c, [621, 29], c, [266, 15], c, [745, 28], c, [284, 27], c, [27, 52], c, [203, 16], c, [182, 13]]),
+      type: u([s, [2, 13], 0, 0, 1, c, [16, 14], c, [30, 15], s, [0, 6], s, [2, 41], c, [42, 16], c, [64, 12], c, [9, 18], c, [49, 19], c, [32, 16], c, [22, 19], c, [145, 45], s, [2, 181], s, [0, 18], c, [20, 4], c, [62, 45], c, [25, 24], c, [441, 40], c, [442, 13], c, [23, 31], c, [17, 34], c, [416, 210], c, [57, 111], c, [76, 42], c, [98, 34], c, [57, 22], c, [22, 10], c, [165, 66], c, [509, 189], c, [756, 25], c, [740, 56], c, [912, 70], c, [286, 136], c, [25, 29], c, [275, 31], c, [240, 14], c, [227, 82], c, [1144, 56], c, [53, 22], c, [775, 59], c, [58, 15], c, [149, 63], c, [1837, 18], c, [81, 35], c, [628, 51], c, [1393, 171], c, [197, 47], c, [268, 26], c, [272, 64], c, [62, 36], c, [36, 72], s, [2, 226]]),
+      state: u([s, [1, 5, 1], 13, 15, 16, 8, 9, 6, s, [25, 4, 2], 32, 37, 38, 43, 49, 51, 52, 54, 58, c, [4, 3], 60, 63, c, [5, 3], 65, c, [4, 3], 67, c, [4, 3], 77, 79, 80, 75, 76, 85, 81, 70, 71, 82, 83, c, [38, 6], 69, 81, 87, 90, c, [8, 4], 91, c, [4, 3], 95, 97, 98, c, [20, 5], 99, c, [7, 6], 100, c, [4, 3], 101, c, [4, 3], 105, 102, 103, 108, 52, 54, c, [3, 3], 119, 114, c, [8, 6], c, [3, 3], 127, 130, 132, 136, c, [66, 7], 143, c, [87, 3], 144, c, [67, 9], 95, 95, 105, 151, 152, 52, 54, 153, 155, c, [22, 3], 157, 119, 114, 161, 163, 165, 168, 170, 172, c, [49, 3], c, [29, 4], c, [67, 5], 119, 114, 182, c, [57, 7], c, [12, 4], 119, 114]),
+      mode: u([s, [2, 27], s, [1, 13], c, [27, 15], c, [53, 38], c, [66, 27], c, [46, 12], c, [65, 23], s, [2, 197], c, [271, 26], c, [340, 23], c, [25, 4], c, [27, 6], c, [264, 10], c, [20, 20], c, [12, 5], c, [66, 18], c, [89, 5], c, [102, 14], s, [1, 38], s, [2, 218], c, [220, 50], c, [274, 30], c, [25, 6], c, [85, 37], c, [736, 26], c, [52, 52], c, [427, 61], c, [54, 34], c, [515, 158], c, [696, 29], c, [1120, 25], c, [845, 62], c, [689, 122], c, [1055, 8], c, [151, 24], c, [24, 20], c, [539, 29], c, [29, 12], c, [1006, 79], c, [660, 49], c, [45, 8], c, [793, 47], c, [131, 31], c, [439, 50], c, [44, 16], c, [125, 9], c, [161, 22], c, [663, 28], c, [599, 24], c, [1703, 174], c, [875, 16], c, [920, 43], c, [1192, 22], c, [260, 51], c, [123, 34], c, [34, 69], c, [1284, 181], s, [2, 51]]),
+      goto: u([s, [7, 13], s, [9, 13], 6, 17, 7, 10, 11, 12, 14, 21, 22, 23, 19, 20, 18, 24, s, [8, 13], 51, 26, s, [51, 25], 28, 30, 33, 35, 39, 40, 41, 34, 36, 42, s, [44, 5, 1], 50, 55, 53, 56, 57, 59, c, [5, 4], 61, s, [72, 7], s, [17, 13], 62, 64, c, [27, 4], s, [22, 13], 66, c, [18, 4], 68, c, [5, 4], s, [29, 13], s, [37, 27], s, [34, 31], s, [35, 31], s, [30, 31], s, [31, 31], s, [32, 31], 1, 4, 86, c, [272, 6], 72, 73, 74, 78, c, [330, 5], 84, c, [282, 8], 5, 84, 88, s, [11, 13], 75, 89, s, [75, 4], 81, 81, 33, 81, c, [48, 4], s, [81, 4], c, [42, 8], 82, 82, 33, 82, c, [20, 4], s, [82, 4], c, [20, 8], s, [84, 4], 92, 93, 94, s, [84, 14], 96, 84, 84, 77, 30, 33, 77, c, [384, 12], c, [16, 16], c, [413, 13], c, [13, 13], s, [94, 24], s, [96, 24], s, [97, 24], s, [98, 24], s, [99, 24], s, [100, 24], s, [101, 24], s, [102, 24], s, [103, 26], 45, 104, s, [111, 24], s, [112, 24], 55, 107, 106, c, [640, 3], s, [13, 13], s, [115, 8], s, [116, 3], 109, s, [116, 5], 110, s, [120, 9], s, [121, 9], s, [122, 9], s, [123, 9], 55, 107, 111, c, [73, 3], s, [15, 13], 112, 120, 113, s, [115, 4, 1], s, [18, 13], s, [19, 13], 55, 107, 121, c, [52, 3], s, [21, 13], 55, 107, 122, c, [19, 3], c, [78, 3], 124, c, [7, 3], 126, 125, 2, s, [39, 26], s, [40, 26], 128, s, [72, 7], s, [42, 26], 129, s, [45, 26], s, [46, 26], s, [47, 26], s, [48, 26], s, [49, 26], s, [50, 26], 124, 131, 133, 134, 135, 138, 137, c, [1118, 14], 142, 140, 139, 141, s, [38, 5], c, [1071, 4], s, [36, 4], 3, s, [10, 13], 79, 79, 33, 79, c, [47, 4], s, [79, 4], c, [51, 8], 80, 80, 33, 80, c, [20, 4], s, [80, 4], c, [20, 8], s, [83, 4], c, [845, 3], s, [83, 14], 96, 83, 83, s, [89, 24], s, [90, 24], s, [91, 24], s, [95, 24], s, [110, 24], 146, 145, 76, 89, 76, 148, 147, s, [92, 5], 93, 94, s, [92, 14], 96, c, [19, 3], s, [93, 3], c, [24, 3], s, [93, 14], 96, 93, 93, 150, 45, 149, 104, s, [107, 4], s, [108, 4], s, [109, 4], s, [12, 13], c, [290, 4], s, [114, 8], 154, 56, 57, s, [119, 8], s, [14, 13], s, [16, 13], s, [66, 7], s, [67, 7], s, [68, 7], s, [69, 7], s, [70, 7], s, [71, 7], 156, c, [92, 4], s, [33, 5], s, [20, 13], s, [23, 13], s, [24, 13], 158, s, [72, 7], 159, s, [28, 13], 160, c, [793, 6], s, [43, 26], s, [44, 26], 125, 162, c, [541, 3], 126, s, [129, 5], 164, s, [72, 7], s, [132, 5], s, [133, 5], s, [52, 26], 166, s, [58, 15], 167, 169, s, [72, 7], 171, s, [72, 7], 173, s, [72, 7], s, [65, 27], 175, 55, 107, 174, c, [255, 3], 78, 78, 33, 78, c, [599, 4], s, [78, 4], c, [599, 8], s, [85, 24], s, [87, 24], s, [86, 24], s, [88, 24], s, [104, 24], s, [105, 24], s, [106, 4], s, [113, 8], s, [117, 8], s, [118, 8], 55, 107, 176, c, [198, 3], s, [135, 7], 177, c, [394, 6], 178, 179, s, [41, 26], s, [127, 5], s, [128, 5], 180, c, [45, 6], s, [131, 5], 181, c, [927, 14], 55, 55, 183, s, [55, 24], s, [56, 26], 184, c, [80, 6], s, [63, 27], 185, c, [34, 6], s, [64, 27], 186, c, [34, 6], s, [62, 27], 187, s, [74, 16], s, [134, 7], 188, s, [26, 13], s, [27, 13], s, [130, 5], s, [53, 26], s, [57, 15], s, [54, 26], s, [59, 27], s, [60, 27], s, [61, 27], s, [73, 16], s, [25, 13]])
     }),
     defaultActions: bda({
-      idx: u([0, 2, 5, 11, 14, s, [17, 7, 1], 27, s, [36, 9, 1], 46, 47, 49, 50, s, [53, 4, 1], 58, 60, 62, s, [63, 5, 2], 72, 73, 74, 76, s, [78, 6, 1], 88, 89, 90, s, [94, 5, 1], s, [105, 4, 1], 110, s, [112, 10, 1], 123, 124, 125, 128, 130, 132, 133, 136, 137, 138, 144, s, [147, 11, 1], s, [159, 5, 1], 166, s, [169, 6, 2], s, [180, 9, 1]]),
-      goto: u([7, 9, 8, 17, 24, 30, 35, 36, 31, 32, 33, 1, 11, 94, s, [96, 8, 1], 111, 112, 13, 115, s, [120, 4, 1], 15, 18, 20, 21, 34, 23, 26, 29, 2, 38, 39, 41, s, [45, 6, 1], 37, 3, 10, 89, 90, 91, 95, 110, 107, 108, 109, 12, 114, 119, 14, 16, s, [66, 6, 1], 19, 136, 22, 25, 42, 44, 126, 129, 133, 134, 52, 65, 85, 87, 86, 88, 104, 105, 106, 113, 117, 118, 135, 28, 40, 43, 127, 128, 132, 56, 63, 64, 62, 74, 130, 131, 53, 57, 54, 59, 60, 61, 73, 27])
+      idx: u([0, 2, 5, 11, 14, s, [17, 8, 1], 28, s, [37, 9, 1], 47, 48, 50, 51, s, [54, 4, 1], 59, 61, 62, 64, 69, 70, 71, 73, s, [75, 6, 1], 84, 86, 87, 88, s, [92, 5, 1], s, [103, 4, 1], 108, s, [110, 9, 1], s, [120, 4, 1], 126, 128, 129, 131, 132, 134, 135, 136, 142, s, [145, 10, 1], 156, 160, 161, 162, 164, s, [167, 5, 2], 176, s, [178, 11, 1]]),
+      goto: u([7, 9, 8, 17, 22, 29, 37, 34, 35, 30, 31, 32, 1, 11, 94, s, [96, 8, 1], 111, 112, 13, 115, s, [120, 4, 1], 15, 18, 19, 21, 2, 39, 40, 42, s, [45, 6, 1], 38, 36, 3, 10, 89, 90, 91, 95, 110, 107, 108, 109, 12, 114, 119, 14, 16, s, [66, 6, 1], 33, 20, 23, 24, 28, 43, 44, 126, 129, 132, 133, 52, 65, 85, 87, 86, 88, 104, 105, 106, 113, 117, 118, 135, 41, 127, 128, 131, 56, 63, 64, 62, 74, 134, 26, 27, 130, 53, 57, 54, 59, 60, 61, 73, 25])
     }),
     parseError: function parseError(str, hash, ExceptionClass) {
       if (hash.recoverable) {
@@ -5063,34 +5609,55 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
       function shallow_copy(src) {
-        if (_typeof(src) === 'object') {
-          var dst = {};
-
-          for (var k in src) {
-            if (Object.prototype.hasOwnProperty.call(src, k)) {
-              dst[k] = src[k];
+        if (src && _typeof(src) === 'object') {
+          // non-Object-type objects, e.g. RegExp, Date, etc., can usually be shallow cloned
+          // using their constructor:
+          if (src.constructor !== Object) {
+            if (Array.isArray(src)) {
+              return src.slice();
             }
-          }
 
+            var dst = new src.constructor(src); // and make sure all custom attributes are added to the clone:
+
+            shallow_copy_noclobber(dst, src);
+            return dst;
+          } // native objects must be cloned a different way:
+          //
+          //return Object.assign({}, src);
+
+
+          var dst = {};
+          shallow_copy_noclobber(dst, src);
           return dst;
         }
 
         return src;
-      }
+      } // add elements from `src` to `dst` when:
+      // - either the element does not yet exist in `src`
+      // - or exists in `src` but is NULL or UNDEFINED there, while its value is non-NULL in `dst`
+
 
       function shallow_copy_noclobber(dst, src) {
+        var chk = Object.prototype.hasOwnProperty;
+
         for (var k in src) {
-          if (typeof dst[k] === 'undefined' && Object.prototype.hasOwnProperty.call(src, k)) {
-            dst[k] = src[k];
+          if (!(k in dst)) {
+            if (chk.call(src, k)) {
+              dst[k] = src[k];
+            }
+          } else {
+            if (src[k] != null && dst[k] == null && chk.call(src, k)) {
+              dst[k] = src[k];
+            }
           }
         }
       }
 
-      function copy_yylloc(loc) {
-        var rv = shallow_copy(loc);
+      function copy_yylloc_native(loc) {
+        var rv = shallow_copy(loc); // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
 
-        if (rv && rv.range) {
-          rv.range = rv.range.slice(0);
+        if (rv) {
+          rv.range = rv.range.slice();
         }
 
         return rv;
@@ -5099,7 +5666,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
       shallow_copy_noclobber(sharedState_yy, this.yy);
       sharedState_yy.lexer = lexer;
-      sharedState_yy.parser = this; // *Always* setup `yyError`, `YYRECOVERING`, `yyErrOk` and `yyClearIn` functions as it is paramount
+      sharedState_yy.parser = this; // allow userland code to override the yytext and yylloc copy/clone functions:
+
+      this.copy_yytext = this.options.copy_yytext || sharedState_yy.copy_yytext || shallow_copy;
+      this.copy_yylloc = this.options.copy_yylloc || sharedState_yy.copy_yylloc || copy_yylloc_native; // *Always* setup `yyError`, `YYRECOVERING`, `yyErrOk` and `yyClearIn` functions as it is paramount
       // to have *their* closure match ours -- if we only set them up once,
       // any subsequent `parse()` runs will fail in very obscure ways when
       // these functions are invoked in the user action code block(s) as
@@ -5123,7 +5693,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             v.recovering = recovering; // v.stackSampleLength = error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH;
 
             recoveringErrorInfo.value_stack[esp] = v;
-            recoveringErrorInfo.location_stack[esp] = copy_yylloc(lexer.yylloc);
+            recoveringErrorInfo.location_stack[esp] = this.copy_yylloc(lexer.yylloc);
             recoveringErrorInfo.state_stack[esp] = newState || NO_ACTION[1];
             ++esp;
             recoveringErrorInfo.info_stack_pointer = esp;
@@ -5332,36 +5902,22 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             } else {
               // shallow-copy L2: after all, we MAY be looking
               // at unconventional yylloc info objects...
-              rv = shallow_copy(l2);
-
-              if (rv.range) {
-                // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-                rv.range = rv.range.slice(0);
-              }
-
+              rv = this.copy_yylloc(l2);
               return rv;
             }
           } else {
             // shallow-copy L1, then adjust first col/row 1 column past the end.
-            rv = shallow_copy(l1);
+            rv = this.copy_yylloc(l1);
             rv.first_line = rv.last_line;
             rv.first_column = rv.last_column;
-
-            if (rv.range) {
-              // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-              rv.range = rv.range.slice(0);
-              rv.range[0] = rv.range[1];
-            }
+            rv.range[0] = rv.range[1];
 
             if (l2) {
               // shallow-mixin L2, then adjust last col/row accordingly.
               shallow_copy_noclobber(rv, l2);
               rv.last_line = l2.last_line;
               rv.last_column = l2.last_column;
-
-              if (rv.range && l2.range) {
-                rv.range[1] = l2.range[1];
-              }
+              rv.range[1] = l2.range[1];
             }
 
             return rv;
@@ -5379,24 +5935,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         // at unconventional yylloc info objects...
 
 
-        rv = shallow_copy(l1); // first_line: ...,
-        // first_column: ...,
-        // last_line: ...,
-        // last_column: ...,
-
-        if (rv.range) {
-          // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-          rv.range = rv.range.slice(0);
-        }
+        rv = this.copy_yylloc(l1);
 
         if (l2) {
           shallow_copy_noclobber(rv, l2);
           rv.last_line = l2.last_line;
           rv.last_column = l2.last_column;
-
-          if (rv.range && l2.range) {
-            rv.range[1] = l2.range[1];
-          }
+          rv.range[1] = l2.range[1];
         }
 
         return rv;
@@ -5409,11 +5954,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           errStr: msg,
           exception: ex,
           text: lexer.match,
-          value: lexer.yytext,
+          value: this.copy_yytext(lexer.yytext),
           token: this.describeSymbol(symbol) || symbol,
           token_id: symbol,
           line: lexer.yylineno,
-          loc: copy_yylloc(lexer.yylloc),
+          loc: this.copy_yylloc(lexer.yylloc),
           expected: expected,
           recoverable: recoverable,
           state: state,
@@ -5462,20 +6007,20 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         delete rv.parser;
         delete rv.lexer; // lexer.yytext MAY be a complex value object, rather than a simple string/value:
 
-        rv.value = shallow_copy(rv.value); // yylloc info:
+        rv.value = this.copy_yytext(rv.value); // yylloc info:
 
-        rv.loc = copy_yylloc(rv.loc); // the 'expected' set won't be modified, so no need to clone it:
-        //rv.expected = rv.expected.slice(0);
+        rv.loc = this.copy_yylloc(rv.loc); // the 'expected' set won't be modified, so no need to clone it:
+        //rv.expected = rv.expected.slice();
         //symbol stack is a simple array:
 
-        rv.symbol_stack = rv.symbol_stack.slice(0); // ditto for state stack:
+        rv.symbol_stack = rv.symbol_stack.slice(); // ditto for state stack:
 
-        rv.state_stack = rv.state_stack.slice(0); // clone the yylloc's in the location stack?:
+        rv.state_stack = rv.state_stack.slice(); // clone the yylloc's in the location stack?:
 
-        rv.location_stack = rv.location_stack.map(copy_yylloc); // and the value stack may carry both simple and complex values:
+        rv.location_stack = rv.location_stack.map(this.copy_yylloc); // and the value stack may carry both simple and complex values:
         // shallow-copy the latter.
 
-        rv.value_stack = rv.value_stack.map(shallow_copy); // and we don't bother with the sharedState_yy reference:
+        rv.value_stack = rv.value_stack.map(this.copy_yytext); // and we don't bother with the sharedState_yy reference:
         //delete rv.yy;
         // now we prepare for tracking the COMBINE actions
         // in the error recovery code path:
@@ -5529,11 +6074,35 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         return rv;
       };
 
+      function getNonTerminalFromCode(symbol) {
+        var tokenName = self.getSymbolName(symbol);
+
+        if (!tokenName) {
+          tokenName = symbol;
+        }
+
+        return tokenName;
+      }
+
       function stdLex() {
         var token = lexer.lex(); // if token isn't its numeric value, convert
 
         if (typeof token !== 'number') {
           token = self.symbols_[token] || token;
+        }
+
+        if (typeof Jison !== 'undefined' && Jison.lexDebugger) {
+          var tokenName = self.getSymbolName(token || EOF);
+
+          if (!tokenName) {
+            tokenName = token;
+          }
+
+          Jison.lexDebugger.push({
+            tokenName: tokenName,
+            tokenText: lexer.match,
+            tokenValue: lexer.yytext
+          });
         }
 
         return token || EOF;
@@ -5544,6 +6113,20 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
         if (typeof token !== 'number') {
           token = self.symbols_[token] || token;
+        }
+
+        if (typeof Jison !== 'undefined' && Jison.lexDebugger) {
+          var tokenName = self.getSymbolName(token || EOF);
+
+          if (!tokenName) {
+            tokenName = token;
+          }
+
+          Jison.lexDebugger.push({
+            tokenName: tokenName,
+            tokenText: lexer.match,
+            tokenValue: lexer.yytext
+          });
         }
 
         return token || EOF;
@@ -5630,7 +6213,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           }
         }
 
-        yyloc = lexer.yylloc;
+        yyloc = this.copy_yylloc(lexer.yylloc);
         lstack[sp] = yyloc;
         vstack[sp] = null;
         sstack[sp] = 0;
@@ -5718,15 +6301,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               var esp = recoveringErrorInfo.info_stack_pointer; // just recovered from another error
 
               if (recovering === ERROR_RECOVERY_TOKEN_DISCARD_COUNT && error_rule_depth >= 0) {
-                // SHIFT current lookahead and grab another
+                // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
+                yyloc = this.copy_yylloc(lexer.yylloc); // SHIFT current lookahead and grab another
+
                 recoveringErrorInfo.symbol_stack[esp] = symbol;
-                recoveringErrorInfo.value_stack[esp] = shallow_copy(lexer.yytext);
-                recoveringErrorInfo.location_stack[esp] = copy_yylloc(lexer.yylloc);
+                recoveringErrorInfo.location_stack[esp] = yyloc;
                 recoveringErrorInfo.state_stack[esp] = newState; // push state
 
-                ++esp; // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
-
-                yyloc = lexer.yylloc;
+                ++esp;
                 preErrorSymbol = 0;
                 symbol = lex();
               } // try to recover from error
@@ -5786,7 +6368,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
               if (errStr) {
                 recoveringErrorInfo.value_stack[esp] = {
-                  yytext: shallow_copy(lexer.yytext),
+                  yytext: this.copy_yytext(lexer.yytext),
                   errorRuleDepth: error_rule_depth,
                   errStr: errStr,
                   errorSymbolDescr: errSymbolDescr,
@@ -5795,13 +6377,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                 };
               } else {
                 recoveringErrorInfo.value_stack[esp] = {
-                  yytext: shallow_copy(lexer.yytext),
+                  yytext: this.copy_yytext(lexer.yytext),
                   errorRuleDepth: error_rule_depth,
                   stackSampleLength: error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH
                 };
               }
 
-              recoveringErrorInfo.location_stack[esp] = copy_yylloc(lexer.yylloc);
+              recoveringErrorInfo.location_stack[esp] = this.copy_yylloc(lexer.yylloc);
               recoveringErrorInfo.state_stack[esp] = newState || NO_ACTION[1];
               ++esp;
               recoveringErrorInfo.info_stack_pointer = esp;
@@ -5820,14 +6402,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
               for (var idx = sp - EXTRA_STACK_SAMPLE_DEPTH, top = idx + yyrulelen; idx < top; idx++, esp++) {
                 recoveringErrorInfo.symbol_stack[esp] = stack[idx];
-                recoveringErrorInfo.value_stack[esp] = shallow_copy(vstack[idx]);
-                recoveringErrorInfo.location_stack[esp] = copy_yylloc(lstack[idx]);
+                recoveringErrorInfo.value_stack[esp] = vstack[idx];
+                recoveringErrorInfo.location_stack[esp] = lstack[idx];
                 recoveringErrorInfo.state_stack[esp] = sstack[idx];
               }
 
               recoveringErrorInfo.symbol_stack[esp] = TERROR;
-              recoveringErrorInfo.value_stack[esp] = shallow_copy(yyval.$);
-              recoveringErrorInfo.location_stack[esp] = copy_yylloc(yyval._$); // goto new state = table[STATE][NONTERMINAL]
+              recoveringErrorInfo.value_stack[esp] = this.copy_yytext(yyval.$);
+              recoveringErrorInfo.location_stack[esp] = this.copy_yylloc(yyval._$); // goto new state = table[STATE][NONTERMINAL]
 
               newState = sstack[sp - 1];
 
@@ -5942,12 +6524,28 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                       ASSERT(symbol !== 0, "line 1135");
                       ASSERT(preErrorSymbol === 0, "line 1136");
                       vstack[sp] = lexer.yytext;
-                      lstack[sp] = copy_yylloc(lexer.yylloc);
+                      lstack[sp] = this.copy_yylloc(lexer.yylloc);
                     }
 
                     sstack[sp] = newState; // push state
 
                     ++sp;
+
+                    if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                      var tokenName = this.getSymbolName(symbol || EOF);
+
+                      if (!tokenName) {
+                        tokenName = symbol;
+                      }
+
+                      Jison.parserDebugger.push({
+                        action: 'shift',
+                        text: lexer.yytext,
+                        terminal: tokenName,
+                        terminal_id: symbol
+                      });
+                    }
+
                     symbol = 0; // **Warning: Edge Case**: the *lexer* may have produced
                     // TERROR tokens of its own volition: *those* TERROR
                     // tokens should be treated like *regular tokens*
@@ -5959,7 +6557,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                     if (!preErrorSymbol) {
                       // normal execution / no error
                       // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
-                      yyloc = lexer.yylloc;
+                      yyloc = this.copy_yylloc(lexer.yylloc);
 
                       if (recovering > 0) {
                         recovering--;
@@ -6011,10 +6609,43 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                     yyrulelen = this_production[1];
                     r = this.performAction.call(yyval, yyloc, newState, sp - 1, vstack, lstack);
 
+                    if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                      var prereduceValue = vstack.slice(sp - yyrulelen, sp);
+                      var debuggableProductions = [];
+
+                      for (var debugIdx = yyrulelen - 1; debugIdx >= 0; debugIdx--) {
+                        var debuggableProduction = getNonTerminalFromCode(stack[sp - debugIdx]);
+                        debuggableProductions.push(debuggableProduction);
+                      } // find the current nonterminal name (- nolan)
+
+
+                      var currentNonterminalCode = this_production[0]; // WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];
+
+                      var currentNonterminal = getNonTerminalFromCode(currentNonterminalCode);
+                      Jison.parserDebugger.push({
+                        action: 'reduce',
+                        nonterminal: currentNonterminal,
+                        nonterminal_id: currentNonterminalCode,
+                        prereduce: prereduceValue,
+                        result: r,
+                        productions: debuggableProductions,
+                        text: yyval.$
+                      });
+                    }
+
                     if (typeof r !== 'undefined') {
                       // signal end of error recovery loop AND end of outer parse loop
                       action = 3;
                       retval = r;
+
+                      if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                        Jison.parserDebugger.push({
+                          action: 'accept',
+                          text: retval
+                        });
+                        console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+                      }
+
                       sp = -2; // magic number: signal outer "fast parse loop" ACCEPT state that we already have a properly set up `retval` parser return value.
 
                       break;
@@ -6062,6 +6693,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
                     if (sp >= 0 && typeof vstack[sp] !== 'undefined') {
                       retval = vstack[sp];
+                    }
+
+                    if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                      Jison.parserDebugger.push({
+                        action: 'accept',
+                        text: retval
+                      });
+                      console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
                     }
 
                     sp = -2; // magic number: signal outer "fast parse loop" ACCEPT state that we already have a properly set up `retval` parser return value.
@@ -6115,8 +6754,23 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             case 1:
               stack[sp] = symbol;
               vstack[sp] = lexer.yytext;
-              lstack[sp] = copy_yylloc(lexer.yylloc);
+              lstack[sp] = this.copy_yylloc(lexer.yylloc);
               sstack[sp] = newState; // push state
+
+              if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                var tokenName = this.getSymbolName(symbol || EOF);
+
+                if (!tokenName) {
+                  tokenName = symbol;
+                }
+
+                Jison.parserDebugger.push({
+                  action: 'shift',
+                  text: lexer.yytext,
+                  terminal: tokenName,
+                  terminal_id: symbol
+                });
+              }
 
               ++sp;
               symbol = 0;
@@ -6125,7 +6779,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               ASSERT(recovering === 0, "line 1353"); // normal execution / no error
               // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
 
-              yyloc = lexer.yylloc;
+              yyloc = this.copy_yylloc(lexer.yylloc);
               continue;
             // reduce:
 
@@ -6139,8 +6793,41 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               yyrulelen = this_production[1];
               r = this.performAction.call(yyval, yyloc, newState, sp - 1, vstack, lstack);
 
+              if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                var prereduceValue = vstack.slice(sp - yyrulelen, sp);
+                var debuggableProductions = [];
+
+                for (var debugIdx = yyrulelen - 1; debugIdx >= 0; debugIdx--) {
+                  var debuggableProduction = getNonTerminalFromCode(stack[sp - debugIdx]);
+                  debuggableProductions.push(debuggableProduction);
+                } // find the current nonterminal name (- nolan)
+
+
+                var currentNonterminalCode = this_production[0]; // WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];
+
+                var currentNonterminal = getNonTerminalFromCode(currentNonterminalCode);
+                Jison.parserDebugger.push({
+                  action: 'reduce',
+                  nonterminal: currentNonterminal,
+                  nonterminal_id: currentNonterminalCode,
+                  prereduce: prereduceValue,
+                  result: r,
+                  productions: debuggableProductions,
+                  text: yyval.$
+                });
+              }
+
               if (typeof r !== 'undefined') {
                 retval = r;
+
+                if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                  Jison.parserDebugger.push({
+                    action: 'accept',
+                    text: retval
+                  });
+                  console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+                }
+
                 break;
               } // pop off stack
 
@@ -6190,6 +6877,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                 }
               }
 
+              if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                Jison.parserDebugger.push({
+                  action: 'accept',
+                  text: retval
+                });
+                console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+              }
+
               break;
           } // break out of loop: we accept or fail with error
 
@@ -6215,6 +6910,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       } finally {
         retval = this.cleanupAfterParse(retval, true, true);
         this.__reentrant_call_depth--;
+
+        if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+          Jison.parserDebugger.push({
+            action: 'return',
+            text: retval
+          });
+          console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+        }
       } // /finally
 
 
@@ -6561,6 +7264,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       _more: false,
       /// INTERNAL USE ONLY
       _signaled_error_token: false,
+      /// INTERNAL USE ONLY; 0: clear to do, 1: clear done for lex()/next(); -1: clear done for inut()/unput()/...
+      _clear_state: 0,
       /// INTERNAL USE ONLY; managed via `pushState()`, `popState()`, `topState()` and `stateStackSize()`
       conditionStack: [],
       /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction. `match` is identical to `yytext` except that this one still contains the matched input string after `lexer.performAction()` has been invoked, where userland code MAY have changed/replaced the `yytext` value entirely!
@@ -6571,14 +7276,18 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       matches: false,
       /// ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction; this value is transferred to the parser as the 'token value' when the parser consumes the lexer token produced through a call to the `lex()` API.
       yytext: '',
-      /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far
+      /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far. (**WARNING:** this value MAY be negative if you `unput()` more text than you have already lexed. This type of behaviour is generally observed for one kind of 'lexer/parser hack' where custom token-illiciting characters are pushed in front of the input stream to help simulate multiple-START-points in the parser. When this happens, `base_position` will be adjusted to help track the original input's starting point in the `_input` buffer.)
       offset: 0,
+      /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: index to the original starting point of the input; always ZERO(0) unless `unput()` has pushed content before the input: see the `offset` **WARNING** just above.
+      base_position: 0,
       /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: length of matched input for the token under construction (`yytext`)
       yyleng: 0,
       /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: 'line number' at which the token under construction is located
       yylineno: 0,
       /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks location info (lines + columns) for the token under construction
       yylloc: null,
+      /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: regex used to split lines while tracking the lexer cursor position.
+      CRLF_Re: /\r\n?|\n/,
 
       /**
            * INTERNAL USE: construct a suitable error info hash object instance for `parseError`.
@@ -6754,7 +7463,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         this.matches = false;
         this._more = false;
         this._backtrack = false;
-        var col = this.yylloc ? this.yylloc.last_column : 0;
+        var col = this.yylloc.last_column;
         this.yylloc = {
           first_line: this.yylineno + 1,
           first_column: col,
@@ -6818,7 +7527,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         }
 
         this._input = input || '';
-        this.clear();
+        this._clear_state = -1;
         this._signaled_error_token = false;
         this.done = false;
         this.yylineno = 0;
@@ -6833,6 +7542,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           range: [0, 0]
         };
         this.offset = 0;
+        this.base_position = 0; // apply these bits of `this.clear()` as well:
+
+        this.yytext = '';
+        this.yyleng = 0;
+        this.match = '';
+        this.matches = false;
+        this._more = false;
+        this._backtrack = false;
         return this;
       },
 
@@ -6907,6 +7624,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           return null;
         }
 
+        if (!this._clear_state && !this._more) {
+          this._clear_state = -1;
+          this.clear();
+        }
+
         var ch = this._input[0];
         this.yytext += ch;
         this.yyleng++;
@@ -6959,11 +7681,28 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
            */
       unput: function lexer_unput(ch) {
         var len = ch.length;
-        var lines = ch.split(/(?:\r\n?|\n)/g);
+        var lines = ch.split(this.CRLF_Re);
+
+        if (!this._clear_state && !this._more) {
+          this._clear_state = -1;
+          this.clear();
+        }
+
         this._input = ch + this._input;
         this.yytext = this.yytext.substr(0, this.yytext.length - len);
         this.yyleng = this.yytext.length;
-        this.offset -= len;
+        this.offset -= len; // **WARNING:**
+        // The `offset` value MAY be negative if you `unput()` more text than you have already lexed.
+        // This type of behaviour is generally observed for one kind of 'lexer/parser hack'
+        // where custom token-illiciting characters are pushed in front of the input stream to help
+        // simulate multiple-START-points in the parser.
+        // When this happens, `base_position` will be adjusted to help track the original input's
+        // starting point in the `_input` buffer.
+
+        if (-this.offset > this.base_position) {
+          this.base_position = -this.offset;
+        }
+
         this.match = this.match.substr(0, this.match.length - len);
         this.matched = this.matched.substr(0, this.matched.length - len);
 
@@ -6974,11 +7713,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           // matched lines end up in the array too.
 
           var pre = this.match;
-          var pre_lines = pre.split(/(?:\r\n?|\n)/g);
+          var pre_lines = pre.split(this.CRLF_Re);
 
           if (pre_lines.length === 1) {
             pre = this.matched;
-            pre_lines = pre.split(/(?:\r\n?|\n)/g);
+            pre_lines = pre.split(this.CRLF_Re);
           }
 
           this.yylloc.last_column = pre_lines[pre_lines.length - 1].length;
@@ -7091,7 +7830,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         past = past.substr(-maxSize * 2 - 2); // now that we have a significantly reduced string to process, transform the newlines
         // and chop them, then limit them:
 
-        var a = past.replace(/\r\n|\r/g, '\n').split('\n');
+        var a = past.split(this.CRLF_Re);
         a = a.slice(-maxLines);
         past = a.join('\n'); // When, after limiting to maxLines, we still have too much to return,
         // do add an ellipsis prefix...
@@ -7151,7 +7890,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         // and chop them, then limit them:
 
 
-        var a = next.split(/\r\n|\r/g, maxLines + 1); // stop splitting once we have reached just beyond the reuired number of lines.
+        var a = next.split(this.CRLF_Re, maxLines + 1); // stop splitting once we have reached just beyond the reuired number of lines.
 
         a = a.slice(0, maxLines);
         next = a.join('\n'); // When, after limiting to maxLines, we still have too much to return,
@@ -7346,7 +8085,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         var l1 = Math.max(1, context_loc2 ? context_loc2.last_line : loc.last_line + CONTEXT_TAIL);
         var lineno_display_width = 1 + Math.log10(l1 | 1) | 0;
         var ws_prefix = new Array(lineno_display_width).join(' ');
-        var nonempty_line_indexes = [];
+        var nonempty_line_indexes = [[], [], []];
         var rv = lines.slice(l0 - 1, l1 + 1).map(function injectLineNumber(line, index) {
           var lno = index + l0;
           var lno_pfx = (ws_prefix + lno).substr(-lineno_display_width);
@@ -7364,27 +8103,42 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             len = Math.max(2, line.length + 1);
           }
 
+          var nli;
+
           if (len) {
             var lead = new Array(offset).join('.');
             var mark = new Array(len).join('^');
             rv += '\n' + errpfx + lead + mark;
+            nli = 1;
+          } else if (lno < loc.first_line) {
+            nli = 0;
+          } else if (lno > loc.last_line) {
+            nli = 2;
+          }
 
-            if (line.trim().length > 0) {
-              nonempty_line_indexes.push(index);
-            }
+          if (line.trim().length > 0) {
+            nonempty_line_indexes[nli].push(index);
           }
 
           rv = rv.replace(/\t/g, ' ');
           return rv;
-        }); // now make sure we don't print an overly large amount of error area: limit it 
+        }); // now make sure we don't print an overly large amount of lead/error/tail area: limit it
         // to the top and bottom line count:
 
-        if (nonempty_line_indexes.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {
-          var clip_start = nonempty_line_indexes[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
-          var clip_end = nonempty_line_indexes[nonempty_line_indexes.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
-          var intermediate_line = new Array(lineno_display_width + 1).join(' ') + '  (...continued...)';
-          intermediate_line += '\n' + new Array(lineno_display_width + 1).join('-') + '  (---------------)';
-          rv.splice(clip_start, clip_end - clip_start + 1, intermediate_line);
+        for (var i = 0; i <= 2; i++) {
+          var line_arr = nonempty_line_indexes[i];
+
+          if (line_arr.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {
+            var clip_start = line_arr[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
+            var clip_end = line_arr[line_arr.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
+            var intermediate_line = new Array(lineno_display_width + 1).join(' ') + '  (...continued...)';
+
+            if (i === 1) {
+              intermediate_line += '\n' + new Array(lineno_display_width + 1).join('-') + '  (---------------)';
+            }
+
+            rv.splice(clip_start, clip_end - clip_start + 1, intermediate_line);
+          }
         }
 
         return rv.join('\n');
@@ -7465,7 +8219,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               last_line: this.yylloc.last_line,
               first_column: this.yylloc.first_column,
               last_column: this.yylloc.last_column,
-              range: this.yylloc.range.slice(0)
+              range: this.yylloc.range.slice()
             },
             yytext: this.yytext,
             match: this.match,
@@ -7477,15 +8231,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             _input: this._input,
             //_signaled_error_token: this._signaled_error_token,
             yy: this.yy,
-            conditionStack: this.conditionStack.slice(0),
+            conditionStack: this.conditionStack.slice(),
             done: this.done
           };
         }
 
         match_str = match[0];
-        match_str_len = match_str.length; // if (match_str.indexOf('\n') !== -1 || match_str.indexOf('\r') !== -1) {
-
-        lines = match_str.split(/(?:\r\n?|\n)/g);
+        match_str_len = match_str.length;
+        lines = match_str.split(this.CRLF_Re);
 
         if (lines.length > 1) {
           this.yylineno += lines.length - 1;
@@ -7493,8 +8246,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.yylloc.last_column = lines[lines.length - 1].length;
         } else {
           this.yylloc.last_column += match_str_len;
-        } // }
-
+        }
 
         this.yytext += match_str;
         this.match += match_str;
@@ -7561,6 +8313,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         var token, match, tempMatch, index;
 
         if (!this._more) {
+          if (!this._clear_state) {
+            this._clear_state = 1;
+          }
+
           this.clear();
         }
 
@@ -7577,7 +8333,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           if (!spec || !spec.rules) {
             var lineno_msg = '';
 
-            if (this.options.trackPosition) {
+            if (this.yylloc) {
               lineno_msg = ' on line ' + (this.yylineno + 1);
             }
 
@@ -7635,7 +8391,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         } else {
           var lineno_msg = 'Lexical error';
 
-          if (this.options.trackPosition) {
+          if (this.yylloc) {
             lineno_msg += ' on line ' + (this.yylineno + 1);
           }
 
@@ -7668,7 +8424,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
            * @this {RegExpLexer}
            */
       lex: function lexer_lex() {
-        var r; // allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:
+        var r; //this._clear_state = 0;
+
+        if (!this._more) {
+          if (!this._clear_state) {
+            this._clear_state = 1;
+          }
+
+          this.clear();
+        } // allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:
+
 
         if (typeof this.pre_lex === 'function') {
           r = this.pre_lex.call(this, 0);
@@ -7703,6 +8468,33 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           r = this.post_lex.call(this, r) || r;
         }
 
+        if (!this._more) {
+          //
+          // 1) make sure any outside interference is detected ASAP: 
+          //    these attributes are to be treated as 'const' values
+          //    once the lexer has produced them with the token (return value `r`).
+          // 2) make sure any subsequent `lex()` API invocation CANNOT
+          //    edit the `yytext`, etc. token attributes for the *current*
+          //    token, i.e. provide a degree of 'closure safety' so that
+          //    code like this:
+          //    
+          //        t1 = lexer.lex();
+          //        v = lexer.yytext;
+          //        l = lexer.yylloc;
+          //        t2 = lexer.lex();
+          //        assert(lexer.yytext !== v);
+          //        assert(lexer.yylloc !== l);
+          //        
+          //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+          //    these conditions.
+          //    
+          this.yytext = Object.freeze(this.yytext);
+          this.matches = Object.freeze(this.matches);
+          this.yylloc.range = Object.freeze(this.yylloc.range);
+          this.yylloc = Object.freeze(this.yylloc);
+          this._clear_state = 0;
+        }
+
         return r;
       },
 
@@ -7714,10 +8506,37 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
            * @this {RegExpLexer}
            */
       fastLex: function lexer_fastLex() {
-        var r;
+        var r; //this._clear_state = 0;
 
         while (!r) {
           r = this.next();
+        }
+
+        if (!this._more) {
+          //
+          // 1) make sure any outside interference is detected ASAP: 
+          //    these attributes are to be treated as 'const' values
+          //    once the lexer has produced them with the token (return value `r`).
+          // 2) make sure any subsequent `lex()` API invocation CANNOT
+          //    edit the `yytext`, etc. token attributes for the *current*
+          //    token, i.e. provide a degree of 'closure safety' so that
+          //    code like this:
+          //    
+          //        t1 = lexer.lex();
+          //        v = lexer.yytext;
+          //        l = lexer.yylloc;
+          //        t2 = lexer.lex();
+          //        assert(lexer.yytext !== v);
+          //        assert(lexer.yylloc !== l);
+          //        
+          //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+          //    these conditions.
+          //    
+          this.yytext = Object.freeze(this.yytext);
+          this.matches = Object.freeze(this.matches);
+          this.yylloc.range = Object.freeze(this.yylloc.range);
+          this.yylloc = Object.freeze(this.yylloc);
+          this._clear_state = 0;
         }
 
         return r;
@@ -7861,7 +8680,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Rule::       %\{([^]*?)%\}(?!\}) */
             yy_.yytext = this.matches[1];
             yy.include_command_allowed = false;
-            return 36;
+            return 35;
 
           case 3:
             /*! Conditions:: action */
@@ -7870,11 +8689,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             if (yy.include_command_allowed) {
               // This is an include instruction in place of (part of) an action:
               this.pushState('options');
-              return 32;
+              return 30;
             } else {
               // TODO
-              yy_.yyerror(rmCommonWS(_templateObject61()) + this.prettyPrintRange(yy_.yylloc));
-              return 37;
+              yy_.yyerror(rmCommonWS(_templateObject62()) + this.prettyPrintRange(yy_.yylloc));
+              return 36;
             }
 
           case 4:
@@ -7882,14 +8701,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
             /*! Rule::       \/\*[^]*?\*\/ */
             //yy.include_command_allowed = false; -- doesn't impact include-allowed state
-            return 36;
+            return 35;
 
           case 5:
             /*! Conditions:: action */
 
             /*! Rule::       \/\/.* */
             yy.include_command_allowed = false;
-            return 36;
+            return 35;
 
           case 6:
             /*! Conditions:: action */
@@ -7899,9 +8718,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               this.popState();
               this.unput(yy_.yytext); // yy_.yytext = '';    --- ommitted as this is the side-effect of .unput(yy_.yytext) already!
 
-              return 24;
+              return 23;
             } else {
-              return 36;
+              return 35;
             }
 
           case 7:
@@ -7912,16 +8731,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               this.popState();
               this.unput(yy_.yytext); // yy_.yytext = '';    --- ommitted as this is the side-effect of .unput(yy_.yytext) already!
 
-              return 24;
+              return 23;
             } else {
-              return 36;
+              return 35;
             }
 
           case 8:
             /*! Conditions:: action */
 
             /*! Rule::       \/(?=\s) */
-            return 36;
+            return 35;
           // most probably a `/` divide operator. 
 
           case 9:
@@ -7940,28 +8759,28 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               yy_.yytext = yy_.yytext[0];
             }
 
-            return 36;
+            return 35;
 
           case 10:
             /*! Conditions:: action */
 
             /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}"|'{QUOTED_STRING_CONTENT}'|`{ES2017_STRING_CONTENT}` */
             yy.include_command_allowed = false;
-            return 36;
+            return 35;
 
           case 11:
             /*! Conditions:: action */
 
             /*! Rule::       [^/"'`%\{\}\/{BR}]+ */
             yy.include_command_allowed = false;
-            return 36;
+            return 35;
 
           case 12:
             /*! Conditions:: action */
 
             /*! Rule::       % */
             yy.include_command_allowed = false;
-            return 36;
+            return 35;
 
           case 13:
             /*! Conditions:: action */
@@ -7969,7 +8788,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Rule::       \{ */
             yy.depth++;
             yy.include_command_allowed = false;
-            return 36;
+            return 35;
 
           case 14:
             /*! Conditions:: action */
@@ -7978,20 +8797,20 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             yy.include_command_allowed = false;
 
             if (yy.depth <= 0) {
-              yy_.yyerror(rmCommonWS(_templateObject62()) + this.prettyPrintRange(yy_.yylloc));
-              return 39;
+              yy_.yyerror(rmCommonWS(_templateObject63()) + this.prettyPrintRange(yy_.yylloc));
+              return 38;
             } else {
               yy.depth--;
             }
 
-            return 36;
+            return 35;
 
           case 15:
             /*! Conditions:: action */
 
             /*! Rule::       (?:[\s\r\n]*?){BR}+{WS}+ */
             yy.include_command_allowed = true;
-            return 36;
+            return 35;
           // keep empty lines as-is inside action code blocks. 
 
           case 17:
@@ -8000,13 +8819,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Rule::       {BR} */
             if (yy.depth > 0) {
               yy.include_command_allowed = true;
-              return 36; // keep empty lines as-is inside action code blocks.
+              return 35; // keep empty lines as-is inside action code blocks.
             } else {
               // end of action code chunk; allow parent mode to see this mode-terminating linebreak too.
               this.popState();
               this.unput(yy_.yytext); // yy_.yytext = '';    --- ommitted as this is the side-effect of .unput(yy_.yytext) already!
 
-              return 24;
+              return 23;
             }
 
           case 18:
@@ -8016,13 +8835,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             yy.include_command_allowed = false;
 
             if (yy.depth !== 0) {
-              yy_.yyerror(rmCommonWS(_templateObject63(), yy.depth) + this.prettyPrintRange(yy_.yylloc));
-              return 38;
+              yy_.yyerror(rmCommonWS(_templateObject64(), yy.depth) + this.prettyPrintRange(yy_.yylloc));
+              return 37;
             }
 
             this.popState();
             yy_.yytext = '';
-            return 24;
+            return 23;
 
           case 19:
             /*! Conditions:: INITIAL rules code options */
@@ -8070,8 +8889,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               }
 
               if (endMarkerIndex < 0) {
-                yy_.yyerror(rmCommonWS(_templateObject64(), endMarker) + this.prettyPrintRange(yy_.yylloc));
-                return 25;
+                yy_.yyerror(rmCommonWS(_templateObject65(), endMarker) + this.prettyPrintRange(yy_.yylloc));
+                return 24;
               }
 
               break;
@@ -8083,10 +8902,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             yy_.yytext = marker; // and allow the next lexer round to match and execute the suitable lexer rule(s) to parse this incoming action code block.
 
             if (atSOL) {
-              return 23;
+              return 22;
             }
 
-            return 26;
+            return 25;
 
           case 20:
             /*! Conditions:: rules macro INITIAL */
@@ -8095,7 +8914,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             yy.depth = 0;
             yy.include_command_allowed = false;
             this.pushState('action');
-            return 35;
+            return 34;
 
           case 21:
             /*! Conditions:: rules macro INITIAL */
@@ -8104,7 +8923,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             yy.depth = 0;
             yy.include_command_allowed = false;
             this.pushState('action');
-            return 35;
+            return 34;
 
           case 22:
             /*! Conditions:: rules macro INITIAL */
@@ -8113,7 +8932,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             yy.depth = 0;
             yy.include_command_allowed = false;
             this.pushState('action');
-            return 35;
+            return 34;
 
           case 23:
             /*! Conditions:: rules */
@@ -8153,7 +8972,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               yy_.yytext = '{'; // hint the parser
             }
 
-            return 26;
+            return 25;
 
           case 24:
             /*! Conditions:: rules */
@@ -8161,7 +8980,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Rule::       %% */
             this.popState();
             this.pushState('code');
-            return 19;
+            return 33;
 
           case 25:
             /*! Conditions:: rules */
@@ -8169,7 +8988,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Rule::       $ */
             this.popState();
             this.pushState('code');
-            return 19;
+            return 33;
 
           case 30:
             /*! Conditions:: options */
@@ -8177,7 +8996,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Rule::       %%|\||; */
             this.popState();
             this.unput(yy_.yytext);
-            return 22;
+            return 21;
 
           case 31:
             /*! Conditions:: options */
@@ -8190,7 +9009,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             // and issue the desired follow-up token: 'INCLUDE':
 
             this.unput(yy_.yytext);
-            return 26;
+            return 25;
 
           case 32:
             /*! Conditions:: options */
@@ -8198,7 +9017,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Rule::       > */
             this.popState();
             this.unput(yy_.yytext);
-            return 22;
+            return 21;
 
           case 35:
             /*! Conditions:: options */
@@ -8221,7 +9040,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Rule::       {BR} */
             this.popState();
             this.unput(yy_.yytext);
-            return 22;
+            return 21;
 
           case 39:
             /*! Conditions:: options */
@@ -8236,7 +9055,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
             /*! Rule::       {ID} */
             this.pushState('macro');
-            return 20;
+            return 19;
 
           case 41:
             /*! Conditions:: macro */
@@ -8244,7 +9063,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Rule::       {BR}+ */
             this.popState();
             this.unput(yy_.yytext);
-            return 21;
+            return 20;
 
           case 42:
             /*! Conditions:: macro */
@@ -8252,7 +9071,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Rule::       $ */
             this.popState();
             this.unput(yy_.yytext);
-            return 21;
+            return 20;
 
           case 43:
             /*! Conditions:: rules macro INITIAL */
@@ -8276,14 +9095,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Rule::       {ANY_LITERAL_CHAR}+ */
             // accept any non-regex, non-lex, non-string-delim,
             // non-escape-starter, non-space character as-is
-            return 51;
+            return 50;
 
           case 49:
             /*! Conditions:: rules macro INITIAL */
 
             /*! Rule::       \[ */
             this.pushState('set');
-            return 46;
+            return 45;
 
           case 64:
             /*! Conditions:: rules macro INITIAL */
@@ -8296,7 +9115,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Conditions:: rules macro INITIAL */
 
             /*! Rule::       \/! */
-            return 42;
+            return 41;
           // treated as `(?!atom)` 
 
           case 67:
@@ -8335,62 +9154,74 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               yy_.yytext = v;
             }
 
-            return 44;
+            return 43;
 
           case 70:
             /*! Conditions:: rules macro INITIAL */
 
             /*! Rule::       \\. */
             yy_.yytext = yy_.yytext.substring(1);
-            return 51;
+            return 50;
 
           case 73:
             /*! Conditions:: rules macro INITIAL */
 
             /*! Rule::       %option[s]? */
             this.pushState('options');
-            return 29;
+            return 27;
 
           case 74:
             /*! Conditions:: rules macro INITIAL */
 
             /*! Rule::       %s\b */
             this.pushState('options');
-            return 33;
+            return 31;
 
           case 75:
             /*! Conditions:: rules macro INITIAL */
 
             /*! Rule::       %x\b */
             this.pushState('options');
-            return 34;
+            return 32;
 
           case 76:
             /*! Conditions:: rules macro INITIAL */
 
             /*! Rule::       %code\b */
             this.pushState('options');
-            return 31;
+            return 29;
 
           case 77:
             /*! Conditions:: rules macro INITIAL */
 
             /*! Rule::       %import\b */
             this.pushState('options');
-            return 30;
+            return 28;
 
           case 80:
             /*! Conditions:: INITIAL rules code */
 
             /*! Rule::       %include\b */
             yy.depth = 0;
-            yy.include_command_allowed = true;
+            yy.include_command_allowed = true; // check whether this `%include` command was located at the start of the line:
+            // if it is, we treat it as a different token to signal the grammar we've
+            // got an action which stands on its own.
+
+            var precedingStr = this.matched[this.matched.length - this.match.length - 1];
+            var atSOL = !precedingStr
+            /* @ Start Of File */
+            || precedingStr === '\n';
             this.pushState('action'); // push the parsed '%include' back into the input-to-parse
             // to trigger the `<action>` state to re-parse it
             // and issue the desired follow-up token: 'INCLUDE':
 
-            this.unput(yy_.yytext);
-            return 26;
+            this.unput(yy_.yytext); // and allow the next lexer round to match and execute the suitable lexer rule(s) to parse this incoming action code block.
+
+            if (atSOL) {
+              return 22;
+            }
+
+            return 25;
 
           case 81:
             /*! Conditions:: INITIAL rules code */
@@ -8398,108 +9229,108 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Rule::       %{NAME}([^\r\n]*) */
 
             /* ignore unrecognized decl */
-            this.warn(rmCommonWS(_templateObject65(), dquote(yy_.yytext), dquote(this.topState())) + this.prettyPrintRange(yy_.yylloc));
+            this.warn(rmCommonWS(_templateObject66(), dquote(yy_.yytext), dquote(this.topState())) + this.prettyPrintRange(yy_.yylloc));
             yy_.yytext = {
               // {NAME}
               name: this.matches[1],
               // optional value/parameters
               value: this.matches[2].trim()
             };
-            return 28;
+            return 26;
 
           case 82:
             /*! Conditions:: rules macro INITIAL */
 
             /*! Rule::       %% */
             this.pushState('rules');
-            return 19;
+            return 33;
 
           case 90:
             /*! Conditions:: set */
 
             /*! Rule::       \] */
             this.popState();
-            return 47;
+            return 46;
 
           case 91:
             /*! Conditions:: code */
 
             /*! Rule::       (?:[^%{BR}][^{BR}]*{BR}+)+ */
-            return 55;
+            return 54;
           // shortcut to grab a large bite at once when we're sure not to encounter any `%include` in there at start-of-line. 
 
           case 93:
             /*! Conditions:: code */
 
             /*! Rule::       [^{BR}]+ */
-            return 55;
+            return 54;
           // the bit of CODE just before EOF... 
 
           case 94:
             /*! Conditions:: action */
 
             /*! Rule::       " */
-            yy_.yyerror(rmCommonWS(_templateObject66()) + this.prettyPrintRange(yy_.yylloc));
-            return 40;
+            yy_.yyerror(rmCommonWS(_templateObject67()) + this.prettyPrintRange(yy_.yylloc));
+            return 39;
 
           case 95:
             /*! Conditions:: action */
 
             /*! Rule::       ' */
-            yy_.yyerror(rmCommonWS(_templateObject67()) + this.prettyPrintRange(yy_.yylloc));
-            return 40;
+            yy_.yyerror(rmCommonWS(_templateObject68()) + this.prettyPrintRange(yy_.yylloc));
+            return 39;
 
           case 96:
             /*! Conditions:: action */
 
             /*! Rule::       ` */
-            yy_.yyerror(rmCommonWS(_templateObject68()) + this.prettyPrintRange(yy_.yylloc));
-            return 40;
+            yy_.yyerror(rmCommonWS(_templateObject69()) + this.prettyPrintRange(yy_.yylloc));
+            return 39;
 
           case 97:
             /*! Conditions:: options */
 
             /*! Rule::       " */
-            yy_.yyerror(rmCommonWS(_templateObject69()) + this.prettyPrintRange(yy_.yylloc));
-            return 40;
+            yy_.yyerror(rmCommonWS(_templateObject70()) + this.prettyPrintRange(yy_.yylloc));
+            return 39;
 
           case 98:
             /*! Conditions:: options */
 
             /*! Rule::       ' */
-            yy_.yyerror(rmCommonWS(_templateObject70()) + this.prettyPrintRange(yy_.yylloc));
-            return 40;
+            yy_.yyerror(rmCommonWS(_templateObject71()) + this.prettyPrintRange(yy_.yylloc));
+            return 39;
 
           case 99:
             /*! Conditions:: options */
 
             /*! Rule::       ` */
-            yy_.yyerror(rmCommonWS(_templateObject71()) + this.prettyPrintRange(yy_.yylloc));
-            return 40;
+            yy_.yyerror(rmCommonWS(_templateObject72()) + this.prettyPrintRange(yy_.yylloc));
+            return 39;
 
           case 100:
             /*! Conditions:: * */
 
             /*! Rule::       " */
             var rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
-            yy_.yyerror(rmCommonWS(_templateObject72(), rules) + this.prettyPrintRange(yy_.yylloc));
-            return 40;
+            yy_.yyerror(rmCommonWS(_templateObject73(), rules) + this.prettyPrintRange(yy_.yylloc));
+            return 39;
 
           case 101:
             /*! Conditions:: * */
 
             /*! Rule::       ' */
             var rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
-            yy_.yyerror(rmCommonWS(_templateObject73(), rules) + this.prettyPrintRange(yy_.yylloc));
-            return 40;
+            yy_.yyerror(rmCommonWS(_templateObject74(), rules) + this.prettyPrintRange(yy_.yylloc));
+            return 39;
 
           case 102:
             /*! Conditions:: * */
 
             /*! Rule::       ` */
             var rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
-            yy_.yyerror(rmCommonWS(_templateObject74(), rules) + this.prettyPrintRange(yy_.yylloc));
-            return 40;
+            yy_.yyerror(rmCommonWS(_templateObject75(), rules) + this.prettyPrintRange(yy_.yylloc));
+            return 39;
 
           case 103:
             /*! Conditions:: macro rules */
@@ -8508,21 +9339,21 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
             /* b0rk on bad characters */
             var rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
-            yy_.yyerror(rmCommonWS(_templateObject75(), rules, dquote(this.topState()), rules) + this.prettyPrintRange(yy_.yylloc));
+            yy_.yyerror(rmCommonWS(_templateObject76(), rules, dquote(this.topState()), rules) + this.prettyPrintRange(yy_.yylloc));
             return 2;
 
           case 104:
             /*! Conditions:: options */
 
             /*! Rule::       . */
-            yy_.yyerror(rmCommonWS(_templateObject76(), dquote(yy_.yytext), dquote(this.topState())) + this.prettyPrintRange(yy_.yylloc));
+            yy_.yyerror(rmCommonWS(_templateObject77(), dquote(yy_.yytext), dquote(this.topState())) + this.prettyPrintRange(yy_.yylloc));
             return 2;
 
           case 105:
             /*! Conditions:: * */
 
             /*! Rule::       . */
-            yy_.yyerror(rmCommonWS(_templateObject77(), dquote(yy_.yytext), dquote(this.topState())) + this.prettyPrintRange(yy_.yylloc));
+            yy_.yyerror(rmCommonWS(_templateObject78(), dquote(yy_.yytext), dquote(this.topState())) + this.prettyPrintRange(yy_.yylloc));
             return 2;
 
           default:
@@ -8533,7 +9364,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         /*! Conditions:: action */
 
         /*! Rule::       {WS}+ */
-        16: 36,
+        16: 35,
 
         /*! Conditions:: options */
 
@@ -8543,17 +9374,17 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         /*! Conditions:: options */
 
         /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */
-        27: 53,
+        27: 52,
 
         /*! Conditions:: options */
 
         /*! Rule::       '{QUOTED_STRING_CONTENT}' */
-        28: 53,
+        28: 52,
 
         /*! Conditions:: options */
 
         /*! Rule::       `{ES2017_STRING_CONTENT}` */
-        29: 53,
+        29: 52,
 
         /*! Conditions:: options */
 
@@ -8568,22 +9399,22 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         /*! Conditions:: options */
 
         /*! Rule::       {ANY_LITERAL_CHAR}+ */
-        36: 54,
+        36: 53,
 
         /*! Conditions:: rules macro INITIAL */
 
         /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */
-        45: 50,
+        45: 49,
 
         /*! Conditions:: rules macro INITIAL */
 
         /*! Rule::       '{QUOTED_STRING_CONTENT}' */
-        46: 50,
+        46: 49,
 
         /*! Conditions:: rules macro INITIAL */
 
         /*! Rule::       `{ES2017_STRING_CONTENT}` */
-        47: 50,
+        47: 49,
 
         /*! Conditions:: rules macro INITIAL */
 
@@ -8593,27 +9424,27 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         /*! Conditions:: rules macro INITIAL */
 
         /*! Rule::       \(\?: */
-        51: 41,
+        51: 40,
 
         /*! Conditions:: rules macro INITIAL */
 
         /*! Rule::       \(\?= */
-        52: 41,
+        52: 40,
 
         /*! Conditions:: rules macro INITIAL */
 
         /*! Rule::       \(\?! */
-        53: 41,
+        53: 40,
 
         /*! Conditions:: rules macro INITIAL */
 
         /*! Rule::       \(\?<= */
-        54: 41,
+        54: 40,
 
         /*! Conditions:: rules macro INITIAL */
 
         /*! Rule::       \(\?<! */
-        55: 41,
+        55: 40,
 
         /*! Conditions:: rules macro INITIAL */
 
@@ -8663,7 +9494,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         /*! Conditions:: rules macro INITIAL */
 
         /*! Rule::       \\(?:[sSbBwWdDpP]|[rfntv\\*+()${}|[\]\/.^?]) */
-        68: 43,
+        68: 42,
 
         /*! Conditions:: rules macro INITIAL */
 
@@ -8688,17 +9519,17 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         /*! Conditions:: rules macro INITIAL */
 
         /*! Rule::       \{\d+(,\s*\d+|,)?\} */
-        83: 49,
+        83: 48,
 
         /*! Conditions:: rules macro INITIAL */
 
         /*! Rule::       \{{ID}\} */
-        84: 45,
+        84: 44,
 
         /*! Conditions:: set options */
 
         /*! Rule::       \{{ID}\} */
-        85: 45,
+        85: 44,
 
         /*! Conditions:: rules macro INITIAL */
 
@@ -8713,17 +9544,17 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         /*! Conditions:: set */
 
         /*! Rule::       (?:\\[^{BR}]|[^\]{])+ */
-        88: 48,
+        88: 47,
 
         /*! Conditions:: set */
 
         /*! Rule::       \{ */
-        89: 48,
+        89: 47,
 
         /*! Conditions:: code */
 
         /*! Rule::       [^{BR}]*{BR}+ */
-        92: 55,
+        92: 54,
 
         /*! Conditions:: * */
 
@@ -10396,7 +11227,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   //
   // This is the base XRegExp ID regex used in many places; this should match the ID macro definition in the EBNF/BNF parser et al as well!
 
-  var ID_REGEX_BASE = '[\\p{Alphabetic}_][\\p{Alphabetic}_\\p{Number}]*'; // see also ./lib/cli.js
+  var ID_REGEX_BASE$1 = '[\\p{Alphabetic}_][\\p{Alphabetic}_\\p{Number}]*'; // see also ./lib/cli.js
 
   /**
   @public
@@ -11340,7 +12171,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   var jisonLexerErrorDefinition = generateErrorClass();
 
   function generateFakeXRegExpClassSrcCode() {
-    return rmCommonWS$2(_templateObject78());
+    return rmCommonWS$2(_templateObject79());
   }
   /** @constructor */
 
@@ -11428,7 +12259,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
         if (opts.options.showSource) {
           if (typeof opts.options.showSource === 'function') {
-            opts.options.showSource(lexer, source, opts);
+            opts.options.showSource(lexer, source, opts, RegExpLexer);
           } else {
             console.log("\nGenerated lexer sourcecode:\n----------------------------------------\n", source, "\n----------------------------------------\n");
           }
@@ -11601,11 +12432,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
   function getRegExpLexerPrototype() {
     // --- START lexer kernel ---
-    return "{\n    EOF: 1,\n    ERROR: 2,\n\n    // JisonLexerError: JisonLexerError,        /// <-- injected by the code generator\n\n    // options: {},                             /// <-- injected by the code generator\n\n    // yy: ...,                                 /// <-- injected by setInput()\n\n    __currentRuleSet__: null,                   /// INTERNAL USE ONLY: internal rule set cache for the current lexer state\n\n    __error_infos: [],                          /// INTERNAL USE ONLY: the set of lexErrorInfo objects created since the last cleanup\n\n    __decompressed: false,                      /// INTERNAL USE ONLY: mark whether the lexer instance has been 'unfolded' completely and is now ready for use\n\n    done: false,                                /// INTERNAL USE ONLY\n    _backtrack: false,                          /// INTERNAL USE ONLY\n    _input: '',                                 /// INTERNAL USE ONLY\n    _more: false,                               /// INTERNAL USE ONLY\n    _signaled_error_token: false,               /// INTERNAL USE ONLY\n\n    conditionStack: [],                         /// INTERNAL USE ONLY; managed via `pushState()`, `popState()`, `topState()` and `stateStackSize()`\n\n    match: '',                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction. `match` is identical to `yytext` except that this one still contains the matched input string after `lexer.performAction()` has been invoked, where userland code MAY have changed/replaced the `yytext` value entirely!\n    matched: '',                                /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks entire input which has been matched so far\n    matches: false,                             /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks RE match result for last (successful) match attempt\n    yytext: '',                                 /// ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction; this value is transferred to the parser as the 'token value' when the parser consumes the lexer token produced through a call to the `lex()` API.\n    offset: 0,                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far\n    yyleng: 0,                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: length of matched input for the token under construction (`yytext`)\n    yylineno: 0,                                /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: 'line number' at which the token under construction is located\n    yylloc: null,                               /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks location info (lines + columns) for the token under construction\n\n    /**\n     * INTERNAL USE: construct a suitable error info hash object instance for `parseError`.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    constructLexErrorInfo: function lexer_constructLexErrorInfo(msg, recoverable, show_input_position) {\n        \"use strict\";\n    \n        msg = '' + msg;\n\n        // heuristic to determine if the error message already contains a (partial) source code dump\n        // as produced by either `showPosition()` or `prettyPrintRange()`:\n        if (show_input_position == undefined) {\n            show_input_position = !(msg.indexOf('\\n') > 0 && msg.indexOf('^') > 0);\n        }\n        if (this.yylloc && show_input_position) {\n            if (typeof this.prettyPrintRange === 'function') {\n                var pretty_src = this.prettyPrintRange(this.yylloc);\n\n                if (!/\\n\\s*$/.test(msg)) {\n                    msg += '\\n';\n                }\n                msg += '\\n  Erroneous area:\\n' + this.prettyPrintRange(this.yylloc);\n            } else if (typeof this.showPosition === 'function') {\n                var pos_str = this.showPosition();\n                if (pos_str) {\n                    if (msg.length && msg[msg.length - 1] !== '\\n' && pos_str[0] !== '\\n') {\n                        msg += '\\n' + pos_str;\n                    } else {\n                        msg += pos_str;\n                    }\n                }\n            }\n        }\n        /** @constructor */\n        var pei = {\n            errStr: msg,\n            recoverable: !!recoverable,\n            text: this.match,           // This one MAY be empty; userland code should use the `upcomingInput` API to obtain more text which follows the 'lexer cursor position'...\n            token: null,\n            line: this.yylineno,\n            loc: this.yylloc,\n            yy: this.yy,                \n            lexer: this,\n\n            /**\n             * and make sure the error info doesn't stay due to potential\n             * ref cycle via userland code manipulations.\n             * These would otherwise all be memory leak opportunities!\n             *\n             * Note that only array and object references are nuked as those\n             * constitute the set of elements which can produce a cyclic ref.\n             * The rest of the members is kept intact as they are harmless.\n             *\n             * @public\n             * @this {LexErrorInfo}\n             */\n            destroy: function destructLexErrorInfo() {\n                // remove cyclic references added to error info:\n                // info.yy = null;\n                // info.lexer = null;\n                // ...\n                \"use strict\";\n                var rec = !!this.recoverable;\n                for (var key in this) {\n                    if (this[key] && this.hasOwnProperty(key) && typeof this[key] === 'object') {\n                        this[key] = undefined;\n                    }\n                }\n                this.recoverable = rec;\n            }\n        };\n        // track this instance so we can `destroy()` it once we deem it superfluous and ready for garbage collection!\n        this.__error_infos.push(pei);\n        return pei;\n    },\n\n    /**\n     * handler which is invoked when a lexer error occurs.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    parseError: function lexer_parseError(str, hash, ExceptionClass) {\n        \"use strict\";\n\n        if (!ExceptionClass) {\n            ExceptionClass = this.JisonLexerError;\n        }\n        if (this.yy) {\n            if (this.yy.parser && typeof this.yy.parser.parseError === 'function') {\n                return this.yy.parser.parseError.call(this, str, hash, ExceptionClass) || this.ERROR;\n            } else if (typeof this.yy.parseError === 'function') {\n                return this.yy.parseError.call(this, str, hash, ExceptionClass) || this.ERROR;\n            }\n        }\n        throw new ExceptionClass(str, hash);\n    },\n\n    /**\n     * method which implements `yyerror(str, ...args)` functionality for use inside lexer actions.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    yyerror: function yyError(str /*, ...args */) {\n        \"use strict\";\n\n        var lineno_msg = 'Lexical error';\n        if (this.yylloc) {\n            lineno_msg += ' on line ' + (this.yylineno + 1);\n        }\n        var p = this.constructLexErrorInfo(lineno_msg + ': ' + str, this.options.lexerErrorsAreRecoverable);\n\n        // Add any extra args to the hash under the name `extra_error_attributes`:\n        var args = Array.prototype.slice.call(arguments, 1);\n        if (args.length) {\n            p.extra_error_attributes = args;\n        }\n\n        return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);\n    },\n\n    /**\n     * final cleanup function for when we have completed lexing the input;\n     * make it an API so that external code can use this one once userland\n     * code has decided it's time to destroy any lingering lexer error\n     * hash object instances and the like: this function helps to clean\n     * up these constructs, which *may* carry cyclic references which would\n     * otherwise prevent the instances from being properly and timely\n     * garbage-collected, i.e. this function helps prevent memory leaks!\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    cleanupAfterLex: function lexer_cleanupAfterLex(do_not_nuke_errorinfos) {\n        \"use strict\";\n\n        // prevent lingering circular references from causing memory leaks:\n        this.setInput('', {});\n\n        // nuke the error hash info instances created during this run.\n        // Userland code must COPY any data/references\n        // in the error hash instance(s) it is more permanently interested in.\n        if (!do_not_nuke_errorinfos) {\n            for (var i = this.__error_infos.length - 1; i >= 0; i--) {\n                var el = this.__error_infos[i];\n                if (el && typeof el.destroy === 'function') {\n                    el.destroy();\n                }\n            }\n            this.__error_infos.length = 0;\n        }\n\n        return this;\n    },\n\n    /**\n     * clear the lexer token context; intended for internal use only\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    clear: function lexer_clear() {\n        \"use strict\";\n\n        this.yytext = '';\n        this.yyleng = 0;\n        this.match = '';\n        // - DO NOT reset `this.matched`\n        this.matches = false;\n\n        this._more = false;\n        this._backtrack = false;\n\n        var col = (this.yylloc ? this.yylloc.last_column : 0);\n        this.yylloc = {\n            first_line: this.yylineno + 1,\n            first_column: col,\n            last_line: this.yylineno + 1,\n            last_column: col,\n\n            range: [this.offset, this.offset]\n        };\n    },\n\n    /**\n     * resets the lexer, sets new input\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    setInput: function lexer_setInput(input, yy) {\n        \"use strict\";\n\n        this.yy = yy || this.yy || {};\n\n        // also check if we've fully initialized the lexer instance,\n        // including expansion work to be done to go from a loaded\n        // lexer to a usable lexer:\n        if (!this.__decompressed) {\n          // step 1: decompress the regex list:\n          var rules = this.rules;\n          for (var i = 0, len = rules.length; i < len; i++) {\n            var rule_re = rules[i];\n\n            // compression: is the RE an xref to another RE slot in the rules[] table?\n            if (typeof rule_re === 'number') {\n              rules[i] = rules[rule_re];\n            }\n          }\n\n          // step 2: unfold the conditions[] set to make these ready for use:\n          var conditions = this.conditions;\n          for (var k in conditions) {\n            var spec = conditions[k];\n\n            var rule_ids = spec.rules;\n\n            var len = rule_ids.length;\n            var rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!\n            var rule_new_ids = new Array(len + 1);\n\n            for (var i = 0; i < len; i++) {\n              var idx = rule_ids[i];\n              var rule_re = rules[idx];\n              rule_regexes[i + 1] = rule_re;\n              rule_new_ids[i + 1] = idx;\n            }\n\n            spec.rules = rule_new_ids;\n            spec.__rule_regexes = rule_regexes;\n            spec.__rule_count = len;\n          }\n\n          this.__decompressed = true;\n        }\n\n        if (input && typeof input !== 'string') {\n            input = '' + input;\n        }\n        this._input = input || '';\n        this.clear();\n        this._signaled_error_token = false;\n        this.done = false;\n        this.yylineno = 0;\n        this.matched = '';\n        this.conditionStack = ['INITIAL'];\n        this.__currentRuleSet__ = null;\n        this.yylloc = {\n            first_line: 1,\n            first_column: 0,\n            last_line: 1,\n            last_column: 0,\n\n            range: [0, 0]\n        };\n        this.offset = 0;\n        return this;\n    },\n\n    /**\n     * edit the remaining input via user-specified callback.\n     * This can be used to forward-adjust the input-to-parse,\n     * e.g. inserting macro expansions and alike in the\n     * input which has yet to be lexed.\n     * The behaviour of this API contrasts the `unput()` et al\n     * APIs as those act on the *consumed* input, while this\n     * one allows one to manipulate the future, without impacting\n     * the current `yyloc` cursor location or any history.\n     *\n     * Use this API to help implement C-preprocessor-like\n     * `#include` statements, etc.\n     *\n     * The provided callback must be synchronous and is\n     * expected to return the edited input (string).\n     *\n     * The `cpsArg` argument value is passed to the callback\n     * as-is.\n     *\n     * `callback` interface:\n     * `function callback(input, cpsArg)`\n     *\n     * - `input` will carry the remaining-input-to-lex string\n     *   from the lexer.\n     * - `cpsArg` is `cpsArg` passed into this API.\n     *\n     * The `this` reference for the callback will be set to\n     * reference this lexer instance so that userland code\n     * in the callback can easily and quickly access any lexer\n     * API.\n     *\n     * When the callback returns a non-string-type falsey value,\n     * we assume the callback did not edit the input and we\n     * will using the input as-is.\n     *\n     * When the callback returns a non-string-type value, it\n     * is converted to a string for lexing via the `\"\" + retval`\n     * operation. (See also why: http://2ality.com/2012/03/converting-to-string.html\n     * -- that way any returned object's `toValue()` and `toString()`\n     * methods will be invoked in a proper/desirable order.)\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    editRemainingInput: function lexer_editRemainingInput(callback, cpsArg) {\n        \"use strict\";\n\n        var rv = callback.call(this, this._input, cpsArg);\n        if (typeof rv !== 'string') {\n            if (rv) {\n                this._input = '' + rv;\n            }\n            // else: keep `this._input` as is.\n        } else {\n            this._input = rv;\n        }\n        return this;\n    },\n\n    /**\n     * consumes and returns one char from the input\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    input: function lexer_input() {\n        \"use strict\";\n\n        if (!this._input) {\n            //this.done = true;    -- don't set `done` as we want the lex()/next() API to be able to produce one custom EOF token match after this anyhow. (lexer can match special <<EOF>> tokens and perform user action code for a <<EOF>> match, but only does so *once*)\n            return null;\n        }\n        var ch = this._input[0];\n        this.yytext += ch;\n        this.yyleng++;\n        this.offset++;\n        this.match += ch;\n        this.matched += ch;\n        // Count the linenumber up when we hit the LF (or a stand-alone CR).\n        // On CRLF, the linenumber is incremented when you fetch the CR or the CRLF combo\n        // and we advance immediately past the LF as well, returning both together as if\n        // it was all a single 'character' only.\n        var slice_len = 1;\n        var lines = false;\n        if (ch === '\\n') {\n            lines = true;\n        } else if (ch === '\\r') {\n            lines = true;\n            var ch2 = this._input[1];\n            if (ch2 === '\\n') {\n                slice_len++;\n                ch += ch2;\n                this.yytext += ch2;\n                this.yyleng++;\n                this.offset++;\n                this.match += ch2;\n                this.matched += ch2;\n                this.yylloc.range[1]++;\n            }\n        }\n        if (lines) {\n            this.yylineno++;\n            this.yylloc.last_line++;\n            this.yylloc.last_column = 0;\n        } else {\n            this.yylloc.last_column++;\n        }\n        this.yylloc.range[1]++;\n\n        this._input = this._input.slice(slice_len);\n        return ch;\n    },\n\n    /**\n     * unshifts one char (or an entire string) into the input\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    unput: function lexer_unput(ch) {\n        \"use strict\";\n\n        var len = ch.length;\n        var lines = ch.split(/(?:\\r\\n?|\\n)/g);\n\n        this._input = ch + this._input;\n        this.yytext = this.yytext.substr(0, this.yytext.length - len);\n        this.yyleng = this.yytext.length;\n        this.offset -= len;\n        this.match = this.match.substr(0, this.match.length - len);\n        this.matched = this.matched.substr(0, this.matched.length - len);\n\n        if (lines.length > 1) {\n            this.yylineno -= lines.length - 1;\n\n            this.yylloc.last_line = this.yylineno + 1;\n\n            // Get last entirely matched line into the `pre_lines[]` array's\n            // last index slot; we don't mind when other previously\n            // matched lines end up in the array too.\n            var pre = this.match;\n            var pre_lines = pre.split(/(?:\\r\\n?|\\n)/g);\n            if (pre_lines.length === 1) {\n                pre = this.matched;\n                pre_lines = pre.split(/(?:\\r\\n?|\\n)/g);\n            }\n            this.yylloc.last_column = pre_lines[pre_lines.length - 1].length;\n        } else {\n            this.yylloc.last_column -= len;\n        }\n\n        this.yylloc.range[1] = this.yylloc.range[0] + this.yyleng;\n\n        this.done = false;\n        return this;\n    },\n\n    /**\n     * return the upcoming input *which has not been lexed yet*.\n     * This can, for example, be used for custom look-ahead inspection code \n     * in your lexer.\n     * \n     * The entire pending input string is returned.\n     *\n     * > ### NOTE ###\n     * >\n     * > When augmenting error reports and alike, you might want to\n     * > look at the `upcomingInput()` API instead, which offers more\n     * > features for limited input extraction and which includes the\n     * > part of the input which has been lexed by the last token a.k.a.\n     * > the *currently lexed* input.\n     * > \n     * \n     * @public\n     * @this {RegExpLexer}\n     */\n    lookAhead: function lexer_lookAhead() {\n        \"use strict\";\n\n        return this._input || '';\n    },\n\n    /**\n     * cache matched text and append it on next action\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    more: function lexer_more() {\n        \"use strict\";\n\n        this._more = true;\n        return this;\n    },\n\n    /**\n     * signal the lexer that this rule fails to match the input, so the\n     * next matching rule (regex) should be tested instead.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    reject: function lexer_reject() {\n        \"use strict\";\n\n        if (this.options.backtrack_lexer) {\n            this._backtrack = true;\n        } else {\n            // when the `parseError()` call returns, we MUST ensure that the error is registered.\n            // We accomplish this by signaling an 'error' token to be produced for the current\n            // `.lex()` run.\n            var lineno_msg = 'Lexical error';\n            if (this.yylloc) {\n                lineno_msg += ' on line ' + (this.yylineno + 1);\n            }\n            var p = this.constructLexErrorInfo(lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).', false);\n            this._signaled_error_token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);\n        }\n        return this;\n    },\n\n    /**\n     * retain first n characters of the match\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    less: function lexer_less(n) {\n        \"use strict\";\n\n        return this.unput(this.match.slice(n));\n    },\n\n    /**\n     * return (part of the) already matched input, i.e. for error\n     * messages.\n     *\n     * Limit the returned string length to `maxSize` (default: 20).\n     *\n     * Limit the returned string to the `maxLines` number of lines of\n     * input (default: 1).\n     *\n     * A negative `maxSize` limit value equals *unlimited*, i.e.\n     * produce the entire input that has already been lexed.\n     *\n     * A negative `maxLines` limit value equals *unlimited*, i.e. limit the result\n     * to the `maxSize` specified number of characters *only*.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    pastInput: function lexer_pastInput(maxSize, maxLines) {\n        \"use strict\";\n\n        var past = this.matched.substring(0, this.matched.length - this.match.length);\n        if (maxSize < 0)\n            maxSize = Infinity;\n        else if (!maxSize)\n            maxSize = 20;\n        if (maxLines < 0)\n            maxLines = Infinity;         // can't ever have more input lines than this!\n        else if (!maxLines)\n            maxLines = 1;\n        // `substr` anticipation: treat \\r\\n as a single character and take a little\n        // more than necessary so that we can still properly check against maxSize\n        // after we've transformed and limited the newLines in here:\n        past = past.substr(-maxSize * 2 - 2);\n        // now that we have a significantly reduced string to process, transform the newlines\n        // and chop them, then limit them:\n        var a = past.replace(/\\r\\n|\\r/g, '\\n').split('\\n');\n        a = a.slice(-maxLines);\n        past = a.join('\\n');\n        // When, after limiting to maxLines, we still have too much to return,\n        // do add an ellipsis prefix...\n        if (past.length > maxSize) {\n            past = '...' + past.substr(-maxSize);\n        }\n        return past;\n    },\n\n    /**\n     * return (part of the) upcoming input *including* the input \n     * matched by the last token (see also the NOTE below). \n     * This can be used to augment error messages, for example.\n     *\n     * Limit the returned string length to `maxSize` (default: 20).\n     *\n     * Limit the returned string to the `maxLines` number of lines of input (default: 1).\n     *\n     * A negative `maxSize` limit value equals *unlimited*, i.e.\n     * produce the entire input that is yet to be lexed.\n     *\n     * A negative `maxLines` limit value equals *unlimited*, i.e. limit the result\n     * to the `maxSize` specified number of characters *only*.\n     *\n     * > ### NOTE ###\n     * >\n     * > *\"upcoming input\"* is defined as the whole of the both\n     * > the *currently lexed* input, together with any remaining input\n     * > following that. *\"currently lexed\"* input is the input\n     * > already recognized by the lexer but not yet returned with\n     * > the lexer token. This happens when you are invoking this API\n     * > from inside any lexer rule action code block.\n     * >\n     * > When you want access to the 'upcoming input' in that you want access\n     * > to the input *which has not been lexed yet* for look-ahead\n     * > inspection or likewise purposes, please consider using the\n     * > `lookAhead()` API instead.\n     * > \n     * \n     * @public\n     * @this {RegExpLexer}\n     */\n    upcomingInput: function lexer_upcomingInput(maxSize, maxLines) {\n        \"use strict\";\n\n        var next = this.match;\n        var source = this._input || '';\n        if (maxSize < 0)\n            maxSize = next.length + source.length;\n        else if (!maxSize)\n            maxSize = 20;\n        if (maxLines < 0)\n            maxLines = maxSize;         // can't ever have more input lines than this!\n        else if (!maxLines)\n            maxLines = 1;\n        // `substring` anticipation: treat \\r\\n as a single character and take a little\n        // more than necessary so that we can still properly check against maxSize\n        // after we've transformed and limited the newLines in here:\n        if (next.length < maxSize * 2 + 2) {\n            next += source.substring(0, maxSize * 2 + 2 - next.length);  // substring is faster on Chrome/V8\n        }\n        // now that we have a significantly reduced string to process, transform the newlines\n        // and chop them, then limit them:\n        var a = next.split(/\\r\\n|\\r/g, maxLines + 1);     // stop splitting once we have reached just beyond the reuired number of lines.\n        a = a.slice(0, maxLines);\n        next = a.join('\\n');\n        // When, after limiting to maxLines, we still have too much to return,\n        // do add an ellipsis postfix...\n        if (next.length > maxSize) {\n            next = next.substring(0, maxSize) + '...';\n        }\n        return next;\n    },\n\n    /**\n     * return a string which displays the character position where the\n     * lexing error occurred, i.e. for error messages\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    showPosition: function lexer_showPosition(maxPrefix, maxPostfix) {\n        \"use strict\";\n\n        var pre = this.pastInput(maxPrefix).replace(/\\s/g, ' ');\n        var c = new Array(pre.length + 1).join('-');\n        return pre + this.upcomingInput(maxPostfix).replace(/\\s/g, ' ') + '\\n' + c + '^';\n    },\n\n    /**\n     * return an YYLLOC info object derived off the given context (actual, preceding, following, current).\n     * Use this method when the given `actual` location is not guaranteed to exist (i.e. when\n     * it MAY be NULL) and you MUST have a valid location info object anyway:\n     * then we take the given context of the `preceding` and `following` locations, IFF those are available,\n     * and reconstruct the `actual` location info from those.\n     * If this fails, the heuristic is to take the `current` location, IFF available.\n     * If this fails as well, we assume the sought location is at/around the current lexer position\n     * and then produce that one as a response. DO NOTE that these heuristic/derived location info\n     * values MAY be inaccurate!\n     *\n     * NOTE: `deriveLocationInfo()` ALWAYS produces a location info object *copy* of `actual`, not just\n     * a *reference* hence all input location objects can be assumed to be 'constant' (function has no side-effects).\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    deriveLocationInfo: function lexer_deriveYYLLOC(actual, preceding, following, current) {\n        \"use strict\";\n\n        var loc = {\n            first_line: 1,\n            first_column: 0,\n            last_line: 1,\n            last_column: 0,\n\n            range: [0, 0]\n        };\n        if (actual) {\n            loc.first_line = actual.first_line | 0;\n            loc.last_line = actual.last_line | 0;\n            loc.first_column = actual.first_column | 0;\n            loc.last_column = actual.last_column | 0;\n\n            if (actual.range) {\n                loc.range[0] = actual.range[0] | 0;\n                loc.range[1] = actual.range[1] | 0;\n            }\n        }\n        if (loc.first_line <= 0 || loc.last_line < loc.first_line) {\n            // plan B: heuristic using preceding and following:\n            if (loc.first_line <= 0 && preceding) {\n                loc.first_line = preceding.last_line | 0;\n                loc.first_column = preceding.last_column | 0;\n\n                if (preceding.range) {\n                    loc.range[0] = actual.range[1] | 0;\n                }\n            }\n\n            if ((loc.last_line <= 0 || loc.last_line < loc.first_line) && following) {\n                loc.last_line = following.first_line | 0;\n                loc.last_column = following.first_column | 0;\n\n                if (following.range) {\n                    loc.range[1] = actual.range[0] | 0;\n                }\n            }\n\n            // plan C?: see if the 'current' location is useful/sane too:\n            if (loc.first_line <= 0 && current && (loc.last_line <= 0 || current.last_line <= loc.last_line)) {\n                loc.first_line = current.first_line | 0;\n                loc.first_column = current.first_column | 0;\n\n                if (current.range) {\n                    loc.range[0] = current.range[0] | 0;\n                }\n            }\n\n            if (loc.last_line <= 0 && current && (loc.first_line <= 0 || current.first_line >= loc.first_line)) {\n                loc.last_line = current.last_line | 0;\n                loc.last_column = current.last_column | 0;\n\n                if (current.range) {\n                    loc.range[1] = current.range[1] | 0;\n                }\n            }\n        }\n        // sanitize: fix last_line BEFORE we fix first_line as we use the 'raw' value of the latter\n        // or plan D heuristics to produce a 'sensible' last_line value:\n        if (loc.last_line <= 0) {\n            if (loc.first_line <= 0) {\n                loc.first_line = this.yylloc.first_line;\n                loc.last_line = this.yylloc.last_line;\n                loc.first_column = this.yylloc.first_column;\n                loc.last_column = this.yylloc.last_column;\n\n                loc.range[0] = this.yylloc.range[0];\n                loc.range[1] = this.yylloc.range[1];\n            } else {\n                loc.last_line = this.yylloc.last_line;\n                loc.last_column = this.yylloc.last_column;\n\n                loc.range[1] = this.yylloc.range[1];\n            }\n        }\n        if (loc.first_line <= 0) {\n            loc.first_line = loc.last_line;\n            loc.first_column = 0; // loc.last_column;\n\n            loc.range[1] = loc.range[0];\n        }\n        if (loc.first_column < 0) {\n            loc.first_column = 0;\n        }\n        if (loc.last_column < 0) {\n            loc.last_column = (loc.first_column > 0 ? loc.first_column : 80);\n        }\n        return loc;\n    },\n\n    /**\n     * return a string which displays the lines & columns of input which are referenced\n     * by the given location info range, plus a few lines of context.\n     *\n     * This function pretty-prints the indicated section of the input, with line numbers\n     * and everything!\n     *\n     * This function is very useful to provide highly readable error reports, while\n     * the location range may be specified in various flexible ways:\n     *\n     * - `loc` is the location info object which references the area which should be\n     *   displayed and 'marked up': these lines & columns of text are marked up by `^`\n     *   characters below each character in the entire input range.\n     *\n     * - `context_loc` is the *optional* location info object which instructs this\n     *   pretty-printer how much *leading* context should be displayed alongside\n     *   the area referenced by `loc`. This can help provide context for the displayed\n     *   error, etc.\n     *\n     *   When this location info is not provided, a default context of 3 lines is\n     *   used.\n     *\n     * - `context_loc2` is another *optional* location info object, which serves\n     *   a similar purpose to `context_loc`: it specifies the amount of *trailing*\n     *   context lines to display in the pretty-print output.\n     *\n     *   When this location info is not provided, a default context of 1 line only is\n     *   used.\n     *\n     * Special Notes:\n     *\n     * - when the `loc`-indicated range is very large (about 5 lines or more), then\n     *   only the first and last few lines of this block are printed while a\n     *   `...continued...` message will be printed between them.\n     *\n     *   This serves the purpose of not printing a huge amount of text when the `loc`\n     *   range happens to be huge: this way a manageable & readable output results\n     *   for arbitrary large ranges.\n     *\n     * - this function can display lines of input which whave not yet been lexed.\n     *   `prettyPrintRange()` can access the entire input!\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    prettyPrintRange: function lexer_prettyPrintRange(loc, context_loc, context_loc2) {\n        \"use strict\";\n\n        loc = this.deriveLocationInfo(loc, context_loc, context_loc2);\n\n        const CONTEXT = 3;\n        const CONTEXT_TAIL = 1;\n        const MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT = 2;\n        var input = this.matched + (this._input || '');\n        var lines = input.split('\\n');\n        var l0 = Math.max(1, (context_loc ? context_loc.first_line : loc.first_line - CONTEXT));\n        var l1 = Math.max(1, (context_loc2 ? context_loc2.last_line : loc.last_line + CONTEXT_TAIL));\n        var lineno_display_width = (1 + Math.log10(l1 | 1) | 0);\n        var ws_prefix = new Array(lineno_display_width).join(' ');\n        var nonempty_line_indexes = [];\n        var rv = lines.slice(l0 - 1, l1 + 1).map(function injectLineNumber(line, index) {\n            \"use strict\";\n\n            var lno = index + l0;\n            var lno_pfx = (ws_prefix + lno).substr(-lineno_display_width);\n            var rv = lno_pfx + ': ' + line;\n            var errpfx = (new Array(lineno_display_width + 1)).join('^');\n            var offset = 2 + 1;\n            var len = 0;\n\n            if (lno === loc.first_line) {\n              offset += loc.first_column;\n\n              len = Math.max(\n                2,\n                ((lno === loc.last_line ? loc.last_column : line.length)) - loc.first_column + 1\n              );\n            } else if (lno === loc.last_line) {\n              len = Math.max(2, loc.last_column + 1);\n            } else if (lno > loc.first_line && lno < loc.last_line) {\n              len = Math.max(2, line.length + 1);\n            }\n\n            if (len) {\n              var lead = new Array(offset).join('.');\n              var mark = new Array(len).join('^');\n              rv += '\\n' + errpfx + lead + mark;\n\n              if (line.trim().length > 0) {\n                nonempty_line_indexes.push(index);\n              }\n            }\n\n            rv = rv.replace(/\\t/g, ' ');\n            return rv;\n        });\n\n        // now make sure we don't print an overly large amount of error area: limit it \n        // to the top and bottom line count:\n        if (nonempty_line_indexes.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {\n            var clip_start = nonempty_line_indexes[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;\n            var clip_end = nonempty_line_indexes[nonempty_line_indexes.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;\n\n            var intermediate_line = (new Array(lineno_display_width + 1)).join(' ') +     '  (...continued...)';\n            intermediate_line += '\\n' + (new Array(lineno_display_width + 1)).join('-') + '  (---------------)';\n            rv.splice(clip_start, clip_end - clip_start + 1, intermediate_line);\n        }\n\n        return rv.join('\\n');\n    },\n\n    /**\n     * helper function, used to produce a human readable description as a string, given\n     * the input `yylloc` location object.\n     *\n     * Set `display_range_too` to TRUE to include the string character index position(s)\n     * in the description if the `yylloc.range` is available.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    describeYYLLOC: function lexer_describe_yylloc(yylloc, display_range_too) {\n        \"use strict\";\n\n        var l1 = yylloc.first_line;\n        var l2 = yylloc.last_line;\n        var c1 = yylloc.first_column;\n        var c2 = yylloc.last_column;\n        var dl = l2 - l1;\n        var dc = c2 - c1;\n        var rv;\n        if (dl === 0) {\n            rv = 'line ' + l1 + ', ';\n            if (dc <= 1) {\n                rv += 'column ' + c1;\n            } else {\n                rv += 'columns ' + c1 + ' .. ' + c2;\n            }\n        } else {\n            rv = 'lines ' + l1 + '(column ' + c1 + ') .. ' + l2 + '(column ' + c2 + ')';\n        }\n        if (yylloc.range && display_range_too) {\n            var r1 = yylloc.range[0];\n            var r2 = yylloc.range[1] - 1;\n            if (r2 <= r1) {\n                rv += ' {String Offset: ' + r1 + '}';\n            } else {\n                rv += ' {String Offset range: ' + r1 + ' .. ' + r2 + '}';\n            }\n        }\n        return rv;\n    },\n\n    /**\n     * test the lexed token: return FALSE when not a match, otherwise return token.\n     *\n     * `match` is supposed to be an array coming out of a regex match, i.e. `match[0]`\n     * contains the actually matched text string.\n     *\n     * Also move the input cursor forward and update the match collectors:\n     *\n     * - `yytext`\n     * - `yyleng`\n     * - `match`\n     * - `matches`\n     * - `yylloc`\n     * - `offset`\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    test_match: function lexer_test_match(match, indexed_rule) {\n        \"use strict\";\n\n        var token,\n            lines,\n            backup,\n            match_str,\n            match_str_len;\n\n        if (this.options.backtrack_lexer) {\n            // save context\n            backup = {\n                yylineno: this.yylineno,\n                yylloc: {\n                    first_line: this.yylloc.first_line,\n                    last_line: this.yylloc.last_line,\n                    first_column: this.yylloc.first_column,\n                    last_column: this.yylloc.last_column,\n\n                    range: this.yylloc.range.slice(0)\n                },\n                yytext: this.yytext,\n                match: this.match,\n                matches: this.matches,\n                matched: this.matched,\n                yyleng: this.yyleng,\n                offset: this.offset,\n                _more: this._more,\n                _input: this._input,\n                //_signaled_error_token: this._signaled_error_token,\n                yy: this.yy,\n                conditionStack: this.conditionStack.slice(0),\n                done: this.done\n            };\n        }\n\n        match_str = match[0];\n        match_str_len = match_str.length;\n        // if (match_str.indexOf('\\n') !== -1 || match_str.indexOf('\\r') !== -1) {\n            lines = match_str.split(/(?:\\r\\n?|\\n)/g);\n            if (lines.length > 1) {\n                this.yylineno += lines.length - 1;\n\n                this.yylloc.last_line = this.yylineno + 1;\n                this.yylloc.last_column = lines[lines.length - 1].length;\n            } else {\n                this.yylloc.last_column += match_str_len;\n            }\n        // }\n        this.yytext += match_str;\n        this.match += match_str;\n        this.matched += match_str;\n        this.matches = match;\n        this.yyleng = this.yytext.length;\n        this.yylloc.range[1] += match_str_len;\n\n        // previous lex rules MAY have invoked the `more()` API rather than producing a token:\n        // those rules will already have moved this `offset` forward matching their match lengths,\n        // hence we must only add our own match length now:\n        this.offset += match_str_len;\n        this._more = false;\n        this._backtrack = false;\n        this._input = this._input.slice(match_str_len);\n\n        // calling this method:\n        //\n        //   function lexer__performAction(yy, yyrulenumber, YY_START) {...}\n        token = this.performAction.call(this, this.yy, indexed_rule, this.conditionStack[this.conditionStack.length - 1] /* = YY_START */);\n        // otherwise, when the action codes are all simple return token statements:\n        //token = this.simpleCaseActionClusters[indexed_rule];\n\n        if (this.done && this._input) {\n            this.done = false;\n        }\n        if (token) {\n            return token;\n        } else if (this._backtrack) {\n            // recover context\n            for (var k in backup) {\n                this[k] = backup[k];\n            }\n            this.__currentRuleSet__ = null;\n            return false; // rule action called reject() implying the next rule should be tested instead.\n        } else if (this._signaled_error_token) {\n            // produce one 'error' token as `.parseError()` in `reject()`\n            // did not guarantee a failure signal by throwing an exception!\n            token = this._signaled_error_token;\n            this._signaled_error_token = false;\n            return token;\n        }\n        return false;\n    },\n\n    /**\n     * return next match in input\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    next: function lexer_next() {\n        \"use strict\";\n\n        if (this.done) {\n            this.clear();\n            return this.EOF;\n        }\n        if (!this._input) {\n            this.done = true;\n        }\n\n        var token,\n            match,\n            tempMatch,\n            index;\n        if (!this._more) {\n            this.clear();\n        }\n        var spec = this.__currentRuleSet__;\n        if (!spec) {\n            // Update the ruleset cache as we apparently encountered a state change or just started lexing.\n            // The cache is set up for fast lookup -- we assume a lexer will switch states much less often than it will\n            // invoke the `lex()` token-producing API and related APIs, hence caching the set for direct access helps\n            // speed up those activities a tiny bit.\n            spec = this.__currentRuleSet__ = this._currentRules();\n            // Check whether a *sane* condition has been pushed before: this makes the lexer robust against\n            // user-programmer bugs such as https://github.com/zaach/jison-lex/issues/19\n            if (!spec || !spec.rules) {\n                var lineno_msg = '';\n                if (this.options.trackPosition) {\n                    lineno_msg = ' on line ' + (this.yylineno + 1);\n                }\n                var p = this.constructLexErrorInfo('Internal lexer engine error' + lineno_msg + ': The lex grammar programmer pushed a non-existing condition name \"' + this.topState() + '\"; this is a fatal error and should be reported to the application programmer team!', false);\n                // produce one 'error' token until this situation has been resolved, most probably by parse termination!\n                return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);\n            }\n        }\n\n        var rule_ids = spec.rules;\n        var regexes = spec.__rule_regexes;\n        var len = spec.__rule_count;\n\n        // Note: the arrays are 1-based, while `len` itself is a valid index,\n        // hence the non-standard less-or-equal check in the next loop condition!\n        for (var i = 1; i <= len; i++) {\n            tempMatch = this._input.match(regexes[i]);\n            if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {\n                match = tempMatch;\n                index = i;\n                if (this.options.backtrack_lexer) {\n                    token = this.test_match(tempMatch, rule_ids[i]);\n                    if (token !== false) {\n                        return token;\n                    } else if (this._backtrack) {\n                        match = undefined;\n                        continue; // rule action called reject() implying a rule MISmatch.\n                    } else {\n                        // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)\n                        return false;\n                    }\n                } else if (!this.options.flex) {\n                    break;\n                }\n            }\n        }\n        if (match) {\n            token = this.test_match(match, rule_ids[index]);\n            if (token !== false) {\n                return token;\n            }\n            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)\n            return false;\n        }\n        if (!this._input) {\n            this.done = true;\n            this.clear();\n            return this.EOF;\n        } else {\n            var lineno_msg = 'Lexical error';\n            if (this.options.trackPosition) {\n                lineno_msg += ' on line ' + (this.yylineno + 1);\n            }\n            var p = this.constructLexErrorInfo(lineno_msg + ': Unrecognized text.', this.options.lexerErrorsAreRecoverable);\n\n            var pendingInput = this._input;\n            var activeCondition = this.topState();\n            var conditionStackDepth = this.conditionStack.length;\n\n            token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);\n            if (token === this.ERROR) {\n                // we can try to recover from a lexer error that `parseError()` did not 'recover' for us\n                // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`\n                // has not consumed/modified any pending input or changed state in the error handler:\n                if (!this.matches &&\n                    // and make sure the input has been modified/consumed ...\n                    pendingInput === this._input &&\n                    // ...or the lexer state has been modified significantly enough\n                    // to merit a non-consuming error handling action right now.\n                    activeCondition === this.topState() &&\n                    conditionStackDepth === this.conditionStack.length\n                ) {\n                    this.input();\n                }\n            }\n            return token;\n        }\n    },\n\n    /**\n     * return next match that has a token\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    lex: function lexer_lex() {\n        \"use strict\";\n\n        var r;\n        // allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:\n        if (typeof this.pre_lex === 'function') {\n            r = this.pre_lex.call(this, 0);\n        }\n        if (typeof this.options.pre_lex === 'function') {\n            // (also account for a userdef function which does not return any value: keep the token as is)\n            r = this.options.pre_lex.call(this, r) || r;\n        }\n        if (this.yy && typeof this.yy.pre_lex === 'function') {\n            // (also account for a userdef function which does not return any value: keep the token as is)\n            r = this.yy.pre_lex.call(this, r) || r;\n        }\n\n        while (!r) {\n            r = this.next();\n        }\n\n        if (this.yy && typeof this.yy.post_lex === 'function') {\n            // (also account for a userdef function which does not return any value: keep the token as is)\n            r = this.yy.post_lex.call(this, r) || r;\n        }\n        if (typeof this.options.post_lex === 'function') {\n            // (also account for a userdef function which does not return any value: keep the token as is)\n            r = this.options.post_lex.call(this, r) || r;\n        }\n        if (typeof this.post_lex === 'function') {\n            // (also account for a userdef function which does not return any value: keep the token as is)\n            r = this.post_lex.call(this, r) || r;\n        }\n        return r;\n    },\n\n    /**\n     * return next match that has a token. Identical to the `lex()` API but does not invoke any of the\n     * `pre_lex()` nor any of the `post_lex()` callbacks.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    fastLex: function lexer_fastLex() {\n        \"use strict\";\n\n        var r;\n\n        while (!r) {\n            r = this.next();\n        }\n\n        return r;\n    },\n\n    /**\n     * return info about the lexer state that can help a parser or other lexer API user to use the\n     * most efficient means available. This API is provided to aid run-time performance for larger\n     * systems which employ this lexer.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    canIUse: function lexer_canIUse() {\n        \"use strict\";\n\n        var rv = {\n            fastLex: !(\n                typeof this.pre_lex === 'function' ||\n                typeof this.options.pre_lex === 'function' ||\n                (this.yy && typeof this.yy.pre_lex === 'function') ||\n                (this.yy && typeof this.yy.post_lex === 'function') ||\n                typeof this.options.post_lex === 'function' ||\n                typeof this.post_lex === 'function'\n            ) && typeof this.fastLex === 'function',\n        };\n        return rv;\n    },\n\n\n    /**\n     * backwards compatible alias for `pushState()`;\n     * the latter is symmetrical with `popState()` and we advise to use\n     * those APIs in any modern lexer code, rather than `begin()`.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    begin: function lexer_begin(condition) {\n        \"use strict\";\n\n        return this.pushState(condition);\n    },\n\n    /**\n     * activates a new lexer condition state (pushes the new lexer\n     * condition state onto the condition stack)\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    pushState: function lexer_pushState(condition) {\n        \"use strict\";\n\n        this.conditionStack.push(condition);\n        this.__currentRuleSet__ = null;\n        return this;\n    },\n\n    /**\n     * pop the previously active lexer condition state off the condition\n     * stack\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    popState: function lexer_popState() {\n        \"use strict\";\n\n        var n = this.conditionStack.length - 1;\n        if (n > 0) {\n            this.__currentRuleSet__ = null;\n            return this.conditionStack.pop();\n        } else {\n            return this.conditionStack[0];\n        }\n    },\n\n    /**\n     * return the currently active lexer condition state; when an index\n     * argument is provided it produces the N-th previous condition state,\n     * if available\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    topState: function lexer_topState(n) {\n        \"use strict\";\n\n        n = this.conditionStack.length - 1 - Math.abs(n || 0);\n        if (n >= 0) {\n            return this.conditionStack[n];\n        } else {\n            return 'INITIAL';\n        }\n    },\n\n    /**\n     * (internal) determine the lexer rule set which is active for the\n     * currently active lexer condition state\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    _currentRules: function lexer__currentRules() {\n        \"use strict\";\n\n        var n = this.conditionStack.length - 1;\n        var state;\n        if (n >= 0) {\n            state = this.conditionStack[n];\n        } else {\n            state = 'INITIAL';\n        }\n        return this.conditions[state] || this.conditions['INITIAL'];\n    },\n\n    /**\n     * return the number of states currently on the stack\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    stateStackSize: function lexer_stateStackSize() {\n        \"use strict\";\n\n        return this.conditionStack.length;\n    }\n}"; // --- END lexer kernel ---
+    return "{\n    EOF: 1,\n    ERROR: 2,\n\n    // JisonLexerError: JisonLexerError,        /// <-- injected by the code generator\n\n    // options: {},                             /// <-- injected by the code generator\n\n    // yy: ...,                                 /// <-- injected by setInput()\n\n    __currentRuleSet__: null,                   /// INTERNAL USE ONLY: internal rule set cache for the current lexer state\n\n    __error_infos: [],                          /// INTERNAL USE ONLY: the set of lexErrorInfo objects created since the last cleanup\n\n    __decompressed: false,                      /// INTERNAL USE ONLY: mark whether the lexer instance has been 'unfolded' completely and is now ready for use\n\n    done: false,                                /// INTERNAL USE ONLY\n    _backtrack: false,                          /// INTERNAL USE ONLY\n    _input: '',                                 /// INTERNAL USE ONLY\n    _more: false,                               /// INTERNAL USE ONLY\n    _signaled_error_token: false,               /// INTERNAL USE ONLY\n    _clear_state: 0,                            /// INTERNAL USE ONLY; 0: clear to do, 1: clear done for lex()/next(); -1: clear done for inut()/unput()/...\n\n    conditionStack: [],                         /// INTERNAL USE ONLY; managed via `pushState()`, `popState()`, `topState()` and `stateStackSize()`\n\n    match: '',                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction. `match` is identical to `yytext` except that this one still contains the matched input string after `lexer.performAction()` has been invoked, where userland code MAY have changed/replaced the `yytext` value entirely!\n    matched: '',                                /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks entire input which has been matched so far\n    matches: false,                             /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks RE match result for last (successful) match attempt\n    yytext: '',                                 /// ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction; this value is transferred to the parser as the 'token value' when the parser consumes the lexer token produced through a call to the `lex()` API.\n    offset: 0,                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far. (**WARNING:** this value MAY be negative if you `unput()` more text than you have already lexed. This type of behaviour is generally observed for one kind of 'lexer/parser hack' where custom token-illiciting characters are pushed in front of the input stream to help simulate multiple-START-points in the parser. When this happens, `base_position` will be adjusted to help track the original input's starting point in the `_input` buffer.)\n    base_position: 0,                           /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: index to the original starting point of the input; always ZERO(0) unless `unput()` has pushed content before the input: see the `offset` **WARNING** just above.\n    yyleng: 0,                                  /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: length of matched input for the token under construction (`yytext`)\n    yylineno: 0,                                /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: 'line number' at which the token under construction is located\n    yylloc: null,                               /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks location info (lines + columns) for the token under construction\n    CRLF_Re: /\\r\\n?|\\n/,                        /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: regex used to split lines while tracking the lexer cursor position.\n\n    /**\n     * INTERNAL USE: construct a suitable error info hash object instance for `parseError`.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    constructLexErrorInfo: function lexer_constructLexErrorInfo(msg, recoverable, show_input_position) {\n        \"use strict\";\n    \n        msg = '' + msg;\n\n        // heuristic to determine if the error message already contains a (partial) source code dump\n        // as produced by either `showPosition()` or `prettyPrintRange()`:\n        if (show_input_position == undefined) {\n            show_input_position = !(msg.indexOf('\\n') > 0 && msg.indexOf('^') > 0);\n        }\n        if (this.yylloc && show_input_position) {\n            if (typeof this.prettyPrintRange === 'function') {\n                var pretty_src = this.prettyPrintRange(this.yylloc);\n\n                if (!/\\n\\s*$/.test(msg)) {\n                    msg += '\\n';\n                }\n                msg += '\\n  Erroneous area:\\n' + this.prettyPrintRange(this.yylloc);\n            } else if (typeof this.showPosition === 'function') {\n                var pos_str = this.showPosition();\n                if (pos_str) {\n                    if (msg.length && msg[msg.length - 1] !== '\\n' && pos_str[0] !== '\\n') {\n                        msg += '\\n' + pos_str;\n                    } else {\n                        msg += pos_str;\n                    }\n                }\n            }\n        }\n        /** @constructor */\n        var pei = {\n            errStr: msg,\n            recoverable: !!recoverable,\n            text: this.match,           // This one MAY be empty; userland code should use the `upcomingInput` API to obtain more text which follows the 'lexer cursor position'...\n            token: null,\n            line: this.yylineno,\n            loc: this.yylloc,\n            yy: this.yy,                \n            lexer: this,\n\n            /**\n             * and make sure the error info doesn't stay due to potential\n             * ref cycle via userland code manipulations.\n             * These would otherwise all be memory leak opportunities!\n             *\n             * Note that only array and object references are nuked as those\n             * constitute the set of elements which can produce a cyclic ref.\n             * The rest of the members is kept intact as they are harmless.\n             *\n             * @public\n             * @this {LexErrorInfo}\n             */\n            destroy: function destructLexErrorInfo() {\n                // remove cyclic references added to error info:\n                // info.yy = null;\n                // info.lexer = null;\n                // ...\n                \"use strict\";\n                var rec = !!this.recoverable;\n                for (var key in this) {\n                    if (this[key] && this.hasOwnProperty(key) && typeof this[key] === 'object') {\n                        this[key] = undefined;\n                    }\n                }\n                this.recoverable = rec;\n            }\n        };\n        // track this instance so we can `destroy()` it once we deem it superfluous and ready for garbage collection!\n        this.__error_infos.push(pei);\n        return pei;\n    },\n\n    /**\n     * handler which is invoked when a lexer error occurs.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    parseError: function lexer_parseError(str, hash, ExceptionClass) {\n        \"use strict\";\n\n        if (!ExceptionClass) {\n            ExceptionClass = this.JisonLexerError;\n        }\n        if (this.yy) {\n            if (this.yy.parser && typeof this.yy.parser.parseError === 'function') {\n                return this.yy.parser.parseError.call(this, str, hash, ExceptionClass) || this.ERROR;\n            } else if (typeof this.yy.parseError === 'function') {\n                return this.yy.parseError.call(this, str, hash, ExceptionClass) || this.ERROR;\n            }\n        }\n        throw new ExceptionClass(str, hash);\n    },\n\n    /**\n     * method which implements `yyerror(str, ...args)` functionality for use inside lexer actions.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    yyerror: function yyError(str /*, ...args */) {\n        \"use strict\";\n\n        var lineno_msg = 'Lexical error';\n        if (this.yylloc) {\n            lineno_msg += ' on line ' + (this.yylineno + 1);\n        }\n        var p = this.constructLexErrorInfo(lineno_msg + ': ' + str, this.options.lexerErrorsAreRecoverable);\n\n        // Add any extra args to the hash under the name `extra_error_attributes`:\n        var args = Array.prototype.slice.call(arguments, 1);\n        if (args.length) {\n            p.extra_error_attributes = args;\n        }\n\n        return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);\n    },\n\n    /**\n     * final cleanup function for when we have completed lexing the input;\n     * make it an API so that external code can use this one once userland\n     * code has decided it's time to destroy any lingering lexer error\n     * hash object instances and the like: this function helps to clean\n     * up these constructs, which *may* carry cyclic references which would\n     * otherwise prevent the instances from being properly and timely\n     * garbage-collected, i.e. this function helps prevent memory leaks!\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    cleanupAfterLex: function lexer_cleanupAfterLex(do_not_nuke_errorinfos) {\n        \"use strict\";\n\n        // prevent lingering circular references from causing memory leaks:\n        this.setInput('', {});\n\n        // nuke the error hash info instances created during this run.\n        // Userland code must COPY any data/references\n        // in the error hash instance(s) it is more permanently interested in.\n        if (!do_not_nuke_errorinfos) {\n            for (var i = this.__error_infos.length - 1; i >= 0; i--) {\n                var el = this.__error_infos[i];\n                if (el && typeof el.destroy === 'function') {\n                    el.destroy();\n                }\n            }\n            this.__error_infos.length = 0;\n        }\n\n        return this;\n    },\n\n    /**\n     * clear the lexer token context; intended for internal use only\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    clear: function lexer_clear() {\n        \"use strict\";\n\n        this.yytext = '';\n        this.yyleng = 0;\n        this.match = '';\n        // - DO NOT reset `this.matched`\n        this.matches = false;\n\n        this._more = false;\n        this._backtrack = false;\n\n        var col = this.yylloc.last_column;\n        this.yylloc = {\n            first_line: this.yylineno + 1,\n            first_column: col,\n            last_line: this.yylineno + 1,\n            last_column: col,\n\n            range: [this.offset, this.offset]\n        };\n    },\n\n    /**\n     * resets the lexer, sets new input\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    setInput: function lexer_setInput(input, yy) {\n        \"use strict\";\n\n        this.yy = yy || this.yy || {};\n\n        // also check if we've fully initialized the lexer instance,\n        // including expansion work to be done to go from a loaded\n        // lexer to a usable lexer:\n        if (!this.__decompressed) {\n          // step 1: decompress the regex list:\n          var rules = this.rules;\n          for (var i = 0, len = rules.length; i < len; i++) {\n            var rule_re = rules[i];\n\n            // compression: is the RE an xref to another RE slot in the rules[] table?\n            if (typeof rule_re === 'number') {\n              rules[i] = rules[rule_re];\n            }\n          }\n\n          // step 2: unfold the conditions[] set to make these ready for use:\n          var conditions = this.conditions;\n          for (var k in conditions) {\n            var spec = conditions[k];\n\n            var rule_ids = spec.rules;\n\n            var len = rule_ids.length;\n            var rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!\n            var rule_new_ids = new Array(len + 1);\n\n            for (var i = 0; i < len; i++) {\n              var idx = rule_ids[i];\n              var rule_re = rules[idx];\n              rule_regexes[i + 1] = rule_re;\n              rule_new_ids[i + 1] = idx;\n            }\n\n            spec.rules = rule_new_ids;\n            spec.__rule_regexes = rule_regexes;\n            spec.__rule_count = len;\n          }\n\n          this.__decompressed = true;\n        }\n\n        if (input && typeof input !== 'string') {\n            input = '' + input;\n        }\n        this._input = input || '';\n        this._clear_state = -1;\n        this._signaled_error_token = false;\n        this.done = false;\n        this.yylineno = 0;\n        this.matched = '';\n        this.conditionStack = ['INITIAL'];\n        this.__currentRuleSet__ = null;\n        this.yylloc = {\n            first_line: 1,\n            first_column: 0,\n            last_line: 1,\n            last_column: 0,\n\n            range: [0, 0]\n        };\n        this.offset = 0;\n        this.base_position = 0;\n        // apply these bits of `this.clear()` as well:\n        this.yytext = '';\n        this.yyleng = 0;\n        this.match = '';\n        this.matches = false;\n\n        this._more = false;\n        this._backtrack = false;\n\n        return this;\n    },\n\n    /**\n     * edit the remaining input via user-specified callback.\n     * This can be used to forward-adjust the input-to-parse,\n     * e.g. inserting macro expansions and alike in the\n     * input which has yet to be lexed.\n     * The behaviour of this API contrasts the `unput()` et al\n     * APIs as those act on the *consumed* input, while this\n     * one allows one to manipulate the future, without impacting\n     * the current `yyloc` cursor location or any history.\n     *\n     * Use this API to help implement C-preprocessor-like\n     * `#include` statements, etc.\n     *\n     * The provided callback must be synchronous and is\n     * expected to return the edited input (string).\n     *\n     * The `cpsArg` argument value is passed to the callback\n     * as-is.\n     *\n     * `callback` interface:\n     * `function callback(input, cpsArg)`\n     *\n     * - `input` will carry the remaining-input-to-lex string\n     *   from the lexer.\n     * - `cpsArg` is `cpsArg` passed into this API.\n     *\n     * The `this` reference for the callback will be set to\n     * reference this lexer instance so that userland code\n     * in the callback can easily and quickly access any lexer\n     * API.\n     *\n     * When the callback returns a non-string-type falsey value,\n     * we assume the callback did not edit the input and we\n     * will using the input as-is.\n     *\n     * When the callback returns a non-string-type value, it\n     * is converted to a string for lexing via the `\"\" + retval`\n     * operation. (See also why: http://2ality.com/2012/03/converting-to-string.html\n     * -- that way any returned object's `toValue()` and `toString()`\n     * methods will be invoked in a proper/desirable order.)\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    editRemainingInput: function lexer_editRemainingInput(callback, cpsArg) {\n        \"use strict\";\n\n        var rv = callback.call(this, this._input, cpsArg);\n        if (typeof rv !== 'string') {\n            if (rv) {\n                this._input = '' + rv;\n            }\n            // else: keep `this._input` as is.\n        } else {\n            this._input = rv;\n        }\n        return this;\n    },\n\n    /**\n     * consumes and returns one char from the input\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    input: function lexer_input() {\n        \"use strict\";\n\n        if (!this._input) {\n            //this.done = true;    -- don't set `done` as we want the lex()/next() API to be able to produce one custom EOF token match after this anyhow. (lexer can match special <<EOF>> tokens and perform user action code for a <<EOF>> match, but only does so *once*)\n            return null;\n        }\n        if (!this._clear_state && !this._more) {\n            this._clear_state = -1;\n            this.clear();\n        }\n        var ch = this._input[0];\n        this.yytext += ch;\n        this.yyleng++;\n        this.offset++;\n        this.match += ch;\n        this.matched += ch;\n        // Count the linenumber up when we hit the LF (or a stand-alone CR).\n        // On CRLF, the linenumber is incremented when you fetch the CR or the CRLF combo\n        // and we advance immediately past the LF as well, returning both together as if\n        // it was all a single 'character' only.\n        var slice_len = 1;\n        var lines = false;\n        if (ch === '\\n') {\n            lines = true;\n        } else if (ch === '\\r') {\n            lines = true;\n            var ch2 = this._input[1];\n            if (ch2 === '\\n') {\n                slice_len++;\n                ch += ch2;\n                this.yytext += ch2;\n                this.yyleng++;\n                this.offset++;\n                this.match += ch2;\n                this.matched += ch2;\n                this.yylloc.range[1]++;\n            }\n        }\n        if (lines) {\n            this.yylineno++;\n            this.yylloc.last_line++;\n            this.yylloc.last_column = 0;\n        } else {\n            this.yylloc.last_column++;\n        }\n        this.yylloc.range[1]++;\n\n        this._input = this._input.slice(slice_len);\n        return ch;\n    },\n\n    /**\n     * unshifts one char (or an entire string) into the input\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    unput: function lexer_unput(ch) {\n        \"use strict\";\n\n        var len = ch.length;\n        var lines = ch.split(this.CRLF_Re);\n\n        if (!this._clear_state && !this._more) {\n            this._clear_state = -1;\n            this.clear();\n        }\n\n        this._input = ch + this._input;\n        this.yytext = this.yytext.substr(0, this.yytext.length - len);\n        this.yyleng = this.yytext.length;\n        this.offset -= len;\n        // **WARNING:**\n        // The `offset` value MAY be negative if you `unput()` more text than you have already lexed.\n        // This type of behaviour is generally observed for one kind of 'lexer/parser hack'\n        // where custom token-illiciting characters are pushed in front of the input stream to help\n        // simulate multiple-START-points in the parser.\n        // When this happens, `base_position` will be adjusted to help track the original input's\n        // starting point in the `_input` buffer.\n        if (-this.offset > this.base_position) {\n            this.base_position = -this.offset;\n        }\n        this.match = this.match.substr(0, this.match.length - len);\n        this.matched = this.matched.substr(0, this.matched.length - len);\n\n        if (lines.length > 1) {\n            this.yylineno -= lines.length - 1;\n\n            this.yylloc.last_line = this.yylineno + 1;\n\n            // Get last entirely matched line into the `pre_lines[]` array's\n            // last index slot; we don't mind when other previously\n            // matched lines end up in the array too.\n            var pre = this.match;\n            var pre_lines = pre.split(this.CRLF_Re);\n            if (pre_lines.length === 1) {\n                pre = this.matched;\n                pre_lines = pre.split(this.CRLF_Re);\n            }\n            this.yylloc.last_column = pre_lines[pre_lines.length - 1].length;\n        } else {\n            this.yylloc.last_column -= len;\n        }\n\n        this.yylloc.range[1] = this.yylloc.range[0] + this.yyleng;\n\n        this.done = false;\n        return this;\n    },\n\n    /**\n     * return the upcoming input *which has not been lexed yet*.\n     * This can, for example, be used for custom look-ahead inspection code \n     * in your lexer.\n     * \n     * The entire pending input string is returned.\n     *\n     * > ### NOTE ###\n     * >\n     * > When augmenting error reports and alike, you might want to\n     * > look at the `upcomingInput()` API instead, which offers more\n     * > features for limited input extraction and which includes the\n     * > part of the input which has been lexed by the last token a.k.a.\n     * > the *currently lexed* input.\n     * > \n     * \n     * @public\n     * @this {RegExpLexer}\n     */\n    lookAhead: function lexer_lookAhead() {\n        \"use strict\";\n\n        return this._input || '';\n    },\n\n    /**\n     * cache matched text and append it on next action\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    more: function lexer_more() {\n        \"use strict\";\n\n        this._more = true;\n        return this;\n    },\n\n    /**\n     * signal the lexer that this rule fails to match the input, so the\n     * next matching rule (regex) should be tested instead.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    reject: function lexer_reject() {\n        \"use strict\";\n\n        if (this.options.backtrack_lexer) {\n            this._backtrack = true;\n        } else {\n            // when the `parseError()` call returns, we MUST ensure that the error is registered.\n            // We accomplish this by signaling an 'error' token to be produced for the current\n            // `.lex()` run.\n            var lineno_msg = 'Lexical error';\n            if (this.yylloc) {\n                lineno_msg += ' on line ' + (this.yylineno + 1);\n            }\n            var p = this.constructLexErrorInfo(lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).', false);\n            this._signaled_error_token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);\n        }\n        return this;\n    },\n\n    /**\n     * retain first n characters of the match\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    less: function lexer_less(n) {\n        \"use strict\";\n\n        return this.unput(this.match.slice(n));\n    },\n\n    /**\n     * return (part of the) already matched input, i.e. for error\n     * messages.\n     *\n     * Limit the returned string length to `maxSize` (default: 20).\n     *\n     * Limit the returned string to the `maxLines` number of lines of\n     * input (default: 1).\n     *\n     * A negative `maxSize` limit value equals *unlimited*, i.e.\n     * produce the entire input that has already been lexed.\n     *\n     * A negative `maxLines` limit value equals *unlimited*, i.e. limit the result\n     * to the `maxSize` specified number of characters *only*.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    pastInput: function lexer_pastInput(maxSize, maxLines) {\n        \"use strict\";\n\n        var past = this.matched.substring(0, this.matched.length - this.match.length);\n        if (maxSize < 0)\n            maxSize = Infinity;\n        else if (!maxSize)\n            maxSize = 20;\n        if (maxLines < 0)\n            maxLines = Infinity;         // can't ever have more input lines than this!\n        else if (!maxLines)\n            maxLines = 1;\n        // `substr` anticipation: treat \\r\\n as a single character and take a little\n        // more than necessary so that we can still properly check against maxSize\n        // after we've transformed and limited the newLines in here:\n        past = past.substr(-maxSize * 2 - 2);\n        // now that we have a significantly reduced string to process, transform the newlines\n        // and chop them, then limit them:\n        var a = past.split(this.CRLF_Re);\n        a = a.slice(-maxLines);\n        past = a.join('\\n');\n        // When, after limiting to maxLines, we still have too much to return,\n        // do add an ellipsis prefix...\n        if (past.length > maxSize) {\n            past = '...' + past.substr(-maxSize);\n        }\n        return past;\n    },\n\n    /**\n     * return (part of the) upcoming input *including* the input \n     * matched by the last token (see also the NOTE below). \n     * This can be used to augment error messages, for example.\n     *\n     * Limit the returned string length to `maxSize` (default: 20).\n     *\n     * Limit the returned string to the `maxLines` number of lines of input (default: 1).\n     *\n     * A negative `maxSize` limit value equals *unlimited*, i.e.\n     * produce the entire input that is yet to be lexed.\n     *\n     * A negative `maxLines` limit value equals *unlimited*, i.e. limit the result\n     * to the `maxSize` specified number of characters *only*.\n     *\n     * > ### NOTE ###\n     * >\n     * > *\"upcoming input\"* is defined as the whole of the both\n     * > the *currently lexed* input, together with any remaining input\n     * > following that. *\"currently lexed\"* input is the input\n     * > already recognized by the lexer but not yet returned with\n     * > the lexer token. This happens when you are invoking this API\n     * > from inside any lexer rule action code block.\n     * >\n     * > When you want access to the 'upcoming input' in that you want access\n     * > to the input *which has not been lexed yet* for look-ahead\n     * > inspection or likewise purposes, please consider using the\n     * > `lookAhead()` API instead.\n     * > \n     * \n     * @public\n     * @this {RegExpLexer}\n     */\n    upcomingInput: function lexer_upcomingInput(maxSize, maxLines) {\n        \"use strict\";\n\n        var next = this.match;\n        var source = this._input || '';\n        if (maxSize < 0)\n            maxSize = next.length + source.length;\n        else if (!maxSize)\n            maxSize = 20;\n        if (maxLines < 0)\n            maxLines = maxSize;         // can't ever have more input lines than this!\n        else if (!maxLines)\n            maxLines = 1;\n        // `substring` anticipation: treat \\r\\n as a single character and take a little\n        // more than necessary so that we can still properly check against maxSize\n        // after we've transformed and limited the newLines in here:\n        if (next.length < maxSize * 2 + 2) {\n            next += source.substring(0, maxSize * 2 + 2 - next.length);  // substring is faster on Chrome/V8\n        }\n        // now that we have a significantly reduced string to process, transform the newlines\n        // and chop them, then limit them:\n        var a = next.split(this.CRLF_Re, maxLines + 1);     // stop splitting once we have reached just beyond the reuired number of lines.\n        a = a.slice(0, maxLines);\n        next = a.join('\\n');\n        // When, after limiting to maxLines, we still have too much to return,\n        // do add an ellipsis postfix...\n        if (next.length > maxSize) {\n            next = next.substring(0, maxSize) + '...';\n        }\n        return next;\n    },\n\n    /**\n     * return a string which displays the character position where the\n     * lexing error occurred, i.e. for error messages\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    showPosition: function lexer_showPosition(maxPrefix, maxPostfix) {\n        \"use strict\";\n\n        var pre = this.pastInput(maxPrefix).replace(/\\s/g, ' ');\n        var c = new Array(pre.length + 1).join('-');\n        return pre + this.upcomingInput(maxPostfix).replace(/\\s/g, ' ') + '\\n' + c + '^';\n    },\n\n    /**\n     * return an YYLLOC info object derived off the given context (actual, preceding, following, current).\n     * Use this method when the given `actual` location is not guaranteed to exist (i.e. when\n     * it MAY be NULL) and you MUST have a valid location info object anyway:\n     * then we take the given context of the `preceding` and `following` locations, IFF those are available,\n     * and reconstruct the `actual` location info from those.\n     * If this fails, the heuristic is to take the `current` location, IFF available.\n     * If this fails as well, we assume the sought location is at/around the current lexer position\n     * and then produce that one as a response. DO NOTE that these heuristic/derived location info\n     * values MAY be inaccurate!\n     *\n     * NOTE: `deriveLocationInfo()` ALWAYS produces a location info object *copy* of `actual`, not just\n     * a *reference* hence all input location objects can be assumed to be 'constant' (function has no side-effects).\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    deriveLocationInfo: function lexer_deriveYYLLOC(actual, preceding, following, current) {\n        \"use strict\";\n\n        var loc = {\n            first_line: 1,\n            first_column: 0,\n            last_line: 1,\n            last_column: 0,\n\n            range: [0, 0]\n        };\n        if (actual) {\n            loc.first_line = actual.first_line | 0;\n            loc.last_line = actual.last_line | 0;\n            loc.first_column = actual.first_column | 0;\n            loc.last_column = actual.last_column | 0;\n\n            if (actual.range) {\n                loc.range[0] = actual.range[0] | 0;\n                loc.range[1] = actual.range[1] | 0;\n            }\n        }\n        if (loc.first_line <= 0 || loc.last_line < loc.first_line) {\n            // plan B: heuristic using preceding and following:\n            if (loc.first_line <= 0 && preceding) {\n                loc.first_line = preceding.last_line | 0;\n                loc.first_column = preceding.last_column | 0;\n\n                if (preceding.range) {\n                    loc.range[0] = actual.range[1] | 0;\n                }\n            }\n\n            if ((loc.last_line <= 0 || loc.last_line < loc.first_line) && following) {\n                loc.last_line = following.first_line | 0;\n                loc.last_column = following.first_column | 0;\n\n                if (following.range) {\n                    loc.range[1] = actual.range[0] | 0;\n                }\n            }\n\n            // plan C?: see if the 'current' location is useful/sane too:\n            if (loc.first_line <= 0 && current && (loc.last_line <= 0 || current.last_line <= loc.last_line)) {\n                loc.first_line = current.first_line | 0;\n                loc.first_column = current.first_column | 0;\n\n                if (current.range) {\n                    loc.range[0] = current.range[0] | 0;\n                }\n            }\n\n            if (loc.last_line <= 0 && current && (loc.first_line <= 0 || current.first_line >= loc.first_line)) {\n                loc.last_line = current.last_line | 0;\n                loc.last_column = current.last_column | 0;\n\n                if (current.range) {\n                    loc.range[1] = current.range[1] | 0;\n                }\n            }\n        }\n        // sanitize: fix last_line BEFORE we fix first_line as we use the 'raw' value of the latter\n        // or plan D heuristics to produce a 'sensible' last_line value:\n        if (loc.last_line <= 0) {\n            if (loc.first_line <= 0) {\n                loc.first_line = this.yylloc.first_line;\n                loc.last_line = this.yylloc.last_line;\n                loc.first_column = this.yylloc.first_column;\n                loc.last_column = this.yylloc.last_column;\n\n                loc.range[0] = this.yylloc.range[0];\n                loc.range[1] = this.yylloc.range[1];\n            } else {\n                loc.last_line = this.yylloc.last_line;\n                loc.last_column = this.yylloc.last_column;\n\n                loc.range[1] = this.yylloc.range[1];\n            }\n        }\n        if (loc.first_line <= 0) {\n            loc.first_line = loc.last_line;\n            loc.first_column = 0; // loc.last_column;\n\n            loc.range[1] = loc.range[0];\n        }\n        if (loc.first_column < 0) {\n            loc.first_column = 0;\n        }\n        if (loc.last_column < 0) {\n            loc.last_column = (loc.first_column > 0 ? loc.first_column : 80);\n        }\n        return loc;\n    },\n\n    /**\n     * return a string which displays the lines & columns of input which are referenced\n     * by the given location info range, plus a few lines of context.\n     *\n     * This function pretty-prints the indicated section of the input, with line numbers\n     * and everything!\n     *\n     * This function is very useful to provide highly readable error reports, while\n     * the location range may be specified in various flexible ways:\n     *\n     * - `loc` is the location info object which references the area which should be\n     *   displayed and 'marked up': these lines & columns of text are marked up by `^`\n     *   characters below each character in the entire input range.\n     *\n     * - `context_loc` is the *optional* location info object which instructs this\n     *   pretty-printer how much *leading* context should be displayed alongside\n     *   the area referenced by `loc`. This can help provide context for the displayed\n     *   error, etc.\n     *\n     *   When this location info is not provided, a default context of 3 lines is\n     *   used.\n     *\n     * - `context_loc2` is another *optional* location info object, which serves\n     *   a similar purpose to `context_loc`: it specifies the amount of *trailing*\n     *   context lines to display in the pretty-print output.\n     *\n     *   When this location info is not provided, a default context of 1 line only is\n     *   used.\n     *\n     * Special Notes:\n     *\n     * - when the `loc`-indicated range is very large (about 5 lines or more), then\n     *   only the first and last few lines of this block are printed while a\n     *   `...continued...` message will be printed between them.\n     *\n     *   This serves the purpose of not printing a huge amount of text when the `loc`\n     *   range happens to be huge: this way a manageable & readable output results\n     *   for arbitrary large ranges.\n     *\n     * - this function can display lines of input which whave not yet been lexed.\n     *   `prettyPrintRange()` can access the entire input!\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    prettyPrintRange: function lexer_prettyPrintRange(loc, context_loc, context_loc2) {\n        \"use strict\";\n\n        loc = this.deriveLocationInfo(loc, context_loc, context_loc2);\n\n        const CONTEXT = 3;\n        const CONTEXT_TAIL = 1;\n        const MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT = 2;\n        var input = this.matched + (this._input || '');\n        var lines = input.split('\\n');\n        var l0 = Math.max(1, (context_loc ? context_loc.first_line : loc.first_line - CONTEXT));\n        var l1 = Math.max(1, (context_loc2 ? context_loc2.last_line : loc.last_line + CONTEXT_TAIL));\n        var lineno_display_width = (1 + Math.log10(l1 | 1) | 0);\n        var ws_prefix = new Array(lineno_display_width).join(' ');\n        var nonempty_line_indexes = [[], [], []];\n        var rv = lines.slice(l0 - 1, l1 + 1).map(function injectLineNumber(line, index) {\n            \"use strict\";\n\n            var lno = index + l0;\n            var lno_pfx = (ws_prefix + lno).substr(-lineno_display_width);\n            var rv = lno_pfx + ': ' + line;\n            var errpfx = (new Array(lineno_display_width + 1)).join('^');\n            var offset = 2 + 1;\n            var len = 0;\n\n            if (lno === loc.first_line) {\n              offset += loc.first_column;\n\n              len = Math.max(\n                2,\n                ((lno === loc.last_line ? loc.last_column : line.length)) - loc.first_column + 1\n              );\n            } else if (lno === loc.last_line) {\n              len = Math.max(2, loc.last_column + 1);\n            } else if (lno > loc.first_line && lno < loc.last_line) {\n              len = Math.max(2, line.length + 1);\n            }\n\n            var nli;\n            if (len) {\n              var lead = new Array(offset).join('.');\n              var mark = new Array(len).join('^');\n              rv += '\\n' + errpfx + lead + mark;\n\n              nli = 1;\n            } else if (lno < loc.first_line) {\n              nli = 0;\n            } else if (lno > loc.last_line) {\n              nli = 2;\n            }\n\n            if (line.trim().length > 0) {\n              nonempty_line_indexes[nli].push(index);\n            }\n\n            rv = rv.replace(/\\t/g, ' ');\n            return rv;\n        });\n\n        // now make sure we don't print an overly large amount of lead/error/tail area: limit it\n        // to the top and bottom line count:\n        for (var i = 0; i <= 2; i++) {\n            var line_arr = nonempty_line_indexes[i];\n            if (line_arr.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {\n                var clip_start = line_arr[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;\n                var clip_end = line_arr[line_arr.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;\n\n                var intermediate_line = (new Array(lineno_display_width + 1)).join(' ') +     '  (...continued...)';\n                if (i === 1) {\n                    intermediate_line += '\\n' + (new Array(lineno_display_width + 1)).join('-') + '  (---------------)';\n                }\n                rv.splice(clip_start, clip_end - clip_start + 1, intermediate_line);\n            }\n        }\n\n        return rv.join('\\n');\n    },\n\n    /**\n     * helper function, used to produce a human readable description as a string, given\n     * the input `yylloc` location object.\n     *\n     * Set `display_range_too` to TRUE to include the string character index position(s)\n     * in the description if the `yylloc.range` is available.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    describeYYLLOC: function lexer_describe_yylloc(yylloc, display_range_too) {\n        \"use strict\";\n\n        var l1 = yylloc.first_line;\n        var l2 = yylloc.last_line;\n        var c1 = yylloc.first_column;\n        var c2 = yylloc.last_column;\n        var dl = l2 - l1;\n        var dc = c2 - c1;\n        var rv;\n        if (dl === 0) {\n            rv = 'line ' + l1 + ', ';\n            if (dc <= 1) {\n                rv += 'column ' + c1;\n            } else {\n                rv += 'columns ' + c1 + ' .. ' + c2;\n            }\n        } else {\n            rv = 'lines ' + l1 + '(column ' + c1 + ') .. ' + l2 + '(column ' + c2 + ')';\n        }\n        if (yylloc.range && display_range_too) {\n            var r1 = yylloc.range[0];\n            var r2 = yylloc.range[1] - 1;\n            if (r2 <= r1) {\n                rv += ' {String Offset: ' + r1 + '}';\n            } else {\n                rv += ' {String Offset range: ' + r1 + ' .. ' + r2 + '}';\n            }\n        }\n        return rv;\n    },\n\n    /**\n     * test the lexed token: return FALSE when not a match, otherwise return token.\n     *\n     * `match` is supposed to be an array coming out of a regex match, i.e. `match[0]`\n     * contains the actually matched text string.\n     *\n     * Also move the input cursor forward and update the match collectors:\n     *\n     * - `yytext`\n     * - `yyleng`\n     * - `match`\n     * - `matches`\n     * - `yylloc`\n     * - `offset`\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    test_match: function lexer_test_match(match, indexed_rule) {\n        \"use strict\";\n\n        var token,\n            lines,\n            backup,\n            match_str,\n            match_str_len;\n\n        if (this.options.backtrack_lexer) {\n            // save context\n            backup = {\n                yylineno: this.yylineno,\n                yylloc: {\n                    first_line: this.yylloc.first_line,\n                    last_line: this.yylloc.last_line,\n                    first_column: this.yylloc.first_column,\n                    last_column: this.yylloc.last_column,\n\n                    range: this.yylloc.range.slice()\n                },\n                yytext: this.yytext,\n                match: this.match,\n                matches: this.matches,\n                matched: this.matched,\n                yyleng: this.yyleng,\n                offset: this.offset,\n                _more: this._more,\n                _input: this._input,\n                //_signaled_error_token: this._signaled_error_token,\n                yy: this.yy,\n                conditionStack: this.conditionStack.slice(),\n                done: this.done\n            };\n        }\n\n        match_str = match[0];\n        match_str_len = match_str.length;\n\n        lines = match_str.split(this.CRLF_Re);\n        if (lines.length > 1) {\n            this.yylineno += lines.length - 1;\n\n            this.yylloc.last_line = this.yylineno + 1;\n            this.yylloc.last_column = lines[lines.length - 1].length;\n        } else {\n            this.yylloc.last_column += match_str_len;\n        }\n\n        this.yytext += match_str;\n        this.match += match_str;\n        this.matched += match_str;\n        this.matches = match;\n        this.yyleng = this.yytext.length;\n        this.yylloc.range[1] += match_str_len;\n\n        // previous lex rules MAY have invoked the `more()` API rather than producing a token:\n        // those rules will already have moved this `offset` forward matching their match lengths,\n        // hence we must only add our own match length now:\n        this.offset += match_str_len;\n        this._more = false;\n        this._backtrack = false;\n        this._input = this._input.slice(match_str_len);\n\n        // calling this method:\n        //\n        //   function lexer__performAction(yy, yyrulenumber, YY_START) {...}\n        token = this.performAction.call(this, this.yy, indexed_rule, this.conditionStack[this.conditionStack.length - 1] /* = YY_START */);\n        // otherwise, when the action codes are all simple return token statements:\n        //token = this.simpleCaseActionClusters[indexed_rule];\n\n        if (this.done && this._input) {\n            this.done = false;\n        }\n        if (token) {\n            return token;\n        } else if (this._backtrack) {\n            // recover context\n            for (var k in backup) {\n                this[k] = backup[k];\n            }\n            this.__currentRuleSet__ = null;\n            return false; // rule action called reject() implying the next rule should be tested instead.\n        } else if (this._signaled_error_token) {\n            // produce one 'error' token as `.parseError()` in `reject()`\n            // did not guarantee a failure signal by throwing an exception!\n            token = this._signaled_error_token;\n            this._signaled_error_token = false;\n            return token;\n        }\n        return false;\n    },\n\n    /**\n     * return next match in input\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    next: function lexer_next() {\n        \"use strict\";\n\n        if (this.done) {\n            this.clear();\n            return this.EOF;\n        }\n        if (!this._input) {\n            this.done = true;\n        }\n\n        var token,\n            match,\n            tempMatch,\n            index;\n        if (!this._more) {\n            if (!this._clear_state) {\n                this._clear_state = 1;\n            }\n            this.clear();\n        }\n        var spec = this.__currentRuleSet__;\n        if (!spec) {\n            // Update the ruleset cache as we apparently encountered a state change or just started lexing.\n            // The cache is set up for fast lookup -- we assume a lexer will switch states much less often than it will\n            // invoke the `lex()` token-producing API and related APIs, hence caching the set for direct access helps\n            // speed up those activities a tiny bit.\n            spec = this.__currentRuleSet__ = this._currentRules();\n            // Check whether a *sane* condition has been pushed before: this makes the lexer robust against\n            // user-programmer bugs such as https://github.com/zaach/jison-lex/issues/19\n            if (!spec || !spec.rules) {\n                var lineno_msg = '';\n                if (this.yylloc) {\n                    lineno_msg = ' on line ' + (this.yylineno + 1);\n                }\n                var p = this.constructLexErrorInfo('Internal lexer engine error' + lineno_msg + ': The lex grammar programmer pushed a non-existing condition name \"' + this.topState() + '\"; this is a fatal error and should be reported to the application programmer team!', false);\n                // produce one 'error' token until this situation has been resolved, most probably by parse termination!\n                return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);\n            }\n        }\n\n        var rule_ids = spec.rules;\n        var regexes = spec.__rule_regexes;\n        var len = spec.__rule_count;\n\n        // Note: the arrays are 1-based, while `len` itself is a valid index,\n        // hence the non-standard less-or-equal check in the next loop condition!\n        for (var i = 1; i <= len; i++) {\n            tempMatch = this._input.match(regexes[i]);\n            if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {\n                match = tempMatch;\n                index = i;\n                if (this.options.backtrack_lexer) {\n                    token = this.test_match(tempMatch, rule_ids[i]);\n                    if (token !== false) {\n                        return token;\n                    } else if (this._backtrack) {\n                        match = undefined;\n                        continue; // rule action called reject() implying a rule MISmatch.\n                    } else {\n                        // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)\n                        return false;\n                    }\n                } else if (!this.options.flex) {\n                    break;\n                }\n            }\n        }\n        if (match) {\n            token = this.test_match(match, rule_ids[index]);\n            if (token !== false) {\n                return token;\n            }\n            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)\n            return false;\n        }\n        if (!this._input) {\n            this.done = true;\n            this.clear();\n            return this.EOF;\n        } else {\n            var lineno_msg = 'Lexical error';\n            if (this.yylloc) {\n                lineno_msg += ' on line ' + (this.yylineno + 1);\n            }\n            var p = this.constructLexErrorInfo(lineno_msg + ': Unrecognized text.', this.options.lexerErrorsAreRecoverable);\n\n            var pendingInput = this._input;\n            var activeCondition = this.topState();\n            var conditionStackDepth = this.conditionStack.length;\n\n            token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);\n            if (token === this.ERROR) {\n                // we can try to recover from a lexer error that `parseError()` did not 'recover' for us\n                // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`\n                // has not consumed/modified any pending input or changed state in the error handler:\n                if (!this.matches &&\n                    // and make sure the input has been modified/consumed ...\n                    pendingInput === this._input &&\n                    // ...or the lexer state has been modified significantly enough\n                    // to merit a non-consuming error handling action right now.\n                    activeCondition === this.topState() &&\n                    conditionStackDepth === this.conditionStack.length\n                ) {\n                    this.input();\n                }\n            }\n            return token;\n        }\n    },\n\n    /**\n     * return next match that has a token\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    lex: function lexer_lex() {\n        \"use strict\";\n\n        var r;\n\n        //this._clear_state = 0;\n\n        if (!this._more) {\n            if (!this._clear_state) {\n                this._clear_state = 1;\n            }\n            this.clear();\n        }\n\n        // allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:\n        if (typeof this.pre_lex === 'function') {\n            r = this.pre_lex.call(this, 0);\n        }\n        if (typeof this.options.pre_lex === 'function') {\n            // (also account for a userdef function which does not return any value: keep the token as is)\n            r = this.options.pre_lex.call(this, r) || r;\n        }\n        if (this.yy && typeof this.yy.pre_lex === 'function') {\n            // (also account for a userdef function which does not return any value: keep the token as is)\n            r = this.yy.pre_lex.call(this, r) || r;\n        }\n\n        while (!r) {\n            r = this.next();\n        }\n\n        if (this.yy && typeof this.yy.post_lex === 'function') {\n            // (also account for a userdef function which does not return any value: keep the token as is)\n            r = this.yy.post_lex.call(this, r) || r;\n        }\n        if (typeof this.options.post_lex === 'function') {\n            // (also account for a userdef function which does not return any value: keep the token as is)\n            r = this.options.post_lex.call(this, r) || r;\n        }\n        if (typeof this.post_lex === 'function') {\n            // (also account for a userdef function which does not return any value: keep the token as is)\n            r = this.post_lex.call(this, r) || r;\n        }\n\n        if (!this._more) {\n            //\n            // 1) make sure any outside interference is detected ASAP: \n            //    these attributes are to be treated as 'const' values\n            //    once the lexer has produced them with the token (return value `r`).\n            // 2) make sure any subsequent `lex()` API invocation CANNOT\n            //    edit the `yytext`, etc. token attributes for the *current*\n            //    token, i.e. provide a degree of 'closure safety' so that\n            //    code like this:\n            //    \n            //        t1 = lexer.lex();\n            //        v = lexer.yytext;\n            //        l = lexer.yylloc;\n            //        t2 = lexer.lex();\n            //        assert(lexer.yytext !== v);\n            //        assert(lexer.yylloc !== l);\n            //        \n            //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*\n            //    these conditions.\n            //    \n            this.yytext = Object.freeze(this.yytext);\n            this.matches = Object.freeze(this.matches);\n            this.yylloc.range = Object.freeze(this.yylloc.range);\n            this.yylloc = Object.freeze(this.yylloc);\n\n            this._clear_state = 0;\n        }\n\n        return r;\n    },\n\n    /**\n     * return next match that has a token. Identical to the `lex()` API but does not invoke any of the\n     * `pre_lex()` nor any of the `post_lex()` callbacks.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    fastLex: function lexer_fastLex() {\n        \"use strict\";\n\n        var r;\n\n        //this._clear_state = 0;\n\n        while (!r) {\n            r = this.next();\n        }\n\n        if (!this._more) {\n            //\n            // 1) make sure any outside interference is detected ASAP: \n            //    these attributes are to be treated as 'const' values\n            //    once the lexer has produced them with the token (return value `r`).\n            // 2) make sure any subsequent `lex()` API invocation CANNOT\n            //    edit the `yytext`, etc. token attributes for the *current*\n            //    token, i.e. provide a degree of 'closure safety' so that\n            //    code like this:\n            //    \n            //        t1 = lexer.lex();\n            //        v = lexer.yytext;\n            //        l = lexer.yylloc;\n            //        t2 = lexer.lex();\n            //        assert(lexer.yytext !== v);\n            //        assert(lexer.yylloc !== l);\n            //        \n            //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*\n            //    these conditions.\n            //    \n            this.yytext = Object.freeze(this.yytext);\n            this.matches = Object.freeze(this.matches);\n            this.yylloc.range = Object.freeze(this.yylloc.range);\n            this.yylloc = Object.freeze(this.yylloc);\n\n            this._clear_state = 0;\n        }\n        \n        return r;\n    },\n\n    /**\n     * return info about the lexer state that can help a parser or other lexer API user to use the\n     * most efficient means available. This API is provided to aid run-time performance for larger\n     * systems which employ this lexer.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    canIUse: function lexer_canIUse() {\n        \"use strict\";\n\n        var rv = {\n            fastLex: !(\n                typeof this.pre_lex === 'function' ||\n                typeof this.options.pre_lex === 'function' ||\n                (this.yy && typeof this.yy.pre_lex === 'function') ||\n                (this.yy && typeof this.yy.post_lex === 'function') ||\n                typeof this.options.post_lex === 'function' ||\n                typeof this.post_lex === 'function'\n            ) && typeof this.fastLex === 'function',\n        };\n        return rv;\n    },\n\n\n    /**\n     * backwards compatible alias for `pushState()`;\n     * the latter is symmetrical with `popState()` and we advise to use\n     * those APIs in any modern lexer code, rather than `begin()`.\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    begin: function lexer_begin(condition) {\n        \"use strict\";\n\n        return this.pushState(condition);\n    },\n\n    /**\n     * activates a new lexer condition state (pushes the new lexer\n     * condition state onto the condition stack)\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    pushState: function lexer_pushState(condition) {\n        \"use strict\";\n\n        this.conditionStack.push(condition);\n        this.__currentRuleSet__ = null;\n        return this;\n    },\n\n    /**\n     * pop the previously active lexer condition state off the condition\n     * stack\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    popState: function lexer_popState() {\n        \"use strict\";\n\n        var n = this.conditionStack.length - 1;\n        if (n > 0) {\n            this.__currentRuleSet__ = null;\n            return this.conditionStack.pop();\n        } else {\n            return this.conditionStack[0];\n        }\n    },\n\n    /**\n     * return the currently active lexer condition state; when an index\n     * argument is provided it produces the N-th previous condition state,\n     * if available\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    topState: function lexer_topState(n) {\n        \"use strict\";\n\n        n = this.conditionStack.length - 1 - Math.abs(n || 0);\n        if (n >= 0) {\n            return this.conditionStack[n];\n        } else {\n            return 'INITIAL';\n        }\n    },\n\n    /**\n     * (internal) determine the lexer rule set which is active for the\n     * currently active lexer condition state\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    _currentRules: function lexer__currentRules() {\n        \"use strict\";\n\n        var n = this.conditionStack.length - 1;\n        var state;\n        if (n >= 0) {\n            state = this.conditionStack[n];\n        } else {\n            state = 'INITIAL';\n        }\n        return this.conditions[state] || this.conditions['INITIAL'];\n    },\n\n    /**\n     * return the number of states currently on the stack\n     *\n     * @public\n     * @this {RegExpLexer}\n     */\n    stateStackSize: function lexer_stateStackSize() {\n        \"use strict\";\n\n        return this.conditionStack.length;\n    }\n}"; // --- END lexer kernel ---
   }
 
   chkBugger$2(getRegExpLexerPrototype());
-  RegExpLexer.prototype = new Function(rmCommonWS$2(_templateObject79(), getRegExpLexerPrototype()))(); // The lexer code stripper, driven by optimization analysis settings and
+  RegExpLexer.prototype = new Function(rmCommonWS$2(_templateObject80(), getRegExpLexerPrototype()))(); // The lexer code stripper, driven by optimization analysis settings and
   // lexer options, which cannot be changed at run-time.
 
   function stripUnusedLexerCode(src, opt) {
@@ -11637,12 +12468,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       var _c = b.splice(line - minl, 0, "", "^^^^^^^^^^^ source line above is reported as erroneous ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^", "");
 
       var offendingChunk = '        ' + b.join('\n        ');
-      console.error(rmCommonWS$2(_templateObject80(), ex, offendingChunk));
+      console.error(rmCommonWS$2(_templateObject81(), ex, offendingChunk));
       new_src = src;
     } // inject analysis report now:
 
 
-    new_src = new_src.replace(/\/\*\s*JISON-LEX-ANALYTICS-REPORT\s*\*\//g, rmCommonWS$2(_templateObject81(), opt.options.backtrack_lexer, opt.options.ranges, opt.options.trackPosition, opt.parseActionsUseYYLENG, opt.parseActionsUseYYLINENO, opt.parseActionsUseYYTEXT, opt.parseActionsUseYYLOC, opt.parseActionsUseValueTracking, opt.parseActionsUseValueAssignment, opt.parseActionsUseLocationTracking, opt.parseActionsUseLocationAssignment, opt.lexerActionsUseYYLENG, opt.lexerActionsUseYYLINENO, opt.lexerActionsUseYYTEXT, opt.lexerActionsUseYYLOC, opt.lexerActionsUseParseError, opt.lexerActionsUseYYERROR, opt.lexerActionsUseLocationTracking, opt.lexerActionsUseMore, opt.lexerActionsUseUnput, opt.lexerActionsUseReject, opt.lexerActionsUseLess, opt.lexerActionsUseDisplayAPIs, opt.lexerActionsUseDescribeYYLOC));
+    new_src = new_src.replace(/\/\*\s*JISON-LEX-ANALYTICS-REPORT\s*\*\//g, rmCommonWS$2(_templateObject82(), opt.options.backtrack_lexer, opt.options.ranges, opt.options.trackPosition, opt.parseActionsUseYYLENG, opt.parseActionsUseYYLINENO, opt.parseActionsUseYYTEXT, opt.parseActionsUseYYLOC, opt.parseActionsUseValueTracking, opt.parseActionsUseValueAssignment, opt.parseActionsUseLocationTracking, opt.parseActionsUseLocationAssignment, opt.lexerActionsUseYYLENG, opt.lexerActionsUseYYLINENO, opt.lexerActionsUseYYTEXT, opt.lexerActionsUseYYLOC, opt.lexerActionsUseParseError, opt.lexerActionsUseYYERROR, opt.lexerActionsUseLocationTracking, opt.lexerActionsUseMore, opt.lexerActionsUseUnput, opt.lexerActionsUseReject, opt.lexerActionsUseLess, opt.lexerActionsUseDisplayAPIs, opt.lexerActionsUseDescribeYYLOC));
     return new_src;
   } // generate lexer source from a grammar
 
@@ -11750,9 +12581,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         break;
 
       case 'commonjs':
-      default:
         code = generateCommonJSModule(opt);
         break;
+
+      default:
+        throw new Error('unsupported moduleType: ' + opt.moduleType);
     }
 
     return code;
@@ -11884,7 +12717,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
 
       var js = JSON.stringify(obj, null, 2);
-      js = js.replace(new XRegExp__default['default']("  \"(".concat(ID_REGEX_BASE, ")\": "), 'g'), '  $1: ');
+      js = js.replace(new XRegExp__default['default']("  \"(".concat(ID_REGEX_BASE$1, ")\": "), 'g'), '  $1: ');
       js = js.replace(/^( +)pre_lex: true(,)?$/gm, function (m, ls, tc) {
         return ls + 'pre_lex: ' + String(pre) + (tc || '');
       });
@@ -11899,7 +12732,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     if (opt.rules.length > 0 || opt.__in_rules_failure_analysis_mode__) {
       // we don't mind that the `test_me()` code above will have this `lexer` variable re-defined:
       // JavaScript is fine with that.
-      var code = [rmCommonWS$2(_templateObject82()), '/*JISON-LEX-ANALYTICS-REPORT*/'
+      var code = [rmCommonWS$2(_templateObject83()), '/*JISON-LEX-ANALYTICS-REPORT*/'
       /* slot #1: placeholder for analysis report further below */
       ]; // get the RegExpLexer.prototype in source code form:
 
@@ -11918,7 +12751,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                   case 'null':
                       return true;
                    case 'string':
-                   } 
+                   }
               }
       */
 
@@ -11926,7 +12759,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       var simpleCaseActionClustersCode = String(opt.caseHelperInclude);
       var rulesCode = generateRegexesInitTableCode(opt);
       var conditionsCode = cleanupJSON(JSON.stringify(opt.conditions, null, 2));
-      code.push(rmCommonWS$2(_templateObject83(), performActionCode, simpleCaseActionClustersCode, rulesCode, conditionsCode));
+      code.push(rmCommonWS$2(_templateObject84(), performActionCode, simpleCaseActionClustersCode, rulesCode, conditionsCode));
       opt.is_custom_lexer = false;
       out = code.join('');
     } else {
@@ -11959,7 +12792,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   }
 
   function generateGenericHeaderComment() {
-    var out = rmCommonWS$2(_templateObject84(), version);
+    var out = rmCommonWS$2(_templateObject85(), version);
     return out;
   }
 
@@ -11987,8 +12820,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
   function generateModule(opt) {
     opt = prepareOptions(opt);
-    var out = [generateGenericHeaderComment(), '', 'var ' + opt.moduleName + ' = (function () {', jisonLexerErrorDefinition, '', generateModuleBody(opt), '', opt.moduleInclude ? opt.moduleInclude + ';' : '', '', 'return lexer;', '})();'];
-    var src = out.join('\n') + '\n';
+    var modIncSrc = opt.moduleInclude ? opt.moduleInclude + ';' : '';
+    var src = rmCommonWS$2(_templateObject86(), generateGenericHeaderComment(), opt.moduleName, jisonLexerErrorDefinition, generateModuleBody(opt), modIncSrc);
     src = stripUnusedLexerCode(src, opt);
     opt.exportSourceCode.all = src;
     return src;
@@ -11996,8 +12829,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
   function generateAMDModule(opt) {
     opt = prepareOptions(opt);
-    var out = [generateGenericHeaderComment(), '', 'define([], function () {', jisonLexerErrorDefinition, '', generateModuleBody(opt), '', opt.moduleInclude ? opt.moduleInclude + ';' : '', '', 'return lexer;', '});'];
-    var src = out.join('\n') + '\n';
+    var modIncSrc = opt.moduleInclude ? opt.moduleInclude + ';' : '';
+    var src = rmCommonWS$2(_templateObject87(), generateGenericHeaderComment(), jisonLexerErrorDefinition, generateModuleBody(opt), modIncSrc);
     src = stripUnusedLexerCode(src, opt);
     opt.exportSourceCode.all = src;
     return src;
@@ -12005,8 +12838,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
   function generateESModule(opt) {
     opt = prepareOptions(opt);
-    var out = [generateGenericHeaderComment(), '', 'var lexer = (function () {', jisonLexerErrorDefinition, '', generateModuleBody(opt), '', opt.moduleInclude ? opt.moduleInclude + ';' : '', '', 'return lexer;', '})();', '', 'function yylex() {', '    return lexer.lex.apply(lexer, arguments);', '}', rmCommonWS$2(_templateObject85())];
-    var src = out.join('\n') + '\n';
+    var modIncSrc = opt.moduleInclude ? opt.moduleInclude + ';' : '';
+    var src = rmCommonWS$2(_templateObject88(), generateGenericHeaderComment(), jisonLexerErrorDefinition, generateModuleBody(opt), modIncSrc);
     src = stripUnusedLexerCode(src, opt);
     opt.exportSourceCode.all = src;
     return src;
@@ -12014,8 +12847,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
   function generateCommonJSModule(opt) {
     opt = prepareOptions(opt);
-    var out = [generateGenericHeaderComment(), '', 'var ' + opt.moduleName + ' = (function () {', jisonLexerErrorDefinition, '', generateModuleBody(opt), '', opt.moduleInclude ? opt.moduleInclude + ';' : '', '', 'return lexer;', '})();', '', 'if (typeof require !== \'undefined\' && typeof exports !== \'undefined\') {', '  exports.lexer = ' + opt.moduleName + ';', '  exports.lex = function () {', '    return ' + opt.moduleName + '.lex.apply(lexer, arguments);', '  };', '}'];
-    var src = out.join('\n') + '\n';
+    var modIncSrc = opt.moduleInclude ? opt.moduleInclude + ';' : '';
+    var src = rmCommonWS$2(_templateObject89(), generateGenericHeaderComment(), opt.moduleName, jisonLexerErrorDefinition, generateModuleBody(opt), modIncSrc, opt.moduleName, opt.moduleName);
     src = stripUnusedLexerCode(src, opt);
     opt.exportSourceCode.all = src;
     return src;
@@ -12560,12 +13393,58 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
       this.yyGetSharedState = function yyGetSharedState() {
         return sharedState_yy;
-      };
+      }; // shallow clone objects & arrays, straight copy of simple `src` values
+      // e.g. `lexer.yytext` MAY be a complex value object,
+      // rather than a simple string/value.
+      //
+      // https://jsperf.com/new-array-vs-splice-vs-slice/72
+      // https://jsperf.com/instanceof-vs-typeof/20
+      // benchmark:: http://127.0.0.1:8080/example/jsperf/#testfile=test0020-typeof-instanceof-isArray.json5
+      // benchmark:: http://127.0.0.1:8080/example/jsperf/?333#testfile=test0021-shallow-clones.json5
+      //
+
+
+      function shallow_copy(src) {
+        if (src && _typeof(src) === 'object') {
+          // non-Object-type objects, e.g. RegExp, Date, etc., can usually be shallow cloned
+          // using their constructor:
+          if (src.constructor !== Object) {
+            if (Array.isArray(src)) {
+              return src.slice();
+            }
+
+            var dst = new src.constructor(src); // and make sure all custom attributes are added to the clone:
+
+            shallow_copy_noclobber(dst, src);
+            return dst;
+          } // native objects must be cloned a different way:
+          //
+          //return Object.assign({}, src);
+
+
+          var dst = {};
+          shallow_copy_noclobber(dst, src);
+          return dst;
+        }
+
+        return src;
+      } // add elements from `src` to `dst` when:
+      // - either the element does not yet exist in `src`
+      // - or exists in `src` but is NULL or UNDEFINED there, while its value is non-NULL in `dst`
+
 
       function shallow_copy_noclobber(dst, src) {
+        var chk = Object.prototype.hasOwnProperty;
+
         for (var k in src) {
-          if (typeof dst[k] === 'undefined' && Object.prototype.hasOwnProperty.call(src, k)) {
-            dst[k] = src[k];
+          if (!(k in dst)) {
+            if (chk.call(src, k)) {
+              dst[k] = src[k];
+            }
+          } else {
+            if (src[k] != null && dst[k] == null && chk.call(src, k)) {
+              dst[k] = src[k];
+            }
           }
         }
       } // copy state
@@ -12573,7 +13452,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
       shallow_copy_noclobber(sharedState_yy, this.yy);
       sharedState_yy.lexer = lexer;
-      sharedState_yy.parser = this; // Does the shared state override the default `parseError` that already comes with this instance?
+      sharedState_yy.parser = this;
+      this.copy_yytext = this.options.copy_yytext || sharedState_yy.copy_yytext || shallow_copy; // Does the shared state override the default `parseError` that already comes with this instance?
 
       if (typeof sharedState_yy.parseError === 'function') {
         this.parseError = function parseErrorAlt(str, hash, ExceptionClass) {
@@ -12686,7 +13566,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           errStr: msg,
           exception: ex,
           text: lexer.match,
-          value: lexer.yytext,
+          value: this.copy_yytext(lexer.yytext),
           token: this.describeSymbol(symbol) || symbol,
           token_id: symbol,
           line: lexer.yylineno,
@@ -12727,11 +13607,35 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         return pei;
       };
 
+      function getNonTerminalFromCode(symbol) {
+        var tokenName = self.getSymbolName(symbol);
+
+        if (!tokenName) {
+          tokenName = symbol;
+        }
+
+        return tokenName;
+      }
+
       function stdLex() {
         var token = lexer.lex(); // if token isn't its numeric value, convert
 
         if (typeof token !== 'number') {
           token = self.symbols_[token] || token;
+        }
+
+        if (typeof Jison !== 'undefined' && Jison.lexDebugger) {
+          var tokenName = self.getSymbolName(token || EOF);
+
+          if (!tokenName) {
+            tokenName = token;
+          }
+
+          Jison.lexDebugger.push({
+            tokenName: tokenName,
+            tokenText: lexer.match,
+            tokenValue: lexer.yytext
+          });
         }
 
         return token || EOF;
@@ -12742,6 +13646,20 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
         if (typeof token !== 'number') {
           token = self.symbols_[token] || token;
+        }
+
+        if (typeof Jison !== 'undefined' && Jison.lexDebugger) {
+          var tokenName = self.getSymbolName(token || EOF);
+
+          if (!tokenName) {
+            tokenName = token;
+          }
+
+          Jison.lexDebugger.push({
+            tokenName: tokenName,
+            tokenText: lexer.match,
+            tokenValue: lexer.yytext
+          });
         }
 
         return token || EOF;
@@ -12877,6 +13795,21 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               vstack[sp] = lexer.yytext;
               sstack[sp] = newState; // push state
 
+              if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                var tokenName = this.getSymbolName(symbol || EOF);
+
+                if (!tokenName) {
+                  tokenName = symbol;
+                }
+
+                Jison.parserDebugger.push({
+                  action: 'shift',
+                  text: lexer.yytext,
+                  terminal: tokenName,
+                  terminal_id: symbol
+                });
+              }
+
               ++sp;
               symbol = 0; // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
 
@@ -12889,8 +13822,41 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               yyrulelen = this_production[1];
               r = this.performAction.call(yyval, newState, sp - 1, vstack);
 
+              if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                var prereduceValue = vstack.slice(sp - yyrulelen, sp);
+                var debuggableProductions = [];
+
+                for (var debugIdx = yyrulelen - 1; debugIdx >= 0; debugIdx--) {
+                  var debuggableProduction = getNonTerminalFromCode(stack[sp - debugIdx]);
+                  debuggableProductions.push(debuggableProduction);
+                } // find the current nonterminal name (- nolan)
+
+
+                var currentNonterminalCode = this_production[0]; // WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];
+
+                var currentNonterminal = getNonTerminalFromCode(currentNonterminalCode);
+                Jison.parserDebugger.push({
+                  action: 'reduce',
+                  nonterminal: currentNonterminal,
+                  nonterminal_id: currentNonterminalCode,
+                  prereduce: prereduceValue,
+                  result: r,
+                  productions: debuggableProductions,
+                  text: yyval.$
+                });
+              }
+
               if (typeof r !== 'undefined') {
                 retval = r;
+
+                if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                  Jison.parserDebugger.push({
+                    action: 'accept',
+                    text: retval
+                  });
+                  console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+                }
+
                 break;
               } // pop off stack
 
@@ -12939,6 +13905,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                 }
               }
 
+              if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                Jison.parserDebugger.push({
+                  action: 'accept',
+                  text: retval
+                });
+                console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+              }
+
               break;
           } // break out of loop: we accept or fail with error
 
@@ -12964,6 +13938,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       } finally {
         retval = this.cleanupAfterParse(retval, true, true);
         this.__reentrant_call_depth--;
+
+        if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+          Jison.parserDebugger.push({
+            action: 'return',
+            text: retval
+          });
+          console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+        }
       } // /finally
 
 
@@ -13309,6 +14291,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       _more: false,
       /// INTERNAL USE ONLY
       _signaled_error_token: false,
+      /// INTERNAL USE ONLY; 0: clear to do, 1: clear done for lex()/next(); -1: clear done for inut()/unput()/...
+      _clear_state: 0,
       /// INTERNAL USE ONLY; managed via `pushState()`, `popState()`, `topState()` and `stateStackSize()`
       conditionStack: [],
       /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction. `match` is identical to `yytext` except that this one still contains the matched input string after `lexer.performAction()` has been invoked, where userland code MAY have changed/replaced the `yytext` value entirely!
@@ -13319,14 +14303,18 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       matches: false,
       /// ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction; this value is transferred to the parser as the 'token value' when the parser consumes the lexer token produced through a call to the `lex()` API.
       yytext: '',
-      /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far
+      /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far. (**WARNING:** this value MAY be negative if you `unput()` more text than you have already lexed. This type of behaviour is generally observed for one kind of 'lexer/parser hack' where custom token-illiciting characters are pushed in front of the input stream to help simulate multiple-START-points in the parser. When this happens, `base_position` will be adjusted to help track the original input's starting point in the `_input` buffer.)
       offset: 0,
+      /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: index to the original starting point of the input; always ZERO(0) unless `unput()` has pushed content before the input: see the `offset` **WARNING** just above.
+      base_position: 0,
       /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: length of matched input for the token under construction (`yytext`)
       yyleng: 0,
       /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: 'line number' at which the token under construction is located
       yylineno: 0,
       /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks location info (lines + columns) for the token under construction
       yylloc: null,
+      /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: regex used to split lines while tracking the lexer cursor position.
+      CRLF_Re: /\r\n?|\n/,
 
       /**
            * INTERNAL USE: construct a suitable error info hash object instance for `parseError`.
@@ -13502,7 +14490,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         this.matches = false;
         this._more = false;
         this._backtrack = false;
-        var col = this.yylloc ? this.yylloc.last_column : 0;
+        var col = this.yylloc.last_column;
         this.yylloc = {
           first_line: this.yylineno + 1,
           first_column: col,
@@ -13566,7 +14554,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         }
 
         this._input = input || '';
-        this.clear();
+        this._clear_state = -1;
         this._signaled_error_token = false;
         this.done = false;
         this.yylineno = 0;
@@ -13581,6 +14569,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           range: [0, 0]
         };
         this.offset = 0;
+        this.base_position = 0; // apply these bits of `this.clear()` as well:
+
+        this.yytext = '';
+        this.yyleng = 0;
+        this.match = '';
+        this.matches = false;
+        this._more = false;
+        this._backtrack = false;
         return this;
       },
 
@@ -13655,6 +14651,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           return null;
         }
 
+        if (!this._clear_state && !this._more) {
+          this._clear_state = -1;
+          this.clear();
+        }
+
         var ch = this._input[0];
         this.yytext += ch;
         this.yyleng++;
@@ -13707,11 +14708,28 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
            */
       unput: function lexer_unput(ch) {
         var len = ch.length;
-        var lines = ch.split(/(?:\r\n?|\n)/g);
+        var lines = ch.split(this.CRLF_Re);
+
+        if (!this._clear_state && !this._more) {
+          this._clear_state = -1;
+          this.clear();
+        }
+
         this._input = ch + this._input;
         this.yytext = this.yytext.substr(0, this.yytext.length - len);
         this.yyleng = this.yytext.length;
-        this.offset -= len;
+        this.offset -= len; // **WARNING:**
+        // The `offset` value MAY be negative if you `unput()` more text than you have already lexed.
+        // This type of behaviour is generally observed for one kind of 'lexer/parser hack'
+        // where custom token-illiciting characters are pushed in front of the input stream to help
+        // simulate multiple-START-points in the parser.
+        // When this happens, `base_position` will be adjusted to help track the original input's
+        // starting point in the `_input` buffer.
+
+        if (-this.offset > this.base_position) {
+          this.base_position = -this.offset;
+        }
+
         this.match = this.match.substr(0, this.match.length - len);
         this.matched = this.matched.substr(0, this.matched.length - len);
 
@@ -13722,11 +14740,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           // matched lines end up in the array too.
 
           var pre = this.match;
-          var pre_lines = pre.split(/(?:\r\n?|\n)/g);
+          var pre_lines = pre.split(this.CRLF_Re);
 
           if (pre_lines.length === 1) {
             pre = this.matched;
-            pre_lines = pre.split(/(?:\r\n?|\n)/g);
+            pre_lines = pre.split(this.CRLF_Re);
           }
 
           this.yylloc.last_column = pre_lines[pre_lines.length - 1].length;
@@ -13839,7 +14857,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         past = past.substr(-maxSize * 2 - 2); // now that we have a significantly reduced string to process, transform the newlines
         // and chop them, then limit them:
 
-        var a = past.replace(/\r\n|\r/g, '\n').split('\n');
+        var a = past.split(this.CRLF_Re);
         a = a.slice(-maxLines);
         past = a.join('\n'); // When, after limiting to maxLines, we still have too much to return,
         // do add an ellipsis prefix...
@@ -13899,7 +14917,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         // and chop them, then limit them:
 
 
-        var a = next.split(/\r\n|\r/g, maxLines + 1); // stop splitting once we have reached just beyond the reuired number of lines.
+        var a = next.split(this.CRLF_Re, maxLines + 1); // stop splitting once we have reached just beyond the reuired number of lines.
 
         a = a.slice(0, maxLines);
         next = a.join('\n'); // When, after limiting to maxLines, we still have too much to return,
@@ -14094,7 +15112,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         var l1 = Math.max(1, context_loc2 ? context_loc2.last_line : loc.last_line + CONTEXT_TAIL);
         var lineno_display_width = 1 + Math.log10(l1 | 1) | 0;
         var ws_prefix = new Array(lineno_display_width).join(' ');
-        var nonempty_line_indexes = [];
+        var nonempty_line_indexes = [[], [], []];
         var rv = lines.slice(l0 - 1, l1 + 1).map(function injectLineNumber(line, index) {
           var lno = index + l0;
           var lno_pfx = (ws_prefix + lno).substr(-lineno_display_width);
@@ -14112,27 +15130,42 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             len = Math.max(2, line.length + 1);
           }
 
+          var nli;
+
           if (len) {
             var lead = new Array(offset).join('.');
             var mark = new Array(len).join('^');
             rv += '\n' + errpfx + lead + mark;
+            nli = 1;
+          } else if (lno < loc.first_line) {
+            nli = 0;
+          } else if (lno > loc.last_line) {
+            nli = 2;
+          }
 
-            if (line.trim().length > 0) {
-              nonempty_line_indexes.push(index);
-            }
+          if (line.trim().length > 0) {
+            nonempty_line_indexes[nli].push(index);
           }
 
           rv = rv.replace(/\t/g, ' ');
           return rv;
-        }); // now make sure we don't print an overly large amount of error area: limit it 
+        }); // now make sure we don't print an overly large amount of lead/error/tail area: limit it
         // to the top and bottom line count:
 
-        if (nonempty_line_indexes.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {
-          var clip_start = nonempty_line_indexes[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
-          var clip_end = nonempty_line_indexes[nonempty_line_indexes.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
-          var intermediate_line = new Array(lineno_display_width + 1).join(' ') + '  (...continued...)';
-          intermediate_line += '\n' + new Array(lineno_display_width + 1).join('-') + '  (---------------)';
-          rv.splice(clip_start, clip_end - clip_start + 1, intermediate_line);
+        for (var i = 0; i <= 2; i++) {
+          var line_arr = nonempty_line_indexes[i];
+
+          if (line_arr.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {
+            var clip_start = line_arr[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
+            var clip_end = line_arr[line_arr.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
+            var intermediate_line = new Array(lineno_display_width + 1).join(' ') + '  (...continued...)';
+
+            if (i === 1) {
+              intermediate_line += '\n' + new Array(lineno_display_width + 1).join('-') + '  (---------------)';
+            }
+
+            rv.splice(clip_start, clip_end - clip_start + 1, intermediate_line);
+          }
         }
 
         return rv.join('\n');
@@ -14213,7 +15246,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               last_line: this.yylloc.last_line,
               first_column: this.yylloc.first_column,
               last_column: this.yylloc.last_column,
-              range: this.yylloc.range.slice(0)
+              range: this.yylloc.range.slice()
             },
             yytext: this.yytext,
             match: this.match,
@@ -14225,15 +15258,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             _input: this._input,
             //_signaled_error_token: this._signaled_error_token,
             yy: this.yy,
-            conditionStack: this.conditionStack.slice(0),
+            conditionStack: this.conditionStack.slice(),
             done: this.done
           };
         }
 
         match_str = match[0];
-        match_str_len = match_str.length; // if (match_str.indexOf('\n') !== -1 || match_str.indexOf('\r') !== -1) {
-
-        lines = match_str.split(/(?:\r\n?|\n)/g);
+        match_str_len = match_str.length;
+        lines = match_str.split(this.CRLF_Re);
 
         if (lines.length > 1) {
           this.yylineno += lines.length - 1;
@@ -14241,8 +15273,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.yylloc.last_column = lines[lines.length - 1].length;
         } else {
           this.yylloc.last_column += match_str_len;
-        } // }
-
+        }
 
         this.yytext += match_str;
         this.match += match_str;
@@ -14309,6 +15340,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         var token, match, tempMatch, index;
 
         if (!this._more) {
+          if (!this._clear_state) {
+            this._clear_state = 1;
+          }
+
           this.clear();
         }
 
@@ -14325,7 +15360,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           if (!spec || !spec.rules) {
             var lineno_msg = '';
 
-            if (this.options.trackPosition) {
+            if (this.yylloc) {
               lineno_msg = ' on line ' + (this.yylineno + 1);
             }
 
@@ -14383,7 +15418,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         } else {
           var lineno_msg = 'Lexical error';
 
-          if (this.options.trackPosition) {
+          if (this.yylloc) {
             lineno_msg += ' on line ' + (this.yylineno + 1);
           }
 
@@ -14416,7 +15451,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
            * @this {RegExpLexer}
            */
       lex: function lexer_lex() {
-        var r; // allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:
+        var r; //this._clear_state = 0;
+
+        if (!this._more) {
+          if (!this._clear_state) {
+            this._clear_state = 1;
+          }
+
+          this.clear();
+        } // allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:
+
 
         if (typeof this.pre_lex === 'function') {
           r = this.pre_lex.call(this, 0);
@@ -14451,6 +15495,33 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           r = this.post_lex.call(this, r) || r;
         }
 
+        if (!this._more) {
+          //
+          // 1) make sure any outside interference is detected ASAP: 
+          //    these attributes are to be treated as 'const' values
+          //    once the lexer has produced them with the token (return value `r`).
+          // 2) make sure any subsequent `lex()` API invocation CANNOT
+          //    edit the `yytext`, etc. token attributes for the *current*
+          //    token, i.e. provide a degree of 'closure safety' so that
+          //    code like this:
+          //    
+          //        t1 = lexer.lex();
+          //        v = lexer.yytext;
+          //        l = lexer.yylloc;
+          //        t2 = lexer.lex();
+          //        assert(lexer.yytext !== v);
+          //        assert(lexer.yylloc !== l);
+          //        
+          //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+          //    these conditions.
+          //    
+          this.yytext = Object.freeze(this.yytext);
+          this.matches = Object.freeze(this.matches);
+          this.yylloc.range = Object.freeze(this.yylloc.range);
+          this.yylloc = Object.freeze(this.yylloc);
+          this._clear_state = 0;
+        }
+
         return r;
       },
 
@@ -14462,10 +15533,37 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
            * @this {RegExpLexer}
            */
       fastLex: function lexer_fastLex() {
-        var r;
+        var r; //this._clear_state = 0;
 
         while (!r) {
           r = this.next();
+        }
+
+        if (!this._more) {
+          //
+          // 1) make sure any outside interference is detected ASAP: 
+          //    these attributes are to be treated as 'const' values
+          //    once the lexer has produced them with the token (return value `r`).
+          // 2) make sure any subsequent `lex()` API invocation CANNOT
+          //    edit the `yytext`, etc. token attributes for the *current*
+          //    token, i.e. provide a degree of 'closure safety' so that
+          //    code like this:
+          //    
+          //        t1 = lexer.lex();
+          //        v = lexer.yytext;
+          //        l = lexer.yylloc;
+          //        t2 = lexer.lex();
+          //        assert(lexer.yytext !== v);
+          //        assert(lexer.yylloc !== l);
+          //        
+          //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+          //    these conditions.
+          //    
+          this.yytext = Object.freeze(this.yytext);
+          this.matches = Object.freeze(this.matches);
+          this.yylloc.range = Object.freeze(this.yylloc.range);
+          this.yylloc = Object.freeze(this.yylloc);
+          this._clear_state = 0;
         }
 
         return r;
@@ -14727,7 +15825,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   //
   // This is the base XRegExp ID regex used in many places; this should match the ID macro definition in the EBNF/BNF parser et al as well!
 
-  var ID_REGEX_BASE$1 = '[\\p{Alphabetic}_][\\p{Alphabetic}_\\p{Number}]*'; // produce a unique production symbol.
+  var ID_REGEX_BASE$2 = '[\\p{Alphabetic}_][\\p{Alphabetic}_\\p{Number}]*'; // produce a unique production symbol.
   // Use this to produce rule productions from transformed EBNF which are
   // guaranteed not to collide with previously generated / already existing
   // rules (~ symbols).
@@ -14901,7 +15999,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         handle = handle[0];
       }
 
-      var expressions = parser$2.parse(handle);
+      var expressions = handle;
+
+      if (typeof expressions === 'string') {
+        expressions = parser$2.parse(handle);
+      }
+
       var list = transformExpressionList(expressions, transform_opts);
       var ret = [list.fragment];
 
@@ -14911,8 +16014,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           // seek out all names and aliases; strip out literal tokens first as those cannot serve as $names:
           var alist = list.terms; // rhs.replace(/'[^']+'/g, '~').replace(/"[^"]+"/g, '~').split(' ');
 
-          var alias_re = new XRegExp__default['default']("\\[".concat(ID_REGEX_BASE$1, "\\]"));
-          var term_re = new XRegExp__default['default']("^".concat(ID_REGEX_BASE$1, "$")); // and collect the PERMITTED aliases: the names of the terms and all the remaining aliases
+          var alias_re = new XRegExp__default['default']("\\[".concat(ID_REGEX_BASE$2, "\\]"));
+          var term_re = new XRegExp__default['default']("^".concat(ID_REGEX_BASE$2, "$")); // and collect the PERMITTED aliases: the names of the terms and all the remaining aliases
 
           var good_aliases = {};
           var alias_cnt = {};
@@ -14986,7 +16089,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           //
 
 
-          var nameref_re = new XRegExp__default['default']("(?:[$@]|##)".concat(ID_REGEX_BASE$1), 'g');
+          var nameref_re = new XRegExp__default['default']("(?:[$@]|##)".concat(ID_REGEX_BASE$2), 'g');
           var named_spots = nameref_re.exec(action);
           var numbered_spots = action.match(/(?:[$@]|##)[0-9]+\b/g);
           var max_term_index = list.terms.length; // loop through the XRegExp alias regex matches in `action`
@@ -15059,11 +16162,20 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
     ref_list.push(from);
     ref_names.push(sub);
-    sub += '.';
-    var to = new from.constructor();
 
-    for (var name in from) {
-      to[name] = deepClone(from[name], sub + name);
+    if (from.constructor === Array) {
+      var to = from.slice();
+
+      for (var i = 0, len = to.length; i < len; i++) {
+        to[i] = deepClone(from[i], sub + '[' + i + ']');
+      }
+    } else {
+      sub += '.';
+      var to = new from.constructor();
+
+      for (var name in from) {
+        to[name] = deepClone(from[name], sub + name);
+      }
     }
 
     return to;
@@ -15592,7 +16704,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 4];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 4, yysp); // END of default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$3(_templateObject86(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2]), yyvstack[yysp - 1].errStr));
+          yyparser.yyError(rmCommonWS$3(_templateObject90(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2]), yyvstack[yysp - 1].errStr));
           break;
 
         case 3:
@@ -15601,7 +16713,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 2];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$3(_templateObject87(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])));
+          yyparser.yyError(rmCommonWS$3(_templateObject91(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])));
           break;
 
         case 4:
@@ -15632,7 +16744,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           var rv = checkActionBlock$2(yyvstack[yysp], yylstack[yysp]);
 
           if (rv) {
-            yyparser.yyError(rmCommonWS$3(_templateObject88(), rv, yylexer.prettyPrintRange(yylstack[yysp])));
+            yyparser.yyError(rmCommonWS$3(_templateObject92(), rv, yylexer.prettyPrintRange(yylstack[yysp])));
           }
 
           this.$ = yyvstack[yysp];
@@ -15661,7 +16773,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           var rv = checkActionBlock$2(yyvstack[yysp], yylstack[yysp]);
 
           if (rv) {
-            yyparser.yyError(rmCommonWS$3(_templateObject89(), rv, yylexer.prettyPrintRange(yylstack[yysp])));
+            yyparser.yyError(rmCommonWS$3(_templateObject93(), rv, yylexer.prettyPrintRange(yylstack[yysp])));
           }
 
           yy.addDeclaration(this.$, {
@@ -15685,7 +16797,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject90(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
+          yyparser.yyError(rmCommonWS$3(_templateObject94(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
           break;
 
         case 12:
@@ -15739,7 +16851,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           var rv = checkActionBlock$2(yyvstack[yysp], yylstack[yysp]);
 
           if (rv) {
-            yyparser.yyError(rmCommonWS$3(_templateObject91(), rv, yylexer.prettyPrintRange(yylstack[yysp])));
+            yyparser.yyError(rmCommonWS$3(_templateObject95(), rv, yylexer.prettyPrintRange(yylstack[yysp])));
           }
 
           this.$ = {
@@ -15755,7 +16867,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           var rv = checkActionBlock$2(yyvstack[yysp], yylstack[yysp]);
 
           if (rv) {
-            yyparser.yyError(rmCommonWS$3(_templateObject92(), rv, yylexer.prettyPrintRange(yylstack[yysp])));
+            yyparser.yyError(rmCommonWS$3(_templateObject96(), rv, yylexer.prettyPrintRange(yylstack[yysp])));
           }
 
           this.$ = {
@@ -15843,7 +16955,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 2];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$3(_templateObject93(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
+          yyparser.yyError(rmCommonWS$3(_templateObject97(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
           break;
 
         case 26:
@@ -15852,7 +16964,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 2];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$3(_templateObject94(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])));
+          yyparser.yyError(rmCommonWS$3(_templateObject98(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2])));
           break;
 
         case 27:
@@ -15863,7 +16975,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           var rv = checkActionBlock$2(yyvstack[yysp], yylstack[yysp]);
 
           if (rv) {
-            yyparser.yyError(rmCommonWS$3(_templateObject95(), $init_code_name, rv, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
+            yyparser.yyError(rmCommonWS$3(_templateObject99(), $init_code_name, rv, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
           }
 
           this.$ = {
@@ -15880,7 +16992,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 2];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$3(_templateObject96(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2], yylstack[yysp])));
+          yyparser.yyError(rmCommonWS$3(_templateObject100(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2], yylstack[yysp])));
           break;
 
         case 29:
@@ -15890,7 +17002,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject97(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
+          yyparser.yyError(rmCommonWS$3(_templateObject101(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
           break;
 
         case 30:
@@ -15900,7 +17012,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject98(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
+          yyparser.yyError(rmCommonWS$3(_templateObject102(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
           break;
 
         case 31:
@@ -15910,7 +17022,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject99(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
+          yyparser.yyError(rmCommonWS$3(_templateObject103(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
           break;
 
         case 32:
@@ -16014,7 +17126,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject100(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2], yylstack[yysp])));
+          yyparser.yyError(rmCommonWS$3(_templateObject104(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2], yylstack[yysp])));
           break;
 
         case 41:
@@ -16024,7 +17136,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject101(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
+          yyparser.yyError(rmCommonWS$3(_templateObject105(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
           break;
 
         case 42:
@@ -16093,7 +17205,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject102(), yyvstack[yysp - 2], yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
+          yyparser.yyError(rmCommonWS$3(_templateObject106(), yyvstack[yysp - 2], yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
           break;
 
         case 49:
@@ -16103,7 +17215,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject103(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
+          yyparser.yyError(rmCommonWS$3(_templateObject107(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
           break;
 
         case 50:
@@ -16124,7 +17236,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject104(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
+          yyparser.yyError(rmCommonWS$3(_templateObject108(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
           break;
 
         case 53:
@@ -16134,7 +17246,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject105(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$3(_templateObject109(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
           break;
 
         case 54:
@@ -16153,7 +17265,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject106(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$3(_templateObject110(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
           break;
 
         case 56:
@@ -16308,7 +17420,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject107(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2]), yyvstack[yysp - 1].errStr));
+          yyparser.yyError(rmCommonWS$3(_templateObject111(), yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2]), yyvstack[yysp - 1].errStr));
           break;
 
         case 77:
@@ -16318,7 +17430,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject108(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$3(_templateObject112(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
           break;
 
         case 78:
@@ -16337,7 +17449,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject109(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$3(_templateObject113(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
           break;
 
         case 81:
@@ -16364,7 +17476,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject110(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$3(_templateObject114(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
           break;
 
         case 85:
@@ -16374,7 +17486,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject111(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
+          yyparser.yyError(rmCommonWS$3(_templateObject115(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
           break;
 
         case 86:
@@ -16388,7 +17500,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             var rv = checkActionBlock$2(yyvstack[yysp], yylstack[yysp]);
 
             if (rv) {
-              yyparser.yyError(rmCommonWS$3(_templateObject112(), rv, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
+              yyparser.yyError(rmCommonWS$3(_templateObject116(), rv, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
             }
 
             this.$.push(yyvstack[yysp]);
@@ -16396,7 +17508,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
           if (yyvstack[yysp - 1]) {
             if (yyvstack[yysp - 2].length === 0) {
-              yyparser.yyError(rmCommonWS$3(_templateObject113(), yylexer.prettyPrintRange(yylstack[yysp - 2], yylstack[yysp - 3], yylstack[yysp]
+              yyparser.yyError(rmCommonWS$3(_templateObject117(), yylexer.prettyPrintRange(yylstack[yysp - 2], yylstack[yysp - 3], yylstack[yysp]
               /* @handle is very probably NULL! We need this one for some decent location info! */
               )));
             }
@@ -16421,7 +17533,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             var rv = checkActionBlock$2(yyvstack[yysp], yylstack[yysp]);
 
             if (rv) {
-              yyparser.yyError(rmCommonWS$3(_templateObject114(), rv, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
+              yyparser.yyError(rmCommonWS$3(_templateObject118(), rv, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
             }
 
             this.$.push(yyvstack[yysp]);
@@ -16440,7 +17552,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject115(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
+          yyparser.yyError(rmCommonWS$3(_templateObject119(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
           break;
 
         case 89:
@@ -16533,7 +17645,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 2];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$3(_templateObject116(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
+          yyparser.yyError(rmCommonWS$3(_templateObject120(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
           break;
 
         case 104:
@@ -16553,7 +17665,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject117(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
+          yyparser.yyError(rmCommonWS$3(_templateObject121(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]), yyvstack[yysp].errStr));
           break;
 
         case 106:
@@ -16570,7 +17682,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 2];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$3(_templateObject118(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
+          yyparser.yyError(rmCommonWS$3(_templateObject122(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
           break;
 
         case 115:
@@ -16603,7 +17715,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 3];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp); // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$3(_templateObject119(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
+          yyparser.yyError(rmCommonWS$3(_templateObject123(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
           break;
 
         case 125:
@@ -16625,7 +17737,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           var rv = checkActionBlock$2(fileContent);
 
           if (rv) {
-            yyparser.yyError(rmCommonWS$3(_templateObject120(), $PATH, rv, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
+            yyparser.yyError(rmCommonWS$3(_templateObject124(), $PATH, rv, yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])));
           } // And no, we don't support nested '%include':
 
 
@@ -16638,7 +17750,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 1];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp); // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$3(_templateObject121()) + yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]));
+          yyparser.yyError(rmCommonWS$3(_templateObject125()) + yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]));
           break;
 
         case 130:
@@ -16648,7 +17760,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yylstack[yysp]; // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
           // TODO ...
 
-          yyparser.yyError(rmCommonWS$3(_templateObject122()) + yylexer.prettyPrintRange(yylstack[yysp]));
+          yyparser.yyError(rmCommonWS$3(_templateObject126()) + yylexer.prettyPrintRange(yylstack[yysp]));
           break;
       }
     },
@@ -16758,34 +17870,55 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
       function shallow_copy(src) {
-        if (_typeof(src) === 'object') {
-          var dst = {};
-
-          for (var k in src) {
-            if (Object.prototype.hasOwnProperty.call(src, k)) {
-              dst[k] = src[k];
+        if (src && _typeof(src) === 'object') {
+          // non-Object-type objects, e.g. RegExp, Date, etc., can usually be shallow cloned
+          // using their constructor:
+          if (src.constructor !== Object) {
+            if (Array.isArray(src)) {
+              return src.slice();
             }
-          }
 
+            var dst = new src.constructor(src); // and make sure all custom attributes are added to the clone:
+
+            shallow_copy_noclobber(dst, src);
+            return dst;
+          } // native objects must be cloned a different way:
+          //
+          //return Object.assign({}, src);
+
+
+          var dst = {};
+          shallow_copy_noclobber(dst, src);
           return dst;
         }
 
         return src;
-      }
+      } // add elements from `src` to `dst` when:
+      // - either the element does not yet exist in `src`
+      // - or exists in `src` but is NULL or UNDEFINED there, while its value is non-NULL in `dst`
+
 
       function shallow_copy_noclobber(dst, src) {
+        var chk = Object.prototype.hasOwnProperty;
+
         for (var k in src) {
-          if (typeof dst[k] === 'undefined' && Object.prototype.hasOwnProperty.call(src, k)) {
-            dst[k] = src[k];
+          if (!(k in dst)) {
+            if (chk.call(src, k)) {
+              dst[k] = src[k];
+            }
+          } else {
+            if (src[k] != null && dst[k] == null && chk.call(src, k)) {
+              dst[k] = src[k];
+            }
           }
         }
       }
 
-      function copy_yylloc(loc) {
-        var rv = shallow_copy(loc);
+      function copy_yylloc_native(loc) {
+        var rv = shallow_copy(loc); // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
 
-        if (rv && rv.range) {
-          rv.range = rv.range.slice(0);
+        if (rv) {
+          rv.range = rv.range.slice();
         }
 
         return rv;
@@ -16794,7 +17927,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
       shallow_copy_noclobber(sharedState_yy, this.yy);
       sharedState_yy.lexer = lexer;
-      sharedState_yy.parser = this; // *Always* setup `yyError`, `YYRECOVERING`, `yyErrOk` and `yyClearIn` functions as it is paramount
+      sharedState_yy.parser = this; // allow userland code to override the yytext and yylloc copy/clone functions:
+
+      this.copy_yytext = this.options.copy_yytext || sharedState_yy.copy_yytext || shallow_copy;
+      this.copy_yylloc = this.options.copy_yylloc || sharedState_yy.copy_yylloc || copy_yylloc_native; // *Always* setup `yyError`, `YYRECOVERING`, `yyErrOk` and `yyClearIn` functions as it is paramount
       // to have *their* closure match ours -- if we only set them up once,
       // any subsequent `parse()` runs will fail in very obscure ways when
       // these functions are invoked in the user action code block(s) as
@@ -16818,7 +17954,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             v.recovering = recovering; // v.stackSampleLength = error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH;
 
             recoveringErrorInfo.value_stack[esp] = v;
-            recoveringErrorInfo.location_stack[esp] = copy_yylloc(lexer.yylloc);
+            recoveringErrorInfo.location_stack[esp] = this.copy_yylloc(lexer.yylloc);
             recoveringErrorInfo.state_stack[esp] = newState || NO_ACTION[1];
             ++esp;
             recoveringErrorInfo.info_stack_pointer = esp;
@@ -17027,36 +18163,22 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             } else {
               // shallow-copy L2: after all, we MAY be looking
               // at unconventional yylloc info objects...
-              rv = shallow_copy(l2);
-
-              if (rv.range) {
-                // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-                rv.range = rv.range.slice(0);
-              }
-
+              rv = this.copy_yylloc(l2);
               return rv;
             }
           } else {
             // shallow-copy L1, then adjust first col/row 1 column past the end.
-            rv = shallow_copy(l1);
+            rv = this.copy_yylloc(l1);
             rv.first_line = rv.last_line;
             rv.first_column = rv.last_column;
-
-            if (rv.range) {
-              // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-              rv.range = rv.range.slice(0);
-              rv.range[0] = rv.range[1];
-            }
+            rv.range[0] = rv.range[1];
 
             if (l2) {
               // shallow-mixin L2, then adjust last col/row accordingly.
               shallow_copy_noclobber(rv, l2);
               rv.last_line = l2.last_line;
               rv.last_column = l2.last_column;
-
-              if (rv.range && l2.range) {
-                rv.range[1] = l2.range[1];
-              }
+              rv.range[1] = l2.range[1];
             }
 
             return rv;
@@ -17074,24 +18196,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         // at unconventional yylloc info objects...
 
 
-        rv = shallow_copy(l1); // first_line: ...,
-        // first_column: ...,
-        // last_line: ...,
-        // last_column: ...,
-
-        if (rv.range) {
-          // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-          rv.range = rv.range.slice(0);
-        }
+        rv = this.copy_yylloc(l1);
 
         if (l2) {
           shallow_copy_noclobber(rv, l2);
           rv.last_line = l2.last_line;
           rv.last_column = l2.last_column;
-
-          if (rv.range && l2.range) {
-            rv.range[1] = l2.range[1];
-          }
+          rv.range[1] = l2.range[1];
         }
 
         return rv;
@@ -17104,11 +18215,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           errStr: msg,
           exception: ex,
           text: lexer.match,
-          value: lexer.yytext,
+          value: this.copy_yytext(lexer.yytext),
           token: this.describeSymbol(symbol) || symbol,
           token_id: symbol,
           line: lexer.yylineno,
-          loc: copy_yylloc(lexer.yylloc),
+          loc: this.copy_yylloc(lexer.yylloc),
           expected: expected,
           recoverable: recoverable,
           state: state,
@@ -17157,20 +18268,20 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         delete rv.parser;
         delete rv.lexer; // lexer.yytext MAY be a complex value object, rather than a simple string/value:
 
-        rv.value = shallow_copy(rv.value); // yylloc info:
+        rv.value = this.copy_yytext(rv.value); // yylloc info:
 
-        rv.loc = copy_yylloc(rv.loc); // the 'expected' set won't be modified, so no need to clone it:
-        //rv.expected = rv.expected.slice(0);
+        rv.loc = this.copy_yylloc(rv.loc); // the 'expected' set won't be modified, so no need to clone it:
+        //rv.expected = rv.expected.slice();
         //symbol stack is a simple array:
 
-        rv.symbol_stack = rv.symbol_stack.slice(0); // ditto for state stack:
+        rv.symbol_stack = rv.symbol_stack.slice(); // ditto for state stack:
 
-        rv.state_stack = rv.state_stack.slice(0); // clone the yylloc's in the location stack?:
+        rv.state_stack = rv.state_stack.slice(); // clone the yylloc's in the location stack?:
 
-        rv.location_stack = rv.location_stack.map(copy_yylloc); // and the value stack may carry both simple and complex values:
+        rv.location_stack = rv.location_stack.map(this.copy_yylloc); // and the value stack may carry both simple and complex values:
         // shallow-copy the latter.
 
-        rv.value_stack = rv.value_stack.map(shallow_copy); // and we don't bother with the sharedState_yy reference:
+        rv.value_stack = rv.value_stack.map(this.copy_yytext); // and we don't bother with the sharedState_yy reference:
         //delete rv.yy;
         // now we prepare for tracking the COMBINE actions
         // in the error recovery code path:
@@ -17224,11 +18335,35 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         return rv;
       };
 
+      function getNonTerminalFromCode(symbol) {
+        var tokenName = self.getSymbolName(symbol);
+
+        if (!tokenName) {
+          tokenName = symbol;
+        }
+
+        return tokenName;
+      }
+
       function stdLex() {
         var token = lexer.lex(); // if token isn't its numeric value, convert
 
         if (typeof token !== 'number') {
           token = self.symbols_[token] || token;
+        }
+
+        if (typeof Jison !== 'undefined' && Jison.lexDebugger) {
+          var tokenName = self.getSymbolName(token || EOF);
+
+          if (!tokenName) {
+            tokenName = token;
+          }
+
+          Jison.lexDebugger.push({
+            tokenName: tokenName,
+            tokenText: lexer.match,
+            tokenValue: lexer.yytext
+          });
         }
 
         return token || EOF;
@@ -17239,6 +18374,20 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
         if (typeof token !== 'number') {
           token = self.symbols_[token] || token;
+        }
+
+        if (typeof Jison !== 'undefined' && Jison.lexDebugger) {
+          var tokenName = self.getSymbolName(token || EOF);
+
+          if (!tokenName) {
+            tokenName = token;
+          }
+
+          Jison.lexDebugger.push({
+            tokenName: tokenName,
+            tokenText: lexer.match,
+            tokenValue: lexer.yytext
+          });
         }
 
         return token || EOF;
@@ -17325,7 +18474,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           }
         }
 
-        yyloc = lexer.yylloc;
+        yyloc = this.copy_yylloc(lexer.yylloc);
         lstack[sp] = yyloc;
         vstack[sp] = null;
         sstack[sp] = 0;
@@ -17413,15 +18562,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               var esp = recoveringErrorInfo.info_stack_pointer; // just recovered from another error
 
               if (recovering === ERROR_RECOVERY_TOKEN_DISCARD_COUNT && error_rule_depth >= 0) {
-                // SHIFT current lookahead and grab another
+                // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
+                yyloc = this.copy_yylloc(lexer.yylloc); // SHIFT current lookahead and grab another
+
                 recoveringErrorInfo.symbol_stack[esp] = symbol;
-                recoveringErrorInfo.value_stack[esp] = shallow_copy(lexer.yytext);
-                recoveringErrorInfo.location_stack[esp] = copy_yylloc(lexer.yylloc);
+                recoveringErrorInfo.location_stack[esp] = yyloc;
                 recoveringErrorInfo.state_stack[esp] = newState; // push state
 
-                ++esp; // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
-
-                yyloc = lexer.yylloc;
+                ++esp;
                 preErrorSymbol = 0;
                 symbol = lex();
               } // try to recover from error
@@ -17481,7 +18629,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
               if (errStr) {
                 recoveringErrorInfo.value_stack[esp] = {
-                  yytext: shallow_copy(lexer.yytext),
+                  yytext: this.copy_yytext(lexer.yytext),
                   errorRuleDepth: error_rule_depth,
                   errStr: errStr,
                   errorSymbolDescr: errSymbolDescr,
@@ -17490,13 +18638,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                 };
               } else {
                 recoveringErrorInfo.value_stack[esp] = {
-                  yytext: shallow_copy(lexer.yytext),
+                  yytext: this.copy_yytext(lexer.yytext),
                   errorRuleDepth: error_rule_depth,
                   stackSampleLength: error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH
                 };
               }
 
-              recoveringErrorInfo.location_stack[esp] = copy_yylloc(lexer.yylloc);
+              recoveringErrorInfo.location_stack[esp] = this.copy_yylloc(lexer.yylloc);
               recoveringErrorInfo.state_stack[esp] = newState || NO_ACTION[1];
               ++esp;
               recoveringErrorInfo.info_stack_pointer = esp;
@@ -17515,14 +18663,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
               for (var idx = sp - EXTRA_STACK_SAMPLE_DEPTH, top = idx + yyrulelen; idx < top; idx++, esp++) {
                 recoveringErrorInfo.symbol_stack[esp] = stack[idx];
-                recoveringErrorInfo.value_stack[esp] = shallow_copy(vstack[idx]);
-                recoveringErrorInfo.location_stack[esp] = copy_yylloc(lstack[idx]);
+                recoveringErrorInfo.value_stack[esp] = vstack[idx];
+                recoveringErrorInfo.location_stack[esp] = lstack[idx];
                 recoveringErrorInfo.state_stack[esp] = sstack[idx];
               }
 
               recoveringErrorInfo.symbol_stack[esp] = TERROR;
-              recoveringErrorInfo.value_stack[esp] = shallow_copy(yyval.$);
-              recoveringErrorInfo.location_stack[esp] = copy_yylloc(yyval._$); // goto new state = table[STATE][NONTERMINAL]
+              recoveringErrorInfo.value_stack[esp] = this.copy_yytext(yyval.$);
+              recoveringErrorInfo.location_stack[esp] = this.copy_yylloc(yyval._$); // goto new state = table[STATE][NONTERMINAL]
 
               newState = sstack[sp - 1];
 
@@ -17637,12 +18785,28 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                       ASSERT(symbol !== 0, "line 1135");
                       ASSERT(preErrorSymbol === 0, "line 1136");
                       vstack[sp] = lexer.yytext;
-                      lstack[sp] = copy_yylloc(lexer.yylloc);
+                      lstack[sp] = this.copy_yylloc(lexer.yylloc);
                     }
 
                     sstack[sp] = newState; // push state
 
                     ++sp;
+
+                    if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                      var tokenName = this.getSymbolName(symbol || EOF);
+
+                      if (!tokenName) {
+                        tokenName = symbol;
+                      }
+
+                      Jison.parserDebugger.push({
+                        action: 'shift',
+                        text: lexer.yytext,
+                        terminal: tokenName,
+                        terminal_id: symbol
+                      });
+                    }
+
                     symbol = 0; // **Warning: Edge Case**: the *lexer* may have produced
                     // TERROR tokens of its own volition: *those* TERROR
                     // tokens should be treated like *regular tokens*
@@ -17654,7 +18818,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                     if (!preErrorSymbol) {
                       // normal execution / no error
                       // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
-                      yyloc = lexer.yylloc;
+                      yyloc = this.copy_yylloc(lexer.yylloc);
 
                       if (recovering > 0) {
                         recovering--;
@@ -17706,10 +18870,43 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                     yyrulelen = this_production[1];
                     r = this.performAction.call(yyval, yyloc, newState, sp - 1, vstack, lstack);
 
+                    if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                      var prereduceValue = vstack.slice(sp - yyrulelen, sp);
+                      var debuggableProductions = [];
+
+                      for (var debugIdx = yyrulelen - 1; debugIdx >= 0; debugIdx--) {
+                        var debuggableProduction = getNonTerminalFromCode(stack[sp - debugIdx]);
+                        debuggableProductions.push(debuggableProduction);
+                      } // find the current nonterminal name (- nolan)
+
+
+                      var currentNonterminalCode = this_production[0]; // WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];
+
+                      var currentNonterminal = getNonTerminalFromCode(currentNonterminalCode);
+                      Jison.parserDebugger.push({
+                        action: 'reduce',
+                        nonterminal: currentNonterminal,
+                        nonterminal_id: currentNonterminalCode,
+                        prereduce: prereduceValue,
+                        result: r,
+                        productions: debuggableProductions,
+                        text: yyval.$
+                      });
+                    }
+
                     if (typeof r !== 'undefined') {
                       // signal end of error recovery loop AND end of outer parse loop
                       action = 3;
                       retval = r;
+
+                      if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                        Jison.parserDebugger.push({
+                          action: 'accept',
+                          text: retval
+                        });
+                        console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+                      }
+
                       sp = -2; // magic number: signal outer "fast parse loop" ACCEPT state that we already have a properly set up `retval` parser return value.
 
                       break;
@@ -17757,6 +18954,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
                     if (sp >= 0 && typeof vstack[sp] !== 'undefined') {
                       retval = vstack[sp];
+                    }
+
+                    if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                      Jison.parserDebugger.push({
+                        action: 'accept',
+                        text: retval
+                      });
+                      console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
                     }
 
                     sp = -2; // magic number: signal outer "fast parse loop" ACCEPT state that we already have a properly set up `retval` parser return value.
@@ -17810,8 +19015,23 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             case 1:
               stack[sp] = symbol;
               vstack[sp] = lexer.yytext;
-              lstack[sp] = copy_yylloc(lexer.yylloc);
+              lstack[sp] = this.copy_yylloc(lexer.yylloc);
               sstack[sp] = newState; // push state
+
+              if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                var tokenName = this.getSymbolName(symbol || EOF);
+
+                if (!tokenName) {
+                  tokenName = symbol;
+                }
+
+                Jison.parserDebugger.push({
+                  action: 'shift',
+                  text: lexer.yytext,
+                  terminal: tokenName,
+                  terminal_id: symbol
+                });
+              }
 
               ++sp;
               symbol = 0;
@@ -17820,7 +19040,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               ASSERT(recovering === 0, "line 1353"); // normal execution / no error
               // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
 
-              yyloc = lexer.yylloc;
+              yyloc = this.copy_yylloc(lexer.yylloc);
               continue;
             // reduce:
 
@@ -17834,8 +19054,41 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               yyrulelen = this_production[1];
               r = this.performAction.call(yyval, yyloc, newState, sp - 1, vstack, lstack);
 
+              if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                var prereduceValue = vstack.slice(sp - yyrulelen, sp);
+                var debuggableProductions = [];
+
+                for (var debugIdx = yyrulelen - 1; debugIdx >= 0; debugIdx--) {
+                  var debuggableProduction = getNonTerminalFromCode(stack[sp - debugIdx]);
+                  debuggableProductions.push(debuggableProduction);
+                } // find the current nonterminal name (- nolan)
+
+
+                var currentNonterminalCode = this_production[0]; // WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];
+
+                var currentNonterminal = getNonTerminalFromCode(currentNonterminalCode);
+                Jison.parserDebugger.push({
+                  action: 'reduce',
+                  nonterminal: currentNonterminal,
+                  nonterminal_id: currentNonterminalCode,
+                  prereduce: prereduceValue,
+                  result: r,
+                  productions: debuggableProductions,
+                  text: yyval.$
+                });
+              }
+
               if (typeof r !== 'undefined') {
                 retval = r;
+
+                if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                  Jison.parserDebugger.push({
+                    action: 'accept',
+                    text: retval
+                  });
+                  console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+                }
+
                 break;
               } // pop off stack
 
@@ -17885,6 +19138,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                 }
               }
 
+              if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                Jison.parserDebugger.push({
+                  action: 'accept',
+                  text: retval
+                });
+                console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+              }
+
               break;
           } // break out of loop: we accept or fail with error
 
@@ -17910,6 +19171,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       } finally {
         retval = this.cleanupAfterParse(retval, true, true);
         this.__reentrant_call_depth--;
+
+        if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+          Jison.parserDebugger.push({
+            action: 'return',
+            text: retval
+          });
+          console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+        }
       } // /finally
 
 
@@ -18256,6 +19525,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       _more: false,
       /// INTERNAL USE ONLY
       _signaled_error_token: false,
+      /// INTERNAL USE ONLY; 0: clear to do, 1: clear done for lex()/next(); -1: clear done for inut()/unput()/...
+      _clear_state: 0,
       /// INTERNAL USE ONLY; managed via `pushState()`, `popState()`, `topState()` and `stateStackSize()`
       conditionStack: [],
       /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction. `match` is identical to `yytext` except that this one still contains the matched input string after `lexer.performAction()` has been invoked, where userland code MAY have changed/replaced the `yytext` value entirely!
@@ -18266,14 +19537,18 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       matches: false,
       /// ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction; this value is transferred to the parser as the 'token value' when the parser consumes the lexer token produced through a call to the `lex()` API.
       yytext: '',
-      /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far
+      /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far. (**WARNING:** this value MAY be negative if you `unput()` more text than you have already lexed. This type of behaviour is generally observed for one kind of 'lexer/parser hack' where custom token-illiciting characters are pushed in front of the input stream to help simulate multiple-START-points in the parser. When this happens, `base_position` will be adjusted to help track the original input's starting point in the `_input` buffer.)
       offset: 0,
+      /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: index to the original starting point of the input; always ZERO(0) unless `unput()` has pushed content before the input: see the `offset` **WARNING** just above.
+      base_position: 0,
       /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: length of matched input for the token under construction (`yytext`)
       yyleng: 0,
       /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: 'line number' at which the token under construction is located
       yylineno: 0,
       /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks location info (lines + columns) for the token under construction
       yylloc: null,
+      /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: regex used to split lines while tracking the lexer cursor position.
+      CRLF_Re: /\r\n?|\n/,
 
       /**
            * INTERNAL USE: construct a suitable error info hash object instance for `parseError`.
@@ -18449,7 +19724,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         this.matches = false;
         this._more = false;
         this._backtrack = false;
-        var col = this.yylloc ? this.yylloc.last_column : 0;
+        var col = this.yylloc.last_column;
         this.yylloc = {
           first_line: this.yylineno + 1,
           first_column: col,
@@ -18513,7 +19788,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         }
 
         this._input = input || '';
-        this.clear();
+        this._clear_state = -1;
         this._signaled_error_token = false;
         this.done = false;
         this.yylineno = 0;
@@ -18528,6 +19803,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           range: [0, 0]
         };
         this.offset = 0;
+        this.base_position = 0; // apply these bits of `this.clear()` as well:
+
+        this.yytext = '';
+        this.yyleng = 0;
+        this.match = '';
+        this.matches = false;
+        this._more = false;
+        this._backtrack = false;
         return this;
       },
 
@@ -18602,6 +19885,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           return null;
         }
 
+        if (!this._clear_state && !this._more) {
+          this._clear_state = -1;
+          this.clear();
+        }
+
         var ch = this._input[0];
         this.yytext += ch;
         this.yyleng++;
@@ -18654,11 +19942,28 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
            */
       unput: function lexer_unput(ch) {
         var len = ch.length;
-        var lines = ch.split(/(?:\r\n?|\n)/g);
+        var lines = ch.split(this.CRLF_Re);
+
+        if (!this._clear_state && !this._more) {
+          this._clear_state = -1;
+          this.clear();
+        }
+
         this._input = ch + this._input;
         this.yytext = this.yytext.substr(0, this.yytext.length - len);
         this.yyleng = this.yytext.length;
-        this.offset -= len;
+        this.offset -= len; // **WARNING:**
+        // The `offset` value MAY be negative if you `unput()` more text than you have already lexed.
+        // This type of behaviour is generally observed for one kind of 'lexer/parser hack'
+        // where custom token-illiciting characters are pushed in front of the input stream to help
+        // simulate multiple-START-points in the parser.
+        // When this happens, `base_position` will be adjusted to help track the original input's
+        // starting point in the `_input` buffer.
+
+        if (-this.offset > this.base_position) {
+          this.base_position = -this.offset;
+        }
+
         this.match = this.match.substr(0, this.match.length - len);
         this.matched = this.matched.substr(0, this.matched.length - len);
 
@@ -18669,11 +19974,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           // matched lines end up in the array too.
 
           var pre = this.match;
-          var pre_lines = pre.split(/(?:\r\n?|\n)/g);
+          var pre_lines = pre.split(this.CRLF_Re);
 
           if (pre_lines.length === 1) {
             pre = this.matched;
-            pre_lines = pre.split(/(?:\r\n?|\n)/g);
+            pre_lines = pre.split(this.CRLF_Re);
           }
 
           this.yylloc.last_column = pre_lines[pre_lines.length - 1].length;
@@ -18786,7 +20091,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         past = past.substr(-maxSize * 2 - 2); // now that we have a significantly reduced string to process, transform the newlines
         // and chop them, then limit them:
 
-        var a = past.replace(/\r\n|\r/g, '\n').split('\n');
+        var a = past.split(this.CRLF_Re);
         a = a.slice(-maxLines);
         past = a.join('\n'); // When, after limiting to maxLines, we still have too much to return,
         // do add an ellipsis prefix...
@@ -18846,7 +20151,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         // and chop them, then limit them:
 
 
-        var a = next.split(/\r\n|\r/g, maxLines + 1); // stop splitting once we have reached just beyond the reuired number of lines.
+        var a = next.split(this.CRLF_Re, maxLines + 1); // stop splitting once we have reached just beyond the reuired number of lines.
 
         a = a.slice(0, maxLines);
         next = a.join('\n'); // When, after limiting to maxLines, we still have too much to return,
@@ -19041,7 +20346,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         var l1 = Math.max(1, context_loc2 ? context_loc2.last_line : loc.last_line + CONTEXT_TAIL);
         var lineno_display_width = 1 + Math.log10(l1 | 1) | 0;
         var ws_prefix = new Array(lineno_display_width).join(' ');
-        var nonempty_line_indexes = [];
+        var nonempty_line_indexes = [[], [], []];
         var rv = lines.slice(l0 - 1, l1 + 1).map(function injectLineNumber(line, index) {
           var lno = index + l0;
           var lno_pfx = (ws_prefix + lno).substr(-lineno_display_width);
@@ -19059,27 +20364,42 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             len = Math.max(2, line.length + 1);
           }
 
+          var nli;
+
           if (len) {
             var lead = new Array(offset).join('.');
             var mark = new Array(len).join('^');
             rv += '\n' + errpfx + lead + mark;
+            nli = 1;
+          } else if (lno < loc.first_line) {
+            nli = 0;
+          } else if (lno > loc.last_line) {
+            nli = 2;
+          }
 
-            if (line.trim().length > 0) {
-              nonempty_line_indexes.push(index);
-            }
+          if (line.trim().length > 0) {
+            nonempty_line_indexes[nli].push(index);
           }
 
           rv = rv.replace(/\t/g, ' ');
           return rv;
-        }); // now make sure we don't print an overly large amount of error area: limit it 
+        }); // now make sure we don't print an overly large amount of lead/error/tail area: limit it
         // to the top and bottom line count:
 
-        if (nonempty_line_indexes.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {
-          var clip_start = nonempty_line_indexes[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
-          var clip_end = nonempty_line_indexes[nonempty_line_indexes.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
-          var intermediate_line = new Array(lineno_display_width + 1).join(' ') + '  (...continued...)';
-          intermediate_line += '\n' + new Array(lineno_display_width + 1).join('-') + '  (---------------)';
-          rv.splice(clip_start, clip_end - clip_start + 1, intermediate_line);
+        for (var i = 0; i <= 2; i++) {
+          var line_arr = nonempty_line_indexes[i];
+
+          if (line_arr.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {
+            var clip_start = line_arr[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
+            var clip_end = line_arr[line_arr.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
+            var intermediate_line = new Array(lineno_display_width + 1).join(' ') + '  (...continued...)';
+
+            if (i === 1) {
+              intermediate_line += '\n' + new Array(lineno_display_width + 1).join('-') + '  (---------------)';
+            }
+
+            rv.splice(clip_start, clip_end - clip_start + 1, intermediate_line);
+          }
         }
 
         return rv.join('\n');
@@ -19160,7 +20480,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               last_line: this.yylloc.last_line,
               first_column: this.yylloc.first_column,
               last_column: this.yylloc.last_column,
-              range: this.yylloc.range.slice(0)
+              range: this.yylloc.range.slice()
             },
             yytext: this.yytext,
             match: this.match,
@@ -19172,15 +20492,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             _input: this._input,
             //_signaled_error_token: this._signaled_error_token,
             yy: this.yy,
-            conditionStack: this.conditionStack.slice(0),
+            conditionStack: this.conditionStack.slice(),
             done: this.done
           };
         }
 
         match_str = match[0];
-        match_str_len = match_str.length; // if (match_str.indexOf('\n') !== -1 || match_str.indexOf('\r') !== -1) {
-
-        lines = match_str.split(/(?:\r\n?|\n)/g);
+        match_str_len = match_str.length;
+        lines = match_str.split(this.CRLF_Re);
 
         if (lines.length > 1) {
           this.yylineno += lines.length - 1;
@@ -19188,8 +20507,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.yylloc.last_column = lines[lines.length - 1].length;
         } else {
           this.yylloc.last_column += match_str_len;
-        } // }
-
+        }
 
         this.yytext += match_str;
         this.match += match_str;
@@ -19256,6 +20574,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         var token, match, tempMatch, index;
 
         if (!this._more) {
+          if (!this._clear_state) {
+            this._clear_state = 1;
+          }
+
           this.clear();
         }
 
@@ -19272,7 +20594,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           if (!spec || !spec.rules) {
             var lineno_msg = '';
 
-            if (this.options.trackPosition) {
+            if (this.yylloc) {
               lineno_msg = ' on line ' + (this.yylineno + 1);
             }
 
@@ -19330,7 +20652,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         } else {
           var lineno_msg = 'Lexical error';
 
-          if (this.options.trackPosition) {
+          if (this.yylloc) {
             lineno_msg += ' on line ' + (this.yylineno + 1);
           }
 
@@ -19363,7 +20685,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
            * @this {RegExpLexer}
            */
       lex: function lexer_lex() {
-        var r; // allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:
+        var r; //this._clear_state = 0;
+
+        if (!this._more) {
+          if (!this._clear_state) {
+            this._clear_state = 1;
+          }
+
+          this.clear();
+        } // allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:
+
 
         if (typeof this.pre_lex === 'function') {
           r = this.pre_lex.call(this, 0);
@@ -19398,6 +20729,33 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           r = this.post_lex.call(this, r) || r;
         }
 
+        if (!this._more) {
+          //
+          // 1) make sure any outside interference is detected ASAP: 
+          //    these attributes are to be treated as 'const' values
+          //    once the lexer has produced them with the token (return value `r`).
+          // 2) make sure any subsequent `lex()` API invocation CANNOT
+          //    edit the `yytext`, etc. token attributes for the *current*
+          //    token, i.e. provide a degree of 'closure safety' so that
+          //    code like this:
+          //    
+          //        t1 = lexer.lex();
+          //        v = lexer.yytext;
+          //        l = lexer.yylloc;
+          //        t2 = lexer.lex();
+          //        assert(lexer.yytext !== v);
+          //        assert(lexer.yylloc !== l);
+          //        
+          //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+          //    these conditions.
+          //    
+          this.yytext = Object.freeze(this.yytext);
+          this.matches = Object.freeze(this.matches);
+          this.yylloc.range = Object.freeze(this.yylloc.range);
+          this.yylloc = Object.freeze(this.yylloc);
+          this._clear_state = 0;
+        }
+
         return r;
       },
 
@@ -19409,10 +20767,37 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
            * @this {RegExpLexer}
            */
       fastLex: function lexer_fastLex() {
-        var r;
+        var r; //this._clear_state = 0;
 
         while (!r) {
           r = this.next();
+        }
+
+        if (!this._more) {
+          //
+          // 1) make sure any outside interference is detected ASAP: 
+          //    these attributes are to be treated as 'const' values
+          //    once the lexer has produced them with the token (return value `r`).
+          // 2) make sure any subsequent `lex()` API invocation CANNOT
+          //    edit the `yytext`, etc. token attributes for the *current*
+          //    token, i.e. provide a degree of 'closure safety' so that
+          //    code like this:
+          //    
+          //        t1 = lexer.lex();
+          //        v = lexer.yytext;
+          //        l = lexer.yylloc;
+          //        t2 = lexer.lex();
+          //        assert(lexer.yytext !== v);
+          //        assert(lexer.yylloc !== l);
+          //        
+          //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+          //    these conditions.
+          //    
+          this.yytext = Object.freeze(this.yytext);
+          this.matches = Object.freeze(this.matches);
+          this.yylloc.range = Object.freeze(this.yylloc.range);
+          this.yylloc = Object.freeze(this.yylloc);
+          this._clear_state = 0;
         }
 
         return r;
@@ -19754,7 +21139,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Rule::       %{NAME}([^\r\n]*) */
 
             /* ignore unrecognized decl */
-            this.warn(rmCommonWS(_templateObject123(), dquote(yy_.yytext), dquote(this.topState())) + this.prettyPrintRange(yy_.yylloc));
+            this.warn(rmCommonWS(_templateObject127(), dquote(yy_.yytext), dquote(this.topState())) + this.prettyPrintRange(yy_.yylloc));
             yy_.yytext = [// {NAME}
             this.matches[1], // optional value/parameters
             this.matches[2].trim()];
@@ -19875,42 +21260,42 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Conditions:: action */
 
             /*! Rule::       " */
-            yy_.yyerror(rmCommonWS(_templateObject124()) + this.prettyPrintRange(yy_.yylloc));
+            yy_.yyerror(rmCommonWS(_templateObject128()) + this.prettyPrintRange(yy_.yylloc));
             return 2;
 
           case 82:
             /*! Conditions:: action */
 
             /*! Rule::       ' */
-            yy_.yyerror(rmCommonWS(_templateObject125()) + this.prettyPrintRange(yy_.yylloc));
+            yy_.yyerror(rmCommonWS(_templateObject129()) + this.prettyPrintRange(yy_.yylloc));
             return 2;
 
           case 83:
             /*! Conditions:: action */
 
             /*! Rule::       ` */
-            yy_.yyerror(rmCommonWS(_templateObject126()) + this.prettyPrintRange(yy_.yylloc));
+            yy_.yyerror(rmCommonWS(_templateObject130()) + this.prettyPrintRange(yy_.yylloc));
             return 2;
 
           case 84:
             /*! Conditions:: option_values */
 
             /*! Rule::       " */
-            yy_.yyerror(rmCommonWS(_templateObject127()) + this.prettyPrintRange(yy_.yylloc));
+            yy_.yyerror(rmCommonWS(_templateObject131()) + this.prettyPrintRange(yy_.yylloc));
             return 2;
 
           case 85:
             /*! Conditions:: option_values */
 
             /*! Rule::       ' */
-            yy_.yyerror(rmCommonWS(_templateObject128()) + this.prettyPrintRange(yy_.yylloc));
+            yy_.yyerror(rmCommonWS(_templateObject132()) + this.prettyPrintRange(yy_.yylloc));
             return 2;
 
           case 86:
             /*! Conditions:: option_values */
 
             /*! Rule::       ` */
-            yy_.yyerror(rmCommonWS(_templateObject129()) + this.prettyPrintRange(yy_.yylloc));
+            yy_.yyerror(rmCommonWS(_templateObject133()) + this.prettyPrintRange(yy_.yylloc));
             return 2;
 
           case 87:
@@ -19918,7 +21303,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
             /*! Rule::       " */
             var rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
-            yy_.yyerror(rmCommonWS(_templateObject130(), rules) + this.prettyPrintRange(yy_.yylloc));
+            yy_.yyerror(rmCommonWS(_templateObject134(), rules) + this.prettyPrintRange(yy_.yylloc));
             return 2;
 
           case 88:
@@ -19926,7 +21311,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
             /*! Rule::       ' */
             var rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
-            yy_.yyerror(rmCommonWS(_templateObject131(), rules) + this.prettyPrintRange(yy_.yylloc));
+            yy_.yyerror(rmCommonWS(_templateObject135(), rules) + this.prettyPrintRange(yy_.yylloc));
             return 2;
 
           case 89:
@@ -19934,7 +21319,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
             /*! Rule::       ` */
             var rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
-            yy_.yyerror(rmCommonWS(_templateObject132(), rules) + this.prettyPrintRange(yy_.yylloc));
+            yy_.yyerror(rmCommonWS(_templateObject136(), rules) + this.prettyPrintRange(yy_.yylloc));
             return 2;
 
           case 90:
@@ -19943,7 +21328,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             /*! Rule::       . */
 
             /* b0rk on bad characters */
-            yy_.yyerror(rmCommonWS(_templateObject133(), dquote(yy_.yytext), dquote(this.topState())) + this.prettyPrintRange(yy_.yylloc));
+            yy_.yyerror(rmCommonWS(_templateObject137(), dquote(yy_.yytext), dquote(this.topState())) + this.prettyPrintRange(yy_.yylloc));
             break;
 
           default:
@@ -20689,8 +22074,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
 
       src = '\n' + pre + '\n' + src + '\n' + post + '\n';
-      var ast = helpers.parseCodeChunkToAST(src);
-      var new_src = helpers.prettyPrintAST(ast);
+      var ast = helpers.parseCodeChunkToAST(src, options);
+      var new_src = helpers.prettyPrintAST(ast, options);
       var start = new_src.indexOf('// **PRE**');
       var end = new_src.lastIndexOf('// **POST**');
       new_src = new_src.substring(start + 10, end).trim();
@@ -20793,7 +22178,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       delete raw.lex.macros;
 
       if (src && !isEmptyObj(src)) {
-        lex_pre.push(rmCommonWS$4(_templateObject134()));
+        lex_pre.push(rmCommonWS$4(_templateObject138()));
         var keylen = 0;
 
         for (key in src) {
@@ -20808,30 +22193,30 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           lex_pre.push(padRight(key, keylen) + src[key]);
         }
 
-        lex_pre.push(rmCommonWS$4(_templateObject135()));
+        lex_pre.push(rmCommonWS$4(_templateObject139()));
       }
 
       src = raw.lex.unknownDecls;
       delete raw.lex.unknownDecls;
 
       if (src && !isEmptyObj(src)) {
-        lex_pre.push(rmCommonWS$4(_templateObject136()));
+        lex_pre.push(rmCommonWS$4(_templateObject140()));
 
         for (var i = 0, len = src.length; i < len; i++) {
           var entry = src[i];
-          var key = entry[0];
-          var value = entry[1];
+          var key = entry.name;
+          var value = entry.value;
           lex_pre.push('%' + key + ' ' + value);
         }
 
-        lex_pre.push(rmCommonWS$4(_templateObject137()));
+        lex_pre.push(rmCommonWS$4(_templateObject141()));
       }
 
       src = raw.lex.options;
       delete raw.lex.options;
 
       if (src && !isEmptyObj(src)) {
-        lex_pre.push(rmCommonWS$4(_templateObject138()));
+        lex_pre.push(rmCommonWS$4(_templateObject142()));
 
         for (key in src) {
           var value = src[key];
@@ -20904,15 +22289,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       if (!isEmptyObj(raw.lex)) {
         // dump the remainder as a comment:
         var rem = json5__default['default'].stringify(raw.lex, null, 2);
-        out += rmCommonWS$4(_templateObject139(), rem.replace(/\*\//g, '*\\/'));
+        out += rmCommonWS$4(_templateObject143(), rem.replace(/\*\//g, '*\\/'));
       }
 
       delete raw.lex;
       out += lex_pre.join('\n') + '\n\n';
-      out += rmCommonWS$4(_templateObject140()) + lex_rules.join('\n') + '\n\n';
+      out += rmCommonWS$4(_templateObject144()) + lex_rules.join('\n') + '\n\n';
 
       if (lex_post.length > 0) {
-        out += rmCommonWS$4(_templateObject141()) + lex_post.join('\n') + '\n\n';
+        out += rmCommonWS$4(_templateObject145()) + lex_post.join('\n') + '\n\n';
       }
 
       lex_out_str = out;
@@ -21080,23 +22465,23 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     delete raw.unknownDecls;
 
     if (src && !isEmptyObj(src)) {
-      lex_pre.push(rmCommonWS$4(_templateObject142()));
+      lex_pre.push(rmCommonWS$4(_templateObject146()));
 
       for (var i = 0, len = src.length; i < len; i++) {
         var entry = src[i];
-        var key = entry[0];
-        var value = entry[1];
+        var key = entry.name;
+        var value = entry.value;
         lex_pre.push('%' + key + ' ' + value);
       }
 
-      lex_pre.push(rmCommonWS$4(_templateObject143()));
+      lex_pre.push(rmCommonWS$4(_templateObject147()));
     } //src = raw.lex;
     //delete raw.lex;
     //if (src) {
 
 
     if (lex_out_str.trim() && options.showLexer) {
-      grammar_pre.push(rmCommonWS$4(_templateObject144(), lex_out_str));
+      grammar_pre.push(rmCommonWS$4(_templateObject148(), lex_out_str));
     }
 
     src = raw.options;
@@ -21306,14 +22691,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     if (!isEmptyObj(raw)) {
       // dump the remainder as a comment:
       var rem = json5__default['default'].stringify(raw, null, 2);
-      out += rmCommonWS$4(_templateObject145(), rem.replace(/\*\//g, '*\\/')); // delete raw;
+      out += rmCommonWS$4(_templateObject149(), rem.replace(/\*\//g, '*\\/')); // delete raw;
     }
 
     if (!options.showParser) {
       out += lex_out_str;
     } else {
       out += grammar_pre.join('\n') + '\n\n';
-      out += rmCommonWS$4(_templateObject146());
+      out += rmCommonWS$4(_templateObject150());
 
       if (grammar_mid.length > 0) {
         out += grammar_mid.join('\n') + '\n\n';
@@ -21326,7 +22711,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           var a = bnf_deriv.split(/\r\n|\n|\r/).map(function (line) {
             return '// ' + line;
           });
-          out += rmCommonWS$4(_templateObject147(), a.join('\n'));
+          out += rmCommonWS$4(_templateObject151(), a.join('\n'));
         }
 
         out += ebnf_rules.join('\n\n') + '\n\n';
@@ -21335,7 +22720,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
 
       if (grammar_post.length > 0) {
-        out += rmCommonWS$4(_templateObject148()) + grammar_post.join('\n') + '\n\n';
+        out += rmCommonWS$4(_templateObject152()) + grammar_post.join('\n') + '\n\n';
       }
     }
 
@@ -21343,7 +22728,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       var a = out.split(/\r\n|\n|\r/).map(function (line) {
         return '// ' + line;
       });
-      out = rmCommonWS$4(_templateObject149(), options.showParser ? 'grammar' : 'lexer', a.join('\n')); // process the original input once again: this time via JSON5
+      out = rmCommonWS$4(_templateObject153(), options.showParser ? 'grammar' : 'lexer', a.join('\n')); // process the original input once again: this time via JSON5
 
       raw = deepClone(originalInput);
 
@@ -21377,8 +22762,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   // This is the base XRegExp ID regex used in many places; this should match the ID macro definition in the EBNF/BNF parser et al as well!
 
 
-  var ID_REGEX_BASE$2 = '[\\p{Alphabetic}_][\\p{Alphabetic}_\\p{Number}]*';
-  var Jison = {
+  var ID_REGEX_BASE$3 = '[\\p{Alphabetic}_][\\p{Alphabetic}_\\p{Number}]*';
+  var Jison$1 = {
     version: version$2
   }; // see also ./lib/cli.js
 
@@ -21459,7 +22844,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     hasErrorRecovery: false,
     hasErrorReporting: false
   };
-  Jison.defaultJisonOptions = defaultJisonOptions; // Merge sets of options.
+  Jison$1.defaultJisonOptions = defaultJisonOptions; // Merge sets of options.
   //
   // Convert alternative jison option names to their base option.
   //
@@ -21484,7 +22869,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }
 
     if (args[0] !== "NODEFAULT") {
-      args.unshift(Jison.defaultJisonOptions);
+      args.unshift(Jison$1.defaultJisonOptions);
     } else {
       args.shift();
     }
@@ -21756,16 +23141,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     return chk_g;
   }
 
-  Jison.rmCommonWS = rmCommonWS$5;
-  Jison.mkStdOptions = mkStdOptions$1;
-  Jison.camelCase = helpers.camelCase;
-  Jison.mkIdentifier = mkIdentifier$4;
-  Jison.autodetectAndConvertToJSONformat = autodetectAndConvertToJSONformat$1; // detect print
+  Jison$1.rmCommonWS = rmCommonWS$5;
+  Jison$1.mkStdOptions = mkStdOptions$1;
+  Jison$1.camelCase = helpers.camelCase;
+  Jison$1.mkIdentifier = mkIdentifier$4;
+  Jison$1.autodetectAndConvertToJSONformat = autodetectAndConvertToJSONformat$1; // detect print
 
   if (typeof console !== 'undefined' && console.log) {
     // wrap console.log to prevent 'Illegal Invocation' exceptions when Jison.print() is used, e.g.
     // in the web tryout pages where this code is employed.
-    Jison.print = function console_log()
+    Jison$1.print = function console_log()
     /* ... */
     {
       var args = Array.prototype.slice.call(arguments, 0);
@@ -21774,30 +23159,30 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       console.log.apply(console, args);
     };
   } else if (typeof puts !== 'undefined') {
-    Jison.print = function puts_print() {
+    Jison$1.print = function puts_print() {
       puts([].join.call(arguments, ' '));
     };
   } else if (typeof print !== 'undefined') {
-    Jison.print = print;
+    Jison$1.print = print;
   } else {
-    Jison.print = function no_op_print() {};
+    Jison$1.print = function no_op_print() {};
   } // Also export other APIs: the JISON module should act as a 'facade' for the others,
   // so applications using the JISON compiler itself can rely on it providing everything
   // in a guaranteed compatible version as it allows userland code to use the precise
   // same APIs as JISON will be using itself:
 
 
-  Jison.Lexer = RegExpLexer;
-  Jison.ebnfParser = ebnfParser;
-  Jison.lexParser = lexParser;
-  Jison.codeExec = code_exec$2;
-  Jison.XRegExp = XRegExp__default['default'];
-  Jison.recast = recast__default['default'];
-  Jison.astUtils = astUtils__default['default']; //Jison.prettier = prettier;
+  Jison$1.Lexer = RegExpLexer;
+  Jison$1.ebnfParser = ebnfParser;
+  Jison$1.lexParser = lexParser;
+  Jison$1.codeExec = code_exec$2;
+  Jison$1.XRegExp = XRegExp__default['default'];
+  Jison$1.recast = recast__default['default'];
+  Jison$1.astUtils = astUtils__default['default']; //Jison.prettier = prettier;
   //Jison.codeShift = codeshift;
 
-  Jison.JSON5 = json5__default['default'];
-  Jison.prettyPrint = grammarPrinter; // iterator utility
+  Jison$1.JSON5 = json5__default['default'];
+  Jison$1.prettyPrint = grammarPrinter; // iterator utility
 
   function each(obj, func) {
     if (typeof obj.forEach === 'function') {
@@ -22091,7 +23476,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     if (this.DEBUG) {
       this.mix(generatorDebug); // mixin debug methods
 
-      Jison.print('Grammar::OPTIONS:\n', this.options);
+      Jison$1.print('Grammar::OPTIONS:\n', this.options);
     }
 
     this.processGrammar(grammar);
@@ -22588,37 +23973,48 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
     function collectLiteralTokensInProduction(handle) {
       var rhs, i, sym;
-      var maxlen = this.maxTokenLength || Infinity;
 
-      if (handle.constructor === Array) {
-        var rhs_i;
-        rhs = typeof handle[0] === 'string' ? splitStringIntoSymbols(handle[0]) : handle[0].slice(0);
+      try {
+        if (devDebug) ;
+        var maxlen = this.maxTokenLength || Infinity;
 
-        for (i = 0; i < rhs.length; i++) {
-          sym = rhs[i]; // check for aliased names, e.g., id[alias] and strip them
+        if (handle.constructor === Array) {
+          var rhs_i;
+          rhs = typeof handle[0] === 'string' ? splitStringIntoSymbols(handle[0]) : handle[0].slice(0);
 
-          rhs_i = sym.match(new XRegExp__default['default']("\\[".concat(ID_REGEX_BASE$2, "\\]$")));
+          for (i = 0; i < rhs.length; i++) {
+            sym = rhs[i]; // check for aliased names, e.g., id[alias] and strip them
 
-          if (rhs_i) {
-            sym = sym.substr(0, sym.length - rhs_i[0].length);
+            rhs_i = sym.match(new XRegExp__default['default']("\\[".concat(ID_REGEX_BASE$3, "\\]$")));
+
+            if (rhs_i) {
+              sym = sym.substr(0, sym.length - rhs_i[0].length);
+            }
+
+            if (!bnf[sym] && sym.length <= maxlen) {
+              addSymbol(sym);
+            }
           }
+        } else {
+          // no action -> don't care about aliases; strip them.
+          handle = handle.replace(new XRegExp__default['default']("\\[".concat(ID_REGEX_BASE$3, "\\]"), 'g'), '');
+          rhs = splitStringIntoSymbols(handle);
 
-          if (!bnf[sym] && sym.length <= maxlen) {
-            addSymbol(sym);
+          for (i = 0; i < rhs.length; i++) {
+            sym = rhs[i];
+
+            if (!bnf[sym] && sym.length <= maxlen) {
+              addSymbol(sym);
+            }
           }
         }
-      } else {
-        // no action -> don't care about aliases; strip them.
-        handle = handle.replace(new XRegExp__default['default']("\\[".concat(ID_REGEX_BASE$2, "\\]"), 'g'), '');
-        rhs = splitStringIntoSymbols(handle);
-
-        for (i = 0; i < rhs.length; i++) {
-          sym = rhs[i];
-
-          if (!bnf[sym] && sym.length <= maxlen) {
-            addSymbol(sym);
-          }
-        }
+      } catch (ex) {
+        console.error(ex, '\ncollectLiteralTokensInProduction: ', symbol, ':', JSON.stringify(handle, null, 2), ' @ options: ', this, {
+          i: i,
+          sym: sym,
+          rhs: rhs
+        });
+        throw ex;
       }
     } // Before we go process the grammar for real, we collect the 'literal' non-terminals and add them to the symbol table
     // before all others: this way these tokens have the maximum chance to get assigned their ASCII value as symbol ID,
@@ -22777,7 +24173,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         ls += rhs.substr(0, pos); // check for aliased literals, e.g., `'>'[gt]` and keep it and the alias together
 
         rhs = rhs.substr(pos + 1);
-        var alias = rhs.match(new XRegExp__default['default']("^\\[".concat(ID_REGEX_BASE$2, "\\]")));
+        var alias = rhs.match(new XRegExp__default['default']("^\\[".concat(ID_REGEX_BASE$3, "\\]")));
 
         if (alias) {
           ls += alias[0];
@@ -22813,7 +24209,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
         for (i = 0; i < rhs.length; i++) {
           // check for aliased names, e.g., id[alias] and strip them
-          rhs_i = rhs[i].match(new XRegExp__default['default']("\\[".concat(ID_REGEX_BASE$2, "\\]$")));
+          rhs_i = rhs[i].match(new XRegExp__default['default']("\\[".concat(ID_REGEX_BASE$3, "\\]$")));
 
           if (rhs_i) {
             rhs[i] = rhs[i].substr(0, rhs[i].length - rhs_i[0].length);
@@ -22854,7 +24250,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         }
       } else {
         // no action -> don't care about aliases; strip them.
-        handle = handle.replace(new XRegExp__default['default']("\\[".concat(ID_REGEX_BASE$2, "\\]"), 'g'), '');
+        handle = handle.replace(new XRegExp__default['default']("\\[".concat(ID_REGEX_BASE$3, "\\]"), 'g'), '');
         rhs = splitStringIntoSymbols(handle);
 
         for (i = 0; i < rhs.length; i++) {
@@ -23070,7 +24466,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     // Replace direct symbol references, e.g. #NUMBER# when there's a `%token NUMBER` for your grammar.
     // We allow these tokens to be referenced anywhere in your code as #TOKEN#.
 
-    var moduleInclude = preprocessActionCode(this.moduleInclude).replace(/#([^#\s\r\n]+)#/g, function (_, sym) {
+    var moduleInclude = preprocessActionCode(this.moduleInclude).replace(new XRegExp__default['default']("#(".concat(ID_REGEX_BASE$3, ")#"), 'g'), function (_, sym) {
       return provideSymbolAsSourcecode(sym);
     }); // and COPY the `moduleInit` array, after preprocessing the individual COPIES:
 
@@ -23079,7 +24475,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       assert__default['default'](typeof chunk.include === 'string');
       return {
         qualifier: chunk.qualifier,
-        include: preprocessActionCode(chunk.include).replace(/#([^#\s\r\n]+)#/g, function (_, sym) {
+        include: preprocessActionCode(chunk.include).replace(new XRegExp__default['default']("#(".concat(ID_REGEX_BASE$3, ")#"), 'g'), function (_, sym) {
           return provideSymbolAsSourcecode(sym);
         })
       };
@@ -23128,7 +24524,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       this.missingActions = missingActions;
 
       if (missingActions.length) {
-        console.warn("WARNING: missing actions for states: ", missingActions);
+        if (this.DEBUG) {
+          this.warn("WARNING: missing actions for states: ", missingActions);
+        }
+
         actions.push("default:\n                // default action for all unlisted resolve states: ".concat(missingActions.join(', '), "\n\n                // When we hit this entry, it's always a non-recoverable issue as this is a severe internal parser state failure:\n                function __b0rk_on_internal_failure(str) {\n                    var hash = yyparser.constructParseErrorInfo(str, null, null, false);\n\n                    return yyparser.parseError(str, hash, yyparser.JisonParserError);\n                }\n\n                return __b0rk_on_internal_failure(\"internal parser failure: resolving unlisted state: \" + yystate);"));
       }
 
@@ -23136,7 +24535,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       var parameters = 'yytext, yyleng, yylineno, yyloc, yystate /* action[1] */, yysp, yyrulelength, yyvstack, yylstack, yystack, yysstack';
       this.performAction = [].concat('function parser__PerformAction(' + parameters + ') {', actions, '}').join('\n').replace(/\bYYABORT\b/g, 'return false').replace(/\bYYACCEPT\b/g, 'return true') // Replace direct symbol references, e.g. #NUMBER# when there's a `%token NUMBER` for your grammar.
       // We allow these tokens to be referenced anywhere in your code as #TOKEN#.
-      .replace(/#([^#\s\r\n]+)#/g, function (_, sym) {
+      .replace(new XRegExp__default['default']("#(".concat(ID_REGEX_BASE$3, ")#"), 'g'), function (_, sym) {
         return provideSymbolAsSourcecode(sym);
       });
       this.performAction = this.performAction.replace(/\byyerror\b/g, 'yyparser.yyError').replace(/\bYYRECOVERING\b(?:\s*\(\s*\))?/g, 'yyparser.yyRecovering()').replace(/\byyerrok\b(?:\s*\(\s*\))?/g, 'yyparser.yyErrOk()').replace(/\byyclearin\b(?:\s*\(\s*\))?/g, 'yyparser.yyClearIn()');
@@ -23336,7 +24735,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       var new_hash = mkParserFeatureHash(this);
 
       if (this.DEBUG) {
-        Jison.print('Optimization analysis:\n', {
+        Jison$1.print('Optimization analysis:\n', {
           cycle: gen_level,
           SAME: prev_gen_hash === new_hash,
           actionsAreAllDefault: this.actionsAreAllDefault,
@@ -23408,7 +24807,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         var m = this[i];
 
         if (!this.__consumedInitCodeSlots__[i]) {
-          rv.push(rmCommonWS$5(_templateObject150(), m.qualifier, m.include, m.qualifier));
+          rv.push(rmCommonWS$5(_templateObject154(), m.qualifier, m.include, m.qualifier));
           this.__consumedInitCodeSlots__[i] = true;
         }
       }
@@ -23492,7 +24891,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       var aliased = handle.aliases,
           rhs_i;
       var rhs = handle.handle;
-      var named_token_re = new XRegExp__default['default']("^".concat(ID_REGEX_BASE$2, "$")); // semantic action specified
+      var named_token_re = new XRegExp__default['default']("^".concat(ID_REGEX_BASE$3, "$")); // semantic action specified
 
       var label = ['case ', handle.id, ':', '\n    /*! Production::    ', postprocessComment(handle.symbol), ' : '].concat(postprocessComment(rhs.map(function (sym) {
         // check if the symbol is a literal terminal, and if it is, quote it:
@@ -23515,11 +24914,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       //
       // Here we expand those direct token/symbol references: #TOKEN#
 
-      action = action.replace(/#([^#\s\r\n]+)#/g, function (_, sym) {
+      action = action.replace(new XRegExp__default['default']("#(".concat(ID_REGEX_BASE$3, ")#"), 'g'), function (_, sym) {
         return provideSymbolAsSourcecode(sym);
       }); // replace named semantic values ($nonterminal)
 
-      if (action.match(new XRegExp__default['default']("(?:[$@#]|##)".concat(ID_REGEX_BASE$2)))) {
+      if (action.match(new XRegExp__default['default']("(?:[$@#]|##)".concat(ID_REGEX_BASE$3)))) {
         var count = {},
             names = {},
             donotalias = {}; // When the rule is fitted with aliases it doesn't mean that the action code MUST use those:
@@ -23604,7 +25003,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           }
         }
 
-        action = action.replace(new XRegExp__default['default']("([$@#]|##)(".concat(ID_REGEX_BASE$2, ")"), 'g'), function (str, mrkr, pl) {
+        action = action.replace(new XRegExp__default['default']("([$@#]|##)(".concat(ID_REGEX_BASE$3, ")"), 'g'), function (str, mrkr, pl) {
           if (names[pl] && count[pl] !== 1) {
             throw new Error("The action block references the ambiguous named alias or term reference \"".concat(pl, "\" which is mentioned ").concat(count[pl], " times in production \"").concat(handle.handle, "\", implicit and explicit aliases included.") + '\nYou should either provide unambiguous = uniquely named aliases for these terms or use numeric index references (e.g. `$3`) as a stop-gap in your action code.');
           }
@@ -23982,7 +25381,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
   generator.warn = function warn() {
     var args = Array.prototype.slice.call(arguments, 0);
-    Jison.print.call(null, args.join(''));
+    Jison$1.print.call(null, args.join(''));
   };
 
   generator.error = function error(msg) {
@@ -24346,17 +25745,17 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     this.states = this.canonicalCollection();
 
     if (this.DEBUG) {
-      Jison.print('\n-------------------------------------------\nSymbol/Follow sets AFTER canonicalCollection:');
+      Jison$1.print('\n-------------------------------------------\nSymbol/Follow sets AFTER canonicalCollection:');
       this.displayFollowSets();
-      Jison.print('\n');
+      Jison$1.print('\n');
     }
 
     this.table = this.parseTable(this.states);
 
     if (this.DEBUG) {
-      Jison.print('\n-------------------------------------------\nSymbol/Follow sets AFTER parseTable:');
+      Jison$1.print('\n-------------------------------------------\nSymbol/Follow sets AFTER parseTable:');
       this.displayFollowSets();
-      Jison.print('\n');
+      Jison$1.print('\n');
     }
 
     this.defaultActions = findDefaults(this.table, this.hasErrorRecovery);
@@ -24848,7 +26247,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         if (typeof opt.warn_cb === 'function') {
           opt.warn_cb(msg);
         } else if (opt.warn_cb) {
-          Jison.print(msg);
+          Jison$1.print(msg);
         } else {
           // do not treat as warning; barf hairball instead so that this oddity gets noticed right away!
           throw new Error(msg);
@@ -24862,7 +26261,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   };
 
   generatorMixin.generateGenericHeaderComment = function generateGenericHeaderComment() {
-    var out = "\n/* parser generated by jison ".concat(version$2, " */\n\n/*\n * Returns a Parser object of the following structure:\n *\n *  Parser: {\n *    yy: {}     The so-called \"shared state\" or rather the *source* of it;\n *               the real \"shared state\" `yy` passed around to\n *               the rule actions, etc. is a derivative/copy of this one,\n *               not a direct reference!\n *  }\n *\n *  Parser.prototype: {\n *    yy: {},\n *    EOF: 1,\n *    TERROR: 2,\n *\n *    trace: function(errorMessage, ...),\n *\n *    JisonParserError: function(msg, hash),\n *\n *    quoteName: function(name),\n *               Helper function which can be overridden by user code later on: put suitable\n *               quotes around literal IDs in a description string.\n *\n *    originalQuoteName: function(name),\n *               The basic quoteName handler provided by JISON.\n *               `cleanupAfterParse()` will clean up and reset `quoteName()` to reference this function\n *               at the end of the `parse()`.\n *\n *    describeSymbol: function(symbol),\n *               Return a more-or-less human-readable description of the given symbol, when\n *               available, or the symbol itself, serving as its own 'description' for lack\n *               of something better to serve up.\n *\n *               Return NULL when the symbol is unknown to the parser.\n *\n *    symbols_: {associative list: name ==> number},\n *    terminals_: {associative list: number ==> name},\n *    nonterminals: {associative list: rule-name ==> {associative list: number ==> rule-alt}},\n *    terminal_descriptions_: (if there are any) {associative list: number ==> description},\n *    productions_: [...],\n *\n *    performAction: function parser__performAction(yytext, yyleng, yylineno, yyloc, yystate, yysp, yyvstack, yylstack, yystack, yysstack),\n *\n *               The function parameters and `this` have the following value/meaning:\n *               - `this`    : reference to the `yyval` internal object, which has members (`$` and `_$`)\n *                             to store/reference the rule value `$$` and location info `@$`.\n *\n *                 One important thing to note about `this` a.k.a. `yyval`: every *reduce* action gets\n *                 to see the same object via the `this` reference, i.e. if you wish to carry custom\n *                 data from one reduce action through to the next within a single parse run, then you\n *                 may get nasty and use `yyval` a.k.a. `this` for storing you own semi-permanent data.\n *\n *                 `this.yy` is a direct reference to the `yy` shared state object.\n *\n *                 `%parse-param`-specified additional `parse()` arguments have been added to this `yy`\n *                 object at `parse()` start and are therefore available to the action code via the\n *                 same named `yy.xxxx` attributes (where `xxxx` represents a identifier name from\n *                 the %parse-param` list.\n *\n *               - `yytext`  : reference to the lexer value which belongs to the last lexer token used\n *                             to match this rule. This is *not* the look-ahead token, but the last token\n *                             that's actually part of this rule.\n *\n *                 Formulated another way, `yytext` is the value of the token immediately preceeding\n *                 the current look-ahead token.\n *                 Caveats apply for rules which don't require look-ahead, such as epsilon rules.\n *\n *               - `yyleng`  : ditto as `yytext`, only now for the lexer.yyleng value.\n *\n *               - `yylineno`: ditto as `yytext`, only now for the lexer.yylineno value.\n *\n *               - `yyloc`   : ditto as `yytext`, only now for the lexer.yylloc lexer token location info.\n *\n *                               WARNING: since jison 0.4.18-186 this entry may be NULL/UNDEFINED instead\n *                               of an empty object when no suitable location info can be provided.\n *\n *               - `yystate` : the current parser state number, used internally for dispatching and\n *                               executing the action code chunk matching the rule currently being reduced.\n *\n *               - `yysp`    : the current state stack position (a.k.a. 'stack pointer')\n *\n *                 This one comes in handy when you are going to do advanced things to the parser\n *                 stacks, all of which are accessible from your action code (see the next entries below).\n *\n *                 Also note that you can access this and other stack index values using the new double-hash\n *                 syntax, i.e. `##$ === ##0 === yysp`, while `##1` is the stack index for all things\n *                 related to the first rule term, just like you have `$1`, `@1` and `#1`.\n *                 This is made available to write very advanced grammar action rules, e.g. when you want\n *                 to investigate the parse state stack in your action code, which would, for example,\n *                 be relevant when you wish to implement error diagnostics and reporting schemes similar\n *                 to the work described here:\n *\n *                 + Pottier, F., 2016. Reachability and error diagnosis in LR(1) automata.\n *                   In Journ\xE9es Francophones des Languages Applicatifs.\n *\n *                 + Jeffery, C.L., 2003. Generating LR syntax error messages from examples.\n *                   ACM Transactions on Programming Languages and Systems (TOPLAS), 25(5), pp.631\u2013640.\n *\n *               - `yyrulelength`: the current rule's term count, i.e. the number of entries occupied on the stack.\n *\n *                 This one comes in handy when you are going to do advanced things to the parser\n *                 stacks, all of which are accessible from your action code (see the next entries below).\n *\n *               - `yyvstack`: reference to the parser value stack. Also accessed via the `$1` etc.\n *                             constructs.\n *\n *               - `yylstack`: reference to the parser token location stack. Also accessed via\n *                             the `@1` etc. constructs.\n *\n *                             WARNING: since jison 0.4.18-186 this array MAY contain slots which are\n *                             UNDEFINED rather than an empty (location) object, when the lexer/parser\n *                             action code did not provide a suitable location info object when such a\n *                             slot was filled!\n *\n *               - `yystack` : reference to the parser token id stack. Also accessed via the\n *                             `#1` etc. constructs.\n *\n *                 Note: this is a bit of a **white lie** as we can statically decode any `#n` reference to\n *                 its numeric token id value, hence that code wouldn't need the `yystack` but *you* might\n *                 want access this array for your own purposes, such as error analysis as mentioned above!\n *\n *                 Note that this stack stores the current stack of *tokens*, that is the sequence of\n *                 already parsed=reduced *nonterminals* (tokens representing rules) and *terminals*\n *                 (lexer tokens *shifted* onto the stack until the rule they belong to is found and\n *                 *reduced*.\n *\n *               - `yysstack`: reference to the parser state stack. This one carries the internal parser\n *                             *states* such as the one in `yystate`, which are used to represent\n *                             the parser state machine in the *parse table*. *Very* *internal* stuff,\n *                             what can I say? If you access this one, you're clearly doing wicked things\n *\n *               - `...`     : the extra arguments you specified in the `%parse-param` statement in your\n *                             grammar definition file.\n *\n *    table: [...],\n *               State transition table\n *               ----------------------\n *\n *               index levels are:\n *               - `state`  --> hash table\n *               - `symbol` --> action (number or array)\n *\n *                 If the `action` is an array, these are the elements' meaning:\n *                 - index [0]: 1 = shift, 2 = reduce, 3 = accept\n *                 - index [1]: GOTO `state`\n *\n *                 If the `action` is a number, it is the GOTO `state`\n *\n *    defaultActions: {...},\n *\n *    parseError: function(str, hash, ExceptionClass),\n *    yyError: function(str, ...),\n *    yyRecovering: function(),\n *    yyErrOk: function(),\n *    yyClearIn: function(),\n *\n *    constructParseErrorInfo: function(error_message, exception_object, expected_token_set, is_recoverable),\n *               Helper function **which will be set up during the first invocation of the `parse()` method**.\n *               Produces a new errorInfo 'hash object' which can be passed into `parseError()`.\n *               See it's use in this parser kernel in many places; example usage:\n *\n *                   var infoObj = parser.constructParseErrorInfo('fail!', null,\n *                                     parser.collect_expected_token_set(state), true);\n *                   var retVal = parser.parseError(infoObj.errStr, infoObj, parser.JisonParserError);\n *\n *    originalParseError: function(str, hash, ExceptionClass),\n *               The basic `parseError` handler provided by JISON.\n *               `cleanupAfterParse()` will clean up and reset `parseError()` to reference this function\n *               at the end of the `parse()`.\n *\n *    options: { ... parser %options ... },\n *\n *    parse: function(input[, args...]),\n *               Parse the given `input` and return the parsed value (or `true` when none was provided by\n *               the root action, in which case the parser is acting as a *matcher*).\n *               You MAY use the additional `args...` parameters as per `%parse-param` spec of this grammar:\n *               these extra `args...` are added verbatim to the `yy` object reference as member variables.\n *\n *               WARNING:\n *               Parser's additional `args...` parameters (via `%parse-param`) MAY conflict with\n *               any attributes already added to `yy` by the jison run-time;\n *               when such a collision is detected an exception is thrown to prevent the generated run-time\n *               from silently accepting this confusing and potentially hazardous situation!\n *\n *               The lexer MAY add its own set of additional parameters (via the `%parse-param` line in\n *               the lexer section of the grammar spec): these will be inserted in the `yy` shared state\n *               object and any collision with those will be reported by the lexer via a thrown exception.\n *\n *    cleanupAfterParse: function(resultValue, invoke_post_methods, do_not_nuke_errorinfos),\n *               Helper function **which will be set up during the first invocation of the `parse()` method**.\n *               This helper API is invoked at the end of the `parse()` call, unless an exception was thrown\n *               and `%options no-try-catch` has been defined for this grammar: in that case this helper MAY\n *               be invoked by calling user code to ensure the `post_parse` callbacks are invoked and\n *               the internal parser gets properly garbage collected under these particular circumstances.\n *\n *    yyMergeLocationInfo: function(first_index, last_index, first_yylloc, last_yylloc, dont_look_back),\n *               Helper function **which will be set up during the first invocation of the `parse()` method**.\n *               This helper API can be invoked to calculate a spanning `yylloc` location info object.\n *\n *               Note: %epsilon rules MAY specify no `first_index` and `first_yylloc`, in which case\n *               this function will attempt to obtain a suitable location marker by inspecting the location stack\n *               backwards.\n *\n *               For more info see the documentation comment further below, immediately above this function's\n *               implementation.\n *\n *    lexer: {\n *        yy: {...},           A reference to the so-called \"shared state\" `yy` once\n *                             received via a call to the `.setInput(input, yy)` lexer API.\n *        EOF: 1,\n *        ERROR: 2,\n *        JisonLexerError: function(msg, hash),\n *        parseError: function(str, hash, ExceptionClass),\n *        setInput: function(input, [yy]),\n *        input: function(),\n *        unput: function(str),\n *        more: function(),\n *        reject: function(),\n *        less: function(n),\n *        pastInput: function(n),\n *        upcomingInput: function(n),\n *        showPosition: function(),\n *        test_match: function(regex_match_array, rule_index, ...),\n *        next: function(...),\n *        lex: function(...),\n *        begin: function(condition),\n *        pushState: function(condition),\n *        popState: function(),\n *        topState: function(),\n *        _currentRules: function(),\n *        stateStackSize: function(),\n *        cleanupAfterLex: function()\n *\n *        options: { ... lexer %options ... },\n *\n *        performAction: function(yy, yy_, $avoiding_name_collisions, YY_START, ...),\n *        rules: [...],\n *        conditions: {associative list: name ==> set},\n *    }\n *  }\n *\n *\n *  token location info (@$, _$, etc.): {\n *    first_line: n,\n *    last_line: n,\n *    first_column: n,\n *    last_column: n,\n *    range: [start_number, end_number]\n *               (where the numbers are indexes into the input string, zero-based)\n *  }\n *\n * ---\n *\n * The `parseError` function receives a 'hash' object with these members for lexer and\n * parser errors:\n *\n *  {\n *    text:        (matched text)\n *    token:       (the produced terminal token, if any)\n *    token_id:    (the produced terminal token numeric ID, if any)\n *    line:        (yylineno)\n *    loc:         (yylloc)\n *  }\n *\n * parser (grammar) errors will also provide these additional members:\n *\n *  {\n *    expected:    (array describing the set of expected tokens;\n *                  may be UNDEFINED when we cannot easily produce such a set)\n *    state:       (integer (or array when the table includes grammar collisions);\n *                  represents the current internal state of the parser kernel.\n *                  can, for example, be used to pass to the `collect_expected_token_set()`\n *                  API to obtain the expected token set)\n *    action:      (integer; represents the current internal action which will be executed)\n *    new_state:   (integer; represents the next/planned internal state, once the current\n *                  action has executed)\n *    recoverable: (boolean: TRUE when the parser MAY have an error recovery rule\n *                  available for this particular error)\n *    state_stack: (array: the current parser LALR/LR internal state stack; this can be used,\n *                  for instance, for advanced error analysis and reporting)\n *    value_stack: (array: the current parser LALR/LR internal `$$` value stack; this can be used,\n *                  for instance, for advanced error analysis and reporting)\n *    location_stack: (array: the current parser LALR/LR internal location stack; this can be used,\n *                  for instance, for advanced error analysis and reporting)\n *    yy:          (object: the current parser internal \"shared state\" `yy`\n *                  as is also available in the rule actions; this can be used,\n *                  for instance, for advanced error analysis and reporting)\n *    lexer:       (reference to the current lexer instance used by the parser)\n *    parser:      (reference to the current parser instance)\n *  }\n *\n * while `this` will reference the current parser instance.\n *\n * When `parseError` is invoked by the lexer, `this` will still reference the related *parser*\n * instance, while these additional `hash` fields will also be provided:\n *\n *  {\n *    lexer:       (reference to the current lexer instance which reported the error)\n *  }\n *\n * When `parseError` is invoked by the parser due to a **JavaScript exception** being fired\n * from either the parser or lexer, `this` will still reference the related *parser*\n * instance, while these additional `hash` fields will also be provided:\n *\n *  {\n *    exception:   (reference to the exception thrown)\n *  }\n *\n * Please do note that in the latter situation, the `expected` field will be omitted as\n * this type of failure is assumed not to be due to *parse errors* but rather due to user\n * action code in either parser or lexer failing unexpectedly.\n *\n * ---\n *\n * You can specify parser options by setting / modifying the `.yy` object of your Parser instance.\n * These options are available:\n *\n * ### options which are global for all parser instances\n *\n *  Parser.pre_parse: function(yy)\n *                 optional: you can specify a pre_parse() function in the chunk following\n *                 the grammar, i.e. after the last `%%`.\n *  Parser.post_parse: function(yy, retval, parseInfo) { return retval; }\n *                 optional: you can specify a post_parse() function in the chunk following\n *                 the grammar, i.e. after the last `%%`. When it does not return any value,\n *                 the parser will return the original `retval`.\n *\n * ### options which can be set up per parser instance\n *\n *  yy: {\n *      pre_parse:  function(yy)\n *                 optional: is invoked before the parse cycle starts (and before the first\n *                 invocation of `lex()`) but immediately after the invocation of\n *                 `parser.pre_parse()`).\n *      post_parse: function(yy, retval, parseInfo) { return retval; }\n *                 optional: is invoked when the parse terminates due to success ('accept')\n *                 or failure (even when exceptions are thrown).\n *                 `retval` contains the return value to be produced by `Parser.parse()`;\n *                 this function can override the return value by returning another.\n *                 When it does not return any value, the parser will return the original\n *                 `retval`.\n *                 This function is invoked immediately before `parser.post_parse()`.\n *\n *      parseError: function(str, hash, ExceptionClass)\n *                 optional: overrides the default `parseError` function.\n *      quoteName: function(name),\n *                 optional: overrides the default `quoteName` function.\n *  }\n *\n *  parser.lexer.options: {\n *      pre_lex:  function()\n *                 optional: is invoked before the lexer is invoked to produce another token.\n *                 `this` refers to the Lexer object.\n *      post_lex: function(token) { return token; }\n *                 optional: is invoked when the lexer has produced a token `token`;\n *                 this function can override the returned token value by returning another.\n *                 When it does not return any (truthy) value, the lexer will return\n *                 the original `token`.\n *                 `this` refers to the Lexer object.\n *\n *      ranges: boolean\n *                 optional: `true` ==> token location info will include a .range[] member.\n *      flex: boolean\n *                 optional: `true` ==> flex-like lexing behaviour where the rules are tested\n *                 exhaustively to find the longest match.\n *      backtrack_lexer: boolean\n *                 optional: `true` ==> lexer regexes are tested in order and for invoked;\n *                 the lexer terminates the scan when a token is returned by the action code.\n *      xregexp: boolean\n *                 optional: `true` ==> lexer rule regexes are \"extended regex format\" requiring the\n *                 `XRegExp` library. When this `%option` has not been specified at compile time, all lexer\n *                 rule regexes have been written as standard JavaScript RegExp expressions.\n *  }\n */\n");
+    var out = "\n/* parser generated by jison ".concat(version$2, " */\n\n/*\n * Returns a Parser object of the following structure:\n *\n *  Parser: {\n *    yy: {}     The so-called \"shared state\" or rather the *source* of it;\n *               the real \"shared state\" `yy` passed around to\n *               the rule actions, etc. is a derivative/copy of this one,\n *               not a direct reference!\n *  }\n *\n *  Parser.prototype: {\n *    yy: {},\n *    EOF: 1,\n *    TERROR: 2,\n *\n *    trace: function(errorMessage, ...),\n *\n *    JisonParserError: function(msg, hash),\n *\n *    quoteName: function(name),\n *               Helper function which can be overridden by user code later on: put suitable\n *               quotes around literal IDs in a description string.\n *\n *    originalQuoteName: function(name),\n *               The basic quoteName handler provided by JISON.\n *               `cleanupAfterParse()` will clean up and reset `quoteName()` to reference this function\n *               at the end of the `parse()`.\n *\n *    describeSymbol: function(symbol),\n *               Return a more-or-less human-readable description of the given symbol, when\n *               available, or the symbol itself, serving as its own 'description' for lack\n *               of something better to serve up.\n *\n *               Return NULL when the symbol is unknown to the parser.\n *\n *    symbols_: {associative list: name ==> number},\n *    terminals_: {associative list: number ==> name},\n *    nonterminals: {associative list: rule-name ==> {associative list: number ==> rule-alt}},\n *    terminal_descriptions_: (if there are any) {associative list: number ==> description},\n *    productions_: [...],\n *\n *    performAction: function parser__performAction(yytext, yyleng, yylineno, yyloc, yystate, yysp, yyvstack, yylstack, yystack, yysstack),\n *\n *               The function parameters and `this` have the following value/meaning:\n *               - `this`    : reference to the `yyval` internal object, which has members (`$` and `_$`)\n *                             to store/reference the rule value `$$` and location info `@$`.\n *\n *                 One important thing to note about `this` a.k.a. `yyval`: every *reduce* action gets\n *                 to see the same object via the `this` reference, i.e. if you wish to carry custom\n *                 data from one reduce action through to the next within a single parse run, then you\n *                 may get nasty and use `yyval` a.k.a. `this` for storing you own semi-permanent data.\n *\n *                 `this.yy` is a direct reference to the `yy` shared state object.\n *\n *                 `%parse-param`-specified additional `parse()` arguments have been added to this `yy`\n *                 object at `parse()` start and are therefore available to the action code via the\n *                 same named `yy.xxxx` attributes (where `xxxx` represents a identifier name from\n *                 the %parse-param` list.\n *\n *               - `yytext`  : reference to the lexer value which belongs to the last lexer token used\n *                             to match this rule. This is *not* the look-ahead token, but the last token\n *                             that's actually part of this rule.\n *\n *                 Formulated another way, `yytext` is the value of the token immediately preceeding\n *                 the current look-ahead token.\n *                 Caveats apply for rules which don't require look-ahead, such as epsilon rules.\n *\n *               - `yyleng`  : ditto as `yytext`, only now for the lexer.yyleng value.\n *\n *               - `yylineno`: ditto as `yytext`, only now for the lexer.yylineno value.\n *\n *               - `yyloc`   : ditto as `yytext`, only now for the lexer.yylloc lexer token location info.\n *\n *                               WARNING: since jison 0.4.18-186 this entry may be NULL/UNDEFINED instead\n *                               of an empty object when no suitable location info can be provided.\n *\n *               - `yystate` : the current parser state number, used internally for dispatching and\n *                               executing the action code chunk matching the rule currently being reduced.\n *\n *               - `yysp`    : the current state stack position (a.k.a. 'stack pointer')\n *\n *                 This one comes in handy when you are going to do advanced things to the parser\n *                 stacks, all of which are accessible from your action code (see the next entries below).\n *\n *                 Also note that you can access this and other stack index values using the new double-hash\n *                 syntax, i.e. `##$ === ##0 === yysp`, while `##1` is the stack index for all things\n *                 related to the first rule term, just like you have `$1`, `@1` and `#1`.\n *                 This is made available to write very advanced grammar action rules, e.g. when you want\n *                 to investigate the parse state stack in your action code, which would, for example,\n *                 be relevant when you wish to implement error diagnostics and reporting schemes similar\n *                 to the work described here:\n *\n *                 + Pottier, F., 2016. Reachability and error diagnosis in LR(1) automata.\n *                   In Journ\xE9es Francophones des Languages Applicatifs.\n *\n *                 + Jeffery, C.L., 2003. Generating LR syntax error messages from examples.\n *                   ACM Transactions on Programming Languages and Systems (TOPLAS), 25(5), pp.631\u2013640.\n *\n *               - `yyrulelength`: the current rule's term count, i.e. the number of entries occupied on the stack.\n *\n *                 This one comes in handy when you are going to do advanced things to the parser\n *                 stacks, all of which are accessible from your action code (see the next entries below).\n *\n *               - `yyvstack`: reference to the parser value stack. Also accessed via the `$1` etc.\n *                             constructs.\n *\n *               - `yylstack`: reference to the parser token location stack. Also accessed via\n *                             the `@1` etc. constructs.\n *\n *                             WARNING: since jison 0.4.18-186 this array MAY contain slots which are\n *                             UNDEFINED rather than an empty (location) object, when the lexer/parser\n *                             action code did not provide a suitable location info object when such a\n *                             slot was filled!\n *\n *               - `yystack` : reference to the parser token id stack. Also accessed via the\n *                             `#1` etc. constructs.\n *\n *                 Note: this is a bit of a **white lie** as we can statically decode any `#n` reference to\n *                 its numeric token id value, hence that code wouldn't need the `yystack` but *you* might\n *                 want access this array for your own purposes, such as error analysis as mentioned above!\n *\n *                 Note that this stack stores the current stack of *tokens*, that is the sequence of\n *                 already parsed=reduced *nonterminals* (tokens representing rules) and *terminals*\n *                 (lexer tokens *shifted* onto the stack until the rule they belong to is found and\n *                 *reduced*.\n *\n *               - `yysstack`: reference to the parser state stack. This one carries the internal parser\n *                             *states* such as the one in `yystate`, which are used to represent\n *                             the parser state machine in the *parse table*. *Very* *internal* stuff,\n *                             what can I say? If you access this one, you're clearly doing wicked things\n *\n *               - `...`     : the extra arguments you specified in the `%parse-param` statement in your\n *                             grammar definition file.\n *\n *    table: [...],\n *               State transition table\n *               ----------------------\n *\n *               index levels are:\n *               - `state`  --> hash table\n *               - `symbol` --> action (number or array)\n *\n *                 If the `action` is an array, these are the elements' meaning:\n *                 - index [0]: 1 = shift, 2 = reduce, 3 = accept\n *                 - index [1]: GOTO `state`\n *\n *                 If the `action` is a number, it is the GOTO `state`\n *\n *    defaultActions: {...},\n *\n *    parseError: function(str, hash, ExceptionClass),\n *    yyError: function(str, ...),\n *    yyRecovering: function(),\n *    yyErrOk: function(),\n *    yyClearIn: function(),\n *\n *    constructParseErrorInfo: function(error_message, exception_object, expected_token_set, is_recoverable),\n *               Helper function **which will be set up during the first invocation of the `parse()` method**.\n *               Produces a new errorInfo 'hash object' which can be passed into `parseError()`.\n *               See it's use in this parser kernel in many places; example usage:\n *\n *                   var infoObj = parser.constructParseErrorInfo('fail!', null,\n *                                     parser.collect_expected_token_set(state), true);\n *                   var retVal = parser.parseError(infoObj.errStr, infoObj, parser.JisonParserError);\n *\n *    originalParseError: function(str, hash, ExceptionClass),\n *               The basic `parseError` handler provided by JISON.\n *               `cleanupAfterParse()` will clean up and reset `parseError()` to reference this function\n *               at the end of the `parse()`.\n *\n *    options: { ... parser %options ... },\n *\n *    parse: function(input[, args...]),\n *               Parse the given `input` and return the parsed value (or `true` when none was provided by\n *               the root action, in which case the parser is acting as a *matcher*).\n *               You MAY use the additional `args...` parameters as per `%parse-param` spec of this grammar:\n *               these extra `args...` are added verbatim to the `yy` object reference as member variables.\n *\n *               WARNING:\n *               Parser's additional `args...` parameters (via `%parse-param`) MAY conflict with\n *               any attributes already added to `yy` by the jison run-time;\n *               when such a collision is detected an exception is thrown to prevent the generated run-time\n *               from silently accepting this confusing and potentially hazardous situation!\n *\n *               The lexer MAY add its own set of additional parameters (via the `%parse-param` line in\n *               the lexer section of the grammar spec): these will be inserted in the `yy` shared state\n *               object and any collision with those will be reported by the lexer via a thrown exception.\n *\n *    cleanupAfterParse: function(resultValue, invoke_post_methods, do_not_nuke_errorinfos),\n *               Helper function **which will be set up during the first invocation of the `parse()` method**.\n *               This helper API is invoked at the end of the `parse()` call, unless an exception was thrown\n *               and `%options no-try-catch` has been defined for this grammar: in that case this helper MAY\n *               be invoked by calling user code to ensure the `post_parse` callbacks are invoked and\n *               the internal parser gets properly garbage collected under these particular circumstances.\n *\n *    yyMergeLocationInfo: function(first_index, last_index, first_yylloc, last_yylloc, dont_look_back),\n *               Helper function **which will be set up during the first invocation of the `parse()` method**.\n *               This helper API can be invoked to calculate a spanning `yylloc` location info object.\n *\n *               Note: %epsilon rules MAY specify no `first_index` and `first_yylloc`, in which case\n *               this function will attempt to obtain a suitable location marker by inspecting the location stack\n *               backwards.\n *\n *               For more info see the documentation comment further below, immediately above this function's\n *               implementation.\n *\n *    lexer: {\n *        yy: {...},           A reference to the so-called \"shared state\" `yy` once\n *                             received via a call to the `.setInput(input, yy)` lexer API.\n *        EOF: 1,\n *        ERROR: 2,\n *        JisonLexerError: function(msg, hash),\n *        parseError: function(str, hash, ExceptionClass),\n *        setInput: function(input, [yy]),\n *        input: function(),\n *        unput: function(str),\n *        more: function(),\n *        reject: function(),\n *        less: function(n),\n *        pastInput: function(n),\n *        upcomingInput: function(n),\n *        showPosition: function(),\n *        test_match: function(regex_match_array, rule_index, ...),\n *        next: function(...),\n *        lex: function(...),\n *        begin: function(condition),\n *        pushState: function(condition),\n *        popState: function(),\n *        topState: function(),\n *        _currentRules: function(),\n *        stateStackSize: function(),\n *        cleanupAfterLex: function()\n *\n *        options: { ... lexer %options ... },\n *\n *        performAction: function(yy, yy_, $avoiding_name_collisions, YY_START, ...),\n *        rules: [...],\n *        conditions: {associative list: name ==> set},\n *    }\n *  }\n *\n *\n *  token location info (@$, _$, etc.): {\n *    first_line: n,\n *    last_line: n,\n *    first_column: n,\n *    last_column: n,\n *    range: [start_number, end_number]\n *               (where the numbers are indexes into the input string, zero-based)\n *  }\n *\n * ---\n *\n * The `parseError` function receives a 'hash' object with these members for lexer and\n * parser errors:\n *\n *  {\n *    text:        (matched text)\n *    token:       (the produced terminal token, if any)\n *    token_id:    (the produced terminal token numeric ID, if any)\n *    line:        (yylineno)\n *    loc:         (yylloc)\n *  }\n *\n * parser (grammar) errors will also provide these additional members:\n *\n *  {\n *    expected:    (array describing the set of expected tokens;\n *                  may be UNDEFINED when we cannot easily produce such a set)\n *    state:       (integer (or array when the table includes grammar collisions);\n *                  represents the current internal state of the parser kernel.\n *                  can, for example, be used to pass to the `collect_expected_token_set()`\n *                  API to obtain the expected token set)\n *    action:      (integer; represents the current internal action which will be executed)\n *    new_state:   (integer; represents the next/planned internal state, once the current\n *                  action has executed)\n *    recoverable: (boolean: TRUE when the parser MAY have an error recovery rule\n *                  available for this particular error)\n *    state_stack: (array: the current parser LALR/LR internal state stack; this can be used,\n *                  for instance, for advanced error analysis and reporting)\n *    value_stack: (array: the current parser LALR/LR internal `$$` value stack; this can be used,\n *                  for instance, for advanced error analysis and reporting)\n *    location_stack: (array: the current parser LALR/LR internal location stack; this can be used,\n *                  for instance, for advanced error analysis and reporting)\n *    yy:          (object: the current parser internal \"shared state\" `yy`\n *                  as is also available in the rule actions; this can be used,\n *                  for instance, for advanced error analysis and reporting)\n *    lexer:       (reference to the current lexer instance used by the parser)\n *    parser:      (reference to the current parser instance)\n *  }\n *\n * while `this` will reference the current parser instance.\n *\n * When `parseError` is invoked by the lexer, `this` will still reference the related *parser*\n * instance, while these additional `hash` fields will also be provided:\n *\n *  {\n *    lexer:       (reference to the current lexer instance which reported the error)\n *  }\n *\n * When `parseError` is invoked by the parser due to a **JavaScript exception** being fired\n * from either the parser or lexer, `this` will still reference the related *parser*\n * instance, while these additional `hash` fields will also be provided:\n *\n *  {\n *    exception:   (reference to the exception thrown)\n *  }\n *\n * Please do note that in the latter situation, the `expected` field will be omitted as\n * this type of failure is assumed not to be due to *parse errors* but rather due to user\n * action code in either parser or lexer failing unexpectedly.\n *\n * ---\n *\n * You can specify parser options by setting / modifying the `.yy` object of your Parser instance.\n * These options are available:\n *\n * ### options which are global for all parser instances\n *\n *  Parser.pre_parse: function(yy)\n *                 optional: you can specify a pre_parse() function in the chunk following\n *                 the grammar, i.e. after the last `%%`.\n *  Parser.post_parse: function(yy, retval, parseInfo) { return retval; }\n *                 optional: you can specify a post_parse() function in the chunk following\n *                 the grammar, i.e. after the last `%%`. When it does not return any value,\n *                 the parser will return the original `retval`.\n *\n * ### options which can be set up per parser instance\n *\n *  yy: {\n *      pre_parse:  function(yy)\n *                 optional: is invoked before the parse cycle starts (and before the first\n *                 invocation of `lex()`) but immediately after the invocation of\n *                 `parser.pre_parse()`).\n *      post_parse: function(yy, retval, parseInfo) { return retval; }\n *                 optional: is invoked when the parse terminates due to success ('accept')\n *                 or failure (even when exceptions are thrown).\n *                 `retval` contains the return value to be produced by `Parser.parse()`;\n *                 this function can override the return value by returning another.\n *                 When it does not return any value, the parser will return the original\n *                 `retval`.\n *                 This function is invoked immediately before `parser.post_parse()`.\n *\n *      parseError: function(str, hash, ExceptionClass)\n *                 optional: overrides the default `parseError` function.\n *      quoteName: function(name),\n *                 optional: overrides the default `quoteName` function.\n *  }\n *\n *  parser.lexer.options: {\n *      pre_lex:  function()\n *                 optional: is invoked before the lexer is invoked to produce another token.\n *                 `this` refers to the Lexer object.\n *      post_lex: function(token) { return token; }\n *                 optional: is invoked when the lexer has produced a token `token`;\n *                 this function can override the returned token value by returning another.\n *                 When it does not return any (truthy) value, the lexer will return\n *                 the original `token`.\n *                 `this` refers to the Lexer object.\n *\n *      ranges: boolean\n *                 optional: `true` ==> token location info will include a .range[] member.\n *      flex: boolean\n *                 optional: `true` ==> flex-like lexing behaviour where the rules are tested\n *                 exhaustively to find the longest match.\n *      backtrack_lexer: boolean                                                                   (\u214F \uC13C \u214A \u2056 \u2058 \u2059 \u205A \u205B \u205C \u205D \u205E \u2020 \u2021 \n a\u2BC8b\n        \u2200   \u2201   \u2202   \u2203   \u2204   \u2205   \u2206   \u2207   \u2208   \u2209   \u220A   \u220B   \u220C   \u220D   \u220E   \u220F\nU+221x  \u2210   \u2211   \u2212   \u2213   \u2214   \u2215   \u2216   \u2217   \u2218   \u2219   \u221A   \u221B   \u221C   \u221D   \u221E   \u221F\nU+222x  \u2220   \u2221   \u2222   \u2223   \u2224   \u2225   \u2226   \u2227   \u2228   \u2229   \u222A   \u222B   \u222C   \u222D   \u222E   \u222F\nU+223x  \u2230   \u2231   \u2232   \u2233   \u2234   \u2235   \u2236   \u2237   \u2238   \u2239   \u223A   \u223B   \u223C   \u223D   \u223E   \u223F\nU+224x  \u2240   \u2241   \u2242   \u2243   \u2244   \u2245   \u2246   \u2247   \u2248   \u2249   \u224A   \u224B   \u224C   \u224D   \u224E   \u224F\nU+225x  \u2250   \u2251   \u2252   \u2253   \u2254   \u2255   \u2256   \u2257   \u2258   \u2259   \u225A   \u225B   \u225C   \u225D   \u225E   \u225F\nU+226x  \u2260   \u2261   \u2262   \u2263   \u2264   \u2265   \u2266   \u2267   \u2268   \u2269   \u226A   \u226B   \u226C   \u226D   \u226E   \u226F\nU+227x  \u2270   \u2271   \u2272   \u2273   \u2274   \u2275   \u2276   \u2277   \u2278   \u2279   \u227A   \u227B   \u227C   \u227D   \u227E   \u227F\nU+228x  \u2280   \u2281   \u2282   \u2283   \u2284   \u2285   \u2286   \u2287   \u2288   \u2289   \u228A   \u228B   \u228C   \u228D   \u228E   \u228F\nU+229x  \u2290   \u2291   \u2292   \u2293   \u2294   \u2295   \u2296   \u2297   \u2298   \u2299   \u229A   \u229B   \u229C   \u229D   \u229E   \u229F\nU+22Ax  \u22A0   \u22A1   \u22A2   \u22A3   \u22A4   \u22A5   \u22A6   \u22A7   \u22A8   \u22A9   \u22AA   \u22AB   \u22AC   \u22AD   \u22AE   \u22AF\nU+22Bx  \u22B0   \u22B1   \u22B2   \u22B3   \u22B4   \u22B5   \u22B6   \u22B7   \u22B8   \u22B9   \u22BA   \u22BB   \u22BC   \u22BD   \u22BE   \u22BF\nU+22Cx  \u22C0   \u22C1   \u22C2   \u22C3   \u22C4   \u22C5   \u22C6   \u22C7   \u22C8   \u22C9   \u22CA   \u22CB   \u22CC   \u22CD   \u22CE   \u22CF\nU+22Dx  \u22D0   \u22D1   \u22D2   \u22D3   \u22D4   \u22D5   \u22D6   \u22D7   \u22D8   \u22D9   \u22DA   \u22DB   \u22DC   \u22DD   \u22DE   \u22DF\nU+22Ex  \u22E0   \u22E1   \u22E2   \u22E3   \u22E4   \u22E5   \u22E6   \u22E7   \u22E8   \u22E9   \u22EA   \u22EB   \u22EC   \u22ED   \u22EE   \u22EF\nU+22Fx  \u22F0   \u22F1   \u22F2   \u22F3   \u22F4   \u22F5   \u22F6   \u22F7   \u22F8   \u22F9   \u22FA   \u22FB   \u22FC   \u22FD   \u22FE   \u22FF)\nU+230x  \u2300   \u2301   \u2302   \u2303   \u2304   \u2305   \u2306   \u2307   \u2308   \u2309   \u230A   \u230B   \u230C   \u230D   \u230E   \u230F\nU+231x  \u2310   \u2311   \u2312   \u2313   \u2314   \u2315   \u2316   \u2317   \u2318   \u2319   \u231A   \u231B   \u231C   \u231D   \u231E   \u231F\nU+232x  \u2320   \u2321   \u2322   \u2323   \u2324   \u2325   \u2326   \u2327   \u2328   \u2329   \u232A   \u232B   \u232C   \u232D   \u232E   \u232F\nU+233x  \u2330   \u2331   \u2332   \u2333   \u2334   \u2335   \u2336   \u2337   \u2338   \u2339   \u233A   \u233B   \u233C   \u233D   \u233E   \u233F\nU+234x  \u2340   \u2341   \u2342   \u2343   \u2344   \u2345   \u2346   \u2347   \u2348   \u2349   \u234A   \u234B   \u234C   \u234D   \u234E   \u234F\nU+235x  \u2350   \u2351   \u2352   \u2353   \u2354   \u2355   \u2356   \u2357   \u2358   \u2359   \u235A   \u235B   \u235C   \u235D   \u235E   \u235F\nU+236x  \u2360   \u2361   \u2362   \u2363   \u2364   \u2365   \u2366   \u2367   \u2368   \u2369   \u236A   \u236B   \u236C   \u236D   \u236E   \u236F\nU+237x  \u2370   \u2371   \u2372   \u2373   \u2374   \u2375   \u2376   \u2377   \u2378   \u2379   \u237A   \u237B   \u237C   \u237D   \u237E   \u237F\nU+238x  \u2380   \u2381   \u2382   \u2383   \u2384   \u2385   \u2386   \u2387   \u2388   \u2389   \u238A   \u238B   \u238C   \u238D   \u238E   \u238F\nU+239x  \u2390   \u2391   \u2392   \u2393   \u2394   \u2395   \u2396   \u2397   \u2398   \u2399   \u239A   \u239B   \u239C   \u239D   \u239E   \u239F\nU+23Ax  \u23A0   \u23A1   \u23A2   \u23A3   \u23A4   \u23A5   \u23A6   \u23A7   \u23A8   \u23A9   \u23AA   \u23AB   \u23AC   \u23AD   \u23AE   \u23AF\nU+23Bx  \u23B0   \u23B1   \u23B2   \u23B3   \u23B4   \u23B5   \u23B6   \u23B7   \u23B8   \u23B9   \u23BA   \u23BB   \u23BC   \u23BD   \u23BE   \u23BF\nU+23Cx  \u23C0   \u23C1   \u23C2   \u23C3   \u23C4   \u23C5   \u23C6   \u23C7   \u23C8   \u23C9   \u23CA   \u23CB   \u23CC   \u23CD   \u23CE   \u23CF\nU+23Dx  \u23D0   \u23D1   \u23D2   \u23D3   \u23D4   \u23D5   \u23D6   \u23D7   \u23D8   \u23D9   \u23DA   \u23DB   \u23DC   \u23DD   \u23DE   \u23DF\nU+23Ex  \u23E0   \u23E1   \u23E2   \u23E3   \u23E4   \u23E5   \u23E6   \u23E7   \u23E8   \u23E9   \u23EA   \u23EB   \u23EC   \u23ED   \u23EE   \u23EF\nU+23Fx  \u23F0   \u23F1   \u23F2   \u23F3   \u23F4   \u23F5   \u23F6   \u23F7   \u23F8   \u23F9   \u23FA   \u23FB   \u23FC   \u23FD   \u23FE   \u23FF\n\nU+260x  \u2600   \u2601   \u2602   \u2603   \u2604   \u2605   \u2606   \u2607   \u2608   \u2609   \u260A   \u260B   \u260C   \u260D   \u260E   \u260F\nU+261x  \u2610   \u2611   \u2612   \u2613   \u2614   \u2615   \u2616   \u2617   \u2618   \u2619   \u261A   \u261B   \u261C   \u261D   \u261E   \u261F\nU+262x  \u2620   \u2621   \u2622   \u2623   \u2624   \u2625   \u2626   \u2627   \u2628   \u2629   \u262A   \u262B   \u262C   \u262D   \u262E   \u262F\nU+263x  \u2630   \u2631   \u2632   \u2633   \u2634   \u2635   \u2636   \u2637   \u2638   \u2639   \u263A   \u263B   \u263C   \u263D   \u263E   \u263F\nU+264x  \u2640   \u2641   \u2642   \u2643   \u2644   \u2645   \u2646   \u2647   \u2648   \u2649   \u264A   \u264B   \u264C   \u264D   \u264E   \u264F\nU+265x  \u2650   \u2651   \u2652   \u2653   \u2654   \u2655   \u2656   \u2657   \u2658   \u2659   \u265A   \u265B   \u265C   \u265D   \u265E   \u265F\nU+266x  \u2660   \u2661   \u2662   \u2663   \u2664   \u2665   \u2666   \u2667   \u2668   \u2669   \u266A   \u266B   \u266C   \u266D   \u266E   \u266F\nU+267x  \u2670   \u2671   \u2672   \u2673   \u2674   \u2675   \u2676   \u2677   \u2678   \u2679   \u267A   \u267B   \u267C   \u267D   \u267E   \u267F\nU+268x  \u2680   \u2681   \u2682   \u2683   \u2684   \u2685   \u2686   \u2687   \u2688   \u2689   \u268A   \u268B   \u268C   \u268D   \u268E   \u268F\nU+269x  \u2690   \u2691   \u2692   \u2693   \u2694   \u2695   \u2696   \u2697   \u2698   \u2699   \u269A   \u269B   \u269C   \u269D   \u269E   \u269F\nU+26Ax  \u26A0   \u26A1   \u26A2   \u26A3   \u26A4   \u26A5   \u26A6   \u26A7   \u26A8   \u26A9   \u26AA   \u26AB   \u26AC   \u26AD   \u26AE   \u26AF\nU+26Bx  \u26B0   \u26B1   \u26B2   \u26B3   \u26B4   \u26B5   \u26B6   \u26B7   \u26B8   \u26B9   \u26BA   \u26BB   \u26BC   \u26BD   \u26BE   \u26BF\nU+26Cx  \u26C0   \u26C1   \u26C2   \u26C3   \u26C4   \u26C5   \u26C6   \u26C7   \u26C8   \u26C9   \u26CA   \u26CB   \u26CC   \u26CD   \u26CE   \u26CF\nU+26Dx  \u26D0   \u26D1   \u26D2   \u26D3   \u26D4   \u26D5   \u26D6   \u26D7   \u26D8   \u26D9   \u26DA   \u26DB   \u26DC   \u26DD   \u26DE   \u26DF\nU+26Ex  \u26E0   \u26E1   \u26E2   \u26E3   \u26E4   \u26E5   \u26E6   \u26E7   \u26E8   \u26E9   \u26EA   \u26EB   \u26EC   \u26ED   \u26EE   \u26EF\nU+26Fx  \u26F0   \u26F1   \u26F2   \u26F3   \u26F4   \u26F5   \u26F6   \u26F7   \u26F8   \u26F9   \u26FA   \u26FB   \u26FC   \u26FD   \u26FE   \u26FF\n\n    \u2701   \u2702   \u2703   \u2704   \u2705   \u2706   \u2707   \u2708   \u2709   \u261B   \u261E   \u270C   \u270D   \u270E   \u270F\n\u2710   \u2711   \u2712   \u2713   \u2714   \u2715   \u2716   \u2717   \u2718   \u2719   \u271A   \u271B   \u271C   \u271D   \u271E   \u271F\n\u2720   \u2721   \u2722   \u2723   \u2724   \u2725   \u2726   \u2727   \u2605   \u2729   \u272A   \u272B   \u272C   \u272D   \u272E   \u272F\n\u2730   \u2731   \u2732   \u2733   \u2734   \u2735   \u2736   \u2737   \u2738   \u2739   \u273A   \u273B   \u273C   \u273D   \u273E   \u273F\n\u2740   \u2741   \u2742   \u2743   \u2744   \u2745   \u2746   \u2747   \u2748   \u2749   \u274A   \u274B   \u25CF   \u274D   \u25A0   \u274F\n\u263A   \u263B   \u2665   \u2666   \u2663   \u2660   \u2022   \u25D8   \u25CB   \u2750   \u2751   \u2752   \u25B2   \u25BC   \u25C6   \u2756\n\u25D7   \u2758   \u2759   \u275A   \u275B   \u275C   \u275D   \u275E    \n\nU+270x  \u2700   \u2701   \u2702   \u2703   \u2704   \u2705   \u2706   \u2707   \u2708   \u2709   \u270A   \u270B   \u270C   \u270D   \u270E   \u270F\nU+271x  \u2710   \u2711   \u2712   \u2713   \u2714   \u2715   \u2716   \u2717   \u2718   \u2719   \u271A   \u271B   \u271C   \u271D   \u271E   \u271F\nU+272x  \u2720   \u2721   \u2722   \u2723   a\u2724b   a\u2725b   a\u2726b   a\u2727b   \u2728   \u2729   \u272A   \u272B   \u272C   \u272D   \u272E   \u272F\nU+273x  \u2730   \u2731   \u2732   \u2733   \u2734   \u2735   \u2736   \u2737   \u2738   \u2739   \u273A   \u273B   \u273C   \u273D   \u273E   \u273F\nU+274x  \u2740   \u2741   \u2742   \u2743   \u2744   \u2745   \u2746   \u2747   \u2748   \u2749   \u274A   \u274B   \u274C   \u274D   \u274E   \u274F\nU+275x  \u2750   \u2751   \u2752   \u2753   \u2754   \u2755   \u2756   \u2757   \u2758   \u2759   \u275A   \u275B   \u275C   \u275D   \u275E   \u275F\nU+276x  \u2760   \u2761   \u2762   \u2763   \u2764   \u2765   \u2766   \u2767   \u2768   \u2769   \u276A   \u276B   \u276C   \u276D   \u276E   a\u276Fb\nU+277x  \u2770   \u2771   \u2772   \u2773   \u2774   \u2775   \u2776   \u2777   \u2778   \u2779   \u277A   \u277B   \u277C   \u277D   \u277E   \u277F\nU+278x  \u2780   \u2781   \u2782   \u2783   \u2784   \u2785   \u2786   \u2787   \u2788   \u2789   \u278A   \u278B   \u278C   \u278D   \u278E   \u278F\nU+279x  \u2790   \u2791   \u2792   \u2793   \u2794   \u2795   \u2796   \u2797   \u2798   \u2799   \u279A   \u279B   \u279C   \u279D   \u279E   \u279F\nU+27Ax  \u27A0   \u27A1   \u27A2   \u27A3   \u27A4   \u27A5   \u27A6   \u27A7   a\u27A8b   \u27A9   \u27AA   \u27AB   \u27AC   \u27AD   \u27AE   \u27AF\nU+27Bx  \u27B0   a\u27B1b   \u27B2   \u27B3   \u27B4   \u27B5   \u27B6   \u27B7   \u27B8   \u27B9   \u27BA   \u27BB   \u27BC   \u27BD   \u27BE   \u27BF\n\nU+2580  \u2580   Upper half block\nU+2581  \u2581   Lower one eighth block\nU+2582  \u2582   Lower one quarter block\nU+2583  \u2583   Lower three eighths block\nU+2584  \u2584   Lower half block\nU+2585  \u2585   Lower five eighths block\nU+2586  \u2586   Lower three quarters block\nU+2587  \u2587   Lower seven eighths block\nU+2588  \u2588   Full block\nU+2589  \u2589   Left seven eighths block\nU+258A  \u258A   Left three quarters block\nU+258B  \u258B   Left five eighths block\nU+258C  \u258C   Left half block\nU+258D  \u258D   Left three eighths block\nU+258E  \u258E   Left one quarter block\nU+258F  \u258F   Left one eighth block\nU+2590  \u2590   Right half block\nU+2591  \u2591   Light shade\nU+2592  \u2592   Medium shade\nU+2593  \u2593   Dark shade\nU+2594  \u2594   Upper one eighth block\nU+2595  \u2595   Right one eighth block\nU+2596  \u2596   Quadrant lower left\nU+2597  \u2597   Quadrant lower right\nU+2598  \u2598   Quadrant upper left\nU+2599  \u2599   Quadrant upper left and lower left and lower right\nU+259A  \u259A   Quadrant upper left and lower right\nU+259B  \u259B   Quadrant upper left and upper right and lower left\nU+259C  \u259C   Quadrant upper left and upper right and lower right\nU+259D  \u259D   Quadrant upper right\nU+259E  \u259E   Quadrant upper right and lower left\nU+259F  \u259F   Quadrant upper right and lower left and lower right\nGeometric Shapes\nMain articles: Geometric Shapes (Unicode block) and Geometric Shapes Extended (Unicode block)\n[hide]Code  Glyph   Description\nU+25A0  \u25A0   Black square\nU+25A1  \u25A1   White square\nU+25A2  \u25A2   White square with rounded corners\nU+25A3  \u25A3   White square containing small black square\nU+25A4  \u25A4   Square with horizontal fill\nU+25A5  \u25A5   Square with vertical fill\nU+25A6  \u25A6   Square with orthogonal crosshatch fill\nU+25A7  \u25A7   Square with upper left to lower right fill\nU+25A8  \u25A8   Square with upper right to lower left fill\nU+25A9  \u25A9   Square with diagonal crosshatch fill\nU+25AA  \u25AA   Black small square\nU+25AB  \u25AB   White small square\nU+25AC  \u25AC   Black rectangle\nU+25AD  \u25AD   White rectangle\nU+25AE  \u25AE   Black vertical rectangle\nU+25AF  \u25AF   White vertical rectangle\nU+25B0  \u25B0   Black parallelogram\nU+25B1  \u25B1   White parallelogram\nU+25B2  \u25B2   Black up-pointing triangle\nU+25B3  \u25B3   White up-pointing triangle\nU+25B4  \u25B4   Black up-pointing small triangle\nU+25B5  \u25B5   White up-pointing small triangle\nU+25B6  \u25B6   Black right-pointing triangle\nU+25B7  \u25B7   White right-pointing triangle\nU+25B8  \u25B8   Black right-pointing small triangle\nU+25B9  \u25B9   White right-pointing small triangle\nU+25BA  \u25BA   Black right-pointing pointer\nU+25BB  \u25BB   White right-pointing pointer\nU+25BC  \u25BC   Black down-pointing triangle\nU+25BD  \u25BD   White down-pointing triangle\nU+25BE  \u25BE   Black down-pointing small triangle\nU+25BF  \u25BF   White down-pointing small triangle\nU+25C0  \u25C0   Black left-pointing triangle\nU+25C1  \u25C1   White left-pointing triangle\nU+25C2  \u25C2   Black left-pointing small triangle\nU+25C3  \u25C3   White left-pointing small triangle\nU+25C4  \u25C4   Black left-pointing pointer\nU+25C5  \u25C5   White left-pointing pointer\nU+25C6  \u25C6   Black diamond\nU+25C7  \u25C7   White diamond\nU+25C8  \u25C8   White diamond containing small black diamond\nU+25C9  \u25C9   Fisheye\nU+25CA  \u25CA   Lozenge\nU+25CB  \u25CB   White circle\nU+25CC  \u25CC   Dotted circle\nU+25CD  \u25CD   Circle with vertical fill\nU+25CE  \u25CE   Bullseye\nU+25CF  \u25CF   Black circle\nU+25D0  \u25D0   Circle with left half black\nU+25D1  \u25D1   Circle with right half black\nU+25D2  \u25D2   Circle with lower half black\nU+25D3  \u25D3   Circle with upper half black\nU+25D4  \u25D4   Circle with upper right quadrant black\nU+25D5  \u25D5   Circle with all but upper left quadrant black\nU+25D6  \u25D6   Left half circle black\nU+25D7  \u25D7   Right half black circle\nU+25D8  \u25D8   Inverse bullet\nU+25D9  \u25D9   Inverse white circle\nU+25DA  \u25DA   Upper half inverse white circle\nU+25DB  \u25DB   Lower half inverse white circle\nU+25DC  \u25DC   Upper left quadrant circular arc\nU+25DD  \u25DD   Upper right quadrant circular arc\nU+25DE  \u25DE   Lower right quadrant circular arc\nU+25DF  \u25DF   Lower left quadrant circular arc\nU+25E0  \u25E0   Upper half circle\nU+25E1  \u25E1   Lower half circle\nU+25E2  \u25E2   Black lower right triangle\nU+25E3  \u25E3   Black lower left triangle\nU+25E4  \u25E4   Black upper left triangle\nU+25E5  \u25E5   Black upper right triangle\nU+25E6  \u25E6   White bullet\nU+25E7  \u25E7   Square with left half black\nU+25E8  \u25E8   Square with right half black\nU+25E9  \u25E9   Square with upper left diagonal half black\nU+25EA  \u25EA   Square with lower right diagonal half black\nU+25EB  \u25EB   White square with vertical bisecting line\nU+25EC  \u25EC   White up-pointing triangle with dot\nU+25ED  \u25ED   Up-pointing triangle with left half black\nU+25EE  \u25EE   Up-pointing triangle with right half black\nU+25EF  \u25EF   Large circle\nU+25F0  \u25F0   White square with upper left quadrant\nU+25F1  \u25F1   White square with lower left quadrant\nU+25F2  \u25F2   White square with lower right quadrant\nU+25F3  \u25F3   White square with upper right quadrant\nU+25F4  \u25F4   White circle with upper left quadrant\nU+25F5  \u25F5   White circle with lower left quadrant\nU+25F6  \u25F6   White circle with lower right quadrant\nU+25F7  \u25F7   White circle with upper right quadrant\nU+25F8  \u25F8   Upper left triangle\nU+25F9  \u25F9   Upper right triangle\nU+25FA  \u25FA   Lower-left triangle\nU+25FB  \u25FB   White medium square\nU+25FC  \u25FC   Black medium square\nU+25FD  \u25FD   White medium small square\nU+25FE  \u25FE   Black medium small square\nU+25FF  \u25FF   Lower right triangle\n\n\n *                 optional: `true` ==> lexer regexes are tested in order and for invoked;\n *                 the lexer terminates the scan when a token is returned by the action code.\n *      xregexp: boolean\n *                 optional: `true` ==> lexer rule regexes are \"extended regex format\" requiring the\n *                 `XRegExp` library. When this `%option` has not been specified at compile time, all lexer\n *                 rule regexes have been written as standard JavaScript RegExp expressions.\n *  }\n */\n");
     return out;
   };
 
@@ -24932,12 +26331,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     if (!opt.noMain) {
       var moduleNameAsCode = String(opt.moduleMain || commonJsMain);
       var moduleImportsAsCode = String(opt.moduleMainImports || commonJsMainImports);
-      out.push(rmCommonWS$5(_templateObject151(), moduleImportsAsCode, moduleNameAsCode.trim()));
+      out.push(rmCommonWS$5(_templateObject155(), moduleImportsAsCode, moduleNameAsCode.trim()));
       exportMain = 'main: yyExecMain,';
-      invokeMain = rmCommonWS$5(_templateObject152());
+      invokeMain = rmCommonWS$5(_templateObject156());
     }
 
-    out.push(rmCommonWS$5(_templateObject153(), invokeMain, exportMain));
+    out.push(rmCommonWS$5(_templateObject157(), invokeMain, exportMain));
     var src = out.join('\n') + '\n';
     opt.exportSourceCode.all = src;
     return src;
@@ -24951,10 +26350,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     if (!opt.noMain) {
       var moduleNameAsCode = String(opt.moduleMain || commonJsMain);
       var moduleImportsAsCode = String(opt.moduleMainImports || commonJsMainImports);
-      main = rmCommonWS$5(_templateObject154(), moduleImportsAsCode, moduleNameAsCode.trim());
+      main = rmCommonWS$5(_templateObject158(), moduleImportsAsCode, moduleNameAsCode.trim());
     }
 
-    var out = this.generateModule(opt) + rmCommonWS$5(_templateObject155(), moduleName, moduleName, moduleName, moduleName, main);
+    var out = this.generateModule(opt) + rmCommonWS$5(_templateObject159(), moduleName, moduleName, moduleName, moduleName, main);
     opt.exportSourceCode.all = out;
     return out;
   };
@@ -25919,7 +27318,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
 
       var js = JSON.stringify(obj, null, 2);
-      js = js.replace(new XRegExp__default['default']("  \"(".concat(ID_REGEX_BASE$2, ")\": "), 'g'), '  $1: ');
+      js = js.replace(new XRegExp__default['default']("  \"(".concat(ID_REGEX_BASE$3, ")\": "), 'g'), '  $1: ');
       js = js.replace(/^( +)pre_parse: true(,)?$/gm, function (m, ls, tc) {
         return ls + 'pre_parse: ' + String(pre) + (tc || '');
       });
@@ -26517,7 +27916,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   generatorMixin.createParser = function createParser() {
     var sourceCodeDef = this.generateModuleExpr(); // produce a chunk of sourcecode that's suitable for evaluation through `eval()`:
 
-    var sourcecode = rmCommonWS$5(_templateObject156(), sourceCodeDef.init, sourceCodeDef.src);
+    var sourcecode = rmCommonWS$5(_templateObject160(), sourceCodeDef.init, sourceCodeDef.src);
     var p = code_exec$2(sourcecode, function generated_code_exec_wrapper_jison(sourcecode) {
       //console.log("===============================PARSER TEST CODE\n", sourcecode, "\n=====================END====================\n");
       chkBugger$3(sourcecode);
@@ -26618,7 +28017,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   } // --- START parser kernel ---
 
 
-  parser$4.parse = "\nfunction parse(input, parseParams) {\n    \"use strict\";\n\n    var self = this;\n    var stack = new Array(128);         // token stack: stores token which leads to state at the same index (column storage)\n    var sstack = new Array(128);        // state stack: stores states (column storage)\n    var tstack = [];                    // token stack (only used when `%options token_stack` support has been enabled)\n    var vstack = new Array(128);        // semantic value stack\n    var lstack = new Array(128);        // location stack\n    var table = this.table;\n    var sp = 0;                         // 'stack pointer': index into the stacks\n    var yyloc;\n    var yytext;\n    var yylineno;\n    var yyleng;\n\n    var symbol = 0;\n    var preErrorSymbol = 0;\n    var lastEofErrorStateDepth = Infinity;\n    var recoveringErrorInfo = null;\n    var recovering = 0;                 // (only used when the grammar contains error recovery rules)\n    var TERROR = this.TERROR;\n    var EOF = this.EOF;\n    var ERROR_RECOVERY_TOKEN_DISCARD_COUNT = (this.options.errorRecoveryTokenDiscardCount | 0) || 3;\n    var NO_ACTION = [0, YY_ERROR_RECOVERY_COMBINE_ID /* === table.length :: ensures that anyone using this new state will fail dramatically! */];\n\n    var lexer;\n    if (this.__lexer__) {\n        lexer = this.__lexer__;\n    } else {\n        lexer = this.__lexer__ = Object.create(this.lexer);\n    }\n\n    var sharedState_yy = {\n        parseError: undefined,\n        quoteName: undefined,\n        lexer: undefined,\n        parser: undefined,\n        pre_parse: undefined,\n        post_parse: undefined,\n        pre_lex: undefined,\n        post_lex: undefined,\n        parseParamsAsMembers: parseParamsAsMembers      // WARNING: must be written this way for the code expanders to work correctly in both ES5 and ES6 modes!\n    };\n\n    var ASSERT;\n    if (typeof assert !== 'function') {\n        ASSERT = function JisonAssert(cond, msg) {\n            \"use strict\";\n\n            if (!cond) {\n                throw new Error('assertion failed: ' + (msg || '***'));\n            }\n        };\n    } else {\n        ASSERT = assert;\n    }\n\n    this.yyGetSharedState = function yyGetSharedState() {\n        return sharedState_yy;\n    };\n\n//_handle_error_with_recovery:                    // run this code when the grammar includes error recovery rules\n\n    this.yyGetErrorInfoTrack = function yyGetErrorInfoTrack() {\n        return recoveringErrorInfo;\n    };\n\n//_handle_error_no_recovery:                      // run this code when the grammar does not include any error recovery rules\n//_handle_error_end_of_section:                   // this concludes the error recovery / no error recovery code section choice above\n\n    // shallow clone objects & arrays, straight copy of simple `src` values\n    // e.g. `lexer.yytext` MAY be a complex value object,\n    // rather than a simple string/value.\n    //\n    // https://jsperf.com/new-array-vs-splice-vs-slice/72\n    // https://jsperf.com/instanceof-vs-typeof/20\n    // benchmark:: http://127.0.0.1:8080/example/jsperf/#testfile=test0020-typeof-instanceof-isArray.json5\n    // benchmark:: http://127.0.0.1:8080/example/jsperf/?333#testfile=test0021-shallow-clones.json5\n    //\n    function shallow_copy(src) {\n        if (typeof src === 'object') {\n            var dst = {};\n            for (var k in src) {\n                if (Object.prototype.hasOwnProperty.call(src, k)) {\n                    dst[k] = src[k];\n                }\n            }\n            return dst;\n        }\n        return src;\n    }\n    function shallow_copy_noclobber(dst, src) {\n        \"use strict\";\n\n        for (var k in src) {\n            if (typeof dst[k] === 'undefined' && Object.prototype.hasOwnProperty.call(src, k)) {\n                dst[k] = src[k];\n            }\n        }\n    }\n    function copy_yylloc(loc) {\n        \"use strict\";\n\n        var rv = shallow_copy(loc);\n        if (rv && rv.range) {\n            rv.range = rv.range.slice(0);\n        }\n        return rv;\n    }\n\n    // copy state\n    shallow_copy_noclobber(sharedState_yy, this.yy);\n\n    sharedState_yy.lexer = lexer;\n    sharedState_yy.parser = this;\n\n    var yydebug = false;\n    if (this.options.debug) {\n        yydebug = function yydebug_impl(msg, obj) {\n            \"use strict\";\n\n            var ref_list;\n            var ref_names;\n\n            function deepClone(from, sub) {\n                \"use strict\";\n\n                if (sub == null) {\n                    ref_list = [];\n                    ref_names = [];\n                    sub = 'root';\n                }\n                if (typeof from === 'function') return '[Function]';\n                if (from == null || typeof from !== 'object') return from;\n                if (from.constructor !== Object && from.constructor !== Array) {\n                    return from;\n                }\n\n                var i = ref_list.indexOf(from);\n                if (i >= 0) {\n                    return '[Circular/Xref:' + ref_names[i] + ']';   // circular or cross reference\n                }\n                ref_list.push(from);\n                ref_names.push(sub);\n\n                var to = new from.constructor();\n                for (var name in from) {\n                    if (name === 'parser') continue;\n                    if (name === 'lexer') continue;\n                    to[name] = deepClone(from[name], name);\n                }\n                return to;\n            }\n\n            obj = obj || {};\n            if (obj.symbol) {\n                obj.local_yytext = yytext;\n                obj.lexer_yytext = lexer.yytext;\n                obj.lexer_yylloc = lexer.yylloc;\n                obj.lexer_yyllineno = lexer.yyllineno;\n            }\n\n            // warning: here we fetch from closure (stack et al)\n            obj.symbol_stack = stack;\n            obj.state_stack = sstack;\n            obj.value_stack = vstack;\n            obj.location_stack = lstack;\n            obj.stack_pointer = sp;\n\n            // ready the object for printing:\n            obj = deepClone(obj);\n\n            // wrap try/catch in a function to help the V8 JIT compiler...\n            function yydebug_cvt(obj) {\n                \"use strict\";\n\n                var js;\n                try {\n                    var re1;\n                    if (typeof XRegExp === 'undefined') {\n                        re1 = /  \\\"([a-z_][a-z_0-9. ]*)\\\": /ig;\n                    } else {\n                        re1 = new XRegExp('  \\\"([\\\\p{Alphabetic}_][\\\\p{Alphabetic}\\\\p{Number}_. ]*)\\\": ', 'g');\n                    }\n                    js = JSON.stringify(obj, null, 2)\n                    .replace(re1, '  $1: ')\n                    .replace(/[\\n\\s]+/g, ' ')\n                    // shorten yylloc object dumps too:\n                    .replace(/\\{ first_line: (\\d+), first_column: (\\d+), last_line: (\\d+), last_column: (\\d+)/g, '{L/C: ($1,$2)..($3,$4)');\n                } catch (ex) {\n                    js = String(obj);\n                }\n                return js;\n            }\n\n            self.trace(msg, yydebug_cvt(obj), '\\n');\n        };\n    }\n\n    // disable debugging at run-time ANYWAY when you've *explicitly* set \"yy.yydebug = false\":\n    if (sharedState_yy.yydebug === false) {\n        yydebug = undefined;\n    }\n\n    // *Always* setup `yyError`, `YYRECOVERING`, `yyErrOk` and `yyClearIn` functions as it is paramount\n    // to have *their* closure match ours -- if we only set them up once,\n    // any subsequent `parse()` runs will fail in very obscure ways when\n    // these functions are invoked in the user action code block(s) as\n    // their closure will still refer to the `parse()` instance which set\n    // them up. Hence we MUST set them up at the start of every `parse()` run!\n    if (this.yyError) {\n        this.yyError = function yyError(str /*, ...args */) {\n            \"use strict\";\n\n            if (yydebug) yydebug('yyerror: ', { message: str, args: arguments, symbol: symbol, state: state, newState: newState, recovering: recovering, action: action });\n\n//_handle_error_with_recovery:                    // run this code when the grammar includes error recovery rules\n\n            var error_rule_depth = (this.options.parserErrorsAreRecoverable ? locateNearestErrorRecoveryRule(state) : -1);\n            var expected = this.collect_expected_token_set(state);\n            var hash = this.constructParseErrorInfo(str, null, expected, (error_rule_depth >= 0));\n            // append to the old one?\n            if (recoveringErrorInfo) {\n                var esp = recoveringErrorInfo.info_stack_pointer;\n\n                recoveringErrorInfo.symbol_stack[esp] = symbol;\n                var v = this.shallowCopyErrorInfo(hash);\n                v.yyError = true;\n                v.errorRuleDepth = error_rule_depth;\n                v.recovering = recovering;\n                // v.stackSampleLength = error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH;\n\n                recoveringErrorInfo.value_stack[esp] = v;\n                recoveringErrorInfo.location_stack[esp] = copy_yylloc(lexer.yylloc);\n                recoveringErrorInfo.state_stack[esp] = newState || NO_ACTION[1];\n\n                ++esp;\n                recoveringErrorInfo.info_stack_pointer = esp;\n            } else {\n                recoveringErrorInfo = this.shallowCopyErrorInfo(hash);\n                recoveringErrorInfo.yyError = true;\n                recoveringErrorInfo.errorRuleDepth = error_rule_depth;\n                recoveringErrorInfo.recovering = recovering;\n            }\n\n//_handle_error_no_recovery:                      // run this code when the grammar does not include any error recovery rules\n\n            var expected = this.collect_expected_token_set(state);\n            var hash = this.constructParseErrorInfo(str, null, expected, false);\n\n//_handle_error_end_of_section:                   // this concludes the error recovery / no error recovery code section choice above\n\n            // Add any extra args to the hash under the name `extra_error_attributes`:\n            var args = Array.prototype.slice.call(arguments, 1);\n            if (args.length) {\n                hash.extra_error_attributes = args;\n            }\n\n            return this.parseError(str, hash, this.JisonParserError);\n        };\n    }\n\n//_handle_error_with_recovery:                    // run this code when the grammar includes error recovery rules\n\n    if (this.yyRecovering) {\n        this.yyRecovering = function yyRecovering() {\n            \"use strict\";\n\n            if (yydebug) yydebug('yyrecovering: ', { symbol: symbol, state: state, newState: newState, recovering: recovering, action: action });\n            return recovering;\n        };\n    }\n\n    if (this.yyErrOk) {\n        this.yyErrOk = function yyErrOk() {\n            \"use strict\";\n\n            if (yydebug) yydebug('yyerrok: ', { symbol: symbol, state: state, newState: newState, recovering: recovering, action: action });\n            recovering = 0;\n\n            // DO NOT reset/cleanup `recoveringErrorInfo` yet: userland code\n            // MAY invoke this API before the error is actually fully\n            // recovered, in which case the parser recovery code won't be able\n            // to append the skipped tokens to this info object.\n            //\n            // The rest of the kernel code is safe enough that it won't inadvertedly\n            // re-use an old `recoveringErrorInfo` chunk so we'ld better wait\n            // with destruction/cleanup until the end of the parse or until another\n            // fresh parse error rears its ugly head...\n            //\n            // if (recoveringErrorInfo && typeof recoveringErrorInfo.destroy === 'function') {\n            //     recoveringErrorInfo.destroy();\n            //     recoveringErrorInfo = undefined;\n            // }\n        };\n    }\n\n    if (this.yyClearIn) {\n        this.yyClearIn = function yyClearIn() {\n            \"use strict\";\n\n            if (yydebug) yydebug('yyclearin: ', { symbol: symbol, newState: newState, recovering: recovering, action: action, preErrorSymbol: preErrorSymbol });\n            if (symbol === TERROR) {\n                symbol = 0;\n                yytext = null;\n                yyleng = 0;\n                yyloc = undefined;\n            }\n            preErrorSymbol = 0;\n        };\n    }\n\n//_handle_error_no_recovery:                      // run this code when the grammar does not include any error recovery rules\n//_handle_error_end_of_section:                   // this concludes the error recovery / no error recovery code section choice above\n\n    // Does the shared state override the default `parseError` that already comes with this instance?\n    if (typeof sharedState_yy.parseError === 'function') {\n        this.parseError = function parseErrorAlt(str, hash, ExceptionClass) {\n            \"use strict\";\n\n            if (!ExceptionClass) {\n                ExceptionClass = this.JisonParserError;\n            }\n            return sharedState_yy.parseError.call(this, str, hash, ExceptionClass);\n        };\n    } else {\n        this.parseError = this.originalParseError;\n    }\n\n    // Does the shared state override the default `quoteName` that already comes with this instance?\n    if (typeof sharedState_yy.quoteName === 'function') {\n        this.quoteName = function quoteNameAlt(id_str) {\n            \"use strict\";\n\n            return sharedState_yy.quoteName.call(this, id_str);\n        };\n    } else {\n        this.quoteName = this.originalQuoteName;\n    }\n\n    // set up the cleanup function; make it an API so that external code can re-use this one in case of\n    // calamities or when the `%options no-try-catch` option has been specified for the grammar, in which\n    // case this parse() API method doesn't come with a `finally { ... }` block any more!\n    //\n    // NOTE: as this API uses parse() as a closure, it MUST be set again on every parse() invocation,\n    //       or else your `sharedState`, etc. references will be *wrong*!\n    this.cleanupAfterParse = function parser_cleanupAfterParse(resultValue, invoke_post_methods, do_not_nuke_errorinfos) {\n        \"use strict\";\n\n        var rv;\n\n        if (invoke_post_methods) {\n            var hash;\n\n            if (sharedState_yy.post_parse || this.post_parse) {\n                // create an error hash info instance: we re-use this API in a **non-error situation**\n                // as this one delivers all parser internals ready for access by userland code.\n                hash = this.constructParseErrorInfo(null /* no error! */, null /* no exception! */, null, false);\n            }\n\n            if (sharedState_yy.post_parse) {\n                rv = sharedState_yy.post_parse.call(this, sharedState_yy, resultValue, hash);\n                if (typeof rv !== 'undefined') resultValue = rv;\n            }\n            if (this.post_parse) {\n                rv = this.post_parse.call(this, sharedState_yy, resultValue, hash);\n                if (typeof rv !== 'undefined') resultValue = rv;\n            }\n\n            // cleanup:\n            if (hash && hash.destroy) {\n                hash.destroy();\n            }\n        }\n\n        if (this.__reentrant_call_depth > 1) return resultValue;        // do not (yet) kill the sharedState when this is a reentrant run.\n\n        // clean up the lingering lexer structures as well:\n        if (lexer.cleanupAfterLex) {\n            lexer.cleanupAfterLex(do_not_nuke_errorinfos);\n        }\n\n        // prevent lingering circular references from causing memory leaks:\n        if (sharedState_yy) {\n            sharedState_yy.lexer = undefined;\n            sharedState_yy.parser = undefined;\n            if (lexer.yy === sharedState_yy) {\n                lexer.yy = undefined;\n            }\n        }\n        sharedState_yy = undefined;\n        this.parseError = this.originalParseError;\n        this.quoteName = this.originalQuoteName;\n\n        // nuke the vstack[] array at least as that one will still reference obsoleted user values.\n        // To be safe, we nuke the other internal stack columns as well...\n        stack.length = 0;               // fastest way to nuke an array without overly bothering the GC\n        sstack.length = 0;\n        lstack.length = 0;\n        vstack.length = 0;\n        sp = 0;\n\n        // nuke the error hash info instances created during this run.\n        // Userland code must COPY any data/references\n        // in the error hash instance(s) it is more permanently interested in.\n        if (!do_not_nuke_errorinfos) {\n            for (var i = this.__error_infos.length - 1; i >= 0; i--) {\n                var el = this.__error_infos[i];\n                if (el && typeof el.destroy === 'function') {\n                    el.destroy();\n                }\n            }\n            this.__error_infos.length = 0;\n\n//_handle_error_with_recovery:                    // run this code when the grammar includes error recovery rules\n\n            for (var i = this.__error_recovery_infos.length - 1; i >= 0; i--) {\n                var el = this.__error_recovery_infos[i];\n                if (el && typeof el.destroy === 'function') {\n                    el.destroy();\n                }\n            }\n            this.__error_recovery_infos.length = 0;\n\n            // `recoveringErrorInfo` is also part of the `__error_recovery_infos` array,\n            // hence has been destroyed already: no need to do that *twice*.\n            if (recoveringErrorInfo) {\n                recoveringErrorInfo = undefined;\n            }\n\n//_handle_error_no_recovery:                      // run this code when the grammar does not include any error recovery rules\n//_handle_error_end_of_section:                   // this concludes the error recovery / no error recovery code section choice above\n\n        }\n\n        return resultValue;\n    };\n\n    // merge yylloc info into a new yylloc instance.\n    //\n    // `first_index` and `last_index` MAY be UNDEFINED/NULL or these are indexes into the `lstack[]` location stack array.\n    //\n    // `first_yylloc` and `last_yylloc` MAY be UNDEFINED/NULL or explicit (custom or regular) `yylloc` instances, in which\n    // case these override the corresponding first/last indexes.\n    //\n    // `dont_look_back` is an optional flag (default: FALSE), which instructs this merge operation NOT to search\n    // through the parse location stack for a location, which would otherwise be used to construct the new (epsilon!)\n    // yylloc info.\n    //\n    // Note: epsilon rule's yylloc situation is detected by passing both `first_index` and `first_yylloc` as UNDEFINED/NULL.\n    this.yyMergeLocationInfo = function parser_yyMergeLocationInfo(first_index, last_index, first_yylloc, last_yylloc, dont_look_back) {\n        \"use strict\";\n\n        var i1 = first_index | 0,\n            i2 = last_index | 0;\n        var l1 = first_yylloc,\n            l2 = last_yylloc;\n        var rv;\n\n        // rules:\n        // - first/last yylloc entries override first/last indexes\n\n        if (!l1) {\n            if (first_index != null) {\n                for (var i = i1; i <= i2; i++) {\n                    l1 = lstack[i];\n                    if (l1) {\n                        break;\n                    }\n                }\n            }\n        }\n\n        if (!l2) {\n            if (last_index != null) {\n                for (var i = i2; i >= i1; i--) {\n                    l2 = lstack[i];\n                    if (l2) {\n                        break;\n                    }\n                }\n            }\n        }\n\n        // - detect if an epsilon rule is being processed and act accordingly:\n        if (!l1 && first_index == null) {\n            // epsilon rule span merger. With optional look-ahead in l2.\n            if (!dont_look_back) {\n                for (var i = (i1 || sp) - 1; i >= 0; i--) {\n                    l1 = lstack[i];\n                    if (l1) {\n                        break;\n                    }\n                }\n            }\n            if (!l1) {\n                if (!l2) {\n                    // when we still don't have any valid yylloc info, we're looking at an epsilon rule\n                    // without look-ahead and no preceding terms and/or `dont_look_back` set:\n                    // in that case we ca do nothing but return NULL/UNDEFINED:\n                    return undefined;\n                } else {\n                    // shallow-copy L2: after all, we MAY be looking\n                    // at unconventional yylloc info objects...\n                    rv = shallow_copy(l2);\n                    if (rv.range) {\n                        // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:\n                        rv.range = rv.range.slice(0);\n                    }\n                    return rv;\n                }\n            } else {\n                // shallow-copy L1, then adjust first col/row 1 column past the end.\n                rv = shallow_copy(l1);\n                rv.first_line = rv.last_line;\n                rv.first_column = rv.last_column;\n                if (rv.range) {\n                    // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:\n                    rv.range = rv.range.slice(0);\n                    rv.range[0] = rv.range[1];\n                }\n\n                if (l2) {\n                    // shallow-mixin L2, then adjust last col/row accordingly.\n                    shallow_copy_noclobber(rv, l2);\n                    rv.last_line = l2.last_line;\n                    rv.last_column = l2.last_column;\n                    if (rv.range && l2.range) {\n                        rv.range[1] = l2.range[1];\n                    }\n                }\n                return rv;\n            }\n        }\n\n        if (!l1) {\n            l1 = l2;\n            l2 = null;\n        }\n        if (!l1) {\n            return undefined;\n        }\n\n        // shallow-copy L1|L2, before we try to adjust the yylloc values: after all, we MAY be looking\n        // at unconventional yylloc info objects...\n        rv = shallow_copy(l1);\n\n        // first_line: ...,\n        // first_column: ...,\n        // last_line: ...,\n        // last_column: ...,\n        if (rv.range) {\n            // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:\n            rv.range = rv.range.slice(0);\n        }\n\n        if (l2) {\n            shallow_copy_noclobber(rv, l2);\n            rv.last_line = l2.last_line;\n            rv.last_column = l2.last_column;\n            if (rv.range && l2.range) {\n                rv.range[1] = l2.range[1];\n            }\n        }\n\n        return rv;\n    };\n\n    // NOTE: as this API uses parse() as a closure, it MUST be set again on every parse() invocation,\n    //       or else your `lexer`, `sharedState`, etc. references will be *wrong*!\n    this.constructParseErrorInfo = function parser_constructParseErrorInfo(msg, ex, expected, recoverable) {\n        \"use strict\";\n\n        var pei = {\n            errStr: msg,\n            exception: ex,\n            text: lexer.match,\n            value: lexer.yytext,\n            token: this.describeSymbol(symbol) || symbol,\n            token_id: symbol,\n            line: lexer.yylineno,\n            loc: copy_yylloc(lexer.yylloc),\n            expected: expected,\n            recoverable: recoverable,\n            state: state,\n            action: action,\n            new_state: newState,\n            symbol_stack: stack,\n            state_stack: sstack,\n            value_stack: vstack,\n            location_stack: lstack,\n            stack_pointer: sp,\n            yy: sharedState_yy,\n            lexer: lexer,\n            parser: this,\n\n            // and make sure the error info doesn't stay due to potential\n            // ref cycle via userland code manipulations.\n            // These would otherwise all be memory leak opportunities!\n            //\n            // Note that only array and object references are nuked as those\n            // constitute the set of elements which can produce a cyclic ref.\n            // The rest of the members is kept intact as they are harmless.\n            destroy: function destructParseErrorInfo() {\n                // remove cyclic references added to error info:\n                // info.yy = null;\n                // info.lexer = null;\n                // info.value = null;\n                // info.value_stack = null;\n                // ...\n                \"use strict\";\n\n                var rec = !!this.recoverable;\n                for (var key in this) {\n                    if (this[key] && this.hasOwnProperty(key) && typeof this[key] === 'object') {\n                        this[key] = undefined;\n                    }\n                }\n                this.recoverable = rec;\n            }\n        };\n        // track this instance so we can `destroy()` it once we deem it superfluous and ready for garbage collection!\n        this.__error_infos.push(pei);\n        return pei;\n    };\n\n    // clone some parts of the (possibly enhanced!) errorInfo object\n    // to give them some persistence.\n    this.shallowCopyErrorInfo = function parser_shallowCopyErrorInfo(p) {\n        \"use strict\";\n\n        var rv = shallow_copy(p);\n\n        // remove the large parts which can only cause cyclic references\n        // and are otherwise available from the parser kernel anyway.\n        delete rv.sharedState_yy;\n        delete rv.parser;\n        delete rv.lexer;\n\n        // lexer.yytext MAY be a complex value object, rather than a simple string/value:\n        rv.value = shallow_copy(rv.value);\n\n        // yylloc info:\n        rv.loc = copy_yylloc(rv.loc);\n\n        // the 'expected' set won't be modified, so no need to clone it:\n        //rv.expected = rv.expected.slice(0);\n\n        //symbol stack is a simple array:\n        rv.symbol_stack = rv.symbol_stack.slice(0);\n        // ditto for state stack:\n        rv.state_stack = rv.state_stack.slice(0);\n        // clone the yylloc's in the location stack?:\n        rv.location_stack = rv.location_stack.map(copy_yylloc);\n        // and the value stack may carry both simple and complex values:\n        // shallow-copy the latter.\n        rv.value_stack = rv.value_stack.map(shallow_copy);\n\n        // and we don't bother with the sharedState_yy reference:\n        //delete rv.yy;\n\n        // now we prepare for tracking the COMBINE actions\n        // in the error recovery code path:\n        //\n        // as we want to keep the maximum error info context, we\n        // *scan* the state stack to find the first *empty* slot.\n        // This position will surely be AT OR ABOVE the current\n        // stack pointer, but we want to keep the 'used but discarded'\n        // part of the parse stacks *intact* as those slots carry\n        // error context that may be useful when you want to produce\n        // very detailed error diagnostic reports.\n        //\n        // ### Purpose of each stack pointer:\n        //\n        // - stack_pointer: points at the top of the parse stack\n        //                  **as it existed at the time of the error\n        //                  occurrence, i.e. at the time the stack\n        //                  snapshot was taken and copied into the\n        //                  errorInfo object.**\n        // - base_pointer:  the bottom of the **empty part** of the\n        //                  stack, i.e. **the start of the rest of\n        //                  the stack space /above/ the existing\n        //                  parse stack. This section will be filled\n        //                  by the error recovery process as it\n        //                  travels the parse state machine to\n        //                  arrive at the resolving error recovery rule.**\n        // - info_stack_pointer:\n        //                  this stack pointer points to the **top of\n        //                  the error recovery tracking stack space**, i.e.\n        //                  this stack pointer takes up the role of\n        //                  the `stack_pointer` for the error recovery\n        //                  process. Any mutations in the **parse stack**\n        //                  are **copy-appended** to this part of the\n        //                  stack space, keeping the bottom part of the\n        //                  stack (the 'snapshot' part where the parse\n        //                  state at the time of error occurrence was kept)\n        //                  intact.\n        // - root_failure_pointer:\n        //                  copy of the `stack_pointer`...\n        //\n        for (var i = rv.stack_pointer; rv.state_stack[i] != null; i++) {\n            // empty\n        }\n        rv.base_pointer = i;\n        rv.info_stack_pointer = i;\n\n        rv.root_failure_pointer = rv.stack_pointer;\n\n        // track this instance so we can `destroy()` it once we deem it superfluous and ready for garbage collection!\n        this.__error_recovery_infos.push(rv);\n\n        return rv;\n    };\n\n    function getNonTerminalFromCode(symbol) {\n        \"use strict\";\n\n        var tokenName = self.getSymbolName(symbol);\n        if (!tokenName) {\n            tokenName = symbol;\n        }\n        return tokenName;\n    }\n\n//_lexer_without_token_stack:\n\n    function stdLex() {\n        \"use strict\";\n\n        var token = lexer.lex();\n        // if token isn't its numeric value, convert\n        if (typeof token !== 'number') {\n            token = self.symbols_[token] || token;\n        }\n\n        return token || EOF;\n    }\n\n    function fastLex() {\n        \"use strict\";\n\n        var token = lexer.fastLex();\n        // if token isn't its numeric value, convert\n        if (typeof token !== 'number') {\n            token = self.symbols_[token] || token;\n        }\n\n        return token || EOF;\n    }\n\n    var lex = stdLex;\n\n//_lexer_with_token_stack:\n\n    // lex function that supports token stacks\n    function tokenStackLex() {\n        \"use strict\";\n\n        var token;\n        token = tstack.pop() || lexer.lex() || EOF;\n        // if token isn't its numeric value, convert\n        if (typeof token !== 'number') {\n            if (token instanceof Array) {\n                // tokenstack CANNOT be nested, i.e. an 'array'-type token\n                // now means the `tstack` is empty as this array of tokens\n                // could only have originated from the `lexer.lex()`\n                // call:\n                tstack = token;\n                token = tstack.pop();\n            }\n            // if token isn't its numeric value, convert\n            if (typeof token !== 'number') {\n                token = self.symbols_[token] || token;\n            }\n        }\n\n        return token || EOF;\n    }\n\n//_lexer_with_token_stack_end:\n\n    var state, action, r, t;\n    var yyval = {\n        $: true,\n        _$: undefined,\n        yy: sharedState_yy\n    };\n    var p;\n    var yyrulelen;\n    var this_production;\n    var newState;\n    var retval = false;\n\n//_handle_error_with_recovery:                    // run this code when the grammar includes error recovery rules\n\n    // Return the rule stack depth where the nearest error rule can be found.\n    // Return -1 when no error recovery rule was found.\n    function locateNearestErrorRecoveryRule(state) {\n        \"use strict\";\n\n        var stack_probe = sp - 1;\n        var depth = 0;\n\n        // try to recover from error\n        while (stack_probe >= 0) {\n            // check for error recovery rule in this state\n            if (yydebug) yydebug('locateNearestErrorRecoveryRule #test#: ', { symbol: symbol, state: state, depth: depth, stackidx: sp - 1 - depth, lastidx: lastEofErrorStateDepth });\n            var t = (table[state] && table[state][TERROR]) || NO_ACTION;\n            if (t[0]) {\n                // We need to make sure we're not cycling forever:\n                // once we hit EOF, even when we `yyerrok()` an error, we must\n                // prevent the core from running forever,\n                // e.g. when parent rules are still expecting certain input to\n                // follow after this, for example when you handle an error inside a set\n                // of braces which are matched by a parent rule in your grammar.\n                //\n                // Hence we require that every error handling/recovery attempt\n                // *after we've hit EOF* has a diminishing state stack: this means\n                // we will ultimately have unwound the state stack entirely and thus\n                // terminate the parse in a controlled fashion even when we have\n                // very complex error/recovery code interplay in the core + user\n                // action code blocks:\n                if (yydebug) yydebug('locateNearestErrorRecoveryRule #found#: ', { symbol: symbol, state: state, depth: depth, stackidx: sp - 1 - depth, lastidx: lastEofErrorStateDepth });\n                if (symbol === EOF) {\n                    if (lastEofErrorStateDepth > sp - 1 - depth) {\n                        lastEofErrorStateDepth = sp - 1 - depth;\n                    } else {\n                        if (yydebug) yydebug('locateNearestErrorRecoveryRule #skip#: ', { symbol: symbol, state: state, depth: depth, stackidx: sp - 1 - depth, lastidx: lastEofErrorStateDepth });\n                        --stack_probe; // popStack(1): [symbol, action]\n                        state = sstack[stack_probe];\n                        ++depth;\n                        continue;\n                    }\n                }\n                return depth;\n            }\n            if (state === 0 /* $accept rule */ || stack_probe < 1) {\n                if (yydebug) yydebug('locateNearestErrorRecoveryRule #end=NIL#: ', { symbol: symbol, state: state, depth: depth, stackidx: sp - 1 - depth, lastidx: lastEofErrorStateDepth });\n                return -1; // No suitable error recovery rule available.\n            }\n            --stack_probe; // popStack(1): [symbol, action]\n            state = sstack[stack_probe];\n            ++depth;\n        }\n        if (yydebug) yydebug('locateNearestErrorRecoveryRule #EMPTY#: ', { symbol: symbol, state: state, depth: depth, stackidx: sp - 1 - depth, lastidx: lastEofErrorStateDepth });\n        return -1; // No suitable error recovery rule available.\n    }\n\n//_handle_error_no_recovery:                      // run this code when the grammar does not include any error recovery rules\n//_handle_error_end_of_section:                   // this concludes the error recovery / no error recovery code section choice above\n\n    try {\n        this.__reentrant_call_depth++;\n\n        lexer.setInput(input, sharedState_yy);\n\n        // NOTE: we *assume* no lexer pre/post handlers are set up *after*\n        // this initial `setInput()` call: hence we can now check and decide\n        // whether we'll go with the standard, slower, lex() API or the\n        // `fast_lex()` one:\n        if (typeof lexer.canIUse === 'function') {\n            var lexerInfo = lexer.canIUse();\n            if (lexerInfo.fastLex && typeof fastLex === 'function') {\n                lex = fastLex;\n            }\n        }\n\n        yyloc = lexer.yylloc;\n        lstack[sp] = yyloc;\n        vstack[sp] = null;\n        sstack[sp] = 0;\n        stack[sp] = 0;\n        ++sp;\n\n        yytext = lexer.yytext;\n        yylineno = lexer.yylineno;\n        yyleng = lexer.yyleng;\n\n        if (this.pre_parse) {\n            this.pre_parse.call(this, sharedState_yy);\n        }\n        if (sharedState_yy.pre_parse) {\n            sharedState_yy.pre_parse.call(this, sharedState_yy);\n        }\n\n        newState = sstack[sp - 1];\n        for (;;) {\n            // retrieve state number from top of stack\n            state = newState;               // sstack[sp - 1];\n\n            // use default actions if available\n            if (this.defaultActions[state]) {\n                action = 2;\n                newState = this.defaultActions[state];\n            } else {\n                // The single `==` condition below covers both these `===` comparisons in a single\n                // operation:\n                //\n                //     if (symbol === null || typeof symbol === 'undefined') ...\n                if (!symbol) {\n                    symbol = lex();\n                }\n                // read action for current state and first input\n                t = (table[state] && table[state][symbol]) || NO_ACTION;\n                newState = t[1];\n                action = t[0];\n\n                if (yydebug) yydebug('after FETCH/LEX: ', { symbol: symbol, symbolID: this.terminals_ && this.terminals_[symbol], state: state, newState: newState, recovering: recovering, action: action });\n\n//_handle_error_with_recovery:                // run this code when the grammar includes error recovery rules\n\n                // handle parse error\n                if (!action) {\n                    // first see if there's any chance at hitting an error recovery rule:\n                    var error_rule_depth = locateNearestErrorRecoveryRule(state);\n                    var errStr = null;\n                    var errSymbolDescr = (this.describeSymbol(symbol) || symbol);\n                    var expected = this.collect_expected_token_set(state);\n\n                    if (!recovering) {\n                        // Report error\n                        if (typeof lexer.yylineno === 'number') {\n                            errStr = 'Parse error on line ' + (lexer.yylineno + 1) + ': ';\n                        } else {\n                            errStr = 'Parse error: ';\n                        }\n\n                        if (typeof lexer.showPosition === 'function') {\n                            errStr += '\\n' + lexer.showPosition(79 - 10, 10) + '\\n';\n                        }\n                        if (expected.length) {\n                            errStr += 'Expecting ' + expected.join(', ') + ', got unexpected ' + errSymbolDescr;\n                        } else {\n                            errStr += 'Unexpected ' + errSymbolDescr;\n                        }\n\n                        p = this.constructParseErrorInfo(errStr, null, expected, (error_rule_depth >= 0));\n\n                        // DO NOT cleanup the old one before we start the new error info track:\n                        // the old one will *linger* on the error stack and stay alive until we\n                        // invoke the parser's cleanup API!\n                        recoveringErrorInfo = this.shallowCopyErrorInfo(p);\n\n                        if (yydebug) yydebug('error recovery rule detected: ', { error_rule_depth: error_rule_depth, error: p.errStr, error_hash: p });\n\n                        r = this.parseError(p.errStr, p, this.JisonParserError);\n                        if (typeof r !== 'undefined') {\n                            retval = r;\n                            break;\n                        }\n\n                        // Protect against overly blunt userland `parseError` code which *sets*\n                        // the `recoverable` flag without properly checking first:\n                        // we always terminate the parse when there's no recovery rule available anyhow!\n                        if (!p.recoverable || error_rule_depth < 0) {\n                            break;\n                        } else {\n                            // TODO: allow parseError callback to edit symbol and or state at the start of the error recovery process...\n                        }\n                    }\n\n                    if (yydebug) yydebug('after ERROR DETECT: ', { error_rule_depth: error_rule_depth, error: p.errStr, error_hash: p });\n\n                    var esp = recoveringErrorInfo.info_stack_pointer;\n\n                    // just recovered from another error\n                    if (recovering === ERROR_RECOVERY_TOKEN_DISCARD_COUNT && error_rule_depth >= 0) {\n                        // SHIFT current lookahead and grab another\n                        recoveringErrorInfo.symbol_stack[esp] = symbol;\n                        recoveringErrorInfo.value_stack[esp] = shallow_copy(lexer.yytext);\n                        recoveringErrorInfo.location_stack[esp] = copy_yylloc(lexer.yylloc);\n                        recoveringErrorInfo.state_stack[esp] = newState; // push state\n                        ++esp;\n\n                        // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:\n                        yyleng = lexer.yyleng;\n                        yytext = lexer.yytext;\n                        yylineno = lexer.yylineno;\n                        yyloc = lexer.yylloc;\n\n                        preErrorSymbol = 0;\n                        symbol = lex();\n\n                        if (yydebug) yydebug('after ERROR RECOVERY-3: ', { symbol: symbol, symbolID: this.terminals_ && this.terminals_[symbol] });\n                    }\n\n                    // try to recover from error\n                    if (error_rule_depth < 0) {\n                        ASSERT(recovering > 0, \"line 897\");\n                        recoveringErrorInfo.info_stack_pointer = esp;\n\n                        // barf a fatal hairball when we're out of look-ahead symbols and none hit a match\n                        // while we are still busy recovering from another error:\n                        var po = this.__error_infos[this.__error_infos.length - 1];\n\n                        // Report error\n                        if (typeof lexer.yylineno === 'number') {\n                            errStr = 'Parsing halted on line ' + (lexer.yylineno + 1) + ' while starting to recover from another error';\n                        } else {\n                            errStr = 'Parsing halted while starting to recover from another error';\n                        }\n\n                        if (po) {\n                            errStr += ' -- previous error which resulted in this fatal result: ' + po.errStr;\n                        } else {\n                            errStr += ': ';\n                        }\n\n                        if (typeof lexer.showPosition === 'function') {\n                            errStr += '\\n' + lexer.showPosition(79 - 10, 10) + '\\n';\n                        }\n                        if (expected.length) {\n                            errStr += 'Expecting ' + expected.join(', ') + ', got unexpected ' + errSymbolDescr;\n                        } else {\n                            errStr += 'Unexpected ' + errSymbolDescr;\n                        }\n\n                        p = this.constructParseErrorInfo(errStr, null, expected, false);\n                        if (po) {\n                            p.extra_error_attributes = po;\n                        }\n\n                        r = this.parseError(p.errStr, p, this.JisonParserError);\n                        if (typeof r !== 'undefined') {\n                            retval = r;\n                        }\n                        break;\n                    }\n\n                    preErrorSymbol = (symbol === TERROR ? 0 : symbol); // save the lookahead token\n                    symbol = TERROR;            // insert generic error symbol as new lookahead\n\n                    const EXTRA_STACK_SAMPLE_DEPTH = 3;\n\n                    // REDUCE/COMBINE the pushed terms/tokens to a new ERROR token:\n                    recoveringErrorInfo.symbol_stack[esp] = preErrorSymbol;\n                    if (errStr) {\n                        recoveringErrorInfo.value_stack[esp] = {\n                            yytext: shallow_copy(lexer.yytext),\n                            errorRuleDepth: error_rule_depth,\n                            errStr: errStr,\n                            errorSymbolDescr: errSymbolDescr,\n                            expectedStr: expected,\n                            stackSampleLength: error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH\n                        };\n                        if (yydebug) yydebug('Error recovery process: pushed error info item on the info stack: ', {\n                            item: vstack[sp],\n                            sp,\n                            esp,\n                            vstack,\n                            stack,\n                            sstack,\n                            combineState: NO_ACTION[1]\n                        });\n                    } else {\n                        recoveringErrorInfo.value_stack[esp] = {\n                            yytext: shallow_copy(lexer.yytext),\n                            errorRuleDepth: error_rule_depth,\n                            stackSampleLength: error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH\n                        };\n                    }\n                    recoveringErrorInfo.location_stack[esp] = copy_yylloc(lexer.yylloc);\n                    recoveringErrorInfo.state_stack[esp] = newState || NO_ACTION[1];\n\n                    ++esp;\n                    recoveringErrorInfo.info_stack_pointer = esp;\n\n                    yyval.$ = recoveringErrorInfo;\n                    yyval._$ = undefined;\n\n                    yyrulelen = error_rule_depth;\n\n                    if (yydebug) yydebug('Error recovery process: performAction: COMBINE: ', {\n                        yyval, yytext, sp, pop_size: yyrulelen, vstack, stack, sstack,\n                        combineState: NO_ACTION[1]\n                    });\n                    r = this.performAction.call(yyval, yytext, yyleng, yylineno, yyloc, NO_ACTION[1], sp - 1, yyrulelen, vstack, lstack, stack, sstack);\n\n                    if (typeof r !== 'undefined') {\n                        retval = r;\n                        break;\n                    }\n\n                    // pop off stack\n                    sp -= yyrulelen;\n\n                    // and move the top entries + discarded part of the parse stacks onto the error info stack:\n                    for (var idx = sp - EXTRA_STACK_SAMPLE_DEPTH, top = idx + yyrulelen; idx < top; idx++, esp++) {\n                        recoveringErrorInfo.symbol_stack[esp] = stack[idx];\n                        recoveringErrorInfo.value_stack[esp] = shallow_copy(vstack[idx]);\n                        recoveringErrorInfo.location_stack[esp] = copy_yylloc(lstack[idx]);\n                        recoveringErrorInfo.state_stack[esp] = sstack[idx];\n                    }\n\n                    recoveringErrorInfo.symbol_stack[esp] = TERROR;\n                    recoveringErrorInfo.value_stack[esp] = shallow_copy(yyval.$);\n                    recoveringErrorInfo.location_stack[esp] = copy_yylloc(yyval._$);\n\n                    // goto new state = table[STATE][NONTERMINAL]\n                    newState = sstack[sp - 1];\n\n                    if (this.defaultActions[newState]) {\n                        recoveringErrorInfo.state_stack[esp] = this.defaultActions[newState];\n                    } else {\n                        t = (table[newState] && table[newState][symbol]) || NO_ACTION;\n                        recoveringErrorInfo.state_stack[esp] = t[1];\n                    }\n\n                    ++esp;\n                    recoveringErrorInfo.info_stack_pointer = esp;\n\n                    // allow N (default: 3) real symbols to be shifted before reporting a new error\n                    recovering = ERROR_RECOVERY_TOKEN_DISCARD_COUNT;\n\n                    if (yydebug) yydebug('after ERROR POP: ', { error_rule_depth: error_rule_depth, symbol: symbol, preErrorSymbol: preErrorSymbol });\n\n                    // Now duplicate the standard parse machine here, at least its initial\n                    // couple of rounds until the TERROR symbol is **pushed onto the parse stack**,\n                    // as we wish to push something special then!\n                    //\n                    // Run the state machine in this copy of the parser state machine\n                    // until we *either* consume the error symbol (and its related information)\n                    // *or* we run into another error while recovering from this one\n                    // *or* we execute a `reduce` action which outputs a final parse\n                    // result (yes, that MAY happen!).\n                    //\n                    // We stay in this secondary parse loop until we have completed\n                    // the *error recovery phase* as the main parse loop (further below)\n                    // is optimized for regular parse operation and DOES NOT cope with\n                    // error recovery *at all*.\n                    //\n                    // We call the secondary parse loop just below the \"slow parse loop\",\n                    // while the main parse loop, which is an almost-duplicate of this one,\n                    // yet optimized for regular parse operation, is called the \"fast\n                    // parse loop\".\n                    //\n                    // Compare this to `bison` & (vanilla) `jison`, both of which have\n                    // only a single parse loop, which handles everything. Our goal is\n                    // to eke out every drop of performance in the main parse loop...\n\n                    ASSERT(recoveringErrorInfo, \"line 1049\");\n                    ASSERT(symbol === TERROR, \"line 1050\");\n                    ASSERT(!action, \"line 1051\");\n                    var errorSymbolFromParser = true;\n                    for (;;) {\n                        // retrieve state number from top of stack\n                        state = newState;               // sstack[sp - 1];\n\n                        // use default actions if available\n                        if (this.defaultActions[state]) {\n                            action = 2;\n                            newState = this.defaultActions[state];\n                        } else {\n                            // The single `==` condition below covers both these `===` comparisons in a single\n                            // operation:\n                            //\n                            //     if (symbol === null || typeof symbol === 'undefined') ...\n                            if (!symbol) {\n                                symbol = lex();\n                                // **Warning: Edge Case**: the *lexer* may produce\n                                // TERROR tokens of its own volition: *those* TERROR\n                                // tokens should be treated like *regular tokens*\n                                // i.e. tokens which have a lexer-provided `yyvalue`\n                                // and `yylloc`:\n                                errorSymbolFromParser = false;\n                            }\n                            // read action for current state and first input\n                            t = (table[state] && table[state][symbol]) || NO_ACTION;\n                            newState = t[1];\n                            action = t[0];\n\n                            if (yydebug) yydebug('after FETCH/LEX: ', { symbol: symbol, symbolID: this.terminals_ && this.terminals_[symbol], state: state, newState: newState, recovering: recovering, action: action });\n\n                            // encountered another parse error? If so, break out to main loop\n                            // and take it from there!\n                            if (!action) {\n                                if (yydebug) yydebug('**NESTED ERROR DETECTED** while still recovering from previous error');\n\n                                ASSERT(recoveringErrorInfo, \"line 1087\");\n\n                                // Prep state variables so that upon breaking out of\n                                // this \"slow parse loop\" and hitting the `continue;`\n                                // statement in the outer \"fast parse loop\" we redo\n                                // the exact same state table lookup as the one above\n                                // so that the outer=main loop will also correctly\n                                // detect the 'parse error' state (`!action`) we have\n                                // just encountered above.\n                                newState = state;\n                                break;\n                            }\n                        }\n\n                        if (yydebug) yydebug('::: SLOW ERROR RECOVERY PHASE CYCLE action: ' + (action === 1 ? 'shift token ' + symbol + ' (then go to state ' + newState + ')' : action === 2 ? 'reduce by rule: ' + newState + (function __print_rule(nt, state) {\n                            \"use strict\";\n\n                            if (!nt || !nt.states || !nt.rules)\n                              return '';\n                            var rulename = nt.states[state];\n                            var rulespec = nt.rules[rulename][state];\n                            return ' (' + rulespec.symbol + ' := ' + rulespec.handle + ')';\n                        })(this.nonterminals_, newState) : action === 3 ? 'accept' : '???unexpected???'), { action: action, newState: newState, recovering: recovering, symbol: symbol });\n\n                        switch (action) {\n                        // catch misc. parse failures:\n                        default:\n                            // this shouldn't happen, unless resolve defaults are off\n                            //\n                            // SILENTLY SIGNAL that the outer \"fast parse loop\" should\n                            // take care of this internal error condition:\n                            // prevent useless code duplication now/here.\n                            break;\n\n                        // shift:\n                        case 1:\n                            stack[sp] = symbol;\n                            // ### Note/Warning ###\n                            //\n                            // The *lexer* may also produce TERROR tokens on its own,\n                            // so we specifically test for the TERROR we did set up\n                            // in the error recovery logic further above!\n                            if (symbol === TERROR && errorSymbolFromParser) {\n                                // Push a special value onto the stack when we're\n                                // shifting the `error` symbol that is related to the\n                                // error we're recovering from.\n                                ASSERT(recoveringErrorInfo, \"line 1131\");\n                                vstack[sp] = recoveringErrorInfo;\n                                lstack[sp] = this.yyMergeLocationInfo(null, null, recoveringErrorInfo.loc, lexer.yylloc, true);\n                            } else {\n                                ASSERT(symbol !== 0, \"line 1135\");\n                                ASSERT(preErrorSymbol === 0, \"line 1136\");\n                                vstack[sp] = lexer.yytext;\n                                lstack[sp] = copy_yylloc(lexer.yylloc);\n                            }\n                            sstack[sp] = newState; // push state\n\n                            ++sp;\n                            symbol = 0;\n                            // **Warning: Edge Case**: the *lexer* may have produced\n                            // TERROR tokens of its own volition: *those* TERROR\n                            // tokens should be treated like *regular tokens*\n                            // i.e. tokens which have a lexer-provided `yyvalue`\n                            // and `yylloc`:\n                            errorSymbolFromParser = false;\n                            if (!preErrorSymbol) { // normal execution / no error\n                                // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:\n                                yyleng = lexer.yyleng;\n                                yytext = lexer.yytext;\n                                yylineno = lexer.yylineno;\n                                yyloc = lexer.yylloc;\n\n                                if (recovering > 0) {\n                                    recovering--;\n                                    if (yydebug) yydebug('... SHIFT:error rule matching: ', { recovering: recovering, symbol: symbol });\n                                }\n                            } else {\n                                // error just occurred, resume old lookahead f/ before error, *unless* that drops us straight back into error mode:\n                                ASSERT(recovering > 0, \"line 1163\");\n                                symbol = preErrorSymbol;\n                                preErrorSymbol = 0;\n                                if (yydebug) yydebug('... SHIFT:error recovery: ', { recovering: recovering, symbol: symbol });\n                                // read action for current state and first input\n                                t = (table[newState] && table[newState][symbol]) || NO_ACTION;\n                                if (!t[0] || symbol === TERROR) {\n                                    // forget about that symbol and move forward: this wasn't a 'forgot to insert' error type where\n                                    // (simple) stuff might have been missing before the token which caused the error we're\n                                    // recovering from now...\n                                    //\n                                    // Also check if the LookAhead symbol isn't the ERROR token we set as part of the error\n                                    // recovery, for then this we would we idling (cycling) on the error forever.\n                                    // Yes, this does not take into account the possibility that the *lexer* may have\n                                    // produced a *new* TERROR token all by itself, but that would be a very peculiar grammar!\n                                    if (yydebug) yydebug('... SHIFT:error recovery: re-application of old symbol doesn\\'t work: instead, we\\'re moving forward now. ', { recovering: recovering, symbol: symbol });\n                                    symbol = 0;\n                                }\n                            }\n\n                            // once we have pushed the special ERROR token value,\n                            // we REMAIN in this inner, \"slow parse loop\" until\n                            // the entire error recovery phase has completed.\n                            //\n                            // ### Note About Edge Case ###\n                            //\n                            // Userland action code MAY already have 'reset' the\n                            // error recovery phase marker `recovering` to ZERO(0)\n                            // while the error symbol hasn't been shifted onto\n                            // the stack yet. Hence we only exit this \"slow parse loop\"\n                            // when *both* conditions are met!\n                            ASSERT(preErrorSymbol === 0, \"line 1194\");\n                            if (recovering === 0) {\n                                break;\n                            }\n                            continue;\n\n                        // reduce:\n                        case 2:\n                            this_production = this.productions_[newState - 1];  // `this.productions_[]` is zero-based indexed while states start from 1 upwards...\n                            yyrulelen = this_production[1];\n\n                            if (yydebug) yydebug('~~~ REDUCE: ', { pop_size: yyrulelen, newState: newState, recovering: recovering, symbol: symbol });\n\n                            r = this.performAction.call(yyval, yytext, yyleng, yylineno, yyloc, newState, sp - 1, yyrulelen, vstack, lstack, stack, sstack);\n\n                            if (typeof r !== 'undefined') {\n                                // signal end of error recovery loop AND end of outer parse loop\n                                action = 3;\n                                retval = r;\n\n                                sp = -2;      // magic number: signal outer \"fast parse loop\" ACCEPT state that we already have a properly set up `retval` parser return value.\n                                break;\n                            }\n\n                            // pop off stack\n                            sp -= yyrulelen;\n\n                            // don't overwrite the `symbol` variable: use a local var to speed things up:\n                            var ntsymbol = this_production[0];    // push nonterminal (reduce)\n                            stack[sp] = ntsymbol;\n                            vstack[sp] = yyval.$;\n                            lstack[sp] = yyval._$;\n                            // goto new state = table[STATE][NONTERMINAL]\n                            newState = table[sstack[sp - 1]][ntsymbol];\n                            sstack[sp] = newState;\n                            ++sp;\n                            if (yydebug) yydebug('REDUCED: ', { newState: newState, recovering: recovering, symbol: symbol });\n                            continue;\n\n                        // accept:\n                        case 3:\n                            retval = true;\n                            // Return the `$accept` rule's `$$` result, if available.\n                            //\n                            // Also note that JISON always adds this top-most `$accept` rule (with implicit,\n                            // default, action):\n                            //\n                            //     $accept: <startSymbol> $end\n                            //                  %{ $$ = $1; @$ = @1; %}\n                            //\n                            // which, combined with the parse kernel's `$accept` state behaviour coded below,\n                            // will produce the `$$` value output of the <startSymbol> rule as the parse result,\n                            // IFF that result is *not* `undefined`. (See also the parser kernel code.)\n                            //\n                            // In code:\n                            //\n                            //                  %{\n                            //                      @$ = @1;            // if location tracking support is included\n                            //                      if (typeof $1 !== 'undefined')\n                            //                          return $1;\n                            //                      else\n                            //                          return true;           // the default parse result if the rule actions don't produce anything\n                            //                  %}\n                            sp--;\n                            if (sp >= 0 && typeof vstack[sp] !== 'undefined') {\n                                retval = vstack[sp];\n                            }\n                            sp = -2;      // magic number: signal outer \"fast parse loop\" ACCEPT state that we already have a properly set up `retval` parser return value.\n                            break;\n                        }\n\n                        // break out of loop: we accept or fail with error\n                        break;\n                    }\n\n                    // should we also break out of the regular/outer parse loop,\n                    // i.e. did the parser already produce a parse result in here?!\n                    // *or* did we hit an unsupported parse state, to be handled\n                    // in the `switch/default` code further below?\n                    ASSERT(action !== 2, \"line 1272\");\n                    if (!action || action === 1) {\n                        continue;\n                    }\n                }\n\n//_handle_error_no_recovery:                  // run this code when the grammar does not include any error recovery rules\n\n                // handle parse error\n                if (!action) {\n                    var errStr;\n                    var errSymbolDescr = (this.describeSymbol(symbol) || symbol);\n                    var expected = this.collect_expected_token_set(state);\n\n                    // Report error\n                    if (typeof lexer.yylineno === 'number') {\n                        errStr = 'Parse error on line ' + (lexer.yylineno + 1) + ': ';\n                    } else {\n                        errStr = 'Parse error: ';\n                    }\n                    if (typeof lexer.showPosition === 'function') {\n                        errStr += '\\n' + lexer.showPosition(79 - 10, 10) + '\\n';\n                    }\n                    if (expected.length) {\n                        errStr += 'Expecting ' + expected.join(', ') + ', got unexpected ' + errSymbolDescr;\n                    } else {\n                        errStr += 'Unexpected ' + errSymbolDescr;\n                    }\n                    // we cannot recover from the error!\n                    p = this.constructParseErrorInfo(errStr, null, expected, false);\n                    r = this.parseError(p.errStr, p, this.JisonParserError);\n                    if (typeof r !== 'undefined') {\n                        retval = r;\n                    }\n                    break;\n                }\n\n//_handle_error_end_of_section:                  // this concludes the error recovery / no error recovery code section choice above\n\n            }\n\n            if (yydebug) yydebug('::: MAIN CYCLE action: ' + (action === 1 ? 'shift token ' + symbol + ' (then go to state ' + newState + ')' : action === 2 ? 'reduce by rule: ' + newState + (function __print_rule(nt, state) {\n                \"use strict\";\n\n                if (!nt || !nt.states || !nt.rules)\n                  return '';\n                var rulename = nt.states[state];\n                var rulespec = nt.rules[rulename][state];\n                return ' (' + rulespec.symbol + ' := ' + rulespec.handle + ')';\n            })(this.nonterminals_, newState) : action === 3 ? 'accept' : '???unexpected???'), { action: action, newState: newState, recovering: recovering, symbol: symbol });\n\n            switch (action) {\n            // catch misc. parse failures:\n            default:\n                // this shouldn't happen, unless resolve defaults are off\n                if (action instanceof Array) {\n                    p = this.constructParseErrorInfo('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol, null, null, false);\n                    r = this.parseError(p.errStr, p, this.JisonParserError);\n                    if (typeof r !== 'undefined') {\n                        retval = r;\n                    }\n                    break;\n                }\n                // Another case of better safe than sorry: in case state transitions come out of another error recovery process\n                // or a buggy LUT (LookUp Table):\n                p = this.constructParseErrorInfo('Parsing halted. No viable error recovery approach available due to internal system failure.', null, null, false);\n                r = this.parseError(p.errStr, p, this.JisonParserError);\n                if (typeof r !== 'undefined') {\n                    retval = r;\n                }\n                break;\n\n            // shift:\n            case 1:\n                stack[sp] = symbol;\n                vstack[sp] = lexer.yytext;\n                lstack[sp] = copy_yylloc(lexer.yylloc);\n                sstack[sp] = newState; // push state\n\n                ++sp;\n                symbol = 0;\n\n                ASSERT(preErrorSymbol === 0, \"line 1352\");         // normal execution / no error\n                ASSERT(recovering === 0, \"line 1353\");             // normal execution / no error\n\n                // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:\n                yyleng = lexer.yyleng;\n                yytext = lexer.yytext;\n                yylineno = lexer.yylineno;\n                yyloc = lexer.yylloc;\n                continue;\n\n            // reduce:\n            case 2:\n                ASSERT(preErrorSymbol === 0, \"line 1364\");         // normal execution / no error\n                ASSERT(recovering === 0, \"line 1365\");             // normal execution / no error\n\n                this_production = this.productions_[newState - 1];  // `this.productions_[]` is zero-based indexed while states start from 1 upwards...\n                yyrulelen = this_production[1];\n\n                if (yydebug) yydebug('~~~ REDUCE: ', { pop_size: yyrulelen, newState: newState, recovering: recovering, symbol: symbol });\n\n                r = this.performAction.call(yyval, yytext, yyleng, yylineno, yyloc, newState, sp - 1, yyrulelen, vstack, lstack, stack, sstack);\n\n                if (typeof r !== 'undefined') {\n                    retval = r;\n                    break;\n                }\n\n                // pop off stack\n                sp -= yyrulelen;\n\n                // don't overwrite the `symbol` variable: use a local var to speed things up:\n                var ntsymbol = this_production[0];    // push nonterminal (reduce)\n                stack[sp] = ntsymbol;\n                vstack[sp] = yyval.$;\n                lstack[sp] = yyval._$;\n                // goto new state = table[STATE][NONTERMINAL]\n                newState = table[sstack[sp - 1]][ntsymbol];\n                sstack[sp] = newState;\n                ++sp;\n                if (yydebug) yydebug('REDUCED: ', { newState: newState, recovering: recovering, symbol: symbol });\n                continue;\n\n            // accept:\n            case 3:\n                if (sp !== -2) {\n                    retval = true;\n                    // Return the `$accept` rule's `$$` result, if available.\n                    //\n                    // Also note that JISON always adds this top-most `$accept` rule (with implicit,\n                    // default, action):\n                    //\n                    //     $accept: <startSymbol> $end\n                    //                  %{ $$ = $1; @$ = @1; %}\n                    //\n                    // which, combined with the parse kernel's `$accept` state behaviour coded below,\n                    // will produce the `$$` value output of the <startSymbol> rule as the parse result,\n                    // IFF that result is *not* `undefined`. (See also the parser kernel code.)\n                    //\n                    // In code:\n                    //\n                    //                  %{\n                    //                      @$ = @1;            // if location tracking support is included\n                    //                      if (typeof $1 !== 'undefined')\n                    //                          return $1;\n                    //                      else\n                    //                          return true;           // the default parse result if the rule actions don't produce anything\n                    //                  %}\n                    sp--;\n                    if (typeof vstack[sp] !== 'undefined') {\n                        retval = vstack[sp];\n                    }\n                }\n                break;\n            }\n\n            // break out of loop: we accept or fail with error\n            break;\n        }\n    } catch (ex) {\n        // report exceptions through the parseError callback too, but keep the exception intact\n        // if it is a known parser or lexer error which has been thrown by parseError() already:\n        if (ex instanceof this.JisonParserError) {\n            throw ex;\n        }\n        else if (lexer && typeof lexer.JisonLexerError === 'function' && ex instanceof lexer.JisonLexerError) {\n            throw ex;\n        }\n\n        p = this.constructParseErrorInfo('Parsing aborted due to exception.', ex, null, false);\n        retval = false;\n        r = this.parseError(p.errStr, p, this.JisonParserError);\n        if (typeof r !== 'undefined') {\n            retval = r;\n        }\n    } finally {\n        retval = this.cleanupAfterParse(retval, true, true);\n        this.__reentrant_call_depth--;\n    }   // /finally\n\n    return retval;\n}\n"; // --- END parser kernel ---
+  parser$4.parse = "\nfunction parse(input, parseParams) {\n    \"use strict\";\n\n    var self = this;\n    var stack = new Array(128);         // token stack: stores token which leads to state at the same index (column storage)\n    var sstack = new Array(128);        // state stack: stores states (column storage)\n    var tstack = [];                    // token stack (only used when `%options token_stack` support has been enabled)\n    var vstack = new Array(128);        // semantic value stack\n    var lstack = new Array(128);        // location stack\n    var table = this.table;\n    var sp = 0;                         // 'stack pointer': index into the stacks\n    var yyloc;\n    var yytext;\n    var yylineno;\n    var yyleng;\n\n    var symbol = 0;\n    var preErrorSymbol = 0;\n    var lastEofErrorStateDepth = Infinity;\n    var recoveringErrorInfo = null;\n    var recovering = 0;                 // (only used when the grammar contains error recovery rules)\n    var TERROR = this.TERROR;\n    var EOF = this.EOF;\n    var ERROR_RECOVERY_TOKEN_DISCARD_COUNT = (this.options.errorRecoveryTokenDiscardCount | 0) || 3;\n    var NO_ACTION = [0, YY_ERROR_RECOVERY_COMBINE_ID /* === table.length :: ensures that anyone using this new state will fail dramatically! */];\n\n    var lexer;\n    if (this.__lexer__) {\n        lexer = this.__lexer__;\n    } else {\n        lexer = this.__lexer__ = Object.create(this.lexer);\n    }\n\n    var sharedState_yy = {\n        parseError: undefined,\n        quoteName: undefined,\n        lexer: undefined,\n        parser: undefined,\n        pre_parse: undefined,\n        post_parse: undefined,\n        pre_lex: undefined,\n        post_lex: undefined,\n        parseParamsAsMembers: parseParamsAsMembers      // WARNING: must be written this way for the code expanders to work correctly in both ES5 and ES6 modes!\n    };\n\n    var ASSERT;\n    if (typeof assert !== 'function') {\n        ASSERT = function JisonAssert(cond, msg) {\n            \"use strict\";\n\n            if (!cond) {\n                throw new Error('assertion failed: ' + (msg || '***'));\n            }\n        };\n    } else {\n        ASSERT = assert;\n    }\n\n    this.yyGetSharedState = function yyGetSharedState() {\n        return sharedState_yy;\n    };\n\n//_handle_error_with_recovery:                    // run this code when the grammar includes error recovery rules\n\n    this.yyGetErrorInfoTrack = function yyGetErrorInfoTrack() {\n        return recoveringErrorInfo;\n    };\n\n//_handle_error_no_recovery:                      // run this code when the grammar does not include any error recovery rules\n//_handle_error_end_of_section:                   // this concludes the error recovery / no error recovery code section choice above\n\n    // shallow clone objects & arrays, straight copy of simple `src` values\n    // e.g. `lexer.yytext` MAY be a complex value object,\n    // rather than a simple string/value.\n    //\n    // https://jsperf.com/new-array-vs-splice-vs-slice/72\n    // https://jsperf.com/instanceof-vs-typeof/20\n    // benchmark:: http://127.0.0.1:8080/example/jsperf/#testfile=test0020-typeof-instanceof-isArray.json5\n    // benchmark:: http://127.0.0.1:8080/example/jsperf/?333#testfile=test0021-shallow-clones.json5\n    //\n    function shallow_copy(src) {\n        \"use strict\";\n\n        if (src && typeof src === 'object') {\n            // non-Object-type objects, e.g. RegExp, Date, etc., can usually be shallow cloned\n            // using their constructor:\n            if (src.constructor !== Object) {\n                if (Array.isArray(src)) {\n                    return src.slice();\n                }\n                var dst = new src.constructor(src);\n\n                // and make sure all custom attributes are added to the clone:\n                shallow_copy_noclobber(dst, src);\n                return dst;\n            }\n            // native objects must be cloned a different way:\n            //\n            //return Object.assign({}, src);\n            var dst = {};\n            shallow_copy_noclobber(dst, src);\n            return dst;\n        }\n        return src;\n    }\n    // add elements from `src` to `dst` when:\n    // - either the element does not yet exist in `src`\n    // - or exists in `src` but is NULL or UNDEFINED there, while its value is non-NULL in `dst`\n    function shallow_copy_noclobber(dst, src) {\n        \"use strict\";\n\n        const chk = Object.prototype.hasOwnProperty;\n        for (var k in src) {\n            if (!(k in dst)) {\n                if (chk.call(src, k)) {\n                    dst[k] = src[k];\n                }\n            }\n            else {\n                if (src[k] != null && dst[k] == null && chk.call(src, k)) {\n                    dst[k] = src[k];\n                }\n            }\n        }\n    }\n    function copy_yylloc_native(loc) {\n        \"use strict\";\n\n        var rv = shallow_copy(loc);\n        // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:\n        if (rv) {\n            rv.range = rv.range.slice();\n        }\n        return rv;\n    }\n\n    // copy state\n    shallow_copy_noclobber(sharedState_yy, this.yy);\n\n    sharedState_yy.lexer = lexer;\n    sharedState_yy.parser = this;\n\n    // allow userland code to override the yytext and yylloc copy/clone functions:\n    this.copy_yytext = this.options.copy_yytext || sharedState_yy.copy_yytext || shallow_copy;\n    this.copy_yylloc = this.options.copy_yylloc || sharedState_yy.copy_yylloc || copy_yylloc_native;\n\n    var yydebug = false;\n    if (this.options.debug) {\n        yydebug = function yydebug_impl(msg, obj) {\n            \"use strict\";\n\n            var ref_list;\n            var ref_names;\n\n            function deepClone(from, sub) {\n                \"use strict\";\n\n                if (sub == null) {\n                    ref_list = [];\n                    ref_names = [];\n                    sub = 'root';\n                }\n                if (typeof from === 'function') return '[Function]';\n                if (from == null || typeof from !== 'object') return from;\n                if (from.constructor !== Object && from.constructor !== Array) {\n                    return from;\n                }\n\n                var i = ref_list.indexOf(from);\n                if (i >= 0) {\n                    return '[Circular/Xref:' + ref_names[i] + ']';   // circular or cross reference\n                }\n                ref_list.push(from);\n                ref_names.push(sub);\n\n                var to = new from.constructor();\n                for (var name in from) {\n                    if (name === 'parser') continue;\n                    if (name === 'lexer') continue;\n                    to[name] = deepClone(from[name], name);\n                }\n                return to;\n            }\n\n            obj = obj || {};\n            if (obj.symbol) {\n                obj.local_yytext = yytext;\n                obj.lexer_yytext = lexer.yytext;\n                obj.lexer_yylloc = lexer.yylloc;\n                obj.lexer_yyllineno = lexer.yyllineno;\n            }\n\n            // warning: here we fetch from closure (stack et al)\n            obj.symbol_stack = stack;\n            obj.state_stack = sstack;\n            obj.value_stack = vstack;\n            obj.location_stack = lstack;\n            obj.stack_pointer = sp;\n\n            // ready the object for printing:\n            obj = deepClone(obj);\n\n            // wrap try/catch in a function to help the V8 JIT compiler...\n            function yydebug_cvt(obj) {\n                \"use strict\";\n\n                var js;\n                try {\n                    var re1;\n                    if (typeof XRegExp === 'undefined') {\n                        re1 = /  \\\"([a-z_][a-z_0-9. ]*)\\\": /ig;\n                    } else {\n                        re1 = new XRegExp('  \\\"([\\\\p{Alphabetic}_][\\\\p{Alphabetic}\\\\p{Number}_. ]*)\\\": ', 'g');\n                    }\n                    js = JSON.stringify(obj, null, 2)\n                    .replace(re1, '  $1: ')\n                    .replace(/[\\n\\s]+/g, ' ')\n                    // shorten yylloc object dumps too:\n                    .replace(/\\{ first_line: (\\d+), first_column: (\\d+), last_line: (\\d+), last_column: (\\d+)/g, '{L/C: ($1,$2)..($3,$4)');\n                } catch (ex) {\n                    js = String(obj);\n                }\n                return js;\n            }\n\n            self.trace(msg, yydebug_cvt(obj), '\\n');\n        };\n    }\n\n    // disable debugging at run-time ANYWAY when you've *explicitly* set \"yy.yydebug = false\":\n    if (sharedState_yy.yydebug === false) {\n        yydebug = undefined;\n    }\n\n    // *Always* setup `yyError`, `YYRECOVERING`, `yyErrOk` and `yyClearIn` functions as it is paramount\n    // to have *their* closure match ours -- if we only set them up once,\n    // any subsequent `parse()` runs will fail in very obscure ways when\n    // these functions are invoked in the user action code block(s) as\n    // their closure will still refer to the `parse()` instance which set\n    // them up. Hence we MUST set them up at the start of every `parse()` run!\n    if (this.yyError) {\n        this.yyError = function yyError(str /*, ...args */) {\n            \"use strict\";\n\n            if (yydebug) yydebug('yyerror: ', { message: str, args: arguments, symbol: symbol, state: state, newState: newState, recovering: recovering, action: action });\n\n//_handle_error_with_recovery:                    // run this code when the grammar includes error recovery rules\n\n            var error_rule_depth = (this.options.parserErrorsAreRecoverable ? locateNearestErrorRecoveryRule(state) : -1);\n            var expected = this.collect_expected_token_set(state);\n            var hash = this.constructParseErrorInfo(str, null, expected, (error_rule_depth >= 0));\n            // append to the old one?\n            if (recoveringErrorInfo) {\n                var esp = recoveringErrorInfo.info_stack_pointer;\n\n                recoveringErrorInfo.symbol_stack[esp] = symbol;\n                var v = this.shallowCopyErrorInfo(hash);\n                v.yyError = true;\n                v.errorRuleDepth = error_rule_depth;\n                v.recovering = recovering;\n                // v.stackSampleLength = error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH;\n\n                recoveringErrorInfo.value_stack[esp] = v;\n                recoveringErrorInfo.location_stack[esp] = this.copy_yylloc(lexer.yylloc);\n                recoveringErrorInfo.state_stack[esp] = newState || NO_ACTION[1];\n\n                ++esp;\n                recoveringErrorInfo.info_stack_pointer = esp;\n            } else {\n                recoveringErrorInfo = this.shallowCopyErrorInfo(hash);\n                recoveringErrorInfo.yyError = true;\n                recoveringErrorInfo.errorRuleDepth = error_rule_depth;\n                recoveringErrorInfo.recovering = recovering;\n            }\n\n//_handle_error_no_recovery:                      // run this code when the grammar does not include any error recovery rules\n\n            var expected = this.collect_expected_token_set(state);\n            var hash = this.constructParseErrorInfo(str, null, expected, false);\n\n//_handle_error_end_of_section:                   // this concludes the error recovery / no error recovery code section choice above\n\n            // Add any extra args to the hash under the name `extra_error_attributes`:\n            var args = Array.prototype.slice.call(arguments, 1);\n            if (args.length) {\n                hash.extra_error_attributes = args;\n            }\n\n            return this.parseError(str, hash, this.JisonParserError);\n        };\n    }\n\n//_handle_error_with_recovery:                    // run this code when the grammar includes error recovery rules\n\n    if (this.yyRecovering) {\n        this.yyRecovering = function yyRecovering() {\n            \"use strict\";\n\n            if (yydebug) yydebug('yyrecovering: ', { symbol: symbol, state: state, newState: newState, recovering: recovering, action: action });\n            return recovering;\n        };\n    }\n\n    if (this.yyErrOk) {\n        this.yyErrOk = function yyErrOk() {\n            \"use strict\";\n\n            if (yydebug) yydebug('yyerrok: ', { symbol: symbol, state: state, newState: newState, recovering: recovering, action: action });\n            recovering = 0;\n\n            // DO NOT reset/cleanup `recoveringErrorInfo` yet: userland code\n            // MAY invoke this API before the error is actually fully\n            // recovered, in which case the parser recovery code won't be able\n            // to append the skipped tokens to this info object.\n            //\n            // The rest of the kernel code is safe enough that it won't inadvertedly\n            // re-use an old `recoveringErrorInfo` chunk so we'ld better wait\n            // with destruction/cleanup until the end of the parse or until another\n            // fresh parse error rears its ugly head...\n            //\n            // if (recoveringErrorInfo && typeof recoveringErrorInfo.destroy === 'function') {\n            //     recoveringErrorInfo.destroy();\n            //     recoveringErrorInfo = undefined;\n            // }\n        };\n    }\n\n    if (this.yyClearIn) {\n        this.yyClearIn = function yyClearIn() {\n            \"use strict\";\n\n            if (yydebug) yydebug('yyclearin: ', { symbol: symbol, newState: newState, recovering: recovering, action: action, preErrorSymbol: preErrorSymbol });\n            if (symbol === TERROR) {\n                symbol = 0;\n                yytext = null;\n                yyleng = 0;\n                yyloc = undefined;\n            }\n            preErrorSymbol = 0;\n        };\n    }\n\n//_handle_error_no_recovery:                      // run this code when the grammar does not include any error recovery rules\n//_handle_error_end_of_section:                   // this concludes the error recovery / no error recovery code section choice above\n\n    // Does the shared state override the default `parseError` that already comes with this instance?\n    if (typeof sharedState_yy.parseError === 'function') {\n        this.parseError = function parseErrorAlt(str, hash, ExceptionClass) {\n            \"use strict\";\n\n            if (!ExceptionClass) {\n                ExceptionClass = this.JisonParserError;\n            }\n            return sharedState_yy.parseError.call(this, str, hash, ExceptionClass);\n        };\n    } else {\n        this.parseError = this.originalParseError;\n    }\n\n    // Does the shared state override the default `quoteName` that already comes with this instance?\n    if (typeof sharedState_yy.quoteName === 'function') {\n        this.quoteName = function quoteNameAlt(id_str) {\n            \"use strict\";\n\n            return sharedState_yy.quoteName.call(this, id_str);\n        };\n    } else {\n        this.quoteName = this.originalQuoteName;\n    }\n\n    // set up the cleanup function; make it an API so that external code can re-use this one in case of\n    // calamities or when the `%options no-try-catch` option has been specified for the grammar, in which\n    // case this parse() API method doesn't come with a `finally { ... }` block any more!\n    //\n    // NOTE: as this API uses parse() as a closure, it MUST be set again on every parse() invocation,\n    //       or else your `sharedState`, etc. references will be *wrong*!\n    this.cleanupAfterParse = function parser_cleanupAfterParse(resultValue, invoke_post_methods, do_not_nuke_errorinfos) {\n        \"use strict\";\n\n        var rv;\n\n        if (invoke_post_methods) {\n            var hash;\n\n            if (sharedState_yy.post_parse || this.post_parse) {\n                // create an error hash info instance: we re-use this API in a **non-error situation**\n                // as this one delivers all parser internals ready for access by userland code.\n                hash = this.constructParseErrorInfo(null /* no error! */, null /* no exception! */, null, false);\n            }\n\n            if (sharedState_yy.post_parse) {\n                rv = sharedState_yy.post_parse.call(this, sharedState_yy, resultValue, hash);\n                if (typeof rv !== 'undefined') resultValue = rv;\n            }\n            if (this.post_parse) {\n                rv = this.post_parse.call(this, sharedState_yy, resultValue, hash);\n                if (typeof rv !== 'undefined') resultValue = rv;\n            }\n\n            // cleanup:\n            if (hash && hash.destroy) {\n                hash.destroy();\n            }\n        }\n\n        if (this.__reentrant_call_depth > 1) return resultValue;        // do not (yet) kill the sharedState when this is a reentrant run.\n\n        // clean up the lingering lexer structures as well:\n        if (lexer.cleanupAfterLex) {\n            lexer.cleanupAfterLex(do_not_nuke_errorinfos);\n        }\n\n        // prevent lingering circular references from causing memory leaks:\n        if (sharedState_yy) {\n            sharedState_yy.lexer = undefined;\n            sharedState_yy.parser = undefined;\n            if (lexer.yy === sharedState_yy) {\n                lexer.yy = undefined;\n            }\n        }\n        sharedState_yy = undefined;\n        this.parseError = this.originalParseError;\n        this.quoteName = this.originalQuoteName;\n\n        // nuke the vstack[] array at least as that one will still reference obsoleted user values.\n        // To be safe, we nuke the other internal stack columns as well...\n        stack.length = 0;               // fastest way to nuke an array without overly bothering the GC\n        sstack.length = 0;\n        lstack.length = 0;\n        vstack.length = 0;\n        sp = 0;\n\n        // nuke the error hash info instances created during this run.\n        // Userland code must COPY any data/references\n        // in the error hash instance(s) it is more permanently interested in.\n        if (!do_not_nuke_errorinfos) {\n            for (var i = this.__error_infos.length - 1; i >= 0; i--) {\n                var el = this.__error_infos[i];\n                if (el && typeof el.destroy === 'function') {\n                    el.destroy();\n                }\n            }\n            this.__error_infos.length = 0;\n\n//_handle_error_with_recovery:                    // run this code when the grammar includes error recovery rules\n\n            for (var i = this.__error_recovery_infos.length - 1; i >= 0; i--) {\n                var el = this.__error_recovery_infos[i];\n                if (el && typeof el.destroy === 'function') {\n                    el.destroy();\n                }\n            }\n            this.__error_recovery_infos.length = 0;\n\n            // `recoveringErrorInfo` is also part of the `__error_recovery_infos` array,\n            // hence has been destroyed already: no need to do that *twice*.\n            if (recoveringErrorInfo) {\n                recoveringErrorInfo = undefined;\n            }\n\n//_handle_error_no_recovery:                      // run this code when the grammar does not include any error recovery rules\n//_handle_error_end_of_section:                   // this concludes the error recovery / no error recovery code section choice above\n\n        }\n\n        return resultValue;\n    };\n\n    // merge yylloc info into a new yylloc instance.\n    //\n    // `first_index` and `last_index` MAY be UNDEFINED/NULL or these are indexes into the `lstack[]` location stack array.\n    //\n    // `first_yylloc` and `last_yylloc` MAY be UNDEFINED/NULL or explicit (custom or regular) `yylloc` instances, in which\n    // case these override the corresponding first/last indexes.\n    //\n    // `dont_look_back` is an optional flag (default: FALSE), which instructs this merge operation NOT to search\n    // through the parse location stack for a location, which would otherwise be used to construct the new (epsilon!)\n    // yylloc info.\n    //\n    // Note: epsilon rule's yylloc situation is detected by passing both `first_index` and `first_yylloc` as UNDEFINED/NULL.\n    this.yyMergeLocationInfo = function parser_yyMergeLocationInfo(first_index, last_index, first_yylloc, last_yylloc, dont_look_back) {\n        \"use strict\";\n\n        var i1 = first_index | 0,\n            i2 = last_index | 0;\n        var l1 = first_yylloc,\n            l2 = last_yylloc;\n        var rv;\n\n        // rules:\n        // - first/last yylloc entries override first/last indexes\n\n        if (!l1) {\n            if (first_index != null) {\n                for (var i = i1; i <= i2; i++) {\n                    l1 = lstack[i];\n                    if (l1) {\n                        break;\n                    }\n                }\n            }\n        }\n\n        if (!l2) {\n            if (last_index != null) {\n                for (var i = i2; i >= i1; i--) {\n                    l2 = lstack[i];\n                    if (l2) {\n                        break;\n                    }\n                }\n            }\n        }\n\n        // - detect if an epsilon rule is being processed and act accordingly:\n        if (!l1 && first_index == null) {\n            // epsilon rule span merger. With optional look-ahead in l2.\n            if (!dont_look_back) {\n                for (var i = (i1 || sp) - 1; i >= 0; i--) {\n                    l1 = lstack[i];\n                    if (l1) {\n                        break;\n                    }\n                }\n            }\n            if (!l1) {\n                if (!l2) {\n                    // when we still don't have any valid yylloc info, we're looking at an epsilon rule\n                    // without look-ahead and no preceding terms and/or `dont_look_back` set:\n                    // in that case we ca do nothing but return NULL/UNDEFINED:\n                    return undefined;\n                } else {\n                    // shallow-copy L2: after all, we MAY be looking\n                    // at unconventional yylloc info objects...\n                    rv = this.copy_yylloc(l2);\n                    return rv;\n                }\n            } else {\n                // shallow-copy L1, then adjust first col/row 1 column past the end.\n                rv = this.copy_yylloc(l1);\n                rv.first_line = rv.last_line;\n                rv.first_column = rv.last_column;\n                rv.range[0] = rv.range[1];\n\n                if (l2) {\n                    // shallow-mixin L2, then adjust last col/row accordingly.\n                    shallow_copy_noclobber(rv, l2);\n                    rv.last_line = l2.last_line;\n                    rv.last_column = l2.last_column;\n                    rv.range[1] = l2.range[1];\n                }\n                return rv;\n            }\n        }\n\n        if (!l1) {\n            l1 = l2;\n            l2 = null;\n        }\n        if (!l1) {\n            return undefined;\n        }\n\n        // shallow-copy L1|L2, before we try to adjust the yylloc values: after all, we MAY be looking\n        // at unconventional yylloc info objects...\n        rv = this.copy_yylloc(l1);\n\n        if (l2) {\n            shallow_copy_noclobber(rv, l2);\n            rv.last_line = l2.last_line;\n            rv.last_column = l2.last_column;\n            rv.range[1] = l2.range[1];\n        }\n\n        return rv;\n    };\n\n    // NOTE: as this API uses parse() as a closure, it MUST be set again on every parse() invocation,\n    //       or else your `lexer`, `sharedState`, etc. references will be *wrong*!\n    this.constructParseErrorInfo = function parser_constructParseErrorInfo(msg, ex, expected, recoverable) {\n        \"use strict\";\n\n        var pei = {\n            errStr: msg,\n            exception: ex,\n            text: lexer.match,\n            value: this.copy_yytext(lexer.yytext),\n            token: this.describeSymbol(symbol) || symbol,\n            token_id: symbol,\n            line: lexer.yylineno,\n            loc: this.copy_yylloc(lexer.yylloc),\n            expected: expected,\n            recoverable: recoverable,\n            state: state,\n            action: action,\n            new_state: newState,\n            symbol_stack: stack,\n            state_stack: sstack,\n            value_stack: vstack,\n            location_stack: lstack,\n            stack_pointer: sp,\n            yy: sharedState_yy,\n            lexer: lexer,\n            parser: this,\n\n            // and make sure the error info doesn't stay due to potential\n            // ref cycle via userland code manipulations.\n            // These would otherwise all be memory leak opportunities!\n            //\n            // Note that only array and object references are nuked as those\n            // constitute the set of elements which can produce a cyclic ref.\n            // The rest of the members is kept intact as they are harmless.\n            destroy: function destructParseErrorInfo() {\n                // remove cyclic references added to error info:\n                // info.yy = null;\n                // info.lexer = null;\n                // info.value = null;\n                // info.value_stack = null;\n                // ...\n                \"use strict\";\n\n                var rec = !!this.recoverable;\n                for (var key in this) {\n                    if (this[key] && this.hasOwnProperty(key) && typeof this[key] === 'object') {\n                        this[key] = undefined;\n                    }\n                }\n                this.recoverable = rec;\n            }\n        };\n        // track this instance so we can `destroy()` it once we deem it superfluous and ready for garbage collection!\n        this.__error_infos.push(pei);\n        return pei;\n    };\n\n    // clone some parts of the (possibly enhanced!) errorInfo object\n    // to give them some persistence.\n    this.shallowCopyErrorInfo = function parser_shallowCopyErrorInfo(p) {\n        \"use strict\";\n\n        var rv = shallow_copy(p);\n\n        // remove the large parts which can only cause cyclic references\n        // and are otherwise available from the parser kernel anyway.\n        delete rv.sharedState_yy;\n        delete rv.parser;\n        delete rv.lexer;\n\n        // lexer.yytext MAY be a complex value object, rather than a simple string/value:\n        rv.value = this.copy_yytext(rv.value);\n\n        // yylloc info:\n        rv.loc = this.copy_yylloc(rv.loc);\n\n        // the 'expected' set won't be modified, so no need to clone it:\n        //rv.expected = rv.expected.slice();\n\n        //symbol stack is a simple array:\n        rv.symbol_stack = rv.symbol_stack.slice();\n        // ditto for state stack:\n        rv.state_stack = rv.state_stack.slice();\n        // clone the yylloc's in the location stack?:\n        rv.location_stack = rv.location_stack.map(this.copy_yylloc);\n        // and the value stack may carry both simple and complex values:\n        // shallow-copy the latter.\n        rv.value_stack = rv.value_stack.map(this.copy_yytext);\n\n        // and we don't bother with the sharedState_yy reference:\n        //delete rv.yy;\n\n        // now we prepare for tracking the COMBINE actions\n        // in the error recovery code path:\n        //\n        // as we want to keep the maximum error info context, we\n        // *scan* the state stack to find the first *empty* slot.\n        // This position will surely be AT OR ABOVE the current\n        // stack pointer, but we want to keep the 'used but discarded'\n        // part of the parse stacks *intact* as those slots carry\n        // error context that may be useful when you want to produce\n        // very detailed error diagnostic reports.\n        //\n        // ### Purpose of each stack pointer:\n        //\n        // - stack_pointer: points at the top of the parse stack\n        //                  **as it existed at the time of the error\n        //                  occurrence, i.e. at the time the stack\n        //                  snapshot was taken and copied into the\n        //                  errorInfo object.**\n        // - base_pointer:  the bottom of the **empty part** of the\n        //                  stack, i.e. **the start of the rest of\n        //                  the stack space /above/ the existing\n        //                  parse stack. This section will be filled\n        //                  by the error recovery process as it\n        //                  travels the parse state machine to\n        //                  arrive at the resolving error recovery rule.**\n        // - info_stack_pointer:\n        //                  this stack pointer points to the **top of\n        //                  the error recovery tracking stack space**, i.e.\n        //                  this stack pointer takes up the role of\n        //                  the `stack_pointer` for the error recovery\n        //                  process. Any mutations in the **parse stack**\n        //                  are **copy-appended** to this part of the\n        //                  stack space, keeping the bottom part of the\n        //                  stack (the 'snapshot' part where the parse\n        //                  state at the time of error occurrence was kept)\n        //                  intact.\n        // - root_failure_pointer:\n        //                  copy of the `stack_pointer`...\n        //\n        for (var i = rv.stack_pointer; rv.state_stack[i] != null; i++) {\n            // empty\n        }\n        rv.base_pointer = i;\n        rv.info_stack_pointer = i;\n\n        rv.root_failure_pointer = rv.stack_pointer;\n\n        // track this instance so we can `destroy()` it once we deem it superfluous and ready for garbage collection!\n        this.__error_recovery_infos.push(rv);\n\n        return rv;\n    };\n\n    function getNonTerminalFromCode(symbol) {\n        \"use strict\";\n\n        var tokenName = self.getSymbolName(symbol);\n        if (!tokenName) {\n            tokenName = symbol;\n        }\n        return tokenName;\n    }\n\n//_lexer_without_token_stack:\n\n    function stdLex() {\n        \"use strict\";\n\n        var token = lexer.lex();\n        // if token isn't its numeric value, convert\n        if (typeof token !== 'number') {\n            token = self.symbols_[token] || token;\n        }\n\n        if (typeof Jison !== 'undefined' && Jison.lexDebugger) {\n            var tokenName = self.getSymbolName(token || EOF);\n            if (!tokenName) {\n                tokenName = token;\n            }\n\n            Jison.lexDebugger.push({\n                tokenName: tokenName,\n                tokenText: lexer.match,\n                tokenValue: lexer.yytext\n            });\n        }\n\n        return token || EOF;\n    }\n\n    function fastLex() {\n        \"use strict\";\n\n        var token = lexer.fastLex();\n        // if token isn't its numeric value, convert\n        if (typeof token !== 'number') {\n            token = self.symbols_[token] || token;\n        }\n\n        if (typeof Jison !== 'undefined' && Jison.lexDebugger) {\n            var tokenName = self.getSymbolName(token || EOF);\n            if (!tokenName) {\n                tokenName = token;\n            }\n\n            Jison.lexDebugger.push({\n                tokenName: tokenName,\n                tokenText: lexer.match,\n                tokenValue: lexer.yytext\n            });\n        }\n\n        return token || EOF;\n    }\n\n    var lex = stdLex;\n\n//_lexer_with_token_stack:\n\n    // lex function that supports token stacks\n    function tokenStackLex() {\n        \"use strict\";\n\n        var token;\n        token = tstack.pop() || lexer.lex() || EOF;\n        // if token isn't its numeric value, convert\n        if (typeof token !== 'number') {\n            if (token instanceof Array) {\n                // tokenstack CANNOT be nested, i.e. an 'array'-type token\n                // now means the `tstack` is empty as this array of tokens\n                // could only have originated from the `lexer.lex()`\n                // call:\n                tstack = token;\n                token = tstack.pop();\n            }\n            // if token isn't its numeric value, convert\n            if (typeof token !== 'number') {\n                token = self.symbols_[token] || token;\n            }\n        }\n\n        if (typeof Jison !== 'undefined' && Jison.lexDebugger) {\n            var tokenName = self.getSymbolName(token || EOF);\n            if (!tokenName) {\n                tokenName = token;\n            }\n\n            Jison.lexDebugger.push({\n                tokenName: tokenName,\n                tokenText: lexer.match,\n                tokenValue: lexer.yytext\n            });\n        }\n\n        return token || EOF;\n    }\n\n//_lexer_with_token_stack_end:\n\n    var state, action, r, t;\n    var yyval = {\n        $: true,\n        _$: undefined,\n        yy: sharedState_yy\n    };\n    var p;\n    var yyrulelen;\n    var this_production;\n    var newState;\n    var retval = false;\n\n//_handle_error_with_recovery:                    // run this code when the grammar includes error recovery rules\n\n    // Return the rule stack depth where the nearest error rule can be found.\n    // Return -1 when no error recovery rule was found.\n    function locateNearestErrorRecoveryRule(state) {\n        \"use strict\";\n\n        var stack_probe = sp - 1;\n        var depth = 0;\n\n        // try to recover from error\n        while (stack_probe >= 0) {\n            // check for error recovery rule in this state\n            if (yydebug) yydebug('locateNearestErrorRecoveryRule #test#: ', { symbol: symbol, state: state, depth: depth, stackidx: sp - 1 - depth, lastidx: lastEofErrorStateDepth });\n            var t = (table[state] && table[state][TERROR]) || NO_ACTION;\n            if (t[0]) {\n                // We need to make sure we're not cycling forever:\n                // once we hit EOF, even when we `yyerrok()` an error, we must\n                // prevent the core from running forever,\n                // e.g. when parent rules are still expecting certain input to\n                // follow after this, for example when you handle an error inside a set\n                // of braces which are matched by a parent rule in your grammar.\n                //\n                // Hence we require that every error handling/recovery attempt\n                // *after we've hit EOF* has a diminishing state stack: this means\n                // we will ultimately have unwound the state stack entirely and thus\n                // terminate the parse in a controlled fashion even when we have\n                // very complex error/recovery code interplay in the core + user\n                // action code blocks:\n                if (yydebug) yydebug('locateNearestErrorRecoveryRule #found#: ', { symbol: symbol, state: state, depth: depth, stackidx: sp - 1 - depth, lastidx: lastEofErrorStateDepth });\n                if (symbol === EOF) {\n                    if (lastEofErrorStateDepth > sp - 1 - depth) {\n                        lastEofErrorStateDepth = sp - 1 - depth;\n                    } else {\n                        if (yydebug) yydebug('locateNearestErrorRecoveryRule #skip#: ', { symbol: symbol, state: state, depth: depth, stackidx: sp - 1 - depth, lastidx: lastEofErrorStateDepth });\n                        --stack_probe; // popStack(1): [symbol, action]\n                        state = sstack[stack_probe];\n                        ++depth;\n                        continue;\n                    }\n                }\n                return depth;\n            }\n            if (state === 0 /* $accept rule */ || stack_probe < 1) {\n                if (yydebug) yydebug('locateNearestErrorRecoveryRule #end=NIL#: ', { symbol: symbol, state: state, depth: depth, stackidx: sp - 1 - depth, lastidx: lastEofErrorStateDepth });\n                return -1; // No suitable error recovery rule available.\n            }\n            --stack_probe; // popStack(1): [symbol, action]\n            state = sstack[stack_probe];\n            ++depth;\n        }\n        if (yydebug) yydebug('locateNearestErrorRecoveryRule #EMPTY#: ', { symbol: symbol, state: state, depth: depth, stackidx: sp - 1 - depth, lastidx: lastEofErrorStateDepth });\n        return -1; // No suitable error recovery rule available.\n    }\n\n//_handle_error_no_recovery:                      // run this code when the grammar does not include any error recovery rules\n//_handle_error_end_of_section:                   // this concludes the error recovery / no error recovery code section choice above\n\n    try {\n        this.__reentrant_call_depth++;\n\n        lexer.setInput(input, sharedState_yy);\n\n        // NOTE: we *assume* no lexer pre/post handlers are set up *after*\n        // this initial `setInput()` call: hence we can now check and decide\n        // whether we'll go with the standard, slower, lex() API or the\n        // `fast_lex()` one:\n        if (typeof lexer.canIUse === 'function') {\n            var lexerInfo = lexer.canIUse();\n            if (lexerInfo.fastLex && typeof fastLex === 'function') {\n                lex = fastLex;\n            }\n        }\n\n        yyloc = this.copy_yylloc(lexer.yylloc);\n        lstack[sp] = yyloc;\n        vstack[sp] = null;\n        sstack[sp] = 0;\n        stack[sp] = 0;\n        ++sp;\n\n        yytext = lexer.yytext;\n        yylineno = lexer.yylineno;\n        yyleng = lexer.yyleng;\n\n        if (this.pre_parse) {\n            this.pre_parse.call(this, sharedState_yy);\n        }\n        if (sharedState_yy.pre_parse) {\n            sharedState_yy.pre_parse.call(this, sharedState_yy);\n        }\n\n        newState = sstack[sp - 1];\n        for (;;) {\n            // retrieve state number from top of stack\n            state = newState;               // sstack[sp - 1];\n\n            // use default actions if available\n            if (this.defaultActions[state]) {\n                action = 2;\n                newState = this.defaultActions[state];\n            } else {\n                // The single `==` condition below covers both these `===` comparisons in a single\n                // operation:\n                //\n                //     if (symbol === null || typeof symbol === 'undefined') ...\n                if (!symbol) {\n                    symbol = lex();\n                }\n                // read action for current state and first input\n                t = (table[state] && table[state][symbol]) || NO_ACTION;\n                newState = t[1];\n                action = t[0];\n\n                if (yydebug) yydebug('after FETCH/LEX: ', { symbol: symbol, symbolID: this.terminals_ && this.terminals_[symbol], state: state, newState: newState, recovering: recovering, action: action });\n\n//_handle_error_with_recovery:                // run this code when the grammar includes error recovery rules\n\n                // handle parse error\n                if (!action) {\n                    // first see if there's any chance at hitting an error recovery rule:\n                    var error_rule_depth = locateNearestErrorRecoveryRule(state);\n                    var errStr = null;\n                    var errSymbolDescr = (this.describeSymbol(symbol) || symbol);\n                    var expected = this.collect_expected_token_set(state);\n\n                    if (!recovering) {\n                        // Report error\n                        if (typeof lexer.yylineno === 'number') {\n                            errStr = 'Parse error on line ' + (lexer.yylineno + 1) + ': ';\n                        } else {\n                            errStr = 'Parse error: ';\n                        }\n\n                        if (typeof lexer.showPosition === 'function') {\n                            errStr += '\\n' + lexer.showPosition(79 - 10, 10) + '\\n';\n                        }\n                        if (expected.length) {\n                            errStr += 'Expecting ' + expected.join(', ') + ', got unexpected ' + errSymbolDescr;\n                        } else {\n                            errStr += 'Unexpected ' + errSymbolDescr;\n                        }\n\n                        p = this.constructParseErrorInfo(errStr, null, expected, (error_rule_depth >= 0));\n\n                        // DO NOT cleanup the old one before we start the new error info track:\n                        // the old one will *linger* on the error stack and stay alive until we\n                        // invoke the parser's cleanup API!\n                        recoveringErrorInfo = this.shallowCopyErrorInfo(p);\n\n                        if (yydebug) yydebug('error recovery rule detected: ', { error_rule_depth: error_rule_depth, error: p.errStr, error_hash: p });\n\n                        r = this.parseError(p.errStr, p, this.JisonParserError);\n                        if (typeof r !== 'undefined') {\n                            retval = r;\n                            break;\n                        }\n\n                        // Protect against overly blunt userland `parseError` code which *sets*\n                        // the `recoverable` flag without properly checking first:\n                        // we always terminate the parse when there's no recovery rule available anyhow!\n                        if (!p.recoverable || error_rule_depth < 0) {\n                            break;\n                        } else {\n                            // TODO: allow parseError callback to edit symbol and or state at the start of the error recovery process...\n                        }\n                    }\n\n                    if (yydebug) yydebug('after ERROR DETECT: ', { error_rule_depth: error_rule_depth, error: p.errStr, error_hash: p });\n\n                    var esp = recoveringErrorInfo.info_stack_pointer;\n\n                    // just recovered from another error\n                    if (recovering === ERROR_RECOVERY_TOKEN_DISCARD_COUNT && error_rule_depth >= 0) {\n                        // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:\n                        yyleng = lexer.yyleng;\n                        yytext = this.copy_yytext(lexer.yytext);\n                        yylineno = lexer.yylineno;\n                        yyloc = this.copy_yylloc(lexer.yylloc);\n\n                        // SHIFT current lookahead and grab another\n                        recoveringErrorInfo.symbol_stack[esp] = symbol;\n                        recoveringErrorInfo.value_stack[esp] = yytext;\n                        recoveringErrorInfo.location_stack[esp] = yyloc;\n                        recoveringErrorInfo.state_stack[esp] = newState; // push state\n                        ++esp;\n\n                        preErrorSymbol = 0;\n                        symbol = lex();\n\n                        if (yydebug) yydebug('after ERROR RECOVERY-3: ', { symbol: symbol, symbolID: this.terminals_ && this.terminals_[symbol] });\n                    }\n\n                    // try to recover from error\n                    if (error_rule_depth < 0) {\n                        ASSERT(recovering > 0, \"line 897\");\n                        recoveringErrorInfo.info_stack_pointer = esp;\n\n                        // barf a fatal hairball when we're out of look-ahead symbols and none hit a match\n                        // while we are still busy recovering from another error:\n                        var po = this.__error_infos[this.__error_infos.length - 1];\n\n                        // Report error\n                        if (typeof lexer.yylineno === 'number') {\n                            errStr = 'Parsing halted on line ' + (lexer.yylineno + 1) + ' while starting to recover from another error';\n                        } else {\n                            errStr = 'Parsing halted while starting to recover from another error';\n                        }\n\n                        if (po) {\n                            errStr += ' -- previous error which resulted in this fatal result: ' + po.errStr;\n                        } else {\n                            errStr += ': ';\n                        }\n\n                        if (typeof lexer.showPosition === 'function') {\n                            errStr += '\\n' + lexer.showPosition(79 - 10, 10) + '\\n';\n                        }\n                        if (expected.length) {\n                            errStr += 'Expecting ' + expected.join(', ') + ', got unexpected ' + errSymbolDescr;\n                        } else {\n                            errStr += 'Unexpected ' + errSymbolDescr;\n                        }\n\n                        p = this.constructParseErrorInfo(errStr, null, expected, false);\n                        if (po) {\n                            p.extra_error_attributes = po;\n                        }\n\n                        r = this.parseError(p.errStr, p, this.JisonParserError);\n                        if (typeof r !== 'undefined') {\n                            retval = r;\n                        }\n                        break;\n                    }\n\n                    preErrorSymbol = (symbol === TERROR ? 0 : symbol); // save the lookahead token\n                    symbol = TERROR;            // insert generic error symbol as new lookahead\n\n                    const EXTRA_STACK_SAMPLE_DEPTH = 3;\n\n                    // REDUCE/COMBINE the pushed terms/tokens to a new ERROR token:\n                    recoveringErrorInfo.symbol_stack[esp] = preErrorSymbol;\n                    if (errStr) {\n                        recoveringErrorInfo.value_stack[esp] = {\n                            yytext: this.copy_yytext(lexer.yytext),\n                            errorRuleDepth: error_rule_depth,\n                            errStr: errStr,\n                            errorSymbolDescr: errSymbolDescr,\n                            expectedStr: expected,\n                            stackSampleLength: error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH\n                        };\n                        if (yydebug) yydebug('Error recovery process: pushed error info item on the info stack: ', {\n                            item: vstack[sp],\n                            sp,\n                            esp,\n                            vstack,\n                            stack,\n                            sstack,\n                            combineState: NO_ACTION[1]\n                        });\n                    } else {\n                        recoveringErrorInfo.value_stack[esp] = {\n                            yytext: this.copy_yytext(lexer.yytext),\n                            errorRuleDepth: error_rule_depth,\n                            stackSampleLength: error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH\n                        };\n                    }\n                    recoveringErrorInfo.location_stack[esp] = this.copy_yylloc(lexer.yylloc);\n                    recoveringErrorInfo.state_stack[esp] = newState || NO_ACTION[1];\n\n                    ++esp;\n                    recoveringErrorInfo.info_stack_pointer = esp;\n\n                    yyval.$ = recoveringErrorInfo;\n                    yyval._$ = undefined;\n\n                    yyrulelen = error_rule_depth;\n\n                    if (yydebug) yydebug('Error recovery process: performAction: COMBINE: ', {\n                        yyval, yytext, sp, pop_size: yyrulelen, vstack, stack, sstack,\n                        combineState: NO_ACTION[1]\n                    });\n                    r = this.performAction.call(yyval, yytext, yyleng, yylineno, yyloc, NO_ACTION[1], sp - 1, yyrulelen, vstack, lstack, stack, sstack);\n\n                    if (typeof r !== 'undefined') {\n                        retval = r;\n                        break;\n                    }\n\n                    // pop off stack\n                    sp -= yyrulelen;\n\n                    // and move the top entries + discarded part of the parse stacks onto the error info stack:\n                    for (var idx = sp - EXTRA_STACK_SAMPLE_DEPTH, top = idx + yyrulelen; idx < top; idx++, esp++) {\n                        recoveringErrorInfo.symbol_stack[esp] = stack[idx];\n                        recoveringErrorInfo.value_stack[esp] = vstack[idx];\n                        recoveringErrorInfo.location_stack[esp] = lstack[idx];\n                        recoveringErrorInfo.state_stack[esp] = sstack[idx];\n                    }\n\n                    recoveringErrorInfo.symbol_stack[esp] = TERROR;\n                    recoveringErrorInfo.value_stack[esp] = this.copy_yytext(yyval.$);\n                    recoveringErrorInfo.location_stack[esp] = this.copy_yylloc(yyval._$);\n\n                    // goto new state = table[STATE][NONTERMINAL]\n                    newState = sstack[sp - 1];\n\n                    if (this.defaultActions[newState]) {\n                        recoveringErrorInfo.state_stack[esp] = this.defaultActions[newState];\n                    } else {\n                        t = (table[newState] && table[newState][symbol]) || NO_ACTION;\n                        recoveringErrorInfo.state_stack[esp] = t[1];\n                    }\n\n                    ++esp;\n                    recoveringErrorInfo.info_stack_pointer = esp;\n\n                    // allow N (default: 3) real symbols to be shifted before reporting a new error\n                    recovering = ERROR_RECOVERY_TOKEN_DISCARD_COUNT;\n\n                    if (yydebug) yydebug('after ERROR POP: ', { error_rule_depth: error_rule_depth, symbol: symbol, preErrorSymbol: preErrorSymbol });\n\n                    // Now duplicate the standard parse machine here, at least its initial\n                    // couple of rounds until the TERROR symbol is **pushed onto the parse stack**,\n                    // as we wish to push something special then!\n                    //\n                    // Run the state machine in this copy of the parser state machine\n                    // until we *either* consume the error symbol (and its related information)\n                    // *or* we run into another error while recovering from this one\n                    // *or* we execute a `reduce` action which outputs a final parse\n                    // result (yes, that MAY happen!).\n                    //\n                    // We stay in this secondary parse loop until we have completed\n                    // the *error recovery phase* as the main parse loop (further below)\n                    // is optimized for regular parse operation and DOES NOT cope with\n                    // error recovery *at all*.\n                    //\n                    // We call the secondary parse loop just below the \"slow parse loop\",\n                    // while the main parse loop, which is an almost-duplicate of this one,\n                    // yet optimized for regular parse operation, is called the \"fast\n                    // parse loop\".\n                    //\n                    // Compare this to `bison` & (vanilla) `jison`, both of which have\n                    // only a single parse loop, which handles everything. Our goal is\n                    // to eke out every drop of performance in the main parse loop...\n\n                    ASSERT(recoveringErrorInfo, \"line 1049\");\n                    ASSERT(symbol === TERROR, \"line 1050\");\n                    ASSERT(!action, \"line 1051\");\n                    var errorSymbolFromParser = true;\n                    for (;;) {\n                        // retrieve state number from top of stack\n                        state = newState;               // sstack[sp - 1];\n\n                        // use default actions if available\n                        if (this.defaultActions[state]) {\n                            action = 2;\n                            newState = this.defaultActions[state];\n                        } else {\n                            // The single `==` condition below covers both these `===` comparisons in a single\n                            // operation:\n                            //\n                            //     if (symbol === null || typeof symbol === 'undefined') ...\n                            if (!symbol) {\n                                symbol = lex();\n                                // **Warning: Edge Case**: the *lexer* may produce\n                                // TERROR tokens of its own volition: *those* TERROR\n                                // tokens should be treated like *regular tokens*\n                                // i.e. tokens which have a lexer-provided `yyvalue`\n                                // and `yylloc`:\n                                errorSymbolFromParser = false;\n                            }\n                            // read action for current state and first input\n                            t = (table[state] && table[state][symbol]) || NO_ACTION;\n                            newState = t[1];\n                            action = t[0];\n\n                            if (yydebug) yydebug('after FETCH/LEX: ', { symbol: symbol, symbolID: this.terminals_ && this.terminals_[symbol], state: state, newState: newState, recovering: recovering, action: action });\n\n                            // encountered another parse error? If so, break out to main loop\n                            // and take it from there!\n                            if (!action) {\n                                if (yydebug) yydebug('**NESTED ERROR DETECTED** while still recovering from previous error');\n\n                                ASSERT(recoveringErrorInfo, \"line 1087\");\n\n                                // Prep state variables so that upon breaking out of\n                                // this \"slow parse loop\" and hitting the `continue;`\n                                // statement in the outer \"fast parse loop\" we redo\n                                // the exact same state table lookup as the one above\n                                // so that the outer=main loop will also correctly\n                                // detect the 'parse error' state (`!action`) we have\n                                // just encountered above.\n                                newState = state;\n                                break;\n                            }\n                        }\n\n                        if (yydebug) yydebug('::: SLOW ERROR RECOVERY PHASE CYCLE action: ' + (action === 1 ? 'shift token ' + symbol + ' (then go to state ' + newState + ')' : action === 2 ? 'reduce by rule: ' + newState + (function __print_rule(nt, state) {\n                            \"use strict\";\n\n                            if (!nt || !nt.states || !nt.rules)\n                              return '';\n                            var rulename = nt.states[state];\n                            var rulespec = nt.rules[rulename][state];\n                            return ' (' + rulespec.symbol + ' := ' + rulespec.handle + ')';\n                        })(this.nonterminals_, newState) : action === 3 ? 'accept' : '???unexpected???'), { action: action, newState: newState, recovering: recovering, symbol: symbol });\n\n                        switch (action) {\n                        // catch misc. parse failures:\n                        default:\n                            // this shouldn't happen, unless resolve defaults are off\n                            //\n                            // SILENTLY SIGNAL that the outer \"fast parse loop\" should\n                            // take care of this internal error condition:\n                            // prevent useless code duplication now/here.\n                            break;\n\n                        // shift:\n                        case 1:\n                            stack[sp] = symbol;\n                            // ### Note/Warning ###\n                            //\n                            // The *lexer* may also produce TERROR tokens on its own,\n                            // so we specifically test for the TERROR we did set up\n                            // in the error recovery logic further above!\n                            if (symbol === TERROR && errorSymbolFromParser) {\n                                // Push a special value onto the stack when we're\n                                // shifting the `error` symbol that is related to the\n                                // error we're recovering from.\n                                ASSERT(recoveringErrorInfo, \"line 1131\");\n                                vstack[sp] = recoveringErrorInfo;\n                                lstack[sp] = this.yyMergeLocationInfo(null, null, recoveringErrorInfo.loc, lexer.yylloc, true);\n                            } else {\n                                ASSERT(symbol !== 0, \"line 1135\");\n                                ASSERT(preErrorSymbol === 0, \"line 1136\");\n                                vstack[sp] = lexer.yytext;\n                                lstack[sp] = this.copy_yylloc(lexer.yylloc);\n                            }\n                            sstack[sp] = newState; // push state\n\n                            ++sp;\n\n                            if (typeof Jison !== 'undefined' && Jison.parserDebugger) {\n                                var tokenName = this.getSymbolName(symbol || EOF);\n                                if (!tokenName) {\n                                    tokenName = symbol;\n                                }\n\n                                Jison.parserDebugger.push({\n                                    action: 'shift',\n                                    text: lexer.yytext,\n                                    terminal: tokenName,\n                                    terminal_id: symbol\n                                });\n                            }\n\n                            symbol = 0;\n                            // **Warning: Edge Case**: the *lexer* may have produced\n                            // TERROR tokens of its own volition: *those* TERROR\n                            // tokens should be treated like *regular tokens*\n                            // i.e. tokens which have a lexer-provided `yyvalue`\n                            // and `yylloc`:\n                            errorSymbolFromParser = false;\n                            if (!preErrorSymbol) { // normal execution / no error\n                                // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:\n                                yyleng = lexer.yyleng;\n                                yytext = lexer.yytext;\n                                yylineno = lexer.yylineno;\n                                yyloc = this.copy_yylloc(lexer.yylloc);\n\n                                if (recovering > 0) {\n                                    recovering--;\n                                    if (yydebug) yydebug('... SHIFT:error rule matching: ', { recovering: recovering, symbol: symbol });\n                                }\n                            } else {\n                                // error just occurred, resume old lookahead f/ before error, *unless* that drops us straight back into error mode:\n                                ASSERT(recovering > 0, \"line 1163\");\n                                symbol = preErrorSymbol;\n                                preErrorSymbol = 0;\n                                if (yydebug) yydebug('... SHIFT:error recovery: ', { recovering: recovering, symbol: symbol });\n                                // read action for current state and first input\n                                t = (table[newState] && table[newState][symbol]) || NO_ACTION;\n                                if (!t[0] || symbol === TERROR) {\n                                    // forget about that symbol and move forward: this wasn't a 'forgot to insert' error type where\n                                    // (simple) stuff might have been missing before the token which caused the error we're\n                                    // recovering from now...\n                                    //\n                                    // Also check if the LookAhead symbol isn't the ERROR token we set as part of the error\n                                    // recovery, for then this we would we idling (cycling) on the error forever.\n                                    // Yes, this does not take into account the possibility that the *lexer* may have\n                                    // produced a *new* TERROR token all by itself, but that would be a very peculiar grammar!\n                                    if (yydebug) yydebug('... SHIFT:error recovery: re-application of old symbol doesn\\'t work: instead, we\\'re moving forward now. ', { recovering: recovering, symbol: symbol });\n                                    symbol = 0;\n                                }\n                            }\n\n                            // once we have pushed the special ERROR token value,\n                            // we REMAIN in this inner, \"slow parse loop\" until\n                            // the entire error recovery phase has completed.\n                            //\n                            // ### Note About Edge Case ###\n                            //\n                            // Userland action code MAY already have 'reset' the\n                            // error recovery phase marker `recovering` to ZERO(0)\n                            // while the error symbol hasn't been shifted onto\n                            // the stack yet. Hence we only exit this \"slow parse loop\"\n                            // when *both* conditions are met!\n                            ASSERT(preErrorSymbol === 0, \"line 1194\");\n                            if (recovering === 0) {\n                                break;\n                            }\n                            continue;\n\n                        // reduce:\n                        case 2:\n                            this_production = this.productions_[newState - 1];  // `this.productions_[]` is zero-based indexed while states start from 1 upwards...\n                            yyrulelen = this_production[1];\n\n                            if (yydebug) yydebug('~~~ REDUCE: ', { pop_size: yyrulelen, newState: newState, recovering: recovering, symbol: symbol });\n\n                            r = this.performAction.call(yyval, yytext, yyleng, yylineno, yyloc, newState, sp - 1, yyrulelen, vstack, lstack, stack, sstack);\n\n                            if (typeof Jison !== 'undefined' && Jison.parserDebugger) {\n                                var prereduceValue = vstack.slice(sp - yyrulelen, sp);\n                                var debuggableProductions = [];\n                                for (var debugIdx = yyrulelen - 1; debugIdx >= 0; debugIdx--) {\n                                    var debuggableProduction = getNonTerminalFromCode(stack[sp - debugIdx]);\n                                    debuggableProductions.push(debuggableProduction);\n                                }\n\n                                // find the current nonterminal name (- nolan)\n                                var currentNonterminalCode = this_production[0];     // WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];\n                                var currentNonterminal = getNonTerminalFromCode(currentNonterminalCode);\n\n                                Jison.parserDebugger.push({\n                                    action: 'reduce',\n                                    nonterminal: currentNonterminal,\n                                    nonterminal_id: currentNonterminalCode,\n                                    prereduce: prereduceValue,\n                                    result: r,\n                                    productions: debuggableProductions,\n                                    text: yyval.$\n                                });\n                            }\n\n                            if (typeof r !== 'undefined') {\n                                // signal end of error recovery loop AND end of outer parse loop\n                                action = 3;\n                                retval = r;\n\n                                if (typeof Jison !== 'undefined' && Jison.parserDebugger) {\n                                    Jison.parserDebugger.push({\n                                        action: 'accept',\n                                        text: retval\n                                    });\n                                    console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);\n                                }\n\n                                sp = -2;      // magic number: signal outer \"fast parse loop\" ACCEPT state that we already have a properly set up `retval` parser return value.\n                                break;\n                            }\n\n                            // pop off stack\n                            sp -= yyrulelen;\n\n                            // don't overwrite the `symbol` variable: use a local var to speed things up:\n                            var ntsymbol = this_production[0];    // push nonterminal (reduce)\n                            stack[sp] = ntsymbol;\n                            vstack[sp] = yyval.$;\n                            lstack[sp] = yyval._$;\n                            // goto new state = table[STATE][NONTERMINAL]\n                            newState = table[sstack[sp - 1]][ntsymbol];\n                            sstack[sp] = newState;\n                            ++sp;\n                            if (yydebug) yydebug('REDUCED: ', { newState: newState, recovering: recovering, symbol: symbol });\n                            continue;\n\n                        // accept:\n                        case 3:\n                            retval = true;\n                            // Return the `$accept` rule's `$$` result, if available.\n                            //\n                            // Also note that JISON always adds this top-most `$accept` rule (with implicit,\n                            // default, action):\n                            //\n                            //     $accept: <startSymbol> $end\n                            //                  %{ $$ = $1; @$ = @1; %}\n                            //\n                            // which, combined with the parse kernel's `$accept` state behaviour coded below,\n                            // will produce the `$$` value output of the <startSymbol> rule as the parse result,\n                            // IFF that result is *not* `undefined`. (See also the parser kernel code.)\n                            //\n                            // In code:\n                            //\n                            //                  %{\n                            //                      @$ = @1;            // if location tracking support is included\n                            //                      if (typeof $1 !== 'undefined')\n                            //                          return $1;\n                            //                      else\n                            //                          return true;           // the default parse result if the rule actions don't produce anything\n                            //                  %}\n                            sp--;\n                            if (sp >= 0 && typeof vstack[sp] !== 'undefined') {\n                                retval = vstack[sp];\n                            }\n\n                            if (typeof Jison !== 'undefined' && Jison.parserDebugger) {\n                                Jison.parserDebugger.push({\n                                    action: 'accept',\n                                    text: retval\n                                });\n                                console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);\n                            }\n\n                            sp = -2;      // magic number: signal outer \"fast parse loop\" ACCEPT state that we already have a properly set up `retval` parser return value.\n                            break;\n                        }\n\n                        // break out of loop: we accept or fail with error\n                        break;\n                    }\n\n                    // should we also break out of the regular/outer parse loop,\n                    // i.e. did the parser already produce a parse result in here?!\n                    // *or* did we hit an unsupported parse state, to be handled\n                    // in the `switch/default` code further below?\n                    ASSERT(action !== 2, \"line 1272\");\n                    if (!action || action === 1) {\n                        continue;\n                    }\n                }\n\n//_handle_error_no_recovery:                  // run this code when the grammar does not include any error recovery rules\n\n                // handle parse error\n                if (!action) {\n                    var errStr;\n                    var errSymbolDescr = (this.describeSymbol(symbol) || symbol);\n                    var expected = this.collect_expected_token_set(state);\n\n                    // Report error\n                    if (typeof lexer.yylineno === 'number') {\n                        errStr = 'Parse error on line ' + (lexer.yylineno + 1) + ': ';\n                    } else {\n                        errStr = 'Parse error: ';\n                    }\n                    if (typeof lexer.showPosition === 'function') {\n                        errStr += '\\n' + lexer.showPosition(79 - 10, 10) + '\\n';\n                    }\n                    if (expected.length) {\n                        errStr += 'Expecting ' + expected.join(', ') + ', got unexpected ' + errSymbolDescr;\n                    } else {\n                        errStr += 'Unexpected ' + errSymbolDescr;\n                    }\n                    // we cannot recover from the error!\n                    p = this.constructParseErrorInfo(errStr, null, expected, false);\n                    r = this.parseError(p.errStr, p, this.JisonParserError);\n                    if (typeof r !== 'undefined') {\n                        retval = r;\n                    }\n                    break;\n                }\n\n//_handle_error_end_of_section:                  // this concludes the error recovery / no error recovery code section choice above\n\n            }\n\n            if (yydebug) yydebug('::: MAIN CYCLE action: ' + (action === 1 ? 'shift token ' + symbol + ' (then go to state ' + newState + ')' : action === 2 ? 'reduce by rule: ' + newState + (function __print_rule(nt, state) {\n                \"use strict\";\n\n                if (!nt || !nt.states || !nt.rules)\n                  return '';\n                var rulename = nt.states[state];\n                var rulespec = nt.rules[rulename][state];\n                return ' (' + rulespec.symbol + ' := ' + rulespec.handle + ')';\n            })(this.nonterminals_, newState) : action === 3 ? 'accept' : '???unexpected???'), { action: action, newState: newState, recovering: recovering, symbol: symbol });\n\n            switch (action) {\n            // catch misc. parse failures:\n            default:\n                // this shouldn't happen, unless resolve defaults are off\n                if (action instanceof Array) {\n                    p = this.constructParseErrorInfo('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol, null, null, false);\n                    r = this.parseError(p.errStr, p, this.JisonParserError);\n                    if (typeof r !== 'undefined') {\n                        retval = r;\n                    }\n                    break;\n                }\n                // Another case of better safe than sorry: in case state transitions come out of another error recovery process\n                // or a buggy LUT (LookUp Table):\n                p = this.constructParseErrorInfo('Parsing halted. No viable error recovery approach available due to internal system failure.', null, null, false);\n                r = this.parseError(p.errStr, p, this.JisonParserError);\n                if (typeof r !== 'undefined') {\n                    retval = r;\n                }\n                break;\n\n            // shift:\n            case 1:\n                stack[sp] = symbol;\n                vstack[sp] = lexer.yytext;\n                lstack[sp] = this.copy_yylloc(lexer.yylloc);\n                sstack[sp] = newState; // push state\n\n                if (typeof Jison !== 'undefined' && Jison.parserDebugger) {\n                    var tokenName = this.getSymbolName(symbol || EOF);\n                    if (!tokenName) {\n                        tokenName = symbol;\n                    }\n\n                    Jison.parserDebugger.push({\n                        action: 'shift',\n                        text: lexer.yytext,\n                        terminal: tokenName,\n                        terminal_id: symbol\n                    });\n                }\n\n                ++sp;\n\n                symbol = 0;\n\n                ASSERT(preErrorSymbol === 0, \"line 1352\");         // normal execution / no error\n                ASSERT(recovering === 0, \"line 1353\");             // normal execution / no error\n\n                // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:\n                yyleng = lexer.yyleng;\n                yytext = lexer.yytext;\n                yylineno = lexer.yylineno;\n                yyloc = this.copy_yylloc(lexer.yylloc);\n                continue;\n\n            // reduce:\n            case 2:\n                ASSERT(preErrorSymbol === 0, \"line 1364\");         // normal execution / no error\n                ASSERT(recovering === 0, \"line 1365\");             // normal execution / no error\n\n                this_production = this.productions_[newState - 1];  // `this.productions_[]` is zero-based indexed while states start from 1 upwards...\n                yyrulelen = this_production[1];\n\n                if (yydebug) yydebug('~~~ REDUCE: ', { pop_size: yyrulelen, newState: newState, recovering: recovering, symbol: symbol });\n\n                r = this.performAction.call(yyval, yytext, yyleng, yylineno, yyloc, newState, sp - 1, yyrulelen, vstack, lstack, stack, sstack);\n\n                if (typeof Jison !== 'undefined' && Jison.parserDebugger) {\n                    var prereduceValue = vstack.slice(sp - yyrulelen, sp);\n                    var debuggableProductions = [];\n                    for (var debugIdx = yyrulelen - 1; debugIdx >= 0; debugIdx--) {\n                        var debuggableProduction = getNonTerminalFromCode(stack[sp - debugIdx]);\n                        debuggableProductions.push(debuggableProduction);\n                    }\n\n                    // find the current nonterminal name (- nolan)\n                    var currentNonterminalCode = this_production[0];     // WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];\n                    var currentNonterminal = getNonTerminalFromCode(currentNonterminalCode);\n\n                    Jison.parserDebugger.push({\n                        action: 'reduce',\n                        nonterminal: currentNonterminal,\n                        nonterminal_id: currentNonterminalCode,\n                        prereduce: prereduceValue,\n                        result: r,\n                        productions: debuggableProductions,\n                        text: yyval.$\n                    });\n                }\n\n                if (typeof r !== 'undefined') {\n                    retval = r;\n\n                    if (typeof Jison !== 'undefined' && Jison.parserDebugger) {\n                        Jison.parserDebugger.push({\n                            action: 'accept',\n                            text: retval\n                        });\n                        console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);\n                    }\n\n                    break;\n                }\n\n                // pop off stack\n                sp -= yyrulelen;\n\n                // don't overwrite the `symbol` variable: use a local var to speed things up:\n                var ntsymbol = this_production[0];    // push nonterminal (reduce)\n                stack[sp] = ntsymbol;\n                vstack[sp] = yyval.$;\n                lstack[sp] = yyval._$;\n                // goto new state = table[STATE][NONTERMINAL]\n                newState = table[sstack[sp - 1]][ntsymbol];\n                sstack[sp] = newState;\n                ++sp;\n                if (yydebug) yydebug('REDUCED: ', { newState: newState, recovering: recovering, symbol: symbol });\n                continue;\n\n            // accept:\n            case 3:\n                if (sp !== -2) {\n                    retval = true;\n                    // Return the `$accept` rule's `$$` result, if available.\n                    //\n                    // Also note that JISON always adds this top-most `$accept` rule (with implicit,\n                    // default, action):\n                    //\n                    //     $accept: <startSymbol> $end\n                    //                  %{ $$ = $1; @$ = @1; %}\n                    //\n                    // which, combined with the parse kernel's `$accept` state behaviour coded below,\n                    // will produce the `$$` value output of the <startSymbol> rule as the parse result,\n                    // IFF that result is *not* `undefined`. (See also the parser kernel code.)\n                    //\n                    // In code:\n                    //\n                    //                  %{\n                    //                      @$ = @1;            // if location tracking support is included\n                    //                      if (typeof $1 !== 'undefined')\n                    //                          return $1;\n                    //                      else\n                    //                          return true;           // the default parse result if the rule actions don't produce anything\n                    //                  %}\n                    sp--;\n                    if (typeof vstack[sp] !== 'undefined') {\n                        retval = vstack[sp];\n                    }\n                }\n\n                if (typeof Jison !== 'undefined' && Jison.parserDebugger) {\n                    Jison.parserDebugger.push({\n                        action: 'accept',\n                        text: retval\n                    });\n                    console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);\n                }\n\n                break;\n            }\n\n            // break out of loop: we accept or fail with error\n            break;\n        }\n    } catch (ex) {\n        // report exceptions through the parseError callback too, but keep the exception intact\n        // if it is a known parser or lexer error which has been thrown by parseError() already:\n        if (ex instanceof this.JisonParserError) {\n            throw ex;\n        }\n        else if (lexer && typeof lexer.JisonLexerError === 'function' && ex instanceof lexer.JisonLexerError) {\n            throw ex;\n        }\n\n        p = this.constructParseErrorInfo('Parsing aborted due to exception.', ex, null, false);\n        retval = false;\n        r = this.parseError(p.errStr, p, this.JisonParserError);\n        if (typeof r !== 'undefined') {\n            retval = r;\n        }\n    } finally {\n        retval = this.cleanupAfterParse(retval, true, true);\n        this.__reentrant_call_depth--;\n\n        if (typeof Jison !== 'undefined' && Jison.parserDebugger) {\n            Jison.parserDebugger.push({\n                action: 'return',\n                text: retval\n            });\n            console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);\n        }\n    }   // /finally\n\n    return retval;\n}\n"; // --- END parser kernel ---
 
   /*
    * LR(0) Parser
@@ -26630,7 +28029,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       this.buildTable();
     }
   });
-  var LR0Generator = Jison.LR0Generator = lr0.construct();
+  var LR0Generator = Jison$1.LR0Generator = lr0.construct();
   /*
    * Simple LALR(1)
    */
@@ -26650,9 +28049,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         this.states = this.canonicalCollection();
 
         if (this.DEBUG || devDebug) {
-          Jison.print('\n-------------------------------------------\nSymbol/Follow sets AFTER canonicalCollection:');
+          Jison$1.print('\n-------------------------------------------\nSymbol/Follow sets AFTER canonicalCollection:');
           this.displayFollowSets();
-          Jison.print('\n');
+          Jison$1.print('\n');
         }
 
         this.terms_ = {};
@@ -26682,13 +28081,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         //          resulting in 'illogical' error messages!
 
         this.onDemandLookahead = !!this.options.onDemandLookahead;
-        if (this.DEBUG) Jison.print('LALR: using on-demand look-ahead: ', this.onDemandLookahead ? 'yes' : 'no');
+        if (this.DEBUG) Jison$1.print('LALR: using on-demand look-ahead: ', this.onDemandLookahead ? 'yes' : 'no');
         this.buildNewGrammar();
 
         if (this.DEBUG) {
-          Jison.print('\n-------------------------------------------\nSymbol/Follow sets AFTER buildNewGrammar: NEW GRAMMAR');
+          Jison$1.print('\n-------------------------------------------\nSymbol/Follow sets AFTER buildNewGrammar: NEW GRAMMAR');
           newg.displayFollowSets();
-          Jison.print('\n-------------------------------------------\nSymbol/Follow sets AFTER buildNewGrammar: ORIGINAL GRAMMAR');
+          Jison$1.print('\n-------------------------------------------\nSymbol/Follow sets AFTER buildNewGrammar: ORIGINAL GRAMMAR');
           this.displayFollowSets();
         }
 
@@ -26712,27 +28111,27 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         });
 
         if (this.DEBUG) {
-          Jison.print('\n-------------------------------------------\nSymbol/Follow sets AFTER computeLookaheads: NEW GRAMMAR');
+          Jison$1.print('\n-------------------------------------------\nSymbol/Follow sets AFTER computeLookaheads: NEW GRAMMAR');
           newg.displayFollowSets();
-          Jison.print('\n-------------------------------------------\nSymbol/Follow sets AFTER computeLookaheads: ORIGINAL GRAMMAR');
+          Jison$1.print('\n-------------------------------------------\nSymbol/Follow sets AFTER computeLookaheads: ORIGINAL GRAMMAR');
           this.displayFollowSets();
         }
 
         this.unionLookaheads();
 
         if (this.DEBUG) {
-          Jison.print('\n-------------------------------------------\nSymbol/Follow sets AFTER unionLookaheads: NEW GRAMMAR');
+          Jison$1.print('\n-------------------------------------------\nSymbol/Follow sets AFTER unionLookaheads: NEW GRAMMAR');
           newg.displayFollowSets();
-          Jison.print('\n-------------------------------------------\nSymbol/Follow sets AFTER unionLookaheads: ORIGINAL GRAMMAR');
+          Jison$1.print('\n-------------------------------------------\nSymbol/Follow sets AFTER unionLookaheads: ORIGINAL GRAMMAR');
           this.displayFollowSets();
         }
 
         this.table = this.parseTable(this.states);
 
         if (this.DEBUG) {
-          Jison.print('\n-------------------------------------------\nSymbol/Follow sets AFTER parseTable: NEW GRAMMAR');
+          Jison$1.print('\n-------------------------------------------\nSymbol/Follow sets AFTER parseTable: NEW GRAMMAR');
           newg.displayFollowSets();
-          Jison.print('\n-------------------------------------------\nSymbol/Follow sets AFTER parseTable: ORIGINAL GRAMMAR');
+          Jison$1.print('\n-------------------------------------------\nSymbol/Follow sets AFTER parseTable: ORIGINAL GRAMMAR');
           this.displayFollowSets();
         } // When some productions are flagged as conflicting, we redo the G' generation and consequent union-ing of the productions
         // in the `.goes[]` arrays.
@@ -26745,7 +28144,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         }
 
         {
-          Jison.print('\n' + '----------------------------------- NOTICE -------------------------------\n' + 'Attempting to resolve the unresolved conflicts in partial LR mode...\n\n' + 'When no conflicts are reported in the next round below, your grammar is\n' + 'accepted as mixed LR/LALR and should work as expected.\n' + '--------------------------------------------------------------------------\n\n');
+          Jison$1.print('\n' + '----------------------------------- NOTICE -------------------------------\n' + 'Attempting to resolve the unresolved conflicts in partial LR mode...\n\n' + 'When no conflicts are reported in the next round below, your grammar is\n' + 'accepted as mixed LR/LALR and should work as expected.\n' + '--------------------------------------------------------------------------\n\n');
         }
         this.conflict_fixing_round = true; // and reset the conflict trackers, which we do not use to attempt to fix the conflict in round #2:
 
@@ -26885,7 +28284,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       });
     }
   });
-  var LALRGenerator = Jison.LALRGenerator = lalr.construct(); // LALR generator debug mixin
+  var LALRGenerator = Jison$1.LALRGenerator = lalr.construct(); // LALR generator debug mixin
 
   var lalrGeneratorDebug = {
     beforebuildNewGrammar: function beforebuildNewGrammar() {
@@ -26921,9 +28320,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       this.computeLookaheads();
 
       if (this.DEBUG) {
-        Jison.print('\n-------------------------------------------\nSymbol/Follow sets AFTER computeLookaheads:');
+        Jison$1.print('\n-------------------------------------------\nSymbol/Follow sets AFTER computeLookaheads:');
         this.displayFollowSets();
-        Jison.print('\n');
+        Jison$1.print('\n');
       }
 
       this.buildTable();
@@ -26933,7 +28332,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
    * SLR Parser
    */
 
-  var SLRGenerator = Jison.SLRGenerator = lrLookaheadGenerator.construct({
+  var SLRGenerator = Jison$1.SLRGenerator = lrLookaheadGenerator.construct({
     type: 'SLR(1)',
     lookAheads: function SLR_lookAhead(state, item) {
       return this.nonterminals[item.production.symbol].follows;
@@ -26995,7 +28394,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       return closureSet;
     }
   });
-  var LR1Generator = Jison.LR1Generator = lr1.construct();
+  var LR1Generator = Jison$1.LR1Generator = lr1.construct();
   /*
    * LL Parser
    */
@@ -27006,14 +28405,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       this.computeLookaheads();
 
       if (this.DEBUG) {
-        Jison.print('\n-------------------------------------------\nSymbol/Follow sets AFTER computeLookaheads:');
+        Jison$1.print('\n-------------------------------------------\nSymbol/Follow sets AFTER computeLookaheads:');
         this.displayFollowSets();
       }
 
       this.table = this.parseTable(this.productions);
 
       if (this.DEBUG) {
-        Jison.print('\n-------------------------------------------\nSymbol/Follow sets AFTER parseTable:');
+        Jison$1.print('\n-------------------------------------------\nSymbol/Follow sets AFTER parseTable:');
         this.displayFollowSets();
       }
 
@@ -27046,9 +28445,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       return table;
     }
   });
-  var LLGenerator = Jison.LLGenerator = ll.construct();
+  var LLGenerator = Jison$1.LLGenerator = ll.construct();
 
-  Jison.Generator = function Jison_Generator(grammar, optionalLexerSection, options) {
+  Jison$1.Generator = function Jison_Generator(grammar, optionalLexerSection, options) {
     // pick the correct argument for the `options` for this call:
     if (!options && optionalLexerSection && typeof optionalLexerSection !== 'string') {
       options = optionalLexerSection;
@@ -27078,7 +28477,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
     options = mkStdOptions$1("NODEFAULT", grammar.options, options);
 
-    switch (options.type || Jison.defaultJisonOptions.type) {
+    switch (options.type || Jison$1.defaultJisonOptions.type) {
       case 'lr0':
         options.hasPartialLrUpgradeOnConflict = false; // kill this unsupported option
 
@@ -27112,22 +28511,22 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   };
 
   function Parser$3(g, l, options) {
-    var gen = Jison.Generator(g, l, options);
+    var gen = Jison$1.Generator(g, l, options);
     return gen.createParser();
   }
 
-  Jison.Parser = Parser$3;
+  Jison$1.Parser = Parser$3;
   var rmCommonWS$6 = helpers.rmCommonWS;
   var mkIdentifier$5 = helpers.mkIdentifier;
-  assert__default['default'](Jison);
-  assert__default['default'](typeof Jison.prettyPrint === 'function');
-  assert__default['default'](Jison.defaultJisonOptions);
-  assert__default['default'](typeof Jison.mkStdOptions === 'function');
-  assert__default['default'](typeof Jison.Generator === 'function');
+  assert__default['default'](Jison$1);
+  assert__default['default'](typeof Jison$1.prettyPrint === 'function');
+  assert__default['default'](Jison$1.defaultJisonOptions);
+  assert__default['default'](typeof Jison$1.mkStdOptions === 'function');
+  assert__default['default'](typeof Jison$1.Generator === 'function');
   var version$3 = '0.6.2-220'; // require('./package.json').version;
 
   function getCommandlineOptions() {
-    var defaults = Jison.defaultJisonOptions;
+    var defaults = Jison$1.defaultJisonOptions;
     var opts = nomnom__default['default'].script('jison').unknownOptionTreatment(false) // do not accept unknown options!
     .produceExplicitOptionsOnly(true).options({
       file: {
@@ -27276,7 +28675,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
           return v;
         },
-        help: rmCommonWS$6(_templateObject157(), defaults.defaultActionMode.join(","))
+        help: rmCommonWS$6(_templateObject161(), defaults.defaultActionMode.join(","))
       },
       hasTryCatch: {
         full: 'try-catch',
@@ -27540,7 +28939,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           case '.yacc':
           case '.l':
           case '.lex':
-            content = Jison.prettyPrint(content, {
+            content = Jison$1.prettyPrint(content, {
               format: ext.substr(1)
             });
             break;
@@ -27585,7 +28984,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
   function generateParserString(grammar, optionalLexSection, opts) {
     //      var settings = Jison.mkStdOptions(opts);
-    var generator = new Jison.Generator(grammar, optionalLexSection, opts);
+    var generator = new Jison$1.Generator(grammar, optionalLexSection, opts);
     var srcCode = generator.generate(opts);
     generator.reportGrammarInformation(); // as `opts` is cloned inside `generator.generate()`, we need to fetch
     // the extra exported tables from the `options` member of the generator

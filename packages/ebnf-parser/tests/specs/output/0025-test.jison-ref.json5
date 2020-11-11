@@ -2,56 +2,14 @@
   bnf: {
     test: [
       [
-        [
-          [
-            'symbol',
-            'foo',
-          ],
-          [
-            'symbol',
-            'bar',
-          ],
-        ],
-        `node({}, 3 / 4, "{"); /{'"/g; 1 / 2`,
+        'foo bar',
+        ` node({}, 3 / 4, "{"); /{'"/g; 1 / 2; `,
       ],
     ],
     hello: [
       [
-        [
-          [
-            'symbol',
-            'world',
-          ],
-        ],
-        'blah / bah',
-      ],
-    ],
-  },
-  grammar: {
-    test: [
-      [
-        [
-          [
-            'symbol',
-            'foo',
-          ],
-          [
-            'symbol',
-            'bar',
-          ],
-        ],
-        `node({}, 3 / 4, "{"); /{'"/g; 1 / 2`,
-      ],
-    ],
-    hello: [
-      [
-        [
-          [
-            'symbol',
-            'world',
-          ],
-        ],
-        'blah / bah',
+        'world',
+        ' blah / bah ',
       ],
     ],
   },

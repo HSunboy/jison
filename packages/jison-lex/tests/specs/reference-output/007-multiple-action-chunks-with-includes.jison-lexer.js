@@ -1453,14 +1453,11 @@ var lexer = {
 
             block0A();   // init chunk 1
 
-
 // Included by Jison: includes/dummy001.include:
 
 dummy1()
 
 // End Of Include by Jison: includes/dummy001.include
-
-
 
 block0B();   // init chunk 2
 
@@ -1596,14 +1593,11 @@ function dummy3() {}
     unknownDecls: [],
     actionInclude: `block0A();   // init chunk 1
 
-
 // Included by Jison: includes/dummy001.include:
 
 dummy1()
 
 // End Of Include by Jison: includes/dummy001.include
-
-
 
 block0B();   // init chunk 2
 
@@ -1655,14 +1649,11 @@ dummy2()
 
             block0A();   // init chunk 1
 
-
 // Included by Jison: includes/dummy001.include:
 
 dummy1()
 
 // End Of Include by Jison: includes/dummy001.include
-
-
 
 block0B();   // init chunk 2
 
@@ -1744,14 +1735,11 @@ break;
   ],
   actionInclude: `block0A();   // init chunk 1
 
-
 // Included by Jison: includes/dummy001.include:
 
 dummy1()
 
 // End Of Include by Jison: includes/dummy001.include
-
-
 
 block0B();   // init chunk 2
 

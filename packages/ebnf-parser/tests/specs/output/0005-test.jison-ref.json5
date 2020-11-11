@@ -1,48 +1,11 @@
 {
   bnf: {
     test: [
-      [
-        [
-          'symbol',
-          'foo',
-        ],
-        [
-          'symbol',
-          'bar',
-        ],
-      ],
-      [],
+      'foo bar',
+      '',
     ],
     hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
-    ],
-  },
-  grammar: {
-    test: [
-      [
-        [
-          'symbol',
-          'foo',
-        ],
-        [
-          'symbol',
-          'bar',
-        ],
-      ],
-      [],
-    ],
-    hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
+      'world',
     ],
   },
   __original_input__: `%% test: foo bar | ; hello: world ;

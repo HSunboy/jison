@@ -1,12 +1,12 @@
 [
-  17,
+  16,
   {
-    id: 29,
+    id: 21,
     token: '"UNKNOWN_DECL"',
-    yytext: {
-      name: 'type',
-      value: '<type> blah',
-    },
+    yytext: [
+      'type',
+      '<type> blah',
+    ],
     yylloc: {
       first_line: 1,
       first_column: 0,
@@ -19,7 +19,7 @@
     },
   },
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -34,7 +34,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'test',
     yylloc: {
@@ -49,7 +49,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -64,7 +64,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'foo',
     yylloc: {
@@ -79,7 +79,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'bar',
     yylloc: {
@@ -94,7 +94,7 @@
     },
   },
   {
-    id: 5,
+    id: 6,
     token: '"|"',
     yytext: '|',
     yylloc: {
@@ -109,7 +109,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'baz',
     yylloc: {
@@ -139,7 +139,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'hello',
     yylloc: {
@@ -154,7 +154,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -169,7 +169,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'world',
     yylloc: {
@@ -195,21 +195,6 @@
       range: [
         56,
         57,
-      ],
-    },
-  },
-  {
-    id: 13,
-    token: '"%%"',
-    yytext: '',
-    yylloc: {
-      first_line: 4,
-      first_column: 0,
-      last_line: 4,
-      last_column: 0,
-      range: [
-        59,
-        59,
       ],
     },
   },

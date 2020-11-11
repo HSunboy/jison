@@ -1,6 +1,6 @@
 [
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 50,
+    id: 49,
     token: '"STRING_LIT"',
     yytext: '"a"',
     yylloc: {
@@ -30,7 +30,7 @@
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: '%{',
     yylloc: {
@@ -45,7 +45,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: `  //
 return true;
@@ -62,7 +62,7 @@ return true;
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '  ',
     yylloc: {
@@ -77,7 +77,7 @@ return true;
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '//',
     yylloc: {
@@ -92,7 +92,7 @@ return true;
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '\n  ',
     yylloc: {
@@ -107,7 +107,7 @@ return true;
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '//',
     yylloc: {
@@ -122,7 +122,7 @@ return true;
     },
   },
   {
-    id: 24,
+    id: 23,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -137,7 +137,7 @@ return true;
     },
   },
   {
-    id: 50,
+    id: 49,
     token: '"STRING_LIT"',
     yytext: '"b"',
     yylloc: {
@@ -152,7 +152,7 @@ return true;
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: '%{',
     yylloc: {
@@ -167,7 +167,7 @@ return true;
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '    return 1;\n',
     yylloc: {
@@ -182,7 +182,7 @@ return true;
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '  ',
     yylloc: {
@@ -197,7 +197,7 @@ return true;
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '//',
     yylloc: {
@@ -212,7 +212,7 @@ return true;
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '\n  ',
     yylloc: {
@@ -227,7 +227,7 @@ return true;
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '//',
     yylloc: {
@@ -242,7 +242,7 @@ return true;
     },
   },
   {
-    id: 24,
+    id: 23,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -257,7 +257,7 @@ return true;
     },
   },
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {

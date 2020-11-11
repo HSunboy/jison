@@ -1,7 +1,7 @@
 [
-  18,
+  15,
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -16,7 +16,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'test',
     yylloc: {
@@ -31,7 +31,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -46,7 +46,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'foo',
     yylloc: {
@@ -61,7 +61,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'bar',
     yylloc: {
@@ -76,7 +76,7 @@
     },
   },
   {
-    id: 5,
+    id: 6,
     token: '"|"',
     yytext: '|',
     yylloc: {
@@ -91,23 +91,8 @@
     },
   },
   {
-    id: 24,
-    token: '"ACTION_START"',
-    yytext: '%{',
-    yylloc: {
-      first_line: 1,
-      first_column: 19,
-      last_line: 1,
-      last_column: 19,
-      range: [
-        19,
-        19,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"ACTION_BODY"',
+    id: 15,
+    token: '"ACTION"',
     yytext: 'action={}',
     yylloc: {
       first_line: 1,
@@ -116,21 +101,6 @@
       last_column: 32,
       range: [
         19,
-        32,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 32,
-      last_line: 1,
-      last_column: 32,
-      range: [
-        32,
         32,
       ],
     },
@@ -151,7 +121,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'hello',
     yylloc: {
@@ -166,7 +136,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -181,7 +151,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'world',
     yylloc: {
@@ -207,21 +177,6 @@
       range: [
         47,
         48,
-      ],
-    },
-  },
-  {
-    id: 13,
-    token: '"%%"',
-    yytext: '',
-    yylloc: {
-      first_line: 3,
-      first_column: 0,
-      last_line: 3,
-      last_column: 0,
-      range: [
-        50,
-        50,
       ],
     },
   },

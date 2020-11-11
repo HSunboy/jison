@@ -1,6 +1,6 @@
 [
   {
-    id: 30,
+    id: 28,
     token: '"IMPORT"',
     yytext: '%import',
     yylloc: {
@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 54,
+    id: 53,
     token: '"OPTION_VALUE"',
     yytext: 'base',
     yylloc: {
@@ -30,7 +30,7 @@
     },
   },
   {
-    id: 53,
+    id: 52,
     token: '"OPTION_STRING"',
     yytext: '"./base.file"',
     yylloc: {
@@ -45,7 +45,7 @@
     },
   },
   {
-    id: 22,
+    id: 21,
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
@@ -60,7 +60,7 @@
     },
   },
   {
-    id: 30,
+    id: 28,
     token: '"IMPORT"',
     yytext: '%import',
     yylloc: {
@@ -75,7 +75,7 @@
     },
   },
   {
-    id: 54,
+    id: 53,
     token: '"OPTION_VALUE"',
     yytext: 'extension',
     yylloc: {
@@ -90,7 +90,7 @@
     },
   },
   {
-    id: 53,
+    id: 52,
     token: '"OPTION_STRING"',
     yytext: '"/tmp/qux"',
     yylloc: {
@@ -105,7 +105,7 @@
     },
   },
   {
-    id: 22,
+    id: 21,
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
@@ -120,7 +120,7 @@
     },
   },
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -150,7 +150,7 @@
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
@@ -165,7 +165,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '//',
     yylloc: {
@@ -180,7 +180,7 @@
     },
   },
   {
-    id: 24,
+    id: 23,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -195,7 +195,7 @@
     },
   },
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {

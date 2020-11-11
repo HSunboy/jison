@@ -1,6 +1,6 @@
 [
   {
-    id: 29,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%options',
     yylloc: {
@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 54,
+    id: 53,
     token: '"OPTION_VALUE"',
     yytext: 's1',
     yylloc: {
@@ -45,7 +45,7 @@
     },
   },
   {
-    id: 53,
+    id: 52,
     token: '"OPTION_STRING"',
     yytext: `"s1\\"val'ue"`,
     yylloc: {
@@ -60,7 +60,7 @@
     },
   },
   {
-    id: 54,
+    id: 53,
     token: '"OPTION_VALUE"',
     yytext: 's2',
     yylloc: {
@@ -90,7 +90,7 @@
     },
   },
   {
-    id: 53,
+    id: 52,
     token: '"OPTION_STRING"',
     yytext: `'s2\\\\x\\'val"ue'`,
     yylloc: {
@@ -105,7 +105,7 @@
     },
   },
   {
-    id: 54,
+    id: 53,
     token: '"OPTION_VALUE"',
     yytext: 's3',
     yylloc: {
@@ -135,7 +135,7 @@
     },
   },
   {
-    id: 53,
+    id: 52,
     token: '"OPTION_STRING"',
     yytext: '`s3\\\\x\\\\\'val"ue`',
     yylloc: {
@@ -150,7 +150,7 @@
     },
   },
   {
-    id: 22,
+    id: 21,
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
@@ -165,7 +165,7 @@
     },
   },
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -180,7 +180,7 @@
     },
   },
   {
-    id: 50,
+    id: 49,
     token: '"STRING_LIT"',
     yytext: '"foo"',
     yylloc: {
@@ -195,7 +195,7 @@
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
@@ -210,7 +210,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: 'return 1',
     yylloc: {
@@ -225,7 +225,7 @@
     },
   },
   {
-    id: 24,
+    id: 23,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -240,7 +240,7 @@
     },
   },
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {

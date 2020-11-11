@@ -1,7 +1,7 @@
 [
-  18,
+  17,
   {
-    id: 28,
+    id: 20,
     token: '"EBNF"',
     yytext: '%ebnf',
     yylloc: {
@@ -16,7 +16,7 @@
     },
   },
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -31,7 +31,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'top',
     yylloc: {
@@ -46,7 +46,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -61,7 +61,7 @@
     },
   },
   {
-    id: 6,
+    id: 7,
     token: '"("',
     yytext: '(',
     yylloc: {
@@ -76,7 +76,7 @@
     },
   },
   {
-    id: 6,
+    id: 7,
     token: '"("',
     yytext: '(',
     yylloc: {
@@ -91,7 +91,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'word',
     yylloc: {
@@ -106,7 +106,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'word',
     yylloc: {
@@ -121,7 +121,7 @@
     },
   },
   {
-    id: 7,
+    id: 8,
     token: '")"',
     yytext: ')',
     yylloc: {
@@ -136,7 +136,7 @@
     },
   },
   {
-    id: 5,
+    id: 6,
     token: '"|"',
     yytext: '|',
     yylloc: {
@@ -151,7 +151,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'word',
     yylloc: {
@@ -166,7 +166,7 @@
     },
   },
   {
-    id: 7,
+    id: 8,
     token: '")"',
     yytext: ')',
     yylloc: {
@@ -181,7 +181,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'EOF',
     yylloc: {
@@ -207,21 +207,6 @@
       range: [
         39,
         40,
-      ],
-    },
-  },
-  {
-    id: 13,
-    token: '"%%"',
-    yytext: '',
-    yylloc: {
-      first_line: 5,
-      first_column: 0,
-      last_line: 5,
-      last_column: 0,
-      range: [
-        42,
-        42,
       ],
     },
   },

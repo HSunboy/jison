@@ -1,23 +1,8 @@
 [
-  12,
+  9,
   {
-    id: 21,
-    token: '"ACTION_START_AT_SOL"',
-    yytext: '%{',
-    yylloc: {
-      first_line: 1,
-      first_column: 0,
-      last_line: 1,
-      last_column: 0,
-      range: [
-        0,
-        0,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"ACTION_BODY"',
+    id: 15,
+    token: '"ACTION"',
     yytext: "var foo = 'bar';",
     yylloc: {
       first_line: 1,
@@ -31,22 +16,7 @@
     },
   },
   {
-    id: 22,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 20,
-      last_line: 1,
-      last_column: 20,
-      range: [
-        20,
-        20,
-      ],
-    },
-  },
-  {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -61,7 +31,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'hello',
     yylloc: {
@@ -76,7 +46,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -91,7 +61,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'world',
     yylloc: {
@@ -117,21 +87,6 @@
       range: [
         35,
         36,
-      ],
-    },
-  },
-  {
-    id: 13,
-    token: '"%%"',
-    yytext: '',
-    yylloc: {
-      first_line: 4,
-      first_column: 0,
-      last_line: 4,
-      last_column: 0,
-      range: [
-        38,
-        38,
       ],
     },
   },

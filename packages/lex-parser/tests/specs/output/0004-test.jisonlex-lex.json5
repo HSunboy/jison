@@ -1,6 +1,6 @@
 [
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 50,
+    id: 49,
     token: '"STRING_LIT"',
     yytext: '"\\n"',
     yylloc: {
@@ -45,7 +45,7 @@
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -60,7 +60,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -75,7 +75,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
@@ -90,7 +90,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: "'NL'",
     yylloc: {
@@ -105,7 +105,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
@@ -120,7 +120,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -135,7 +135,7 @@
     },
   },
   {
-    id: 24,
+    id: 23,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -150,7 +150,7 @@
     },
   },
   {
-    id: 43,
+    id: 42,
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\n',
     yylloc: {
@@ -180,7 +180,7 @@
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -195,7 +195,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -210,7 +210,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
@@ -225,7 +225,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: "'NL2'",
     yylloc: {
@@ -240,7 +240,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
@@ -255,7 +255,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -270,7 +270,7 @@
     },
   },
   {
-    id: 24,
+    id: 23,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -285,7 +285,7 @@
     },
   },
   {
-    id: 50,
+    id: 49,
     token: '"STRING_LIT"',
     yytext: '"\\\\n"',
     yylloc: {
@@ -315,7 +315,7 @@
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -330,7 +330,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -345,7 +345,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
@@ -360,7 +360,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: "'NL3'",
     yylloc: {
@@ -375,7 +375,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
@@ -390,7 +390,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -405,7 +405,7 @@
     },
   },
   {
-    id: 24,
+    id: 23,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -420,7 +420,7 @@
     },
   },
   {
-    id: 50,
+    id: 49,
     token: '"STRING_LIT"',
     yytext: '`\n`',
     yylloc: {
@@ -450,7 +450,7 @@
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -465,7 +465,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -480,7 +480,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
@@ -495,7 +495,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: "'NL4'",
     yylloc: {
@@ -510,7 +510,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
@@ -525,7 +525,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -540,7 +540,7 @@
     },
   },
   {
-    id: 24,
+    id: 23,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -555,7 +555,7 @@
     },
   },
   {
-    id: 43,
+    id: 42,
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\s',
     yylloc: {
@@ -585,7 +585,7 @@
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -600,7 +600,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -615,7 +615,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '/* skip */',
     yylloc: {
@@ -630,7 +630,7 @@
     },
   },
   {
-    id: 36,
+    id: 35,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -645,7 +645,7 @@
     },
   },
   {
-    id: 24,
+    id: 23,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -660,7 +660,7 @@
     },
   },
   {
-    id: 19,
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {
