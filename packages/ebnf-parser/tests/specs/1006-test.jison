@@ -7,5 +7,5 @@
 
 %ebnf
 %%
-top : word+ EOFl
+top : word+ EOF;
 

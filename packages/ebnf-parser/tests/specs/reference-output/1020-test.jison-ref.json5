@@ -1,0 +1,25 @@
+{
+  unknownDecls: [
+    [
+      'foo',
+      'blarg!',
+    ],
+  ],
+  ebnf: {
+    foo: [
+      'bar',
+    ],
+  },
+  bnf: {
+    foo: [
+      'bar',
+    ],
+  },
+  __original_input__: `// invalid option-style line:
+%foo blarg!
+
+%%
+
+foo: bar;
+`,
+}

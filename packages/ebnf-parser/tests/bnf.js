@@ -1,5 +1,5 @@
 var assert = require("chai").assert;
-var bnf = require("../dist/ebnf-parser-cjs-es5");
+var bnf = require("../dist/ebnf-parser-cjs");
 
 var Jison = require('../../../../jison/');  // jison-gho
 

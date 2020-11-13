@@ -76,7 +76,7 @@
     },
   },
   {
-    id: 42,
+    id: 38,
     token: '"ARROW_ACTION"',
     yytext: '$foo',
     yylloc: {

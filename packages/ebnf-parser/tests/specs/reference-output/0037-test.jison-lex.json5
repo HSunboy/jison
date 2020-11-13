@@ -1,7 +1,7 @@
 [
   24,
   {
-    id: 30,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%options',
     yylloc: {
@@ -16,8 +16,8 @@
     },
   },
   {
-    id: 59,
-    token: '"OPTION_VALUE"',
+    id: 25,
+    token: '"NAME"',
     yytext: 's1',
     yylloc: {
       first_line: 1,
@@ -31,7 +31,7 @@
     },
   },
   {
-    id: 12,
+    id: 3,
     token: '"="',
     yytext: '=',
     yylloc: {
@@ -46,9 +46,9 @@
     },
   },
   {
-    id: 58,
-    token: '"OPTION_STRING"',
-    yytext: `"s1\\"val'ue"`,
+    id: 29,
+    token: '"OPTION_STRING_VALUE"',
+    yytext: 's1"val\'ue',
     yylloc: {
       first_line: 1,
       first_column: 12,
@@ -61,8 +61,8 @@
     },
   },
   {
-    id: 59,
-    token: '"OPTION_VALUE"',
+    id: 25,
+    token: '"NAME"',
     yytext: 's2',
     yylloc: {
       first_line: 1,
@@ -76,7 +76,7 @@
     },
   },
   {
-    id: 12,
+    id: 3,
     token: '"="',
     yytext: '=',
     yylloc: {
@@ -91,9 +91,9 @@
     },
   },
   {
-    id: 58,
-    token: '"OPTION_STRING"',
-    yytext: `'s2\\\\x\\'val"ue'`,
+    id: 29,
+    token: '"OPTION_STRING_VALUE"',
+    yytext: 's2\\\\x\'val"ue',
     yylloc: {
       first_line: 1,
       first_column: 28,
@@ -106,8 +106,8 @@
     },
   },
   {
-    id: 59,
-    token: '"OPTION_VALUE"',
+    id: 25,
+    token: '"NAME"',
     yytext: 's3',
     yylloc: {
       first_line: 1,
@@ -121,7 +121,7 @@
     },
   },
   {
-    id: 12,
+    id: 3,
     token: '"="',
     yytext: '=',
     yylloc: {
@@ -136,9 +136,9 @@
     },
   },
   {
-    id: 58,
-    token: '"OPTION_STRING"',
-    yytext: `"s3\\"val\\'ue"`,
+    id: 29,
+    token: '"OPTION_STRING_VALUE"',
+    yytext: 's3"val\'ue',
     yylloc: {
       first_line: 1,
       first_column: 47,
@@ -151,8 +151,8 @@
     },
   },
   {
-    id: 59,
-    token: '"OPTION_VALUE"',
+    id: 25,
+    token: '"NAME"',
     yytext: 's4',
     yylloc: {
       first_line: 1,
@@ -166,7 +166,7 @@
     },
   },
   {
-    id: 12,
+    id: 3,
     token: '"="',
     yytext: '=',
     yylloc: {
@@ -181,9 +181,9 @@
     },
   },
   {
-    id: 58,
-    token: '"OPTION_STRING"',
-    yytext: `'s4\\\\x\\'val\\"ue'`,
+    id: 29,
+    token: '"OPTION_STRING_VALUE"',
+    yytext: 's4\\\\x\'val"ue',
     yylloc: {
       first_line: 1,
       first_column: 64,
@@ -196,22 +196,22 @@
     },
   },
   {
-    id: 26,
+    id: 28,
     token: '"OPTIONS_END"',
-    yytext: '',
+    yytext: '\n',
     yylloc: {
       first_line: 1,
       first_column: 81,
-      last_line: 1,
-      last_column: 81,
+      last_line: 2,
+      last_column: 0,
       range: [
         81,
-        81,
+        82,
       ],
     },
   },
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -226,7 +226,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'hello',
     yylloc: {
@@ -241,7 +241,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -256,7 +256,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'world',
     yylloc: {
@@ -286,7 +286,7 @@
     },
   },
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -301,8 +301,8 @@
     },
   },
   {
-    id: 60,
-    token: '"TRAILING_CODE_CHUNK"',
+    id: 46,
+    token: '"CODE"',
     yytext: `
 
 `,

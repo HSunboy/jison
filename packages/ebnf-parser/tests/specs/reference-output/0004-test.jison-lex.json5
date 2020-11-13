@@ -1,7 +1,7 @@
 [
-  32,
+  29,
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -16,7 +16,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'test',
     yylloc: {
@@ -31,7 +31,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -46,7 +46,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'foo',
     yylloc: {
@@ -61,7 +61,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'bar',
     yylloc: {
@@ -76,23 +76,8 @@
     },
   },
   {
-    id: 24,
-    token: '"ACTION_START"',
-    yytext: '{',
-    yylloc: {
-      first_line: 1,
-      first_column: 17,
-      last_line: 1,
-      last_column: 17,
-      range: [
-        17,
-        17,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"ACTION_BODY"',
+    id: 12,
+    token: '"{"',
     yytext: '{',
     yylloc: {
       first_line: 1,
@@ -106,7 +91,7 @@
     },
   },
   {
-    id: 53,
+    id: 43,
     token: '"ACTION_BODY"',
     yytext: 'action',
     yylloc: {
@@ -121,8 +106,8 @@
     },
   },
   {
-    id: 22,
-    token: '"ACTION_END"',
+    id: 13,
+    token: '"}"',
     yytext: '}',
     yylloc: {
       first_line: 1,
@@ -136,7 +121,7 @@
     },
   },
   {
-    id: 5,
+    id: 6,
     token: '"|"',
     yytext: '|',
     yylloc: {
@@ -151,7 +136,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'baz',
     yylloc: {
@@ -181,7 +166,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'hello',
     yylloc: {
@@ -196,7 +181,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -211,7 +196,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'world',
     yylloc: {
@@ -226,7 +211,7 @@
     },
   },
   {
-    id: 49,
+    id: 42,
     token: '"PREC"',
     yytext: '%prec',
     yylloc: {
@@ -241,7 +226,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'UMINUS',
     yylloc: {
@@ -271,7 +256,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'extra',
     yylloc: {
@@ -286,7 +271,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -301,7 +286,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'foo',
     yylloc: {
@@ -316,7 +301,7 @@
     },
   },
   {
-    id: 49,
+    id: 42,
     token: '"PREC"',
     yytext: '%prec',
     yylloc: {
@@ -331,9 +316,9 @@
     },
   },
   {
-    id: 43,
-    token: '"STRING_LIT"',
-    yytext: "'-'",
+    id: 26,
+    token: '"STRING"',
+    yytext: '-',
     yylloc: {
       first_line: 1,
       first_column: 78,
@@ -346,23 +331,8 @@
     },
   },
   {
-    id: 24,
-    token: '"ACTION_START"',
-    yytext: '{',
-    yylloc: {
-      first_line: 1,
-      first_column: 82,
-      last_line: 1,
-      last_column: 82,
-      range: [
-        82,
-        82,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"ACTION_BODY"',
+    id: 12,
+    token: '"{"',
     yytext: '{',
     yylloc: {
       first_line: 1,
@@ -376,7 +346,7 @@
     },
   },
   {
-    id: 53,
+    id: 43,
     token: '"ACTION_BODY"',
     yytext: 'action',
     yylloc: {
@@ -391,8 +361,8 @@
     },
   },
   {
-    id: 22,
-    token: '"ACTION_END"',
+    id: 13,
+    token: '"}"',
     yytext: '}',
     yylloc: {
       first_line: 1,
@@ -417,21 +387,6 @@
       range: [
         91,
         92,
-      ],
-    },
-  },
-  {
-    id: 13,
-    token: '"%%"',
-    yytext: '',
-    yylloc: {
-      first_line: 3,
-      first_column: 0,
-      last_line: 3,
-      last_column: 0,
-      range: [
-        94,
-        94,
       ],
     },
   },

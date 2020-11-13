@@ -18,38 +18,7 @@
   },
   bnf: {
     test: [
-      [
-        [
-          'symbol',
-          'foo',
-        ],
-        [
-          'symbol',
-          'bar',
-        ],
-        [
-          'symbol',
-          `"'"`,
-        ],
-      ],
-    ],
-  },
-  grammar: {
-    test: [
-      [
-        [
-          'symbol',
-          'foo',
-        ],
-        [
-          'symbol',
-          'bar',
-        ],
-        [
-          'symbol',
-          `"'"`,
-        ],
-      ],
+      `foo bar "'"`,
     ],
   },
   __original_input__: `%lex

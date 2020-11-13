@@ -1,4 +1,5 @@
 [
+  6,
   {
     id: 33,
     token: '"%%"',
@@ -89,6 +90,7 @@
       ],
     },
   },
+  -1,
   {
     fail: 1,
     err: {
@@ -115,26 +117,26 @@ Regrettably, it does not exist in the remainder of the input.
 ^..............^^
 3: return true;
 4: %}}
-    at Object.lexer_parseError [as parseError] (\lex-parser-cjs-es5.js:6085:13)
-    at Object.yyError [as yyerror] (\lex-parser-cjs-es5.js:6111:19)
-    at Object.lexer__performAction [as performAction] (\lex-parser-cjs-es5.js:7608:19)
-    at Object.lexer_test_match [as test_match] (\lex-parser-cjs-es5.js:6962:34)
-    at Object.lexer_next [as next] (\lex-parser-cjs-es5.js:7072:22)
-    at Object.lexer_lex [as lex] (\lex-parser-cjs-es5.js:7148:18)
-    at Context.testEachParserExample (\all-tests.js:224:27)
-    at callFn (\runnable.js:364:21)
-    at Test.Runnable.run (\runnable.js:352:5)
-    at Runner.runTest (\runner.js:677:10)
-    at \runner.js:801:12
-    at next (\runner.js:594:14)
-    at \runner.js:604:7
-    at next (\runner.js:486:14)
-    at cbHookRun (\runner.js:551:7)
-    at done (\runnable.js:308:5)
-    at callFn (\runnable.js:387:7)
-    at Hook.Runnable.run (\runnable.js:352:5)
-    at next (\runner.js:510:10)
-    at Immediate._onImmediate (\runner.js:572:5)
+    at Object.lexer_parseError [as parseError] (/lex-parser-cjs-es5.js:6105:13)
+    at Object.yyError [as yyerror] (/lex-parser-cjs-es5.js:6131:19)
+    at Object.lexer__performAction [as performAction] (/lex-parser-cjs-es5.js:7628:19)
+    at Object.lexer_test_match [as test_match] (/lex-parser-cjs-es5.js:6982:34)
+    at Object.lexer_next [as next] (/lex-parser-cjs-es5.js:7092:22)
+    at Object.lexer_lex [as lex] (/lex-parser-cjs-es5.js:7168:18)
+    at Context.testEachParserExample (/all-tests.js:221:27)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
     at processImmediate (/timers.js:456:21)`,
       hash: {
         errStr: `Lexical error on line 2: 

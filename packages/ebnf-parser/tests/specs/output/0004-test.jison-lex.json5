@@ -211,7 +211,7 @@
     },
   },
   {
-    id: 41,
+    id: 42,
     token: '"PREC"',
     yytext: '%prec',
     yylloc: {
@@ -301,7 +301,7 @@
     },
   },
   {
-    id: 41,
+    id: 42,
     token: '"PREC"',
     yytext: '%prec',
     yylloc: {

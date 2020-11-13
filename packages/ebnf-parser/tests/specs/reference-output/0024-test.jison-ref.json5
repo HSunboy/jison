@@ -2,51 +2,12 @@
   bnf: {
     test: [
       [
-        [
-          [
-            'symbol',
-            'foo',
-          ],
-          [
-            'symbol',
-            'bar',
-          ],
-        ],
-        'node({}, 3 / 4, "{"); /* { */',
+        'foo bar',
+        ' node({}, 3 / 4, "{"); /* { */ ',
       ],
     ],
     hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
-    ],
-  },
-  grammar: {
-    test: [
-      [
-        [
-          [
-            'symbol',
-            'foo',
-          ],
-          [
-            'symbol',
-            'bar',
-          ],
-        ],
-        'node({}, 3 / 4, "{"); /* { */',
-      ],
-    ],
-    hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
+      'world',
     ],
   },
   __original_input__: `%% test: foo bar { node({}, 3 / 4, "{"); /* { */ }; hello: world ;

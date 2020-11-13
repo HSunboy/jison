@@ -66,6 +66,17 @@ function shallow_copy_and_strip_depth(src, parentKey) {
 }
 
 
+function stripErrorStackPaths(msg) {
+    // strip away devbox-specific paths in error stack traces in the output:
+    msg = msg
+    .replace(/\bat ([^\r\n(\\\/]*?)\([^)]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)\)/gi, 'at $1(/$2)')
+    .replace(/\bat [^\r\n ]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)/gi, 'at /$1')
+
+    return msg;
+}
+
+
+
 function trim_array_tail(arr) {
     if (arr instanceof Array) {
         for (var len = arr.length; len > 0; len--) {
@@ -281,7 +292,7 @@ function treat_object(e) {
 // it will be fed to a test log or other output.
 // 
 // Internal use in the unit test rigs.
-export default function trimErrorForTestReporting(e) {
+function trimErrorForTestReporting(e) {
     cycleref.length = 0;
     cyclerefpath.length = 0;
     linkref.length = 0;
@@ -299,4 +310,9 @@ export default function trimErrorForTestReporting(e) {
     path = ['*'];
 
     return e;
+}
+
+export {
+    trimErrorForTestReporting,
+    stripErrorStackPaths,    
 }

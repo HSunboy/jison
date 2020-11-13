@@ -10,3 +10,11 @@
 ./1010-test.jison
 ./1011-test.jison
 ./1012-test.jison
+./1013-test.jison
+./1014-test.jison
+./1015-test.jison
+./1016-test.jison
+./1017-test.jison
+./1018-test.jison
+./1019-test.jison
+./1020-test.jison

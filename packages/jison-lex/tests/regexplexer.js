@@ -9,6 +9,7 @@ var XRegExp = require("@gerhobbelt/xregexp");
 var RegExpLexer = require('../dist/regexp-lexer-cjs-es5');
 var helpers = require('../../helpers-lib/dist/helpers-lib-cjs-es5');
 var trimErrorForTestReporting = helpers.trimErrorForTestReporting;
+var stripErrorStackPaths = helpers.stripErrorStackPaths;
 
 
 
@@ -3446,13 +3447,6 @@ function lexer_reset() {
 
   var original_cwd = process.cwd();
 
-  function stripErrorStackPaths(msg) {
-    // strip away devbox-specific paths in error stack traces in the output:
-    msg = msg.replace(/\bat ([^\r\n(\\\/]*?)\([^)]+?([\\\/][a-z0-9_-]+\.js:[0-9]+:[0-9]+)\)/gi, 'at $1($2)');
-    msg = msg.replace(/\bat [^\r\n ]+?([\\\/][a-z0-9_-]+\.js:[0-9]+:[0-9]+)/gi, 'at $1');
-    return msg;
-  }
-
   function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key, err) {
     // and produce an alternative structure to JSON-ify:
     return {
@@ -3553,11 +3547,8 @@ describe("Test Lexer Grammars", function () {
         err = ex;
         tokens.push({
           fail: 1,
-          message: ex.message,
-          name: ex.name,
-          stack: ex.stack,
           meta: filespec.spec.meta, 
-          ex: trimErrorForTestReporting(ex),
+          err: trimErrorForTestReporting(ex),
         });
         // and make sure lexer !== undefined:
         lexer = { fail: 1 };
@@ -3621,6 +3612,7 @@ describe("Test Lexer Grammars", function () {
             stack: err.stack
           }
         }, {space: 2});
+        
         dumpStr = stripErrorStackPaths(dumpStr);
       }
 

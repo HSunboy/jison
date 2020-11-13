@@ -2,34 +2,8 @@
   bnf: {
     test: [
       [
-        [
-          [
-            'symbol',
-            'foo',
-          ],
-          [
-            'symbol',
-            'bar',
-          ],
-        ],
-        '$$ = $foo',
-      ],
-    ],
-  },
-  grammar: {
-    test: [
-      [
-        [
-          [
-            'symbol',
-            'foo',
-          ],
-          [
-            'symbol',
-            'bar',
-          ],
-        ],
-        '$$ = $foo',
+        'foo bar',
+        '$$ = ($foo);',
       ],
     ],
   },

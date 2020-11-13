@@ -366,7 +366,212 @@
  *      flex: boolean
  *                 optional: `true` ==> flex-like lexing behaviour where the rules are tested
  *                 exhaustively to find the longest match.
- *      backtrack_lexer: boolean
+ *      backtrack_lexer: boolean                                                                   (⅏ 센 ⅊ ⁖ ⁘ ⁙ ⁚ ⁛ ⁜ ⁝ ⁞ † ‡ 
+ a⯈b
+        ∀   ∁   ∂   ∃   ∄   ∅   ∆   ∇   ∈   ∉   ∊   ∋   ∌   ∍   ∎   ∏
+U+221x  ∐   ∑   −   ∓   ∔   ∕   ∖   ∗   ∘   ∙   √   ∛   ∜   ∝   ∞   ∟
+U+222x  ∠   ∡   ∢   ∣   ∤   ∥   ∦   ∧   ∨   ∩   ∪   ∫   ∬   ∭   ∮   ∯
+U+223x  ∰   ∱   ∲   ∳   ∴   ∵   ∶   ∷   ∸   ∹   ∺   ∻   ∼   ∽   ∾   ∿
+U+224x  ≀   ≁   ≂   ≃   ≄   ≅   ≆   ≇   ≈   ≉   ≊   ≋   ≌   ≍   ≎   ≏
+U+225x  ≐   ≑   ≒   ≓   ≔   ≕   ≖   ≗   ≘   ≙   ≚   ≛   ≜   ≝   ≞   ≟
+U+226x  ≠   ≡   ≢   ≣   ≤   ≥   ≦   ≧   ≨   ≩   ≪   ≫   ≬   ≭   ≮   ≯
+U+227x  ≰   ≱   ≲   ≳   ≴   ≵   ≶   ≷   ≸   ≹   ≺   ≻   ≼   ≽   ≾   ≿
+U+228x  ⊀   ⊁   ⊂   ⊃   ⊄   ⊅   ⊆   ⊇   ⊈   ⊉   ⊊   ⊋   ⊌   ⊍   ⊎   ⊏
+U+229x  ⊐   ⊑   ⊒   ⊓   ⊔   ⊕   ⊖   ⊗   ⊘   ⊙   ⊚   ⊛   ⊜   ⊝   ⊞   ⊟
+U+22Ax  ⊠   ⊡   ⊢   ⊣   ⊤   ⊥   ⊦   ⊧   ⊨   ⊩   ⊪   ⊫   ⊬   ⊭   ⊮   ⊯
+U+22Bx  ⊰   ⊱   ⊲   ⊳   ⊴   ⊵   ⊶   ⊷   ⊸   ⊹   ⊺   ⊻   ⊼   ⊽   ⊾   ⊿
+U+22Cx  ⋀   ⋁   ⋂   ⋃   ⋄   ⋅   ⋆   ⋇   ⋈   ⋉   ⋊   ⋋   ⋌   ⋍   ⋎   ⋏
+U+22Dx  ⋐   ⋑   ⋒   ⋓   ⋔   ⋕   ⋖   ⋗   ⋘   ⋙   ⋚   ⋛   ⋜   ⋝   ⋞   ⋟
+U+22Ex  ⋠   ⋡   ⋢   ⋣   ⋤   ⋥   ⋦   ⋧   ⋨   ⋩   ⋪   ⋫   ⋬   ⋭   ⋮   ⋯
+U+22Fx  ⋰   ⋱   ⋲   ⋳   ⋴   ⋵   ⋶   ⋷   ⋸   ⋹   ⋺   ⋻   ⋼   ⋽   ⋾   ⋿)
+U+230x  ⌀   ⌁   ⌂   ⌃   ⌄   ⌅   ⌆   ⌇   ⌈   ⌉   ⌊   ⌋   ⌌   ⌍   ⌎   ⌏
+U+231x  ⌐   ⌑   ⌒   ⌓   ⌔   ⌕   ⌖   ⌗   ⌘   ⌙   ⌚   ⌛   ⌜   ⌝   ⌞   ⌟
+U+232x  ⌠   ⌡   ⌢   ⌣   ⌤   ⌥   ⌦   ⌧   ⌨   〈   〉   ⌫   ⌬   ⌭   ⌮   ⌯
+U+233x  ⌰   ⌱   ⌲   ⌳   ⌴   ⌵   ⌶   ⌷   ⌸   ⌹   ⌺   ⌻   ⌼   ⌽   ⌾   ⌿
+U+234x  ⍀   ⍁   ⍂   ⍃   ⍄   ⍅   ⍆   ⍇   ⍈   ⍉   ⍊   ⍋   ⍌   ⍍   ⍎   ⍏
+U+235x  ⍐   ⍑   ⍒   ⍓   ⍔   ⍕   ⍖   ⍗   ⍘   ⍙   ⍚   ⍛   ⍜   ⍝   ⍞   ⍟
+U+236x  ⍠   ⍡   ⍢   ⍣   ⍤   ⍥   ⍦   ⍧   ⍨   ⍩   ⍪   ⍫   ⍬   ⍭   ⍮   ⍯
+U+237x  ⍰   ⍱   ⍲   ⍳   ⍴   ⍵   ⍶   ⍷   ⍸   ⍹   ⍺   ⍻   ⍼   ⍽   ⍾   ⍿
+U+238x  ⎀   ⎁   ⎂   ⎃   ⎄   ⎅   ⎆   ⎇   ⎈   ⎉   ⎊   ⎋   ⎌   ⎍   ⎎   ⎏
+U+239x  ⎐   ⎑   ⎒   ⎓   ⎔   ⎕   ⎖   ⎗   ⎘   ⎙   ⎚   ⎛   ⎜   ⎝   ⎞   ⎟
+U+23Ax  ⎠   ⎡   ⎢   ⎣   ⎤   ⎥   ⎦   ⎧   ⎨   ⎩   ⎪   ⎫   ⎬   ⎭   ⎮   ⎯
+U+23Bx  ⎰   ⎱   ⎲   ⎳   ⎴   ⎵   ⎶   ⎷   ⎸   ⎹   ⎺   ⎻   ⎼   ⎽   ⎾   ⎿
+U+23Cx  ⏀   ⏁   ⏂   ⏃   ⏄   ⏅   ⏆   ⏇   ⏈   ⏉   ⏊   ⏋   ⏌   ⏍   ⏎   ⏏
+U+23Dx  ⏐   ⏑   ⏒   ⏓   ⏔   ⏕   ⏖   ⏗   ⏘   ⏙   ⏚   ⏛   ⏜   ⏝   ⏞   ⏟
+U+23Ex  ⏠   ⏡   ⏢   ⏣   ⏤   ⏥   ⏦   ⏧   ⏨   ⏩   ⏪   ⏫   ⏬   ⏭   ⏮   ⏯
+U+23Fx  ⏰   ⏱   ⏲   ⏳   ⏴   ⏵   ⏶   ⏷   ⏸   ⏹   ⏺   ⏻   ⏼   ⏽   ⏾   ⏿
+
+U+260x  ☀   ☁   ☂   ☃   ☄   ★   ☆   ☇   ☈   ☉   ☊   ☋   ☌   ☍   ☎   ☏
+U+261x  ☐   ☑   ☒   ☓   ☔   ☕   ☖   ☗   ☘   ☙   ☚   ☛   ☜   ☝   ☞   ☟
+U+262x  ☠   ☡   ☢   ☣   ☤   ☥   ☦   ☧   ☨   ☩   ☪   ☫   ☬   ☭   ☮   ☯
+U+263x  ☰   ☱   ☲   ☳   ☴   ☵   ☶   ☷   ☸   ☹   ☺   ☻   ☼   ☽   ☾   ☿
+U+264x  ♀   ♁   ♂   ♃   ♄   ♅   ♆   ♇   ♈   ♉   ♊   ♋   ♌   ♍   ♎   ♏
+U+265x  ♐   ♑   ♒   ♓   ♔   ♕   ♖   ♗   ♘   ♙   ♚   ♛   ♜   ♝   ♞   ♟
+U+266x  ♠   ♡   ♢   ♣   ♤   ♥   ♦   ♧   ♨   ♩   ♪   ♫   ♬   ♭   ♮   ♯
+U+267x  ♰   ♱   ♲   ♳   ♴   ♵   ♶   ♷   ♸   ♹   ♺   ♻   ♼   ♽   ♾   ♿
+U+268x  ⚀   ⚁   ⚂   ⚃   ⚄   ⚅   ⚆   ⚇   ⚈   ⚉   ⚊   ⚋   ⚌   ⚍   ⚎   ⚏
+U+269x  ⚐   ⚑   ⚒   ⚓   ⚔   ⚕   ⚖   ⚗   ⚘   ⚙   ⚚   ⚛   ⚜   ⚝   ⚞   ⚟
+U+26Ax  ⚠   ⚡   ⚢   ⚣   ⚤   ⚥   ⚦   ⚧   ⚨   ⚩   ⚪   ⚫   ⚬   ⚭   ⚮   ⚯
+U+26Bx  ⚰   ⚱   ⚲   ⚳   ⚴   ⚵   ⚶   ⚷   ⚸   ⚹   ⚺   ⚻   ⚼   ⚽   ⚾   ⚿
+U+26Cx  ⛀   ⛁   ⛂   ⛃   ⛄   ⛅   ⛆   ⛇   ⛈   ⛉   ⛊   ⛋   ⛌   ⛍   ⛎   ⛏
+U+26Dx  ⛐   ⛑   ⛒   ⛓   ⛔   ⛕   ⛖   ⛗   ⛘   ⛙   ⛚   ⛛   ⛜   ⛝   ⛞   ⛟
+U+26Ex  ⛠   ⛡   ⛢   ⛣   ⛤   ⛥   ⛦   ⛧   ⛨   ⛩   ⛪   ⛫   ⛬   ⛭   ⛮   ⛯
+U+26Fx  ⛰   ⛱   ⛲   ⛳   ⛴   ⛵   ⛶   ⛷   ⛸   ⛹   ⛺   ⛻   ⛼   ⛽   ⛾   ⛿
+
+    ✁   ✂   ✃   ✄   ✅   ✆   ✇   ✈   ✉   ☛   ☞   ✌   ✍   ✎   ✏
+✐   ✑   ✒   ✓   ✔   ✕   ✖   ✗   ✘   ✙   ✚   ✛   ✜   ✝   ✞   ✟
+✠   ✡   ✢   ✣   ✤   ✥   ✦   ✧   ★   ✩   ✪   ✫   ✬   ✭   ✮   ✯
+✰   ✱   ✲   ✳   ✴   ✵   ✶   ✷   ✸   ✹   ✺   ✻   ✼   ✽   ✾   ✿
+❀   ❁   ❂   ❃   ❄   ❅   ❆   ❇   ❈   ❉   ❊   ❋   ●   ❍   ■   ❏
+☺   ☻   ♥   ♦   ♣   ♠   •   ◘   ○   ❐   ❑   ❒   ▲   ▼   ◆   ❖
+◗   ❘   ❙   ❚   ❛   ❜   ❝   ❞    
+
+U+270x  ✀   ✁   ✂   ✃   ✄   ✅   ✆   ✇   ✈   ✉   ✊   ✋   ✌   ✍   ✎   ✏
+U+271x  ✐   ✑   ✒   ✓   ✔   ✕   ✖   ✗   ✘   ✙   ✚   ✛   ✜   ✝   ✞   ✟
+U+272x  ✠   ✡   ✢   ✣   a✤b   a✥b   a✦b   a✧b   ✨   ✩   ✪   ✫   ✬   ✭   ✮   ✯
+U+273x  ✰   ✱   ✲   ✳   ✴   ✵   ✶   ✷   ✸   ✹   ✺   ✻   ✼   ✽   ✾   ✿
+U+274x  ❀   ❁   ❂   ❃   ❄   ❅   ❆   ❇   ❈   ❉   ❊   ❋   ❌   ❍   ❎   ❏
+U+275x  ❐   ❑   ❒   ❓   ❔   ❕   ❖   ❗   ❘   ❙   ❚   ❛   ❜   ❝   ❞   ❟
+U+276x  ❠   ❡   ❢   ❣   ❤   ❥   ❦   ❧   ❨   ❩   ❪   ❫   ❬   ❭   ❮   a❯b
+U+277x  ❰   ❱   ❲   ❳   ❴   ❵   ❶   ❷   ❸   ❹   ❺   ❻   ❼   ❽   ❾   ❿
+U+278x  ➀   ➁   ➂   ➃   ➄   ➅   ➆   ➇   ➈   ➉   ➊   ➋   ➌   ➍   ➎   ➏
+U+279x  ➐   ➑   ➒   ➓   ➔   ➕   ➖   ➗   ➘   ➙   ➚   ➛   ➜   ➝   ➞   ➟
+U+27Ax  ➠   ➡   ➢   ➣   ➤   ➥   ➦   ➧   a➨b   ➩   ➪   ➫   ➬   ➭   ➮   ➯
+U+27Bx  ➰   a➱b   ➲   ➳   ➴   ➵   ➶   ➷   ➸   ➹   ➺   ➻   ➼   ➽   ➾   ➿
+
+U+2580  ▀   Upper half block
+U+2581  ▁   Lower one eighth block
+U+2582  ▂   Lower one quarter block
+U+2583  ▃   Lower three eighths block
+U+2584  ▄   Lower half block
+U+2585  ▅   Lower five eighths block
+U+2586  ▆   Lower three quarters block
+U+2587  ▇   Lower seven eighths block
+U+2588  █   Full block
+U+2589  ▉   Left seven eighths block
+U+258A  ▊   Left three quarters block
+U+258B  ▋   Left five eighths block
+U+258C  ▌   Left half block
+U+258D  ▍   Left three eighths block
+U+258E  ▎   Left one quarter block
+U+258F  ▏   Left one eighth block
+U+2590  ▐   Right half block
+U+2591  ░   Light shade
+U+2592  ▒   Medium shade
+U+2593  ▓   Dark shade
+U+2594  ▔   Upper one eighth block
+U+2595  ▕   Right one eighth block
+U+2596  ▖   Quadrant lower left
+U+2597  ▗   Quadrant lower right
+U+2598  ▘   Quadrant upper left
+U+2599  ▙   Quadrant upper left and lower left and lower right
+U+259A  ▚   Quadrant upper left and lower right
+U+259B  ▛   Quadrant upper left and upper right and lower left
+U+259C  ▜   Quadrant upper left and upper right and lower right
+U+259D  ▝   Quadrant upper right
+U+259E  ▞   Quadrant upper right and lower left
+U+259F  ▟   Quadrant upper right and lower left and lower right
+Geometric Shapes
+Main articles: Geometric Shapes (Unicode block) and Geometric Shapes Extended (Unicode block)
+[hide]Code  Glyph   Description
+U+25A0  ■   Black square
+U+25A1  □   White square
+U+25A2  ▢   White square with rounded corners
+U+25A3  ▣   White square containing small black square
+U+25A4  ▤   Square with horizontal fill
+U+25A5  ▥   Square with vertical fill
+U+25A6  ▦   Square with orthogonal crosshatch fill
+U+25A7  ▧   Square with upper left to lower right fill
+U+25A8  ▨   Square with upper right to lower left fill
+U+25A9  ▩   Square with diagonal crosshatch fill
+U+25AA  ▪   Black small square
+U+25AB  ▫   White small square
+U+25AC  ▬   Black rectangle
+U+25AD  ▭   White rectangle
+U+25AE  ▮   Black vertical rectangle
+U+25AF  ▯   White vertical rectangle
+U+25B0  ▰   Black parallelogram
+U+25B1  ▱   White parallelogram
+U+25B2  ▲   Black up-pointing triangle
+U+25B3  △   White up-pointing triangle
+U+25B4  ▴   Black up-pointing small triangle
+U+25B5  ▵   White up-pointing small triangle
+U+25B6  ▶   Black right-pointing triangle
+U+25B7  ▷   White right-pointing triangle
+U+25B8  ▸   Black right-pointing small triangle
+U+25B9  ▹   White right-pointing small triangle
+U+25BA  ►   Black right-pointing pointer
+U+25BB  ▻   White right-pointing pointer
+U+25BC  ▼   Black down-pointing triangle
+U+25BD  ▽   White down-pointing triangle
+U+25BE  ▾   Black down-pointing small triangle
+U+25BF  ▿   White down-pointing small triangle
+U+25C0  ◀   Black left-pointing triangle
+U+25C1  ◁   White left-pointing triangle
+U+25C2  ◂   Black left-pointing small triangle
+U+25C3  ◃   White left-pointing small triangle
+U+25C4  ◄   Black left-pointing pointer
+U+25C5  ◅   White left-pointing pointer
+U+25C6  ◆   Black diamond
+U+25C7  ◇   White diamond
+U+25C8  ◈   White diamond containing small black diamond
+U+25C9  ◉   Fisheye
+U+25CA  ◊   Lozenge
+U+25CB  ○   White circle
+U+25CC  ◌   Dotted circle
+U+25CD  ◍   Circle with vertical fill
+U+25CE  ◎   Bullseye
+U+25CF  ●   Black circle
+U+25D0  ◐   Circle with left half black
+U+25D1  ◑   Circle with right half black
+U+25D2  ◒   Circle with lower half black
+U+25D3  ◓   Circle with upper half black
+U+25D4  ◔   Circle with upper right quadrant black
+U+25D5  ◕   Circle with all but upper left quadrant black
+U+25D6  ◖   Left half circle black
+U+25D7  ◗   Right half black circle
+U+25D8  ◘   Inverse bullet
+U+25D9  ◙   Inverse white circle
+U+25DA  ◚   Upper half inverse white circle
+U+25DB  ◛   Lower half inverse white circle
+U+25DC  ◜   Upper left quadrant circular arc
+U+25DD  ◝   Upper right quadrant circular arc
+U+25DE  ◞   Lower right quadrant circular arc
+U+25DF  ◟   Lower left quadrant circular arc
+U+25E0  ◠   Upper half circle
+U+25E1  ◡   Lower half circle
+U+25E2  ◢   Black lower right triangle
+U+25E3  ◣   Black lower left triangle
+U+25E4  ◤   Black upper left triangle
+U+25E5  ◥   Black upper right triangle
+U+25E6  ◦   White bullet
+U+25E7  ◧   Square with left half black
+U+25E8  ◨   Square with right half black
+U+25E9  ◩   Square with upper left diagonal half black
+U+25EA  ◪   Square with lower right diagonal half black
+U+25EB  ◫   White square with vertical bisecting line
+U+25EC  ◬   White up-pointing triangle with dot
+U+25ED  ◭   Up-pointing triangle with left half black
+U+25EE  ◮   Up-pointing triangle with right half black
+U+25EF  ◯   Large circle
+U+25F0  ◰   White square with upper left quadrant
+U+25F1  ◱   White square with lower left quadrant
+U+25F2  ◲   White square with lower right quadrant
+U+25F3  ◳   White square with upper right quadrant
+U+25F4  ◴   White circle with upper left quadrant
+U+25F5  ◵   White circle with lower left quadrant
+U+25F6  ◶   White circle with lower right quadrant
+U+25F7  ◷   White circle with upper right quadrant
+U+25F8  ◸   Upper left triangle
+U+25F9  ◹   Upper right triangle
+U+25FA  ◺   Lower-left triangle
+U+25FB  ◻   White medium square
+U+25FC  ◼   Black medium square
+U+25FD  ◽   White medium small square
+U+25FE  ◾   Black medium small square
+U+25FF  ◿   Lower right triangle
+
+
  *                 optional: `true` ==> lexer regexes are tested in order and for invoked;
  *                 the lexer terminates the scan when a token is returned by the action code.
  *      xregexp: boolean
@@ -1120,25 +1325,59 @@ parse: function parse(input) {
     // benchmark:: http://127.0.0.1:8080/example/jsperf/?333#testfile=test0021-shallow-clones.json5
     //
     function shallow_copy(src) {
-        if (typeof src === 'object') {
-            var dst = {};
-            for (var k in src) {
-                if (Object.prototype.hasOwnProperty.call(src, k)) {
-                    dst[k] = src[k];
+        "use strict";
+
+        if (src && typeof src === 'object') {
+            // non-Object-type objects, e.g. RegExp, Date, etc., can usually be shallow cloned
+            // using their constructor:
+            if (src.constructor !== Object) {
+                if (Array.isArray(src)) {
+                    return src.slice();
                 }
+                var dst = new src.constructor(src);
+
+                // and make sure all custom attributes are added to the clone:
+                shallow_copy_noclobber(dst, src);
+                return dst;
             }
+            // native objects must be cloned a different way:
+            //
+            //return Object.assign({}, src);
+            var dst = {};
+            shallow_copy_noclobber(dst, src);
             return dst;
         }
         return src;
     }
+    // add elements from `src` to `dst` when:
+    // - either the element does not yet exist in `src`
+    // - or exists in `src` but is NULL or UNDEFINED there, while its value is non-NULL in `dst`
     function shallow_copy_noclobber(dst, src) {
         "use strict";
 
+        const chk = Object.prototype.hasOwnProperty;
         for (var k in src) {
-            if (typeof dst[k] === 'undefined' && Object.prototype.hasOwnProperty.call(src, k)) {
-                dst[k] = src[k];
+            if (!(k in dst)) {
+                if (chk.call(src, k)) {
+                    dst[k] = src[k];
+                }
+            }
+            else {
+                if (src[k] != null && dst[k] == null && chk.call(src, k)) {
+                    dst[k] = src[k];
+                }
             }
         }
+    }
+    function copy_yylloc_native(loc) {
+        "use strict";
+
+        var rv = shallow_copy(loc);
+
+        if (rv) {
+            rv.range = rv.range.slice();
+        }
+        return rv;
     }
 
     // copy state
@@ -1146,6 +1385,9 @@ parse: function parse(input) {
 
     sharedState_yy.lexer = lexer;
     sharedState_yy.parser = this;
+
+
+    this.copy_yytext = this.options.copy_yytext || sharedState_yy.copy_yytext || shallow_copy;
 
 
 
@@ -1399,7 +1641,7 @@ parse: function parse(input) {
             errStr: msg,
             exception: ex,
             text: lexer.match,
-            value: lexer.yytext,
+            value: this.copy_yytext(lexer.yytext),
             token: this.describeSymbol(symbol) || symbol,
             token_id: symbol,
             line: lexer.yylineno,
@@ -1480,6 +1722,19 @@ parse: function parse(input) {
             token = self.symbols_[token] || token;
         }
 
+        if (typeof Jison !== 'undefined' && Jison.lexDebugger) {
+            var tokenName = self.getSymbolName(token || EOF);
+            if (!tokenName) {
+                tokenName = token;
+            }
+
+            Jison.lexDebugger.push({
+                tokenName: tokenName,
+                tokenText: lexer.match,
+                tokenValue: lexer.yytext
+            });
+        }
+
         return token || EOF;
     }
 
@@ -1490,6 +1745,19 @@ parse: function parse(input) {
         // if token isn't its numeric value, convert
         if (typeof token !== 'number') {
             token = self.symbols_[token] || token;
+        }
+
+        if (typeof Jison !== 'undefined' && Jison.lexDebugger) {
+            var tokenName = self.getSymbolName(token || EOF);
+            if (!tokenName) {
+                tokenName = token;
+            }
+
+            Jison.lexDebugger.push({
+                tokenName: tokenName,
+                tokenText: lexer.match,
+                tokenValue: lexer.yytext
+            });
         }
 
         return token || EOF;
@@ -1584,13 +1852,15 @@ parse: function parse(input) {
                     var expected = this.collect_expected_token_set(state);
 
                     // Report error
+                    errStr = 'Parse error';
                     if (typeof lexer.yylineno === 'number') {
-                        errStr = 'Parse error on line ' + (lexer.yylineno + 1) + ': ';
-                    } else {
-                        errStr = 'Parse error: ';
+                        errStr += ' on line ' + (lexer.yylineno + 1);
                     }
+
                     if (typeof lexer.showPosition === 'function') {
-                        errStr += '\n' + lexer.showPosition(79 - 10, 10) + '\n';
+                        errStr += ':\n' + lexer.showPosition(79 - 10, 10) + '\n';
+                    } else {
+                        errStr += ': ';
                     }
                     if (expected.length) {
                         errStr += 'Expecting ' + expected.join(', ') + ', got unexpected ' + errSymbolDescr;
@@ -1646,7 +1916,22 @@ parse: function parse(input) {
 
                 sstack[sp] = newState; // push state
 
+                if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                    var tokenName = this.getSymbolName(symbol || EOF);
+                    if (!tokenName) {
+                        tokenName = symbol;
+                    }
+
+                    Jison.parserDebugger.push({
+                        action: 'shift',
+                        text: lexer.yytext,
+                        terminal: tokenName,
+                        terminal_id: symbol
+                    });
+                }
+
                 ++sp;
+
                 symbol = 0;
 
 
@@ -1678,8 +1963,40 @@ parse: function parse(input) {
 
                 r = this.performAction.call(yyval, newState, sp - 1, vstack);
 
+                if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                    var prereduceValue = vstack.slice(sp - yyrulelen, sp);
+                    var debuggableProductions = [];
+                    for (var debugIdx = yyrulelen - 1; debugIdx >= 0; debugIdx--) {
+                        var debuggableProduction = getNonTerminalFromCode(stack[sp - debugIdx]);
+                        debuggableProductions.push(debuggableProduction);
+                    }
+
+                    // find the current nonterminal name (- nolan)
+                    var currentNonterminalCode = this_production[0];     // WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];
+                    var currentNonterminal = getNonTerminalFromCode(currentNonterminalCode);
+
+                    Jison.parserDebugger.push({
+                        action: 'reduce',
+                        nonterminal: currentNonterminal,
+                        nonterminal_id: currentNonterminalCode,
+                        prereduce: prereduceValue,
+                        result: r,
+                        productions: debuggableProductions,
+                        text: yyval.$
+                    });
+                }
+
                 if (typeof r !== 'undefined') {
                     retval = r;
+
+                    if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                        Jison.parserDebugger.push({
+                            action: 'accept',
+                            text: retval
+                        });
+                        console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+                    }
+
                     break;
                 }
 
@@ -1736,6 +2053,15 @@ parse: function parse(input) {
                         retval = vstack[sp];
                     }
                 }
+
+                if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+                    Jison.parserDebugger.push({
+                        action: 'accept',
+                        text: retval
+                    });
+                    console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+                }
+
                 break;
             }
 
@@ -1761,6 +2087,14 @@ parse: function parse(input) {
     } finally {
         retval = this.cleanupAfterParse(retval, true, true);
         this.__reentrant_call_depth--;
+
+        if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
+            Jison.parserDebugger.push({
+                action: 'return',
+                text: retval
+            });
+            console.log(Jison.parserDebugger[Jison.parserDebugger.length - 1]);
+        }
     }   // /finally
 
     return retval;
@@ -1988,6 +2322,8 @@ parser.originalQuoteName = parser.quoteName;
 
 
 var lexer = function() {
+  'use strict';
+
   /**
    * See also:
    * http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508
@@ -2127,6 +2463,9 @@ EOF: 1,
     /// INTERNAL USE ONLY
     _signaled_error_token: false,
 
+    /// INTERNAL USE ONLY; 0: clear to do, 1: clear done for lex()/next(); -1: clear done for inut()/unput()/...
+    _clear_state: 0,
+
     /// INTERNAL USE ONLY; managed via `pushState()`, `popState()`, `topState()` and `stateStackSize()`
     conditionStack: [],
 
@@ -2142,8 +2481,11 @@ EOF: 1,
     /// ADVANCED USE ONLY: tracks input which has been matched so far for the lexer token under construction; this value is transferred to the parser as the 'token value' when the parser consumes the lexer token produced through a call to the `lex()` API.
     yytext: '',
 
-    /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far
+    /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks the 'cursor position' in the input string, i.e. the number of characters matched so far. (**WARNING:** this value MAY be negative if you `unput()` more text than you have already lexed. This type of behaviour is generally observed for one kind of 'lexer/parser hack' where custom token-illiciting characters are pushed in front of the input stream to help simulate multiple-START-points in the parser. When this happens, `base_position` will be adjusted to help track the original input's starting point in the `_input` buffer.)
     offset: 0,
+
+    /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: index to the original starting point of the input; always ZERO(0) unless `unput()` has pushed content before the input: see the `offset` **WARNING** just above.
+    base_position: 0,
 
     /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: length of matched input for the token under construction (`yytext`)
     yyleng: 0,
@@ -2153,6 +2495,9 @@ EOF: 1,
 
     /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: tracks location info (lines + columns) for the token under construction
     yylloc: null,
+
+    /// READ-ONLY EXTERNAL ACCESS - ADVANCED USE ONLY: regex used to split lines while tracking the lexer cursor position.
+    CRLF_Re: /\r\n?|\n/,
 
     /**
          * INTERNAL USE: construct a suitable error info hash object instance for `parseError`.
@@ -2346,7 +2691,7 @@ EOF: 1,
 
       this._more = false;
       this._backtrack = false;
-      var col = this.yylloc ? this.yylloc.last_column : 0;
+      var col = this.yylloc.last_column;
 
       this.yylloc = {
         first_line: this.yylineno + 1,
@@ -2413,7 +2758,7 @@ EOF: 1,
       }
 
       this._input = input || '';
-      this.clear();
+      this._clear_state = -1;
       this._signaled_error_token = false;
       this.done = false;
       this.yylineno = 0;
@@ -2430,6 +2775,16 @@ EOF: 1,
       };
 
       this.offset = 0;
+      this.base_position = 0;
+
+      // apply these bits of `this.clear()` as well:
+      this.yytext = '';
+
+      this.yyleng = 0;
+      this.match = '';
+      this.matches = false;
+      this._more = false;
+      this._backtrack = false;
       return this;
     },
 
@@ -2507,6 +2862,11 @@ EOF: 1,
         return null;
       }
 
+      if (!this._clear_state && !this._more) {
+        this._clear_state = -1;
+        this.clear();
+      }
+
       var ch = this._input[0];
       this.yytext += ch;
       this.yyleng++;
@@ -2562,11 +2922,29 @@ EOF: 1,
     unput: function lexer_unput(ch) {
       'use strict';
       var len = ch.length;
-      var lines = ch.split(/(?:\r\n?|\n)/g);
+      var lines = ch.split(this.CRLF_Re);
+
+      if (!this._clear_state && !this._more) {
+        this._clear_state = -1;
+        this.clear();
+      }
+
       this._input = ch + this._input;
       this.yytext = this.yytext.substr(0, this.yytext.length - len);
       this.yyleng = this.yytext.length;
       this.offset -= len;
+
+      // **WARNING:**
+      // The `offset` value MAY be negative if you `unput()` more text than you have already lexed.
+      // This type of behaviour is generally observed for one kind of 'lexer/parser hack'
+      // where custom token-illiciting characters are pushed in front of the input stream to help
+      // simulate multiple-START-points in the parser.
+      // When this happens, `base_position` will be adjusted to help track the original input's
+      // starting point in the `_input` buffer.
+      if (-this.offset > this.base_position) {
+        this.base_position = -this.offset;
+      }
+
       this.match = this.match.substr(0, this.match.length - len);
       this.matched = this.matched.substr(0, this.matched.length - len);
 
@@ -2579,11 +2957,11 @@ EOF: 1,
         // matched lines end up in the array too.
         var pre = this.match;
 
-        var pre_lines = pre.split(/(?:\r\n?|\n)/g);
+        var pre_lines = pre.split(this.CRLF_Re);
 
         if (pre_lines.length === 1) {
           pre = this.matched;
-          pre_lines = pre.split(/(?:\r\n?|\n)/g);
+          pre_lines = pre.split(this.CRLF_Re);
         }
 
         this.yylloc.last_column = pre_lines[pre_lines.length - 1].length;
@@ -2715,7 +3093,7 @@ EOF: 1,
 
       // now that we have a significantly reduced string to process, transform the newlines
       // and chop them, then limit them:
-      var a = past.replace(/\r\n|\r/g, '\n').split('\n');
+      var a = past.split(this.CRLF_Re);
 
       a = a.slice(-maxLines);
       past = a.join('\n');
@@ -2786,7 +3164,7 @@ EOF: 1,
 
       // now that we have a significantly reduced string to process, transform the newlines
       // and chop them, then limit them:
-      var a = next.split(/\r\n|\r/g, maxLines + 1);     // stop splitting once we have reached just beyond the reuired number of lines.
+      var a = next.split(this.CRLF_Re, maxLines + 1);     // stop splitting once we have reached just beyond the reuired number of lines.
 
       a = a.slice(0, maxLines);
       next = a.join('\n');
@@ -2985,7 +3363,7 @@ EOF: 1,
       var l1 = Math.max(1, context_loc2 ? context_loc2.last_line : loc.last_line + CONTEXT_TAIL);
       var lineno_display_width = 1 + Math.log10(l1 | 1) | 0;
       var ws_prefix = new Array(lineno_display_width).join(' ');
-      var nonempty_line_indexes = [];
+      var nonempty_line_indexes = [[], [], []];
 
       var rv = lines.slice(l0 - 1, l1 + 1).map(function injectLineNumber(line, index) {
         'use strict';
@@ -3009,28 +3387,43 @@ EOF: 1,
           len = Math.max(2, line.length + 1);
         }
 
+        var nli;
+
         if (len) {
           var lead = new Array(offset).join('.');
           var mark = new Array(len).join('^');
           rv += '\n' + errpfx + lead + mark;
+          nli = 1;
+        } else if (lno < loc.first_line) {
+          nli = 0;
+        } else if (lno > loc.last_line) {
+          nli = 2;
+        }
 
-          if (line.trim().length > 0) {
-            nonempty_line_indexes.push(index);
-          }
+        if (line.trim().length > 0) {
+          nonempty_line_indexes[nli].push(index);
         }
 
         rv = rv.replace(/\t/g, ' ');
         return rv;
       });
 
-      // now make sure we don't print an overly large amount of error area: limit it 
+      // now make sure we don't print an overly large amount of lead/error/tail area: limit it
       // to the top and bottom line count:
-      if (nonempty_line_indexes.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {
-        var clip_start = nonempty_line_indexes[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
-        var clip_end = nonempty_line_indexes[nonempty_line_indexes.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
-        var intermediate_line = new Array(lineno_display_width + 1).join(' ') + '  (...continued...)';
-        intermediate_line += '\n' + new Array(lineno_display_width + 1).join('-') + '  (---------------)';
-        rv.splice(clip_start, clip_end - clip_start + 1, intermediate_line);
+      for (var i = 0; i <= 2; i++) {
+        var line_arr = nonempty_line_indexes[i];
+
+        if (line_arr.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {
+          var clip_start = line_arr[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
+          var clip_end = line_arr[line_arr.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
+          var intermediate_line = new Array(lineno_display_width + 1).join(' ') + '  (...continued...)';
+
+          if (i === 1) {
+            intermediate_line += '\n' + new Array(lineno_display_width + 1).join('-') + '  (---------------)';
+          }
+
+          rv.splice(clip_start, clip_end - clip_start + 1, intermediate_line);
+        }
       }
 
       return rv.join('\n');
@@ -3114,7 +3507,7 @@ EOF: 1,
             last_line: this.yylloc.last_line,
             first_column: this.yylloc.first_column,
             last_column: this.yylloc.last_column,
-            range: this.yylloc.range.slice(0)
+            range: this.yylloc.range.slice()
           },
 
           yytext: this.yytext,
@@ -3129,16 +3522,14 @@ EOF: 1,
           //_signaled_error_token: this._signaled_error_token,
           yy: this.yy,
 
-          conditionStack: this.conditionStack.slice(0),
+          conditionStack: this.conditionStack.slice(),
           done: this.done
         };
       }
 
       match_str = match[0];
       match_str_len = match_str.length;
-
-      // if (match_str.indexOf('\n') !== -1 || match_str.indexOf('\r') !== -1) {
-      lines = match_str.split(/(?:\r\n?|\n)/g);
+      lines = match_str.split(this.CRLF_Re);
 
       if (lines.length > 1) {
         this.yylineno += lines.length - 1;
@@ -3148,9 +3539,7 @@ EOF: 1,
         this.yylloc.last_column += match_str_len;
       }
 
-      // }
       this.yytext += match_str;
-
       this.match += match_str;
       this.matched += match_str;
       this.matches = match;
@@ -3226,6 +3615,10 @@ EOF: 1,
       var token, match, tempMatch, index;
 
       if (!this._more) {
+        if (!this._clear_state) {
+          this._clear_state = 1;
+        }
+
         this.clear();
       }
 
@@ -3243,7 +3636,7 @@ EOF: 1,
         if (!spec || !spec.rules) {
           var lineno_msg = '';
 
-          if (this.options.trackPosition) {
+          if (this.yylloc) {
             lineno_msg = ' on line ' + (this.yylineno + 1);
           }
 
@@ -3306,7 +3699,7 @@ EOF: 1,
       } else {
         var lineno_msg = 'Lexical error';
 
-        if (this.options.trackPosition) {
+        if (this.yylloc) {
           lineno_msg += ' on line ' + (this.yylineno + 1);
         }
 
@@ -3346,6 +3739,16 @@ EOF: 1,
       'use strict';
       var r;
 
+      //this._clear_state = 0;
+
+      if (!this._more) {
+        if (!this._clear_state) {
+          this._clear_state = 1;
+        }
+
+        this.clear();
+      }
+
       // allow the PRE/POST handlers set/modify the return token for maximum flexibility of the generated lexer:
       if (typeof this.pre_lex === 'function') {
         r = this.pre_lex.call(this, 0);
@@ -3380,6 +3783,34 @@ EOF: 1,
         r = this.post_lex.call(this, r) || r;
       }
 
+      if (!this._more) {
+        //
+        // 1) make sure any outside interference is detected ASAP: 
+        //    these attributes are to be treated as 'const' values
+        //    once the lexer has produced them with the token (return value `r`).
+        // 2) make sure any subsequent `lex()` API invocation CANNOT
+        //    edit the `yytext`, etc. token attributes for the *current*
+        //    token, i.e. provide a degree of 'closure safety' so that
+        //    code like this:
+        //    
+        //        t1 = lexer.lex();
+        //        v = lexer.yytext;
+        //        l = lexer.yylloc;
+        //        t2 = lexer.lex();
+        //        assert(lexer.yytext !== v);
+        //        assert(lexer.yylloc !== l);
+        //        
+        //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+        //    these conditions.
+        //    
+        this.yytext = Object.freeze(this.yytext);
+
+        this.matches = Object.freeze(this.matches);
+        this.yylloc.range = Object.freeze(this.yylloc.range);
+        this.yylloc = Object.freeze(this.yylloc);
+        this._clear_state = 0;
+      }
+
       return r;
     },
 
@@ -3394,8 +3825,38 @@ EOF: 1,
       'use strict';
       var r;
 
+      //this._clear_state = 0;
+
       while (!r) {
         r = this.next();
+      }
+
+      if (!this._more) {
+        //
+        // 1) make sure any outside interference is detected ASAP: 
+        //    these attributes are to be treated as 'const' values
+        //    once the lexer has produced them with the token (return value `r`).
+        // 2) make sure any subsequent `lex()` API invocation CANNOT
+        //    edit the `yytext`, etc. token attributes for the *current*
+        //    token, i.e. provide a degree of 'closure safety' so that
+        //    code like this:
+        //    
+        //        t1 = lexer.lex();
+        //        v = lexer.yytext;
+        //        l = lexer.yylloc;
+        //        t2 = lexer.lex();
+        //        assert(lexer.yytext !== v);
+        //        assert(lexer.yylloc !== l);
+        //        
+        //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
+        //    these conditions.
+        //    
+        this.yytext = Object.freeze(this.yytext);
+
+        this.matches = Object.freeze(this.matches);
+        this.yylloc.range = Object.freeze(this.yylloc.range);
+        this.yylloc = Object.freeze(this.yylloc);
+        this._clear_state = 0;
       }
 
       return r;

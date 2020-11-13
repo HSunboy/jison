@@ -1,7 +1,7 @@
 [
   13,
   {
-    id: 36,
+    id: 31,
     token: '"PARSE_PARAM"',
     yytext: '%parse-param',
     yylloc: {
@@ -16,7 +16,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'first',
     yylloc: {
@@ -31,7 +31,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'second',
     yylloc: {
@@ -46,7 +46,7 @@
     },
   },
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -61,7 +61,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'hello',
     yylloc: {
@@ -76,7 +76,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -91,7 +91,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'world',
     yylloc: {
@@ -121,7 +121,7 @@
     },
   },
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -136,8 +136,8 @@
     },
   },
   {
-    id: 60,
-    token: '"TRAILING_CODE_CHUNK"',
+    id: 46,
+    token: '"CODE"',
     yytext: `
 
 `,

@@ -1,36 +1,21 @@
 {
   unknownDecls: [
-    {
-      name: 'foo',
-      value: 'bar',
-    },
-    {
-      name: 'foo',
-      value: 'baz',
-    },
-    {
-      name: 'qux',
-      value: '{ fizzle }',
-    },
+    [
+      'foo',
+      'bar',
+    ],
+    [
+      'foo',
+      'baz',
+    ],
+    [
+      'qux',
+      '{ fizzle }',
+    ],
   ],
   bnf: {
     hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
-    ],
-  },
-  grammar: {
-    hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
+      'world',
     ],
   },
   __original_input__: `%foo bar 

@@ -5,7 +5,10 @@ var mkdirp = require('mkdirp');
 var yaml = require('@gerhobbelt/js-yaml');
 var JSON5 = require('@gerhobbelt/json5');
 //var globby = require('globby');
-var bnf = require("../dist/ebnf-parser-cjs-es5");
+var helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
+var trimErrorForTestReporting = helpers.trimErrorForTestReporting;
+var stripErrorStackPaths = helpers.stripErrorStackPaths;
+var bnf = require("../dist/ebnf-parser-cjs");
 var ebnf = bnf.ebnf_parser;
 
 
@@ -57,7 +60,6 @@ function parser_reset() {
   //   __dirname + '/specs/1*.js',
   // ]);
   var testset = fs.readFileSync(__dirname + '/specs/testset-ebnf.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/specs' + l.trim().replace(/^\./, ''));
-  console.error({testset});
   var original_cwd = process.cwd();
 
   testset = testset.sort();
@@ -155,15 +157,7 @@ function parser_reset() {
   .filter(function (info) {
     return !!info;
   });
-
-  var original_cwd = process.cwd();
-
-  function stripErrorStackPaths(msg) {
-    // strip away devbox-specific paths in error stack traces in the output:
-    msg = msg.replace(/\bat ([^\r\n(\\\/]*?)\([^)]+?([\\\/][a-z0-9_-]+\.js:[0-9]+:[0-9]+)\)/gi, 'at $1($2)');
-    msg = msg.replace(/\bat [^\r\n ]+?([\\\/][a-z0-9_-]+\.js:[0-9]+:[0-9]+)/gi, 'at $1');
-    return msg;
-  }
+  console.error({testset});
 
   function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key, err) {
     // and produce an alternative structure to JSON-ify:
@@ -206,8 +200,12 @@ describe("EBNF lexer", function () {
     // process this file:
     var title = (filespec.meta ? filespec.meta.title : null);
 
+    var testname = 'test: ' + filespec.path.replace(/^.*?\/specs\//, '') + (title ? ' :: ' + title : '');
+    
+    console.error('generate test: ', testname);
+
     // and create a test for it:
-    it('test: ' + filespec.path.replace(/^.*?\/specs\//, '') + (title ? ' :: ' + title : ''), function testEachParserExample() {
+    it(testname, function testEachParserExample() {
       var err, ast, grammar;
       var tokens = [];
       var lexer = bnf.bnf_parser.parser.lexer;
@@ -244,19 +242,17 @@ describe("EBNF lexer", function () {
         // save the error:
         tokens.push(-1);
         err = ex;
-        tokens.push({
-          fail: 1,
-          message: ex.message,
-          name: ex.name,
-          stack: ex.stack,
+        tokens.push({ 
+          fail: 1, 
           meta: filespec.spec.meta, 
-          ex: ex,
+          err: trimErrorForTestReporting(ex),
         });
         // and make sure ast !== undefined:
         ast = { fail: 1 };
       } finally {
         process.chdir(original_cwd);
       }
+      
       // also store the number of tokens we received:
       tokens.unshift(i);
       // if (lexerSourceCode) {
@@ -266,11 +262,19 @@ describe("EBNF lexer", function () {
       // either we check/test the correctness of the collected input, iff there's
       // a reference provided, OR we create the reference file for future use:
       var refOut = JSON5.stringify(tokens, {
+        replacer: function remove_lexer_objrefs(key, value) {
+          if (value === lexer) {
+            return "[lexer instance]";
+          }
+          return value;
+        },
         space: 2,
         circularRefHandler: testrig_JSON5circularRefHandler
       });
+      
       // strip away devbox-specific paths in error stack traces in the output:
       refOut = stripErrorStackPaths(refOut);
+      
       // and convert it back so we have a `tokens` set that's cleaned up
       // and potentially matching the stored reference set:
       tokens = JSON5.parse(refOut);
@@ -328,7 +332,11 @@ describe("EBNF parser", function () {
         // save the error:
         err = ex;
         // and make sure ast !== undefined:
-        ast = { fail: 1, spec: filespec.grammar, err: err };
+        ast = { 
+          fail: 1, 
+          spec: filespec.grammar, 
+          err: trimErrorForTestReporting(ex) 
+        };
       } finally {
         process.chdir(original_cwd);
       }

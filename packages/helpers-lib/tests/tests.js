@@ -26,14 +26,24 @@ describe("helpers API", function () {
     assert.strictEqual(helpers.mkIdentifier("abc"), "abc");
     assert.strictEqual(helpers.mkIdentifier("abc-def-ghi"), "abcDefGhi");
 
-    assert.strictEqual(helpers.mkIdentifier("1abc"), "_abc");
+    assert.strictEqual(helpers.mkIdentifier("1abc"), "_1abc");
     assert.strictEqual(helpers.mkIdentifier(" abc"), "_abc");
     assert.strictEqual(helpers.mkIdentifier("abc_def_ghi"), "abc_def_ghi");
 
     assert.strictEqual(helpers.mkIdentifier("abc___def"), "abc_def");
     assert.strictEqual(helpers.mkIdentifier("abc--def"), "abc_Def");
     assert.strictEqual(helpers.mkIdentifier("abc----def"), "abc_Def");
-    assert.strictEqual(helpers.mkIdentifier("1-abc-2--def"), "_Abc_2_Def");
+    assert.strictEqual(helpers.mkIdentifier("-abc----def"), "Abc_Def");          // !
+    assert.strictEqual(helpers.mkIdentifier("--var"), "_Var");                   // !
+    assert.strictEqual(helpers.mkIdentifier("--var--"), "_Var__"); 
+    assert.strictEqual(helpers.mkIdentifier("--Var--"), "_Var__"); 
+    assert.strictEqual(helpers.mkIdentifier("__var__"), "__var__");
+    assert.strictEqual(helpers.mkIdentifier("__VAR__"), "__VAR__");
+    assert.strictEqual(helpers.mkIdentifier("_VAR_"), "_VAR_");
+    assert.strictEqual(helpers.mkIdentifier("____VAR____"), "__VAR__");
+    assert.strictEqual(helpers.mkIdentifier("-abc----def---"), "Abc_Def__");
+    assert.strictEqual(helpers.mkIdentifier("1-abc-2--def"), "_1Abc_2_Def");
+    assert.strictEqual(helpers.mkIdentifier("-1-abc-2--def"), "_1Abc_2_Def");
     assert.strictEqual(helpers.mkIdentifier("a+b+c+d+e+-Fg"), "a_b_c_d_e_Fg");
   });
 
@@ -489,8 +499,14 @@ yyerror(rmCommonWS\`
     assert.ok(typeof helpers.dump === 'function');
   });
 
-  it("isLegalIdentifierInput: **TBD**", function () {
+  it("isLegalIdentifierInput:", function () {
     assert.ok(typeof helpers.isLegalIdentifierInput === 'function');
+    assert.ok(helpers.isLegalIdentifierInput('camelCase1'), 'camelCase1');
+    assert.ok(helpers.isLegalIdentifierInput('camels-have-one-hump'), 'camels-have-one-hump');
+    assert.ok(helpers.isLegalIdentifierInput('camel-case-1'), 'camel-case-1');
+    assert.ok(!helpers.isLegalIdentifierInput('@camelCase1'), 'NOT LEGAL: @camelCase1');
+    assert.ok(!helpers.isLegalIdentifierInput('#camelCase1'), 'NOT LEGAL: #camelCase1');
+    assert.ok(!helpers.isLegalIdentifierInput('1camelCase1'), 'NOT LEGAL: 1camelCase1');
   });
 
   it("scanRegExp: **TBD**", function () {
@@ -499,6 +515,11 @@ yyerror(rmCommonWS\`
 
   it("trimErrorForTestReporting: **TBD**", function () {
     assert.ok(typeof helpers.trimErrorForTestReporting === 'function');
+    assert.equal(helpers.trimErrorForTestReporting('a\nb/c/d\ne\\f\\g\n'), 'a\nb/c/d\ne\\f\\g\n');
+  });
+
+  it("stripErrorStackPaths: **TBD**", function () {
+    assert.ok(typeof helpers.stripErrorStackPaths === 'function');
   });
 
   it("checkRegExp: **TBD**", function () {

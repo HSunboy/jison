@@ -1,7 +1,7 @@
 [
-  20,
+  17,
   {
-    id: 28,
+    id: 20,
     token: '"EBNF"',
     yytext: '%ebnf',
     yylloc: {
@@ -16,7 +16,7 @@
     },
   },
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -31,7 +31,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'nodelist',
     yylloc: {
@@ -46,7 +46,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -61,23 +61,8 @@
     },
   },
   {
-    id: 24,
-    token: '"ACTION_START"',
-    yytext: '{',
-    yylloc: {
-      first_line: 4,
-      first_column: 19,
-      last_line: 4,
-      last_column: 19,
-      range: [
-        38,
-        38,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"ACTION_BODY"',
+    id: 12,
+    token: '"{"',
     yytext: '{',
     yylloc: {
       first_line: 4,
@@ -91,7 +76,7 @@
     },
   },
   {
-    id: 53,
+    id: 43,
     token: '"ACTION_BODY"',
     yytext: '$$ = [];',
     yylloc: {
@@ -106,8 +91,8 @@
     },
   },
   {
-    id: 22,
-    token: '"ACTION_END"',
+    id: 13,
+    token: '"}"',
     yytext: '}',
     yylloc: {
       first_line: 4,
@@ -121,7 +106,7 @@
     },
   },
   {
-    id: 5,
+    id: 6,
     token: '"|"',
     yytext: '|',
     yylloc: {
@@ -136,7 +121,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'nodelist',
     yylloc: {
@@ -151,7 +136,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'node',
     yylloc: {
@@ -166,23 +151,8 @@
     },
   },
   {
-    id: 24,
-    token: '"ACTION_START"',
-    yytext: '{',
-    yylloc: {
-      first_line: 5,
-      first_column: 19,
-      last_line: 5,
-      last_column: 19,
-      range: [
-        68,
-        68,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"ACTION_BODY"',
+    id: 12,
+    token: '"{"',
     yytext: '{',
     yylloc: {
       first_line: 5,
@@ -196,7 +166,7 @@
     },
   },
   {
-    id: 53,
+    id: 43,
     token: '"ACTION_BODY"',
     yytext: '$1.push($2);',
     yylloc: {
@@ -211,8 +181,8 @@
     },
   },
   {
-    id: 22,
-    token: '"ACTION_END"',
+    id: 13,
+    token: '"}"',
     yytext: '}',
     yylloc: {
       first_line: 5,
@@ -237,21 +207,6 @@
       range: [
         83,
         84,
-      ],
-    },
-  },
-  {
-    id: 13,
-    token: '"%%"',
-    yytext: '',
-    yylloc: {
-      first_line: 8,
-      first_column: 0,
-      last_line: 8,
-      last_column: 0,
-      range: [
-        86,
-        86,
       ],
     },
   },

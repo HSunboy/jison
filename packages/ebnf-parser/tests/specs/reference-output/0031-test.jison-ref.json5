@@ -1,60 +1,25 @@
 {
+  moduleInclude: `baz 
+
+
+foo; 
+bar;
+
+`,
   bnf: {
     test: [
+      'foo bar',
       [
-        [
-          'symbol',
-          'foo',
-        ],
-        [
-          'symbol',
-          'bar',
-        ],
-      ],
-      [
-        [],
-        `action; 
+        '',
+        ` 
+action; 
 hi`,
       ],
     ],
     hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
+      'world',
     ],
   },
-  grammar: {
-    test: [
-      [
-        [
-          'symbol',
-          'foo',
-        ],
-        [
-          'symbol',
-          'bar',
-        ],
-      ],
-      [
-        [],
-        `action; 
-hi`,
-      ],
-    ],
-    hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
-    ],
-  },
-  moduleInclude: `foo; 
-bar`,
   __original_input__: `%{baz 
 %}%% test: foo bar | { 
 action; 

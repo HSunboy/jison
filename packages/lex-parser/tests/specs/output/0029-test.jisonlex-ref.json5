@@ -31,30 +31,30 @@ Regrettably, it does not exist in the remainder of the input.
 ^..............^^^^^^
 3: return "%{..%}";
 4: }}}}}%
-    at Object.parseError (\lex-parser-cjs-es5.js:4229:13)
-    at Object.lexer_parseError [as parseError] (\lex-parser-cjs-es5.js:6079:44)
-    at Object.yyError [as yyerror] (\lex-parser-cjs-es5.js:6111:19)
-    at Object.lexer__performAction [as performAction] (\lex-parser-cjs-es5.js:7608:19)
-    at Object.lexer_test_match [as test_match] (\lex-parser-cjs-es5.js:6962:34)
-    at Object.lexer_next [as next] (\lex-parser-cjs-es5.js:7072:22)
-    at Object.lexer_fastLex [as fastLex] (\lex-parser-cjs-es5.js:7207:18)
-    at fastLex (\lex-parser-cjs-es5.js:4807:25)
-    at Object.parse (\lex-parser-cjs-es5.js:4942:22)
-    at Object.yyparse [as parse] (\lex-parser-cjs-es5.js:8972:23)
-    at Context.testEachParserExample (\all-tests.js:312:19)
-    at callFn (\runnable.js:364:21)
-    at Test.Runnable.run (\runnable.js:352:5)
-    at Runner.runTest (\runner.js:677:10)
-    at \runner.js:801:12
-    at next (\runner.js:594:14)
-    at \runner.js:604:7
-    at next (\runner.js:486:14)
-    at cbHookRun (\runner.js:551:7)
-    at done (\runnable.js:308:5)
-    at callFn (\runnable.js:387:7)
-    at Hook.Runnable.run (\runnable.js:352:5)
-    at next (\runner.js:510:10)
-    at Immediate._onImmediate (\runner.js:572:5)
+    at Object.parseError (/lex-parser-cjs-es5.js:4247:13)
+    at Object.lexer_parseError [as parseError] (/lex-parser-cjs-es5.js:6099:44)
+    at Object.yyError [as yyerror] (/lex-parser-cjs-es5.js:6131:19)
+    at Object.lexer__performAction [as performAction] (/lex-parser-cjs-es5.js:7628:19)
+    at Object.lexer_test_match [as test_match] (/lex-parser-cjs-es5.js:6982:34)
+    at Object.lexer_next [as next] (/lex-parser-cjs-es5.js:7092:22)
+    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs-es5.js:7227:18)
+    at fastLex (/lex-parser-cjs-es5.js:4825:25)
+    at Object.parse (/lex-parser-cjs-es5.js:4960:22)
+    at Object.yyparse [as parse] (/lex-parser-cjs-es5.js:8992:23)
+    at Context.testEachParserExample (/all-tests.js:323:19)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
     at processImmediate (/timers.js:456:21)`,
     hash: {
       errStr: `Lexical error on line 2: 

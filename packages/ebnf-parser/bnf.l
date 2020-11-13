@@ -1,7 +1,5 @@
 
 %code imports %{
-  import JSON5 from '@gerhobbelt/json5';
-
   import helpers from '../helpers-lib';
 %}
 
@@ -242,63 +240,63 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yylloc));
-                                        return 'error';
+                                        return 'UNTERMINATED_STRING_ERROR';
 <action>\'                              yyerror(rmCommonWS`
                                             unterminated string constant in lexer rule action block.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yylloc));
-                                        return 'error';
+                                        return 'UNTERMINATED_STRING_ERROR';
 <action>\`                              yyerror(rmCommonWS`
                                             unterminated string constant in lexer rule action block.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yylloc));
-                                        return 'error';
+                                        return 'UNTERMINATED_STRING_ERROR';
 
 <option_values>\"                       yyerror(rmCommonWS`
                                             unterminated string constant in %options entry.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yylloc));
-                                        return 'error';
+                                        return 'UNTERMINATED_STRING_ERROR';
 <option_values>\'                       yyerror(rmCommonWS`
                                             unterminated string constant in %options entry.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yylloc));
-                                        return 'error';
+                                        return 'UNTERMINATED_STRING_ERROR';
 <option_values>\`                       yyerror(rmCommonWS`
                                             unterminated string constant in %options entry.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yylloc));
-                                        return 'error';
+                                        return 'UNTERMINATED_STRING_ERROR';
 
 <*>\"                                   var rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
                                         yyerror(rmCommonWS`
-                                            unterminated string constant  encountered while lexing
+                                            unterminated string constant encountered while lexing
                                             ${rules}.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yylloc));
-                                        return 'error';
+                                        return 'UNTERMINATED_STRING_ERROR';
 <*>\'                                   var rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
                                         yyerror(rmCommonWS`
-                                            unterminated string constant  encountered while lexing
+                                            unterminated string constant encountered while lexing
                                             ${rules}.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yylloc));
-                                        return 'error';
+                                        return 'UNTERMINATED_STRING_ERROR';
 <*>\`                                   var rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
                                         yyerror(rmCommonWS`
-                                            unterminated string constant  encountered while lexing
+                                            unterminated string constant encountered while lexing
                                             ${rules}.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yylloc));
-                                        return 'error';
+                                        return 'UNTERMINATED_STRING_ERROR';
 
 
 <*>.                                    %{
@@ -309,6 +307,7 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                                 
                                                   Erroneous area:
                                                 ` + this.prettyPrintRange(yylloc));
+                                            return 'error';
                                         %}
 
 <*><<EOF>>                              return 'EOF';

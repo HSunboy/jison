@@ -1,7 +1,7 @@
 [
-  13,
+  10,
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -16,7 +16,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'test',
     yylloc: {
@@ -31,7 +31,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -46,7 +46,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'foo',
     yylloc: {
@@ -61,7 +61,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'bar',
     yylloc: {
@@ -76,46 +76,16 @@
     },
   },
   {
-    id: 46,
-    token: '"ARROW_ACTION_START"',
-    yytext: '->',
+    id: 38,
+    token: '"ARROW_ACTION"',
+    yytext: '$foo',
     yylloc: {
       first_line: 1,
       first_column: 17,
       last_line: 1,
-      last_column: 19,
+      last_column: 24,
       range: [
         17,
-        19,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"ACTION_BODY"',
-    yytext: ' $foo',
-    yylloc: {
-      first_line: 1,
-      first_column: 19,
-      last_line: 1,
-      last_column: 24,
-      range: [
-        19,
-        24,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 24,
-      last_line: 1,
-      last_column: 24,
-      range: [
-        24,
         24,
       ],
     },
@@ -132,21 +102,6 @@
       range: [
         25,
         26,
-      ],
-    },
-  },
-  {
-    id: 13,
-    token: '"%%"',
-    yytext: '',
-    yylloc: {
-      first_line: 4,
-      first_column: 0,
-      last_line: 4,
-      last_column: 0,
-      range: [
-        28,
-        28,
       ],
     },
   },

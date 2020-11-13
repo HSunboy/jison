@@ -1,7 +1,7 @@
 [
-  16,
+  15,
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -16,7 +16,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'test',
     yylloc: {
@@ -31,7 +31,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -46,7 +46,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'foo',
     yylloc: {
@@ -61,7 +61,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'bar',
     yylloc: {
@@ -76,7 +76,7 @@
     },
   },
   {
-    id: 5,
+    id: 6,
     token: '"|"',
     yytext: '|',
     yylloc: {
@@ -91,7 +91,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'baz',
     yylloc: {
@@ -121,7 +121,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'test',
     yylloc: {
@@ -136,7 +136,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -151,7 +151,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'world',
     yylloc: {
@@ -177,21 +177,6 @@
       range: [
         37,
         38,
-      ],
-    },
-  },
-  {
-    id: 13,
-    token: '"%%"',
-    yytext: '',
-    yylloc: {
-      first_line: 3,
-      first_column: 0,
-      last_line: 3,
-      last_column: 0,
-      range: [
-        40,
-        40,
       ],
     },
   },

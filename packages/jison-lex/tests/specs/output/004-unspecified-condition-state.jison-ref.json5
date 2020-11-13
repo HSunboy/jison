@@ -3,54 +3,7 @@
   -1,
   {
     fail: 1,
-    message: `Could not parse jison lexer spec in JSON AUTODETECT mode:
-in JISON Mode we get Error: 
-You specified an unknown lexer condition state 'NUMBER'.
-Is this a typo or did you forget to include this one in the '%s' and '%x'
-inclusive and exclusive condition state sets specifications at the top of
-the lexer spec?
-    
-As a rough example, things should look something like this in your lexer
-spec file:
-    
-    %s NUMBER
-    %%
-    <NUMBER>LEXER_RULE_REGEX    return 'TOK';
-    
-  Erroneous code:
-7: <NUMBER>\\d+         -> 'NUMBER';
-^...^^^^^^
-8: 
-
-
-while JSON5 Mode produces Error: JSON5: invalid character '%' at 2:1`,
-    name: 'Error',
-    stack: `SyntaxError: JSON5: invalid character '%' at 2:1
-    at syntaxError (\index.js:1954:16)
-    at invalidChar (\index.js:1895:13)
-    at Object.value (\index.js:964:16)
-    at lex (\index.js:743:41)
-    at Object.parse (\index.js:689:18)
-    at autodetectAndConvertToJSONformat (\regexp-lexer-cjs-es5.js:3242:174)
-    at processGrammar (\regexp-lexer-cjs-es5.js:5078:1728)
-    at test_me (\regexp-lexer-cjs-es5.js:3489:175)
-    at new RegExpLexer (\regexp-lexer-cjs-es5.js:3511:130)
-    at Context.testEachLexerExample (\regexplexer.js:3521:17)
-    at callFn (\runnable.js:364:21)
-    at Test.Runnable.run (\runnable.js:352:5)
-    at Runner.runTest (\runner.js:677:10)
-    at \runner.js:801:12
-    at next (\runner.js:594:14)
-    at \runner.js:604:7
-    at next (\runner.js:486:14)
-    at cbHookRun (\runner.js:551:7)
-    at done (\runnable.js:308:5)
-    at callFn (\runnable.js:387:7)
-    at Hook.Runnable.run (\runnable.js:352:5)
-    at next (\runner.js:510:10)
-    at Immediate._onImmediate (\runner.js:572:5)
-    at processImmediate (/timers.js:456:21)`,
-    ex: {
+    err: {
       name: 'Error',
       message: `Could not parse jison lexer spec in JSON AUTODETECT mode:
 in JISON Mode we get Error: 
@@ -74,29 +27,29 @@ spec file:
 
 while JSON5 Mode produces Error: JSON5: invalid character '%' at 2:1`,
       stack: `SyntaxError: JSON5: invalid character '%' at 2:1
-    at syntaxError (\index.js:1954:16)
-    at invalidChar (\index.js:1895:13)
-    at Object.value (\index.js:964:16)
-    at lex (\index.js:743:41)
-    at Object.parse (\index.js:689:18)
-    at autodetectAndConvertToJSONformat (\regexp-lexer-cjs-es5.js:3242:174)
-    at processGrammar (\regexp-lexer-cjs-es5.js:5078:1728)
-    at test_me (\regexp-lexer-cjs-es5.js:3489:175)
-    at new RegExpLexer (\regexp-lexer-cjs-es5.js:3511:130)
-    at Context.testEachLexerExample (\regexplexer.js:3521:17)
-    at callFn (\runnable.js:364:21)
-    at Test.Runnable.run (\runnable.js:352:5)
-    at Runner.runTest (\runner.js:677:10)
-    at \runner.js:801:12
-    at next (\runner.js:594:14)
-    at \runner.js:604:7
-    at next (\runner.js:486:14)
-    at cbHookRun (\runner.js:551:7)
-    at done (\runnable.js:308:5)
-    at callFn (\runnable.js:387:7)
-    at Hook.Runnable.run (\runnable.js:352:5)
-    at next (\runner.js:510:10)
-    at Immediate._onImmediate (\runner.js:572:5)
+    at syntaxError (/index.js:1954:16)
+    at invalidChar (/index.js:1895:13)
+    at Object.value (/index.js:964:16)
+    at lex (/index.js:743:41)
+    at Object.parse (/index.js:689:18)
+    at autodetectAndConvertToJSONformat (/regexp-lexer-cjs-es5.js:3245:174)
+    at processGrammar (/regexp-lexer-cjs-es5.js:5081:1728)
+    at test_me (/regexp-lexer-cjs-es5.js:3492:175)
+    at new RegExpLexer (/regexp-lexer-cjs-es5.js:3514:130)
+    at Context.testEachLexerExample (/regexplexer.js:3515:17)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
     at processImmediate (/timers.js:456:21)`,
       secondary_exception: {
         message: `
@@ -392,7 +345,7 @@ spec file:
             __reentrant_call_depth: 0,
             __error_infos: [
               {
-                errStr: `Parse error on line 2: 
+                errStr: `Parse error on line 2:
  "a" %{ ret...
 -^
 Unexpected "ACTION_BODY"`,
@@ -423,7 +376,7 @@ rule regex.
 3:  "b" %{ return 1; %}
     
   Technical error report:
-Parse error on line 2: 
+Parse error on line 2:
  "a" %{ ret...
 -^
 Unexpected "ACTION_BODY"
@@ -533,7 +486,7 @@ Unexpected "ACTION_BODY"
                   keyStack: [
                     '',
                     '2',
-                    'ex',
+                    'err',
                     'secondary_exception',
                     'hash',
                     'parser',
@@ -658,7 +611,7 @@ The lexer rule's action code section does not compile: Line 3: Unexpected number
                   keyStack: [
                     '',
                     '2',
-                    'ex',
+                    'err',
                     'secondary_exception',
                     'hash',
                     'parser',
@@ -761,7 +714,7 @@ The '%%' lexer epilogue code does not compile: Line 4: Unexpected token **
                   keyStack: [
                     '',
                     '2',
-                    'ex',
+                    'err',
                     'secondary_exception',
                     'hash',
                     'parser',
@@ -889,7 +842,7 @@ done here.
                   keyStack: [
                     '',
                     '2',
-                    'ex',
+                    'err',
                     'secondary_exception',
                     'hash',
                     'parser',
@@ -906,7 +859,7 @@ done here.
                 keyStack: [
                   '',
                   '2',
-                  'ex',
+                  'err',
                   'secondary_exception',
                   'hash',
                   'parser',
@@ -916,7 +869,7 @@ done here.
             ],
             __error_recovery_infos: [
               {
-                errStr: `Parse error on line 2: 
+                errStr: `Parse error on line 2:
  "a" %{ ret...
 -^
 Unexpected "ACTION_BODY"`,
@@ -1217,7 +1170,7 @@ Unexpected "ACTION_BODY"`,
                   {
                     yytext: '"a"',
                     errorRuleDepth: 0,
-                    errStr: `Parse error on line 2: 
+                    errStr: `Parse error on line 2:
  "a" %{ ret...
 -^
 Unexpected "ACTION_BODY"`,
@@ -1226,7 +1179,7 @@ Unexpected "ACTION_BODY"`,
                     stackSampleLength: 3,
                   },
                   {
-                    errStr: `Parse error on line 2: 
+                    errStr: `Parse error on line 2:
  "a" %{ ret...
 -^
 Unexpected "ACTION_BODY"`,
@@ -1519,7 +1472,7 @@ Unexpected "ACTION_BODY"`,
                       keyStack: [
                         '',
                         '2',
-                        'ex',
+                        'err',
                         'secondary_exception',
                         'hash',
                         'parser',
@@ -1736,7 +1689,7 @@ rule regex.
 3:  "b" %{ return 1; %}
     
   Technical error report:
-Parse error on line 2: 
+Parse error on line 2:
  "a" %{ ret...
 -^
 Unexpected "ACTION_BODY"
@@ -2063,7 +2016,7 @@ Unexpected "ACTION_BODY"
                       [],
                       ' ',
                       {
-                        errStr: `Parse error on line 2: 
+                        errStr: `Parse error on line 2:
  "a" %{ ret...
 -^
 Unexpected "ACTION_BODY"`,
@@ -2356,7 +2309,7 @@ Unexpected "ACTION_BODY"`,
                           keyStack: [
                             '',
                             '2',
-                            'ex',
+                            'err',
                             'secondary_exception',
                             'hash',
                             'parser',
@@ -3195,7 +3148,7 @@ rule regex.
 3:  "b" %{ return 1; %}
     
   Technical error report:
-Parse error on line 2: 
+Parse error on line 2:
  "a" %{ ret...
 -^
 Unexpected "ACTION_BODY"
@@ -3522,7 +3475,7 @@ Unexpected "ACTION_BODY"
                   [],
                   ' ',
                   {
-                    errStr: `Parse error on line 2: 
+                    errStr: `Parse error on line 2:
  "a" %{ ret...
 -^
 Unexpected "ACTION_BODY"`,
@@ -3823,7 +3776,7 @@ Unexpected "ACTION_BODY"`,
                       {
                         yytext: '"a"',
                         errorRuleDepth: 0,
-                        errStr: `Parse error on line 2: 
+                        errStr: `Parse error on line 2:
  "a" %{ ret...
 -^
 Unexpected "ACTION_BODY"`,
@@ -3832,7 +3785,7 @@ Unexpected "ACTION_BODY"`,
                         stackSampleLength: 3,
                       },
                       {
-                        errStr: `Parse error on line 2: 
+                        errStr: `Parse error on line 2:
  "a" %{ ret...
 -^
 Unexpected "ACTION_BODY"`,
@@ -4125,7 +4078,7 @@ Unexpected "ACTION_BODY"`,
                           keyStack: [
                             '',
                             '2',
-                            'ex',
+                            'err',
                             'secondary_exception',
                             'hash',
                             'parser',
@@ -4337,7 +4290,7 @@ Unexpected "ACTION_BODY"`,
                         keyStack: [
                           '',
                           '2',
-                          'ex',
+                          'err',
                           'secondary_exception',
                           'hash',
                           'parser',

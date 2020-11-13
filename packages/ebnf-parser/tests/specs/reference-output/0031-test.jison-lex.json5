@@ -1,23 +1,8 @@
 [
-  27,
+  21,
   {
-    id: 21,
-    token: '"ACTION_START_AT_SOL"',
-    yytext: '%{',
-    yylloc: {
-      first_line: 1,
-      first_column: 0,
-      last_line: 1,
-      last_column: 0,
-      range: [
-        0,
-        0,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"ACTION_BODY"',
+    id: 15,
+    token: '"ACTION"',
     yytext: `baz 
 `,
     yylloc: {
@@ -32,22 +17,7 @@
     },
   },
   {
-    id: 22,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 2,
-      first_column: 2,
-      last_line: 2,
-      last_column: 2,
-      range: [
-        10,
-        10,
-      ],
-    },
-  },
-  {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -62,7 +32,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'test',
     yylloc: {
@@ -77,7 +47,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -92,7 +62,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'foo',
     yylloc: {
@@ -107,7 +77,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'bar',
     yylloc: {
@@ -122,7 +92,7 @@
     },
   },
   {
-    id: 5,
+    id: 6,
     token: '"|"',
     yytext: '|',
     yylloc: {
@@ -137,23 +107,8 @@
     },
   },
   {
-    id: 24,
-    token: '"ACTION_START"',
-    yytext: '{',
-    yylloc: {
-      first_line: 2,
-      first_column: 21,
-      last_line: 2,
-      last_column: 21,
-      range: [
-        29,
-        29,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"ACTION_BODY"',
+    id: 12,
+    token: '"{"',
     yytext: '{',
     yylloc: {
       first_line: 2,
@@ -167,85 +122,25 @@
     },
   },
   {
-    id: 53,
+    id: 43,
     token: '"ACTION_BODY"',
-    yytext: ' ',
+    yytext: ` 
+action; 
+hi`,
     yylloc: {
       first_line: 2,
       first_column: 22,
-      last_line: 2,
-      last_column: 23,
-      range: [
-        30,
-        31,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"ACTION_BODY"',
-    yytext: `
-`,
-    yylloc: {
-      first_line: 2,
-      first_column: 23,
-      last_line: 3,
-      last_column: 0,
-      range: [
-        31,
-        33,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"ACTION_BODY"',
-    yytext: 'action; ',
-    yylloc: {
-      first_line: 3,
-      first_column: 0,
-      last_line: 3,
-      last_column: 8,
-      range: [
-        33,
-        41,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"ACTION_BODY"',
-    yytext: `
-`,
-    yylloc: {
-      first_line: 3,
-      first_column: 8,
-      last_line: 4,
-      last_column: 0,
-      range: [
-        41,
-        43,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"ACTION_BODY"',
-    yytext: 'hi',
-    yylloc: {
-      first_line: 4,
-      first_column: 0,
       last_line: 4,
       last_column: 2,
       range: [
-        43,
+        30,
         45,
       ],
     },
   },
   {
-    id: 22,
-    token: '"ACTION_END"',
+    id: 13,
+    token: '"}"',
     yytext: '}',
     yylloc: {
       first_line: 4,
@@ -274,7 +169,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'hello',
     yylloc: {
@@ -289,7 +184,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -304,7 +199,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'world',
     yylloc: {
@@ -334,7 +229,7 @@
     },
   },
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -349,19 +244,34 @@
     },
   },
   {
-    id: 60,
-    token: '"TRAILING_CODE_CHUNK"',
+    id: 46,
+    token: '"CODE"',
     yytext: `foo; 
-bar;
-
 `,
     yylloc: {
       first_line: 5,
       first_column: 16,
-      last_line: 8,
+      last_line: 6,
       last_column: 0,
       range: [
         66,
+        73,
+      ],
+    },
+  },
+  {
+    id: 46,
+    token: '"CODE"',
+    yytext: `bar;
+
+`,
+    yylloc: {
+      first_line: 6,
+      first_column: 0,
+      last_line: 8,
+      last_column: 0,
+      range: [
+        73,
         81,
       ],
     },

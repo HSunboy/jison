@@ -1,5 +1,5 @@
 [
-  12,
+  11,
   {
     id: 17,
     token: '"LEX_BLOCK"',
@@ -20,7 +20,7 @@
     },
   },
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -35,7 +35,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'test',
     yylloc: {
@@ -50,7 +50,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -65,7 +65,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'foo',
     yylloc: {
@@ -80,7 +80,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'bar',
     yylloc: {
@@ -95,9 +95,9 @@
     },
   },
   {
-    id: 43,
-    token: '"STRING_LIT"',
-    yytext: `"'"`,
+    id: 26,
+    token: '"STRING"',
+    yytext: "'",
     yylloc: {
       first_line: 6,
       first_column: 17,
@@ -121,21 +121,6 @@
       range: [
         65,
         66,
-      ],
-    },
-  },
-  {
-    id: 13,
-    token: '"%%"',
-    yytext: '',
-    yylloc: {
-      first_line: 8,
-      first_column: 0,
-      last_line: 8,
-      last_column: 0,
-      range: [
-        68,
-        68,
       ],
     },
   },

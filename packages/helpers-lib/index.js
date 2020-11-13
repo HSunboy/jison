@@ -10,7 +10,7 @@ import parse2AST from './parse-code-chunk-to-AST';
 import stringifier from './code-stringification';
 import detectIstanbulGlobal from './detect-istanbul';
 import reHelpers from './validate-regex';
-import trimErrorForTestReporting from './trimErrorForTestReporting';
+import { trimErrorForTestReporting, stripErrorStackPaths } from './trimErrorForTestReporting';
 
 
 export default {
@@ -21,6 +21,7 @@ export default {
     scanRegExp,
     dquote,
     trimErrorForTestReporting,
+    stripErrorStackPaths,
 
     checkRegExp: reHelpers.checkRegExp,
     getRegExpInfo: reHelpers.getRegExpInfo,
@@ -42,4 +43,4 @@ export default {
     printFunctionSourceCodeContainer: stringifier.printFunctionSourceCodeContainer,
 
     detectIstanbulGlobal,
-};
+}

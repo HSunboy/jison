@@ -1,7 +1,6 @@
 
 %code imports %{
   import XRegExp from '@gerhobbelt/xregexp';        // for helping out the `%options xregexp` in the lexer
-  import JSON5 from '@gerhobbelt/json5';            // TODO: quick fix until `%code imports` works in the lexer spec!
   import helpers from '../helpers-lib';
   import fs from 'fs';
   import transform from './ebnf-transform';
@@ -397,6 +396,9 @@ parse_params
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @PARSE_PARAM)}
+
+                  Technical error report:
+                ${$error.errStr}
             `);
         }
     ;
@@ -606,6 +608,25 @@ production_id
 
                   Technical error report:
                 ${$error.errStr}
+            `);
+        }
+    | id optional_production_description ARROW_ACTION
+        {
+            // TODO ...
+            yyerror(rmCommonWS`
+                Production for rule '${$id}' is missing: arrows introduce action code in Jison.
+
+                Jison does not support rule production definition using arrows (->, =>, →) but expects
+                colons (:) instead, so maybe you intended this:
+
+                    ${$id} : ${$ARROW_ACTION}
+
+                while the user-defined action code block MAY be an arrow function, e.g.
+
+                    rule: math_production -> Math.min($math_production, 42);
+
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(@ARROW_ACTION, @id)}
             `);
         }
     ;

@@ -26,58 +26,11 @@
   },
   bnf: {
     test: [
-      [
-        [
-          'symbol',
-          'foo',
-        ],
-        [
-          'symbol',
-          'bar',
-        ],
-      ],
-      [
-        [
-          'symbol',
-          'baz',
-        ],
-      ],
+      'foo bar',
+      'baz',
     ],
     hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
-    ],
-  },
-  grammar: {
-    test: [
-      [
-        [
-          'symbol',
-          'foo',
-        ],
-        [
-          'symbol',
-          'bar',
-        ],
-      ],
-      [
-        [
-          'symbol',
-          'baz',
-        ],
-      ],
-    ],
-    hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
+      'world',
     ],
   },
   __original_input__: `%lex 

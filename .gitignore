@@ -78,5 +78,7 @@ tmp*
 profile*.txt
 /include.lex
 
-
+# debug dump files
+*fatal_parser_dump*.js
+*fatal_lexer_dump*.js
 

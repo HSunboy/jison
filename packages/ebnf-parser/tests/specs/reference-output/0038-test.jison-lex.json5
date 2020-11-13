@@ -1,12 +1,12 @@
 [
   13,
   {
-    id: 29,
+    id: 21,
     token: '"UNKNOWN_DECL"',
-    yytext: {
-      name: 'foo',
-      value: 'bar',
-    },
+    yytext: [
+      'foo',
+      'bar',
+    ],
     yylloc: {
       first_line: 1,
       first_column: 0,
@@ -19,12 +19,12 @@
     },
   },
   {
-    id: 29,
+    id: 21,
     token: '"UNKNOWN_DECL"',
-    yytext: {
-      name: 'foo',
-      value: 'baz',
-    },
+    yytext: [
+      'foo',
+      'baz',
+    ],
     yylloc: {
       first_line: 2,
       first_column: 0,
@@ -37,12 +37,12 @@
     },
   },
   {
-    id: 29,
+    id: 21,
     token: '"UNKNOWN_DECL"',
-    yytext: {
-      name: 'qux',
-      value: '{ fizzle }',
-    },
+    yytext: [
+      'qux',
+      '{ fizzle }',
+    ],
     yylloc: {
       first_line: 3,
       first_column: 0,
@@ -55,7 +55,7 @@
     },
   },
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -70,7 +70,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'hello',
     yylloc: {
@@ -85,7 +85,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -100,7 +100,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'world',
     yylloc: {
@@ -130,7 +130,7 @@
     },
   },
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -145,8 +145,8 @@
     },
   },
   {
-    id: 60,
-    token: '"TRAILING_CODE_CHUNK"',
+    id: 46,
+    token: '"CODE"',
     yytext: `
 
 `,

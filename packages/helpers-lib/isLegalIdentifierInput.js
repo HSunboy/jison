@@ -13,16 +13,16 @@ export default function isLegalIdentifierInput(s) {
     s = '' + s;
     // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
     // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
-    s = s
+    let ref = s
     .replace(/-\w/g, function (match) {
         var c = match.charAt(1);
         var rv = c.toUpperCase();
-        // do not mutate 'a-2' to 'a2':
+        // mutate 'a-2' to 'a_2':
         if (c === rv && c.match(/\d/)) {
-            return match;
+            return '_' + match.substr(1);
         }
         return rv;
     });
     var alt = mkIdentifier(s);
-    return alt === s;
+    return alt === ref;
 }

@@ -1,7 +1,7 @@
 [
   10,
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -16,7 +16,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'hello',
     yylloc: {
@@ -31,7 +31,7 @@
     },
   },
   {
-    id: 3,
+    id: 5,
     token: '":"',
     yytext: ':',
     yylloc: {
@@ -46,7 +46,7 @@
     },
   },
   {
-    id: 16,
+    id: 24,
     token: '"ID"',
     yytext: 'world',
     yylloc: {
@@ -76,7 +76,7 @@
     },
   },
   {
-    id: 13,
+    id: 14,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -91,8 +91,8 @@
     },
   },
   {
-    id: 60,
-    token: '"TRAILING_CODE_CHUNK"',
+    id: 46,
+    token: '"CODE"',
     yytext: `var foo = 'bar';
 
 `,

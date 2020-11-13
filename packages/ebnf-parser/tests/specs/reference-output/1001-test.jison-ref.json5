@@ -5,21 +5,12 @@
   ebnf: {
     nodelist: [
       [
-        [],
-        '$$ = []',
+        '',
+        '$$ = [];',
       ],
       [
-        [
-          [
-            'symbol',
-            'nodelist',
-          ],
-          [
-            'symbol',
-            'node',
-          ],
-        ],
-        '$1.push($2)',
+        'nodelist node',
+        '$1.push($2);',
       ],
     ],
   },
@@ -27,32 +18,11 @@
     nodelist: [
       [
         '',
-        '$$ = []',
+        '$$ = [];',
       ],
       [
         'nodelist node',
-        '$1.push($2)',
-      ],
-    ],
-  },
-  grammar: {
-    nodelist: [
-      [
-        [],
-        '$$ = []',
-      ],
-      [
-        [
-          [
-            'symbol',
-            'nodelist',
-          ],
-          [
-            'symbol',
-            'node',
-          ],
-        ],
-        '$1.push($2)',
+        '$1.push($2);',
       ],
     ],
   },

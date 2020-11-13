@@ -5701,7 +5701,7 @@ parse: function parse(input) {
         // the 'expected' set won't be modified, so no need to clone it:
         //rv.expected = rv.expected.slice();
 
-        //symbol stack is a simple array:
+        // symbol stack is a simple array:
         rv.symbol_stack = rv.symbol_stack.slice();
         // ditto for state stack:
         rv.state_stack = rv.state_stack.slice();
@@ -6014,14 +6014,15 @@ parse: function parse(input) {
 
                     if (!recovering) {
                         // Report error
+                        errStr = 'Parse error';
                         if (typeof lexer.yylineno === 'number') {
-                            errStr = 'Parse error on line ' + (lexer.yylineno + 1) + ': ';
-                        } else {
-                            errStr = 'Parse error: ';
+                            errStr += ' on line ' + (lexer.yylineno + 1);
                         }
 
                         if (typeof lexer.showPosition === 'function') {
-                            errStr += '\n' + lexer.showPosition(79 - 10, 10) + '\n';
+                            errStr += ':\n' + lexer.showPosition(79 - 10, 10) + '\n';
+                        } else {
+                            errStr += ': ';
                         }
                         if (expected.length) {
                             errStr += 'Expecting ' + expected.join(', ') + ', got unexpected ' + errSymbolDescr;

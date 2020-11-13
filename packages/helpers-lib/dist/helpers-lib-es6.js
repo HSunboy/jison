@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path$1 from 'path';
+import JSON5 from '@gerhobbelt/json5';
 import XRegExp from '@gerhobbelt/xregexp';
 import recast from 'recast';
 import { transformSync } from '@babel/core';
@@ -114,19 +115,21 @@ function camelCase(s) {
 /** @public */
 function mkIdentifier(s) {
     s = '' + s;
+
     return s
     // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
     // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
     .replace(/-\w/g, function (match) {
         var c = match.charAt(1);
         var rv = c.toUpperCase();
-        // do not mutate 'a-2' to 'a2':
+        // mutate 'a-2' to 'a_2':
         if (c === rv && c.match(/\d/)) {
-            return match;
+            return '_' + match.substr(1);
         }
         return rv;
     })
     // cleanup: replace any non-suitable character series to a single underscore:
+    .replace(/^([\d])/, '_$1')      // where leading numbers are prefixed by an underscore: '1' --> '_1'
     .replace(/^[^\w_]/, '_')
     // do not accept numerics at the leading position, despite those matching regex `\w`:
     .replace(/^\d/, '_')
@@ -202,18 +205,18 @@ function isLegalIdentifierInput(s) {
     s = '' + s;
     // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
     // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
-    s = s
+    let ref = s
     .replace(/-\w/g, function (match) {
         var c = match.charAt(1);
         var rv = c.toUpperCase();
-        // do not mutate 'a-2' to 'a2':
+        // mutate 'a-2' to 'a_2':
         if (c === rv && c.match(/\d/)) {
-            return match;
+            return '_' + match.substr(1);
         }
         return rv;
     });
     var alt = mkIdentifier(s);
-    return alt === s;
+    return alt === ref;
 }
 
 // properly quote and escape the given input string
@@ -289,7 +292,19 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
 
             try {
                 dumpfile = path$1.normalize(dumpPaths[i] + '/' + dumpName);
-                fs.writeFileSync(dumpfile, sourcecode, 'utf8');
+
+                let dump = {
+                    errname,
+                    err_id,
+                    options,
+                    ex,
+                };
+                let d = JSON5.stringify(dump, null, 2);
+                // make sure each line is a comment line:
+                d = d.split('\n').map((l) => '// ' + l);
+                d = d.join('\n');
+
+                fs.writeFileSync(dumpfile, sourcecode + '\n\n\n' + d, 'utf8');
                 console.error("****** offending generated " + errname + " source code dumped into file: ", dumpfile);
                 break;          // abort loop once a dump action was successful!
             } catch (ex3) {
@@ -351,7 +366,7 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
         p = code_execution_rig.call(this, sourcecode, options, errname, debug);
     } catch (ex) {
         
-        if (options.dumpSourceCodeOnFailure) {
+        if (options.dumpSourceCodeOnFailure || 1) {
             dumpSourceToFile(sourcecode, errname, err_id, options, ex);
         }
         
@@ -1425,6 +1440,17 @@ function shallow_copy_and_strip_depth(src, parentKey) {
 }
 
 
+function stripErrorStackPaths(msg) {
+    // strip away devbox-specific paths in error stack traces in the output:
+    msg = msg
+    .replace(/\bat ([^\r\n(\\\/]*?)\([^)]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)\)/gi, 'at $1(/$2)')
+    .replace(/\bat [^\r\n ]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)/gi, 'at /$1');
+
+    return msg;
+}
+
+
+
 function trim_array_tail(arr) {
     if (arr instanceof Array) {
         for (var len = arr.length; len > 0; len--) {
@@ -1668,6 +1694,7 @@ var index = {
     scanRegExp,
     dquote,
     trimErrorForTestReporting,
+    stripErrorStackPaths,
 
     checkRegExp: reHelpers.checkRegExp,
     getRegExpInfo: reHelpers.getRegExpInfo,

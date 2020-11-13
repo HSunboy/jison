@@ -1,9 +1,9 @@
 'use strict';
 
 var XRegExp = require('@gerhobbelt/xregexp');
-var JSON5 = require('@gerhobbelt/json5');
 var fs = require('fs');
 var path$1 = require('path');
+var JSON5 = require('@gerhobbelt/json5');
 var recast = require('recast');
 var babel = require('@babel/core');
 var assert$1 = require('assert');
@@ -11,9 +11,9 @@ var assert$1 = require('assert');
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var XRegExp__default = /*#__PURE__*/_interopDefaultLegacy(XRegExp);
-var JSON5__default = /*#__PURE__*/_interopDefaultLegacy(JSON5);
 var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
 var path__default = /*#__PURE__*/_interopDefaultLegacy(path$1);
+var JSON5__default = /*#__PURE__*/_interopDefaultLegacy(JSON5);
 var recast__default = /*#__PURE__*/_interopDefaultLegacy(recast);
 var assert__default = /*#__PURE__*/_interopDefaultLegacy(assert$1);
 
@@ -126,19 +126,21 @@ function camelCase(s) {
 /** @public */
 function mkIdentifier(s) {
     s = '' + s;
+
     return s
     // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
     // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
     .replace(/-\w/g, function (match) {
         var c = match.charAt(1);
         var rv = c.toUpperCase();
-        // do not mutate 'a-2' to 'a2':
+        // mutate 'a-2' to 'a_2':
         if (c === rv && c.match(/\d/)) {
-            return match;
+            return '_' + match.substr(1);
         }
         return rv;
     })
     // cleanup: replace any non-suitable character series to a single underscore:
+    .replace(/^([\d])/, '_$1')      // where leading numbers are prefixed by an underscore: '1' --> '_1'
     .replace(/^[^\w_]/, '_')
     // do not accept numerics at the leading position, despite those matching regex `\w`:
     .replace(/^\d/, '_')
@@ -214,18 +216,18 @@ function isLegalIdentifierInput(s) {
     s = '' + s;
     // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
     // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
-    s = s
+    let ref = s
     .replace(/-\w/g, function (match) {
         var c = match.charAt(1);
         var rv = c.toUpperCase();
-        // do not mutate 'a-2' to 'a2':
+        // mutate 'a-2' to 'a_2':
         if (c === rv && c.match(/\d/)) {
-            return match;
+            return '_' + match.substr(1);
         }
         return rv;
     });
     var alt = mkIdentifier(s);
-    return alt === s;
+    return alt === ref;
 }
 
 // properly quote and escape the given input string
@@ -301,7 +303,19 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
 
             try {
                 dumpfile = path__default['default'].normalize(dumpPaths[i] + '/' + dumpName);
-                fs__default['default'].writeFileSync(dumpfile, sourcecode, 'utf8');
+
+                let dump = {
+                    errname,
+                    err_id,
+                    options,
+                    ex,
+                };
+                let d = JSON5__default['default'].stringify(dump, null, 2);
+                // make sure each line is a comment line:
+                d = d.split('\n').map((l) => '// ' + l);
+                d = d.join('\n');
+
+                fs__default['default'].writeFileSync(dumpfile, sourcecode + '\n\n\n' + d, 'utf8');
                 console.error("****** offending generated " + errname + " source code dumped into file: ", dumpfile);
                 break;          // abort loop once a dump action was successful!
             } catch (ex3) {
@@ -363,7 +377,7 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
         p = code_execution_rig.call(this, sourcecode, options, errname, debug);
     } catch (ex) {
         
-        if (options.dumpSourceCodeOnFailure) {
+        if (options.dumpSourceCodeOnFailure || 1) {
             dumpSourceToFile(sourcecode, errname, err_id, options, ex);
         }
         
@@ -1437,6 +1451,17 @@ function shallow_copy_and_strip_depth(src, parentKey) {
 }
 
 
+function stripErrorStackPaths(msg) {
+    // strip away devbox-specific paths in error stack traces in the output:
+    msg = msg
+    .replace(/\bat ([^\r\n(\\\/]*?)\([^)]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)\)/gi, 'at $1(/$2)')
+    .replace(/\bat [^\r\n ]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)/gi, 'at /$1');
+
+    return msg;
+}
+
+
+
 function trim_array_tail(arr) {
     if (arr instanceof Array) {
         for (var len = arr.length; len > 0; len--) {
@@ -1680,6 +1705,7 @@ var helpers = {
     scanRegExp,
     dquote,
     trimErrorForTestReporting,
+    stripErrorStackPaths,
 
     checkRegExp: reHelpers.checkRegExp,
     getRegExpInfo: reHelpers.getRegExpInfo,
@@ -2935,13 +2961,15 @@ parse: function parse(input) {
                     var expected = this.collect_expected_token_set(state);
 
                     // Report error
+                    errStr = 'Parse error';
                     if (typeof lexer.yylineno === 'number') {
-                        errStr = 'Parse error on line ' + (lexer.yylineno + 1) + ': ';
-                    } else {
-                        errStr = 'Parse error: ';
+                        errStr += ' on line ' + (lexer.yylineno + 1);
                     }
+
                     if (typeof lexer.showPosition === 'function') {
-                        errStr += '\n' + lexer.showPosition(79 - 10, 10) + '\n';
+                        errStr += ':\n' + lexer.showPosition(79 - 10, 10) + '\n';
+                    } else {
+                        errStr += ': ';
                     }
                     if (expected.length) {
                         errStr += 'Expecting ' + expected.join(', ') + ', got unexpected ' + errSymbolDescr;
@@ -5786,14 +5814,14 @@ symbols_: {
   "?": 10,
   "ACTION": 15,
   "ACTION_BODY": 43,
-  "ALIAS": 39,
-  "ARROW_ACTION": 42,
+  "ALIAS": 40,
+  "ARROW_ACTION": 38,
   "CODE": 46,
   "DEBUG": 19,
   "EBNF": 20,
   "EOF": 1,
-  "EOF_ID": 40,
-  "EPSILON": 38,
+  "EOF_ID": 41,
+  "EPSILON": 39,
   "ID": 24,
   "IMPORT": 22,
   "INCLUDE": 44,
@@ -5810,7 +5838,7 @@ symbols_: {
   "PARSER_TYPE": 32,
   "PARSE_PARAM": 31,
   "PATH": 45,
-  "PREC": 41,
+  "PREC": 42,
   "RIGHT": 34,
   "START": 16,
   "STRING": 26,
@@ -5905,11 +5933,11 @@ terminals_: {
   35: "NONASSOC",
   36: "TOKEN_TYPE",
   37: "INTEGER",
-  38: "EPSILON",
-  39: "ALIAS",
-  40: "EOF_ID",
-  41: "PREC",
-  42: "ARROW_ACTION",
+  38: "ARROW_ACTION",
+  39: "EPSILON",
+  40: "ALIAS",
+  41: "EOF_ID",
+  42: "PREC",
   43: "ACTION_BODY",
   44: "INCLUDE",
   45: "PATH",
@@ -6070,8 +6098,8 @@ productions_: bp$1({
   70,
   s$1,
   [71, 3],
-  72,
-  72,
+  s$1,
+  [72, 3],
   73,
   73,
   s$1,
@@ -6152,25 +6180,25 @@ productions_: bp$1({
   [11, 7],
   c$1,
   [36, 4],
-  3,
-  3,
+  s$1,
+  [3, 3],
   1,
   0,
   3,
   c$1,
-  [39, 4],
+  [40, 4],
   c$1,
-  [80, 4],
+  [81, 4],
   c$1,
   [9, 3],
   c$1,
-  [39, 4],
+  [40, 4],
   3,
   3,
   c$1,
-  [34, 5],
+  [35, 5],
   c$1,
-  [40, 5],
+  [41, 5],
   c$1,
   [32, 3],
   s$1,
@@ -6182,9 +6210,9 @@ productions_: bp$1({
   4,
   4,
   c$1,
-  [53, 3],
+  [54, 3],
   c$1,
-  [85, 4],
+  [86, 4],
   c$1,
   [35, 3],
   0
@@ -6264,13 +6292,13 @@ case 3:
 
 case 4:
     /*! Production::    optional_end_block : %epsilon */
-case 100:
+case 101:
     /*! Production::    suffix : %epsilon */
-case 116:
-    /*! Production::    action : %epsilon */
 case 117:
+    /*! Production::    action : %epsilon */
+case 118:
     /*! Production::    action_body : %epsilon */
-case 132:
+case 133:
     /*! Production::    optional_module_code_chunk : %epsilon */
 
     // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
@@ -6684,37 +6712,37 @@ case 68:
     /*! Production::    token_value : INTEGER */
 case 69:
     /*! Production::    token_description : STRING */
-case 80:
+case 81:
     /*! Production::    optional_production_description : STRING */
-case 95:
+case 96:
     /*! Production::    expression : ID */
-case 101:
-    /*! Production::    suffix : "*" */
 case 102:
-    /*! Production::    suffix : "?" */
+    /*! Production::    suffix : "*" */
 case 103:
+    /*! Production::    suffix : "?" */
+case 104:
     /*! Production::    suffix : "+" */
-case 107:
-    /*! Production::    symbol : id */
 case 108:
-    /*! Production::    symbol : STRING */
+    /*! Production::    symbol : id */
 case 109:
+    /*! Production::    symbol : STRING */
+case 110:
     /*! Production::    id : ID */
-case 112:
-    /*! Production::    action_ne : ACTION */
 case 113:
-    /*! Production::    action_ne : include_macro_code */
+    /*! Production::    action_ne : ACTION */
 case 114:
+    /*! Production::    action_ne : include_macro_code */
+case 115:
     /*! Production::    action : action_ne */
-case 118:
+case 119:
     /*! Production::    action_body : action_comments_body */
-case 122:
+case 123:
     /*! Production::    action_comments_body : ACTION_BODY */
-case 124:
+case 125:
     /*! Production::    extra_parser_module_code : optional_module_code_chunk */
-case 128:
+case 129:
     /*! Production::    module_code_chunk : CODE */
-case 131:
+case 132:
     /*! Production::    optional_module_code_chunk : module_code_chunk */
 
     // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
@@ -6727,7 +6755,7 @@ case 131:
 
 case 39:
     /*! Production::    options : OPTIONS option_list OPTIONS_END */
-case 110:
+case 111:
     /*! Production::    action_ne : "{" action_body "}" */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
@@ -6795,7 +6823,7 @@ case 60:
     /*! Production::    token_list : symbol */
 case 71:
     /*! Production::    id_list : id */
-case 83:
+case 84:
     /*! Production::    handle_list : handle_action */
 
     // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
@@ -6905,6 +6933,9 @@ case 51:
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);
     break;
 
@@ -7210,7 +7241,34 @@ case 79:
     `);
     break;
 
-case 81:
+case 80:
+    /*! Production::    production_id : id optional_production_description ARROW_ACTION */
+
+    // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+    this.$ = yyvstack[yysp - 2];
+    this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
+    // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+    
+    
+    // TODO ...
+    yyparser.yyError(rmCommonWS$1`
+        Production for rule '${$id}' is missing: arrows introduce action code in Jison.
+    
+        Jison does not support rule production definition using arrows (->, =>, →) but expects
+        colons (:) instead, so maybe you intended this:
+    
+            ${yyvstack[yysp - 2]} : ${yyvstack[yysp]}
+    
+        while the user-defined action code block MAY be an arrow function, e.g.
+    
+            rule: math_production -> Math.min($math_production, 42);
+    
+          Erroneous area:
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+    `);
+    break;
+
+case 82:
     /*! Production::    optional_production_description : %epsilon */
 
     // default action (generated by JISON mode classic/merge :: 0,VT,VA,-,-,LT,LA,-,-):
@@ -7219,7 +7277,7 @@ case 81:
     // END of default action (generated by JISON mode classic/merge :: 0,VT,VA,-,-,LT,LA,-,-)
     break;
 
-case 82:
+case 83:
     /*! Production::    handle_list : handle_list "|" handle_action */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
@@ -7231,7 +7289,7 @@ case 82:
     this.$.push(yyvstack[yysp]);
     break;
 
-case 84:
+case 85:
     /*! Production::    handle_list : handle_list "|" error */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
@@ -7252,7 +7310,7 @@ case 84:
     `);
     break;
 
-case 85:
+case 86:
     /*! Production::    handle_list : handle_list ":" error */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
@@ -7270,7 +7328,7 @@ case 85:
     `);
     break;
 
-case 86:
+case 87:
     /*! Production::    handle_action : handle prec action */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
@@ -7307,7 +7365,7 @@ case 86:
     }
     break;
 
-case 87:
+case 88:
     /*! Production::    handle_action : EPSILON action */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
@@ -7333,7 +7391,7 @@ case 87:
     }
     break;
 
-case 88:
+case 89:
     /*! Production::    handle_action : EPSILON error */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
@@ -7351,7 +7409,7 @@ case 88:
     `);
     break;
 
-case 89:
+case 90:
     /*! Production::    handle : handle suffixed_expression */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
@@ -7363,7 +7421,7 @@ case 89:
     this.$.push(yyvstack[yysp]);
     break;
 
-case 90:
+case 91:
     /*! Production::    handle : %epsilon */
 
     // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
@@ -7374,7 +7432,7 @@ case 90:
     this.$ = [];
     break;
 
-case 91:
+case 92:
     /*! Production::    handle_sublist : handle_sublist "|" handle */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
@@ -7386,7 +7444,7 @@ case 91:
     this.$.push(yyvstack[yysp].join(' '));
     break;
 
-case 92:
+case 93:
     /*! Production::    handle_sublist : handle */
 
     // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
@@ -7397,7 +7455,7 @@ case 92:
     this.$ = [yyvstack[yysp].join(' ')];
     break;
 
-case 93:
+case 94:
     /*! Production::    suffixed_expression : expression suffix ALIAS */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
@@ -7408,11 +7466,11 @@ case 93:
     this.$ = yyvstack[yysp - 2] + yyvstack[yysp - 1] + "[" + yyvstack[yysp] + "]";
     break;
 
-case 94:
+case 95:
     /*! Production::    suffixed_expression : expression suffix */
-case 123:
+case 124:
     /*! Production::    action_comments_body : action_comments_body ACTION_BODY */
-case 129:
+case 130:
     /*! Production::    module_code_chunk : module_code_chunk CODE */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
@@ -7423,7 +7481,7 @@ case 129:
     this.$ = yyvstack[yysp - 1] + yyvstack[yysp];
     break;
 
-case 96:
+case 97:
     /*! Production::    expression : EOF_ID */
 
     // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
@@ -7434,7 +7492,7 @@ case 96:
     this.$ = '$end';
     break;
 
-case 97:
+case 98:
     /*! Production::    expression : STRING */
 
     // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
@@ -7449,7 +7507,7 @@ case 97:
     this.$ = dquote$1(yyvstack[yysp]);
     break;
 
-case 98:
+case 99:
     /*! Production::    expression : "(" handle_sublist ")" */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
@@ -7460,7 +7518,7 @@ case 98:
     this.$ = '(' + yyvstack[yysp - 1].join(' | ') + ')';
     break;
 
-case 99:
+case 100:
     /*! Production::    expression : "(" handle_sublist error */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
@@ -7477,7 +7535,7 @@ case 99:
     `);
     break;
 
-case 104:
+case 105:
     /*! Production::    prec : PREC symbol */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
@@ -7488,7 +7546,7 @@ case 104:
     this.$ = { prec: yyvstack[yysp] };
     break;
 
-case 105:
+case 106:
     /*! Production::    prec : PREC error */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
@@ -7509,7 +7567,7 @@ case 105:
     `);
     break;
 
-case 106:
+case 107:
     /*! Production::    prec : %epsilon */
 
     // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
@@ -7520,7 +7578,7 @@ case 106:
     this.$ = null;
     break;
 
-case 111:
+case 112:
     /*! Production::    action_ne : "{" action_body error */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
@@ -7537,7 +7595,7 @@ case 111:
     `);
     break;
 
-case 115:
+case 116:
     /*! Production::    action : ARROW_ACTION */
 
     // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
@@ -7548,7 +7606,7 @@ case 115:
     this.$ = '$$ = (' + yyvstack[yysp] + ');';
     break;
 
-case 119:
+case 120:
     /*! Production::    action_body : action_body "{" action_body "}" action_comments_body */
 
     // default action (generated by JISON mode classic/merge :: 5,VT,VA,VU,-,LT,LA,-,-):
@@ -7559,7 +7617,7 @@ case 119:
     this.$ = yyvstack[yysp - 4] + yyvstack[yysp - 3] + yyvstack[yysp - 2] + yyvstack[yysp - 1] + yyvstack[yysp];
     break;
 
-case 120:
+case 121:
     /*! Production::    action_body : action_body "{" action_body "}" */
 
     // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
@@ -7570,7 +7628,7 @@ case 120:
     this.$ = yyvstack[yysp - 3] + yyvstack[yysp - 2] + yyvstack[yysp - 1] + yyvstack[yysp];
     break;
 
-case 121:
+case 122:
     /*! Production::    action_body : action_body "{" action_body error */
 
     // default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-):
@@ -7587,7 +7645,7 @@ case 121:
     `);
     break;
 
-case 125:
+case 126:
     /*! Production::    extra_parser_module_code : optional_module_code_chunk include_macro_code extra_parser_module_code */
 
     // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
@@ -7598,7 +7656,7 @@ case 125:
     this.$ = yyvstack[yysp - 2] + yyvstack[yysp - 1] + yyvstack[yysp];
     break;
 
-case 126:
+case 127:
     /*! Production::    include_macro_code : INCLUDE PATH */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
@@ -7620,7 +7678,7 @@ case 126:
     this.$ = '\n// Included by Jison: ' + yyvstack[yysp] + ':\n\n' + fileContent + '\n\n// End Of Include by Jison: ' + yyvstack[yysp] + '\n\n';
     break;
 
-case 127:
+case 128:
     /*! Production::    include_macro_code : INCLUDE error */
 
     // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
@@ -7636,7 +7694,7 @@ case 127:
     ` + yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1]));
     break;
 
-case 130:
+case 131:
     /*! Production::    module_code_chunk : error */
 
     // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
@@ -7715,7 +7773,7 @@ table: bt$1({
   c$1,
   [40, 3],
   17,
-  4,
+  5,
   20,
   18,
   23,
@@ -7741,8 +7799,8 @@ table: bt$1({
   3,
   15,
   11,
-  2,
-  2,
+  3,
+  3,
   19,
   20,
   18,
@@ -7767,15 +7825,15 @@ table: bt$1({
   9,
   s$1,
   [3, 4],
-  14,
-  14,
+  s$1,
+  [14, 3],
   18,
   21,
   21,
   6,
   4,
   c$1,
-  [50, 5],
+  [51, 5],
   7,
   7,
   s$1,
@@ -7880,7 +7938,7 @@ table: bt$1({
   c$1,
   [24, 6],
   37,
-  42,
+  38,
   c$1,
   [152, 37],
   24,
@@ -7975,7 +8033,7 @@ table: bt$1({
   24,
   26,
   38,
-  40,
+  39,
   41,
   42,
   44,
@@ -7985,90 +8043,92 @@ table: bt$1({
   2,
   5,
   26,
+  38,
   73,
   c$1,
-  [151, 12],
+  [152, 12],
   c$1,
-  [94, 7],
+  [95, 7],
   c$1,
-  [307, 38],
+  [308, 38],
   37,
   44,
   66,
   67,
   c$1,
-  [685, 109],
+  [686, 109],
   12,
   13,
   43,
   86,
   87,
   c$1,
-  [349, 14],
+  [350, 14],
   c$1,
-  [445, 11],
+  [446, 11],
   c$1,
   [84, 46],
   c$1,
-  [504, 10],
+  [505, 10],
   c$1,
-  [348, 19],
+  [349, 19],
   c$1,
   [58, 19],
   25,
   29,
   30,
   c$1,
-  [346, 5],
+  [347, 5],
   1,
   44,
   89,
   1,
   c$1,
-  [483, 3],
+  [484, 3],
   c$1,
   [3, 6],
   c$1,
-  [339, 3],
+  [340, 3],
   c$1,
   [121, 3],
   c$1,
-  [496, 3],
+  [497, 3],
   c$1,
   [8, 5],
   c$1,
-  [349, 8],
+  [350, 9],
   c$1,
-  [348, 4],
+  [349, 3],
   78,
   79,
   81,
   c$1,
-  [568, 5],
+  [569, 5],
   15,
-  42,
+  38,
   44,
   84,
   85,
   89,
   2,
   5,
-  2,
-  5,
+  38,
   c$1,
-  [359, 19],
+  [3, 4],
+  c$1,
+  [361, 18],
   c$1,
   [19, 11],
   c$1,
-  [142, 8],
+  [144, 8],
   c$1,
-  [337, 30],
+  [339, 30],
   c$1,
-  [180, 26],
+  [182, 26],
   c$1,
-  [284, 3],
+  [286, 3],
   c$1,
-  [287, 4],
+  [289, 4],
   c$1,
   [4, 4],
   25,
@@ -8078,30 +8138,30 @@ table: bt$1({
   c$1,
   [4, 4],
   c$1,
-  [517, 8],
+  [520, 8],
   c$1,
-  [168, 6],
+  [170, 6],
   c$1,
-  [507, 14],
+  [510, 14],
   c$1,
-  [506, 3],
+  [509, 3],
   c$1,
-  [189, 7],
+  [191, 7],
   c$1,
-  [162, 8],
+  [164, 8],
   s$1,
   [4, 5, 1],
   c$1,
-  [190, 8],
+  [192, 8],
   c$1,
-  [1024, 6],
+  [1027, 6],
   s$1,
   [4, 9, 1],
   c$1,
-  [22, 3],
-  s$1,
-  [39, 4, 1],
-  44,
+  [22, 4],
+  40,
+  c$1,
+  [23, 3],
   80,
   c$1,
   [19, 18],
@@ -8109,51 +8169,52 @@ table: bt$1({
   [18, 37],
   c$1,
   [16, 3],
-  c$1,
-  [88, 3],
+  24,
+  26,
+  41,
   76,
   77,
   c$1,
-  [292, 6],
+  [294, 6],
   c$1,
   [3, 6],
   c$1,
   [144, 14],
   c$1,
-  [14, 15],
+  [14, 29],
   c$1,
-  [480, 39],
+  [496, 39],
   c$1,
   [21, 21],
   c$1,
-  [549, 6],
+  [565, 6],
   c$1,
   [6, 3],
   1,
   c$1,
-  [111, 12],
+  [125, 12],
   c$1,
-  [234, 7],
+  [248, 7],
   c$1,
   [7, 7],
   c$1,
-  [238, 10],
+  [252, 11],
   c$1,
-  [179, 11],
+  [193, 10],
   c$1,
   [15, 40],
   6,
   8,
   c$1,
-  [209, 7],
+  [223, 7],
   78,
   79,
   c$1,
-  [374, 4],
+  [388, 4],
   c$1,
-  [313, 14],
+  [327, 14],
   c$1,
-  [271, 43],
+  [285, 43],
   c$1,
   [164, 4],
   c$1,
@@ -8215,23 +8276,23 @@ table: bt$1({
   c$1,
   [98, 26],
   c$1,
-  [489, 7],
+  [356, 27],
   c$1,
-  [721, 173],
+  [722, 154],
   c$1,
-  [462, 131],
+  [463, 131],
   c$1,
   [130, 37],
   c$1,
-  [375, 11],
+  [376, 11],
   c$1,
-  [818, 45],
+  [819, 47],
   c$1,
-  [223, 79],
+  [225, 79],
   c$1,
-  [124, 24],
+  [126, 24],
   c$1,
-  [986, 15],
+  [989, 15],
   c$1,
   [38, 19],
   c$1,
@@ -8239,13 +8300,13 @@ table: bt$1({
   c$1,
   [157, 62],
   c$1,
-  [443, 106],
+  [445, 120],
   c$1,
-  [106, 103],
+  [120, 103],
   c$1,
   [103, 62],
   c$1,
-  [1248, 16],
+  [909, 16],
   c$1,
   [78, 6]
 ]),
@@ -8318,26 +8379,26 @@ table: bt$1({
   133,
   131,
   82,
-  137,
-  142,
+  138,
+  143,
   94,
   93,
-  143,
+  144,
   101,
   133,
-  146,
-  82,
   147,
+  82,
+  148,
   50,
-  149,
-  154,
-  153,
+  150,
   155,
+  154,
+  156,
   111,
   124,
   126,
-  162,
   163,
+  164,
   124,
   126
 ]),
@@ -8387,57 +8448,57 @@ table: bt$1({
   c$1,
   [427, 12],
   c$1,
-  [9, 15],
+  [10, 15],
   c$1,
-  [335, 13],
+  [62, 22],
   c$1,
-  [389, 39],
+  [390, 31],
   c$1,
   [45, 43],
   c$1,
-  [509, 77],
+  [510, 77],
   c$1,
-  [762, 121],
+  [763, 121],
   c$1,
   [129, 9],
   c$1,
-  [756, 14],
+  [757, 14],
   c$1,
-  [334, 14],
+  [368, 12],
   c$1,
-  [41, 6],
+  [367, 6],
   c$1,
-  [367, 5],
+  [368, 7],
   c$1,
-  [784, 37],
+  [650, 26],
   c$1,
-  [208, 63],
+  [210, 76],
   c$1,
-  [1142, 20],
+  [1145, 20],
   c$1,
-  [1081, 10],
+  [1084, 10],
   c$1,
-  [487, 14],
+  [490, 14],
   c$1,
   [22, 9],
   c$1,
-  [151, 17],
+  [152, 17],
   c$1,
-  [221, 10],
+  [223, 10],
   c$1,
-  [803, 156],
+  [806, 156],
   c$1,
-  [318, 61],
+  [332, 76],
   c$1,
-  [216, 50],
+  [231, 49],
   c$1,
-  [457, 7],
+  [491, 7],
   c$1,
-  [455, 38],
+  [470, 39],
   c$1,
-  [123, 34],
+  [122, 33],
   c$1,
-  [1206, 8],
+  [1223, 8],
   1
 ]),
   goto: u$1([
@@ -8526,7 +8587,7 @@ table: bt$1({
   s$1,
   [29, 18],
   s$1,
-  [109, 26],
+  [110, 26],
   s$1,
   [15, 18],
   s$1,
@@ -8566,13 +8627,13 @@ table: bt$1({
   s$1,
   [60, 20],
   s$1,
-  [107, 25],
-  s$1,
   [108, 25],
   s$1,
-  [126, 24],
+  [109, 25],
   s$1,
   [127, 24],
+  s$1,
+  [128, 24],
   s$1,
   [50, 11],
   33,
@@ -8600,9 +8661,9 @@ table: bt$1({
   44,
   90,
   91,
-  132,
+  133,
   96,
-  132,
+  133,
   95,
   s$1,
   [72, 3],
@@ -8615,13 +8676,14 @@ table: bt$1({
   [74, 4],
   99,
   s$1,
-  [90, 8],
+  [91, 9],
   102,
   s$1,
-  [90, 4],
-  81,
-  81,
+  [91, 3],
+  82,
+  82,
   104,
+  82,
   s$1,
   [61, 11],
   33,
@@ -8649,11 +8711,12 @@ table: bt$1({
   s$1,
   [27, 18],
   s$1,
-  [117, 3],
-  s$1,
-  [112, 22],
+  [118, 3],
+  112,
   s$1,
   [113, 21],
+  s$1,
+  [114, 21],
   s$1,
   [28, 18],
   s$1,
@@ -8673,15 +8736,15 @@ table: bt$1({
   1,
   2,
   5,
-  124,
+  125,
   21,
-  131,
-  131,
+  132,
+  132,
   118,
   s$1,
-  [128, 3],
+  [129, 3],
   s$1,
-  [130, 3],
+  [131, 3],
   s$1,
   [73, 4],
   119,
@@ -8693,29 +8756,30 @@ table: bt$1({
   77,
   77,
   s$1,
-  [83, 3],
+  [84, 3],
   s$1,
-  [106, 3],
+  [107, 3],
   130,
-  106,
-  106,
+  107,
+  107,
   127,
   129,
+  107,
   128,
   125,
-  106,
-  106,
+  107,
   132,
   s$1,
-  [116, 3],
+  [117, 3],
   80,
   81,
   134,
   21,
   136,
   135,
-  80,
-  80,
+  137,
+  s$1,
+  [81, 3],
   s$1,
   [70, 19],
   s$1,
@@ -8729,14 +8793,14 @@ table: bt$1({
   [68, 19],
   s$1,
   [69, 18],
-  139,
   140,
-  138,
-  s$1,
-  [118, 3],
   141,
+  139,
   s$1,
-  [122, 4],
+  [119, 3],
+  142,
+  s$1,
+  [123, 4],
   45,
   45,
   46,
@@ -8746,119 +8810,122 @@ table: bt$1({
   48,
   48,
   c$1,
-  [494, 4],
+  [497, 4],
   s$1,
-  [129, 3],
+  [130, 3],
   s$1,
   [75, 4],
-  144,
-  c$1,
-  [487, 13],
   145,
+  c$1,
+  [490, 13],
+  146,
   s$1,
   [76, 4],
   c$1,
-  [153, 7],
+  [155, 7],
   s$1,
-  [89, 14],
-  148,
+  [90, 14],
+  149,
   33,
   51,
   s$1,
-  [100, 6],
-  150,
+  [101, 6],
   151,
   152,
+  153,
   s$1,
-  [100, 9],
-  s$1,
-  [95, 18],
+  [101, 9],
   s$1,
   [96, 18],
   s$1,
   [97, 18],
   s$1,
-  [90, 7],
+  [98, 18],
   s$1,
-  [87, 3],
+  [91, 7],
   s$1,
   [88, 3],
   s$1,
-  [114, 3],
+  [89, 3],
   s$1,
   [115, 3],
+  s$1,
+  [116, 3],
   s$1,
   [78, 14],
   s$1,
   [79, 14],
   s$1,
+  [80, 14],
+  s$1,
   [63, 18],
   s$1,
-  [110, 21],
-  s$1,
   [111, 21],
+  s$1,
+  [112, 21],
   c$1,
-  [526, 4],
+  [542, 4],
   s$1,
-  [123, 4],
-  125,
+  [124, 4],
+  126,
   s$1,
-  [82, 3],
-  s$1,
-  [84, 3],
+  [83, 3],
   s$1,
   [85, 3],
   s$1,
   [86, 3],
   s$1,
-  [104, 7],
+  [87, 3],
   s$1,
   [105, 7],
   s$1,
-  [94, 10],
-  156,
+  [106, 7],
   s$1,
-  [94, 4],
+  [95, 11],
+  157,
   s$1,
-  [101, 15],
+  [95, 3],
   s$1,
   [102, 15],
   s$1,
   [103, 15],
-  158,
+  s$1,
+  [104, 15],
   159,
-  157,
-  92,
-  92,
-  130,
-  92,
-  c$1,
-  [465, 3],
-  161,
-  140,
   160,
+  158,
+  93,
+  93,
+  130,
+  93,
+  127,
+  129,
+  128,
+  162,
+  141,
+  161,
   s$1,
-  [93, 14],
-  s$1,
-  [98, 18],
+  [94, 14],
   s$1,
   [99, 18],
   s$1,
-  [90, 7],
+  [100, 18],
   s$1,
-  [120, 3],
-  112,
+  [91, 7],
   s$1,
   [121, 3],
-  91,
-  91,
+  112,
+  s$1,
+  [122, 3],
+  92,
+  92,
   130,
-  91,
+  92,
   c$1,
   [74, 3],
   s$1,
-  [119, 3],
-  141
+  [120, 3],
+  142
 ])
 }),
 defaultActions: bda({
@@ -8913,15 +8980,15 @@ defaultActions: bda({
   122,
   124,
   s$1,
-  [127, 13, 1],
+  [127, 14, 1],
   s$1,
-  [141, 8, 1],
-  150,
+  [142, 8, 1],
   151,
   152,
+  153,
   s$1,
-  [156, 4, 1],
-  161
+  [157, 4, 1],
+  162
 ]),
   goto: u$1([
   10,
@@ -8937,7 +9004,7 @@ defaultActions: bda({
   3,
   12,
   29,
-  109,
+  110,
   15,
   30,
   67,
@@ -8948,10 +9015,10 @@ defaultActions: bda({
   34,
   55,
   60,
-  107,
   108,
-  126,
+  109,
   127,
+  128,
   51,
   52,
   53,
@@ -8966,8 +9033,8 @@ defaultActions: bda({
   38,
   26,
   27,
-  112,
   113,
+  114,
   28,
   59,
   39,
@@ -8977,51 +9044,52 @@ defaultActions: bda({
   1,
   2,
   5,
-  128,
-  130,
+  129,
+  131,
   73,
-  83,
-  80,
+  84,
+  81,
   70,
   64,
   68,
   69,
-  122,
+  123,
   s$1,
   [45, 4, 1],
-  129,
+  130,
   75,
   76,
-  89,
-  95,
+  90,
   96,
   97,
-  90,
-  87,
+  98,
+  91,
   88,
-  114,
+  89,
   115,
+  116,
   78,
   79,
+  80,
   63,
-  110,
   111,
-  123,
-  125,
-  82,
-  84,
+  112,
+  124,
+  126,
+  83,
   85,
   86,
-  104,
+  87,
   105,
-  101,
+  106,
   102,
   103,
-  93,
-  98,
+  104,
+  94,
   99,
-  90,
-  121
+  100,
+  91,
+  122
 ])
 }),
 parseError: function parseError(str, hash, ExceptionClass) {
@@ -9064,7 +9132,7 @@ parse: function parse(input) {
     var TERROR = this.TERROR;
     var EOF = this.EOF;
     var ERROR_RECOVERY_TOKEN_DISCARD_COUNT = (this.options.errorRecoveryTokenDiscardCount | 0) || 3;
-    var NO_ACTION = [0, 164 /* === table.length :: ensures that anyone using this new state will fail dramatically! */];
+    var NO_ACTION = [0, 165 /* === table.length :: ensures that anyone using this new state will fail dramatically! */];
 
     var lexer;
     if (this.__lexer__) {
@@ -9541,7 +9609,7 @@ parse: function parse(input) {
         // the 'expected' set won't be modified, so no need to clone it:
         //rv.expected = rv.expected.slice();
 
-        //symbol stack is a simple array:
+        // symbol stack is a simple array:
         rv.symbol_stack = rv.symbol_stack.slice();
         // ditto for state stack:
         rv.state_stack = rv.state_stack.slice();
@@ -9850,14 +9918,15 @@ parse: function parse(input) {
 
                     if (!recovering) {
                         // Report error
+                        errStr = 'Parse error';
                         if (typeof lexer.yylineno === 'number') {
-                            errStr = 'Parse error on line ' + (lexer.yylineno + 1) + ': ';
-                        } else {
-                            errStr = 'Parse error: ';
+                            errStr += ' on line ' + (lexer.yylineno + 1);
                         }
 
                         if (typeof lexer.showPosition === 'function') {
-                            errStr += '\n' + lexer.showPosition(79 - 10, 10) + '\n';
+                            errStr += ':\n' + lexer.showPosition(79 - 10, 10) + '\n';
+                        } else {
+                            errStr += ': ';
                         }
                         if (expected.length) {
                             errStr += 'Expecting ' + expected.join(', ') + ', got unexpected ' + errSymbolDescr;
@@ -12636,7 +12705,7 @@ EOF: 1,
         /*! Rule::       \[{ID}\] */
         yy_.yytext = this.matches[1];
 
-        return 39;
+        return 40;
       case 42:
         /*! Conditions:: token bnf ebnf INITIAL */
         /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */
@@ -12732,19 +12801,19 @@ EOF: 1,
         /*! Rule::       ->.* */
         yy_.yytext = yy_.yytext.substr(2, yy_.yyleng - 2).trim();
 
-        return 42;
+        return 38;
       case 70:
         /*! Conditions:: token bnf ebnf INITIAL */
         /*! Rule::       →.* */
         yy_.yytext = yy_.yytext.substr(1, yy_.yyleng - 1).trim();
 
-        return 42;
+        return 38;
       case 71:
         /*! Conditions:: token bnf ebnf INITIAL */
         /*! Rule::       =>.* */
         yy_.yytext = yy_.yytext.substr(2, yy_.yyleng - 2).trim();
 
-        return 42;
+        return 38;
       case 72:
         /*! Conditions:: token bnf ebnf INITIAL */
         /*! Rule::       {HEX_NUMBER} */
@@ -12802,7 +12871,7 @@ EOF: 1,
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
 
-        return 2;
+        return 'UNTERMINATED_STRING_ERROR';
       case 82:
         /*! Conditions:: action */
         /*! Rule::       ' */
@@ -12812,7 +12881,7 @@ EOF: 1,
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
 
-        return 2;
+        return 'UNTERMINATED_STRING_ERROR';
       case 83:
         /*! Conditions:: action */
         /*! Rule::       ` */
@@ -12822,7 +12891,7 @@ EOF: 1,
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
 
-        return 2;
+        return 'UNTERMINATED_STRING_ERROR';
       case 84:
         /*! Conditions:: option_values */
         /*! Rule::       " */
@@ -12832,7 +12901,7 @@ EOF: 1,
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
 
-        return 2;
+        return 'UNTERMINATED_STRING_ERROR';
       case 85:
         /*! Conditions:: option_values */
         /*! Rule::       ' */
@@ -12842,7 +12911,7 @@ EOF: 1,
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
 
-        return 2;
+        return 'UNTERMINATED_STRING_ERROR';
       case 86:
         /*! Conditions:: option_values */
         /*! Rule::       ` */
@@ -12852,46 +12921,46 @@ EOF: 1,
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
 
-        return 2;
+        return 'UNTERMINATED_STRING_ERROR';
       case 87:
         /*! Conditions:: * */
         /*! Rule::       " */
         var rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
 
         yy_.yyerror(rmCommonWS`
-                                            unterminated string constant  encountered while lexing
+                                            unterminated string constant encountered while lexing
                                             ${rules}.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
 
-        return 2;
+        return 'UNTERMINATED_STRING_ERROR';
       case 88:
         /*! Conditions:: * */
         /*! Rule::       ' */
         var rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
 
         yy_.yyerror(rmCommonWS`
-                                            unterminated string constant  encountered while lexing
+                                            unterminated string constant encountered while lexing
                                             ${rules}.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
 
-        return 2;
+        return 'UNTERMINATED_STRING_ERROR';
       case 89:
         /*! Conditions:: * */
         /*! Rule::       ` */
         var rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
 
         yy_.yyerror(rmCommonWS`
-                                            unterminated string constant  encountered while lexing
+                                            unterminated string constant encountered while lexing
                                             ${rules}.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
 
-        return 2;
+        return 'UNTERMINATED_STRING_ERROR';
       case 90:
         /*! Conditions:: * */
         /*! Rule::       . */
@@ -12903,7 +12972,7 @@ EOF: 1,
                                                   Erroneous area:
                                                 ` + this.prettyPrintRange(yy_.yylloc));
 
-        break;
+        return 2;
       default:
         return this.simpleCaseActionClusters[yyrulenumber];
       }
@@ -12936,27 +13005,27 @@ EOF: 1,
 
       /*! Conditions:: bnf ebnf */
       /*! Rule::       %empty\b */
-      13: 38,
+      13: 39,
 
       /*! Conditions:: bnf ebnf */
       /*! Rule::       %epsilon\b */
-      14: 38,
+      14: 39,
 
       /*! Conditions:: bnf ebnf */
       /*! Rule::       Ɛ */
-      15: 38,
+      15: 39,
 
       /*! Conditions:: bnf ebnf */
       /*! Rule::       ɛ */
-      16: 38,
+      16: 39,
 
       /*! Conditions:: bnf ebnf */
       /*! Rule::       ε */
-      17: 38,
+      17: 39,
 
       /*! Conditions:: bnf ebnf */
       /*! Rule::       ϵ */
-      18: 38,
+      18: 39,
 
       /*! Conditions:: ebnf */
       /*! Rule::       \( */
@@ -12992,11 +13061,11 @@ EOF: 1,
 
       /*! Conditions:: token bnf ebnf INITIAL */
       /*! Rule::       \$end\b */
-      40: 40,
+      40: 41,
 
       /*! Conditions:: token bnf ebnf INITIAL */
       /*! Rule::       \$eof\b */
-      41: 40,
+      41: 41,
 
       /*! Conditions:: token */
       /*! Rule::       [^\s\r\n]+ */
@@ -13024,7 +13093,7 @@ EOF: 1,
 
       /*! Conditions:: token bnf ebnf INITIAL */
       /*! Rule::       %prec\b */
-      52: 41,
+      52: 42,
 
       /*! Conditions:: token bnf ebnf INITIAL */
       /*! Rule::       %start\b */
@@ -18616,7 +18685,7 @@ parse: function parse(input) {
         // the 'expected' set won't be modified, so no need to clone it:
         //rv.expected = rv.expected.slice();
 
-        //symbol stack is a simple array:
+        // symbol stack is a simple array:
         rv.symbol_stack = rv.symbol_stack.slice();
         // ditto for state stack:
         rv.state_stack = rv.state_stack.slice();
@@ -18925,14 +18994,15 @@ parse: function parse(input) {
 
                     if (!recovering) {
                         // Report error
+                        errStr = 'Parse error';
                         if (typeof lexer.yylineno === 'number') {
-                            errStr = 'Parse error on line ' + (lexer.yylineno + 1) + ': ';
-                        } else {
-                            errStr = 'Parse error: ';
+                            errStr += ' on line ' + (lexer.yylineno + 1);
                         }
 
                         if (typeof lexer.showPosition === 'function') {
-                            errStr += '\n' + lexer.showPosition(79 - 10, 10) + '\n';
+                            errStr += ':\n' + lexer.showPosition(79 - 10, 10) + '\n';
+                        } else {
+                            errStr += ': ';
                         }
                         if (expected.length) {
                             errStr += 'Expecting ' + expected.join(', ') + ', got unexpected ' + errSymbolDescr;

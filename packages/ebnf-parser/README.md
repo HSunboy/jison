@@ -35,7 +35,7 @@ var code_exec  = helpers.exec;
 import XRegExp from '@gerhobbelt/xregexp';
 import recast from 'recast';
 import astUtils from 'ast-util';
-import json5 from '@gerhobbelt/json5';
+import JSON5 from '@gerhobbelt/json5';
 
 // Also export other APIs: the JISON module should act as a 'facade' for the others,
 // so applications using the JISON compiler itself can rely on it providing everything
@@ -48,7 +48,7 @@ Jison.codeExec = code_exec;
 Jison.XRegExp = XRegExp;
 Jison.recast = recast;
 Jison.astUtils = astUtils;
-Jison.JSON5 = json5;
+Jison.JSON5 = JSON5;
 Jison.prettyPrint = grammarPrinter;
 Jison.rmCommonWS = rmCommonWS;
 Jison.mkStdOptions = mkStdOptions;

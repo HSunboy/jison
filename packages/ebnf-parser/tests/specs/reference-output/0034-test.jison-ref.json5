@@ -1,25 +1,10 @@
 {
   options: {
-    bugABoo: true,
+    'bug-a-boo': true,
   },
   bnf: {
     hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
-    ],
-  },
-  grammar: {
-    hello: [
-      [
-        [
-          'symbol',
-          'world',
-        ],
-      ],
+      'world',
     ],
   },
   __original_input__: `%options bug-a-boo 

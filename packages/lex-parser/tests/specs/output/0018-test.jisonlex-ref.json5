@@ -32,7 +32,7 @@ by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
 7: 
     
   Technical error report:
-Parse error on line 5: 
+Parse error on line 5:
 }
 ^
 Expecting end of input, "<", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "CODE", "START_INC", "START_EXC", "%%", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"
@@ -60,30 +60,30 @@ by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
 7: 
     
   Technical error report:
-Parse error on line 5: 
+Parse error on line 5:
 }
 ^
 Expecting end of input, "<", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "CODE", "START_INC", "START_EXC", "%%", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"
 
-    at Object.parseError (\lex-parser-cjs-es5.js:4229:13)
-    at Object.yyError (\lex-parser-cjs-es5.js:4409:21)
-    at Object.parser__PerformAction (\lex-parser-cjs-es5.js:2176:18)
-    at Object.parse (\lex-parser-cjs-es5.js:5305:42)
-    at Object.yyparse [as parse] (\lex-parser-cjs-es5.js:8972:23)
-    at Context.testEachParserExample (\all-tests.js:312:19)
-    at callFn (\runnable.js:364:21)
-    at Test.Runnable.run (\runnable.js:352:5)
-    at Runner.runTest (\runner.js:677:10)
-    at \runner.js:801:12
-    at next (\runner.js:594:14)
-    at \runner.js:604:7
-    at next (\runner.js:486:14)
-    at cbHookRun (\runner.js:551:7)
-    at done (\runnable.js:308:5)
-    at callFn (\runnable.js:387:7)
-    at Hook.Runnable.run (\runnable.js:352:5)
-    at next (\runner.js:510:10)
-    at Immediate._onImmediate (\runner.js:572:5)
+    at Object.parseError (/lex-parser-cjs-es5.js:4247:13)
+    at Object.yyError (/lex-parser-cjs-es5.js:4427:21)
+    at Object.parser__PerformAction (/lex-parser-cjs-es5.js:2194:18)
+    at Object.parse (/lex-parser-cjs-es5.js:5325:42)
+    at Object.yyparse [as parse] (/lex-parser-cjs-es5.js:8992:23)
+    at Context.testEachParserExample (/all-tests.js:323:19)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
     at processImmediate (/timers.js:456:21)`,
     hash: {
       errStr: `
@@ -109,7 +109,7 @@ by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
 7: 
     
   Technical error report:
-Parse error on line 5: 
+Parse error on line 5:
 }
 ^
 Expecting end of input, "<", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "CODE", "START_INC", "START_EXC", "%%", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"
@@ -353,7 +353,7 @@ Expecting end of input, "<", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL"
         __reentrant_call_depth: 0,
         __error_infos: [
           {
-            errStr: `Parse error on line 5: 
+            errStr: `Parse error on line 5:
 }
 ^
 Expecting end of input, "<", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "CODE", "START_INC", "START_EXC", "%%", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"`,
@@ -393,7 +393,7 @@ by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
 7: 
     
   Technical error report:
-Parse error on line 5: 
+Parse error on line 5:
 }
 ^
 Expecting end of input, "<", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "CODE", "START_INC", "START_EXC", "%%", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"

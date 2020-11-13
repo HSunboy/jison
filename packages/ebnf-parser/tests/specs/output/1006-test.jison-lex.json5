@@ -1,5 +1,5 @@
 [
-  10,
+  11,
   {
     id: 20,
     token: '"EBNF"',
@@ -93,14 +93,29 @@
   {
     id: 24,
     token: '"ID"',
-    yytext: 'EOFl',
+    yytext: 'EOF',
     yylloc: {
       first_line: 3,
       first_column: 12,
       last_line: 3,
-      last_column: 16,
+      last_column: 15,
       range: [
         21,
+        24,
+      ],
+    },
+  },
+  {
+    id: 4,
+    token: '";"',
+    yytext: ';',
+    yylloc: {
+      first_line: 3,
+      first_column: 15,
+      last_line: 3,
+      last_column: 16,
+      range: [
+        24,
         25,
       ],
     },

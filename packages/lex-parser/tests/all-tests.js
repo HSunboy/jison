@@ -8,6 +8,7 @@ var JSON5 = require('@gerhobbelt/json5');
 var lex = require("../dist/lex-parser-cjs-es5");
 var helpers = require('../../helpers-lib/dist/helpers-lib-cjs-es5');
 var trimErrorForTestReporting = helpers.trimErrorForTestReporting;
+var stripErrorStackPaths = helpers.stripErrorStackPaths;
 
 
 
@@ -150,13 +151,6 @@ function lexer_reset() {
   });
   console.error({testset});
 
-  function stripErrorStackPaths(msg) {
-    // strip away devbox-specific paths in error stack traces in the output:
-    msg = msg.replace(/\bat ([^\r\n(\\\/]*?)\([^)]+?([\\\/][a-z0-9_-]+\.js:[0-9]+:[0-9]+)\)/gi, 'at $1($2)');
-    msg = msg.replace(/\bat [^\r\n ]+?([\\\/][a-z0-9_-]+\.js:[0-9]+:[0-9]+)/gi, 'at $1');
-    return msg;
-  }
-
   function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key, err) {
     // and produce an alternative structure to JSON-ify:
     return {
@@ -198,9 +192,12 @@ describe("LEX spec lexer", function () {
     // process this file:
     var title = (filespec.meta ? filespec.meta.title : null);
 
-    // and create a test for it:
+    var testname = 'test: ' + filespec.path.replace(/^.*?\/specs\//, '').replace(/^.*?\/lex\//, '/lex/') + (title ? ' :: ' + title : '');
+    
+    console.error('generate test: ', testname);
 
-    it('test: ' + filespec.path.replace(/^.*?\/specs\//, '').replace(/^.*?\/lex\//, '/lex/') + (title ? ' :: ' + title : ''), function testEachParserExample() {
+    // and create a test for it:
+    it(testname, function testEachParserExample() {
       var err, ast, grammar;
       var tokens = [];
       var lexer = lex.parser.lexer;
@@ -239,12 +236,24 @@ describe("LEX spec lexer", function () {
         }
       } catch (ex) {
         // save the error:
+        tokens.push(-1);
         err = ex;
+        tokens.push({ 
+          fail: 1, 
+          meta: filespec.spec.meta, 
+          err: trimErrorForTestReporting(ex),
+        });
         // and make sure ast !== undefined:
-        tokens.push({ fail: 1, meta: filespec.spec.meta, err: trimErrorForTestReporting(err) });
+        ast = { fail: 1 };
       } finally {
         process.chdir(original_cwd);
       }
+      
+      // also store the number of tokens we received:
+      tokens.unshift(i);
+      // if (lexerSourceCode) {
+      //   tokens.push(lexerSourceCode);
+      // }
 
       // either we check/test the correctness of the collected input, iff there's
       // a reference provided, OR we create the reference file for future use:
@@ -252,8 +261,10 @@ describe("LEX spec lexer", function () {
         space: 2,
         circularRefHandler: testrig_JSON5circularRefHandler
       });
+      
       // strip away devbox-specific paths in error stack traces in the output:
       refOut = stripErrorStackPaths(refOut);
+      
       // and convert it back so we have a `tokens` set that's cleaned up
       // and potentially matching the stored reference set:
       tokens = JSON5.parse(refOut);
@@ -315,7 +326,11 @@ describe("LEX parser", function () {
         // save the error:
         err = ex;
         // and make sure ast !== undefined:
-        ast = { fail: 1, spec: filespec.grammar, err: trimErrorForTestReporting(err) };
+        ast = { 
+          fail: 1, 
+          spec: filespec.grammar, 
+          err: trimErrorForTestReporting(ex) 
+        };
       } finally {
         process.chdir(original_cwd);
       }
