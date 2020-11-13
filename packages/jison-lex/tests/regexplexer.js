@@ -1974,10 +1974,10 @@ describe('Lexer Kernel', function () {
         lexer.setInput(input);
 
         assert.throws(function () {
-                lexer.lex();
-            },
-            JisonLexerError,
-            /Lexical error on line \d+[^]*?You can only invoke reject\(\) in the lexer when the lexer is of the backtracking persuasion/
+            lexer.lex();
+        },
+        JisonLexerError,
+        /Lexical error on line \d+[^]*?You can only invoke reject\(\) in the lexer when the lexer is of the backtracking persuasion/
         );
     });
 

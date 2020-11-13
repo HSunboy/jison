@@ -55,8 +55,8 @@ export default function rmCommonWS(strings, ...values) {
     // the last line in the entire template must be empty when it has ANY trailing
     // whitespace:
     {
-    let a = src[src.length - 1];
-    a[a.length - 1] = a[a.length - 1].replace(/\s+$/, '');
+        let a = src[src.length - 1];
+        a[a.length - 1] = a[a.length - 1].replace(/\s+$/, '');
     }
 
     // Done removing common indentation.
@@ -78,16 +78,16 @@ export default function rmCommonWS(strings, ...values) {
 
     // now merge everything to construct the template result:
     {
-    let rv = [];
-    for (let i = 0, len = values.length; i < len; i++) {
+        let rv = [];
+        for (let i = 0, len = values.length; i < len; i++) {
+            rv.push(src[i].join('\n'));
+            rv.push(values[i]);
+        }
+        // the last value is always followed by a last template string partial:
         rv.push(src[i].join('\n'));
-        rv.push(values[i]);
-    }
-    // the last value is always followed by a last template string partial:
-    rv.push(src[i].join('\n'));
 
-    let sv = rv.join('');
-    return sv;
+        let sv = rv.join('');
+        return sv;
     }
 }
 

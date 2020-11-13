@@ -557,16 +557,15 @@ const lexer_kernel =
      */
     pastInput: function lexer_pastInput(maxSize, maxLines) {
         let past = this.matched.substring(0, this.matched.length - this.match.length);
-        if (maxSize < 0) { 
-            maxSize = Infinity; 
-        } else if (!maxSize) { 
-            maxSize = 20; 
+        if (maxSize < 0) {
+            maxSize = Infinity;
+        } else if (!maxSize) {
+            maxSize = 20;
         }
-        if (maxLines < 0) { 
+        if (maxLines < 0) {
             maxLines = Infinity;          // can't ever have more input lines than this!
-        }
-        else if (!maxLines) { 
-            maxLines = 1; 
+        } else if (!maxLines) {
+            maxLines = 1;
         }
         // `substr` anticipation: treat \r\n as a single character and take a little
         // more than necessary so that we can still properly check against maxSize
@@ -621,17 +620,16 @@ const lexer_kernel =
     upcomingInput: function lexer_upcomingInput(maxSize, maxLines) {
         let next = this.match;
         let source = this._input || '';
-        if (maxSize < 0) { 
-            maxSize = next.length + source.length; 
-        } else if (!maxSize) { 
-            maxSize = 20; 
+        if (maxSize < 0) {
+            maxSize = next.length + source.length;
+        } else if (!maxSize) {
+            maxSize = 20;
         }
-        
-        if (maxLines < 0) { 
+
+        if (maxLines < 0) {
             maxLines = maxSize;          // can't ever have more input lines than this!
-        }
-        else if (!maxLines) { 
-            maxLines = 1; 
+        } else if (!maxLines) {
+            maxLines = 1;
         }
         // `substring` anticipation: treat \r\n as a single character and take a little
         // more than necessary so that we can still properly check against maxSize
@@ -1079,82 +1077,82 @@ const lexer_kernel =
             }
         }
 
-{
-        let rule_ids = spec.rules;
-        let regexes = spec.__rule_regexes;
-        let len = spec.__rule_count;
-        let match;
-        let index;
+        {
+            let rule_ids = spec.rules;
+            let regexes = spec.__rule_regexes;
+            let len = spec.__rule_count;
+            let match;
+            let index;
 
-        // Note: the arrays are 1-based, while `len` itself is a valid index,
-        // hence the non-standard less-or-equal check in the next loop condition!
-        for (let i = 1; i <= len; i++) {
-            let tempMatch = this._input.match(regexes[i]);
-            if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
-                match = tempMatch;
-                index = i;
-                if (this.options.backtrack_lexer) {
-                    let token = this.test_match(tempMatch, rule_ids[i]);
-                    if (token !== false) {
-                        return token;
-                    } else if (this._backtrack) {
-                        match = undefined;
-                        continue; // rule action called reject() implying a rule MISmatch.
-                    } else {
-                        // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-                        return false;
+            // Note: the arrays are 1-based, while `len` itself is a valid index,
+            // hence the non-standard less-or-equal check in the next loop condition!
+            for (let i = 1; i <= len; i++) {
+                let tempMatch = this._input.match(regexes[i]);
+                if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
+                    match = tempMatch;
+                    index = i;
+                    if (this.options.backtrack_lexer) {
+                        let token = this.test_match(tempMatch, rule_ids[i]);
+                        if (token !== false) {
+                            return token;
+                        } else if (this._backtrack) {
+                            match = undefined;
+                            continue; // rule action called reject() implying a rule MISmatch.
+                        } else {
+                            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+                            return false;
+                        }
+                    } else if (!this.options.flex) {
+                        break;
                     }
-                } else if (!this.options.flex) {
-                    break;
                 }
             }
-        }
-        
-        if (match) {
-            let token = this.test_match(match, rule_ids[index]);
-            if (token !== false) {
-                return token;
+
+            if (match) {
+                let token = this.test_match(match, rule_ids[index]);
+                if (token !== false) {
+                    return token;
+                }
+                // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+                return false;
             }
-            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-            return false;
         }
-        }
-        
+
         if (!this._input) {
             this.done = true;
             this.clear();
             return this.EOF;
         }
-        
+
         {
-        let lineno_msg = 'Lexical error';
-        if (this.yylloc) {
-            lineno_msg += ' on line ' + (this.yylineno + 1);
-        }
-        const p = this.constructLexErrorInfo(lineno_msg + ': Unrecognized text.', this.options.lexerErrorsAreRecoverable);
+            let lineno_msg = 'Lexical error';
+            if (this.yylloc) {
+                lineno_msg += ' on line ' + (this.yylineno + 1);
+            }
+            const p = this.constructLexErrorInfo(lineno_msg + ': Unrecognized text.', this.options.lexerErrorsAreRecoverable);
 
-        let pendingInput = this._input;
-        let activeCondition = this.topState();
-        let conditionStackDepth = this.conditionStack.length;
+            let pendingInput = this._input;
+            let activeCondition = this.topState();
+            let conditionStackDepth = this.conditionStack.length;
 
-        let token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
-        if (token === this.ERROR) {
+            let token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
+            if (token === this.ERROR) {
                 // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
                 // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
                 // has not consumed/modified any pending input or changed state in the error handler:
-            if (!this.matches &&
+                if (!this.matches &&
                     // and make sure the input has been modified/consumed ...
                     pendingInput === this._input &&
                     // ...or the lexer state has been modified significantly enough
                     // to merit a non-consuming error handling action right now.
                     activeCondition === this.topState() &&
                     conditionStackDepth === this.conditionStack.length
-            ) {
-                this.input();
+                ) {
+                    this.input();
+                }
             }
+            return token;
         }
-        return token;
-}
     },
 
     /**
@@ -1356,7 +1354,7 @@ const lexer_kernel =
      * @this {RegExpLexer}
      */
     topState: function lexer_topState(n) {
-        const n = this.conditionStack.length - 1 - Math.abs(n || 0);
+        n = this.conditionStack.length - 1 - Math.abs(n || 0);
         if (n >= 0) {
             return this.conditionStack[n];
         }

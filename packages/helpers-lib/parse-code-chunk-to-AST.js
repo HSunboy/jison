@@ -890,7 +890,7 @@ function compileCodeToES5(src, options) {
 
 
 function prettyPrintAST(ast, options) {
-    let options = options || {};
+    options = options || {};
     const defaultOptions = {
         tabWidth: 2,
         quote: 'single',
