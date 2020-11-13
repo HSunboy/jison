@@ -79,7 +79,8 @@ export default function rmCommonWS(strings, ...values) {
     // now merge everything to construct the template result:
     {
         let rv = [];
-        for (let i = 0, len = values.length; i < len; i++) {
+        let i = 0;
+        for (let len = values.length; i < len; i++) {
             rv.push(src[i].join('\n'));
             rv.push(values[i]);
         }
@@ -90,4 +91,3 @@ export default function rmCommonWS(strings, ...values) {
         return sv;
     }
 }
-
