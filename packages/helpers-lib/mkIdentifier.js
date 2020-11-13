@@ -2,8 +2,8 @@
 // https://www.ecma-international.org/ecma-262/6.0/#sec-reserved-words
 const reservedWords = ((list) => {
     let rv = new Set();
-    for (let w in list) {
-        console.error('reserved word:', w);
+    for (let w of list) {
+        //console.error('reserved word:', w);
         rv.add(w);
     }
     return rv;
