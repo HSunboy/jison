@@ -3,7 +3,7 @@ import XRegExp from '@gerhobbelt/xregexp';
 
 //import assert from 'assert';
 
-var devDebug = 0;
+let devDebug = 0;
 
 // WARNING: this regex MUST match the regex for `ID` in ebnf-parser::bnf.l jison language lexer spec! (`ID = [{ALPHA}]{ALNUM}*`)
 //
@@ -15,9 +15,9 @@ const ID_REGEX_BASE = '[\\p{Alphabetic}_][\\p{Alphabetic}_\\p{Number}]*';
 // guaranteed not to collide with previously generated / already existing
 // rules (~ symbols).
 function generateUniqueSymbol(id, postfix, opts) {
-    var sym = id + postfix;
+    let sym = id + postfix;
     if (opts.grammar[sym]) {
-        var i = 2;              // the first occurrence won't have a number, this is already a collision, so start numbering at *2*.
+        let i = 2;              // the first occurrence won't have a number, this is already a collision, so start numbering at *2*.
         do {
             sym = id + postfix + i;
             i++;
@@ -27,8 +27,8 @@ function generateUniqueSymbol(id, postfix, opts) {
 }
 
 function generatePushAction(handle, offset) {
-    var terms = handle.terms;
-    var rv = [];
+    const terms = handle.terms;
+    let rv = [];
 
     for (var i = 0, len = terms.length; i < len; i++) {
         rv.push('$' + (i + offset));
@@ -44,11 +44,11 @@ function generatePushAction(handle, offset) {
 }
 
 function transformExpression(e, opts, emit) {
-    var type = e[0],
-        value = e[1],
-        name = false,
-        has_transformed = 0;
-    var list, n;
+    let type = e[0];
+    let value = e[1];
+    let name = false;
+    let has_transformed = 0;
+    let list, n;
 
     if (type === 'xalias') {
         type = e[1];
@@ -78,7 +78,7 @@ function transformExpression(e, opts, emit) {
         has_transformed = 1;
 
         opts = optsForProduction(name, opts.grammar);
-        list = transformExpressionList([value], opts);
+        list = transformExpressionList([ value ], opts);
         opts.grammar[name] = [
             [
                 list.fragment,
@@ -99,7 +99,7 @@ function transformExpression(e, opts, emit) {
         has_transformed = 1;
 
         opts = optsForProduction(name, opts.grammar);
-        list = transformExpressionList([value], opts);
+        list = transformExpressionList([ value ], opts);
         opts.grammar[name] = [
             [
                 '',
@@ -120,7 +120,7 @@ function transformExpression(e, opts, emit) {
         has_transformed = 1;
 
         opts = optsForProduction(name, opts.grammar);
-        list = transformExpressionList([value], opts);
+        list = transformExpressionList([ value ], opts);
         // you want to be able to check if 0 or 1 occurrences were recognized: since jison
         // by default *copies* the lexer token value, i.e. `$$ = $1` is the (optional) default action,
         // we will need to set the action up explicitly in case of the 0-count match:
@@ -158,7 +158,7 @@ function transformExpression(e, opts, emit) {
 
             opts = optsForProduction(name, opts.grammar);
             opts.grammar[name] = value.map(function (handle) {
-                var list = transformExpressionList(handle, opts);
+                let list = transformExpressionList(handle, opts);
                 return [
                     list.fragment,
                     '$$ = ' + generatePushAction(list, 1) + ';'
@@ -171,11 +171,11 @@ function transformExpression(e, opts, emit) {
 }
 
 function transformExpressionList(list, opts) {
-    var first_transformed_term_index = false;
-    var terms = list.reduce(function (tot, e) {
-        var ci = tot.length;
+    let first_transformed_term_index = false;
+    let terms = list.reduce(function (tot, e) {
+        let ci = tot.length;
 
-        var has_transformed = transformExpression(e, opts, function (name) {
+        let has_transformed = transformExpression(e, opts, function (name) {
             if (name.terms) {
                 tot.push.apply(tot, name.terms);
             } else {
@@ -204,48 +204,48 @@ function optsForProduction(id, grammar) {
 }
 
 function transformProduction(id, production, grammar) {
-    var transform_opts = optsForProduction(id, grammar);
+    let transform_opts = optsForProduction(id, grammar);
     return production.map(function (handle) {
-        var action = null,
-            opts = null;
-        var i, len, n;
+        let action = null;
+        let opts = null;
+        let i, len, n;
 
         if (typeof handle !== 'string') {
             action = handle[1];
             opts = handle[2];
             handle = handle[0];
         }
-        var expressions = handle;
+        let expressions = handle;
         if (typeof expressions === 'string') {
             expressions = parser.parse(handle);
         }
 
         if (devDebug > 1) console.log('\n================\nEBNF transform expressions:\n ', handle, opts, JSON.stringify(expressions, null, 2));
 
-        var list = transformExpressionList(expressions, transform_opts);
+        let list = transformExpressionList(expressions, transform_opts);
 
-        var ret = [list.fragment];
+        let ret = [ list.fragment ];
         if (action) {
             // make sure the action doesn't address any inner items.
             if (list.first_transformed_term_index) {
-                var rhs = list.fragment;
+                let rhs = list.fragment;
                 // seek out all names and aliases; strip out literal tokens first as those cannot serve as $names:
-                var alist = list.terms; // rhs.replace(/'[^']+'/g, '~').replace(/"[^"]+"/g, '~').split(' ');
+                let alist = list.terms; // rhs.replace(/'[^']+'/g, '~').replace(/"[^"]+"/g, '~').split(' ');
                 // we also know at which index the first transformation occurred:
-                var first_index = list.first_transformed_term_index - 1;
+                let first_index = list.first_transformed_term_index - 1;
                 if (devDebug > 2) console.log('alist ~ rhs rule terms: ', alist, rhs);
 
-                var alias_re = new XRegExp(`\\[${ID_REGEX_BASE}\\]`);
-                var term_re = new XRegExp(`^${ID_REGEX_BASE}$`);
+                let alias_re = new XRegExp(`\\[${ID_REGEX_BASE}\\]`);
+                let term_re = new XRegExp(`^${ID_REGEX_BASE}$`);
                 // and collect the PERMITTED aliases: the names of the terms and all the remaining aliases
-                var good_aliases = {};
-                var alias_cnt = {};
-                var donotalias = {};
+                let good_aliases = {};
+                let alias_cnt = {};
+                let donotalias = {};
 
                 // WARNING: this replicates the knowledge/code of jison.js::addName()
-                var addName = function addNameEBNF(s, i) {
-                    var base = s.replace(/[0-9]+$/, '');
-                    var dna = donotalias[base];
+                let addName = function addNameEBNF(s, i) {
+                    let base = s.replace(/[0-9]+$/, '');
+                    let dna = donotalias[base];
 
                     if (good_aliases[s]) {
                         alias_cnt[s]++;
@@ -264,7 +264,7 @@ function transformProduction(id, production, grammar) {
                 };
 
                 // WARNING: this replicates the knowledge/code of jison.js::markBasename()
-                var markBasename = function markBasenameEBNF(s) {
+                let markBasename = function markBasenameEBNF(s) {
                     if (/[0-9]$/.test(s)) {
                         s = s.replace(/[0-9]+$/, '');
                         donotalias[s] = true;
@@ -297,22 +297,24 @@ function transformProduction(id, production, grammar) {
                         addName(term, i);
                     }
                 }
-                if (devDebug > 2) console.log('good_aliases: ', {
-                    donotalias: donotalias,
-                    good_aliases: good_aliases,
-                    alias_cnt: alias_cnt,
-                });
+                if (devDebug > 2) {
+                    console.log('good_aliases: ', {
+                        donotalias: donotalias,
+                        good_aliases: good_aliases,
+                        alias_cnt: alias_cnt
+                    });
+                }
 
                 // now scan the action for all named and numeric semantic values ($nonterminal / $1 / @1, ##1, ...)
                 //
                 // Note that `#name` are straight **static** symbol translations, which are okay as they don't
-                // require access to the parse stack: `#n` references can be resolved completely 
+                // require access to the parse stack: `#n` references can be resolved completely
                 // at grammar compile time.
                 //
-                var nameref_re = new XRegExp(`(?:[$@]|##)${ID_REGEX_BASE}`, 'g');
-                var named_spots = nameref_re.exec(action);
-                var numbered_spots = action.match(/(?:[$@]|##)[0-9]+\b/g);
-                var max_term_index = list.terms.length;
+                let nameref_re = new XRegExp(`(?:[$@]|##)${ID_REGEX_BASE}`, 'g');
+                let named_spots = nameref_re.exec(action);
+                let numbered_spots = action.match(/(?:[$@]|##)[0-9]+\b/g);
+                let max_term_index = list.terms.length;
                 if (devDebug > 2) console.log('ACTION named_spots: ', named_spots);
                 if (devDebug > 2) console.log('ACTION numbered_spots: ', numbered_spots);
 
@@ -344,7 +346,7 @@ function transformProduction(id, production, grammar) {
                     for (i = 0, len = numbered_spots.length; i < len; i++) {
                         n = parseInt(numbered_spots[i].replace(/^(?:[$@]|##)/, ''));
                         if (n > max_term_index) {
-                            /* @const */ var n_suffixes = [ 'st', 'nd', 'rd', 'th' ];
+                            /* @const */ let n_suffixes = [ 'st', 'nd', 'rd', 'th' ];
                             throw new Error('The action block references the ' + n + n_suffixes[Math.max(0, Math.min(3, n - 1))] + ' term, ' +
                                             'which is not available in production "' + handle + '"; ' +
                                             'Be reminded that you cannot reference sub-elements within EBNF */+/? groups, ' +
@@ -363,14 +365,14 @@ function transformProduction(id, production, grammar) {
 
         if (ret.length === 1) {
             return ret[0];
-        } else {
-            return ret;
         }
-    });
-};
+        return ret;
 
-var ref_list;
-var ref_names;
+    });
+}
+
+let ref_list;
+let ref_names;
 
 // create a deep copy of the input, so we will keep the input constant.
 function deepClone(from, sub) {
@@ -385,7 +387,7 @@ function deepClone(from, sub) {
         return from;
     }
 
-    var idx = ref_list.indexOf(from);
+    let idx = ref_list.indexOf(from);
     if (idx >= 0) {
         throw new Error('[Circular/Xref:' + ref_names[i] + ']');   // circular or cross reference
     }
@@ -401,7 +403,7 @@ function deepClone(from, sub) {
         sub += '.';
 
         var to = new from.constructor();
-        for (var name in from) {
+        for (let name in from) {
             to[name] = deepClone(from[name], sub + name);
         }
     }
@@ -416,11 +418,11 @@ function transformGrammar(grammar) {
     });
 
     return grammar;
-};
+}
 
 function transform(ebnf) {
     if (devDebug > 0) console.log('EBNF:\n ', JSON.stringify(ebnf, null, 2));
-    var rv = transformGrammar(ebnf);
+    let rv = transformGrammar(ebnf);
     if (devDebug > 0) console.log('\n\nEBNF after transformation:\n ', JSON.stringify(rv, null, 2));
 
     return rv;

@@ -5,9 +5,9 @@ import commonjs from 'rollup-plugin-commonjs';
 import base from '../../rollup.config-template.js';
 
 export default Object.assign(base, {
-  input: 'cli.js',
+    input: 'cli.js',
   //treeshake: false,
-  output: [
+    output: [
   	  {
 	    file: 'dist/cli-cjs.js',
 	    format: 'cjs'
@@ -21,6 +21,6 @@ export default Object.assign(base, {
 	    name: 'jison-lex',
 	    format: 'umd'
 	  }
-  ],
+    ]
 });
 

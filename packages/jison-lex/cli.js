@@ -4,17 +4,15 @@ import path from 'path';
 import nomnom from '@gerhobbelt/nomnom';
 
 import helpers from '../helpers-lib';
-var mkIdentifier = helpers.mkIdentifier;
+const mkIdentifier = helpers.mkIdentifier;
 
 import RegExpLexer from './regexp-lexer.js';
 
-var version = '0.6.2-220';                              // require('./package.json').version;
+const version = '0.6.2-220';                              // require('./package.json').version;
 
 
 function getCommandlineOptions() {
-    'use strict';
-
-    var opts = nomnom
+    let opts = nomnom
         .script('jison-lex')
         .unknownOptionTreatment(false)              // do not accept unknown options!
         .options({
@@ -64,7 +62,7 @@ function getCommandlineOptions() {
                 abbr: 'm',
                 default: 'commonjs',
                 metavar: 'TYPE',
-                choices: ['commonjs', 'amd', 'js', 'es'],
+                choices: [ 'commonjs', 'amd', 'js', 'es' ],
                 help: 'The type of module to generate (commonjs, amd, es, js)'
             },
             moduleName: {
@@ -98,7 +96,7 @@ function getCommandlineOptions() {
         }).parse();
 
     if (opts.debug) {
-        console.log("JISON-LEX CLI options:\n", opts);
+        console.log('JISON-LEX CLI options:\n', opts);
     }
 
     return opts;
@@ -126,7 +124,7 @@ function cliMain(opts) {
             return true;
         } catch (e) {
             if (e.code === 'ENOENT') {
-                var parent = path.dirname(fp);
+                let parent = path.dirname(fp);
                 // Did we hit the root directory by now? If so, abort!
                 // Else, create the parent; iff that fails, we fail too...
                 if (parent !== fp && mkdirp(parent)) {
@@ -145,17 +143,17 @@ function cliMain(opts) {
 
     function processInputFile() {
         // getting raw files
-        var lex;
-        var original_cwd = process.cwd();
+        let lex;
+        let original_cwd = process.cwd();
 
-        var raw = fs.readFileSync(path.normalize(opts.file), 'utf8');
+        let raw = fs.readFileSync(path.normalize(opts.file), 'utf8');
 
         // making best guess at json mode
         opts.json = path.extname(opts.file) === '.json' || opts.json;
 
         // When only the directory part of the output path was specified, then we
         // do NOT have the target module name in there as well!
-        var outpath = opts.outfile;
+        let outpath = opts.outfile;
         if (typeof outpath === 'string') {
             if (/[\\\/]$/.test(outpath) || isDirectory(outpath)) {
                 opts.outfile = null;
@@ -174,7 +172,7 @@ function cliMain(opts) {
 
         // setting output file name and module name based on input file name
         // if they aren't specified.
-        var name = path.basename(opts.outfile || opts.file);
+        let name = path.basename(opts.outfile || opts.file);
 
         // get the base name (i.e. the file name without extension)
         // i.e. strip off only the extension and keep any other dots in the filename
@@ -187,10 +185,10 @@ function cliMain(opts) {
 
         // Change CWD to the directory where the source grammar resides: this helps us properly
         // %include any files mentioned in the grammar with relative paths:
-        var new_cwd = path.dirname(path.normalize(opts.file));
+        let new_cwd = path.dirname(path.normalize(opts.file));
         process.chdir(new_cwd);
 
-        var lexer = cli.generateLexerString(raw, opts);
+        let lexer = cli.generateLexerString(raw, opts);
 
         // and change back to the CWD we started out with:
         process.chdir(original_cwd);
@@ -202,8 +200,8 @@ function cliMain(opts) {
     }
 
     function readin(cb) {
-        var stdin = process.openStdin(),
-        data = '';
+        const stdin = process.openStdin();
+        let data = '';
 
         stdin.setEncoding('utf8');
         stdin.addListener('data', function (chunk) {
@@ -230,10 +228,8 @@ function cliMain(opts) {
 
 
 function generateLexerString(lexerSpec, opts) {
-    'use strict';
-
     // var settings = RegExpLexer.mkStdOptions(opts);
-    var predefined_tokens = null;
+    let predefined_tokens = null;
 
     return RegExpLexer.generate(lexerSpec, predefined_tokens, opts);
 }
@@ -248,7 +244,7 @@ export default cli;
 
 
 if (require.main === module) {
-    var opts = getCommandlineOptions();
+    const opts = getCommandlineOptions();
     cli.main(opts);
 }
 

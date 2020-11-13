@@ -25,7 +25,7 @@ rules:
   array-bracket-spacing:  [ 2, "always", { "singleValue": true, "objectsInArrays": true, "arraysInArrays": true } ]
   block-scoped-var:       1
   block-spacing:          2
-  brace-style:            [ 2, '1tbs', { allowSingleLine: true } ]
+  brace-style:            [ 1, '1tbs', { allowSingleLine: true } ]
   # Postponed
   #callback-return:        2
   comma-dangle:           2
@@ -64,7 +64,7 @@ rules:
   no-caller:              2
   no-case-declarations:   1
   no-catch-shadow:        1
-  no-cond-assign:         2
+  no-cond-assign:         1
   no-console:             1
   no-constant-condition:  1
   no-control-regex:       1
@@ -76,7 +76,7 @@ rules:
   no-duplicate-case:      2
   no-else-return:         2
   # Tend to drop
-  # no-empty:               1
+  no-empty:               1
   no-empty-character-class: 2
   no-empty-pattern:       2
   no-eq-null:             1
@@ -92,7 +92,7 @@ rules:
   # Postponed
   #no-implicit-coercion:   [2, { "boolean": true, "number": true, "string": true } ]
   no-implied-eval:        2
-  no-inner-declarations:  2
+  no-inner-declarations:  1
   no-invalid-regexp:      2
   no-irregular-whitespace: 2
   no-iterator:            2
@@ -118,7 +118,7 @@ rules:
   no-obj-calls:           2
   no-octal:               2
   no-octal-escape:        2
-  no-path-concat:         2
+  no-path-concat:         1
   no-proto:               2
   no-prototype-builtins:  1
   no-redeclare:           1
@@ -127,7 +127,7 @@ rules:
   no-return-assign:       2
   no-script-url:          2
   no-self-compare:        2
-  no-sequences:           2
+  no-sequences:           1
   no-shadow:              1
   no-shadow-restricted-names: 2
   no-sparse-arrays:       2
@@ -136,10 +136,11 @@ rules:
   no-undef-init:          2
   no-undefined:           1
   no-unexpected-multiline: 2
-  no-unreachable:         2
+  no-unreachable:         1
   no-unused-expressions:  2
   no-unused-vars:         1
   no-use-before-define:   1
+  no-useless-catch:       1
   no-useless-escape:      1
   no-var:                 1
   no-void:                2

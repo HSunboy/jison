@@ -11,7 +11,7 @@ function chkBugger(src) {
 /// HELPER FUNCTION: print the function in source code form, properly indented.
 /** @public */
 function printFunctionSourceCode(f) {
-    var src = String(f);
+    const src = String(f);
     chkBugger(src);
     return src;
 }
@@ -23,24 +23,24 @@ const arrowFuncRe = /^(?:(?:\(([^\)]*)\))|(?:([^\(\)]+)))[\s\r\n]*=>[\s\r\n]*(?:
 
 /// HELPER FUNCTION: print the function **content** in source code form, properly indented,
 /// ergo: produce the code for inlining the function.
-/// 
+///
 /// Also supports ES6's Arrow Functions:
-/// 
+///
 /// ```
 /// function a(x) { return x; }        ==> 'return x;'
 /// function (x)  { return x; }        ==> 'return x;'
 /// (x) => { return x; }               ==> 'return x;'
 /// (x) => x;                          ==> 'return x;'
 /// (x) => do(1), do(2), x;            ==> 'return (do(1), do(2), x);'
-/// 
+///
 /** @public */
 function printFunctionSourceCodeContainer(f) {
-    var action = printFunctionSourceCode(f).trim();
-    var args;
+    let action = printFunctionSourceCode(f).trim();
+    let args;
 
     // Also cope with Arrow Functions (and inline those as well?).
     // See also https://github.com/zaach/jison-lex/issues/23
-    var m = funcRe.exec(action);
+    let m = funcRe.exec(action);
     if (m) {
         args = m[1].trim();
         action = m[2].trim();
@@ -57,8 +57,8 @@ function printFunctionSourceCodeContainer(f) {
             if (m[5]) {
                 // non-bracketed version: implicit `return` statement!
                 //
-                // Q: Must we make sure we have extra braces around the return value 
-                // to prevent JavaScript from inserting implit EOS (End Of Statement) 
+                // Q: Must we make sure we have extra braces around the return value
+                // to prevent JavaScript from inserting implit EOS (End Of Statement)
                 // markers when parsing this, when there are newlines in the code?
                 // A: No, we don't have to as arrow functions rvalues suffer from this
                 // same problem, hence the arrow function's programmer must already
@@ -69,14 +69,14 @@ function printFunctionSourceCodeContainer(f) {
                 action = m[3].trim();
             }
         } else {
-            var e = new Error('Cannot extract code from function');
+            const e = new Error('Cannot extract code from function');
             e.subject = action;
             throw e;
         }
     }
     return {
         args: args,
-        code: action,
+        code: action
     };
 }
 
@@ -87,6 +87,6 @@ function printFunctionSourceCodeContainer(f) {
 
 
 export default {
-	printFunctionSourceCode,
-	printFunctionSourceCodeContainer,
+    printFunctionSourceCode,
+    printFunctionSourceCodeContainer
 };

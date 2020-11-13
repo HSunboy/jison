@@ -1,17 +1,17 @@
-var assert = require("chai").assert;
-var Jison = require('../setup').Jison;
-var Lexer = require('../setup').Lexer;
-//var globby = require('globby');
-var fs = require('fs');
-var path = require('path');
-var helpers = require('../../packages/helpers-lib');
-var code_exec = helpers.exec;
+const assert = require('chai').assert;
+const Jison = require('../setup').Jison;
+const Lexer = require('../setup').Lexer;
+//const globby = require('globby');
+const fs = require('fs');
+const path = require('path');
+const helpers = require('../../packages/helpers-lib');
+const code_exec = helpers.exec;
 
 
-var lexData = {
+const lexData = {
     rules: [
-       ['x', 'return "x";'],
-       ['y', 'return "y";']
+        [ 'x', 'return "x";' ],
+        [ 'y', 'return "y";' ]
     ]
 };
 
@@ -19,225 +19,225 @@ var lexData = {
 
 
 const test_list = [
-  {
-    name: 'issue-289',
-    __ignore__: true,
-  },
-  {
-    name: 'issue-lex-23',
-    inputs: [
-      '1 + 2 + 3 + 4 + 5\n'
-    ],
-    parseResult: 15,
-  },
-  {
-    name: 'error-handling-and-yyclearin',
-    inputs: [
-      'A\nB A\nA\nA\n'
-    ],
-  },
-  {
-    name: 'error-handling-and-yyerrok-macro',
-    inputs: [
-      'A\nB A\nA\nA\n'
-    ],
-  },
-  {
-    name: 'error-handling-and-yyerrok-part3',
-    inputs: [
-      '    zz ;'      +
-      '    ( zz ) ;'  +
-      '    ( zz ;'    +
-      '    zz ;'      +
-      '    zz ;'      +
-      '    zz );'     +
-      '    zz ;' 
-    ],
-  },
-  {
-    name: 'error-recognition-actions',
-    inputs: [
-      'A\nB A\nA\nA\n'
-    ],
-  },
-  {
-    name: 'no-prec-hack-needed',
-    __ignore__: true,
-  },
-  {
-    name: 'yacc-error-recovery',
-    __ignore__: true,
-  },
-  {
-    name: 'with_custom_lexer',
-    __ignore__: true,
-  },
-  {
-    name: 'parser-to-lexer-communication-test--profiling',
-    type: 'lr',
-  },
-  {
-    name: 'parser-to-lexer-communication-test',
-    type: 'lr',
-    __ignore__: true,
-  },
-  {
-    name: 'faking-multiple-start-rules',
-    __ignore__: true,
-  },
-  {
-    name: 'faking-multiple-start-rules-alt',
-    __ignore__: true,
-  },
-  {
-    name: 'lalr-but-not-slr',
-    type: 'lalr',
-  },
-  {
-    name: 'lr-but-not-lalr',
-    type: 'lr',
-  },
-  {
-    name: 'test-propagation-rules-reduction-1',
-    reportStats: true,
-    exportAllTables: true,
-    __check__: function (p, spec, rv, tables) {
-      assert.equal(p.unused_productions.length, 0, 'grammar must report it found 0 unused rules');
-      assert.equal(tables.parseTable.length, 7, 'grammar must report it has 7 states in the parse table');
-      assert.equal(Object.keys(tables.defaultParseActions).length, 5, 'grammar must report it has 7 default action rows in the parse table');
-      assert.equal(tables.parseProductions.length, 5, 'grammar must report it has 5 productions');
+    {
+        name: 'issue-289',
+        __ignore__: true
+    },
+    {
+        name: 'issue-lex-23',
+        inputs: [
+            '1 + 2 + 3 + 4 + 5\n'
+        ],
+        parseResult: 15
+    },
+    {
+        name: 'error-handling-and-yyclearin',
+        inputs: [
+            'A\nB A\nA\nA\n'
+        ]
+    },
+    {
+        name: 'error-handling-and-yyerrok-macro',
+        inputs: [
+            'A\nB A\nA\nA\n'
+        ]
+    },
+    {
+        name: 'error-handling-and-yyerrok-part3',
+        inputs: [
+            '    zz ;'      +
+            '    ( zz ) ;'  +
+            '    ( zz ;'    +
+            '    zz ;'      +
+            '    zz ;'      +
+            '    zz );'     +
+            '    zz ;'
+        ]
+    },
+    {
+        name: 'error-recognition-actions',
+        inputs: [
+            'A\nB A\nA\nA\n'
+        ]
+    },
+    {
+        name: 'no-prec-hack-needed',
+        __ignore__: true
+    },
+    {
+        name: 'yacc-error-recovery',
+        __ignore__: true
+    },
+    {
+        name: 'with_custom_lexer',
+        __ignore__: true
+    },
+    {
+        name: 'parser-to-lexer-communication-test--profiling',
+        type: 'lr'
+    },
+    {
+        name: 'parser-to-lexer-communication-test',
+        type: 'lr',
+        __ignore__: true
+    },
+    {
+        name: 'faking-multiple-start-rules',
+        __ignore__: true
+    },
+    {
+        name: 'faking-multiple-start-rules-alt',
+        __ignore__: true
+    },
+    {
+        name: 'lalr-but-not-slr',
+        type: 'lalr'
+    },
+    {
+        name: 'lr-but-not-lalr',
+        type: 'lr'
+    },
+    {
+        name: 'test-propagation-rules-reduction-1',
+        reportStats: true,
+        exportAllTables: true,
+        __check__: function (p, spec, rv, tables) {
+            assert.equal(p.unused_productions.length, 0, 'grammar must report it found 0 unused rules');
+            assert.equal(tables.parseTable.length, 7, 'grammar must report it has 7 states in the parse table');
+            assert.equal(Object.keys(tables.defaultParseActions).length, 5, 'grammar must report it has 7 default action rows in the parse table');
+            assert.equal(tables.parseProductions.length, 5, 'grammar must report it has 5 productions');
+        }
+    },
+    {
+        name: 'test-propagation-rules-reduction-2',
+        reportStats: true,
+        exportAllTables: true,
+        __check__: function (p, spec, rv, tables) {
+            assert.equal(p.unused_productions.length, 4, 'grammar must report it found 4 unused rules');
+            assert.equal(tables.parseTable.length, 3, 'grammar must report it has 3 states in the parse table');
+            assert.equal(Object.keys(tables.defaultParseActions).length, 1, 'grammar must report it has 1 default action rows in the parse table');
+            assert.equal(tables.parseProductions.length, 5, 'grammar must report it has 5 productions');
+        }
+    },
+    {
+        name: 'test-unused-rules-reporting',
+        reportStats: true,
+        __check__: function (p, spec) {
+            assert.equal(p.unused_productions.length, 3, 'grammar must report it found 3 unused rules');
+        }
+    },
+    {
+        name: 'test-unused-rules-reporting-alt',
+        reportStats: true,
+        __check__: function (p, spec) {
+            assert.equal(p.unused_productions.length, 3, 'grammar must report it found 3 unused rules');
+        }
+    },
+    {
+        name: 'compound-include-path-must-be-in-quotes',
+        fail: true
     }
-  },
-  {
-    name: 'test-propagation-rules-reduction-2',
-    reportStats: true,
-    exportAllTables: true,
-    __check__: function (p, spec, rv, tables) {
-      assert.equal(p.unused_productions.length, 4, 'grammar must report it found 4 unused rules');
-      assert.equal(tables.parseTable.length, 3, 'grammar must report it has 3 states in the parse table');
-      assert.equal(Object.keys(tables.defaultParseActions).length, 1, 'grammar must report it has 1 default action rows in the parse table');
-      assert.equal(tables.parseProductions.length, 5, 'grammar must report it has 5 productions');
-    }
-  },
-  {
-    name: 'test-unused-rules-reporting',
-    reportStats: true,
-    __check__: function (p, spec) {
-      assert.equal(p.unused_productions.length, 3, 'grammar must report it found 3 unused rules');
-    }
-  },
-  {
-    name: 'test-unused-rules-reporting-alt',
-    reportStats: true,
-    __check__: function (p, spec) {
-      assert.equal(p.unused_productions.length, 3, 'grammar must report it found 3 unused rules');
-    }
-  },
-  {
-    name: 'compound-include-path-must-be-in-quotes',
-    fail: true,
-  },
 ];
 
 console.log('exec globby....', __dirname);
 // var testset = globby.sync([
 //   __dirname + '/../../examples/*.jison',
-//   __dirname + '/../../examples/issue-lex-*.js', 
+//   __dirname + '/../../examples/issue-lex-*.js',
 // ]);
-var testset = fs.readFileSync(__dirname + '/../../examples/testset1.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/../../examples' + l.trim().replace(/^\./, ''));
+let testset = fs.readFileSync(__dirname + '/../../examples/testset1.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/../../examples' + l.trim().replace(/^\./, ''));
 testset = testset.sort().map(function (filepath) {
-  for (var j = 0, lj = test_list.length; j < lj; j++) {
-    var fstr = test_list[j].name;
-    var pos = filepath.indexOf(fstr);
+    for (let j = 0, lj = test_list.length; j < lj; j++) {
+        let fstr = test_list[j].name;
+        let pos = filepath.indexOf(fstr);
     // console.log('pos: ', pos, filepath, fstr);
-    if (pos > 0) {
-      var to = Object.assign({
-        path: filepath,
-      }, test_list[j]);
-      return to;
+        if (pos > 0) {
+            let to = Object.assign({
+                path: filepath
+            }, test_list[j]);
+            return to;
+        }
     }
-  }
-  return {
-    name: path.basename(filepath),
-    path: filepath
-  };
+    return {
+        name: path.basename(filepath),
+        path: filepath
+    };
 })
 .filter(function (t) {
-  return !!t;
+    return !!t;
 });
 console.log('testset....', testset);
 
-var original_cwd = process.cwd();
+const original_cwd = process.cwd();
 
 
-describe("Example/Test Grammars", function () {
-  testset.forEach(function (filespec) {
+describe('Example/Test Grammars', function () {
+    testset.forEach(function (filespec) {
     // process this file:
-    it('test example: ' + filespec.path.replace(/^.*?\/examples\//, ''), function test_one_example_grammar_now() {
-      var grammar;
+        it('test example: ' + filespec.path.replace(/^.*?\/examples\//, ''), function test_one_example_grammar_now() {
+            let grammar;
 
-      if (filespec.path.match(/\.js$/)) {
-        grammar = require(filespec.path);
-      } else {
-        grammar = fs.readFileSync(filespec.path, 'utf8').replace(/\r\n|\r/g, '\n');
-      }
+            if (filespec.path.match(/\.js$/)) {
+                grammar = require(filespec.path);
+            } else {
+                grammar = fs.readFileSync(filespec.path, 'utf8').replace(/\r\n|\r/g, '\n');
+            }
 
-      // Change CWD to the directory where the source grammar resides: this helps us properly
-      // %include any files mentioned in the grammar with relative paths:
-      var new_cwd = path.dirname(path.normalize(filespec.path));
-      process.chdir(new_cwd);
+            // Change CWD to the directory where the source grammar resides: this helps us properly
+            // %include any files mentioned in the grammar with relative paths:
+            let new_cwd = path.dirname(path.normalize(filespec.path));
+            process.chdir(new_cwd);
 
-      var options = {
-        json: true
-      };
-      for (var k in filespec) {
-        if (k !== 'path' && k !== 'inputs' && k !== '__check__' && k !== 'exportAllTables') {
-          options[k] = filespec[k];
-        }
-        if (k === 'exportAllTables') {
-          options.exportAllTables = {};
-        }
-      }
-      //options.exportSourceCode = {};
-      options.file = filespec.path;
-      var parser = new Jison.Parser(grammar, options);
-      var rv;
+            let options = {
+                json: true
+            };
+            for (let k in filespec) {
+                if (k !== 'path' && k !== 'inputs' && k !== '__check__' && k !== 'exportAllTables') {
+                    options[k] = filespec[k];
+                }
+                if (k === 'exportAllTables') {
+                    options.exportAllTables = {};
+                }
+            }
+            //options.exportSourceCode = {};
+            options.file = filespec.path;
+            let parser = new Jison.Parser(grammar, options);
+            let rv;
 
-      // and change back to the CWD we started out with:
-      process.chdir(original_cwd);
+            // and change back to the CWD we started out with:
+            process.chdir(original_cwd);
 
-      if (filespec.__ignore__) {
-        return;
-      }
+            if (filespec.__ignore__) {
+                return;
+            }
 
-      code_exec(String(parser.parse), function test_exec() {
-        var expected_rv = (filespec.parseResult !== undefined ? filespec.parseResult : true);
-        
-        if (typeof parser.main === 'function') {
-          assert.ok(!parser.main(), 'main() is supposed to produce zero ~ success');
-        } else if (filespec.inputs) {
-          for (var i = 0, l = filespec.inputs.length; i < l; i++) {
-            rv = parser.parse(filespec.inputs[i]);
-            console.log('parse A: ', filespec.inputs[i], rv);
-            assert.strictEqual(rv, expected_rv, 'parser.parse() is supposed to produce TRUE');
-          }
-        } else {
-          rv = parser.parse('zz; yy; zz;zz ;');
-          console.log('parse B: ', path.basename(filespec.path), rv);
-          assert.strictEqual(rv, expected_rv, 'parser.parse() is supposed to produce TRUE');
-        }
-      }, {
-        dumpSourceCodeOnFailure: true,
-        throwErrorOnCompileFailure: true,
-        inputFilename: parser.options.inputFilename,
-        inputPath: parser.options.inputPath,
-      }, "test");
+            code_exec(String(parser.parse), function test_exec() {
+                let expected_rv = (filespec.parseResult !== undefined ? filespec.parseResult : true);
 
-      if (filespec.__check__) {
-        filespec.__check__(parser, filespec, rv, options.exportAllTables);
-      }
+                if (typeof parser.main === 'function') {
+                    assert.ok(!parser.main(), 'main() is supposed to produce zero ~ success');
+                } else if (filespec.inputs) {
+                    for (let i = 0, l = filespec.inputs.length; i < l; i++) {
+                        rv = parser.parse(filespec.inputs[i]);
+                        console.log('parse A: ', filespec.inputs[i], rv);
+                        assert.strictEqual(rv, expected_rv, 'parser.parse() is supposed to produce TRUE');
+                    }
+                } else {
+                    rv = parser.parse('zz; yy; zz;zz ;');
+                    console.log('parse B: ', path.basename(filespec.path), rv);
+                    assert.strictEqual(rv, expected_rv, 'parser.parse() is supposed to produce TRUE');
+                }
+            }, {
+                dumpSourceCodeOnFailure: true,
+                throwErrorOnCompileFailure: true,
+                inputFilename: parser.options.inputFilename,
+                inputPath: parser.options.inputPath
+            }, 'test');
+
+            if (filespec.__check__) {
+                filespec.__check__(parser, filespec, rv, options.exportAllTables);
+            }
+        });
     });
-  });
 });
 
 
@@ -380,10 +380,10 @@ compiled_calc:
   #$(JISON) --main -t ./$@_exec.jison
   $(JISON) --main ./$@_exec.jison
   # postprocess generated source code:
-  #node ./$@_const_rewrite_postprocess.js ./$@_AST_symbols.json5 output/$@/$@_exec.js 
-  node ./$@_const_rewrite_postprocess.js ./output/$@/$@_parse.js ./$@_OPA_defines.json5 output/$@/$@_exec.js 
-  #node ./$@_const_rewrite_postprocess.js ./output/$@/$@_parse.js output/$@/$@_exec.js 
-  #node ./$@_const_rewrite_postprocess.js ./$@_OPA_defines.json5 output/$@/$@_exec.js 
+  #node ./$@_const_rewrite_postprocess.js ./$@_AST_symbols.json5 output/$@/$@_exec.js
+  node ./$@_const_rewrite_postprocess.js ./output/$@/$@_parse.js ./$@_OPA_defines.json5 output/$@/$@_exec.js
+  #node ./$@_const_rewrite_postprocess.js ./output/$@/$@_parse.js output/$@/$@_exec.js
+  #node ./$@_const_rewrite_postprocess.js ./$@_OPA_defines.json5 output/$@/$@_exec.js
   # and run it!
   node output/$@/$@_exec.js $@_input.txt
 

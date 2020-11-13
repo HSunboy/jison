@@ -1,9 +1,9 @@
 
-import bnf from "./parser";
-import transform from "./ebnf-transform";
-import jisonlex from "../lex-parser";
+import bnf from './parser';
+import transform from './ebnf-transform';
+import jisonlex from '../lex-parser';
 
-var version = '0.6.2-220';                              // require('./package.json').version;
+const version = '0.6.2-220';                              // require('./package.json').version;
 
 function parse(grammar) {
     return bnf.parser.parse(grammar);
@@ -69,7 +69,7 @@ bnf.parser.yy.addDeclaration = function bnfAddDeclaration(grammar, decl) {
     if (decl.options) {
         if (!grammar.options) grammar.options = {};
         // last occurrence of `%options` wins:
-        for (var i = 0; i < decl.options.length; i++) {
+        for (let i = 0; i < decl.options.length; i++) {
             grammar.options[decl.options[i][0]] = decl.options[i][1];
         }
     }
@@ -109,9 +109,9 @@ function parseLex(text, position) {
     // which matches the original input file:
     position = position || {};
     position.range = position.range || [];
-    var l = position.first_line | 0;
-    var c = position.range[0] | 0;
-    var prelude = '';
+    let l = position.first_line | 0;
+    let c = position.range[0] | 0;
+    let prelude = '';
     if (l > 1) {
         prelude += (new Array(l)).join('\n');
         c -= prelude.length;
@@ -136,6 +136,6 @@ export default {
     ebnf_parser,
     bnf_lexer: jisonlex,
 
-    version,
+    version
 };
 

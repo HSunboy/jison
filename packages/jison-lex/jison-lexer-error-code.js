@@ -9,8 +9,6 @@
  * @nocollapse
  */
 function JisonLexerError(msg, hash) {
-    "use strict";
-
     Object.defineProperty(this, 'name', {
         enumerable: false,
         writable: false,
@@ -27,9 +25,9 @@ function JisonLexerError(msg, hash) {
 
     this.hash = hash;
 
-    var stacktrace;
+    let stacktrace;
     if (hash && hash.exception instanceof Error) {
-        var ex2 = hash.exception;
+        const ex2 = hash.exception;
         this.message = ex2.message || msg;
         stacktrace = ex2.stack;
     }

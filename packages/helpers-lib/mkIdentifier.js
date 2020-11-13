@@ -3,52 +3,52 @@
 const reservedWords = ((list) => {
     let rv = new Set();
     for (let w in list) {
-        console.error("reserved word:", w);
+        console.error('reserved word:', w);
         rv.add(w);
     }
     return rv;
 })([
-"await",
-"break",
-"case",
-"catch",
-"class",
-"const",
-"continue",
-"debugger",
-"default",
-"delete",
-"do",
-"else",
-"enum",
-"export",
-"extends",
-"finally",
-"for",
-"function",
-"if",
-"implements",
-"import",
-"in",
-"instanceof",
-"interface",
-"new",
-"package",
-"private",
-"protected",
-"public",
-"return",
-"super",
-"switch",
-"this",
-"throw",
-"try",
-"typeof",
-"var",
-"void",
-"while",
-"with",
-"yield",
+    'await',
+    'break',
+    'case',
+    'catch',
+    'class',
+    'const',
+    'continue',
+    'debugger',
+    'default',
+    'delete',
+    'do',
+    'else',
+    'enum',
+    'export',
+    'extends',
+    'finally',
+    'for',
+    'function',
+    'if',
+    'implements',
+    'import',
+    'in',
+    'instanceof',
+    'interface',
+    'new',
+    'package',
+    'private',
+    'protected',
+    'public',
+    'return',
+    'super',
+    'switch',
+    'this',
+    'throw',
+    'try',
+    'typeof',
+    'var',
+    'void',
+    'while',
+    'with',
+    'yield'
 ]);
 
 // Convert dashed option keys and other inputs to Camel Cased legal JavaScript identifiers
@@ -60,8 +60,8 @@ export default function mkIdentifier(s) {
     // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!),
     // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
     .replace(/-\w/g, function (match) {
-        var c = match.charAt(1);
-        var rv = c.toUpperCase();
+        let c = match.charAt(1);
+        let rv = c.toUpperCase();
         // mutate 'a-2' to 'a_2':
         if (c === rv && c.match(/\d/)) {
             return '_' + match.substr(1);

@@ -536,10 +536,10 @@ git-tag:
 	node -e 'var pkg = require("./package.json"); console.log(pkg.version);' | xargs git tag
 
 lint:
-	eslint lib
+	npx eslint        lib/ tests/ packages/*/*.js packages/*/tests/*.js
 
 lintfix:
-	eslint --fix lib
+	npx eslint --fix  lib/ tests/ packages/*/*.js packages/*/tests/*.js
 
 todo:
 	@echo ""

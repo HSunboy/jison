@@ -3,7 +3,7 @@
  * @externs
  */
 
-var module;
+let module;
 
 function require(name) {}
 

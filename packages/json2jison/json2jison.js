@@ -5,7 +5,7 @@
 // - stripActions
 function json2jison(grammar, options) {
     options = options || {};
-    var s = "";
+    let s = '';
 
     s += genDecls(grammar, options);
     s += genBNF(grammar.bnf, options);
@@ -14,28 +14,24 @@ function json2jison(grammar, options) {
 }
 
 function genDecls(grammar, options) {
-    var s = "",
-        key;
+    let s = '';
+    let key;
 
     for (key in grammar) {
         if (grammar.hasOwnProperty(key)) {
             if (key === 'start') {
-                s += "\n%start " + grammar.start + "\n\n";
-            }
-            else if (key === 'author') {
-                s += "\n/* author: " + grammar.author + " */\n\n";
-            }
-            else if (key === 'comment') {
-                s += "\n/* description: " + grammar.comment + " */\n\n";
-            }
-            else if (key === 'lex') {
-                s += "%lex\n" + genLex(grammar.lex) + "/lex\n\n";
-            }
-            else if (key === 'operators') {
-                for (var i = 0; i < grammar.operators.length; i++) {
-                    s += "%" + grammar.operators[i][0] + ' ' + quoteSymbols(grammar.operators[i].slice(1).join(' ')) + "\n";
+                s += '\n%start ' + grammar.start + '\n\n';
+            } else if (key === 'author') {
+                s += '\n/* author: ' + grammar.author + ' */\n\n';
+            } else if (key === 'comment') {
+                s += '\n/* description: ' + grammar.comment + ' */\n\n';
+            } else if (key === 'lex') {
+                s += '%lex\n' + genLex(grammar.lex) + '/lex\n\n';
+            } else if (key === 'operators') {
+                for (let i = 0; i < grammar.operators.length; i++) {
+                    s += '%' + grammar.operators[i][0] + ' ' + quoteSymbols(grammar.operators[i].slice(1).join(' ')) + '\n';
                 }
-                s += "\n";
+                s += '\n';
             }
         }
     }
@@ -44,12 +40,12 @@ function genDecls(grammar, options) {
 }
 
 function genBNF(bnf, options) {
-    var s = "%%\n",
-        sym;
+    let s = '%%\n';
+    let sym;
 
     for (sym in bnf) {
         if (bnf.hasOwnProperty(sym)) {
-            s += ["\n", sym, '\n    : ', genHandles(bnf[sym], options), "\n    ;\n"].join("");
+            s += [ '\n', sym, '\n    : ', genHandles(bnf[sym], options), '\n    ;\n' ].join('');
         }
     }
 
@@ -59,36 +55,36 @@ function genBNF(bnf, options) {
 function genHandles(handle, options) {
     if (typeof handle === 'string') {
         return handle;
-    } else { //array
-        var s = "";
-        for (var i = 0; i < handle.length; i++) {
-            if (typeof handle[i] === 'string' && handle[i]) {
-                s += quoteSymbols(handle[i]);
-            } else if (handle[i] instanceof Array) {
-                s += (handle[i][0] && quoteSymbols(handle[i][0]));
-                if (typeof handle[i][1] === 'string') {
-                    if (handle[i][2] && handle[i][2].prec) {
-                        s += " %prec " + handle[i][2].prec;
-                    }
-                    if (!options.stripActions) {
-                        s += "\n        {" + handle[i][1] + "}";
-                    }
-                } else if (handle[i][1].prec) {
-                    s += " %prec " + handle[i][1].prec;
+    }  //array
+    let s = '';
+    for (let i = 0; i < handle.length; i++) {
+        if (typeof handle[i] === 'string' && handle[i]) {
+            s += quoteSymbols(handle[i]);
+        } else if (handle[i] instanceof Array) {
+            s += (handle[i][0] && quoteSymbols(handle[i][0]));
+            if (typeof handle[i][1] === 'string') {
+                if (handle[i][2] && handle[i][2].prec) {
+                    s += ' %prec ' + handle[i][2].prec;
                 }
-            }
-            if (typeof handle[i + 1] !== 'undefined') {
-                s += "\n    | ";
+                if (!options.stripActions) {
+                    s += '\n        {' + handle[i][1] + '}';
+                }
+            } else if (handle[i][1].prec) {
+                s += ' %prec ' + handle[i][1].prec;
             }
         }
-        return s;
+        if (typeof handle[i + 1] !== 'undefined') {
+            s += '\n    | ';
+        }
     }
+    return s;
+
 }
 
 function quoteSymbols(rhs) {
     rhs = rhs.split(' ');
 
-    for (var i = 0; i < rhs.length; i++) {
+    for (let i = 0; i < rhs.length; i++) {
         rhs[i] = quoteSymbol(rhs[i]);
     }
     return rhs.join(' ');
@@ -96,7 +92,7 @@ function quoteSymbols(rhs) {
 
 function quoteSymbol(sym) {
     if (!/[a-zA-Z_][a-zA-Z0-9_]*/.test(sym)) {
-        var quote = /'/.test(sym) ? '"' : "'";
+        let quote = /'/.test(sym) ? '"' : "'";
         sym = quote + sym + quote;
     }
     return sym;
@@ -106,18 +102,18 @@ function quoteSymbol(sym) {
 // Generate lex format from lex JSON
 
 function genLex(lex) {
-    var s = [];
-    var indent = 28;
+    let s = [];
+    let indent = 28;
 
     if ('macros' in lex) {
-        for (var macro in lex.macros) {
+        for (let macro in lex.macros) {
             s.push(macro, new Array(indent - macro.length + 1).join(' '), lex.macros[macro], '\n');
         }
     }
     if ('startConditions' in lex) {
-        var ps = [];
-        var px = [];
-        for (var st in lex.startConditions) {
+        let ps = [];
+        let px = [];
+        for (let st in lex.startConditions) {
             if (lex.startConditions[st]) {
                 px.push(st);
             } else {
@@ -136,16 +132,16 @@ function genLex(lex) {
     }
     s.push('\n%%\n');
 
-    var longestRule = lex.rules.reduce(function (prev, curr) { 
-        return prev > curr[0].length ? prev : curr[0].length; 
+    let longestRule = lex.rules.reduce(function (prev, curr) {
+        return prev > curr[0].length ? prev : curr[0].length;
     }, 0);
     if ('rules' in lex) {
-        for (var rule; rule = lex.rules.shift(); ) {
+        for (var rule; rule = lex.rules.shift();) {
             if (rule.length > 2) {
                 s.push('<' + rule.shift().join(',') + '>');
             }
-            var reg = genLexRegex(rule[0]);
-            s.push(reg, new Array(longestRule-reg.length + 5).join(' '), genLexRule(rule[1]), '\n');
+            let reg = genLexRegex(rule[0]);
+            s.push(reg, new Array(longestRule - reg.length + 5).join(' '), genLexRule(rule[1]), '\n');
         }
     }
     s.push('\n');
@@ -154,10 +150,10 @@ function genLex(lex) {
 }
 
 function genLexRegex(regex) {
-    var matcher = regex.replace(/^([a-zA-Z0-9_]+)$/, "\"$1\"")
-                       .replace(/\\([.*+?^${}()|\[\]\/\\])/g, "$1")
-                       .replace(/^\$$/, "<<EOF>>")
-                       .replace(/^([.*+?^${}()|\[\]\/\\\-;=,><!@#%&]+)$/, "\"$1\"");
+    let matcher = regex.replace(/^([a-zA-Z0-9_]+)$/, '"$1"')
+       .replace(/\\([.*+?^${}()|\[\]\/\\])/g, '$1')
+       .replace(/^\$$/, '<<EOF>>')
+       .replace(/^([.*+?^${}()|\[\]\/\\\-;=,><!@#%&]+)$/, '"$1"');
     return matcher;
 }
 function genLexRule(rule) {

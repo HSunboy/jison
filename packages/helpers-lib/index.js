@@ -42,5 +42,5 @@ export default {
     printFunctionSourceCode: stringifier.printFunctionSourceCode,
     printFunctionSourceCodeContainer: stringifier.printFunctionSourceCodeContainer,
 
-    detectIstanbulGlobal,
-}
+    detectIstanbulGlobal
+};

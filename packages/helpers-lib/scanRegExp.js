@@ -5,13 +5,13 @@
 export default function scanRegExp(s) {
     s = '' + s;
     // code based on Esprima scanner: `Scanner.prototype.scanRegExpBody()`
-    var index = 0;
-    var length = s.length;
-    var ch = s[index];
+    let index = 0;
+    let length = s.length;
+    let ch = s[index];
     //assert.assert(ch === '/', 'Regular expression literal must start with a slash');
-    var str = s[index++];
-    var classMarker = false;
-    var terminated = false;
+    let str = s[index++];
+    let classMarker = false;
+    let terminated = false;
     while (index < length) {
         ch = s[index++];
         str += ch;
@@ -22,23 +22,17 @@ export default function scanRegExp(s) {
                 break;             // UnterminatedRegExp
             }
             str += ch;
-        }
-        else if (isLineTerminator(ch.charCodeAt(0))) {
+        } else if (isLineTerminator(ch.charCodeAt(0))) {
             break;                 // UnterminatedRegExp
-        }
-        else if (classMarker) {
+        } else if (classMarker) {
             if (ch === ']') {
                 classMarker = false;
             }
-        }
-        else {
-            if (ch === '/') {
-                terminated = true;
-                break;
-            }
-            else if (ch === '[') {
-                classMarker = true;
-            }
+        } else if (ch === '/') {
+            terminated = true;
+            break;
+        } else if (ch === '[') {
+            classMarker = true;
         }
     }
     if (!terminated) {

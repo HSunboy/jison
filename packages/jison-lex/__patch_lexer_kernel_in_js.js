@@ -10,20 +10,20 @@ function encode(str) {
     .trim();
 }
 
-var kernel = encode(fs.readFileSync('jison-lexer-kernel.js', 'utf8'))
+let kernel = encode(fs.readFileSync('jison-lexer-kernel.js', 'utf8'))
     // strip header comment too:
     .replace(/^[^{]*/, '');
 
-var errorClassCode = encode(fs.readFileSync('jison-lexer-error-code.js', 'utf8'));
+let errorClassCode = encode(fs.readFileSync('jison-lexer-error-code.js', 'utf8'));
 
-globby(['regexp-lexer.js']).then(paths => {
-    var count = 0;
+globby([ 'regexp-lexer.js' ]).then(paths => {
+    let count = 0;
 
     //console.log(paths);
     paths.forEach(path => {
-        var updated = false;
+        let updated = false;
 
-        var src = fs.readFileSync(path, 'utf8');
+        let src = fs.readFileSync(path, 'utf8');
         src = src
         .replace(/(\/\/ --- START lexer kernel ---)[^]+?(\/\/ --- END lexer kernel ---)/, function f(m, p1, p2) {
             return p1 + `

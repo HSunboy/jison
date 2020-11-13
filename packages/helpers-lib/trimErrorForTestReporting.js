@@ -1,10 +1,10 @@
-var cycleref = [];
-var cyclerefpath = [];
+let cycleref = [];
+let cyclerefpath = [];
 
-var linkref = [];
-var linkrefpath = [];
+let linkref = [];
+let linkrefpath = [];
 
-var path = [];
+let path = [];
 
 function shallow_copy(src) {
     if (typeof src === 'object') {
@@ -12,14 +12,14 @@ function shallow_copy(src) {
             return src.slice();
         }
 
-        var dst = {};
+        let dst = {};
         if (src instanceof Error) {
             dst.name = src.name;
             dst.message = src.message;
             dst.stack = src.stack;
         }
 
-        for (var k in src) {
+        for (let k in src) {
             if (Object.prototype.hasOwnProperty.call(src, k)) {
                 dst[k] = src[k];
             }
@@ -32,11 +32,11 @@ function shallow_copy(src) {
 
 function shallow_copy_and_strip_depth(src, parentKey) {
     if (typeof src === 'object') {
-        var dst;
+        let dst;
 
         if (src instanceof Array) {
             dst = src.slice();
-            for (var i = 0, len = dst.length; i < len; i++) {
+            for (let i = 0, len = dst.length; i < len; i++) {
                 path.push('[' + i + ']');
                 dst[i] = shallow_copy_and_strip_depth(dst[i], parentKey + '[' + i + ']');
                 path.pop();
@@ -49,9 +49,9 @@ function shallow_copy_and_strip_depth(src, parentKey) {
                 dst.stack = src.stack;
             }
 
-            for (var k in src) {
+            for (let k in src) {
                 if (Object.prototype.hasOwnProperty.call(src, k)) {
-                    var el = src[k];
+                    let el = src[k];
                     if (el && typeof el === 'object') {
                         dst[k] = '[cyclic reference::attribute --> ' + parentKey + '.' + k + ']';
                     } else {
@@ -70,7 +70,7 @@ function stripErrorStackPaths(msg) {
     // strip away devbox-specific paths in error stack traces in the output:
     msg = msg
     .replace(/\bat ([^\r\n(\\\/]*?)\([^)]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)\)/gi, 'at $1(/$2)')
-    .replace(/\bat [^\r\n ]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)/gi, 'at /$1')
+    .replace(/\bat [^\r\n ]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)/gi, 'at /$1');
 
     return msg;
 }
@@ -90,7 +90,7 @@ function trim_array_tail(arr) {
 
 function treat_value_stack(v) {
     if (v instanceof Array) {
-        var idx = cycleref.indexOf(v);
+        let idx = cycleref.indexOf(v);
         if (idx >= 0) {
             v = '[cyclic reference to parent array --> ' + cyclerefpath[idx] + ']';
         } else {
@@ -116,10 +116,10 @@ function treat_value_stack(v) {
 }
 
 function treat_error_infos_array(arr) {
-    var inf = arr.slice();
+    let inf = arr.slice();
     trim_array_tail(inf);
-    for (var key = 0, len = inf.length; key < len; key++) {
-        var err = inf[key];
+    for (let key = 0, len = inf.length; key < len; key++) {
+        let err = inf[key];
         if (err) {
             path.push('[' + key + ']');
 
@@ -217,7 +217,7 @@ function treat_hash(h) {
 function treat_error_report_info(e) {
     // shallow copy object:
     e = shallow_copy(e);
-    
+
     if (e && e.hash) {
         path.push('hash');
         e.hash = treat_hash(e.hash);
@@ -234,7 +234,7 @@ function treat_error_report_info(e) {
         path.push('lexer');
         e.lexer = treat_lexer(e.lexer);
         path.pop();
-    }    
+    }
 
     if (e.__error_infos) {
         path.push('__error_infos');
@@ -262,7 +262,7 @@ function treat_error_report_info(e) {
 
 function treat_object(e) {
     if (e && typeof e === 'object') {
-        var idx = cycleref.indexOf(e);
+        let idx = cycleref.indexOf(e);
         if (idx >= 0) {
             // cyclic reference, most probably an error instance.
             // we still want it to be READABLE in a way, though:
@@ -278,7 +278,7 @@ function treat_object(e) {
                 linkrefpath.push(path.join('.'));
 
                 e = treat_error_report_info(e);
-                
+
                 cycleref.pop();
                 cyclerefpath.pop();
             }
@@ -290,14 +290,14 @@ function treat_object(e) {
 
 // strip off large chunks from the Error exception object before
 // it will be fed to a test log or other output.
-// 
+//
 // Internal use in the unit test rigs.
 function trimErrorForTestReporting(e) {
     cycleref.length = 0;
     cyclerefpath.length = 0;
     linkref.length = 0;
     linkrefpath.length = 0;
-    path = ['*'];
+    path = [ '*' ];
 
     if (e) {
         e = treat_object(e);
@@ -307,12 +307,12 @@ function trimErrorForTestReporting(e) {
     cyclerefpath.length = 0;
     linkref.length = 0;
     linkrefpath.length = 0;
-    path = ['*'];
+    path = [ '*' ];
 
     return e;
 }
 
 export {
     trimErrorForTestReporting,
-    stripErrorStackPaths,    
-}
+    stripErrorStackPaths
+};

@@ -11,18 +11,18 @@ import mkIdentifier from './mkIdentifier';
 /** @public */
 export default function isLegalIdentifierInput(s) {
     s = '' + s;
-    // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
+    // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!),
     // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
     let ref = s
     .replace(/-\w/g, function (match) {
-        var c = match.charAt(1);
-        var rv = c.toUpperCase();
+        let c = match.charAt(1);
+        let rv = c.toUpperCase();
         // mutate 'a-2' to 'a_2':
         if (c === rv && c.match(/\d/)) {
             return '_' + match.substr(1);
         }
         return rv;
     });
-    var alt = mkIdentifier(s);
+    let alt = mkIdentifier(s);
     return alt === ref;
 }

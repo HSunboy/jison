@@ -20,7 +20,7 @@
 //
 // Return FALSE when there's no failure, otherwise return an `Error` info object.
 function checkRegExp(re_src, re_flags, XRegExp) {
-    var re;
+    let re;
 
     // were we fed a RegExp object or a string?
     if (re_src
@@ -68,7 +68,7 @@ function checkRegExp(re_src, re_flags, XRegExp) {
 //
 // Return FALSE when the input is not a legal regex.
 function getRegExpInfo(re_src, re_flags, XRegExp) {
-    var re1, re2, m1, m2;
+    let re1, re2, m1, m2;
 
     // were we fed a RegExp object or a string?
     if (re_src

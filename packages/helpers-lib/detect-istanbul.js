@@ -7,13 +7,13 @@ function chkBugger() {
 
 
 
-// 
-// 
-// 
+//
+//
+//
 function detectIstanbulGlobal() {
-    const gcv = "__coverage__";
+    const gcv = '__coverage__';
     const globalvar = new Function('return this')();
-    var coverage = globalvar[gcv];
+    const coverage = globalvar[gcv];
     return coverage || false;
 }
 
