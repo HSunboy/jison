@@ -6,7 +6,7 @@
   },
   "name": "jison-gho",
   "description": "A parser generator with a Bison/YACC-similar API (derived off zaach/jison repo)",
-  "version": "0.6.2-220",
+  "version": "0.7.0-220",
   "license": "MIT",
   "keywords": [
     "jison",
@@ -28,13 +28,13 @@
     "email": "jison@librelist.com",
     "url": "http://github.com/GerHobbelt/jison/issues"
   },
-  "main": "dist/jison-cjs-es5.js",
+  "main": "dist/jison-cjs.js",
   "module": "lib/jison.js",
   "bin": {
     "jison": "dist/cli-cjs.js"
   },
   "engines": {
-    "node": ">=8.0"
+    "node": ">=10.0"
   },
   "dependencies": {
     "ast-util": "0.6.0",
@@ -54,6 +54,7 @@
     "browserify": "17.0.0",
     "chai": "4.2.0",
     "cross-env": "7.0.2",
+    "eslint": "^7.13.0",
     "get-stdin": "8.0.0",
     "globby": "11.0.1",
     "istanbul": "0.4.5",
@@ -72,6 +73,8 @@
     "build": "make",
     "pub": "npm publish --access public",
     "test": "make test",
+    "lint": "make lint",
+    "fix": "make lintfix",
     "regen": "make sync",
     "website": "node_modules/.bin/live-server docs/"
   },

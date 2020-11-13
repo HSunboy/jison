@@ -1,3 +1,4 @@
+PATH        := ./node_modules/.bin:${PATH}
 
 NANOC := $(shell command -v nanoc 2> /dev/null)
 
@@ -534,6 +535,18 @@ sync:
 git-tag:
 	node -e 'var pkg = require("./package.json"); console.log(pkg.version);' | xargs git tag
 
+lint:
+	eslint lib
+
+lintfix:
+	eslint --fix lib
+
+todo:
+	@echo ""
+	@echo "TODO list"
+	@echo "---------"
+	@echo ""
+	grep 'TODO' -n -r ./ --exclude-dir=node_modules --exclude-dir=unicode-homographs --exclude-dir=.nyc_output --exclude-dir=dist --exclude-dir=coverage --exclude=Makefile 2>/dev/null || test true
 
 git:
 	-git pull --all
@@ -601,7 +614,7 @@ superclean: clean clean-site
 		build npm-install                                                           \
 		subpackages                                                                 \
 		clean superclean git prep_util_dir                                          \
-		bump                                                                        \
+		bump lint lintfix todo                                                      \
 		git-tag subpackages-git-tag                                                 \
 		compile-site clean-site                                                     \
 		publish subpackages-publish                                                 \
