@@ -15,6 +15,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import JSON5 from '@gerhobbelt/json5';
 
 
 
@@ -70,7 +71,19 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
 
             try {
                 dumpfile = path.normalize(dumpPaths[i] + '/' + dumpName);
-                fs.writeFileSync(dumpfile, sourcecode, 'utf8');
+
+                let dump = {
+                    errname,
+                    err_id,
+                    options,
+                    ex,
+                };
+                let d = JSON5.stringify(dump, null, 2);
+                // make sure each line is a comment line:
+                d = d.split('\n').map((l) => '// ' + l);
+                d = d.join('\n');
+
+                fs.writeFileSync(dumpfile, sourcecode + '\n\n\n' + d, 'utf8');
                 console.error("****** offending generated " + errname + " source code dumped into file: ", dumpfile);
                 break;          // abort loop once a dump action was successful!
             } catch (ex3) {
@@ -146,7 +159,7 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
 
         if (debug > 1) console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         
-        if (options.dumpSourceCodeOnFailure) {
+        if (options.dumpSourceCodeOnFailure || 1) {
             dumpSourceToFile(sourcecode, errname, err_id, options, ex);
         }
         
