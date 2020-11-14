@@ -2,7 +2,7 @@ const fs = require('fs');
 const XRegExp = require('@gerhobbelt/xregexp');
 const assert = require('chai').assert;
 // NodeJS doesn't support ES2015 import statements yet, so we must use the compiled/rollup-ed version instead:
-const helpers = require('../dist/helpers-lib-cjs-es5');
+const helpers = require('../dist/helpers-lib-cjs');
 
 // TODO real tests
 
@@ -536,6 +536,27 @@ yyerror(rmCommonWS\`
 
     it('trimActionCode: **TBD**', function () {
         assert.ok(typeof helpers.trimActionCode === 'function');
+    });
+
+    it('convertExceptionToObject:', function () {
+        assert.ok(typeof helpers.convertExceptionToObject === 'function');
+
+        try {
+            throw new SyntaxError('blarg');
+        } catch (ex) {
+            let out = helpers.convertExceptionToObject(ex);
+            let trace = helpers.stripErrorStackPaths(out.stack);
+            // check if first few lines exist in the stack trace:
+            assert.ok(/SyntaxError: blarg/.test(trace));
+            assert.ok(/\(\/tests\.js:/.test(trace));
+            assert.ok(trace.split('\n').length > 4);
+            out.stack = 'bogus stack trace';
+            assert.deepEqual(out, {
+              message: 'blarg',
+              name: 'SyntaxError',
+              stack: 'bogus stack trace',
+            });
+        }
     });
 
     it('compileCodeToES5: test default configuration', function () {

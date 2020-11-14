@@ -6,8 +6,8 @@ const yaml = require('@gerhobbelt/js-yaml');
 const JSON5 = require('@gerhobbelt/json5');
 //const globby = require('globby');
 const XRegExp = require('@gerhobbelt/xregexp');
-const RegExpLexer = require('../dist/regexp-lexer-cjs-es5');
-const helpers = require('../../helpers-lib/dist/helpers-lib-cjs-es5');
+const RegExpLexer = require('../dist/regexp-lexer-cjs');
+const helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
 const trimErrorForTestReporting = helpers.trimErrorForTestReporting;
 const stripErrorStackPaths = helpers.stripErrorStackPaths;
 
@@ -222,6 +222,13 @@ describe('Lexer Prerequisites & Assumptions', function () {
     });
 
     it('`x = Object.freeze(x)` protects `x` against any future editing', function () {
+        // https://dev.to/damcosset/object-freeze-vs-object-seal-in-javascript-3kob :
+        // 
+        // > Note: If you are not in strict mode, it will fail silently. 
+        // > In strict mode, you will get TypeErrors. 
+        // 
+        "use strict";
+
         let soll = {
             a: 1,
             b: 'x',
@@ -234,24 +241,24 @@ describe('Lexer Prerequisites & Assumptions', function () {
         let ist = Object.freeze(soll);
         assert.ok(ist === soll, 'object must not be cloned');
         assert.throws(function () {
-            soll.a = 1;
+            soll.a = 666;
         },
         TypeError);
 
         // no error modifying sub-objects:
-        soll.c.a = 1;
+        soll.c.a = 666;
 
-        soll.d[0] = 1;
+        soll.d[0] = 666;
 
         // once we freeze those sub-objects too, the same operations should throw an exception in strict mode:
         Object.freeze(ist.c);
         Object.freeze(ist.d);
         assert.throws(function () {
-            soll.c.a = 1;
+            soll.c.a = 777;
         },
         TypeError);
         assert.throws(function () {
-            soll.d[0] = 1;
+            soll.d[0] = 777;
         },
         TypeError);
     });
@@ -2269,7 +2276,12 @@ describe('Lexer Kernel', function () {
     });
 
     it('test yylloc info object must be unique for each token', function () {
-
+        // https://dev.to/damcosset/object-freeze-vs-object-seal-in-javascript-3kob :
+        // 
+        // > Note: If you are not in strict mode, it will fail silently. 
+        // > In strict mode, you will get TypeErrors. 
+        // 
+        "use strict";
 
         let dict = {
             rules: [
@@ -2318,6 +2330,13 @@ describe('Lexer Kernel', function () {
     });
 
     it('test yylloc info object is not modified by subsequent lex() activity', function () {
+        // https://dev.to/damcosset/object-freeze-vs-object-seal-in-javascript-3kob :
+        // 
+        // > Note: If you are not in strict mode, it will fail silently. 
+        // > In strict mode, you will get TypeErrors. 
+        // 
+        "use strict";
+
         let dict = {
             rules: [
                 [ '[a-z]', "return 'X';" ]
@@ -2380,6 +2399,13 @@ describe('Lexer Kernel', function () {
     });
 
     it('test yylloc info object CANNOT be modified by subsequent input() activity', function () {
+        // https://dev.to/damcosset/object-freeze-vs-object-seal-in-javascript-3kob :
+        // 
+        // > Note: If you are not in strict mode, it will fail silently. 
+        // > In strict mode, you will get TypeErrors. 
+        // 
+        "use strict";
+
         let dict = {
             rules: [
                 [ '[a-z]', "return 'X';" ]
@@ -2514,6 +2540,97 @@ describe('Lexer Kernel', function () {
         assert.equal(lexer.lex(), 'ay');
         assert.equal(lexer.lex(), 'ax');
         assert.equal(lexer.lex(), lexer.EOF);
+    });
+
+    it('test faulty custom lexer which does not provide the minimum viable interface', function () {
+        let src = null;
+
+        // Wrap the custom lexer code in a function so we can String()-dump it:
+        /* istanbul ignore next: action code is injected and then crashes the generated parser due to unreachable coverage global */
+        function customLexerCode() {
+            let input = '';
+            let input_offset = 0;
+            let lexer = {
+                EOF: 1,
+                ERROR: 2,
+                options: {},
+                // ERROR: no 'lex()' method provided
+                setInput: function (inp) {
+                    input = inp;
+                    input_offset = 0;
+                }
+            };
+        }
+
+        let dict = {
+            rules: [],
+            actionInclude: String(customLexerCode).replace(/function [^\{]+\{/, '').replace(/\}$/, ''),
+            moduleInclude: 'console.log("moduleInclude");',
+            options: {
+                foo: 'bar',
+                showSource: function (lexer, source, opts) {
+                    src = source;
+                }
+            }
+        };
+
+        let input = 'xxyx';
+
+        assert.throws(function () {
+            let lexer = new RegExpLexer(dict, input);
+        },
+        SyntaxError,
+        /user-defined lexer does not provide the mandatory 'lexer\.lex\(\)' API function/
+        );
+    });
+
+    it('test faulty custom lexer which does not provide the required \'lexer\' instance', function () {
+        let src = null;
+
+        // Wrap the custom lexer code in a function so we can String()-dump it:
+        /* istanbul ignore next: action code is injected and then crashes the generated parser due to unreachable coverage global */
+        function customLexerCode() {
+            let input = '';
+            let input_offset = 0;
+            // ERROR: 'lexer' instance missing (or ill-named like we have here: 'foobarf')
+            let foobarf = {
+                EOF: 1,
+                ERROR: 2,
+                options: {},
+                lex: function () {
+                    if (input.length > input_offset) {
+                        return 'a' + input[input_offset++];
+                    }
+                    return this.EOF;
+
+                },
+                setInput: function (inp) {
+                    input = inp;
+                    input_offset = 0;
+                }
+            };
+        }
+
+        let dict = {
+            rules: [],
+            actionInclude: String(customLexerCode).replace(/function [^\{]+\{/, '').replace(/\}$/, ''),
+            moduleInclude: 'console.log("moduleInclude");',
+            options: {
+                foo: 'bar',
+                showSource: function (lexer, source, opts) {
+                    src = source;
+                }
+            }
+        };
+
+        let input = 'xxyx';
+
+        assert.throws(function () {
+            let lexer = new RegExpLexer(dict, input);
+        },
+        SyntaxError,
+        /user-defined lexer does not define the required 'lexer' instance/
+        );
     });
 
     it('test XRegExp option support', function () {

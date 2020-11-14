@@ -5,8 +5,8 @@ const mkdirp = require('mkdirp');
 const yaml = require('@gerhobbelt/js-yaml');
 const JSON5 = require('@gerhobbelt/json5');
 //const globby = require("globby");
-const lex = require('../dist/lex-parser-cjs-es5');
-const helpers = require('../../helpers-lib/dist/helpers-lib-cjs-es5');
+const lex = require('../dist/lex-parser-cjs');
+const helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
 const trimErrorForTestReporting = helpers.trimErrorForTestReporting;
 const stripErrorStackPaths = helpers.stripErrorStackPaths;
 

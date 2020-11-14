@@ -37,6 +37,32 @@ function pad(n, p) {
 }
 
 
+function convertExceptionToObject(ex) {
+    if (!ex) return ex;
+
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+    // 
+    // - Copy enumerable properties (which may exist when this is a custom exception class derived off Error)
+    let rv = Object.assign({}, ex);
+    // - Set up the default fields which should ALWAYS be present:
+    rv.message = ex.message;
+    rv.name = ex.name;
+    rv.stack = ex.stack; // this assignment stringifies the stack trace in ex.stack.
+    // - Set the optional fields:
+    if (ex.code !== undefined) rv.code = ex.code;
+    if (ex.type !== undefined) rv.type = ex.type;
+    if (ex.fileName !== undefined) rv.fileName = ex.fileName;
+    if (ex.lineNumber !== undefined) rv.lineNumber = ex.lineNumber;
+    if (ex.columnNumber !== undefined) rv.columnNumber = ex.columnNumber;
+    if (Array.isArray(ex.errors)) {
+        rv.errors = [];
+        for (let se of ex.errors) {
+            rv.errors.push(convertExceptionToObject(se));
+        }
+    }
+    return rv;
+}
+
 // attempt to dump in one of several locations: first winner is *it*!
 function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
     let dumpfile;
@@ -76,7 +102,7 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
                     errname,
                     err_id,
                     options,
-                    ex
+                    ex: convertExceptionToObject(ex)
                 };
                 let d = JSON5.stringify(dump, null, 2);
                 // make sure each line is a comment line:
@@ -179,5 +205,6 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
 
 export default {
     exec: exec_and_diagnose_this_stuff,
-    dump: dumpSourceToFile
+    dump: dumpSourceToFile,
+    convertExceptionToObject,
 };

@@ -12,7 +12,10 @@ function encode(str) {
 
 let kernel = encode(fs.readFileSync('jison-lexer-kernel.js', 'utf8'))
     // strip header comment too:
-    .replace(/^[^{]*/, '');
+    .replace(/^[^{]*/, '')
+    .trim()
+    .replace(/[^}]*$/, '');
+
 
 let errorClassCode = encode(fs.readFileSync('jison-lexer-error-code.js', 'utf8'));
 
@@ -33,7 +36,7 @@ return \`${kernel}\`;
         .replace(/(\/\/ --- START lexer error class ---)[^]+?(\/\/ --- END lexer error class ---)/, function f(m, p1, p2) {
             return p1 + `
 
-var prelude = \`${errorClassCode}\`;
+const prelude = \`${errorClassCode}\`;
 
     ` + p2;
         });
