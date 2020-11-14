@@ -20,15 +20,15 @@ function re2set(re) {
     return xs.substr(2, xs.length - 4);   // strip off the wrapping: /[...]/
 }
 
-function exec(src) {
+function exec(src, line, forceDump) {
     return helpers.exec(src, function code_execution_rig(sourcecode, options, errname, debug) {
-        if (0x0) helpers.dump(src, '____testcode-dump-EXEC');
-        const f = new Function('', src);
+        if (forceDump) helpers.dump(sourcecode, errname);
+        const f = new Function('', sourcecode);
         return f();
     }, {
         dumpSourceCodeOnFailure: true,
         throwErrorOnCompileFailure: true
-    });
+    }, line);
 }
 
 
@@ -1258,7 +1258,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `);
+        `, "Line 1261");
         console.error('lexer:', typeof lexer);
         lexer.setInput(input);
 
@@ -1286,7 +1286,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `);
+        `, "Line 1289");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1320,7 +1320,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `);
+        `, "Line 1323");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1349,7 +1349,7 @@ describe('Lexer Kernel', function () {
           ${lexerSource}
 
           return exports;
-        `);
+        `, "Line 1352");
         exported.lexer.setInput(input);
 
         assert.equal(exported.lex(), 'X');
@@ -1382,7 +1382,7 @@ describe('Lexer Kernel', function () {
           ${lexerSource}
 
           return lexer;
-        `);
+        `, "Line 1385");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1409,7 +1409,7 @@ describe('Lexer Kernel', function () {
               lexer, 
               yylex
             };`);
-        let lexer = exec(lexerSource);
+        let lexer = exec(lexerSource, "Line 1412");
         lexer.lexer.setInput(input);
 
         // two ways to access `lex()`:

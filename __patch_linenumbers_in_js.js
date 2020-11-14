@@ -6,7 +6,7 @@ const fs = require('fs');
 globby(['*.js', 'lib/*.js', 'tests/**/*.js', 'packages/*/*.js', 'packages/*/tests/**/*.js']).then(paths => {
 	var count = 0;
 
-    console.log(paths);
+    //console.log(paths);
     paths.forEach(path => {
     	var updated = false;
 
@@ -18,8 +18,9 @@ globby(['*.js', 'lib/*.js', 'tests/**/*.js', 'packages/*/*.js', 'packages/*/test
             let a = pre.split('\n');
             let lc = a.length;
             //console.log("match:", {s, index, lc});
-            updated = true;
-    		return `${m1}Line ${lc}${m1}`;
+    		let newsrc = `${m1}Line ${lc}${m1}`;
+            updated = (newsrc !== s);
+            return newsrc;
     	});
 
     	if (updated) {

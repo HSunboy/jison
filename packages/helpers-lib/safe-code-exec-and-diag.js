@@ -72,11 +72,25 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
         const dumpPaths = [ (options.outfile ? path.dirname(options.outfile) : null), options.inputPath, process.cwd() ];
         let dumpName = path.basename(options.inputFilename || options.moduleName || (options.outfile ? path.dirname(options.outfile) : null) || options.defaultModuleName || errname)
         .replace(/\.[a-z]{1,5}$/i, '')          // remove extension .y, .yacc, .jison, ...whatever
-        .replace(/[^a-z0-9_]/ig, '_');          // make sure it's legal in the destination filesystem: the least common denominator.
+        .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
+        .substr(0, 100);
         if (dumpName === '' || dumpName === '_') {
             dumpName = '__bugger__';
         }
+
+        // generate a stacktrace for the dump no matter what:
+        if (!ex) {
+            try {
+                throw new Error("Not an error: only fetching stacktrace in sourcecode dump helper so you can see which code invoked this.");
+            } catch (ex2) {
+                ex = ex2;
+            }
+        }
+
         err_id = err_id || 'XXX';
+        err_id = err_id
+        .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
+        .substr(0, 50);
 
         const ts = new Date();
         const tm = ts.getUTCFullYear() +
@@ -168,7 +182,7 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
     if (err_id.length === 0) {
         err_id = 'exec_crash';
     }
-    const debug = 0;
+    const debug = options.debug || 0;
 
     if (debug) console.warn('generated ' + errname + ' code under EXEC TEST.');
     if (debug > 1) {

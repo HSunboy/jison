@@ -15,7 +15,7 @@ endif
 
 
 
-all: clean-nyc sync subpackages build test test-nyc examples-test report-nyc
+all: clean-nyc fix-linenumbers sync subpackages build test test-nyc examples-test report-nyc
 
 everything:                         \
 		clean                       \
@@ -485,6 +485,8 @@ dist/jison.js: rollup.config.js rollup.config-template.js package.json lib/jison
 	$(BABEL) dist/jison-cjs.js -o dist/jison-cjs-es5.js
 	$(BABEL) dist/jison-umd.js -o dist/jison-umd-es5.js
 
+fix-linenumbers:
+	node __patch_linenumbers_in_js.js
 
 
 
@@ -603,6 +605,9 @@ superclean: clean clean-site
 	git checkout dist/
 
 
+clean-dumpfiles:
+	bash -c "find . -type f \( -iname '*fatal_*_dump*' -o -ipath '*reference-output*' \) -print -delete"
+
 
 
 .PHONY: all everything                                                              \
@@ -614,7 +619,7 @@ superclean: clean clean-site
 		build npm-install                                                           \
 		subpackages                                                                 \
 		clean superclean git prep_util_dir                                          \
-		bump lint lintfix todo                                                      \
+		bump lint lintfix todo fix-linenumbers clean-dumpfiles                      \
 		git-tag subpackages-git-tag                                                 \
 		compile-site clean-site                                                     \
 		publish subpackages-publish                                                 \

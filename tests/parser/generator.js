@@ -7,15 +7,15 @@ const fs = require('fs');
 const path = require('path');
 
 
-function exec(src) {
+function exec(src, line, forceDump) {
     return helpers.exec(src, function code_execution_rig(sourcecode, options, errname, debug) {
-        if (0x0) helpers.dump(src, '____testcode-dump-EXEC');
-        const f = new Function('', src);
+        if (forceDump || 1) helpers.dump(sourcecode, errname);
+        const f = new Function('', sourcecode);
         return f();
     }, {
         dumpSourceCodeOnFailure: true,
         throwErrorOnCompileFailure: true
-    });
+    }, line);
 }
 
 
