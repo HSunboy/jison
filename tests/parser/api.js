@@ -481,7 +481,8 @@ describe('JISON API', function () {
             first_line: 666,
             last_line: 999,
             first_column: 1,
-            last_column: 42
+            last_column: 42,
+            range: [1, 4]
         };
 
         let gen = new Jison.Generator(grammar);
@@ -511,8 +512,6 @@ describe('JISON API', function () {
         let loc1 = parser.parse('xx\nxy');
 
         assert.strictEqual(loc1, true, '`return @B;` action code should produce TRUE (default parser exit value on successful parse) as the lexer-provided location would be UNDEFINED');
-
-
 
         // ------------------------------------------------------------------------
         //

@@ -98,13 +98,22 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
             try {
                 dumpfile = path.normalize(dumpPaths[i] + '/' + dumpName);
 
-                let dump = {
+                const dump = {
                     errname,
                     err_id,
                     options,
                     ex: convertExceptionToObject(ex)
                 };
-                let d = JSON5.stringify(dump, null, 2);
+                let d = JSON5.stringify(dump, {
+                    replacer: function remove_lexer_objrefs(key, value) {
+                        if (value instanceof Error) {
+                            return convertExceptionToObject(value);
+                        }
+                        return value;
+                    },
+                    space: 2,
+                    circularRefHandler: (value, circusPos, stack, keyStack, key, err) => '[!circular ref!]',
+                });
                 // make sure each line is a comment line:
                 d = d.split('\n').map((l) => '// ' + l);
                 d = d.join('\n');

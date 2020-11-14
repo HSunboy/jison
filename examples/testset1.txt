@@ -117,6 +117,7 @@
 ./regex.jison
 ./semwhitespace.jison
 ./semwhitespace_lex.jison
+./ShExJison.jison
 ./so-q-20475147.jison
 ./so-q-58891186-2.jison
 ./so-q-58891186-3.jison

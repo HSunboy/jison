@@ -1,9 +1,22 @@
 const assert = require('chai').assert;
 const Jison = require('../setup').Jison;
 const Lexer = require('../setup').Lexer;
+const helpers = require('../../packages/helpers-lib');
 
 const fs = require('fs');
 const path = require('path');
+
+
+function exec(src) {
+    return helpers.exec(src, function code_execution_rig(sourcecode, options, errname, debug) {
+        if (0x0) helpers.dump(src, '____testcode-dump-EXEC');
+        const f = new Function('', src);
+        return f();
+    }, {
+        dumpSourceCodeOnFailure: true,
+        throwErrorOnCompileFailure: true
+    });
+}
 
 
 describe('Parser Generator API', function () {
@@ -29,17 +42,25 @@ describe('Parser Generator API', function () {
         gen.lexer = new Lexer(lexData);
 
         let parserSource = gen.generateAMDModule();
-        let parser = null;
-        let define = function (deps, callback) {
-            // temporary AMD-style define function, for testing.
-            if (!callback) {
-                // no deps array:
-                parser = deps();
-            } else {
-                parser = callback();
-            }
-        };
-        eval(parserSource);
+        let parser = exec(`
+            let parser;
+
+            let define = function (deps, callback) {
+                // temporary AMD-style define function, for testing.
+                if (!callback) {
+                    // no deps array:
+                    parser = deps();
+                } else {
+                    parser = callback();
+                }
+            };
+
+            // =================== GENERATED SOURCECODE START ====================
+            ${parserSource}
+            // =================== GENERATED SOURCECODE END ====================
+
+            return parser;
+        `, "Line 63");
 
         assert.ok(parser.parse(input));
     });
@@ -66,8 +87,15 @@ describe('Parser Generator API', function () {
         gen.lexer = new Lexer(lexData);
 
         let parserSource = gen.generateCommonJSModule();
-        let exports = {};
-        eval(parserSource);
+        let exports = exec(`
+            let exports = {};
+
+            // =================== GENERATED SOURCECODE START ====================
+            ${parserSource}
+            // =================== GENERATED SOURCECODE END ====================
+
+            return exports;
+        `, "Line 98");
 
         assert.ok(exports.parse(input));
     });
@@ -94,7 +122,13 @@ describe('Parser Generator API', function () {
         gen.lexer = new Lexer(lexData);
 
         let parserSource = gen.generateModule();
-        eval(parserSource);
+        let parser = exec(`
+            // =================== GENERATED SOURCECODE START ====================
+            ${parserSource}
+            // =================== GENERATED SOURCECODE END ====================
+
+            return parser;
+        `, "Line 131");
 
         assert.ok(parser.parse(input));
     });
@@ -121,7 +155,13 @@ describe('Parser Generator API', function () {
         gen.lexer = new Lexer(lexData);
 
         let parserSource = gen.generate({ moduleType: 'js', moduleName: 'parsey' });
-        eval(parserSource);
+        let parsey = exec(`
+            // =================== GENERATED SOURCECODE START ====================
+            ${parserSource}
+            // =================== GENERATED SOURCECODE END ====================
+
+            return parsey;
+        `, "Line 164");
 
         assert.ok(parsey.parse(input));
     });
@@ -143,14 +183,20 @@ describe('Parser Generator API', function () {
             }
         };
 
-        let compiler = {};
-
         let input = 'xyxxxy';
         let gen = new Jison.Generator(grammar);
         gen.lexer = new Lexer(lexData);
 
         let parserSource = gen.generateModule({ moduleName: 'compiler.parser' });
-        eval(parserSource);
+        let compiler = exec(`
+            let compiler = {};
+
+            // =================== GENERATED SOURCECODE START ====================
+            ${parserSource}
+            // =================== GENERATED SOURCECODE END ====================
+
+            return compiler;
+        `, "Line 199");
 
         assert.ok(compiler.parser.parse(input));
     });
@@ -233,7 +279,13 @@ describe('Parser Generator API', function () {
         let gen = new Jison.Generator(grammar);
 
         let parserSource = gen.generateModule();
-        eval(parserSource);
+        let parser = exec(`
+            // =================== GENERATED SOURCECODE START ====================
+            ${parserSource}
+            // =================== GENERATED SOURCECODE END ====================
+
+            return parser;
+        `, "Line 288");
 
         assert.ok(parser.parse(JSON.stringify(grammar.bnf)));
     });
@@ -256,8 +308,15 @@ describe('Parser Generator API', function () {
         gen.lexer = new Lexer(lexData);
 
         let parserSource = gen.generateCommonJSModule();
-        let exports = {};
-        eval(parserSource);
+        let parser = exec(`
+            let exports = {};
+
+            // =================== GENERATED SOURCECODE START ====================
+            ${parserSource}
+            // =================== GENERATED SOURCECODE END ====================
+
+            return parser;
+        `, "Line 319");
 
         assert.equal(parser.parse('y'), 1, 'semantic action');
     });
@@ -280,8 +339,15 @@ describe('Parser Generator API', function () {
         gen.lexer = new Lexer(lexData);
 
         let parserSource = gen.generateCommonJSModule();
-        let exports = {};
-        eval(parserSource);
+        let parser = exec(`
+            let exports = {};
+
+            // =================== GENERATED SOURCECODE START ====================
+            ${parserSource}
+            // =================== GENERATED SOURCECODE END ====================
+
+            return parser;
+        `, "Line 350");
 
         assert.equal(parser.parse('y'), 1, 'semantic action');
     });
@@ -302,7 +368,13 @@ describe('Parser Generator API', function () {
         let gen = new Jison.Generator(grammar);
 
         let parserSource = gen.generateModule();
-        eval(parserSource);
+        let parser = exec(`
+            // =================== GENERATED SOURCECODE START ====================
+            ${parserSource}
+            // =================== GENERATED SOURCECODE END ====================
+
+            return parser;
+        `, "Line 377");
 
         let p = new parser.Parser();
 
@@ -331,8 +403,15 @@ describe('Parser Generator API', function () {
         gen.lexer = new Lexer(lexData);
 
         let parserSource = gen.generateCommonJSModule();
-        let exports = {};
-        eval(parserSource);
+        let parser = exec(`
+            let exports = {};
+
+            // =================== GENERATED SOURCECODE START ====================
+            ${parserSource}
+            // =================== GENERATED SOURCECODE END ====================
+
+            return parser;
+        `, "Line 414");
 
         assert.equal(parser.parse('y'), 1, 'semantic action');
     });
@@ -410,17 +489,25 @@ describe('Parser Generator API', function () {
         gen.lexer = new Lexer(lexData);
 
         let parserSource = gen.generateAMDModule();
-        let parser = null;
-        let define = function (deps, callback) {
-            // temporary AMD-style define function, for testing.
-            if (!callback) {
-                // no deps array:
-                parser = deps();
-            } else {
-                parser = callback();
-            }
-        };
-        eval(parserSource);
+        let parser = exec(`
+            let parser;
+
+            let define = function (deps, callback) {
+                // temporary AMD-style define function, for testing.
+                if (!callback) {
+                    // no deps array:
+                    parser = deps();
+                } else {
+                    parser = callback();
+                }
+            };
+
+            // =================== GENERATED SOURCECODE START ====================
+            ${parserSource}
+            // =================== GENERATED SOURCECODE END ====================
+
+            return parser;
+        `, "Line 510");
 
         assert.ok(parser.parse(input));
     });
@@ -464,18 +551,25 @@ describe('Parser Generator API', function () {
         gen.lexer = new Lexer(lexData);
 
         let parserSource = gen.generateAMDModule();
-        let parser = null;
-        let define = function (deps, callback) {
-            // temporary AMD-style define function, for testing.
-            if (!callback) {
-                // no deps array:
-                parser = deps();
-            } else {
-                parser = callback();
-            }
-        };
-        //console.log('source: ', parserSource);
-        eval(parserSource);
+        let parser = exec(`
+            let parser;
+
+            let define = function (deps, callback) {
+                // temporary AMD-style define function, for testing.
+                if (!callback) {
+                    // no deps array:
+                    parser = deps();
+                } else {
+                    parser = callback();
+                }
+            };
+
+            // =================== GENERATED SOURCECODE START ====================
+            ${parserSource}
+            // =================== GENERATED SOURCECODE END ====================
+
+            return parser;
+        `, "Line 572");
 
         let rv = parser.parse(input);
         assert.equal(rv, 42);
@@ -504,18 +598,25 @@ describe('Parser Generator API', function () {
         gen.lexer = new Lexer(lexData);
 
         let parserSource = gen.generateAMDModule();
-        let parser = null;
-        let define = function (deps, callback) {
-            // temporary AMD-style define function, for testing.
-            if (!callback) {
-                // no deps array:
-                parser = deps();
-            } else {
-                parser = callback();
-            }
-        };
-        //console.log('source: ', parserSource);
-        eval(parserSource);
+        let parser = exec(`
+            let parser;
+
+            let define = function (deps, callback) {
+                // temporary AMD-style define function, for testing.
+                if (!callback) {
+                    // no deps array:
+                    parser = deps();
+                } else {
+                    parser = callback();
+                }
+            };
+
+            // =================== GENERATED SOURCECODE START ====================
+            ${parserSource}
+            // =================== GENERATED SOURCECODE END ====================
+
+            return parser;
+        `, "Line 619");
 
         let rv = parser.parse(input);
         assert.equal(rv, 42);

@@ -44,21 +44,21 @@ describe('Lexer Prerequisites & Assumptions', function () {
     }
     function shallow_copy(src) {
         if (src && typeof src === 'object') {
-          // non-Object-type objects, e.g. RegExp, Date, etc., can usually be shallow cloned
-          // using their constructor:
+            // non-Object-type objects, e.g. RegExp, Date, etc., can usually be shallow cloned
+            // using their constructor:
             if (src.constructor !== Object) {
                 if (Array.isArray(src)) {
                     return src.slice();
                 }
                 var dst = new src.constructor(src);
 
-              // and make sure all custom attributes are added to the clone:
+                // and make sure all custom attributes are added to the clone:
                 shallow_copy_noclobber(dst, src);
                 return dst;
             }
-          // native objects must be cloned a different way:
-          //
-          //return Object.assign({}, src);
+            // native objects must be cloned a different way:
+            //
+            //return Object.assign({}, src);
             var dst = {};
             shallow_copy_noclobber(dst, src);
             return dst;
@@ -66,7 +66,7 @@ describe('Lexer Prerequisites & Assumptions', function () {
         return src;
     }
 
-  // required for proper `shallow_copy()` operation:
+    // required for proper `shallow_copy()` operation:
     it('`new Object(x)` API does not clone object / attributes', function () {
         let soll = {
             a: 1,

@@ -1,14 +1,14 @@
-let assert = require('chai').assert;
-let fs = require('fs');
-let path = require('path');
-let mkdirp = require('mkdirp');
-let yaml = require('@gerhobbelt/js-yaml');
-let JSON5 = require('@gerhobbelt/json5');
-//var globby = require('globby');
-let helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
-let trimErrorForTestReporting = helpers.trimErrorForTestReporting;
-let stripErrorStackPaths = helpers.stripErrorStackPaths;
-let bnf = require('../dist/ebnf-parser-cjs');
+const assert = require('chai').assert;
+const fs = require('fs');
+const path = require('path');
+const mkdirp = require('mkdirp');
+const yaml = require('@gerhobbelt/js-yaml');
+const JSON5 = require('@gerhobbelt/json5');
+//const globby = require('globby');
+const helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
+const trimErrorForTestReporting = helpers.trimErrorForTestReporting;
+const stripErrorStackPaths = helpers.stripErrorStackPaths;
+const bnf = require('../dist/ebnf-parser-cjs');
 
 
 
@@ -50,14 +50,14 @@ function parser_reset() {
 
 
 console.log('exec glob....', __dirname);
-  // var testset = globby.sync([
-  //   __dirname + '/specs/0*.jison',
-  //   __dirname + '/specs/0*.bnf',
-  //   __dirname + '/specs/0*.ebnf',
-  //   __dirname + '/specs/0*.json5',
-  //   '!'+ __dirname + '/specs/0*-ref.json5',
-  //   __dirname + '/specs/0*.js',
-  // ]);
+// var testset = globby.sync([
+//   __dirname + '/specs/0*.jison',
+//   __dirname + '/specs/0*.bnf',
+//   __dirname + '/specs/0*.ebnf',
+//   __dirname + '/specs/0*.json5',
+//   '!'+ __dirname + '/specs/0*-ref.json5',
+//   __dirname + '/specs/0*.js',
+// ]);
 let testset = fs.readFileSync(__dirname + '/specs/testset.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/specs' + l.trim().replace(/^\./, ''));
 let original_cwd = process.cwd();
 
@@ -77,21 +77,21 @@ testset = testset.map(function (filepath) {
 
             let hdrspec = fs.readFileSync(filepath, 'utf8').replace(/\r\n|\r/g, '\n');
 
-        // extract the top comment, which carries the title, etc. metadata:
+            // extract the top comment, which carries the title, etc. metadata:
             header = hdrspec.substr(0, hdrspec.indexOf('\n\n') + 1);
 
             grammar = spec;
         } else {
             spec = fs.readFileSync(filepath, 'utf8').replace(/\r\n|\r/g, '\n');
 
-        // extract the top comment, which carries the title, etc. metadata:
+            // extract the top comment, which carries the title, etc. metadata:
             header = spec.substr(0, spec.indexOf('\n\n') + 1);
 
-        // extract the grammar to test:
+            // extract the grammar to test:
             grammar = spec.substr(spec.indexOf('\n\n') + 2);
         }
 
-      // then strip off the comment prefix for every line:
+        // then strip off the comment prefix for every line:
         header = header.replace(/^\/\/ ?/gm, '').replace(/\n...\n[^]*$/, function (m) {
             extra = m;
             return '';
@@ -162,10 +162,10 @@ function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key
     // and produce an alternative structure to JSON-ify:
     return {
         circularReference: true,
-      // ex: {
-      //   message: err.message,
-      //   type: err.name
-      // },
+        // ex: {
+        //   message: err.message,
+        //   type: err.name
+        // },
         index: circusPos,
         parentDepth: objStack.length - circusPos - 1,
         key: key,
@@ -196,22 +196,22 @@ describe('BNF lexer', function () {
     });
 
     testset.forEach(function (filespec) {
-    // process this file:
+        // process this file:
         let title = (filespec.meta ? filespec.meta.title : null);
 
         let testname = 'test: ' + filespec.path.replace(/^.*?\/specs\//, '') + (title ? ' :: ' + title : '');
 
         console.error('generate test: ', testname);
 
-    // and create a test for it:
+        // and create a test for it:
         it(testname, function testEachParserExample() {
             let err, ast, grammar;
             let tokens = [];
             let lexer = bnf.bnf_parser.parser.lexer;
 
             try {
-        // Change CWD to the directory where the source grammar resides: this helps us properly
-        // %include any files mentioned in the grammar with relative paths:
+                // Change CWD to the directory where the source grammar resides: this helps us properly
+                // %include any files mentioned in the grammar with relative paths:
                 process.chdir(path.dirname(filespec.path));
 
                 grammar = filespec.grammar; // "%% test: foo bar | baz ; hello: world ;";
@@ -229,8 +229,8 @@ describe('BNF lexer', function () {
                         yylloc: lexer.yylloc
                     });
                     if (tok === lexer.EOF) {
-            // and make sure EOF stays EOF, i.e. continued invocation of `lex()` will only
-            // produce more EOF tokens at the same location:
+                        // and make sure EOF stays EOF, i.e. continued invocation of `lex()` will only
+                        // produce more EOF tokens at the same location:
                         countDown--;
                         if (countDown <= 0) {
                             break;
@@ -238,7 +238,7 @@ describe('BNF lexer', function () {
                     }
                 }
             } catch (ex) {
-        // save the error:
+                // save the error:
                 tokens.push(-1);
                 err = ex;
                 tokens.push({
@@ -246,20 +246,20 @@ describe('BNF lexer', function () {
                     meta: filespec.spec.meta,
                     err: trimErrorForTestReporting(ex)
                 });
-        // and make sure ast !== undefined:
+                // and make sure ast !== undefined:
                 ast = { fail: 1 };
             } finally {
                 process.chdir(original_cwd);
             }
 
-      // also store the number of tokens we received:
+            // also store the number of tokens we received:
             tokens.unshift(i);
-      // if (lexerSourceCode) {
-      //   tokens.push(lexerSourceCode);
-      // }
+            // if (lexerSourceCode) {
+            //   tokens.push(lexerSourceCode);
+            // }
 
-      // either we check/test the correctness of the collected input, iff there's
-      // a reference provided, OR we create the reference file for future use:
+            // either we check/test the correctness of the collected input, iff there's
+            // a reference provided, OR we create the reference file for future use:
             let refOut = JSON5.stringify(tokens, {
                 replacer: function remove_lexer_objrefs(key, value) {
                     if (value === lexer) {
@@ -271,24 +271,24 @@ describe('BNF lexer', function () {
                 circularRefHandler: testrig_JSON5circularRefHandler
             });
 
-      // strip away devbox-specific paths in error stack traces in the output:
+            // strip away devbox-specific paths in error stack traces in the output:
             refOut = stripErrorStackPaths(refOut);
 
-      // and convert it back so we have a `tokens` set that's cleaned up
-      // and potentially matching the stored reference set:
+            // and convert it back so we have a `tokens` set that's cleaned up
+            // and potentially matching the stored reference set:
             tokens = JSON5.parse(refOut);
             if (filespec.lexerRef) {
-        // Perform the validations only AFTER we've written the files to output:
-        // several tests produce very large outputs, which we shouldn't let assert() process
-        // for diff reporting as that takes bloody ages:
-        //assert.deepEqual(ast, filespec.ref);
+                // Perform the validations only AFTER we've written the files to output:
+                // several tests produce very large outputs, which we shouldn't let assert() process
+                // for diff reporting as that takes bloody ages:
+                //assert.deepEqual(ast, filespec.ref);
             } else {
                 fs.writeFileSync(filespec.lexerRefPath, refOut, 'utf8');
                 filespec.lexerRef = refOut;
             }
             fs.writeFileSync(filespec.lexerOutPath, refOut, 'utf8');
 
-      // now that we have saved all data, perform the validation checks:
+            // now that we have saved all data, perform the validation checks:
             assert.deepEqual(tokens, filespec.lexerRef, 'grammar should be lexed correctly');
         });
     });
@@ -310,17 +310,17 @@ describe('BNF parser', function () {
     });
 
     testset.forEach(function (filespec) {
-    // process this file:
+        // process this file:
         let title = (filespec.meta ? filespec.meta.title : null);
 
-    // and create a test for it:
+        // and create a test for it:
 
         it('test: ' + filespec.path.replace(/^.*?\/specs\//, '') + (title ? ' :: ' + title : ''), function testEachParserExample() {
             let err, ast, grammar;
 
             try {
-        // Change CWD to the directory where the source grammar resides: this helps us properly
-        // %include any files mentioned in the grammar with relative paths:
+                // Change CWD to the directory where the source grammar resides: this helps us properly
+                // %include any files mentioned in the grammar with relative paths:
                 process.chdir(path.dirname(filespec.path));
 
                 grammar = filespec.grammar; // "%% test: foo bar | baz ; hello: world ;";
@@ -328,9 +328,9 @@ describe('BNF parser', function () {
                 ast = bnf.parse(grammar);
                 ast.__original_input__ = grammar;
             } catch (ex) {
-        // save the error:
+                // save the error:
                 err = ex;
-        // and make sure ast !== undefined:
+                // and make sure ast !== undefined:
                 ast = {
                     fail: 1,
                     spec: filespec.grammar,
@@ -340,29 +340,29 @@ describe('BNF parser', function () {
                 process.chdir(original_cwd);
             }
 
-      // either we check/test the correctness of the collected input, iff there's
-      // a reference provided, OR we create the reference file for future use:
+            // either we check/test the correctness of the collected input, iff there's
+            // a reference provided, OR we create the reference file for future use:
             let refOut = JSON5.stringify(ast, {
                 space: 2,
                 circularRefHandler: testrig_JSON5circularRefHandler
             });
-      // strip away devbox-specific paths in error stack traces in the output:
+            // strip away devbox-specific paths in error stack traces in the output:
             refOut = stripErrorStackPaths(refOut);
-      // and convert it back so we have a `tokens` set that's cleaned up
-      // and potentially matching the stored reference set:
+            // and convert it back so we have a `tokens` set that's cleaned up
+            // and potentially matching the stored reference set:
             ast = JSON5.parse(refOut);
             if (filespec.ref) {
-        // Perform the validations only AFTER we've written the files to output:
-        // several tests produce very large outputs, which we shouldn't let assert() process
-        // for diff reporting as that takes bloody ages:
-        //assert.deepEqual(ast, filespec.ref);
+                // Perform the validations only AFTER we've written the files to output:
+                // several tests produce very large outputs, which we shouldn't let assert() process
+                // for diff reporting as that takes bloody ages:
+                //assert.deepEqual(ast, filespec.ref);
             } else {
                 fs.writeFileSync(filespec.outputRefPath, refOut, 'utf8');
                 filespec.ref = refOut;
             }
             fs.writeFileSync(filespec.outputOutPath, refOut, 'utf8');
 
-      // now that we have saved all data, perform the validation checks:
+            // now that we have saved all data, perform the validation checks:
             assert.deepEqual(ast, filespec.ref, 'grammar should be parsed correctly');
         });
     });

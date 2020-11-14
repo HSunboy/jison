@@ -214,7 +214,11 @@ option
         { $$ = [$option, parseValue($value)]; }
     | NAME[option] '=' error
         {
-            // TODO ...
+            // ERRONEOUS ACTION CODE below.
+            //
+            // https://github.com/GerHobbelt/jison/issues/13: lexer rules for jison
+            // (ebnf-parser and lex-parser modules) b0rk very late on unterminated string:
+            //
             yyerror(`named %option value error for ${$option}?" + "\n\n  Erroneous area:\n" + yylexer.prettyPrintRange(yylexer, @error, @option));
         }
     | NAME[option] error
