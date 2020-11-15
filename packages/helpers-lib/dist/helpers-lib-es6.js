@@ -1,12 +1,13 @@
 import fs from 'fs';
 import path$1 from 'path';
 import JSON5 from '@gerhobbelt/json5';
+import mkdirp from 'mkdirp';
 import XRegExp from '@gerhobbelt/xregexp';
 import recast from 'recast';
 import { transformSync } from '@babel/core';
 import assert from 'assert';
 
-// Return TRUE if `src` starts with `searchString`. 
+// Return TRUE if `src` starts with `searchString`.
 function startsWith(src, searchString) {
     return src.substr(0, searchString.length) === searchString;
 }
@@ -29,19 +30,19 @@ function rmCommonWS(strings, ...values) {
     // As `strings[]` is an array of strings, each potentially consisting
     // of multiple lines, followed by one(1) value, we have to split each
     // individual string into lines to keep that bit of information intact.
-    // 
+    //
     // We assume clean code style, hence no random mix of tabs and spaces, so every
     // line MUST have the same indent style as all others, so `length` of indent
     // should suffice, but the way we coded this is stricter checking as we look
     // for the *exact* indenting=leading whitespace in each line.
-    var indent_str = null;
-    var src = strings.map(function splitIntoLines(s) {
-        var a = s.split('\n');
-        
+    let indent_str = null;
+    let src = strings.map(function splitIntoLines(s) {
+        let a = s.split('\n');
+
         indent_str = a.reduce(function analyzeLine(indent_str, line, index) {
             // only check indentation of parts which follow a NEWLINE:
             if (index !== 0) {
-                var m = /^(\s*)\S/.exec(line);
+                let m = /^(\s*)\S/.exec(line);
                 // only non-empty ~ content-carrying lines matter re common indent calculus:
                 if (m) {
                     if (indent_str == null) {
@@ -60,19 +61,21 @@ function rmCommonWS(strings, ...values) {
     // Also note: due to the way we format the template strings in our sourcecode,
     // the last line in the entire template must be empty when it has ANY trailing
     // whitespace:
-    var a = src[src.length - 1];
-    a[a.length - 1] = a[a.length - 1].replace(/\s+$/, '');
+    {
+        let a = src[src.length - 1];
+        a[a.length - 1] = a[a.length - 1].replace(/\s+$/, '');
+    }
 
     // Done removing common indentation.
-    // 
+    //
     // Process template string partials now, but only when there's
     // some actual UNindenting to do:
     if (indent_str) {
-        for (var i = 0, len = src.length; i < len; i++) {
-            var a = src[i];
+        for (let i = 0, len = src.length; i < len; i++) {
+            let a = src[i];
             // only correct indentation at start of line, i.e. only check for
             // the indent after every NEWLINE ==> start at j=1 rather than j=0
-            for (var j = 1, linecnt = a.length; j < linecnt; j++) {
+            for (let j = 1, linecnt = a.length; j < linecnt; j++) {
                 if (startsWith(a[j], indent_str)) {
                     a[j] = a[j].substr(indent_str.length);
                 }
@@ -81,16 +84,19 @@ function rmCommonWS(strings, ...values) {
     }
 
     // now merge everything to construct the template result:
-    var rv = [];
-    for (var i = 0, len = values.length; i < len; i++) {
+    {
+        let rv = [];
+        let i = 0;
+        for (let len = values.length; i < len; i++) {
+            rv.push(src[i].join('\n'));
+            rv.push(values[i]);
+        }
+        // the last value is always followed by a last template string partial:
         rv.push(src[i].join('\n'));
-        rv.push(values[i]);
-    }
-    // the last value is always followed by a last template string partial:
-    rv.push(src[i].join('\n'));
 
-    var sv = rv.join('');
-    return sv;
+        let sv = rv.join('');
+        return sv;
+    }
 }
 
 // Convert dashed option keys to Camel Case, e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
@@ -101,27 +107,79 @@ function camelCase(s) {
         return match.toLowerCase();
     })
     .replace(/-\w/g, function (match) {
-        var c = match.charAt(1);
-        var rv = c.toUpperCase();
+        const c = match.charAt(1);
+        const rv = c.toUpperCase();
         // do not mutate 'a-2' to 'a2':
         if (c === rv && c.match(/\d/)) {
             return match;
         }
         return rv;
-    })
+    });
 }
+
+// https://www.ecma-international.org/ecma-262/6.0/#sec-reserved-words
+const reservedWords = ((list) => {
+    let rv = new Set();
+    for (let w of list) {
+        //console.error('reserved word:', w);
+        rv.add(w);
+    }
+    return rv;
+})([
+    'await',
+    'break',
+    'case',
+    'catch',
+    'class',
+    'const',
+    'continue',
+    'debugger',
+    'default',
+    'delete',
+    'do',
+    'else',
+    'enum',
+    'export',
+    'extends',
+    'finally',
+    'for',
+    'function',
+    'if',
+    'implements',
+    'import',
+    'in',
+    'instanceof',
+    'interface',
+    'new',
+    'package',
+    'private',
+    'protected',
+    'public',
+    'return',
+    'super',
+    'switch',
+    'this',
+    'throw',
+    'try',
+    'typeof',
+    'var',
+    'void',
+    'while',
+    'with',
+    'yield'
+]);
 
 // Convert dashed option keys and other inputs to Camel Cased legal JavaScript identifiers
 /** @public */
 function mkIdentifier(s) {
     s = '' + s;
 
-    return s
-    // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
+    let rv = s
+    // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!),
     // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
     .replace(/-\w/g, function (match) {
-        var c = match.charAt(1);
-        var rv = c.toUpperCase();
+        let c = match.charAt(1);
+        let rv = c.toUpperCase();
         // mutate 'a-2' to 'a_2':
         if (c === rv && c.match(/\d/)) {
             return '_' + match.substr(1);
@@ -139,6 +197,11 @@ function mkIdentifier(s) {
     .replace(/__+$/, '#')
     .replace(/_+/g, '_')
     .replace(/#/g, '__');
+
+    if (reservedWords.has(rv)) {
+        rv = '_' + rv;
+    }
+    return rv;
 }
 
 // Check if the start of the given input matches a regex expression.
@@ -147,13 +210,13 @@ function mkIdentifier(s) {
 function scanRegExp(s) {
     s = '' + s;
     // code based on Esprima scanner: `Scanner.prototype.scanRegExpBody()`
-    var index = 0;
-    var length = s.length;
-    var ch = s[index];
+    let index = 0;
+    let length = s.length;
+    let ch = s[index];
     //assert.assert(ch === '/', 'Regular expression literal must start with a slash');
-    var str = s[index++];
-    var classMarker = false;
-    var terminated = false;
+    let str = s[index++];
+    let classMarker = false;
+    let terminated = false;
     while (index < length) {
         ch = s[index++];
         str += ch;
@@ -164,23 +227,17 @@ function scanRegExp(s) {
                 break;             // UnterminatedRegExp
             }
             str += ch;
-        }
-        else if (isLineTerminator(ch.charCodeAt(0))) {
+        } else if (isLineTerminator(ch.charCodeAt(0))) {
             break;                 // UnterminatedRegExp
-        }
-        else if (classMarker) {
+        } else if (classMarker) {
             if (ch === ']') {
                 classMarker = false;
             }
-        }
-        else {
-            if (ch === '/') {
-                terminated = true;
-                break;
-            }
-            else if (ch === '[') {
-                classMarker = true;
-            }
+        } else if (ch === '/') {
+            terminated = true;
+            break;
+        } else if (ch === '[') {
+            classMarker = true;
         }
     }
     if (!terminated) {
@@ -203,34 +260,33 @@ function isLineTerminator(cp) {
 /** @public */
 function isLegalIdentifierInput(s) {
     s = '' + s;
-    // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
+    // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!),
     // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
     let ref = s
     .replace(/-\w/g, function (match) {
-        var c = match.charAt(1);
-        var rv = c.toUpperCase();
+        let c = match.charAt(1);
+        let rv = c.toUpperCase();
         // mutate 'a-2' to 'a_2':
         if (c === rv && c.match(/\d/)) {
             return '_' + match.substr(1);
         }
         return rv;
     });
-    var alt = mkIdentifier(s);
+    let alt = mkIdentifier(s);
     return alt === ref;
 }
 
 // properly quote and escape the given input string
 function dquote(s) {
-    var sq = (s.indexOf('\'') >= 0);
-    var dq = (s.indexOf('"') >= 0);
+    let sq = (s.indexOf('\'') >= 0);
+    let dq = (s.indexOf('"') >= 0);
     if (sq && dq) {
         s = s.replace(/"/g, '\\"');
         dq = false;
     }
     if (dq) {
         s = '\'' + s + '\'';
-    }
-    else {
+    } else {
         s = '"' + s + '"';
     }
     return s;
@@ -253,28 +309,76 @@ function chkBugger(src) {
 // Helper function: pad number with leading zeroes
 function pad(n, p) {
     p = p || 2;
-    var rv = '0000' + n;
+    let rv = '0000' + n;
     return rv.slice(-p);
 }
 
 
+function convertExceptionToObject(ex) {
+    if (!ex) return ex;
+
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+    // 
+    // - Copy enumerable properties (which may exist when this is a custom exception class derived off Error)
+    let rv = Object.assign({}, ex);
+    // - Set up the default fields which should ALWAYS be present:
+    rv.message = ex.message;
+    rv.name = ex.name;
+    rv.stack = ex.stack; // this assignment stringifies the stack trace in ex.stack.
+    // - Set the optional fields:
+    if (ex.code !== undefined) rv.code = ex.code;
+    if (ex.type !== undefined) rv.type = ex.type;
+    if (ex.fileName !== undefined) rv.fileName = ex.fileName;
+    if (ex.lineNumber !== undefined) rv.lineNumber = ex.lineNumber;
+    if (ex.columnNumber !== undefined) rv.columnNumber = ex.columnNumber;
+    if (Array.isArray(ex.errors)) {
+        rv.errors = [];
+        for (let se of ex.errors) {
+            rv.errors.push(convertExceptionToObject(se));
+        }
+    }
+    return rv;
+}
+
+
+function find_suitable_app_dump_path() {
+    return process.cwd()
+    .replace(/\\/g, '/')
+    .replace(/\/node_modules\/.*$/, (m) => '/___nm___/')
+    .replace(/(\/jison\/)(.*)$/, (m, p1, p2) => p1 + '___' + p2.split('/').map((d) => d.charAt(0).toUpperCase()).join('_'));
+}
+
 // attempt to dump in one of several locations: first winner is *it*!
 function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
-    var dumpfile;
+    let dumpfile;
     options = options || {};
 
     try {
-        var dumpPaths = [(options.outfile ? path$1.dirname(options.outfile) : null), options.inputPath, process.cwd()];
-        var dumpName = path$1.basename(options.inputFilename || options.moduleName || (options.outfile ? path$1.dirname(options.outfile) : null) || options.defaultModuleName || errname)
+        const dumpPaths = [ (options.outfile ? path$1.dirname(options.outfile) : null), options.inputPath, find_suitable_app_dump_path() ];
+        let dumpName = path$1.basename(options.inputFilename || options.moduleName || (options.outfile ? path$1.dirname(options.outfile) : null) || options.defaultModuleName || errname)
         .replace(/\.[a-z]{1,5}$/i, '')          // remove extension .y, .yacc, .jison, ...whatever
-        .replace(/[^a-z0-9_]/ig, '_');          // make sure it's legal in the destination filesystem: the least common denominator.
+        .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
+        .substr(0, 100);
         if (dumpName === '' || dumpName === '_') {
             dumpName = '__bugger__';
         }
-        err_id = err_id || 'XXX';
 
-        var ts = new Date();
-        var tm = ts.getUTCFullYear() +
+        // generate a stacktrace for the dump no matter what:
+        if (!ex) {
+            try {
+                throw new Error("Not an error: only fetching stacktrace in sourcecode dump helper so you can see which code invoked this.");
+            } catch (ex2) {
+                ex = ex2;
+            }
+        }
+
+        err_id = err_id || 'XXX';
+        err_id = err_id
+        .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
+        .substr(0, 50);
+
+        const ts = new Date();
+        const tm = ts.getUTCFullYear() +
             '_' + pad(ts.getUTCMonth() + 1) +
             '_' + pad(ts.getUTCDate()) +
             'T' + pad(ts.getUTCHours()) +
@@ -285,27 +389,37 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
 
         dumpName += '.fatal_' + err_id + '_dump_' + tm + '.js';
 
-        for (var i = 0, l = dumpPaths.length; i < l; i++) {
+        for (let i = 0, l = dumpPaths.length; i < l; i++) {
             if (!dumpPaths[i]) {
                 continue;
             }
 
             try {
-                dumpfile = path$1.normalize(dumpPaths[i] + '/' + dumpName);
+                dumpfile = path$1.normalize(path$1.join(dumpPaths[i], dumpName));
 
-                let dump = {
+                const dump = {
                     errname,
                     err_id,
                     options,
-                    ex,
+                    ex: convertExceptionToObject(ex)
                 };
-                let d = JSON5.stringify(dump, null, 2);
+                let d = JSON5.stringify(dump, {
+                    replacer: function remove_lexer_objrefs(key, value) {
+                        if (value instanceof Error) {
+                            return convertExceptionToObject(value);
+                        }
+                        return value;
+                    },
+                    space: 2,
+                    circularRefHandler: (value, circusPos, stack, keyStack, key, err) => '[!circular ref!]',
+                });
                 // make sure each line is a comment line:
                 d = d.split('\n').map((l) => '// ' + l);
                 d = d.join('\n');
 
+                mkdirp(path$1.dirname(dumpfile));
                 fs.writeFileSync(dumpfile, sourcecode + '\n\n\n' + d, 'utf8');
-                console.error("****** offending generated " + errname + " source code dumped into file: ", dumpfile);
+                console.error('****** offending generated ' + errname + ' source code dumped into file: ', dumpfile);
                 break;          // abort loop once a dump action was successful!
             } catch (ex3) {
                 //console.error("generated " + errname + " source code fatal DUMPING error ATTEMPT: ", i, " = ", ex3.message, " -- while attempting to dump into file: ", dumpfile, "\n", ex3.stack);
@@ -315,7 +429,7 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
             }
         }
     } catch (ex2) {
-        console.error("generated " + errname + " source code fatal DUMPING error: ", ex2.message, " -- while attempting to dump into file: ", dumpfile, "\n", ex2.stack);
+        console.error('generated ' + errname + ' source code fatal DUMPING error: ', ex2.message, ' -- while attempting to dump into file: ', dumpfile, '\n', ex2.stack);
     }
 
     // augment the exception info, when available:
@@ -323,7 +437,7 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
         ex.offending_source_code = sourcecode;
         ex.offending_source_title = errname;
         ex.offending_source_dumpfile = dumpfile;
-    }    
+    }
 }
 
 
@@ -349,27 +463,43 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
 //
 function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, title) {
     options = options || {};
-    var errname = "" + (title || "exec_test");
-    var err_id = errname.replace(/[^a-z0-9_]/ig, "_");
+    let errname = '' + (title || 'exec_test');
+    let err_id = errname.replace(/[^a-z0-9_]/ig, '_');
     if (err_id.length === 0) {
-        err_id = "exec_crash";
+        err_id = 'exec_crash';
     }
-    const debug = 0;
+    const debug = options.debug || 0;
 
-    var p;
+    if (debug) console.warn('generated ' + errname + ' code under EXEC TEST.');
+    if (debug > 1) {
+        console.warn(`
+        ######################## source code ##########################
+        ${sourcecode}
+        ######################## source code ##########################
+        `);
+    }
+
+    let p;
     try {
         // p = eval(sourcecode);
         if (typeof code_execution_rig !== 'function') {
-            throw new Error("safe-code-exec-and-diag: code_execution_rig MUST be a JavaScript function");
+            throw new Error('safe-code-exec-and-diag: code_execution_rig MUST be a JavaScript function');
         }
         chkBugger(sourcecode);
         p = code_execution_rig.call(this, sourcecode, options, errname, debug);
     } catch (ex) {
-        
+        if (debug > 1) console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
+        if (debug) console.log('generated ' + errname + ' source code fatal error: ', ex.message);
+
+        if (debug > 1) console.log('exec-and-diagnose options:', options);
+
+        if (debug > 1) console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
         if (options.dumpSourceCodeOnFailure || 1) {
             dumpSourceToFile(sourcecode, errname, err_id, options, ex);
         }
-        
+
         if (options.throwErrorOnCompileFailure) {
             throw ex;
         }
@@ -382,9 +512,10 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
 
 
 
-var code_exec = {
+var exec = {
     exec: exec_and_diagnose_this_stuff,
-    dump: dumpSourceToFile
+    dump: dumpSourceToFile,
+    convertExceptionToObject,
 };
 
 //
@@ -406,22 +537,22 @@ assert(recast);
 //
 // This is the base XRegExp ID regex used in many places; this should match the ID macro definition in the EBNF/BNF parser et al as well!
 const ID_REGEX_BASE = '[\\p{Alphabetic}_][\\p{Alphabetic}_\\p{Number}]*';
-// regex set expression which can be used as part of a conditional check to find word/ID/token boundaries 
+// regex set expression which can be used as part of a conditional check to find word/ID/token boundaries
 // as this lists all characters which are not allowed in an Identifier anywhere:
 const IN_ID_CHARSET = '\\p{Alphabetic}_\\p{Number}';
 
 
 
 
-// Determine which Unicode NonAsciiIdentifierStart characters 
+// Determine which Unicode NonAsciiIdentifierStart characters
 // are unused in the given sourcecode and provide a mapping array
 // from given (JISON) start/end identifier character-sequences
 // to these.
-// 
+//
 // The purpose of this routine is to deliver a reversible
 // transform from JISON to plain JavaScript for any action
-// code chunks. 
-// 
+// code chunks.
+//
 // This is the basic building block which helps us convert
 // jison variables such as `$id`, `$3`, `$-1` ('negative index' reference),
 // `@id`, `#id`, `#TOK#` to variable names which can be
@@ -429,40 +560,40 @@ const IN_ID_CHARSET = '\\p{Alphabetic}_\\p{Number}';
 function generateMapper4JisonGrammarIdentifiers(input) {
     // IMPORTANT: we only want the single char Unicodes in here
     // so we can do this transformation at 'Char'-word rather than 'Code'-codepoint level.
-    
+
     //const IdentifierStart = unicode4IdStart.filter((e) => e.codePointAt(0) < 0xFFFF);
 
-    // As we will be 'encoding' the Jison Special characters @ and # into the IDStart Unicode 
+    // As we will be 'encoding' the Jison Special characters @ and # into the IDStart Unicode
     // range to make JavaScript parsers *not* barf a hairball on Jison action code chunks, we
     // must consider a few things while doing that:
-    // 
+    //
     // We CAN use an escape system where we replace a single character with multiple characters,
     // as JavaScript DOES NOT discern between single characters and multi-character strings: anything
-    // between quotes is a string and there's no such thing as C/C++/C#'s `'c'` vs `"c"` which is 
+    // between quotes is a string and there's no such thing as C/C++/C#'s `'c'` vs `"c"` which is
     // *character* 'c' vs *string* 'c'.
-    // 
+    //
     // As we can safely escape characters, all we need to do is find a character (or set of characters)
     // which are in the ID_Start range and are expected to be used rarely while clearly identifyable
     // by humans for ease of debugging of the escaped intermediate values.
-    // 
+    //
     // The escape scheme is simple and borrowed from ancient serial communication protocols and
     // the JavaScript string spec alike:
-    // 
+    //
     // - assume the escape character is A
     // - then if the original input stream includes an A, we output AA
     // - if the original input includes a character #, which must be escaped, it is encoded/output as A
-    // 
+    //
     // This is the same as the way the backslash escape in JavaScript strings works and has a minor issue:
     // sequences of AAA with an odd number of A's CAN occur in the output, which might be a little hard to read.
     // Those are, however, easily machine-decodable and that's what's most important here.
-    // 
-    // To help with that AAA... issue AND because we need to escape multiple Jison markers, we choose to 
+    //
+    // To help with that AAA... issue AND because we need to escape multiple Jison markers, we choose to
     // a slightly tweaked approach: we are going to use a set of 2-char wide escape codes, where the
-    // first character is fixed and the second character is chosen such that the escape code 
-    // DOES NOT occur in the original input -- unless someone would have intentionally fed nasty input 
+    // first character is fixed and the second character is chosen such that the escape code
+    // DOES NOT occur in the original input -- unless someone would have intentionally fed nasty input
     // to the encoder as we will pick the 2 characters in the escape from 2 utterly different *human languages*:
-    // 
-    // - the first character is ဩ which is highly visible and allows us to quickly search through a 
+    //
+    // - the first character is ဩ which is highly visible and allows us to quickly search through a
     //   source to see if and where there are *any* Jison escapes.
     // - the second character is taken from the Unicode CANADIAN SYLLABICS range (0x1400-0x1670) as far as
     //   those are part of ID_Start (0x1401-0x166C or there-abouts) and, unless an attack is attempted at jison,
@@ -470,30 +601,30 @@ function generateMapper4JisonGrammarIdentifiers(input) {
     //   writes such a escape in the comments to document this system, e.g. 'ဩᐅ', then there's still plenty
     //   alternatives for the second character left.
     // - the second character represents the escape type: $-n, $#, #n, @n, #ID#, etc. and each type will
-    //   pick a different base shape from that CANADIAN SYLLABICS charset. 
-    // - note that the trailing '#' in Jison's '#TOKEN#' escape will be escaped as a different code to 
+    //   pick a different base shape from that CANADIAN SYLLABICS charset.
+    // - note that the trailing '#' in Jison's '#TOKEN#' escape will be escaped as a different code to
     //   signal '#' as a token terminator there.
     // - meanwhile, only the initial character in the escape needs to be escaped if encountered in the
     //   original text: ဩ -> ဩဩ as the 2nd and 3rd character are only there to *augment* the escape.
     //   Any CANADIAN SYLLABICS in the original input don't need escaping, as these only have special meaning
     //   when prefixed with ဩ
-    // - if the ဩ character is used often in the text, the alternative ℹ இ ண ஐ Ϟ ല ઊ characters MAY be considered 
+    // - if the ဩ character is used often in the text, the alternative ℹ இ ண ஐ Ϟ ല ઊ characters MAY be considered
     //   for the initial escape code, hence we start with analyzing the entire source input to see which
     //   escapes we'll come up with this time.
     //
     // The basic shapes are:
-    // 
+    //
     // - 1401-141B:  ᐁ             1
     // - 142F-1448:  ᐯ             2
     // - 144C-1465:  ᑌ             3
     // - 146B-1482:  ᑫ             4
-    // - 1489-14A0:  ᒉ             5  
-    // - 14A3-14BA:  ᒣ             6 
-    // - 14C0-14CF:  ᓀ             
+    // - 1489-14A0:  ᒉ             5
+    // - 14A3-14BA:  ᒣ             6
+    // - 14C0-14CF:  ᓀ
     // - 14D3-14E9:  ᓓ             7
     // - 14ED-1504:  ᓭ             8
     // - 1510-1524:  ᔐ             9
-    // - 1526-153D:  ᔦ 
+    // - 1526-153D:  ᔦ
     // - 1542-154F:  ᕂ
     // - 1553-155C:  ᕓ
     // - 155E-1569:  ᕞ
@@ -504,59 +635,59 @@ function generateMapper4JisonGrammarIdentifiers(input) {
     // - 1622-162D:  ᘢ
     //
     // ## JISON identifier formats ##
-    // 
+    //
     // - direct symbol references, e.g. `#NUMBER#` when there's a `%token NUMBER` for your grammar.
     //   These represent the token ID number.
-    //   
+    //
     //   -> (1+2) start-# + end-#
-    //   
+    //
     // - alias/token value references, e.g. `$token`, `$2`
-    // 
+    //
     //   -> $ is an accepted starter, so no encoding required
-    // 
+    //
     // - alias/token location reference, e.g. `@token`, `@2`
-    // 
+    //
     //   -> (6) single-@
-    // 
+    //
     // - alias/token id numbers, e.g. `#token`, `#2`
-    // 
+    //
     //   -> (3) single-#
-    // 
+    //
     // - alias/token stack indexes, e.g. `##token`, `##2`
-    // 
+    //
     //   -> (4) double-#
-    // 
+    //
     // - result value reference `$$`
-    // 
+    //
     //   -> $ is an accepted starter, so no encoding required
-    // 
+    //
     // - result location reference `@$`
-    // 
+    //
     //   -> (6) single-@
-    // 
+    //
     // - rule id number `#$`
-    // 
+    //
     //   -> (3) single-#
-    //   
+    //
     // - result stack index `##$`
-    // 
+    //
     //   -> (4) double-#
-    // 
+    //
     // - 'negative index' value references, e.g. `$-2`
-    // 
+    //
     //   -> (8) single-negative-$
-    //   
+    //
     // - 'negative index' location reference, e.g. `@-2`
-    // 
+    //
     //   -> (7) single-negative-@
-    //   
+    //
     // - 'negative index' stack indexes, e.g. `##-2`
-    // 
+    //
     //   -> (5) double-negative-#
-    // 
-    
+    //
+
     // count the number of occurrences of ch in src:
-    // 
+    //
     // function countOccurrences(ch, src) {
     //     let cnt = 0;
     //     let offset = 0;
@@ -598,38 +729,38 @@ function generateMapper4JisonGrammarIdentifiers(input) {
         return set[lsidx];
     }
 
-    const escCharSet = "ဩ ℹ இ ண ஐ Ϟ ല ઊ";
+    const escCharSet = 'ဩ ℹ இ ண ஐ Ϟ ല ઊ';
 
     // Currently we only need 7 rows of typeIdCharSets. The other rows are commented out but available for future use:
     const typeIdCharSets = [
-        "ᐁ  ᐂ  ᐃ  ᐄ  ᐅ  ᐆ  ᐇ  ᐈ  ᐉ  ᐊ  ᐋ  ᐌ  ᐍ  ᐎ  ᐏ  ᐐ  ᐑ  ᐒ  ᐓ  ᐔ  ᐕ  ᐖ  ᐗ  ᐘ  ᐙ  ᐚ  ᐛ  ᐫ  ᐬ  ᐭ  ᐮ",
+        'ᐁ  ᐂ  ᐃ  ᐄ  ᐅ  ᐆ  ᐇ  ᐈ  ᐉ  ᐊ  ᐋ  ᐌ  ᐍ  ᐎ  ᐏ  ᐐ  ᐑ  ᐒ  ᐓ  ᐔ  ᐕ  ᐖ  ᐗ  ᐘ  ᐙ  ᐚ  ᐛ  ᐫ  ᐬ  ᐭ  ᐮ',
         //"ᐯ  ᐰ  ᐱ  ᐲ  ᐳ  ᐴ  ᐵ  ᐶ  ᐷ  ᐸ  ᐹ  ᐺ  ᐻ  ᐼ  ᐽ  ᐾ  ᐿ  ᑀ  ᑁ  ᑂ  ᑃ  ᑄ  ᑅ  ᑆ  ᑇ  ᑈ",
-        "ᑌ  ᑍ  ᑎ  ᑏ  ᑐ  ᑑ  ᑒ  ᑓ  ᑔ  ᑕ  ᑖ  ᑗ  ᑘ  ᑙ  ᑚ  ᑛ  ᑜ  ᑝ  ᑞ  ᑟ  ᑠ  ᑡ  ᑢ  ᑣ  ᑤ  ᑥ  ᑧ  ᑨ  ᑩ  ᑪ",
-        "ᑫ  ᑬ  ᑭ  ᑮ  ᑯ  ᑰ  ᑱ  ᑲ  ᑳ  ᑴ  ᑵ  ᑶ  ᑷ  ᑸ  ᑹ  ᑺ  ᑻ  ᑼ  ᑽ  ᑾ  ᑿ  ᒀ  ᒁ  ᒂ  ᒅ  ᒆ  ᒇ  ᒈ",
+        'ᑌ  ᑍ  ᑎ  ᑏ  ᑐ  ᑑ  ᑒ  ᑓ  ᑔ  ᑕ  ᑖ  ᑗ  ᑘ  ᑙ  ᑚ  ᑛ  ᑜ  ᑝ  ᑞ  ᑟ  ᑠ  ᑡ  ᑢ  ᑣ  ᑤ  ᑥ  ᑧ  ᑨ  ᑩ  ᑪ',
+        'ᑫ  ᑬ  ᑭ  ᑮ  ᑯ  ᑰ  ᑱ  ᑲ  ᑳ  ᑴ  ᑵ  ᑶ  ᑷ  ᑸ  ᑹ  ᑺ  ᑻ  ᑼ  ᑽ  ᑾ  ᑿ  ᒀ  ᒁ  ᒂ  ᒅ  ᒆ  ᒇ  ᒈ',
         //"ᒉ  ᒊ  ᒋ  ᒌ  ᒍ  ᒎ  ᒏ  ᒐ  ᒑ  ᒒ  ᒓ  ᒔ  ᒕ  ᒖ  ᒗ  ᒘ  ᒙ  ᒚ  ᒛ  ᒜ  ᒝ  ᒞ  ᒟ  ᒠ",
         //"ᒣ  ᒤ  ᒥ  ᒦ  ᒧ  ᒨ  ᒩ  ᒪ  ᒫ  ᒬ  ᒭ  ᒮ  ᒯ  ᒰ  ᒱ  ᒲ  ᒳ  ᒴ  ᒵ  ᒶ  ᒷ  ᒸ  ᒹ  ᒺ",
         //"ᓓ  ᓔ  ᓕ  ᓖ  ᓗ  ᓘ  ᓙ  ᓚ  ᓛ  ᓜ  ᓝ  ᓞ  ᓟ  ᓠ  ᓡ  ᓢ  ᓣ  ᓤ  ᓥ  ᓦ  ᓧ  ᓨ  ᓩ",
         //"ᓭ  ᓮ  ᓯ  ᓰ  ᓱ  ᓲ  ᓳ  ᓴ  ᓵ  ᓶ  ᓷ  ᓸ  ᓹ  ᓺ  ᓻ  ᓼ  ᓽ  ᓾ  ᓿ  ᔀ  ᔁ  ᔂ  ᔃ  ᔄ",
         //"ᔐ  ᔑ  ᔒ  ᔓ  ᔔ  ᔕ  ᔖ  ᔗ  ᔘ  ᔙ  ᔚ  ᔛ  ᔜ  ᔝ  ᔞ  ᔟ  ᔠ  ᔡ  ᔢ  ᔣ  ᔤ",
-        "ᔦ  ᔧ  ᔨ  ᔩ  ᔪ  ᔫ  ᔬ  ᔭ  ᔮ  ᔯ  ᔰ  ᔱ  ᔲ  ᔳ  ᔴ  ᔵ  ᔶ  ᔷ  ᔸ  ᔹ  ᔺ  ᔻ  ᔼ  ᔽ",
+        'ᔦ  ᔧ  ᔨ  ᔩ  ᔪ  ᔫ  ᔬ  ᔭ  ᔮ  ᔯ  ᔰ  ᔱ  ᔲ  ᔳ  ᔴ  ᔵ  ᔶ  ᔷ  ᔸ  ᔹ  ᔺ  ᔻ  ᔼ  ᔽ',
         //"ᓀ  ᓁ  ᓂ  ᓃ  ᓄ  ᓅ  ᓆ  ᓇ  ᓈ  ᓉ  ᓊ  ᓋ  ᓌ  ᓍ  ᓎ  ᓏ",
         //"ᕂ  ᕃ  ᕄ  ᕅ  ᕆ  ᕇ  ᕈ  ᕉ  ᕊ  ᕋ  ᕌ  ᕍ  ᕎ  ᕏ",
         //"ᕞ  ᕟ  ᕠ  ᕡ  ᕢ  ᕣ  ᕤ  ᕥ  ᕦ  ᕧ  ᕨ  ᕩ",
         //"ᖸ  ᖹ  ᖺ  ᖻ  ᖼ  ᖽ  ᖾ  ᖿ  ᗀ  ᗁ  ᗂ  ᗃ",
-        "ᗜ  ᗝ  ᗞ  ᗟ  ᗠ  ᗡ  ᗢ  ᗣ  ᗤ  ᗥ  ᗦ  ᗧ  ᗨ  ᗩ  ᗪ  ᗫ  ᗬ  ᗭ",
+        'ᗜ  ᗝ  ᗞ  ᗟ  ᗠ  ᗡ  ᗢ  ᗣ  ᗤ  ᗥ  ᗦ  ᗧ  ᗨ  ᗩ  ᗪ  ᗫ  ᗬ  ᗭ',
         //"ᗯ  ᗰ  ᗱ  ᗲ  ᗳ  ᗴ  ᗵ  ᗶ  ᗷ  ᗸ  ᗹ  ᗺ  ᗻ  ᗼ  ᗽ  ᗾ  ᗿ  ᘀ",
-        "ᘔ  ᘕ  ᘖ  ᘗ  ᘘ  ᘙ  ᘚ  ᘛ  ᘜ  ᘝ  ᘞ  ᘟ  ᘠ  ᘡ",
+        'ᘔ  ᘕ  ᘖ  ᘗ  ᘘ  ᘙ  ᘚ  ᘛ  ᘜ  ᘝ  ᘞ  ᘟ  ᘠ  ᘡ',
         //"ᘢ  ᘣ  ᘤ  ᘥ  ᘦ  ᘧ  ᘨ  ᘩ  ᘪ  ᘫ  ᘬ  ᘭ  ᘴ  ᘵ  ᘶ  ᘷ  ᘸ  ᘹ",
         //"ᕓ  ᕔ  ᕕ  ᕖ  ᕗ  ᕘ  ᕙ  ᕚ  ᕛ  ᕜ",
-        "ᗄ  ᗅ  ᗆ  ᗇ  ᗈ  ᗉ  ᗊ  ᗋ  ᗌ  ᗍ  ᗎ  ᗏ  ᗐ  ᗑ  ᗒ  ᗓ  ᗔ  ᗕ  ᗖ  ᗗ  ᗘ  ᗙ  ᗚ  ᗛ",
+        'ᗄ  ᗅ  ᗆ  ᗇ  ᗈ  ᗉ  ᗊ  ᗋ  ᗌ  ᗍ  ᗎ  ᗏ  ᗐ  ᗑ  ᗒ  ᗓ  ᗔ  ᗕ  ᗖ  ᗗ  ᗘ  ᗙ  ᗚ  ᗛ'
     ];
 
-    //const I = 'ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ';   // 1..12, but accepted as IdentifierStart in JavaScript :-) 
+    //const I = 'ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ';   // 1..12, but accepted as IdentifierStart in JavaScript :-)
 
     // Probable speed improvement: scan a single time through the (probably large) input source,
     // looking for all characters in parallel, instead of scanning N times through there:
     // construct a regex to dig out all potential occurrences and take it from there.
-    let reStr = escCharSet + typeIdCharSets.join("");
+    let reStr = escCharSet + typeIdCharSets.join('');
     reStr = reStr.replace(/\s+/g, '');
     const re = new RegExp(`[${reStr}]`, 'g');
     var hash = new Array(0xD800);
@@ -641,18 +772,18 @@ function generateMapper4JisonGrammarIdentifiers(input) {
 
     //
     // The basic shapes are:
-    // 
+    //
     // - 1401-141B:  ᐁ             1
     // - 142F-1448:  ᐯ             2
     // - 144C-1465:  ᑌ             3
     // - 146B-1482:  ᑫ             4
-    // - 1489-14A0:  ᒉ             5  
-    // - 14A3-14BA:  ᒣ             6 
-    // - 14C0-14CF:  ᓀ             
+    // - 1489-14A0:  ᒉ             5
+    // - 14A3-14BA:  ᒣ             6
+    // - 14C0-14CF:  ᓀ
     // - 14D3-14E9:  ᓓ             7
     // - 14ED-1504:  ᓭ             8
     // - 1510-1524:  ᔐ             9
-    // - 1526-153D:  ᔦ 
+    // - 1526-153D:  ᔦ
     // - 1542-154F:  ᕂ
     // - 1553-155C:  ᕓ
     // - 155E-1569:  ᕞ
@@ -663,56 +794,56 @@ function generateMapper4JisonGrammarIdentifiers(input) {
     // - 1622-162D:  ᘢ
     //
     // ## JISON identifier formats ##
-    // 
+    //
     // - direct symbol references, e.g. `#NUMBER#` when there's a `%token NUMBER` for your grammar.
     //   These represent the token ID number.
-    //   
+    //
     //   -> (1+2) start-# + end-#
-    //   
+    //
     // - alias/token value references, e.g. `$token`, `$2`
-    // 
+    //
     //   -> $ is an accepted starter, so no encoding required
-    // 
+    //
     // - alias/token location reference, e.g. `@token`, `@2`
-    // 
+    //
     //   -> (6) single-@
-    // 
+    //
     // - alias/token id numbers, e.g. `#token`, `#2`
-    // 
+    //
     //   -> (3) single-#
-    // 
+    //
     // - alias/token stack indexes, e.g. `##token`, `##2`
-    // 
+    //
     //   -> (4) double-#
-    // 
+    //
     // - result value reference `$$`
-    // 
+    //
     //   -> $ is an accepted starter, so no encoding required
-    // 
+    //
     // - result location reference `@$`
-    // 
+    //
     //   -> (6) single-@
-    // 
+    //
     // - rule id number `#$`
-    // 
+    //
     //   -> (3) single-#
-    //   
+    //
     // - result stack index `##$`
-    // 
+    //
     //   -> (4) double-#
-    // 
+    //
     // - 'negative index' value references, e.g. `$-2`
-    // 
+    //
     //   -> (8) single-negative-$
-    //   
+    //
     // - 'negative index' location reference, e.g. `@-2`
-    // 
+    //
     //   -> (7) single-negative-@
-    //   
+    //
     // - 'negative index' stack indexes, e.g. `##-2`
-    // 
+    //
     //   -> (5) double-negative-#
-    // 
+    //
 
     const escChar = pickChar(escCharSet);
     let typeIdChar = [];
@@ -720,97 +851,97 @@ function generateMapper4JisonGrammarIdentifiers(input) {
         typeIdChar[i] = pickChar(typeIdCharSets[i]);
     }
 
-    // produce a function set for encoding and decoding content, 
+    // produce a function set for encoding and decoding content,
     // plus the basic strings to build regexes for matching the various jison
     // identifier types:
     return {
         // - direct symbol references, e.g. `#NUMBER#` when there's a `%token NUMBER` for your grammar.
         //   These represent the token ID number.
-        //   
+        //
         //   -> (1) start-#
         tokenDirectIdentifierStart: escChar + typeIdChar[0],
         tokenDirectIdentifierRe: new XRegExp(`#(${ID_REGEX_BASE})#`, 'g'),
 
         // - alias/token value references, e.g. `$token`, `$2`
-        // 
+        //
         //   -> $ is an accepted starter, so no encoding required
         // - result value reference `$$`
-        // 
+        //
         //   -> $ is an accepted starter, so no encoding required
         tokenValueReferenceStart: '$',
         tokenValueReferenceRe: new XRegExp(`$(${ID_REGEX_BASE})|$([0-9]+)`, 'g'),
 
         // - alias/token location reference, e.g. `@token`, `@2`
-        // 
+        //
         //   -> (6) single-@
         // - result location reference `@$`
-        // 
+        //
         //   -> (6) single-@
         tokenLocationStart: escChar + typeIdChar[1],
         tokenLocationRe: new XRegExp(`@(${ID_REGEX_BASE})|@([0-9]+)`, 'g'),
 
         // - alias/token id numbers, e.g. `#token`, `#2`
-        // 
+        //
         //   -> (3) single-#
         // - rule id number `#$`
-        // 
+        //
         //   -> (3) single-#
         tokenIdentifierStart: escChar + typeIdChar[2],
         tokenIdentifierRe: new XRegExp(`#(${ID_REGEX_BASE})|#([0-9]+)`, 'g'),
-        
+
         // - alias/token stack indexes, e.g. `##token`, `##2`
-        // 
+        //
         //   -> (4) double-#
         // - result stack index `##$`
-        // 
+        //
         //   -> (4) double-#
         tokenStackIndexStart: escChar + typeIdChar[3],
         tokenStackIndexRe: new XRegExp(`##(${ID_REGEX_BASE})|##([0-9]+)`, 'g'),
 
         // - 'negative index' value references, e.g. `$-2`
-        // 
+        //
         //   -> (8) single-negative-$
         tokenNegativeValueReferenceStart: escChar + typeIdChar[4],
-        tokenValueReferenceRe: new XRegExp(`$-([0-9]+)`, 'g'),
-           
+        tokenValueReferenceRe: new XRegExp('$-([0-9]+)', 'g'),
+
         // - 'negative index' location reference, e.g. `@-2`
-        // 
+        //
         //   -> (7) single-negative-@
         tokenNegativeLocationStart: escChar + typeIdChar[5],
-        tokenNegativeLocationRe: new XRegExp(`@-([0-9]+)`, 'g'),
-           
+        tokenNegativeLocationRe: new XRegExp('@-([0-9]+)', 'g'),
+
         // - 'negative index' stack indexes, e.g. `##-2`
-        // 
+        //
         //   -> (5) double-negative-#
         tokenNegativeStackIndexStart: escChar + typeIdChar[6],
-        tokenNegativeStackIndexRe: new XRegExp(`#-([0-9]+)`, 'g'),
+        tokenNegativeStackIndexRe: new XRegExp('#-([0-9]+)', 'g'),
 
         // combined regex for encoding direction
         tokenDetect4EncodeRe: new XRegExp(`([^$@#${IN_ID_CHARSET}])([$@#]|##)(${ID_REGEX_BASE}|[$]|-?[0-9]+)(#?)(?![$@#${IN_ID_CHARSET}])`, 'g'),
 
         // combined regex for decoding direction
-        tokenDetect4DecodeRe: new XRegExp(`([^$${IN_ID_CHARSET}])(${escChar}[${typeIdChar.slice(0,7).join('')}])(${ID_REGEX_BASE}|[$]|[0-9]+)(?![$@#${IN_ID_CHARSET}])`, 'g'),
+        tokenDetect4DecodeRe: new XRegExp(`([^$${IN_ID_CHARSET}])(${escChar}[${typeIdChar.slice(0, 7).join('')}])(${ID_REGEX_BASE}|[$]|[0-9]+)(?![$@#${IN_ID_CHARSET}])`, 'g'),
 
         encode: function encodeJisonTokens(src, locationOffsetSpec) {
             let re = this.tokenDetect4EncodeRe;
 
             // reset regex
-            re.lastIndex = 0;            
+            re.lastIndex = 0;
 
             // patch `src` for the lookbehind emulation in the main regex used:
             src = ' ' + src;
 
             // Perform the encoding, one token at a time via callback function.
-            // 
+            //
             // Note: all erroneous inputs are IGNORED as those MAY be part of a string
             // or comment, where they are perfectly legal.
-            // This is a tad sub-optimal as we won't be able to report errors early 
+            // This is a tad sub-optimal as we won't be able to report errors early
             // but otherwise we would be rejecting some potentially *legal* action code
             // and we DO NOT want to be pedantically strict while we are unable to parse
             // the input very precisely yet.
             src = src.replace(re, (m, p1, p2, p3, p4, offset) => {
                 // p1 is only serving as lookbehind emulation
-                 
+
                 switch (p2) {
                 case '$':
                     // no encoding required UNLESS it's a negative index; p4 MUST be empty
@@ -818,7 +949,7 @@ function generateMapper4JisonGrammarIdentifiers(input) {
                         if (locationOffsetSpec) {
                             locationOffsetSpec.reportLocation(`syntax error: ${p2 + p3} cannot be followed by ${p4}`, src, offset + p1.length + p2.length + p3.length);
                         }
-                        return p1 + p2 +p3 + p4;
+                        return p1 + p2 + p3 + p4;
                     }
                     if (p3[0] === '-') {
                         return p1 + this.tokenNegativeValueReferenceStart + p3.substring(1);
@@ -831,7 +962,7 @@ function generateMapper4JisonGrammarIdentifiers(input) {
                         if (locationOffsetSpec) {
                             locationOffsetSpec.reportLocation(`syntax error: ${p2 + p3} cannot be followed by ${p4}`, src, offset + p1.length + p2.length + p3.length);
                         }
-                        return p1 + p2 +p3 + p4;
+                        return p1 + p2 + p3 + p4;
                     }
                     if (p3[0] === '-') {
                         return p1 + this.tokenNegativeStackIndexStart + p3.substring(1);
@@ -844,7 +975,7 @@ function generateMapper4JisonGrammarIdentifiers(input) {
                         if (locationOffsetSpec) {
                             locationOffsetSpec.reportLocation(`syntax error: ${p2 + p3} cannot be followed by ${p4}`, src, offset + p1.length + p2.length + p3.length);
                         }
-                        return p1 + p2 +p3 + p4;
+                        return p1 + p2 + p3 + p4;
                     }
                     if (p3[0] === '-') {
                         return p1 + this.tokenNegativeLocationStart + p3.substring(1);
@@ -857,7 +988,7 @@ function generateMapper4JisonGrammarIdentifiers(input) {
                         if (locationOffsetSpec) {
                             locationOffsetSpec.reportLocation(`syntax error: ${p2 + p3 + p4} is an illegal negative reference type`, src, offset + p1.length + p2.length);
                         }
-                        return p1 + p2 +p3 + p4;
+                        return p1 + p2 + p3 + p4;
                     }
                     if (p4 !== '') {
                         return p1 + this.tokenDirectIdentifierStart + p3;
@@ -876,37 +1007,37 @@ function generateMapper4JisonGrammarIdentifiers(input) {
             let re = this.tokenDetect4DecodeRe;
 
             // reset regex
-            re.lastIndex = 0;            
+            re.lastIndex = 0;
 
             // patch `src` for the lookbehind emulation in the main regex used:
             src = ' ' + src;
 
             // Perform the encoding, one token at a time via callback function.
-            // 
+            //
             // Note: all erroneous inputs are IGNORED as those MAY be part of a string
             // or comment, where they are perfectly legal.
-            // This is a tad sub-optimal as we won't be able to report errors early 
+            // This is a tad sub-optimal as we won't be able to report errors early
             // but otherwise we would be rejecting some potentially *legal* action code
             // and we DO NOT want to be pedantically strict while we are unable to parse
             // the input very precisely yet.
             src = src.replace(re, (m, p1, p2, p3, offset) => {
                 // p1 is only serving as lookbehind emulation
-                
+
                 switch (p2) {
                 case this.tokenNegativeValueReferenceStart:
-                    return p1 + "$-" + p3;
+                    return p1 + '$-' + p3;
 
                 case this.tokenNegativeStackIndexStart:
-                    return p1 + "##-" + p3;
+                    return p1 + '##-' + p3;
 
                 case this.tokenStackIndexStart:
-                    return p1 + "##" + p3;
+                    return p1 + '##' + p3;
 
                 case this.tokenNegativeLocationStart:
-                    return p1 + "@-" + p3;
+                    return p1 + '@-' + p3;
 
                 case this.tokenLocationStart:
-                    return p1 + "@" + p3;
+                    return p1 + '@' + p3;
 
                 case this.tokenDirectIdentifierStart:
                     // p3 CANNOT be a negative value or token ID
@@ -938,7 +1069,7 @@ function generateMapper4JisonGrammarIdentifiers(input) {
 
             // and remove the added prefix which was used for lookbehind emulation:
             return src.substring(1);
-        },
+        }
     };
 }
 
@@ -955,37 +1086,37 @@ function parseCodeChunkToAST(src, options) {
     .replace(/@/g, '\uFFDA')
     .replace(/#/g, '\uFFDB')
     ;
-    var ast = recast.parse(src);
+    const ast = recast.parse(src);
     return ast;
 }
 
 
 function compileCodeToES5(src, options) {
     options = Object.assign({}, {
-      ast: true,
-      code: true,
-      sourceMaps: true,
-      comments: true,
-      filename: 'compileCodeToES5.js',
-      sourceFileName: 'compileCodeToES5.js',
-      sourceRoot: '.',
-      sourceType: 'module',
+        ast: true,
+        code: true,
+        sourceMaps: true,
+        comments: true,
+        filename: 'compileCodeToES5.js',
+        sourceFileName: 'compileCodeToES5.js',
+        sourceRoot: '.',
+        sourceType: 'module',
 
-      babelrc: false,
-      
-      ignore: [
-        "node_modules/**/*.js"
-      ],
-      compact: false,
-      retainLines: false,
-      presets: [
-        ["@babel/preset-env", {
-          targets: {
-            browsers: ["last 2 versions"],
-            node: "8.0"
-          }
-        }]
-      ]
+        babelrc: false,
+
+        ignore: [
+            'node_modules/**/*.js'
+        ],
+        compact: false,
+        retainLines: false,
+        presets: [
+            [ '@babel/preset-env', {
+                targets: {
+                    browsers: [ 'last 2 versions' ],
+                    node: '8.0'
+                }
+            } ]
+        ]
     }, options);
 
     return transformSync(src, options); // => { code, map, ast }
@@ -993,8 +1124,8 @@ function compileCodeToES5(src, options) {
 
 
 function prettyPrintAST(ast, options) {
-    var options = options || {};
-    const defaultOptions = { 
+    options = options || {};
+    const defaultOptions = {
         tabWidth: 2,
         quote: 'single',
         arrowParensAlways: true,
@@ -1003,7 +1134,7 @@ function prettyPrintAST(ast, options) {
         // when printing generically.
         reuseWhitespace: false
     };
-    for (var key in defaultOptions) {
+    for (let key in defaultOptions) {
         if (options[key] === undefined) {
             options[key] = defaultOptions[key];
         }
@@ -1026,25 +1157,25 @@ function prettyPrintAST(ast, options) {
 
 
 // validate the given JISON+JavaScript snippet: does it compile?
-// 
-// Return either the parsed AST (object) or an error message (string). 
+//
+// Return either the parsed AST (object) or an error message (string).
 function checkActionBlock(src, yylloc, options) {
     // make sure reasonable line numbers, etc. are reported in any
     // potential parse errors by pushing the source code down:
     if (yylloc && yylloc.first_line > 0) {
-        var cnt = yylloc.first_line;
-        var lines = new Array(cnt);
+        let cnt = yylloc.first_line;
+        let lines = new Array(cnt);
         src = lines.join('\n') + src;
-    } 
+    }
     if (!src.trim()) {
         return false;
     }
 
     try {
-        var rv = parseCodeChunkToAST(src, options);
+        let rv = parseCodeChunkToAST(src, options);
         return false;
     } catch (ex) {
-        return ex.message || "code snippet cannot be parsed";
+        return ex.message || 'code snippet cannot be parsed';
     }
 }
 
@@ -1055,9 +1186,9 @@ function checkActionBlock(src, yylloc, options) {
 // trailing semicolons and/or wrapping `{...}` braces,
 // when such is easily possible *without having to actually
 // **parse** the `src` code block in order to do this safely*.
-// 
+//
 // Returns the trimmed sourcecode which was provided via `src`.
-// 
+//
 // Note: the `startMarker` argument is special in that a lexer/parser
 // can feed us the delimiter which started the code block here:
 // when the starting delimiter actually is `{` we can safely
@@ -1065,7 +1196,7 @@ function checkActionBlock(src, yylloc, options) {
 // while otherwise we may *not* do so as complex/specially-crafted
 // code will fail when it was wrapped in other delimiters, e.g.
 // action code specs like this one:
-// 
+//
 //              %{
 //                  {  // trimActionCode sees this one as outer-starting: WRONG
 //                      a: 1
@@ -1074,14 +1205,14 @@ function checkActionBlock(src, yylloc, options) {
 //                      b: 2
 //                  }  // trimActionCode sees this one as outer-ending: WRONG
 //              %}
-//              
+//
 // Of course the example would be 'ludicrous' action code but the
-// key point here is that users will certainly be able to come up with 
+// key point here is that users will certainly be able to come up with
 // convoluted code that is smarter than our simple regex-based
 // `{...}` trimmer in here!
-// 
+//
 function trimActionCode(src, startMarker) {
-    var s = src.trim();
+    let s = src.trim();
     // remove outermost set of braces UNLESS there's
     // a curly brace in there anywhere: in that case
     // we should leave it up to the sophisticated
@@ -1135,7 +1266,7 @@ var parse2AST = {
     trimActionCode,
 
     ID_REGEX_BASE,
-    IN_ID_CHARSET,
+    IN_ID_CHARSET
 };
 
 function chkBugger$1(src) {
@@ -1149,7 +1280,7 @@ function chkBugger$1(src) {
 /// HELPER FUNCTION: print the function in source code form, properly indented.
 /** @public */
 function printFunctionSourceCode(f) {
-    var src = String(f);
+    const src = String(f);
     chkBugger$1(src);
     return src;
 }
@@ -1161,24 +1292,24 @@ const arrowFuncRe = /^(?:(?:\(([^\)]*)\))|(?:([^\(\)]+)))[\s\r\n]*=>[\s\r\n]*(?:
 
 /// HELPER FUNCTION: print the function **content** in source code form, properly indented,
 /// ergo: produce the code for inlining the function.
-/// 
+///
 /// Also supports ES6's Arrow Functions:
-/// 
+///
 /// ```
 /// function a(x) { return x; }        ==> 'return x;'
 /// function (x)  { return x; }        ==> 'return x;'
 /// (x) => { return x; }               ==> 'return x;'
 /// (x) => x;                          ==> 'return x;'
 /// (x) => do(1), do(2), x;            ==> 'return (do(1), do(2), x);'
-/// 
+///
 /** @public */
 function printFunctionSourceCodeContainer(f) {
-    var action = printFunctionSourceCode(f).trim();
-    var args;
+    let action = printFunctionSourceCode(f).trim();
+    let args;
 
     // Also cope with Arrow Functions (and inline those as well?).
     // See also https://github.com/zaach/jison-lex/issues/23
-    var m = funcRe.exec(action);
+    let m = funcRe.exec(action);
     if (m) {
         args = m[1].trim();
         action = m[2].trim();
@@ -1195,8 +1326,8 @@ function printFunctionSourceCodeContainer(f) {
             if (m[5]) {
                 // non-bracketed version: implicit `return` statement!
                 //
-                // Q: Must we make sure we have extra braces around the return value 
-                // to prevent JavaScript from inserting implit EOS (End Of Statement) 
+                // Q: Must we make sure we have extra braces around the return value
+                // to prevent JavaScript from inserting implit EOS (End Of Statement)
                 // markers when parsing this, when there are newlines in the code?
                 // A: No, we don't have to as arrow functions rvalues suffer from this
                 // same problem, hence the arrow function's programmer must already
@@ -1207,14 +1338,14 @@ function printFunctionSourceCodeContainer(f) {
                 action = m[3].trim();
             }
         } else {
-            var e = new Error('Cannot extract code from function');
+            const e = new Error('Cannot extract code from function');
             e.subject = action;
             throw e;
         }
     }
     return {
         args: args,
-        code: action,
+        code: action
     };
 }
 
@@ -1225,17 +1356,17 @@ function printFunctionSourceCodeContainer(f) {
 
 
 var stringifier = {
-	printFunctionSourceCode,
-	printFunctionSourceCodeContainer,
+    printFunctionSourceCode,
+    printFunctionSourceCodeContainer
 };
 
-// 
-// 
-// 
+//
+//
+//
 function detectIstanbulGlobal() {
-    const gcv = "__coverage__";
+    const gcv = '__coverage__';
     const globalvar = new Function('return this')();
-    var coverage = globalvar[gcv];
+    const coverage = globalvar[gcv];
     return coverage || false;
 }
 
@@ -1261,7 +1392,7 @@ function detectIstanbulGlobal() {
 //
 // Return FALSE when there's no failure, otherwise return an `Error` info object.
 function checkRegExp(re_src, re_flags, XRegExp) {
-    var re;
+    let re;
 
     // were we fed a RegExp object or a string?
     if (re_src
@@ -1309,7 +1440,7 @@ function checkRegExp(re_src, re_flags, XRegExp) {
 //
 // Return FALSE when the input is not a legal regex.
 function getRegExpInfo(re_src, re_flags, XRegExp) {
-    var re1, re2, m1, m2;
+    let re1, re2, m1, m2;
 
     // were we fed a RegExp object or a string?
     if (re_src
@@ -1372,13 +1503,13 @@ var reHelpers = {
     getRegExpInfo: getRegExpInfo
 };
 
-var cycleref = [];
-var cyclerefpath = [];
+let cycleref = [];
+let cyclerefpath = [];
 
-var linkref = [];
-var linkrefpath = [];
+let linkref = [];
+let linkrefpath = [];
 
-var path = [];
+let path = [];
 
 function shallow_copy(src) {
     if (typeof src === 'object') {
@@ -1386,14 +1517,14 @@ function shallow_copy(src) {
             return src.slice();
         }
 
-        var dst = {};
+        let dst = {};
         if (src instanceof Error) {
             dst.name = src.name;
             dst.message = src.message;
             dst.stack = src.stack;
         }
 
-        for (var k in src) {
+        for (let k in src) {
             if (Object.prototype.hasOwnProperty.call(src, k)) {
                 dst[k] = src[k];
             }
@@ -1406,11 +1537,11 @@ function shallow_copy(src) {
 
 function shallow_copy_and_strip_depth(src, parentKey) {
     if (typeof src === 'object') {
-        var dst;
+        let dst;
 
         if (src instanceof Array) {
             dst = src.slice();
-            for (var i = 0, len = dst.length; i < len; i++) {
+            for (let i = 0, len = dst.length; i < len; i++) {
                 path.push('[' + i + ']');
                 dst[i] = shallow_copy_and_strip_depth(dst[i], parentKey + '[' + i + ']');
                 path.pop();
@@ -1423,9 +1554,9 @@ function shallow_copy_and_strip_depth(src, parentKey) {
                 dst.stack = src.stack;
             }
 
-            for (var k in src) {
+            for (let k in src) {
                 if (Object.prototype.hasOwnProperty.call(src, k)) {
-                    var el = src[k];
+                    let el = src[k];
                     if (el && typeof el === 'object') {
                         dst[k] = '[cyclic reference::attribute --> ' + parentKey + '.' + k + ']';
                     } else {
@@ -1440,14 +1571,50 @@ function shallow_copy_and_strip_depth(src, parentKey) {
 }
 
 
+// strip developer machine specific parts off any paths in a given stacktrace (string)
+// to ease cross-platform comparison of these stacktraces.
 function stripErrorStackPaths(msg) {
     // strip away devbox-specific paths in error stack traces in the output:
+    // and any `nyc` profiler run added trailing cruft has to go too, e.g. ', <anonymous>:1489:27)':
     msg = msg
-    .replace(/\bat ([^\r\n(\\\/]*?)\([^)]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)\)/gi, 'at $1(/$2)')
-    .replace(/\bat [^\r\n ]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)/gi, 'at /$1');
+    .replace(/\bat ([^\r\n(\\\/]+?)\([^)]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)\)(?:, <anonymous>:[0-9]+:[0-9]+\))?/gi, 'at $1(/$2:$3)')
+    .replace(/\bat [^\r\n ]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)/gi, 'at /$1:$2');
 
     return msg;
 }
+
+
+// strip off the line/position info from any stacktrace as a assert.deepEqual() on these
+// will otherwise FAIL due to us running this stuff through both regular `node` and 
+// the `nyc` profiler: the latter reformats the sourcecode-under-test, thus producing 
+// exceptions and stacktraces which point completely somewhere else and this would b0rk
+// our test rigs for the jison subpackages.
+function cleanStackTrace4Comparison(obj) {
+    if (typeof obj === 'string') {
+        // and any `nyc` profiler run added trailing cruft has to go too, e.g. ', <anonymous>:1489:27)':
+        let msg = obj
+        .replace(/\bat ([^\r\n(\\\/]+?)\([^)]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)\)(?:, <anonymous>:[0-9]+:[0-9]+\))?/gi, 'at $1(/$2)')
+        .replace(/\bat [^\r\n ]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)/gi, 'at /$1');
+
+        return msg;
+    }
+
+    if (obj) {
+        if (obj.stack) {
+            obj.stack = cleanStackTrace4Comparison(obj.stack);
+        }
+        let keys = Object.keys(obj);
+        for (let i in keys) {
+            let key = keys[i];
+            let el = obj[key];
+            cleanStackTrace4Comparison(el);
+        }
+    }
+    return obj;
+}
+
+
+
 
 
 
@@ -1464,7 +1631,7 @@ function trim_array_tail(arr) {
 
 function treat_value_stack(v) {
     if (v instanceof Array) {
-        var idx = cycleref.indexOf(v);
+        let idx = cycleref.indexOf(v);
         if (idx >= 0) {
             v = '[cyclic reference to parent array --> ' + cyclerefpath[idx] + ']';
         } else {
@@ -1490,10 +1657,10 @@ function treat_value_stack(v) {
 }
 
 function treat_error_infos_array(arr) {
-    var inf = arr.slice();
+    let inf = arr.slice();
     trim_array_tail(inf);
-    for (var key = 0, len = inf.length; key < len; key++) {
-        var err = inf[key];
+    for (let key = 0, len = inf.length; key < len; key++) {
+        let err = inf[key];
         if (err) {
             path.push('[' + key + ']');
 
@@ -1591,7 +1758,7 @@ function treat_hash(h) {
 function treat_error_report_info(e) {
     // shallow copy object:
     e = shallow_copy(e);
-    
+
     if (e && e.hash) {
         path.push('hash');
         e.hash = treat_hash(e.hash);
@@ -1608,7 +1775,7 @@ function treat_error_report_info(e) {
         path.push('lexer');
         e.lexer = treat_lexer(e.lexer);
         path.pop();
-    }    
+    }
 
     if (e.__error_infos) {
         path.push('__error_infos');
@@ -1636,7 +1803,7 @@ function treat_error_report_info(e) {
 
 function treat_object(e) {
     if (e && typeof e === 'object') {
-        var idx = cycleref.indexOf(e);
+        let idx = cycleref.indexOf(e);
         if (idx >= 0) {
             // cyclic reference, most probably an error instance.
             // we still want it to be READABLE in a way, though:
@@ -1652,7 +1819,7 @@ function treat_object(e) {
                 linkrefpath.push(path.join('.'));
 
                 e = treat_error_report_info(e);
-                
+
                 cycleref.pop();
                 cyclerefpath.pop();
             }
@@ -1664,14 +1831,14 @@ function treat_object(e) {
 
 // strip off large chunks from the Error exception object before
 // it will be fed to a test log or other output.
-// 
+//
 // Internal use in the unit test rigs.
 function trimErrorForTestReporting(e) {
     cycleref.length = 0;
     cyclerefpath.length = 0;
     linkref.length = 0;
     linkrefpath.length = 0;
-    path = ['*'];
+    path = [ '*' ];
 
     if (e) {
         e = treat_object(e);
@@ -1681,7 +1848,7 @@ function trimErrorForTestReporting(e) {
     cyclerefpath.length = 0;
     linkref.length = 0;
     linkrefpath.length = 0;
-    path = ['*'];
+    path = [ '*' ];
 
     return e;
 }
@@ -1695,12 +1862,14 @@ var index = {
     dquote,
     trimErrorForTestReporting,
     stripErrorStackPaths,
+    cleanStackTrace4Comparison,
 
     checkRegExp: reHelpers.checkRegExp,
     getRegExpInfo: reHelpers.getRegExpInfo,
 
-    exec: code_exec.exec,
-    dump: code_exec.dump,
+    exec: exec.exec,
+    dump: exec.dump,
+    convertExceptionToObject: exec.convertExceptionToObject,
 
     generateMapper4JisonGrammarIdentifiers: parse2AST.generateMapper4JisonGrammarIdentifiers,
     parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,
@@ -1715,7 +1884,7 @@ var index = {
     printFunctionSourceCode: stringifier.printFunctionSourceCode,
     printFunctionSourceCodeContainer: stringifier.printFunctionSourceCodeContainer,
 
-    detectIstanbulGlobal,
+    detectIstanbulGlobal
 };
 
 export default index;

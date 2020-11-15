@@ -1,5 +1,5 @@
 
-            var lexer;
+                    
 // custom lexer...
   console.log('The moment the custom lexer gets defined...');
   var lexer = {
@@ -17,10 +17,10 @@
   };
 ;
 
-            //=============================================================================
-            //                     JISON-LEX OPTIONS:
+                    //=============================================================================
+                    //                     JISON-LEX OPTIONS:
 
-            {
+                    {
   lexerActionsUseYYLENG: '???',
   lexerActionsUseYYLINENO: '???',
   lexerActionsUseYYTEXT: '???',
@@ -144,4 +144,4 @@ var YYSTATE = YY_START;
   is_custom_lexer: true,
 }
 
-        
+                

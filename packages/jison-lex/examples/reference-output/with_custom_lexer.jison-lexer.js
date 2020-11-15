@@ -1,5 +1,5 @@
 
-            var lexer;
+                    
 // When you set up a custom lexer, this is the minimum example for one:
     // 
     // your lexer class/object must provide these interface methods and constants at least:
@@ -39,10 +39,10 @@
     };
 ;
 
-            //=============================================================================
-            //                     JISON-LEX OPTIONS:
+                    //=============================================================================
+                    //                     JISON-LEX OPTIONS:
 
-            {
+                    {
   lexerActionsUseYYLENG: '???',
   lexerActionsUseYYLINENO: '???',
   lexerActionsUseYYTEXT: '???',
@@ -367,4 +367,4 @@ parser.main = function (args) {
   is_custom_lexer: true,
 }
 
-        
+                

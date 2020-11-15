@@ -1,7 +1,8 @@
 
-            
-var lexer = {
-/*JISON-LEX-ANALYTICS-REPORT*/EOF: 1,
+                    
+const lexer = {
+/* JISON-LEX-ANALYTICS-REPORT */
+EOF: 1,
     ERROR: 2,
 
     // JisonLexerError: JisonLexerError,        /// <-- injected by the code generator
@@ -43,8 +44,6 @@ var lexer = {
      * @this {RegExpLexer}
      */
     constructLexErrorInfo: function lexer_constructLexErrorInfo(msg, recoverable, show_input_position) {
-        "use strict";
-    
         msg = '' + msg;
 
         // heuristic to determine if the error message already contains a (partial) source code dump
@@ -54,14 +53,14 @@ var lexer = {
         }
         if (this.yylloc && show_input_position) {
             if (typeof this.prettyPrintRange === 'function') {
-                var pretty_src = this.prettyPrintRange(this.yylloc);
+                const pretty_src = this.prettyPrintRange(this.yylloc);
 
                 if (!/\n\s*$/.test(msg)) {
                     msg += '\n';
                 }
                 msg += '\n  Erroneous area:\n' + this.prettyPrintRange(this.yylloc);
             } else if (typeof this.showPosition === 'function') {
-                var pos_str = this.showPosition();
+                const pos_str = this.showPosition();
                 if (pos_str) {
                     if (msg.length && msg[msg.length - 1] !== '\n' && pos_str[0] !== '\n') {
                         msg += '\n' + pos_str;
@@ -72,14 +71,14 @@ var lexer = {
             }
         }
         /** @constructor */
-        var pei = {
+        const pei = {
             errStr: msg,
             recoverable: !!recoverable,
             text: this.match,           // This one MAY be empty; userland code should use the `upcomingInput` API to obtain more text which follows the 'lexer cursor position'...
             token: null,
             line: this.yylineno,
             loc: this.yylloc,
-            yy: this.yy,                
+            yy: this.yy,
             lexer: this,
 
             /**
@@ -99,9 +98,8 @@ var lexer = {
                 // info.yy = null;
                 // info.lexer = null;
                 // ...
-                "use strict";
-                var rec = !!this.recoverable;
-                for (var key in this) {
+                const rec = !!this.recoverable;
+                for (let key in this) {
                     if (this[key] && this.hasOwnProperty(key) && typeof this[key] === 'object') {
                         this[key] = undefined;
                     }
@@ -121,8 +119,6 @@ var lexer = {
      * @this {RegExpLexer}
      */
     parseError: function lexer_parseError(str, hash, ExceptionClass) {
-        "use strict";
-
         if (!ExceptionClass) {
             ExceptionClass = this.JisonLexerError;
         }
@@ -143,16 +139,14 @@ var lexer = {
      * @this {RegExpLexer}
      */
     yyerror: function yyError(str /*, ...args */) {
-        "use strict";
-
-        var lineno_msg = 'Lexical error';
+        let lineno_msg = 'Lexical error';
         if (this.yylloc) {
             lineno_msg += ' on line ' + (this.yylineno + 1);
         }
-        var p = this.constructLexErrorInfo(lineno_msg + ': ' + str, this.options.lexerErrorsAreRecoverable);
+        const p = this.constructLexErrorInfo(lineno_msg + ': ' + str, this.options.lexerErrorsAreRecoverable);
 
         // Add any extra args to the hash under the name `extra_error_attributes`:
-        var args = Array.prototype.slice.call(arguments, 1);
+        let args = Array.prototype.slice.call(arguments, 1);
         if (args.length) {
             p.extra_error_attributes = args;
         }
@@ -173,8 +167,6 @@ var lexer = {
      * @this {RegExpLexer}
      */
     cleanupAfterLex: function lexer_cleanupAfterLex(do_not_nuke_errorinfos) {
-        "use strict";
-
         // prevent lingering circular references from causing memory leaks:
         this.setInput('', {});
 
@@ -182,8 +174,8 @@ var lexer = {
         // Userland code must COPY any data/references
         // in the error hash instance(s) it is more permanently interested in.
         if (!do_not_nuke_errorinfos) {
-            for (var i = this.__error_infos.length - 1; i >= 0; i--) {
-                var el = this.__error_infos[i];
+            for (let i = this.__error_infos.length - 1; i >= 0; i--) {
+                let el = this.__error_infos[i];
                 if (el && typeof el.destroy === 'function') {
                     el.destroy();
                 }
@@ -201,8 +193,6 @@ var lexer = {
      * @this {RegExpLexer}
      */
     clear: function lexer_clear() {
-        "use strict";
-
         this.yytext = '';
         this.yyleng = 0;
         this.match = '';
@@ -212,14 +202,14 @@ var lexer = {
         this._more = false;
         this._backtrack = false;
 
-        var col = this.yylloc.last_column;
+        const col = this.yylloc.last_column;
         this.yylloc = {
             first_line: this.yylineno + 1,
             first_column: col,
             last_line: this.yylineno + 1,
             last_column: col,
 
-            range: [this.offset, this.offset]
+            range: [ this.offset, this.offset ]
         };
     },
 
@@ -230,8 +220,6 @@ var lexer = {
      * @this {RegExpLexer}
      */
     setInput: function lexer_setInput(input, yy) {
-        "use strict";
-
         this.yy = yy || this.yy || {};
 
         // also check if we've fully initialized the lexer instance,
@@ -239,40 +227,40 @@ var lexer = {
         // lexer to a usable lexer:
         if (!this.__decompressed) {
           // step 1: decompress the regex list:
-          var rules = this.rules;
-          for (var i = 0, len = rules.length; i < len; i++) {
-            var rule_re = rules[i];
+            let rules = this.rules;
+            for (var i = 0, len = rules.length; i < len; i++) {
+                var rule_re = rules[i];
 
             // compression: is the RE an xref to another RE slot in the rules[] table?
-            if (typeof rule_re === 'number') {
-              rules[i] = rules[rule_re];
+                if (typeof rule_re === 'number') {
+                    rules[i] = rules[rule_re];
+                }
             }
-          }
 
           // step 2: unfold the conditions[] set to make these ready for use:
-          var conditions = this.conditions;
-          for (var k in conditions) {
-            var spec = conditions[k];
+            let conditions = this.conditions;
+            for (let k in conditions) {
+                let spec = conditions[k];
 
-            var rule_ids = spec.rules;
+                let rule_ids = spec.rules;
 
-            var len = rule_ids.length;
-            var rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
-            var rule_new_ids = new Array(len + 1);
+                var len = rule_ids.length;
+                let rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
+                let rule_new_ids = new Array(len + 1);
 
-            for (var i = 0; i < len; i++) {
-              var idx = rule_ids[i];
-              var rule_re = rules[idx];
-              rule_regexes[i + 1] = rule_re;
-              rule_new_ids[i + 1] = idx;
+                for (var i = 0; i < len; i++) {
+                    let idx = rule_ids[i];
+                    var rule_re = rules[idx];
+                    rule_regexes[i + 1] = rule_re;
+                    rule_new_ids[i + 1] = idx;
+                }
+
+                spec.rules = rule_new_ids;
+                spec.__rule_regexes = rule_regexes;
+                spec.__rule_count = len;
             }
 
-            spec.rules = rule_new_ids;
-            spec.__rule_regexes = rule_regexes;
-            spec.__rule_count = len;
-          }
-
-          this.__decompressed = true;
+            this.__decompressed = true;
         }
 
         if (input && typeof input !== 'string') {
@@ -284,7 +272,7 @@ var lexer = {
         this.done = false;
         this.yylineno = 0;
         this.matched = '';
-        this.conditionStack = ['INITIAL'];
+        this.conditionStack = [ 'INITIAL' ];
         this.__currentRuleSet__ = null;
         this.yylloc = {
             first_line: 1,
@@ -292,7 +280,7 @@ var lexer = {
             last_line: 1,
             last_column: 0,
 
-            range: [0, 0]
+            range: [ 0, 0 ]
         };
         this.offset = 0;
         this.base_position = 0;
@@ -353,9 +341,7 @@ var lexer = {
      * @this {RegExpLexer}
      */
     editRemainingInput: function lexer_editRemainingInput(callback, cpsArg) {
-        "use strict";
-
-        var rv = callback.call(this, this._input, cpsArg);
+        const rv = callback.call(this, this._input, cpsArg);
         if (typeof rv !== 'string') {
             if (rv) {
                 this._input = '' + rv;
@@ -374,8 +360,6 @@ var lexer = {
      * @this {RegExpLexer}
      */
     input: function lexer_input() {
-        "use strict";
-
         if (!this._input) {
             //this.done = true;    -- don't set `done` as we want the lex()/next() API to be able to produce one custom EOF token match after this anyhow. (lexer can match special <<EOF>> tokens and perform user action code for a <<EOF>> match, but only does so *once*)
             return null;
@@ -384,7 +368,7 @@ var lexer = {
             this._clear_state = -1;
             this.clear();
         }
-        var ch = this._input[0];
+        let ch = this._input[0];
         this.yytext += ch;
         this.yyleng++;
         this.offset++;
@@ -394,13 +378,13 @@ var lexer = {
         // On CRLF, the linenumber is incremented when you fetch the CR or the CRLF combo
         // and we advance immediately past the LF as well, returning both together as if
         // it was all a single 'character' only.
-        var slice_len = 1;
-        var lines = false;
+        let slice_len = 1;
+        let lines = false;
         if (ch === '\n') {
             lines = true;
         } else if (ch === '\r') {
             lines = true;
-            var ch2 = this._input[1];
+            const ch2 = this._input[1];
             if (ch2 === '\n') {
                 slice_len++;
                 ch += ch2;
@@ -432,10 +416,8 @@ var lexer = {
      * @this {RegExpLexer}
      */
     unput: function lexer_unput(ch) {
-        "use strict";
-
-        var len = ch.length;
-        var lines = ch.split(this.CRLF_Re);
+        let len = ch.length;
+        let lines = ch.split(this.CRLF_Re);
 
         if (!this._clear_state && !this._more) {
             this._clear_state = -1;
@@ -467,8 +449,8 @@ var lexer = {
             // Get last entirely matched line into the `pre_lines[]` array's
             // last index slot; we don't mind when other previously
             // matched lines end up in the array too.
-            var pre = this.match;
-            var pre_lines = pre.split(this.CRLF_Re);
+            let pre = this.match;
+            let pre_lines = pre.split(this.CRLF_Re);
             if (pre_lines.length === 1) {
                 pre = this.matched;
                 pre_lines = pre.split(this.CRLF_Re);
@@ -486,9 +468,9 @@ var lexer = {
 
     /**
      * return the upcoming input *which has not been lexed yet*.
-     * This can, for example, be used for custom look-ahead inspection code 
+     * This can, for example, be used for custom look-ahead inspection code
      * in your lexer.
-     * 
+     *
      * The entire pending input string is returned.
      *
      * > ### NOTE ###
@@ -498,14 +480,12 @@ var lexer = {
      * > features for limited input extraction and which includes the
      * > part of the input which has been lexed by the last token a.k.a.
      * > the *currently lexed* input.
-     * > 
-     * 
+     * >
+     *
      * @public
      * @this {RegExpLexer}
      */
     lookAhead: function lexer_lookAhead() {
-        "use strict";
-
         return this._input || '';
     },
 
@@ -516,8 +496,6 @@ var lexer = {
      * @this {RegExpLexer}
      */
     more: function lexer_more() {
-        "use strict";
-
         this._more = true;
         return this;
     },
@@ -530,19 +508,17 @@ var lexer = {
      * @this {RegExpLexer}
      */
     reject: function lexer_reject() {
-        "use strict";
-
         if (this.options.backtrack_lexer) {
             this._backtrack = true;
         } else {
             // when the `parseError()` call returns, we MUST ensure that the error is registered.
             // We accomplish this by signaling an 'error' token to be produced for the current
             // `.lex()` run.
-            var lineno_msg = 'Lexical error';
+            let lineno_msg = 'Lexical error';
             if (this.yylloc) {
                 lineno_msg += ' on line ' + (this.yylineno + 1);
             }
-            var p = this.constructLexErrorInfo(lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).', false);
+            const p = this.constructLexErrorInfo(lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).', false);
             this._signaled_error_token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
         }
         return this;
@@ -555,8 +531,6 @@ var lexer = {
      * @this {RegExpLexer}
      */
     less: function lexer_less(n) {
-        "use strict";
-
         return this.unput(this.match.slice(n));
     },
 
@@ -579,24 +553,24 @@ var lexer = {
      * @this {RegExpLexer}
      */
     pastInput: function lexer_pastInput(maxSize, maxLines) {
-        "use strict";
-
-        var past = this.matched.substring(0, this.matched.length - this.match.length);
-        if (maxSize < 0)
+        let past = this.matched.substring(0, this.matched.length - this.match.length);
+        if (maxSize < 0) {
             maxSize = Infinity;
-        else if (!maxSize)
+        } else if (!maxSize) {
             maxSize = 20;
-        if (maxLines < 0)
-            maxLines = Infinity;         // can't ever have more input lines than this!
-        else if (!maxLines)
+        }
+        if (maxLines < 0) {
+            maxLines = Infinity;          // can't ever have more input lines than this!
+        } else if (!maxLines) {
             maxLines = 1;
+        }
         // `substr` anticipation: treat \r\n as a single character and take a little
         // more than necessary so that we can still properly check against maxSize
         // after we've transformed and limited the newLines in here:
         past = past.substr(-maxSize * 2 - 2);
         // now that we have a significantly reduced string to process, transform the newlines
         // and chop them, then limit them:
-        var a = past.split(this.CRLF_Re);
+        let a = past.split(this.CRLF_Re);
         a = a.slice(-maxLines);
         past = a.join('\n');
         // When, after limiting to maxLines, we still have too much to return,
@@ -608,8 +582,8 @@ var lexer = {
     },
 
     /**
-     * return (part of the) upcoming input *including* the input 
-     * matched by the last token (see also the NOTE below). 
+     * return (part of the) upcoming input *including* the input
+     * matched by the last token (see also the NOTE below).
      * This can be used to augment error messages, for example.
      *
      * Limit the returned string length to `maxSize` (default: 20).
@@ -635,24 +609,25 @@ var lexer = {
      * > to the input *which has not been lexed yet* for look-ahead
      * > inspection or likewise purposes, please consider using the
      * > `lookAhead()` API instead.
-     * > 
-     * 
+     * >
+     *
      * @public
      * @this {RegExpLexer}
      */
     upcomingInput: function lexer_upcomingInput(maxSize, maxLines) {
-        "use strict";
-
-        var next = this.match;
-        var source = this._input || '';
-        if (maxSize < 0)
+        let next = this.match;
+        let source = this._input || '';
+        if (maxSize < 0) {
             maxSize = next.length + source.length;
-        else if (!maxSize)
+        } else if (!maxSize) {
             maxSize = 20;
-        if (maxLines < 0)
-            maxLines = maxSize;         // can't ever have more input lines than this!
-        else if (!maxLines)
+        }
+
+        if (maxLines < 0) {
+            maxLines = maxSize;          // can't ever have more input lines than this!
+        } else if (!maxLines) {
             maxLines = 1;
+        }
         // `substring` anticipation: treat \r\n as a single character and take a little
         // more than necessary so that we can still properly check against maxSize
         // after we've transformed and limited the newLines in here:
@@ -661,7 +636,7 @@ var lexer = {
         }
         // now that we have a significantly reduced string to process, transform the newlines
         // and chop them, then limit them:
-        var a = next.split(this.CRLF_Re, maxLines + 1);     // stop splitting once we have reached just beyond the reuired number of lines.
+        let a = next.split(this.CRLF_Re, maxLines + 1);     // stop splitting once we have reached just beyond the reuired number of lines.
         a = a.slice(0, maxLines);
         next = a.join('\n');
         // When, after limiting to maxLines, we still have too much to return,
@@ -680,10 +655,8 @@ var lexer = {
      * @this {RegExpLexer}
      */
     showPosition: function lexer_showPosition(maxPrefix, maxPostfix) {
-        "use strict";
-
-        var pre = this.pastInput(maxPrefix).replace(/\s/g, ' ');
-        var c = new Array(pre.length + 1).join('-');
+        const pre = this.pastInput(maxPrefix).replace(/\s/g, ' ');
+        let c = new Array(pre.length + 1).join('-');
         return pre + this.upcomingInput(maxPostfix).replace(/\s/g, ' ') + '\n' + c + '^';
     },
 
@@ -705,15 +678,13 @@ var lexer = {
      * @this {RegExpLexer}
      */
     deriveLocationInfo: function lexer_deriveYYLLOC(actual, preceding, following, current) {
-        "use strict";
-
-        var loc = {
+        let loc = {
             first_line: 1,
             first_column: 0,
             last_line: 1,
             last_column: 0,
 
-            range: [0, 0]
+            range: [ 0, 0 ]
         };
         if (actual) {
             loc.first_line = actual.first_line | 0;
@@ -844,58 +815,54 @@ var lexer = {
      * @this {RegExpLexer}
      */
     prettyPrintRange: function lexer_prettyPrintRange(loc, context_loc, context_loc2) {
-        "use strict";
-
         loc = this.deriveLocationInfo(loc, context_loc, context_loc2);
 
         const CONTEXT = 3;
         const CONTEXT_TAIL = 1;
         const MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT = 2;
-        var input = this.matched + (this._input || '');
-        var lines = input.split('\n');
-        var l0 = Math.max(1, (context_loc ? context_loc.first_line : loc.first_line - CONTEXT));
-        var l1 = Math.max(1, (context_loc2 ? context_loc2.last_line : loc.last_line + CONTEXT_TAIL));
-        var lineno_display_width = (1 + Math.log10(l1 | 1) | 0);
-        var ws_prefix = new Array(lineno_display_width).join(' ');
-        var nonempty_line_indexes = [[], [], []];
-        var rv = lines.slice(l0 - 1, l1 + 1).map(function injectLineNumber(line, index) {
-            "use strict";
-
-            var lno = index + l0;
-            var lno_pfx = (ws_prefix + lno).substr(-lineno_display_width);
-            var rv = lno_pfx + ': ' + line;
-            var errpfx = (new Array(lineno_display_width + 1)).join('^');
-            var offset = 2 + 1;
-            var len = 0;
+        let input = this.matched + (this._input || '');
+        let lines = input.split('\n');
+        let l0 = Math.max(1, (context_loc ? context_loc.first_line : loc.first_line - CONTEXT));
+        let l1 = Math.max(1, (context_loc2 ? context_loc2.last_line : loc.last_line + CONTEXT_TAIL));
+        let lineno_display_width = (1 + Math.log10(l1 | 1) | 0);
+        let ws_prefix = new Array(lineno_display_width).join(' ');
+        let nonempty_line_indexes = [ [], [], [] ];
+        let rv = lines.slice(l0 - 1, l1 + 1).map(function injectLineNumber(line, index) {
+            let lno = index + l0;
+            let lno_pfx = (ws_prefix + lno).substr(-lineno_display_width);
+            let rv = lno_pfx + ': ' + line;
+            let errpfx = (new Array(lineno_display_width + 1)).join('^');
+            let offset = 2 + 1;
+            let len = 0;
 
             if (lno === loc.first_line) {
-              offset += loc.first_column;
+                offset += loc.first_column;
 
-              len = Math.max(
-                2,
-                ((lno === loc.last_line ? loc.last_column : line.length)) - loc.first_column + 1
-              );
+                len = Math.max(
+                    2,
+                    ((lno === loc.last_line ? loc.last_column : line.length)) - loc.first_column + 1
+                );
             } else if (lno === loc.last_line) {
-              len = Math.max(2, loc.last_column + 1);
+                len = Math.max(2, loc.last_column + 1);
             } else if (lno > loc.first_line && lno < loc.last_line) {
-              len = Math.max(2, line.length + 1);
+                len = Math.max(2, line.length + 1);
             }
 
-            var nli;
+            let nli;
             if (len) {
-              var lead = new Array(offset).join('.');
-              var mark = new Array(len).join('^');
-              rv += '\n' + errpfx + lead + mark;
+                let lead = new Array(offset).join('.');
+                let mark = new Array(len).join('^');
+                rv += '\n' + errpfx + lead + mark;
 
-              nli = 1;
+                nli = 1;
             } else if (lno < loc.first_line) {
-              nli = 0;
+                nli = 0;
             } else if (lno > loc.last_line) {
-              nli = 2;
+                nli = 2;
             }
 
             if (line.trim().length > 0) {
-              nonempty_line_indexes[nli].push(index);
+                nonempty_line_indexes[nli].push(index);
             }
 
             rv = rv.replace(/\t/g, ' ');
@@ -904,13 +871,13 @@ var lexer = {
 
         // now make sure we don't print an overly large amount of lead/error/tail area: limit it
         // to the top and bottom line count:
-        for (var i = 0; i <= 2; i++) {
-            var line_arr = nonempty_line_indexes[i];
+        for (let i = 0; i <= 2; i++) {
+            let line_arr = nonempty_line_indexes[i];
             if (line_arr.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {
-                var clip_start = line_arr[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
-                var clip_end = line_arr[line_arr.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
+                let clip_start = line_arr[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
+                let clip_end = line_arr[line_arr.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
 
-                var intermediate_line = (new Array(lineno_display_width + 1)).join(' ') +     '  (...continued...)';
+                let intermediate_line = (new Array(lineno_display_width + 1)).join(' ') +     '  (...continued...)';
                 if (i === 1) {
                     intermediate_line += '\n' + (new Array(lineno_display_width + 1)).join('-') + '  (---------------)';
                 }
@@ -932,15 +899,13 @@ var lexer = {
      * @this {RegExpLexer}
      */
     describeYYLLOC: function lexer_describe_yylloc(yylloc, display_range_too) {
-        "use strict";
-
-        var l1 = yylloc.first_line;
-        var l2 = yylloc.last_line;
-        var c1 = yylloc.first_column;
-        var c2 = yylloc.last_column;
-        var dl = l2 - l1;
-        var dc = c2 - c1;
-        var rv;
+        let l1 = yylloc.first_line;
+        let l2 = yylloc.last_line;
+        let c1 = yylloc.first_column;
+        let c2 = yylloc.last_column;
+        let dl = l2 - l1;
+        let dc = c2 - c1;
+        let rv;
         if (dl === 0) {
             rv = 'line ' + l1 + ', ';
             if (dc <= 1) {
@@ -952,8 +917,8 @@ var lexer = {
             rv = 'lines ' + l1 + '(column ' + c1 + ') .. ' + l2 + '(column ' + c2 + ')';
         }
         if (yylloc.range && display_range_too) {
-            var r1 = yylloc.range[0];
-            var r2 = yylloc.range[1] - 1;
+            let r1 = yylloc.range[0];
+            let r2 = yylloc.range[1] - 1;
             if (r2 <= r1) {
                 rv += ' {String Offset: ' + r1 + '}';
             } else {
@@ -982,13 +947,7 @@ var lexer = {
      * @this {RegExpLexer}
      */
     test_match: function lexer_test_match(match, indexed_rule) {
-        "use strict";
-
-        var token,
-            lines,
-            backup,
-            match_str,
-            match_str_len;
+        let backup;
 
         if (this.options.backtrack_lexer) {
             // save context
@@ -1017,10 +976,10 @@ var lexer = {
             };
         }
 
-        match_str = match[0];
-        match_str_len = match_str.length;
+        let match_str = match[0];
+        let match_str_len = match_str.length;
 
-        lines = match_str.split(this.CRLF_Re);
+        let lines = match_str.split(this.CRLF_Re);
         if (lines.length > 1) {
             this.yylineno += lines.length - 1;
 
@@ -1048,7 +1007,7 @@ var lexer = {
         // calling this method:
         //
         //   function lexer__performAction(yy, yyrulenumber, YY_START) {...}
-        token = this.performAction.call(this, this.yy, indexed_rule, this.conditionStack[this.conditionStack.length - 1] /* = YY_START */);
+        let token = this.performAction.call(this, this.yy, indexed_rule, this.conditionStack[this.conditionStack.length - 1] /* = YY_START */);
         // otherwise, when the action codes are all simple return token statements:
         //token = this.simpleCaseActionClusters[indexed_rule];
 
@@ -1059,7 +1018,7 @@ var lexer = {
             return token;
         } else if (this._backtrack) {
             // recover context
-            for (var k in backup) {
+            for (let k in backup) {
                 this[k] = backup[k];
             }
             this.__currentRuleSet__ = null;
@@ -1081,8 +1040,6 @@ var lexer = {
      * @this {RegExpLexer}
      */
     next: function lexer_next() {
-        "use strict";
-
         if (this.done) {
             this.clear();
             return this.EOF;
@@ -1091,17 +1048,13 @@ var lexer = {
             this.done = true;
         }
 
-        var token,
-            match,
-            tempMatch,
-            index;
         if (!this._more) {
             if (!this._clear_state) {
                 this._clear_state = 1;
             }
             this.clear();
         }
-        var spec = this.__currentRuleSet__;
+        let spec = this.__currentRuleSet__;
         if (!spec) {
             // Update the ruleset cache as we apparently encountered a state change or just started lexing.
             // The cache is set up for fast lookup -- we assume a lexer will switch states much less often than it will
@@ -1111,67 +1064,75 @@ var lexer = {
             // Check whether a *sane* condition has been pushed before: this makes the lexer robust against
             // user-programmer bugs such as https://github.com/zaach/jison-lex/issues/19
             if (!spec || !spec.rules) {
-                var lineno_msg = '';
+                let lineno_msg = '';
                 if (this.yylloc) {
                     lineno_msg = ' on line ' + (this.yylineno + 1);
                 }
-                var p = this.constructLexErrorInfo('Internal lexer engine error' + lineno_msg + ': The lex grammar programmer pushed a non-existing condition name "' + this.topState() + '"; this is a fatal error and should be reported to the application programmer team!', false);
+                const p = this.constructLexErrorInfo('Internal lexer engine error' + lineno_msg + ': The lex grammar programmer pushed a non-existing condition name "' + this.topState() + '"; this is a fatal error and should be reported to the application programmer team!', false);
                 // produce one 'error' token until this situation has been resolved, most probably by parse termination!
                 return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
             }
         }
 
-        var rule_ids = spec.rules;
-        var regexes = spec.__rule_regexes;
-        var len = spec.__rule_count;
+        {
+            let rule_ids = spec.rules;
+            let regexes = spec.__rule_regexes;
+            let len = spec.__rule_count;
+            let match;
+            let index;
 
-        // Note: the arrays are 1-based, while `len` itself is a valid index,
-        // hence the non-standard less-or-equal check in the next loop condition!
-        for (var i = 1; i <= len; i++) {
-            tempMatch = this._input.match(regexes[i]);
-            if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
-                match = tempMatch;
-                index = i;
-                if (this.options.backtrack_lexer) {
-                    token = this.test_match(tempMatch, rule_ids[i]);
-                    if (token !== false) {
-                        return token;
-                    } else if (this._backtrack) {
-                        match = undefined;
-                        continue; // rule action called reject() implying a rule MISmatch.
-                    } else {
-                        // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-                        return false;
+            // Note: the arrays are 1-based, while `len` itself is a valid index,
+            // hence the non-standard less-or-equal check in the next loop condition!
+            for (let i = 1; i <= len; i++) {
+                let tempMatch = this._input.match(regexes[i]);
+                if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
+                    match = tempMatch;
+                    index = i;
+                    if (this.options.backtrack_lexer) {
+                        let token = this.test_match(tempMatch, rule_ids[i]);
+                        if (token !== false) {
+                            return token;
+                        } else if (this._backtrack) {
+                            match = undefined;
+                            continue; // rule action called reject() implying a rule MISmatch.
+                        } else {
+                            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+                            return false;
+                        }
+                    } else if (!this.options.flex) {
+                        break;
                     }
-                } else if (!this.options.flex) {
-                    break;
                 }
             }
-        }
-        if (match) {
-            token = this.test_match(match, rule_ids[index]);
-            if (token !== false) {
-                return token;
+
+            if (match) {
+                let token = this.test_match(match, rule_ids[index]);
+                if (token !== false) {
+                    return token;
+                }
+                // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+                return false;
             }
-            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-            return false;
         }
+
         if (!this._input) {
             this.done = true;
             this.clear();
             return this.EOF;
-        } else {
-            var lineno_msg = 'Lexical error';
+        }
+
+        {
+            let lineno_msg = 'Lexical error';
             if (this.yylloc) {
                 lineno_msg += ' on line ' + (this.yylineno + 1);
             }
-            var p = this.constructLexErrorInfo(lineno_msg + ': Unrecognized text.', this.options.lexerErrorsAreRecoverable);
+            const p = this.constructLexErrorInfo(lineno_msg + ': Unrecognized text.', this.options.lexerErrorsAreRecoverable);
 
-            var pendingInput = this._input;
-            var activeCondition = this.topState();
-            var conditionStackDepth = this.conditionStack.length;
+            let pendingInput = this._input;
+            let activeCondition = this.topState();
+            let conditionStackDepth = this.conditionStack.length;
 
-            token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
+            let token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
             if (token === this.ERROR) {
                 // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
                 // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
@@ -1198,9 +1159,7 @@ var lexer = {
      * @this {RegExpLexer}
      */
     lex: function lexer_lex() {
-        "use strict";
-
-        var r;
+        let r;
 
         //this._clear_state = 0;
 
@@ -1243,24 +1202,24 @@ var lexer = {
 
         if (!this._more) {
             //
-            // 1) make sure any outside interference is detected ASAP: 
+            // 1) make sure any outside interference is detected ASAP:
             //    these attributes are to be treated as 'const' values
             //    once the lexer has produced them with the token (return value `r`).
             // 2) make sure any subsequent `lex()` API invocation CANNOT
             //    edit the `yytext`, etc. token attributes for the *current*
             //    token, i.e. provide a degree of 'closure safety' so that
             //    code like this:
-            //    
+            //
             //        t1 = lexer.lex();
             //        v = lexer.yytext;
             //        l = lexer.yylloc;
             //        t2 = lexer.lex();
             //        assert(lexer.yytext !== v);
             //        assert(lexer.yylloc !== l);
-            //        
+            //
             //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
             //    these conditions.
-            //    
+            //
             this.yytext = Object.freeze(this.yytext);
             this.matches = Object.freeze(this.matches);
             this.yylloc.range = Object.freeze(this.yylloc.range);
@@ -1280,9 +1239,7 @@ var lexer = {
      * @this {RegExpLexer}
      */
     fastLex: function lexer_fastLex() {
-        "use strict";
-
-        var r;
+        let r;
 
         //this._clear_state = 0;
 
@@ -1292,24 +1249,24 @@ var lexer = {
 
         if (!this._more) {
             //
-            // 1) make sure any outside interference is detected ASAP: 
+            // 1) make sure any outside interference is detected ASAP:
             //    these attributes are to be treated as 'const' values
             //    once the lexer has produced them with the token (return value `r`).
             // 2) make sure any subsequent `lex()` API invocation CANNOT
             //    edit the `yytext`, etc. token attributes for the *current*
             //    token, i.e. provide a degree of 'closure safety' so that
             //    code like this:
-            //    
+            //
             //        t1 = lexer.lex();
             //        v = lexer.yytext;
             //        l = lexer.yylloc;
             //        t2 = lexer.lex();
             //        assert(lexer.yytext !== v);
             //        assert(lexer.yylloc !== l);
-            //        
+            //
             //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
             //    these conditions.
-            //    
+            //
             this.yytext = Object.freeze(this.yytext);
             this.matches = Object.freeze(this.matches);
             this.yylloc.range = Object.freeze(this.yylloc.range);
@@ -1317,7 +1274,7 @@ var lexer = {
 
             this._clear_state = 0;
         }
-        
+
         return r;
     },
 
@@ -1330,9 +1287,7 @@ var lexer = {
      * @this {RegExpLexer}
      */
     canIUse: function lexer_canIUse() {
-        "use strict";
-
-        var rv = {
+        const rv = {
             fastLex: !(
                 typeof this.pre_lex === 'function' ||
                 typeof this.options.pre_lex === 'function' ||
@@ -1340,7 +1295,7 @@ var lexer = {
                 (this.yy && typeof this.yy.post_lex === 'function') ||
                 typeof this.options.post_lex === 'function' ||
                 typeof this.post_lex === 'function'
-            ) && typeof this.fastLex === 'function',
+            ) && typeof this.fastLex === 'function'
         };
         return rv;
     },
@@ -1355,8 +1310,6 @@ var lexer = {
      * @this {RegExpLexer}
      */
     begin: function lexer_begin(condition) {
-        "use strict";
-
         return this.pushState(condition);
     },
 
@@ -1368,8 +1321,6 @@ var lexer = {
      * @this {RegExpLexer}
      */
     pushState: function lexer_pushState(condition) {
-        "use strict";
-
         this.conditionStack.push(condition);
         this.__currentRuleSet__ = null;
         return this;
@@ -1383,15 +1334,12 @@ var lexer = {
      * @this {RegExpLexer}
      */
     popState: function lexer_popState() {
-        "use strict";
-
-        var n = this.conditionStack.length - 1;
+        const n = this.conditionStack.length - 1;
         if (n > 0) {
             this.__currentRuleSet__ = null;
             return this.conditionStack.pop();
-        } else {
-            return this.conditionStack[0];
         }
+        return this.conditionStack[0];
     },
 
     /**
@@ -1403,14 +1351,11 @@ var lexer = {
      * @this {RegExpLexer}
      */
     topState: function lexer_topState(n) {
-        "use strict";
-
         n = this.conditionStack.length - 1 - Math.abs(n || 0);
         if (n >= 0) {
             return this.conditionStack[n];
-        } else {
-            return 'INITIAL';
         }
+        return 'INITIAL';
     },
 
     /**
@@ -1421,16 +1366,14 @@ var lexer = {
      * @this {RegExpLexer}
      */
     _currentRules: function lexer__currentRules() {
-        "use strict";
-
-        var n = this.conditionStack.length - 1;
-        var state;
+        const n = this.conditionStack.length - 1;
+        let state;
         if (n >= 0) {
             state = this.conditionStack[n];
         } else {
             state = 'INITIAL';
         }
-        return this.conditions[state] || this.conditions['INITIAL'];
+        return this.conditions[state] || this.conditions.INITIAL;
     },
 
     /**
@@ -1440,8 +1383,6 @@ var lexer = {
      * @this {RegExpLexer}
      */
     stateStackSize: function lexer_stateStackSize() {
-        "use strict";
-
         return this.conditionStack.length;
     },
     options: {
@@ -2443,10 +2384,10 @@ default:
 };
 ;
 
-            //=============================================================================
-            //                     JISON-LEX OPTIONS:
+                    //=============================================================================
+                    //                     JISON-LEX OPTIONS:
 
-            {
+                    {
   lexerActionsUseYYLENG: '???',
   lexerActionsUseYYLINENO: '???',
   lexerActionsUseYYTEXT: '???',
@@ -4819,4 +4760,4 @@ default:
   is_custom_lexer: false,
 }
 
-        
+                

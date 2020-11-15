@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('@gerhobbelt/xregexp'), require('@gerhobbelt/json5'), require('fs'), require('path'), require('recast'), require('@babel/core'), require('assert')) :
-    typeof define === 'function' && define.amd ? define(['@gerhobbelt/xregexp', '@gerhobbelt/json5', 'fs', 'path', 'recast', '@babel/core', 'assert'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global['lex-parser'] = factory(global.XRegExp, global.JSON5, global.fs, global.path$1, global.recast, global.babel, global.assert$1));
-}(this, (function (XRegExp, JSON5, fs, path$1, recast, babel, assert$1) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('@gerhobbelt/xregexp'), require('@gerhobbelt/json5'), require('fs'), require('path'), require('mkdirp'), require('recast'), require('@babel/core'), require('assert')) :
+    typeof define === 'function' && define.amd ? define(['@gerhobbelt/xregexp', '@gerhobbelt/json5', 'fs', 'path', 'mkdirp', 'recast', '@babel/core', 'assert'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global['lex-parser'] = factory(global.XRegExp, global.JSON5, global.fs, global.path$1, global.mkdirp, global.recast, global.babel, global.assert$1));
+}(this, (function (XRegExp, JSON5, fs, path$1, mkdirp, recast, babel, assert$1) { 'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -10,10 +10,11 @@
     var JSON5__default = /*#__PURE__*/_interopDefaultLegacy(JSON5);
     var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
     var path__default = /*#__PURE__*/_interopDefaultLegacy(path$1);
+    var mkdirp__default = /*#__PURE__*/_interopDefaultLegacy(mkdirp);
     var recast__default = /*#__PURE__*/_interopDefaultLegacy(recast);
     var assert__default = /*#__PURE__*/_interopDefaultLegacy(assert$1);
 
-    // Return TRUE if `src` starts with `searchString`. 
+    // Return TRUE if `src` starts with `searchString`.
     function startsWith(src, searchString) {
         return src.substr(0, searchString.length) === searchString;
     }
@@ -36,19 +37,19 @@
         // As `strings[]` is an array of strings, each potentially consisting
         // of multiple lines, followed by one(1) value, we have to split each
         // individual string into lines to keep that bit of information intact.
-        // 
+        //
         // We assume clean code style, hence no random mix of tabs and spaces, so every
         // line MUST have the same indent style as all others, so `length` of indent
         // should suffice, but the way we coded this is stricter checking as we look
         // for the *exact* indenting=leading whitespace in each line.
-        var indent_str = null;
-        var src = strings.map(function splitIntoLines(s) {
-            var a = s.split('\n');
-            
+        let indent_str = null;
+        let src = strings.map(function splitIntoLines(s) {
+            let a = s.split('\n');
+
             indent_str = a.reduce(function analyzeLine(indent_str, line, index) {
                 // only check indentation of parts which follow a NEWLINE:
                 if (index !== 0) {
-                    var m = /^(\s*)\S/.exec(line);
+                    let m = /^(\s*)\S/.exec(line);
                     // only non-empty ~ content-carrying lines matter re common indent calculus:
                     if (m) {
                         if (indent_str == null) {
@@ -67,19 +68,21 @@
         // Also note: due to the way we format the template strings in our sourcecode,
         // the last line in the entire template must be empty when it has ANY trailing
         // whitespace:
-        var a = src[src.length - 1];
-        a[a.length - 1] = a[a.length - 1].replace(/\s+$/, '');
+        {
+            let a = src[src.length - 1];
+            a[a.length - 1] = a[a.length - 1].replace(/\s+$/, '');
+        }
 
         // Done removing common indentation.
-        // 
+        //
         // Process template string partials now, but only when there's
         // some actual UNindenting to do:
         if (indent_str) {
-            for (var i = 0, len = src.length; i < len; i++) {
-                var a = src[i];
+            for (let i = 0, len = src.length; i < len; i++) {
+                let a = src[i];
                 // only correct indentation at start of line, i.e. only check for
                 // the indent after every NEWLINE ==> start at j=1 rather than j=0
-                for (var j = 1, linecnt = a.length; j < linecnt; j++) {
+                for (let j = 1, linecnt = a.length; j < linecnt; j++) {
                     if (startsWith(a[j], indent_str)) {
                         a[j] = a[j].substr(indent_str.length);
                     }
@@ -88,16 +91,19 @@
         }
 
         // now merge everything to construct the template result:
-        var rv = [];
-        for (var i = 0, len = values.length; i < len; i++) {
+        {
+            let rv = [];
+            let i = 0;
+            for (let len = values.length; i < len; i++) {
+                rv.push(src[i].join('\n'));
+                rv.push(values[i]);
+            }
+            // the last value is always followed by a last template string partial:
             rv.push(src[i].join('\n'));
-            rv.push(values[i]);
-        }
-        // the last value is always followed by a last template string partial:
-        rv.push(src[i].join('\n'));
 
-        var sv = rv.join('');
-        return sv;
+            let sv = rv.join('');
+            return sv;
+        }
     }
 
     // Convert dashed option keys to Camel Case, e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
@@ -108,27 +114,79 @@
             return match.toLowerCase();
         })
         .replace(/-\w/g, function (match) {
-            var c = match.charAt(1);
-            var rv = c.toUpperCase();
+            const c = match.charAt(1);
+            const rv = c.toUpperCase();
             // do not mutate 'a-2' to 'a2':
             if (c === rv && c.match(/\d/)) {
                 return match;
             }
             return rv;
-        })
+        });
     }
+
+    // https://www.ecma-international.org/ecma-262/6.0/#sec-reserved-words
+    const reservedWords = ((list) => {
+        let rv = new Set();
+        for (let w of list) {
+            //console.error('reserved word:', w);
+            rv.add(w);
+        }
+        return rv;
+    })([
+        'await',
+        'break',
+        'case',
+        'catch',
+        'class',
+        'const',
+        'continue',
+        'debugger',
+        'default',
+        'delete',
+        'do',
+        'else',
+        'enum',
+        'export',
+        'extends',
+        'finally',
+        'for',
+        'function',
+        'if',
+        'implements',
+        'import',
+        'in',
+        'instanceof',
+        'interface',
+        'new',
+        'package',
+        'private',
+        'protected',
+        'public',
+        'return',
+        'super',
+        'switch',
+        'this',
+        'throw',
+        'try',
+        'typeof',
+        'var',
+        'void',
+        'while',
+        'with',
+        'yield'
+    ]);
 
     // Convert dashed option keys and other inputs to Camel Cased legal JavaScript identifiers
     /** @public */
     function mkIdentifier(s) {
         s = '' + s;
 
-        return s
-        // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
+        let rv = s
+        // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!),
         // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
         .replace(/-\w/g, function (match) {
-            var c = match.charAt(1);
-            var rv = c.toUpperCase();
+            let c = match.charAt(1);
+            let rv = c.toUpperCase();
             // mutate 'a-2' to 'a_2':
             if (c === rv && c.match(/\d/)) {
                 return '_' + match.substr(1);
@@ -146,6 +204,11 @@
         .replace(/__+$/, '#')
         .replace(/_+/g, '_')
         .replace(/#/g, '__');
+
+        if (reservedWords.has(rv)) {
+            rv = '_' + rv;
+        }
+        return rv;
     }
 
     // Check if the start of the given input matches a regex expression.
@@ -154,13 +217,13 @@
     function scanRegExp(s) {
         s = '' + s;
         // code based on Esprima scanner: `Scanner.prototype.scanRegExpBody()`
-        var index = 0;
-        var length = s.length;
-        var ch = s[index];
+        let index = 0;
+        let length = s.length;
+        let ch = s[index];
         //assert.assert(ch === '/', 'Regular expression literal must start with a slash');
-        var str = s[index++];
-        var classMarker = false;
-        var terminated = false;
+        let str = s[index++];
+        let classMarker = false;
+        let terminated = false;
         while (index < length) {
             ch = s[index++];
             str += ch;
@@ -171,23 +234,17 @@
                     break;             // UnterminatedRegExp
                 }
                 str += ch;
-            }
-            else if (isLineTerminator(ch.charCodeAt(0))) {
+            } else if (isLineTerminator(ch.charCodeAt(0))) {
                 break;                 // UnterminatedRegExp
-            }
-            else if (classMarker) {
+            } else if (classMarker) {
                 if (ch === ']') {
                     classMarker = false;
                 }
-            }
-            else {
-                if (ch === '/') {
-                    terminated = true;
-                    break;
-                }
-                else if (ch === '[') {
-                    classMarker = true;
-                }
+            } else if (ch === '/') {
+                terminated = true;
+                break;
+            } else if (ch === '[') {
+                classMarker = true;
             }
         }
         if (!terminated) {
@@ -210,34 +267,33 @@
     /** @public */
     function isLegalIdentifierInput(s) {
         s = '' + s;
-        // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!), 
+        // Convert dashed ids to Camel Case (though NOT lowercasing the initial letter though!),
         // e.g. `camelCase('camels-have-one-hump')` => `'camelsHaveOneHump'`
         let ref = s
         .replace(/-\w/g, function (match) {
-            var c = match.charAt(1);
-            var rv = c.toUpperCase();
+            let c = match.charAt(1);
+            let rv = c.toUpperCase();
             // mutate 'a-2' to 'a_2':
             if (c === rv && c.match(/\d/)) {
                 return '_' + match.substr(1);
             }
             return rv;
         });
-        var alt = mkIdentifier(s);
+        let alt = mkIdentifier(s);
         return alt === ref;
     }
 
     // properly quote and escape the given input string
     function dquote(s) {
-        var sq = (s.indexOf('\'') >= 0);
-        var dq = (s.indexOf('"') >= 0);
+        let sq = (s.indexOf('\'') >= 0);
+        let dq = (s.indexOf('"') >= 0);
         if (sq && dq) {
             s = s.replace(/"/g, '\\"');
             dq = false;
         }
         if (dq) {
             s = '\'' + s + '\'';
-        }
-        else {
+        } else {
             s = '"' + s + '"';
         }
         return s;
@@ -260,28 +316,76 @@
     // Helper function: pad number with leading zeroes
     function pad(n, p) {
         p = p || 2;
-        var rv = '0000' + n;
+        let rv = '0000' + n;
         return rv.slice(-p);
     }
 
 
+    function convertExceptionToObject(ex) {
+        if (!ex) return ex;
+
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+        // 
+        // - Copy enumerable properties (which may exist when this is a custom exception class derived off Error)
+        let rv = Object.assign({}, ex);
+        // - Set up the default fields which should ALWAYS be present:
+        rv.message = ex.message;
+        rv.name = ex.name;
+        rv.stack = ex.stack; // this assignment stringifies the stack trace in ex.stack.
+        // - Set the optional fields:
+        if (ex.code !== undefined) rv.code = ex.code;
+        if (ex.type !== undefined) rv.type = ex.type;
+        if (ex.fileName !== undefined) rv.fileName = ex.fileName;
+        if (ex.lineNumber !== undefined) rv.lineNumber = ex.lineNumber;
+        if (ex.columnNumber !== undefined) rv.columnNumber = ex.columnNumber;
+        if (Array.isArray(ex.errors)) {
+            rv.errors = [];
+            for (let se of ex.errors) {
+                rv.errors.push(convertExceptionToObject(se));
+            }
+        }
+        return rv;
+    }
+
+
+    function find_suitable_app_dump_path() {
+        return process.cwd()
+        .replace(/\\/g, '/')
+        .replace(/\/node_modules\/.*$/, (m) => '/___nm___/')
+        .replace(/(\/jison\/)(.*)$/, (m, p1, p2) => p1 + '___' + p2.split('/').map((d) => d.charAt(0).toUpperCase()).join('_'));
+    }
+
     // attempt to dump in one of several locations: first winner is *it*!
     function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
-        var dumpfile;
+        let dumpfile;
         options = options || {};
 
         try {
-            var dumpPaths = [(options.outfile ? path__default['default'].dirname(options.outfile) : null), options.inputPath, process.cwd()];
-            var dumpName = path__default['default'].basename(options.inputFilename || options.moduleName || (options.outfile ? path__default['default'].dirname(options.outfile) : null) || options.defaultModuleName || errname)
+            const dumpPaths = [ (options.outfile ? path__default['default'].dirname(options.outfile) : null), options.inputPath, find_suitable_app_dump_path() ];
+            let dumpName = path__default['default'].basename(options.inputFilename || options.moduleName || (options.outfile ? path__default['default'].dirname(options.outfile) : null) || options.defaultModuleName || errname)
             .replace(/\.[a-z]{1,5}$/i, '')          // remove extension .y, .yacc, .jison, ...whatever
-            .replace(/[^a-z0-9_]/ig, '_');          // make sure it's legal in the destination filesystem: the least common denominator.
+            .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
+            .substr(0, 100);
             if (dumpName === '' || dumpName === '_') {
                 dumpName = '__bugger__';
             }
-            err_id = err_id || 'XXX';
 
-            var ts = new Date();
-            var tm = ts.getUTCFullYear() +
+            // generate a stacktrace for the dump no matter what:
+            if (!ex) {
+                try {
+                    throw new Error("Not an error: only fetching stacktrace in sourcecode dump helper so you can see which code invoked this.");
+                } catch (ex2) {
+                    ex = ex2;
+                }
+            }
+
+            err_id = err_id || 'XXX';
+            err_id = err_id
+            .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
+            .substr(0, 50);
+
+            const ts = new Date();
+            const tm = ts.getUTCFullYear() +
                 '_' + pad(ts.getUTCMonth() + 1) +
                 '_' + pad(ts.getUTCDate()) +
                 'T' + pad(ts.getUTCHours()) +
@@ -292,27 +396,37 @@
 
             dumpName += '.fatal_' + err_id + '_dump_' + tm + '.js';
 
-            for (var i = 0, l = dumpPaths.length; i < l; i++) {
+            for (let i = 0, l = dumpPaths.length; i < l; i++) {
                 if (!dumpPaths[i]) {
                     continue;
                 }
 
                 try {
-                    dumpfile = path__default['default'].normalize(dumpPaths[i] + '/' + dumpName);
+                    dumpfile = path__default['default'].normalize(path__default['default'].join(dumpPaths[i], dumpName));
 
-                    let dump = {
+                    const dump = {
                         errname,
                         err_id,
                         options,
-                        ex,
+                        ex: convertExceptionToObject(ex)
                     };
-                    let d = JSON5__default['default'].stringify(dump, null, 2);
+                    let d = JSON5__default['default'].stringify(dump, {
+                        replacer: function remove_lexer_objrefs(key, value) {
+                            if (value instanceof Error) {
+                                return convertExceptionToObject(value);
+                            }
+                            return value;
+                        },
+                        space: 2,
+                        circularRefHandler: (value, circusPos, stack, keyStack, key, err) => '[!circular ref!]',
+                    });
                     // make sure each line is a comment line:
                     d = d.split('\n').map((l) => '// ' + l);
                     d = d.join('\n');
 
+                    mkdirp__default['default'](path__default['default'].dirname(dumpfile));
                     fs__default['default'].writeFileSync(dumpfile, sourcecode + '\n\n\n' + d, 'utf8');
-                    console.error("****** offending generated " + errname + " source code dumped into file: ", dumpfile);
+                    console.error('****** offending generated ' + errname + ' source code dumped into file: ', dumpfile);
                     break;          // abort loop once a dump action was successful!
                 } catch (ex3) {
                     //console.error("generated " + errname + " source code fatal DUMPING error ATTEMPT: ", i, " = ", ex3.message, " -- while attempting to dump into file: ", dumpfile, "\n", ex3.stack);
@@ -322,7 +436,7 @@
                 }
             }
         } catch (ex2) {
-            console.error("generated " + errname + " source code fatal DUMPING error: ", ex2.message, " -- while attempting to dump into file: ", dumpfile, "\n", ex2.stack);
+            console.error('generated ' + errname + ' source code fatal DUMPING error: ', ex2.message, ' -- while attempting to dump into file: ', dumpfile, '\n', ex2.stack);
         }
 
         // augment the exception info, when available:
@@ -330,7 +444,7 @@
             ex.offending_source_code = sourcecode;
             ex.offending_source_title = errname;
             ex.offending_source_dumpfile = dumpfile;
-        }    
+        }
     }
 
 
@@ -356,27 +470,43 @@
     //
     function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, title) {
         options = options || {};
-        var errname = "" + (title || "exec_test");
-        var err_id = errname.replace(/[^a-z0-9_]/ig, "_");
+        let errname = '' + (title || 'exec_test');
+        let err_id = errname.replace(/[^a-z0-9_]/ig, '_');
         if (err_id.length === 0) {
-            err_id = "exec_crash";
+            err_id = 'exec_crash';
         }
-        const debug = 0;
+        const debug = options.debug || 0;
 
-        var p;
+        if (debug) console.warn('generated ' + errname + ' code under EXEC TEST.');
+        if (debug > 1) {
+            console.warn(`
+        ######################## source code ##########################
+        ${sourcecode}
+        ######################## source code ##########################
+        `);
+        }
+
+        let p;
         try {
             // p = eval(sourcecode);
             if (typeof code_execution_rig !== 'function') {
-                throw new Error("safe-code-exec-and-diag: code_execution_rig MUST be a JavaScript function");
+                throw new Error('safe-code-exec-and-diag: code_execution_rig MUST be a JavaScript function');
             }
             chkBugger(sourcecode);
             p = code_execution_rig.call(this, sourcecode, options, errname, debug);
         } catch (ex) {
-            
+            if (debug > 1) console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
+            if (debug) console.log('generated ' + errname + ' source code fatal error: ', ex.message);
+
+            if (debug > 1) console.log('exec-and-diagnose options:', options);
+
+            if (debug > 1) console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
             if (options.dumpSourceCodeOnFailure || 1) {
                 dumpSourceToFile(sourcecode, errname, err_id, options, ex);
             }
-            
+
             if (options.throwErrorOnCompileFailure) {
                 throw ex;
             }
@@ -389,9 +519,10 @@
 
 
 
-    var code_exec = {
+    var exec = {
         exec: exec_and_diagnose_this_stuff,
-        dump: dumpSourceToFile
+        dump: dumpSourceToFile,
+        convertExceptionToObject,
     };
 
     //
@@ -413,22 +544,22 @@
     //
     // This is the base XRegExp ID regex used in many places; this should match the ID macro definition in the EBNF/BNF parser et al as well!
     const ID_REGEX_BASE = '[\\p{Alphabetic}_][\\p{Alphabetic}_\\p{Number}]*';
-    // regex set expression which can be used as part of a conditional check to find word/ID/token boundaries 
+    // regex set expression which can be used as part of a conditional check to find word/ID/token boundaries
     // as this lists all characters which are not allowed in an Identifier anywhere:
     const IN_ID_CHARSET = '\\p{Alphabetic}_\\p{Number}';
 
 
 
 
-    // Determine which Unicode NonAsciiIdentifierStart characters 
+    // Determine which Unicode NonAsciiIdentifierStart characters
     // are unused in the given sourcecode and provide a mapping array
     // from given (JISON) start/end identifier character-sequences
     // to these.
-    // 
+    //
     // The purpose of this routine is to deliver a reversible
     // transform from JISON to plain JavaScript for any action
-    // code chunks. 
-    // 
+    // code chunks.
+    //
     // This is the basic building block which helps us convert
     // jison variables such as `$id`, `$3`, `$-1` ('negative index' reference),
     // `@id`, `#id`, `#TOK#` to variable names which can be
@@ -436,40 +567,40 @@
     function generateMapper4JisonGrammarIdentifiers(input) {
         // IMPORTANT: we only want the single char Unicodes in here
         // so we can do this transformation at 'Char'-word rather than 'Code'-codepoint level.
-        
+
         //const IdentifierStart = unicode4IdStart.filter((e) => e.codePointAt(0) < 0xFFFF);
 
-        // As we will be 'encoding' the Jison Special characters @ and # into the IDStart Unicode 
+        // As we will be 'encoding' the Jison Special characters @ and # into the IDStart Unicode
         // range to make JavaScript parsers *not* barf a hairball on Jison action code chunks, we
         // must consider a few things while doing that:
-        // 
+        //
         // We CAN use an escape system where we replace a single character with multiple characters,
         // as JavaScript DOES NOT discern between single characters and multi-character strings: anything
-        // between quotes is a string and there's no such thing as C/C++/C#'s `'c'` vs `"c"` which is 
+        // between quotes is a string and there's no such thing as C/C++/C#'s `'c'` vs `"c"` which is
         // *character* 'c' vs *string* 'c'.
-        // 
+        //
         // As we can safely escape characters, all we need to do is find a character (or set of characters)
         // which are in the ID_Start range and are expected to be used rarely while clearly identifyable
         // by humans for ease of debugging of the escaped intermediate values.
-        // 
+        //
         // The escape scheme is simple and borrowed from ancient serial communication protocols and
         // the JavaScript string spec alike:
-        // 
+        //
         // - assume the escape character is A
         // - then if the original input stream includes an A, we output AA
         // - if the original input includes a character #, which must be escaped, it is encoded/output as A
-        // 
+        //
         // This is the same as the way the backslash escape in JavaScript strings works and has a minor issue:
         // sequences of AAA with an odd number of A's CAN occur in the output, which might be a little hard to read.
         // Those are, however, easily machine-decodable and that's what's most important here.
-        // 
-        // To help with that AAA... issue AND because we need to escape multiple Jison markers, we choose to 
+        //
+        // To help with that AAA... issue AND because we need to escape multiple Jison markers, we choose to
         // a slightly tweaked approach: we are going to use a set of 2-char wide escape codes, where the
-        // first character is fixed and the second character is chosen such that the escape code 
-        // DOES NOT occur in the original input -- unless someone would have intentionally fed nasty input 
+        // first character is fixed and the second character is chosen such that the escape code
+        // DOES NOT occur in the original input -- unless someone would have intentionally fed nasty input
         // to the encoder as we will pick the 2 characters in the escape from 2 utterly different *human languages*:
-        // 
-        // - the first character is ဩ which is highly visible and allows us to quickly search through a 
+        //
+        // - the first character is ဩ which is highly visible and allows us to quickly search through a
         //   source to see if and where there are *any* Jison escapes.
         // - the second character is taken from the Unicode CANADIAN SYLLABICS range (0x1400-0x1670) as far as
         //   those are part of ID_Start (0x1401-0x166C or there-abouts) and, unless an attack is attempted at jison,
@@ -477,30 +608,30 @@
         //   writes such a escape in the comments to document this system, e.g. 'ဩᐅ', then there's still plenty
         //   alternatives for the second character left.
         // - the second character represents the escape type: $-n, $#, #n, @n, #ID#, etc. and each type will
-        //   pick a different base shape from that CANADIAN SYLLABICS charset. 
-        // - note that the trailing '#' in Jison's '#TOKEN#' escape will be escaped as a different code to 
+        //   pick a different base shape from that CANADIAN SYLLABICS charset.
+        // - note that the trailing '#' in Jison's '#TOKEN#' escape will be escaped as a different code to
         //   signal '#' as a token terminator there.
         // - meanwhile, only the initial character in the escape needs to be escaped if encountered in the
         //   original text: ဩ -> ဩဩ as the 2nd and 3rd character are only there to *augment* the escape.
         //   Any CANADIAN SYLLABICS in the original input don't need escaping, as these only have special meaning
         //   when prefixed with ဩ
-        // - if the ဩ character is used often in the text, the alternative ℹ இ ண ஐ Ϟ ല ઊ characters MAY be considered 
+        // - if the ဩ character is used often in the text, the alternative ℹ இ ண ஐ Ϟ ല ઊ characters MAY be considered
         //   for the initial escape code, hence we start with analyzing the entire source input to see which
         //   escapes we'll come up with this time.
         //
         // The basic shapes are:
-        // 
+        //
         // - 1401-141B:  ᐁ             1
         // - 142F-1448:  ᐯ             2
         // - 144C-1465:  ᑌ             3
         // - 146B-1482:  ᑫ             4
-        // - 1489-14A0:  ᒉ             5  
-        // - 14A3-14BA:  ᒣ             6 
-        // - 14C0-14CF:  ᓀ             
+        // - 1489-14A0:  ᒉ             5
+        // - 14A3-14BA:  ᒣ             6
+        // - 14C0-14CF:  ᓀ
         // - 14D3-14E9:  ᓓ             7
         // - 14ED-1504:  ᓭ             8
         // - 1510-1524:  ᔐ             9
-        // - 1526-153D:  ᔦ 
+        // - 1526-153D:  ᔦ
         // - 1542-154F:  ᕂ
         // - 1553-155C:  ᕓ
         // - 155E-1569:  ᕞ
@@ -511,59 +642,59 @@
         // - 1622-162D:  ᘢ
         //
         // ## JISON identifier formats ##
-        // 
+        //
         // - direct symbol references, e.g. `#NUMBER#` when there's a `%token NUMBER` for your grammar.
         //   These represent the token ID number.
-        //   
+        //
         //   -> (1+2) start-# + end-#
-        //   
+        //
         // - alias/token value references, e.g. `$token`, `$2`
-        // 
+        //
         //   -> $ is an accepted starter, so no encoding required
-        // 
+        //
         // - alias/token location reference, e.g. `@token`, `@2`
-        // 
+        //
         //   -> (6) single-@
-        // 
+        //
         // - alias/token id numbers, e.g. `#token`, `#2`
-        // 
+        //
         //   -> (3) single-#
-        // 
+        //
         // - alias/token stack indexes, e.g. `##token`, `##2`
-        // 
+        //
         //   -> (4) double-#
-        // 
+        //
         // - result value reference `$$`
-        // 
+        //
         //   -> $ is an accepted starter, so no encoding required
-        // 
+        //
         // - result location reference `@$`
-        // 
+        //
         //   -> (6) single-@
-        // 
+        //
         // - rule id number `#$`
-        // 
+        //
         //   -> (3) single-#
-        //   
+        //
         // - result stack index `##$`
-        // 
+        //
         //   -> (4) double-#
-        // 
+        //
         // - 'negative index' value references, e.g. `$-2`
-        // 
+        //
         //   -> (8) single-negative-$
-        //   
+        //
         // - 'negative index' location reference, e.g. `@-2`
-        // 
+        //
         //   -> (7) single-negative-@
-        //   
+        //
         // - 'negative index' stack indexes, e.g. `##-2`
-        // 
+        //
         //   -> (5) double-negative-#
-        // 
-        
+        //
+
         // count the number of occurrences of ch in src:
-        // 
+        //
         // function countOccurrences(ch, src) {
         //     let cnt = 0;
         //     let offset = 0;
@@ -605,38 +736,38 @@
             return set[lsidx];
         }
 
-        const escCharSet = "ဩ ℹ இ ண ஐ Ϟ ല ઊ";
+        const escCharSet = 'ဩ ℹ இ ண ஐ Ϟ ല ઊ';
 
         // Currently we only need 7 rows of typeIdCharSets. The other rows are commented out but available for future use:
         const typeIdCharSets = [
-            "ᐁ  ᐂ  ᐃ  ᐄ  ᐅ  ᐆ  ᐇ  ᐈ  ᐉ  ᐊ  ᐋ  ᐌ  ᐍ  ᐎ  ᐏ  ᐐ  ᐑ  ᐒ  ᐓ  ᐔ  ᐕ  ᐖ  ᐗ  ᐘ  ᐙ  ᐚ  ᐛ  ᐫ  ᐬ  ᐭ  ᐮ",
+            'ᐁ  ᐂ  ᐃ  ᐄ  ᐅ  ᐆ  ᐇ  ᐈ  ᐉ  ᐊ  ᐋ  ᐌ  ᐍ  ᐎ  ᐏ  ᐐ  ᐑ  ᐒ  ᐓ  ᐔ  ᐕ  ᐖ  ᐗ  ᐘ  ᐙ  ᐚ  ᐛ  ᐫ  ᐬ  ᐭ  ᐮ',
             //"ᐯ  ᐰ  ᐱ  ᐲ  ᐳ  ᐴ  ᐵ  ᐶ  ᐷ  ᐸ  ᐹ  ᐺ  ᐻ  ᐼ  ᐽ  ᐾ  ᐿ  ᑀ  ᑁ  ᑂ  ᑃ  ᑄ  ᑅ  ᑆ  ᑇ  ᑈ",
-            "ᑌ  ᑍ  ᑎ  ᑏ  ᑐ  ᑑ  ᑒ  ᑓ  ᑔ  ᑕ  ᑖ  ᑗ  ᑘ  ᑙ  ᑚ  ᑛ  ᑜ  ᑝ  ᑞ  ᑟ  ᑠ  ᑡ  ᑢ  ᑣ  ᑤ  ᑥ  ᑧ  ᑨ  ᑩ  ᑪ",
-            "ᑫ  ᑬ  ᑭ  ᑮ  ᑯ  ᑰ  ᑱ  ᑲ  ᑳ  ᑴ  ᑵ  ᑶ  ᑷ  ᑸ  ᑹ  ᑺ  ᑻ  ᑼ  ᑽ  ᑾ  ᑿ  ᒀ  ᒁ  ᒂ  ᒅ  ᒆ  ᒇ  ᒈ",
+            'ᑌ  ᑍ  ᑎ  ᑏ  ᑐ  ᑑ  ᑒ  ᑓ  ᑔ  ᑕ  ᑖ  ᑗ  ᑘ  ᑙ  ᑚ  ᑛ  ᑜ  ᑝ  ᑞ  ᑟ  ᑠ  ᑡ  ᑢ  ᑣ  ᑤ  ᑥ  ᑧ  ᑨ  ᑩ  ᑪ',
+            'ᑫ  ᑬ  ᑭ  ᑮ  ᑯ  ᑰ  ᑱ  ᑲ  ᑳ  ᑴ  ᑵ  ᑶ  ᑷ  ᑸ  ᑹ  ᑺ  ᑻ  ᑼ  ᑽ  ᑾ  ᑿ  ᒀ  ᒁ  ᒂ  ᒅ  ᒆ  ᒇ  ᒈ',
             //"ᒉ  ᒊ  ᒋ  ᒌ  ᒍ  ᒎ  ᒏ  ᒐ  ᒑ  ᒒ  ᒓ  ᒔ  ᒕ  ᒖ  ᒗ  ᒘ  ᒙ  ᒚ  ᒛ  ᒜ  ᒝ  ᒞ  ᒟ  ᒠ",
             //"ᒣ  ᒤ  ᒥ  ᒦ  ᒧ  ᒨ  ᒩ  ᒪ  ᒫ  ᒬ  ᒭ  ᒮ  ᒯ  ᒰ  ᒱ  ᒲ  ᒳ  ᒴ  ᒵ  ᒶ  ᒷ  ᒸ  ᒹ  ᒺ",
             //"ᓓ  ᓔ  ᓕ  ᓖ  ᓗ  ᓘ  ᓙ  ᓚ  ᓛ  ᓜ  ᓝ  ᓞ  ᓟ  ᓠ  ᓡ  ᓢ  ᓣ  ᓤ  ᓥ  ᓦ  ᓧ  ᓨ  ᓩ",
             //"ᓭ  ᓮ  ᓯ  ᓰ  ᓱ  ᓲ  ᓳ  ᓴ  ᓵ  ᓶ  ᓷ  ᓸ  ᓹ  ᓺ  ᓻ  ᓼ  ᓽ  ᓾ  ᓿ  ᔀ  ᔁ  ᔂ  ᔃ  ᔄ",
             //"ᔐ  ᔑ  ᔒ  ᔓ  ᔔ  ᔕ  ᔖ  ᔗ  ᔘ  ᔙ  ᔚ  ᔛ  ᔜ  ᔝ  ᔞ  ᔟ  ᔠ  ᔡ  ᔢ  ᔣ  ᔤ",
-            "ᔦ  ᔧ  ᔨ  ᔩ  ᔪ  ᔫ  ᔬ  ᔭ  ᔮ  ᔯ  ᔰ  ᔱ  ᔲ  ᔳ  ᔴ  ᔵ  ᔶ  ᔷ  ᔸ  ᔹ  ᔺ  ᔻ  ᔼ  ᔽ",
+            'ᔦ  ᔧ  ᔨ  ᔩ  ᔪ  ᔫ  ᔬ  ᔭ  ᔮ  ᔯ  ᔰ  ᔱ  ᔲ  ᔳ  ᔴ  ᔵ  ᔶ  ᔷ  ᔸ  ᔹ  ᔺ  ᔻ  ᔼ  ᔽ',
             //"ᓀ  ᓁ  ᓂ  ᓃ  ᓄ  ᓅ  ᓆ  ᓇ  ᓈ  ᓉ  ᓊ  ᓋ  ᓌ  ᓍ  ᓎ  ᓏ",
             //"ᕂ  ᕃ  ᕄ  ᕅ  ᕆ  ᕇ  ᕈ  ᕉ  ᕊ  ᕋ  ᕌ  ᕍ  ᕎ  ᕏ",
             //"ᕞ  ᕟ  ᕠ  ᕡ  ᕢ  ᕣ  ᕤ  ᕥ  ᕦ  ᕧ  ᕨ  ᕩ",
             //"ᖸ  ᖹ  ᖺ  ᖻ  ᖼ  ᖽ  ᖾ  ᖿ  ᗀ  ᗁ  ᗂ  ᗃ",
-            "ᗜ  ᗝ  ᗞ  ᗟ  ᗠ  ᗡ  ᗢ  ᗣ  ᗤ  ᗥ  ᗦ  ᗧ  ᗨ  ᗩ  ᗪ  ᗫ  ᗬ  ᗭ",
+            'ᗜ  ᗝ  ᗞ  ᗟ  ᗠ  ᗡ  ᗢ  ᗣ  ᗤ  ᗥ  ᗦ  ᗧ  ᗨ  ᗩ  ᗪ  ᗫ  ᗬ  ᗭ',
             //"ᗯ  ᗰ  ᗱ  ᗲ  ᗳ  ᗴ  ᗵ  ᗶ  ᗷ  ᗸ  ᗹ  ᗺ  ᗻ  ᗼ  ᗽ  ᗾ  ᗿ  ᘀ",
-            "ᘔ  ᘕ  ᘖ  ᘗ  ᘘ  ᘙ  ᘚ  ᘛ  ᘜ  ᘝ  ᘞ  ᘟ  ᘠ  ᘡ",
+            'ᘔ  ᘕ  ᘖ  ᘗ  ᘘ  ᘙ  ᘚ  ᘛ  ᘜ  ᘝ  ᘞ  ᘟ  ᘠ  ᘡ',
             //"ᘢ  ᘣ  ᘤ  ᘥ  ᘦ  ᘧ  ᘨ  ᘩ  ᘪ  ᘫ  ᘬ  ᘭ  ᘴ  ᘵ  ᘶ  ᘷ  ᘸ  ᘹ",
             //"ᕓ  ᕔ  ᕕ  ᕖ  ᕗ  ᕘ  ᕙ  ᕚ  ᕛ  ᕜ",
-            "ᗄ  ᗅ  ᗆ  ᗇ  ᗈ  ᗉ  ᗊ  ᗋ  ᗌ  ᗍ  ᗎ  ᗏ  ᗐ  ᗑ  ᗒ  ᗓ  ᗔ  ᗕ  ᗖ  ᗗ  ᗘ  ᗙ  ᗚ  ᗛ",
+            'ᗄ  ᗅ  ᗆ  ᗇ  ᗈ  ᗉ  ᗊ  ᗋ  ᗌ  ᗍ  ᗎ  ᗏ  ᗐ  ᗑ  ᗒ  ᗓ  ᗔ  ᗕ  ᗖ  ᗗ  ᗘ  ᗙ  ᗚ  ᗛ'
         ];
 
-        //const I = 'ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ';   // 1..12, but accepted as IdentifierStart in JavaScript :-) 
+        //const I = 'ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ';   // 1..12, but accepted as IdentifierStart in JavaScript :-)
 
         // Probable speed improvement: scan a single time through the (probably large) input source,
         // looking for all characters in parallel, instead of scanning N times through there:
         // construct a regex to dig out all potential occurrences and take it from there.
-        let reStr = escCharSet + typeIdCharSets.join("");
+        let reStr = escCharSet + typeIdCharSets.join('');
         reStr = reStr.replace(/\s+/g, '');
         const re = new RegExp(`[${reStr}]`, 'g');
         var hash = new Array(0xD800);
@@ -648,18 +779,18 @@
 
         //
         // The basic shapes are:
-        // 
+        //
         // - 1401-141B:  ᐁ             1
         // - 142F-1448:  ᐯ             2
         // - 144C-1465:  ᑌ             3
         // - 146B-1482:  ᑫ             4
-        // - 1489-14A0:  ᒉ             5  
-        // - 14A3-14BA:  ᒣ             6 
-        // - 14C0-14CF:  ᓀ             
+        // - 1489-14A0:  ᒉ             5
+        // - 14A3-14BA:  ᒣ             6
+        // - 14C0-14CF:  ᓀ
         // - 14D3-14E9:  ᓓ             7
         // - 14ED-1504:  ᓭ             8
         // - 1510-1524:  ᔐ             9
-        // - 1526-153D:  ᔦ 
+        // - 1526-153D:  ᔦ
         // - 1542-154F:  ᕂ
         // - 1553-155C:  ᕓ
         // - 155E-1569:  ᕞ
@@ -670,56 +801,56 @@
         // - 1622-162D:  ᘢ
         //
         // ## JISON identifier formats ##
-        // 
+        //
         // - direct symbol references, e.g. `#NUMBER#` when there's a `%token NUMBER` for your grammar.
         //   These represent the token ID number.
-        //   
+        //
         //   -> (1+2) start-# + end-#
-        //   
+        //
         // - alias/token value references, e.g. `$token`, `$2`
-        // 
+        //
         //   -> $ is an accepted starter, so no encoding required
-        // 
+        //
         // - alias/token location reference, e.g. `@token`, `@2`
-        // 
+        //
         //   -> (6) single-@
-        // 
+        //
         // - alias/token id numbers, e.g. `#token`, `#2`
-        // 
+        //
         //   -> (3) single-#
-        // 
+        //
         // - alias/token stack indexes, e.g. `##token`, `##2`
-        // 
+        //
         //   -> (4) double-#
-        // 
+        //
         // - result value reference `$$`
-        // 
+        //
         //   -> $ is an accepted starter, so no encoding required
-        // 
+        //
         // - result location reference `@$`
-        // 
+        //
         //   -> (6) single-@
-        // 
+        //
         // - rule id number `#$`
-        // 
+        //
         //   -> (3) single-#
-        //   
+        //
         // - result stack index `##$`
-        // 
+        //
         //   -> (4) double-#
-        // 
+        //
         // - 'negative index' value references, e.g. `$-2`
-        // 
+        //
         //   -> (8) single-negative-$
-        //   
+        //
         // - 'negative index' location reference, e.g. `@-2`
-        // 
+        //
         //   -> (7) single-negative-@
-        //   
+        //
         // - 'negative index' stack indexes, e.g. `##-2`
-        // 
+        //
         //   -> (5) double-negative-#
-        // 
+        //
 
         const escChar = pickChar(escCharSet);
         let typeIdChar = [];
@@ -727,97 +858,97 @@
             typeIdChar[i] = pickChar(typeIdCharSets[i]);
         }
 
-        // produce a function set for encoding and decoding content, 
+        // produce a function set for encoding and decoding content,
         // plus the basic strings to build regexes for matching the various jison
         // identifier types:
         return {
             // - direct symbol references, e.g. `#NUMBER#` when there's a `%token NUMBER` for your grammar.
             //   These represent the token ID number.
-            //   
+            //
             //   -> (1) start-#
             tokenDirectIdentifierStart: escChar + typeIdChar[0],
             tokenDirectIdentifierRe: new XRegExp__default['default'](`#(${ID_REGEX_BASE})#`, 'g'),
 
             // - alias/token value references, e.g. `$token`, `$2`
-            // 
+            //
             //   -> $ is an accepted starter, so no encoding required
             // - result value reference `$$`
-            // 
+            //
             //   -> $ is an accepted starter, so no encoding required
             tokenValueReferenceStart: '$',
             tokenValueReferenceRe: new XRegExp__default['default'](`$(${ID_REGEX_BASE})|$([0-9]+)`, 'g'),
 
             // - alias/token location reference, e.g. `@token`, `@2`
-            // 
+            //
             //   -> (6) single-@
             // - result location reference `@$`
-            // 
+            //
             //   -> (6) single-@
             tokenLocationStart: escChar + typeIdChar[1],
             tokenLocationRe: new XRegExp__default['default'](`@(${ID_REGEX_BASE})|@([0-9]+)`, 'g'),
 
             // - alias/token id numbers, e.g. `#token`, `#2`
-            // 
+            //
             //   -> (3) single-#
             // - rule id number `#$`
-            // 
+            //
             //   -> (3) single-#
             tokenIdentifierStart: escChar + typeIdChar[2],
             tokenIdentifierRe: new XRegExp__default['default'](`#(${ID_REGEX_BASE})|#([0-9]+)`, 'g'),
-            
+
             // - alias/token stack indexes, e.g. `##token`, `##2`
-            // 
+            //
             //   -> (4) double-#
             // - result stack index `##$`
-            // 
+            //
             //   -> (4) double-#
             tokenStackIndexStart: escChar + typeIdChar[3],
             tokenStackIndexRe: new XRegExp__default['default'](`##(${ID_REGEX_BASE})|##([0-9]+)`, 'g'),
 
             // - 'negative index' value references, e.g. `$-2`
-            // 
+            //
             //   -> (8) single-negative-$
             tokenNegativeValueReferenceStart: escChar + typeIdChar[4],
-            tokenValueReferenceRe: new XRegExp__default['default'](`$-([0-9]+)`, 'g'),
-               
+            tokenValueReferenceRe: new XRegExp__default['default']('$-([0-9]+)', 'g'),
+
             // - 'negative index' location reference, e.g. `@-2`
-            // 
+            //
             //   -> (7) single-negative-@
             tokenNegativeLocationStart: escChar + typeIdChar[5],
-            tokenNegativeLocationRe: new XRegExp__default['default'](`@-([0-9]+)`, 'g'),
-               
+            tokenNegativeLocationRe: new XRegExp__default['default']('@-([0-9]+)', 'g'),
+
             // - 'negative index' stack indexes, e.g. `##-2`
-            // 
+            //
             //   -> (5) double-negative-#
             tokenNegativeStackIndexStart: escChar + typeIdChar[6],
-            tokenNegativeStackIndexRe: new XRegExp__default['default'](`#-([0-9]+)`, 'g'),
+            tokenNegativeStackIndexRe: new XRegExp__default['default']('#-([0-9]+)', 'g'),
 
             // combined regex for encoding direction
             tokenDetect4EncodeRe: new XRegExp__default['default'](`([^$@#${IN_ID_CHARSET}])([$@#]|##)(${ID_REGEX_BASE}|[$]|-?[0-9]+)(#?)(?![$@#${IN_ID_CHARSET}])`, 'g'),
 
             // combined regex for decoding direction
-            tokenDetect4DecodeRe: new XRegExp__default['default'](`([^$${IN_ID_CHARSET}])(${escChar}[${typeIdChar.slice(0,7).join('')}])(${ID_REGEX_BASE}|[$]|[0-9]+)(?![$@#${IN_ID_CHARSET}])`, 'g'),
+            tokenDetect4DecodeRe: new XRegExp__default['default'](`([^$${IN_ID_CHARSET}])(${escChar}[${typeIdChar.slice(0, 7).join('')}])(${ID_REGEX_BASE}|[$]|[0-9]+)(?![$@#${IN_ID_CHARSET}])`, 'g'),
 
             encode: function encodeJisonTokens(src, locationOffsetSpec) {
                 let re = this.tokenDetect4EncodeRe;
 
                 // reset regex
-                re.lastIndex = 0;            
+                re.lastIndex = 0;
 
                 // patch `src` for the lookbehind emulation in the main regex used:
                 src = ' ' + src;
 
                 // Perform the encoding, one token at a time via callback function.
-                // 
+                //
                 // Note: all erroneous inputs are IGNORED as those MAY be part of a string
                 // or comment, where they are perfectly legal.
-                // This is a tad sub-optimal as we won't be able to report errors early 
+                // This is a tad sub-optimal as we won't be able to report errors early
                 // but otherwise we would be rejecting some potentially *legal* action code
                 // and we DO NOT want to be pedantically strict while we are unable to parse
                 // the input very precisely yet.
                 src = src.replace(re, (m, p1, p2, p3, p4, offset) => {
                     // p1 is only serving as lookbehind emulation
-                     
+
                     switch (p2) {
                     case '$':
                         // no encoding required UNLESS it's a negative index; p4 MUST be empty
@@ -825,7 +956,7 @@
                             if (locationOffsetSpec) {
                                 locationOffsetSpec.reportLocation(`syntax error: ${p2 + p3} cannot be followed by ${p4}`, src, offset + p1.length + p2.length + p3.length);
                             }
-                            return p1 + p2 +p3 + p4;
+                            return p1 + p2 + p3 + p4;
                         }
                         if (p3[0] === '-') {
                             return p1 + this.tokenNegativeValueReferenceStart + p3.substring(1);
@@ -838,7 +969,7 @@
                             if (locationOffsetSpec) {
                                 locationOffsetSpec.reportLocation(`syntax error: ${p2 + p3} cannot be followed by ${p4}`, src, offset + p1.length + p2.length + p3.length);
                             }
-                            return p1 + p2 +p3 + p4;
+                            return p1 + p2 + p3 + p4;
                         }
                         if (p3[0] === '-') {
                             return p1 + this.tokenNegativeStackIndexStart + p3.substring(1);
@@ -851,7 +982,7 @@
                             if (locationOffsetSpec) {
                                 locationOffsetSpec.reportLocation(`syntax error: ${p2 + p3} cannot be followed by ${p4}`, src, offset + p1.length + p2.length + p3.length);
                             }
-                            return p1 + p2 +p3 + p4;
+                            return p1 + p2 + p3 + p4;
                         }
                         if (p3[0] === '-') {
                             return p1 + this.tokenNegativeLocationStart + p3.substring(1);
@@ -864,7 +995,7 @@
                             if (locationOffsetSpec) {
                                 locationOffsetSpec.reportLocation(`syntax error: ${p2 + p3 + p4} is an illegal negative reference type`, src, offset + p1.length + p2.length);
                             }
-                            return p1 + p2 +p3 + p4;
+                            return p1 + p2 + p3 + p4;
                         }
                         if (p4 !== '') {
                             return p1 + this.tokenDirectIdentifierStart + p3;
@@ -883,37 +1014,37 @@
                 let re = this.tokenDetect4DecodeRe;
 
                 // reset regex
-                re.lastIndex = 0;            
+                re.lastIndex = 0;
 
                 // patch `src` for the lookbehind emulation in the main regex used:
                 src = ' ' + src;
 
                 // Perform the encoding, one token at a time via callback function.
-                // 
+                //
                 // Note: all erroneous inputs are IGNORED as those MAY be part of a string
                 // or comment, where they are perfectly legal.
-                // This is a tad sub-optimal as we won't be able to report errors early 
+                // This is a tad sub-optimal as we won't be able to report errors early
                 // but otherwise we would be rejecting some potentially *legal* action code
                 // and we DO NOT want to be pedantically strict while we are unable to parse
                 // the input very precisely yet.
                 src = src.replace(re, (m, p1, p2, p3, offset) => {
                     // p1 is only serving as lookbehind emulation
-                    
+
                     switch (p2) {
                     case this.tokenNegativeValueReferenceStart:
-                        return p1 + "$-" + p3;
+                        return p1 + '$-' + p3;
 
                     case this.tokenNegativeStackIndexStart:
-                        return p1 + "##-" + p3;
+                        return p1 + '##-' + p3;
 
                     case this.tokenStackIndexStart:
-                        return p1 + "##" + p3;
+                        return p1 + '##' + p3;
 
                     case this.tokenNegativeLocationStart:
-                        return p1 + "@-" + p3;
+                        return p1 + '@-' + p3;
 
                     case this.tokenLocationStart:
-                        return p1 + "@" + p3;
+                        return p1 + '@' + p3;
 
                     case this.tokenDirectIdentifierStart:
                         // p3 CANNOT be a negative value or token ID
@@ -945,7 +1076,7 @@
 
                 // and remove the added prefix which was used for lookbehind emulation:
                 return src.substring(1);
-            },
+            }
         };
     }
 
@@ -962,37 +1093,37 @@
         .replace(/@/g, '\uFFDA')
         .replace(/#/g, '\uFFDB')
         ;
-        var ast = recast__default['default'].parse(src);
+        const ast = recast__default['default'].parse(src);
         return ast;
     }
 
 
     function compileCodeToES5(src, options) {
         options = Object.assign({}, {
-          ast: true,
-          code: true,
-          sourceMaps: true,
-          comments: true,
-          filename: 'compileCodeToES5.js',
-          sourceFileName: 'compileCodeToES5.js',
-          sourceRoot: '.',
-          sourceType: 'module',
+            ast: true,
+            code: true,
+            sourceMaps: true,
+            comments: true,
+            filename: 'compileCodeToES5.js',
+            sourceFileName: 'compileCodeToES5.js',
+            sourceRoot: '.',
+            sourceType: 'module',
 
-          babelrc: false,
-          
-          ignore: [
-            "node_modules/**/*.js"
-          ],
-          compact: false,
-          retainLines: false,
-          presets: [
-            ["@babel/preset-env", {
-              targets: {
-                browsers: ["last 2 versions"],
-                node: "8.0"
-              }
-            }]
-          ]
+            babelrc: false,
+
+            ignore: [
+                'node_modules/**/*.js'
+            ],
+            compact: false,
+            retainLines: false,
+            presets: [
+                [ '@babel/preset-env', {
+                    targets: {
+                        browsers: [ 'last 2 versions' ],
+                        node: '8.0'
+                    }
+                } ]
+            ]
         }, options);
 
         return babel.transformSync(src, options); // => { code, map, ast }
@@ -1000,8 +1131,8 @@
 
 
     function prettyPrintAST(ast, options) {
-        var options = options || {};
-        const defaultOptions = { 
+        options = options || {};
+        const defaultOptions = {
             tabWidth: 2,
             quote: 'single',
             arrowParensAlways: true,
@@ -1010,7 +1141,7 @@
             // when printing generically.
             reuseWhitespace: false
         };
-        for (var key in defaultOptions) {
+        for (let key in defaultOptions) {
             if (options[key] === undefined) {
                 options[key] = defaultOptions[key];
             }
@@ -1033,25 +1164,25 @@
 
 
     // validate the given JISON+JavaScript snippet: does it compile?
-    // 
-    // Return either the parsed AST (object) or an error message (string). 
+    //
+    // Return either the parsed AST (object) or an error message (string).
     function checkActionBlock(src, yylloc, options) {
         // make sure reasonable line numbers, etc. are reported in any
         // potential parse errors by pushing the source code down:
         if (yylloc && yylloc.first_line > 0) {
-            var cnt = yylloc.first_line;
-            var lines = new Array(cnt);
+            let cnt = yylloc.first_line;
+            let lines = new Array(cnt);
             src = lines.join('\n') + src;
-        } 
+        }
         if (!src.trim()) {
             return false;
         }
 
         try {
-            var rv = parseCodeChunkToAST(src, options);
+            let rv = parseCodeChunkToAST(src, options);
             return false;
         } catch (ex) {
-            return ex.message || "code snippet cannot be parsed";
+            return ex.message || 'code snippet cannot be parsed';
         }
     }
 
@@ -1062,9 +1193,9 @@
     // trailing semicolons and/or wrapping `{...}` braces,
     // when such is easily possible *without having to actually
     // **parse** the `src` code block in order to do this safely*.
-    // 
+    //
     // Returns the trimmed sourcecode which was provided via `src`.
-    // 
+    //
     // Note: the `startMarker` argument is special in that a lexer/parser
     // can feed us the delimiter which started the code block here:
     // when the starting delimiter actually is `{` we can safely
@@ -1072,7 +1203,7 @@
     // while otherwise we may *not* do so as complex/specially-crafted
     // code will fail when it was wrapped in other delimiters, e.g.
     // action code specs like this one:
-    // 
+    //
     //              %{
     //                  {  // trimActionCode sees this one as outer-starting: WRONG
     //                      a: 1
@@ -1081,14 +1212,14 @@
     //                      b: 2
     //                  }  // trimActionCode sees this one as outer-ending: WRONG
     //              %}
-    //              
+    //
     // Of course the example would be 'ludicrous' action code but the
-    // key point here is that users will certainly be able to come up with 
+    // key point here is that users will certainly be able to come up with
     // convoluted code that is smarter than our simple regex-based
     // `{...}` trimmer in here!
-    // 
+    //
     function trimActionCode(src, startMarker) {
-        var s = src.trim();
+        let s = src.trim();
         // remove outermost set of braces UNLESS there's
         // a curly brace in there anywhere: in that case
         // we should leave it up to the sophisticated
@@ -1142,7 +1273,7 @@
         trimActionCode,
 
         ID_REGEX_BASE,
-        IN_ID_CHARSET,
+        IN_ID_CHARSET
     };
 
     function chkBugger$1(src) {
@@ -1156,7 +1287,7 @@
     /// HELPER FUNCTION: print the function in source code form, properly indented.
     /** @public */
     function printFunctionSourceCode(f) {
-        var src = String(f);
+        const src = String(f);
         chkBugger$1(src);
         return src;
     }
@@ -1168,24 +1299,24 @@
 
     /// HELPER FUNCTION: print the function **content** in source code form, properly indented,
     /// ergo: produce the code for inlining the function.
-    /// 
+    ///
     /// Also supports ES6's Arrow Functions:
-    /// 
+    ///
     /// ```
     /// function a(x) { return x; }        ==> 'return x;'
     /// function (x)  { return x; }        ==> 'return x;'
     /// (x) => { return x; }               ==> 'return x;'
     /// (x) => x;                          ==> 'return x;'
     /// (x) => do(1), do(2), x;            ==> 'return (do(1), do(2), x);'
-    /// 
+    ///
     /** @public */
     function printFunctionSourceCodeContainer(f) {
-        var action = printFunctionSourceCode(f).trim();
-        var args;
+        let action = printFunctionSourceCode(f).trim();
+        let args;
 
         // Also cope with Arrow Functions (and inline those as well?).
         // See also https://github.com/zaach/jison-lex/issues/23
-        var m = funcRe.exec(action);
+        let m = funcRe.exec(action);
         if (m) {
             args = m[1].trim();
             action = m[2].trim();
@@ -1202,8 +1333,8 @@
                 if (m[5]) {
                     // non-bracketed version: implicit `return` statement!
                     //
-                    // Q: Must we make sure we have extra braces around the return value 
-                    // to prevent JavaScript from inserting implit EOS (End Of Statement) 
+                    // Q: Must we make sure we have extra braces around the return value
+                    // to prevent JavaScript from inserting implit EOS (End Of Statement)
                     // markers when parsing this, when there are newlines in the code?
                     // A: No, we don't have to as arrow functions rvalues suffer from this
                     // same problem, hence the arrow function's programmer must already
@@ -1214,14 +1345,14 @@
                     action = m[3].trim();
                 }
             } else {
-                var e = new Error('Cannot extract code from function');
+                const e = new Error('Cannot extract code from function');
                 e.subject = action;
                 throw e;
             }
         }
         return {
             args: args,
-            code: action,
+            code: action
         };
     }
 
@@ -1232,17 +1363,17 @@
 
 
     var stringifier = {
-    	printFunctionSourceCode,
-    	printFunctionSourceCodeContainer,
+        printFunctionSourceCode,
+        printFunctionSourceCodeContainer
     };
 
-    // 
-    // 
-    // 
+    //
+    //
+    //
     function detectIstanbulGlobal() {
-        const gcv = "__coverage__";
+        const gcv = '__coverage__';
         const globalvar = new Function('return this')();
-        var coverage = globalvar[gcv];
+        const coverage = globalvar[gcv];
         return coverage || false;
     }
 
@@ -1268,7 +1399,7 @@
     //
     // Return FALSE when there's no failure, otherwise return an `Error` info object.
     function checkRegExp(re_src, re_flags, XRegExp) {
-        var re;
+        let re;
 
         // were we fed a RegExp object or a string?
         if (re_src
@@ -1316,7 +1447,7 @@
     //
     // Return FALSE when the input is not a legal regex.
     function getRegExpInfo(re_src, re_flags, XRegExp) {
-        var re1, re2, m1, m2;
+        let re1, re2, m1, m2;
 
         // were we fed a RegExp object or a string?
         if (re_src
@@ -1379,13 +1510,13 @@
         getRegExpInfo: getRegExpInfo
     };
 
-    var cycleref = [];
-    var cyclerefpath = [];
+    let cycleref = [];
+    let cyclerefpath = [];
 
-    var linkref = [];
-    var linkrefpath = [];
+    let linkref = [];
+    let linkrefpath = [];
 
-    var path = [];
+    let path = [];
 
     function shallow_copy(src) {
         if (typeof src === 'object') {
@@ -1393,14 +1524,14 @@
                 return src.slice();
             }
 
-            var dst = {};
+            let dst = {};
             if (src instanceof Error) {
                 dst.name = src.name;
                 dst.message = src.message;
                 dst.stack = src.stack;
             }
 
-            for (var k in src) {
+            for (let k in src) {
                 if (Object.prototype.hasOwnProperty.call(src, k)) {
                     dst[k] = src[k];
                 }
@@ -1413,11 +1544,11 @@
 
     function shallow_copy_and_strip_depth(src, parentKey) {
         if (typeof src === 'object') {
-            var dst;
+            let dst;
 
             if (src instanceof Array) {
                 dst = src.slice();
-                for (var i = 0, len = dst.length; i < len; i++) {
+                for (let i = 0, len = dst.length; i < len; i++) {
                     path.push('[' + i + ']');
                     dst[i] = shallow_copy_and_strip_depth(dst[i], parentKey + '[' + i + ']');
                     path.pop();
@@ -1430,9 +1561,9 @@
                     dst.stack = src.stack;
                 }
 
-                for (var k in src) {
+                for (let k in src) {
                     if (Object.prototype.hasOwnProperty.call(src, k)) {
-                        var el = src[k];
+                        let el = src[k];
                         if (el && typeof el === 'object') {
                             dst[k] = '[cyclic reference::attribute --> ' + parentKey + '.' + k + ']';
                         } else {
@@ -1447,14 +1578,50 @@
     }
 
 
+    // strip developer machine specific parts off any paths in a given stacktrace (string)
+    // to ease cross-platform comparison of these stacktraces.
     function stripErrorStackPaths(msg) {
         // strip away devbox-specific paths in error stack traces in the output:
+        // and any `nyc` profiler run added trailing cruft has to go too, e.g. ', <anonymous>:1489:27)':
         msg = msg
-        .replace(/\bat ([^\r\n(\\\/]*?)\([^)]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)\)/gi, 'at $1(/$2)')
-        .replace(/\bat [^\r\n ]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)/gi, 'at /$1');
+        .replace(/\bat ([^\r\n(\\\/]+?)\([^)]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)\)(?:, <anonymous>:[0-9]+:[0-9]+\))?/gi, 'at $1(/$2:$3)')
+        .replace(/\bat [^\r\n ]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)/gi, 'at /$1:$2');
 
         return msg;
     }
+
+
+    // strip off the line/position info from any stacktrace as a assert.deepEqual() on these
+    // will otherwise FAIL due to us running this stuff through both regular `node` and 
+    // the `nyc` profiler: the latter reformats the sourcecode-under-test, thus producing 
+    // exceptions and stacktraces which point completely somewhere else and this would b0rk
+    // our test rigs for the jison subpackages.
+    function cleanStackTrace4Comparison(obj) {
+        if (typeof obj === 'string') {
+            // and any `nyc` profiler run added trailing cruft has to go too, e.g. ', <anonymous>:1489:27)':
+            let msg = obj
+            .replace(/\bat ([^\r\n(\\\/]+?)\([^)]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)\)(?:, <anonymous>:[0-9]+:[0-9]+\))?/gi, 'at $1(/$2)')
+            .replace(/\bat [^\r\n ]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)/gi, 'at /$1');
+
+            return msg;
+        }
+
+        if (obj) {
+            if (obj.stack) {
+                obj.stack = cleanStackTrace4Comparison(obj.stack);
+            }
+            let keys = Object.keys(obj);
+            for (let i in keys) {
+                let key = keys[i];
+                let el = obj[key];
+                cleanStackTrace4Comparison(el);
+            }
+        }
+        return obj;
+    }
+
+
+
 
 
 
@@ -1471,7 +1638,7 @@
 
     function treat_value_stack(v) {
         if (v instanceof Array) {
-            var idx = cycleref.indexOf(v);
+            let idx = cycleref.indexOf(v);
             if (idx >= 0) {
                 v = '[cyclic reference to parent array --> ' + cyclerefpath[idx] + ']';
             } else {
@@ -1497,10 +1664,10 @@
     }
 
     function treat_error_infos_array(arr) {
-        var inf = arr.slice();
+        let inf = arr.slice();
         trim_array_tail(inf);
-        for (var key = 0, len = inf.length; key < len; key++) {
-            var err = inf[key];
+        for (let key = 0, len = inf.length; key < len; key++) {
+            let err = inf[key];
             if (err) {
                 path.push('[' + key + ']');
 
@@ -1598,7 +1765,7 @@
     function treat_error_report_info(e) {
         // shallow copy object:
         e = shallow_copy(e);
-        
+
         if (e && e.hash) {
             path.push('hash');
             e.hash = treat_hash(e.hash);
@@ -1615,7 +1782,7 @@
             path.push('lexer');
             e.lexer = treat_lexer(e.lexer);
             path.pop();
-        }    
+        }
 
         if (e.__error_infos) {
             path.push('__error_infos');
@@ -1643,7 +1810,7 @@
 
     function treat_object(e) {
         if (e && typeof e === 'object') {
-            var idx = cycleref.indexOf(e);
+            let idx = cycleref.indexOf(e);
             if (idx >= 0) {
                 // cyclic reference, most probably an error instance.
                 // we still want it to be READABLE in a way, though:
@@ -1659,7 +1826,7 @@
                     linkrefpath.push(path.join('.'));
 
                     e = treat_error_report_info(e);
-                    
+
                     cycleref.pop();
                     cyclerefpath.pop();
                 }
@@ -1671,14 +1838,14 @@
 
     // strip off large chunks from the Error exception object before
     // it will be fed to a test log or other output.
-    // 
+    //
     // Internal use in the unit test rigs.
     function trimErrorForTestReporting(e) {
         cycleref.length = 0;
         cyclerefpath.length = 0;
         linkref.length = 0;
         linkrefpath.length = 0;
-        path = ['*'];
+        path = [ '*' ];
 
         if (e) {
             e = treat_object(e);
@@ -1688,7 +1855,7 @@
         cyclerefpath.length = 0;
         linkref.length = 0;
         linkrefpath.length = 0;
-        path = ['*'];
+        path = [ '*' ];
 
         return e;
     }
@@ -1702,12 +1869,14 @@
         dquote,
         trimErrorForTestReporting,
         stripErrorStackPaths,
+        cleanStackTrace4Comparison,
 
         checkRegExp: reHelpers.checkRegExp,
         getRegExpInfo: reHelpers.getRegExpInfo,
 
-        exec: code_exec.exec,
-        dump: code_exec.dump,
+        exec: exec.exec,
+        dump: exec.dump,
+        convertExceptionToObject: exec.convertExceptionToObject,
 
         generateMapper4JisonGrammarIdentifiers: parse2AST.generateMapper4JisonGrammarIdentifiers,
         parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,
@@ -1722,7 +1891,7 @@
         printFunctionSourceCode: stringifier.printFunctionSourceCode,
         printFunctionSourceCodeContainer: stringifier.printFunctionSourceCodeContainer,
 
-        detectIstanbulGlobal,
+        detectIstanbulGlobal
     };
 
     // See also:
@@ -1730,7 +1899,6 @@
     // but we keep the prototype.constructor and prototype.name assignment lines too for compatibility
     // with userland code which might access the derived class in a 'classic' way.
     function JisonParserError(msg, hash) {
-
         Object.defineProperty(this, 'name', {
             enumerable: false,
             writable: false,
@@ -1747,9 +1915,9 @@
 
         this.hash = hash;
 
-        var stacktrace;
+        let stacktrace;
         if (hash && hash.exception instanceof Error) {
-            var ex2 = hash.exception;
+            let ex2 = hash.exception;
             this.message = ex2.message || msg;
             stacktrace = ex2.stack;
         }
@@ -1782,10 +1950,10 @@
 
             // helper: reconstruct the productions[] table
             function bp(s) {
-                var rv = [];
-                var p = s.pop;
-                var r = s.rule;
-                for (var i = 0, l = p.length; i < l; i++) {
+                let rv = [];
+                let p = s.pop;
+                let r = s.rule;
+                for (let i = 0, l = p.length; i < l; i++) {
                     rv.push([
                         p[i],
                         r[i]
@@ -1798,11 +1966,11 @@
 
             // helper: reconstruct the defaultActions[] table
             function bda(s) {
-                var rv = {};
-                var d = s.idx;
-                var g = s.goto;
-                for (var i = 0, l = d.length; i < l; i++) {
-                    var j = d[i];
+                let rv = {};
+                let d = s.idx;
+                let g = s.goto;
+                for (let i = 0, l = d.length; i < l; i++) {
+                    let j = d[i];
                     rv[j] = g[i];
                 }
                 return rv;
@@ -1812,18 +1980,18 @@
 
             // helper: reconstruct the 'goto' table
             function bt(s) {
-                var rv = [];
-                var d = s.len;
-                var y = s.symbol;
-                var t = s.type;
-                var a = s.state;
-                var m = s.mode;
-                var g = s.goto;
-                for (var i = 0, l = d.length; i < l; i++) {
-                    var n = d[i];
-                    var q = {};
-                    for (var j = 0; j < n; j++) {
-                        var z = y.shift();
+                let rv = [];
+                let d = s.len;
+                let y = s.symbol;
+                let t = s.type;
+                let a = s.state;
+                let m = s.mode;
+                let g = s.goto;
+                for (let i = 0, l = d.length; i < l; i++) {
+                    let n = d[i];
+                    let q = {};
+                    for (let j = 0; j < n; j++) {
+                        let z = y.shift();
                         switch (t.shift()) {
                         case 2:
                             q[z] = [
@@ -1854,7 +2022,7 @@
             // `this` references an array
             function s(c, l, a) {
                 a = a || 0;
-                for (var i = 0; i < l; i++) {
+                for (let i = 0; i < l; i++) {
                     this.push(c);
                     c += a;
                 }
@@ -1871,9 +2039,9 @@
 
             // helper: unpack an array using helpers and data, all passed in an array argument 'a'.
             function u(a) {
-                var rv = [];
-                for (var i = 0, l = a.length; i < l; i++) {
-                    var e = a[i];
+                let rv = [];
+                for (let i = 0, l = a.length; i < l; i++) {
+                    let e = a[i];
                     // Is this entry a helper function?
                     if (typeof e === 'function') {
                         i++;
@@ -1886,7 +2054,7 @@
             }
         
 
-    var parser = {
+    let parser = {
         // Code Generator Information Report
         // ---------------------------------
         //
@@ -2136,7 +2304,6 @@
         // Helper function which can be overridden by user code later on: put suitable quotes around
         // literal IDs in a description string.
         quoteName: function parser_quoteName(id_str) {
-
             return '"' + id_str + '"';
         },
 
@@ -2144,7 +2311,6 @@
         //
         // Return NULL when the symbol is unknown to the parser.
         getSymbolName: function parser_getSymbolName(symbol) {
-
             if (this.terminals_[symbol]) {
                 return this.terminals_[symbol];
             }
@@ -2156,8 +2322,8 @@
             //      parser.getSymbolName(#$)
             //
             // to obtain a human-readable name of the current grammar rule.
-            var s = this.symbols_;
-            for (var key in s) {
+            const s = this.symbols_;
+            for (let key in s) {
                 if (s[key] === symbol) {
                     return key;
                 }
@@ -2170,14 +2336,13 @@
         //
         // Return NULL when the symbol is unknown to the parser.
         describeSymbol: function parser_describeSymbol(symbol) {
-
             if (symbol !== this.EOF && this.terminal_descriptions_ && this.terminal_descriptions_[symbol]) {
                 return this.terminal_descriptions_[symbol];
-            }
-            else if (symbol === this.EOF) {
+            } else if (symbol === this.EOF) {
                 return 'end of input';
             }
-            var id = this.getSymbolName(symbol);
+
+            let id = this.getSymbolName(symbol);
             if (id) {
                 return this.quoteName(id);
             }
@@ -2193,10 +2358,10 @@
         //
         // The returned list (array) will not contain any duplicate entries.
         collect_expected_token_set: function parser_collect_expected_token_set(state, do_not_describe) {
+            const TERROR = this.TERROR;
+            let tokenset = [];
+            let check = {};
 
-            var TERROR = this.TERROR;
-            var tokenset = [];
-            var check = {};
             // Has this (error?) state been outfitted with a custom expectations description text for human consumption?
             // If so, use that one instead of the less palatable token set.
             if (!do_not_describe && this.state_descriptions_ && this.state_descriptions_[state]) {
@@ -2204,10 +2369,10 @@
                     this.state_descriptions_[state]
                 ];
             }
-            for (var p in this.table[state]) {
+            for (let p in this.table[state]) {
                 p = +p;
                 if (p !== TERROR) {
-                    var d = do_not_describe ? p : this.describeSymbol(p);
+                    let d = do_not_describe ? p : this.describeSymbol(p);
                     if (d && !check[d]) {
                         tokenset.push(d);
                         check[d] = true;        // Mark this token description as already mentioned to prevent outputting duplicate entries.
@@ -2362,9 +2527,9 @@
               /* this == yyval */
 
               // the JS engine itself can go and remove these statements when `yy` turns out to be unused in any action code!
-              var yy = this.yy;
-              var yyparser = yy.parser;
-              var yylexer = yy.lexer;
+              let yy = this.yy;
+              let yyparser = yy.parser;
+              let yylexer = yy.lexer;
 
               const OPTION_DOES_NOT_ACCEPT_VALUE = 0x0001;
         const OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES = 0x0002;
@@ -2376,18 +2541,18 @@
     case 0:
         /*! Production::    $accept : lex $end */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/2,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 1];
         this._$ = yylstack[yysp - 1];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/2,VT,VA,-,-,LT,LA,-,-)
         break;
 
     case 1:
         /*! Production::    lex : init definitions rules_and_epilogue EOF */
 
-        // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp - 1];
@@ -2417,9 +2582,9 @@
     case 2:
         /*! Production::    rules_and_epilogue : start_productions_marker rules epilogue */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         if (yyvstack[yysp]) {
@@ -2432,10 +2597,10 @@
     case 3:
         /*! Production::    rules_and_epilogue : start_productions_marker error epilogue */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 2];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -2462,9 +2627,9 @@
     case 4:
         /*! Production::    rules_and_epilogue : start_productions_marker rules */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = { rules: yyvstack[yysp] };
@@ -2473,10 +2638,10 @@
     case 5:
         /*! Production::    rules_and_epilogue : start_productions_marker error */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 1];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -2504,9 +2669,9 @@
     case 6:
         /*! Production::    rules_and_epilogue : %epsilon */
 
-        // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 0/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(null, null, null, null, true);
-        // END of default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 0/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = { rules: [] };
@@ -2515,10 +2680,10 @@
     case 7:
         /*! Production::    init : %epsilon */
 
-        // default action (generated by JISON mode classic/merge :: 0,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 0/1,VT,VA,-,-,LT,LA,-,-):
         this.$ = undefined;
         this._$ = yyparser.yyMergeLocationInfo(null, null, null, null, true);
-        // END of default action (generated by JISON mode classic/merge :: 0,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 0/1,VT,VA,-,-,LT,LA,-,-)
         
         
         yy.actionInclude = [];
@@ -2557,9 +2722,9 @@
     case 8:
         /*! Production::    definitions : definitions definition */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp - 1];
@@ -2624,9 +2789,9 @@
     case 9:
         /*! Production::    definitions : %epsilon */
 
-        // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 0/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(null, null, null, null, true);
-        // END of default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 0/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = {
@@ -2641,9 +2806,9 @@
     case 10:
         /*! Production::    definition : MACRO_NAME regex MACRO_END */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         // Note: make sure we don't try re-define/override any XRegExp `\p{...}` or `\P{...}`
@@ -2678,10 +2843,10 @@
     case 11:
         /*! Production::    definition : MACRO_NAME error */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 1];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -2698,9 +2863,9 @@
     case 12:
         /*! Production::    definition : start_inclusive_keyword option_list OPTIONS_END */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         var lst = yyvstack[yysp - 1];
@@ -2717,10 +2882,10 @@
     case 13:
         /*! Production::    definition : start_inclusive_keyword error */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 1];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -2737,9 +2902,9 @@
     case 14:
         /*! Production::    definition : start_exclusive_keyword option_list OPTIONS_END */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         var lst = yyvstack[yysp - 1];
@@ -2756,10 +2921,10 @@
     case 15:
         /*! Production::    definition : start_exclusive_keyword error */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 1];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -2776,9 +2941,9 @@
     case 16:
         /*! Production::    definition : ACTION_START_AT_SOL action ACTION_END */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         var srcCode = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
@@ -2802,9 +2967,9 @@
     case 132:
         /*! Production::    epilogue_chunk : UNTERMINATED_ACTION_BLOCK */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         // The issue has already been reported by the lexer. No need to repeat
@@ -2815,9 +2980,9 @@
     case 18:
         /*! Production::    definition : ACTION_START_AT_SOL error */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         var start_marker = yyvstack[yysp - 1].trim();
@@ -2837,9 +3002,9 @@
     case 19:
         /*! Production::    definition : ACTION_START error */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         var start_marker = yyvstack[yysp - 1].trim();
@@ -2863,9 +3028,9 @@
     case 20:
         /*! Production::    definition : option_keyword option_list OPTIONS_END */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         var lst = yyvstack[yysp - 1];
@@ -2878,10 +3043,10 @@
     case 21:
         /*! Production::    definition : option_keyword error */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 1];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -2898,9 +3063,9 @@
     case 22:
         /*! Production::    definition : UNKNOWN_DECL */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = {
@@ -2912,9 +3077,9 @@
     case 23:
         /*! Production::    definition : import_keyword option_list OPTIONS_END */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         // check if there are two unvalued options: 'name path'
@@ -2954,10 +3119,10 @@
     case 24:
         /*! Production::    definition : import_keyword error OPTIONS_END */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 2];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -2977,9 +3142,9 @@
     case 25:
         /*! Production::    definition : init_code_keyword option_list ACTION_START action ACTION_END OPTIONS_END */
 
-        // default action (generated by JISON mode classic/merge :: 6,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 6/6,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 5, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 6,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 6/6,VT,VA,VU,-,LT,LA,-,-)
         
         
         // check there's only 1 option which is an identifier
@@ -3029,10 +3194,10 @@
     case 26:
         /*! Production::    definition : init_code_keyword option_list ACTION_START error OPTIONS_END */
 
-        // default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 5/5,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 4];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 4, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 5/5,VT,VA,-,-,LT,LA,-,-)
         
         
         var start_marker = yyvstack[yysp - 2].trim();
@@ -3056,10 +3221,10 @@
     case 27:
         /*! Production::    definition : init_code_keyword error ACTION_START error OPTIONS_END */
 
-        // default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 5/5,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 4];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 4, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 5,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 5/5,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -3079,10 +3244,10 @@
     case 28:
         /*! Production::    definition : init_code_keyword error OPTIONS_END */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 2];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -3106,10 +3271,10 @@
     case 29:
         /*! Production::    definition : error */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp];
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -3130,10 +3295,10 @@
     case 30:
         /*! Production::    option_keyword : OPTIONS */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp];
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-)
         
         
         yy.__options_flags__ = OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;
@@ -3145,10 +3310,10 @@
     case 33:
         /*! Production::    include_keyword : INCLUDE */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp];
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-)
         
         
         yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;
@@ -3158,10 +3323,10 @@
     case 32:
         /*! Production::    init_code_keyword : CODE */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp];
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-)
         
         
         yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS | OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;
@@ -3171,10 +3336,10 @@
     case 34:
         /*! Production::    start_inclusive_keyword : START_INC */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp];
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-)
         
         
         yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;
@@ -3184,10 +3349,10 @@
     case 35:
         /*! Production::    start_exclusive_keyword : START_EXC */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp];
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-)
         
         
         yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;
@@ -3197,10 +3362,10 @@
     case 36:
         /*! Production::    start_conditions_marker : "<" */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp];
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-)
         
         
         yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES | OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME;
@@ -3210,10 +3375,10 @@
     case 37:
         /*! Production::    start_productions_marker : "%%" */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp];
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-)
         
         
         yy.__options_flags__ = 0;
@@ -3223,10 +3388,10 @@
     case 38:
         /*! Production::    start_epilogue_marker : "%%" */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp];
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-)
         
         
         yy.__options_flags__ = 0;
@@ -3236,9 +3401,9 @@
     case 39:
         /*! Production::    rules : rules scoped_rules_collective */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp - 1].concat(yyvstack[yysp]);
@@ -3247,9 +3412,9 @@
     case 40:
         /*! Production::    rules : rules rule */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp - 1].concat([yyvstack[yysp]]);
@@ -3258,9 +3423,9 @@
     case 41:
         /*! Production::    rules : rules ACTION_START_AT_SOL action ACTION_END */
 
-        // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
         
         
         var srcCode = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
@@ -3282,9 +3447,9 @@
     case 42:
         /*! Production::    rules : rules UNTERMINATED_ACTION_BLOCK */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         // The issue has already been reported by the lexer. No need to repeat
@@ -3295,9 +3460,9 @@
     case 43:
         /*! Production::    rules : rules ACTION_START_AT_SOL error */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         var start_marker = yyvstack[yysp - 1].trim();
@@ -3317,9 +3482,9 @@
     case 44:
         /*! Production::    rules : rules ACTION_START error */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         var start_marker = yyvstack[yysp - 1].trim();
@@ -3373,9 +3538,9 @@
     case 50:
         /*! Production::    rules : rules init_code_keyword */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -3395,9 +3560,9 @@
     case 58:
         /*! Production::    rule_block : %epsilon */
 
-        // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 0/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(null, null, null, null, true);
-        // END of default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 0/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = [];
@@ -3406,9 +3571,9 @@
     case 52:
         /*! Production::    scoped_rules_collective : start_conditions rule */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         if (yyvstack[yysp - 1]) {
@@ -3420,9 +3585,9 @@
     case 53:
         /*! Production::    scoped_rules_collective : start_conditions "{" rule_block "}" */
 
-        // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
         
         
         if (yyvstack[yysp - 3]) {
@@ -3436,10 +3601,10 @@
     case 54:
         /*! Production::    scoped_rules_collective : start_conditions "{" error "}" */
 
-        // default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 4/4,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 3];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -3459,10 +3624,10 @@
     case 55:
         /*! Production::    scoped_rules_collective : start_conditions "{" error */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 2];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -3482,10 +3647,10 @@
     case 56:
         /*! Production::    scoped_rules_collective : start_conditions error "}" */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 2];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -3505,9 +3670,9 @@
     case 57:
         /*! Production::    rule_block : rule_block rule */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp - 1]; this.$.push(yyvstack[yysp]);
@@ -3518,9 +3683,9 @@
     case 60:
         /*! Production::    rule : regex ACTION_START_AT_SOL action ACTION_END */
 
-        // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
         
         
         var srcCode = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
@@ -3539,9 +3704,9 @@
     case 61:
         /*! Production::    rule : regex ARROW_ACTION_START action ACTION_END */
 
-        // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
         
         
         var srcCode = trimActionCode$1(yyvstack[yysp - 1]);
@@ -3582,9 +3747,9 @@
     case 62:
         /*! Production::    rule : regex ARROW_ACTION_START error */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = [yyvstack[yysp - 2], yyvstack[yysp]];
@@ -3608,9 +3773,9 @@
     case 63:
         /*! Production::    rule : regex ACTION_START error */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         // TODO: REWRITE
@@ -3636,9 +3801,9 @@
     case 64:
         /*! Production::    rule : regex ACTION_START_AT_SOL error */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         // TODO: REWRITE
@@ -3683,9 +3848,9 @@
     case 65:
         /*! Production::    rule : regex error */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = [yyvstack[yysp - 1], yyvstack[yysp]];
@@ -3711,9 +3876,9 @@
     case 127:
         /*! Production::    epilogue_chunks : epilogue_chunks epilogue_chunk */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp - 1] + yyvstack[yysp];
@@ -3722,9 +3887,9 @@
     case 67:
         /*! Production::    action : action include_macro_code */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp - 1] + '\n\n' + yyvstack[yysp] + '\n\n';
@@ -3733,10 +3898,10 @@
     case 68:
         /*! Production::    action : action INCLUDE_PLACEMENT_ERROR */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 1];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -3750,10 +3915,10 @@
     case 69:
         /*! Production::    action : action BRACKET_MISSING */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 1];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -3767,10 +3932,10 @@
     case 70:
         /*! Production::    action : action BRACKET_SURPLUS */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 1];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -3784,10 +3949,10 @@
     case 71:
         /*! Production::    action : action UNTERMINATED_STRING_ERROR */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 1];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -3806,9 +3971,9 @@
     case 77:
         /*! Production::    regex_list : %epsilon */
 
-        // default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 0/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(null, null, null, null, true);
-        // END of default action (generated by JISON mode classic/merge :: 0,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 0/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = '';
@@ -3817,9 +3982,9 @@
     case 73:
         /*! Production::    start_conditions : start_conditions_marker option_list OPTIONS_END ">" */
 
-        // default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 4,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
         
         
         // rewrite + accept star '*' as name + check if we allow empty list?
@@ -3857,10 +4022,10 @@
     case 74:
         /*! Production::    start_conditions : start_conditions_marker option_list error */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 2];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-)
         
         
         // rewrite + accept star '*' as name + check if we allow empty list?
@@ -3884,9 +4049,9 @@
     case 75:
         /*! Production::    regex : nonempty_regex_list */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         // Detect if the regex ends with a pure (Unicode) word;
@@ -3965,9 +4130,9 @@
     case 129:
         /*! Production::    epilogue_chunks : epilogue_chunk */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp];
@@ -3976,9 +4141,9 @@
     case 78:
         /*! Production::    nonempty_regex_list : nonempty_regex_list "|" regex_concat */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp - 2] + '|' + yyvstack[yysp];
@@ -3987,9 +4152,9 @@
     case 79:
         /*! Production::    nonempty_regex_list : nonempty_regex_list "|" */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp - 1] + '|';
@@ -3998,9 +4163,9 @@
     case 80:
         /*! Production::    nonempty_regex_list : "|" regex_concat */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = '|' + yyvstack[yysp];
@@ -4009,9 +4174,9 @@
     case 81:
         /*! Production::    nonempty_regex_list : "|" */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = '|';
@@ -4020,9 +4185,9 @@
     case 85:
         /*! Production::    regex_base : "(" regex_list ")" */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = '(' + yyvstack[yysp - 1] + ')';
@@ -4031,9 +4196,9 @@
     case 86:
         /*! Production::    regex_base : SPECIAL_GROUP regex_list ")" */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp - 2] + yyvstack[yysp - 1] + ')';
@@ -4044,10 +4209,10 @@
     case 88:
         /*! Production::    regex_base : SPECIAL_GROUP regex_list error */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 2];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -4064,9 +4229,9 @@
     case 89:
         /*! Production::    regex_base : regex_base "+" */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp - 1] + '+';
@@ -4075,9 +4240,9 @@
     case 90:
         /*! Production::    regex_base : regex_base "*" */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp - 1] + '*';
@@ -4086,9 +4251,9 @@
     case 91:
         /*! Production::    regex_base : regex_base "?" */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp - 1] + '?';
@@ -4097,9 +4262,9 @@
     case 92:
         /*! Production::    regex_base : "/" regex_base */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = '(?=' + yyvstack[yysp] + ')';
@@ -4108,9 +4273,9 @@
     case 93:
         /*! Production::    regex_base : "/!" regex_base */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = '(?!' + yyvstack[yysp] + ')';
@@ -4129,18 +4294,18 @@
     case 108:
         /*! Production::    regex_set_atom : REGEX_SET */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp];
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-)
         break;
 
     case 97:
         /*! Production::    regex_base : "." */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = '.';
@@ -4149,9 +4314,9 @@
     case 98:
         /*! Production::    regex_base : "^" */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = '^';
@@ -4160,9 +4325,9 @@
     case 99:
         /*! Production::    regex_base : "$" */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = '$';
@@ -4171,9 +4336,9 @@
     case 102:
         /*! Production::    regex_base : ESCAPED_CHAR */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = encodeRegexLiteralStr(encodeUnicodeCodepoint(yyvstack[yysp]));
@@ -4182,9 +4347,9 @@
     case 104:
         /*! Production::    any_group_regex : REGEX_SET_START regex_set REGEX_SET_END */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = yyvstack[yysp - 2] + yyvstack[yysp - 1] + yyvstack[yysp];
@@ -4193,10 +4358,10 @@
     case 105:
         /*! Production::    any_group_regex : REGEX_SET_START regex_set error */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 2];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -4213,9 +4378,9 @@
     case 109:
         /*! Production::    regex_set_atom : name_expansion */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         if (XRegExp__default['default']._getUnicodeProperty(yyvstack[yysp].replace(/[{}]/g, ''))
@@ -4232,9 +4397,9 @@
     case 111:
         /*! Production::    literal_string : STRING_LIT */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         var src = yyvstack[yysp];
@@ -4246,9 +4411,9 @@
     case 112:
         /*! Production::    literal_string : CHARACTER_LIT */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         var s = yyvstack[yysp];
@@ -4258,9 +4423,9 @@
     case 113:
         /*! Production::    option_list : option_list "," option */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         // validate that this is legal behaviour under the given circumstances, i.e. parser context:
@@ -4295,9 +4460,9 @@
     case 114:
         /*! Production::    option_list : option_list option */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         // validate that this is legal behaviour under the given circumstances, i.e. parser context:
@@ -4316,9 +4481,9 @@
     case 115:
         /*! Production::    option_list : option */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = [yyvstack[yysp]];
@@ -4327,9 +4492,9 @@
     case 116:
         /*! Production::    option : option_name */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = [yyvstack[yysp], true];
@@ -4338,9 +4503,9 @@
     case 117:
         /*! Production::    option : option_name "=" option_value */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         // validate that this is legal behaviour under the given circumstances, i.e. parser context:
@@ -4358,10 +4523,10 @@
     case 118:
         /*! Production::    option : option_name "=" error */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 2];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-)
         
         
         // TODO ...
@@ -4379,10 +4544,10 @@
     case 119:
         /*! Production::    option : DUMMY3 error */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 1];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-)
         
         
         var with_value_msg = ' (with optional value assignment)';
@@ -4403,9 +4568,9 @@
     case 120:
         /*! Production::    option_name : option_value */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         // validate that this is legal input under the given circumstances, i.e. parser context:
@@ -4438,9 +4603,9 @@
     case 121:
         /*! Production::    option_name : "*" */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         // validate that this is legal input under the given circumstances, i.e. parser context:
@@ -4466,9 +4631,9 @@
     case 122:
         /*! Production::    option_value : OPTION_STRING */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = JSON5__default['default'].parse(yyvstack[yysp]);
@@ -4477,9 +4642,9 @@
     case 123:
         /*! Production::    option_value : OPTION_VALUE */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = parseValue(yyvstack[yysp]);
@@ -4488,9 +4653,9 @@
     case 124:
         /*! Production::    epilogue : start_epilogue_marker */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         this.$ = '';
@@ -4499,9 +4664,9 @@
     case 125:
         /*! Production::    epilogue : start_epilogue_marker epilogue_chunks */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         var srcCode = trimActionCode$1(yyvstack[yysp]);
@@ -4522,10 +4687,10 @@
     case 126:
         /*! Production::    epilogue : start_epilogue_marker error */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 1];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -4542,9 +4707,9 @@
     case 128:
         /*! Production::    epilogue_chunks : epilogue_chunks error */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         // TODO ...
@@ -4563,9 +4728,9 @@
     case 130:
         /*! Production::    epilogue_chunk : ACTION_START_AT_SOL action ACTION_END */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
         
         
         var srcCode = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
@@ -4589,9 +4754,9 @@
     case 131:
         /*! Production::    epilogue_chunk : ACTION_START_AT_SOL error */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         var start_marker = yyvstack[yysp - 1].trim();
@@ -4611,9 +4776,9 @@
     case 133:
         /*! Production::    epilogue_chunk : TRAILING_CODE_CHUNK */
 
-        // default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1,VT,VA,VU,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         // these code chunks are very probably incomplete, hence compile-testing
@@ -4624,9 +4789,9 @@
     case 134:
         /*! Production::    include_macro_code : include_keyword option_list OPTIONS_END */
 
-        // default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,LU,LUbA):
+        // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,LU,LUbA):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 3,VT,VA,VU,-,LT,LA,LU,LUbA)
+        // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,LU,LUbA)
         
         
         // check if there is only 1 unvalued options: 'path'
@@ -4682,10 +4847,10 @@
     case 135:
         /*! Production::    include_macro_code : include_keyword error */
 
-        // default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-):
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
         this.$ = yyvstack[yysp - 1];
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$1`
@@ -6288,7 +6453,6 @@
     ])
     }),
     parseError: function parseError(str, hash, ExceptionClass) {
-
         if (hash.recoverable) {
             if (typeof this.trace === 'function') {
                 this.trace(str);
@@ -6305,38 +6469,34 @@
         }
     },
     parse: function parse(input) {
+        let self = this;
+        let stack = new Array(128);         // token stack: stores token which leads to state at the same index (column storage)
+        let sstack = new Array(128);        // state stack: stores states (column storage)
 
-        var self = this;
-        var stack = new Array(128);         // token stack: stores token which leads to state at the same index (column storage)
-        var sstack = new Array(128);        // state stack: stores states (column storage)
+        let vstack = new Array(128);        // semantic value stack
+        let lstack = new Array(128);        // location stack
+        let table = this.table;
+        let sp = 0;                         // 'stack pointer': index into the stacks
+        let yyloc;
 
-        var vstack = new Array(128);        // semantic value stack
-        var lstack = new Array(128);        // location stack
-        var table = this.table;
-        var sp = 0;                         // 'stack pointer': index into the stacks
-        var yyloc;
+        let symbol = 0;
+        let preErrorSymbol = 0;
+        let lastEofErrorStateDepth = Infinity;
+        let recoveringErrorInfo = null;
+        let recovering = 0;                 // (only used when the grammar contains error recovery rules)
+        const TERROR = this.TERROR;
+        const EOF = this.EOF;
+        const ERROR_RECOVERY_TOKEN_DISCARD_COUNT = (this.options.errorRecoveryTokenDiscardCount | 0) || 3;
+        const NO_ACTION = [ 0, 189 /* === table.length :: ensures that anyone using this new state will fail dramatically! */];
 
-        
-
-
-        var symbol = 0;
-        var preErrorSymbol = 0;
-        var lastEofErrorStateDepth = Infinity;
-        var recoveringErrorInfo = null;
-        var recovering = 0;                 // (only used when the grammar contains error recovery rules)
-        var TERROR = this.TERROR;
-        var EOF = this.EOF;
-        var ERROR_RECOVERY_TOKEN_DISCARD_COUNT = (this.options.errorRecoveryTokenDiscardCount | 0) || 3;
-        var NO_ACTION = [0, 189 /* === table.length :: ensures that anyone using this new state will fail dramatically! */];
-
-        var lexer;
+        let lexer;
         if (this.__lexer__) {
             lexer = this.__lexer__;
         } else {
             lexer = this.__lexer__ = Object.create(this.lexer);
         }
 
-        var sharedState_yy = {
+        let sharedState_yy = {
             parseError: undefined,
             quoteName: undefined,
             lexer: undefined,
@@ -6344,20 +6504,18 @@
             pre_parse: undefined,
             post_parse: undefined,
             pre_lex: undefined,
-            post_lex: undefined      // WARNING: must be written this way for the code expanders to work correctly in both ES5 and ES6 modes!
+            post_lex: undefined      // WARNING: must be written this way for the code expanders to work correctly!
         };
 
-        var ASSERT;
-        if (typeof assert !== 'function') {
-            ASSERT = function JisonAssert(cond, msg) {
-
-                if (!cond) {
-                    throw new Error('assertion failed: ' + (msg || '***'));
-                }
-            };
-        } else {
-            ASSERT = assert;
-        }
+        const ASSERT = (
+            typeof assert !== 'function' ?
+                function JisonAssert(cond, msg) {
+                    if (!cond) {
+                        throw new Error('assertion failed: ' + (msg || '***'));
+                    }
+                } :
+                assert
+        );
 
         this.yyGetSharedState = function yyGetSharedState() {
             return sharedState_yy;
@@ -6379,7 +6537,6 @@
         // benchmark:: http://127.0.0.1:8080/example/jsperf/?333#testfile=test0021-shallow-clones.json5
         //
         function shallow_copy(src) {
-
             if (src && typeof src === 'object') {
                 // non-Object-type objects, e.g. RegExp, Date, etc., can usually be shallow cloned
                 // using their constructor:
@@ -6387,18 +6544,19 @@
                     if (Array.isArray(src)) {
                         return src.slice();
                     }
-                    var dst = new src.constructor(src);
+                    let dst = new src.constructor(src);
 
                     // and make sure all custom attributes are added to the clone:
                     shallow_copy_noclobber(dst, src);
                     return dst;
                 }
                 // native objects must be cloned a different way:
-                //
-                //return Object.assign({}, src);
-                var dst = {};
-                shallow_copy_noclobber(dst, src);
-                return dst;
+                {
+                    //return Object.assign({}, src);
+                    let dst = {};
+                    shallow_copy_noclobber(dst, src);
+                    return dst;
+                }
             }
             return src;
         }
@@ -6406,24 +6564,19 @@
         // - either the element does not yet exist in `src`
         // - or exists in `src` but is NULL or UNDEFINED there, while its value is non-NULL in `dst`
         function shallow_copy_noclobber(dst, src) {
-
             const chk = Object.prototype.hasOwnProperty;
-            for (var k in src) {
+            for (let k in src) {
                 if (!(k in dst)) {
                     if (chk.call(src, k)) {
                         dst[k] = src[k];
                     }
-                }
-                else {
-                    if (src[k] != null && dst[k] == null && chk.call(src, k)) {
-                        dst[k] = src[k];
-                    }
+                } else if (src[k] != null && dst[k] == null && chk.call(src, k)) {
+                    dst[k] = src[k];
                 }
             }
         }
         function copy_yylloc_native(loc) {
-
-            var rv = shallow_copy(loc);
+            let rv = shallow_copy(loc);
             // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
             if (rv) {
                 rv.range = rv.range.slice();
@@ -6461,18 +6614,15 @@
 
 
 
-
-
-
-                var error_rule_depth = (this.options.parserErrorsAreRecoverable ? locateNearestErrorRecoveryRule(state) : -1);
-                var expected = this.collect_expected_token_set(state);
-                var hash = this.constructParseErrorInfo(str, null, expected, (error_rule_depth >= 0));
+    let error_rule_depth = (this.options.parserErrorsAreRecoverable ? locateNearestErrorRecoveryRule(state) : -1);
+                let expected = this.collect_expected_token_set(state);
+                let hash = this.constructParseErrorInfo(str, null, expected, (error_rule_depth >= 0));
                 // append to the old one?
                 if (recoveringErrorInfo) {
-                    var esp = recoveringErrorInfo.info_stack_pointer;
+                    let esp = recoveringErrorInfo.info_stack_pointer;
 
                     recoveringErrorInfo.symbol_stack[esp] = symbol;
-                    var v = this.shallowCopyErrorInfo(hash);
+                    let v = this.shallowCopyErrorInfo(hash);
                     v.yyError = true;
                     v.errorRuleDepth = error_rule_depth;
                     v.recovering = recovering;
@@ -6493,7 +6643,7 @@
 
 
                 // Add any extra args to the hash under the name `extra_error_attributes`:
-                var args = Array.prototype.slice.call(arguments, 1);
+                let args = Array.prototype.slice.call(arguments, 1);
                 if (args.length) {
                     hash.extra_error_attributes = args;
                 }
@@ -6511,7 +6661,6 @@
         // Does the shared state override the default `parseError` that already comes with this instance?
         if (typeof sharedState_yy.parseError === 'function') {
             this.parseError = function parseErrorAlt(str, hash, ExceptionClass) {
-
                 if (!ExceptionClass) {
                     ExceptionClass = this.JisonParserError;
                 }
@@ -6524,7 +6673,6 @@
         // Does the shared state override the default `quoteName` that already comes with this instance?
         if (typeof sharedState_yy.quoteName === 'function') {
             this.quoteName = function quoteNameAlt(id_str) {
-
                 return sharedState_yy.quoteName.call(this, id_str);
             };
         } else {
@@ -6538,11 +6686,10 @@
         // NOTE: as this API uses parse() as a closure, it MUST be set again on every parse() invocation,
         //       or else your `sharedState`, etc. references will be *wrong*!
         this.cleanupAfterParse = function parser_cleanupAfterParse(resultValue, invoke_post_methods, do_not_nuke_errorinfos) {
-
-            var rv;
+            let rv;
 
             if (invoke_post_methods) {
-                var hash;
+                let hash;
 
                 if (sharedState_yy.post_parse || this.post_parse) {
                     // create an error hash info instance: we re-use this API in a **non-error situation**
@@ -6596,8 +6743,8 @@
             // Userland code must COPY any data/references
             // in the error hash instance(s) it is more permanently interested in.
             if (!do_not_nuke_errorinfos) {
-                for (var i = this.__error_infos.length - 1; i >= 0; i--) {
-                    var el = this.__error_infos[i];
+                for (let i = this.__error_infos.length - 1; i >= 0; i--) {
+                    let el = this.__error_infos[i];
                     if (el && typeof el.destroy === 'function') {
                         el.destroy();
                     }
@@ -6605,8 +6752,8 @@
                 this.__error_infos.length = 0;
 
 
-                for (var i = this.__error_recovery_infos.length - 1; i >= 0; i--) {
-                    var el = this.__error_recovery_infos[i];
+                for (let i = this.__error_recovery_infos.length - 1; i >= 0; i--) {
+                    let el = this.__error_recovery_infos[i];
                     if (el && typeof el.destroy === 'function') {
                         el.destroy();
                     }
@@ -6638,19 +6785,18 @@
         //
         // Note: epsilon rule's yylloc situation is detected by passing both `first_index` and `first_yylloc` as UNDEFINED/NULL.
         this.yyMergeLocationInfo = function parser_yyMergeLocationInfo(first_index, last_index, first_yylloc, last_yylloc, dont_look_back) {
-
-            var i1 = first_index | 0,
-                i2 = last_index | 0;
-            var l1 = first_yylloc,
-                l2 = last_yylloc;
-            var rv;
+            let i1 = first_index | 0;
+            let i2 = last_index | 0;
+            let l1 = first_yylloc;
+            let l2 = last_yylloc;
+            let rv;
 
             // rules:
             // - first/last yylloc entries override first/last indexes
 
             if (!l1) {
                 if (first_index != null) {
-                    for (var i = i1; i <= i2; i++) {
+                    for (let i = i1; i <= i2; i++) {
                         l1 = lstack[i];
                         if (l1) {
                             break;
@@ -6661,7 +6807,7 @@
 
             if (!l2) {
                 if (last_index != null) {
-                    for (var i = i2; i >= i1; i--) {
+                    for (let i = i2; i >= i1; i--) {
                         l2 = lstack[i];
                         if (l2) {
                             break;
@@ -6674,7 +6820,7 @@
             if (!l1 && first_index == null) {
                 // epsilon rule span merger. With optional look-ahead in l2.
                 if (!dont_look_back) {
-                    for (var i = (i1 || sp) - 1; i >= 0; i--) {
+                    for (let i = (i1 || sp) - 1; i >= 0; i--) {
                         l1 = lstack[i];
                         if (l1) {
                             break;
@@ -6686,29 +6832,27 @@
                         // when we still don't have any valid yylloc info, we're looking at an epsilon rule
                         // without look-ahead and no preceding terms and/or `dont_look_back` set:
                         // in that case we ca do nothing but return NULL/UNDEFINED:
-                        return undefined;
-                    } else {
-                        // shallow-copy L2: after all, we MAY be looking
-                        // at unconventional yylloc info objects...
-                        rv = this.copy_yylloc(l2);
-                        return rv;
+                        return null;
                     }
-                } else {
-                    // shallow-copy L1, then adjust first col/row 1 column past the end.
-                    rv = this.copy_yylloc(l1);
-                    rv.first_line = rv.last_line;
-                    rv.first_column = rv.last_column;
-                    rv.range[0] = rv.range[1];
-
-                    if (l2) {
-                        // shallow-mixin L2, then adjust last col/row accordingly.
-                        shallow_copy_noclobber(rv, l2);
-                        rv.last_line = l2.last_line;
-                        rv.last_column = l2.last_column;
-                        rv.range[1] = l2.range[1];
-                    }
+                    // shallow-copy L2: after all, we MAY be looking
+                    // at unconventional yylloc info objects...
+                    rv = this.copy_yylloc(l2);
                     return rv;
                 }
+                // shallow-copy L1, then adjust first col/row 1 column past the end.
+                rv = this.copy_yylloc(l1);
+                rv.first_line = rv.last_line;
+                rv.first_column = rv.last_column;
+                rv.range[0] = rv.range[1];
+
+                if (l2) {
+                    // shallow-mixin L2, then adjust last col/row accordingly.
+                    shallow_copy_noclobber(rv, l2);
+                    rv.last_line = l2.last_line;
+                    rv.last_column = l2.last_column;
+                    rv.range[1] = l2.range[1];
+                }
+                return rv;
             }
 
             if (!l1) {
@@ -6716,7 +6860,7 @@
                 l2 = null;
             }
             if (!l1) {
-                return undefined;
+                return null;
             }
 
             // shallow-copy L1|L2, before we try to adjust the yylloc values: after all, we MAY be looking
@@ -6736,8 +6880,7 @@
         // NOTE: as this API uses parse() as a closure, it MUST be set again on every parse() invocation,
         //       or else your `lexer`, `sharedState`, etc. references will be *wrong*!
         this.constructParseErrorInfo = function parser_constructParseErrorInfo(msg, ex, expected, recoverable) {
-
-            var pei = {
+            const pei = {
                 errStr: msg,
                 exception: ex,
                 text: lexer.match,
@@ -6746,10 +6889,10 @@
                 token_id: symbol,
                 line: lexer.yylineno,
                 loc: this.copy_yylloc(lexer.yylloc),
-                expected: expected,
-                recoverable: recoverable,
-                state: state,
-                action: action,
+                expected,
+                recoverable,
+                state,
+                action,
                 new_state: newState,
                 symbol_stack: stack,
                 state_stack: sstack,
@@ -6757,7 +6900,7 @@
                 location_stack: lstack,
                 stack_pointer: sp,
                 yy: sharedState_yy,
-                lexer: lexer,
+                lexer,
                 parser: this,
 
                 // and make sure the error info doesn't stay due to potential
@@ -6768,9 +6911,14 @@
                 // constitute the set of elements which can produce a cyclic ref.
                 // The rest of the members is kept intact as they are harmless.
                 destroy: function destructParseErrorInfo() {
-
-                    var rec = !!this.recoverable;
-                    for (var key in this) {
+                    // remove cyclic references added to error info:
+                    // info.yy = null;
+                    // info.lexer = null;
+                    // info.value = null;
+                    // info.value_stack = null;
+                    // ...
+                    const rec = !!this.recoverable;
+                    for (let key in this) {
                         if (this[key] && this.hasOwnProperty(key) && typeof this[key] === 'object') {
                             this[key] = undefined;
                         }
@@ -6786,8 +6934,7 @@
         // clone some parts of the (possibly enhanced!) errorInfo object
         // to give them some persistence.
         this.shallowCopyErrorInfo = function parser_shallowCopyErrorInfo(p) {
-
-            var rv = shallow_copy(p);
+            let rv = shallow_copy(p);
 
             // remove the large parts which can only cause cyclic references
             // and are otherwise available from the parser kernel anyway.
@@ -6856,11 +7003,14 @@
             // - root_failure_pointer:
             //                  copy of the `stack_pointer`...
             //
-            for (var i = rv.stack_pointer; rv.state_stack[i] != null; i++) {
-                // empty
+            {
+                let i;
+                for (i = rv.stack_pointer; rv.state_stack[i] != null; i++) {
+                    // empty
+                }
+                rv.base_pointer = i;
+                rv.info_stack_pointer = i;
             }
-            rv.base_pointer = i;
-            rv.info_stack_pointer = i;
 
             rv.root_failure_pointer = rv.stack_pointer;
 
@@ -6871,8 +7021,7 @@
         };
 
         function getNonTerminalFromCode(symbol) {
-
-            var tokenName = self.getSymbolName(symbol);
+            let tokenName = self.getSymbolName(symbol);
             if (!tokenName) {
                 tokenName = symbol;
             }
@@ -6881,21 +7030,20 @@
 
 
         function stdLex() {
-
-            var token = lexer.lex();
+            let token = lexer.lex();
             // if token isn't its numeric value, convert
             if (typeof token !== 'number') {
                 token = self.symbols_[token] || token;
             }
 
             if (typeof Jison !== 'undefined' && Jison.lexDebugger) {
-                var tokenName = self.getSymbolName(token || EOF);
+                let tokenName = self.getSymbolName(token || EOF);
                 if (!tokenName) {
                     tokenName = token;
                 }
 
                 Jison.lexDebugger.push({
-                    tokenName: tokenName,
+                    tokenName,
                     tokenText: lexer.match,
                     tokenValue: lexer.yytext
                 });
@@ -6905,21 +7053,20 @@
         }
 
         function fastLex() {
-
-            var token = lexer.fastLex();
+            let token = lexer.fastLex();
             // if token isn't its numeric value, convert
             if (typeof token !== 'number') {
                 token = self.symbols_[token] || token;
             }
 
             if (typeof Jison !== 'undefined' && Jison.lexDebugger) {
-                var tokenName = self.getSymbolName(token || EOF);
+                let tokenName = self.getSymbolName(token || EOF);
                 if (!tokenName) {
                     tokenName = token;
                 }
 
                 Jison.lexDebugger.push({
-                    tokenName: tokenName,
+                    tokenName,
                     tokenText: lexer.match,
                     tokenValue: lexer.yytext
                 });
@@ -6928,28 +7075,27 @@
             return token || EOF;
         }
 
-        var lex = stdLex;
+        let lex = stdLex;
 
 
-        var state, action, r, t;
-        var yyval = {
+        let state, action, r, t;
+        let yyval = {
             $: true,
             _$: undefined,
             yy: sharedState_yy
         };
-        var p;
-        var yyrulelen;
-        var this_production;
-        var newState;
-        var retval = false;
+        let p;
+        let yyrulelen;
+        let this_production;
+        let newState;
+        let retval = false;
 
 
         // Return the rule stack depth where the nearest error rule can be found.
         // Return -1 when no error recovery rule was found.
         function locateNearestErrorRecoveryRule(state) {
-
-            var stack_probe = sp - 1;
-            var depth = 0;
+            let stack_probe = sp - 1;
+            let depth = 0;
 
             // try to recover from error
             while (stack_probe >= 0) {
@@ -6962,8 +7108,7 @@
 
 
 
-
-                var t = (table[state] && table[state][TERROR]) || NO_ACTION;
+    const t = (table[state] && table[state][TERROR]) || NO_ACTION;
                 if (t[0]) {
                     // We need to make sure we're not cycling forever:
                     // once we hit EOF, even when we `yyerrok()` an error, we must
@@ -6986,8 +7131,7 @@
 
 
 
-
-                    if (symbol === EOF) {
+    if (symbol === EOF) {
                         if (lastEofErrorStateDepth > sp - 1 - depth) {
                             lastEofErrorStateDepth = sp - 1 - depth;
                         } else {
@@ -6999,8 +7143,7 @@
 
 
 
-
-                            --stack_probe; // popStack(1): [symbol, action]
+    --stack_probe; // popStack(1): [symbol, action]
                             state = sstack[stack_probe];
                             ++depth;
                             continue;
@@ -7017,8 +7160,7 @@
 
 
 
-
-                    return -1; // No suitable error recovery rule available.
+    return -1; // No suitable error recovery rule available.
                 }
                 --stack_probe; // popStack(1): [symbol, action]
                 state = sstack[stack_probe];
@@ -7032,8 +7174,7 @@
 
 
 
-
-            return -1; // No suitable error recovery rule available.
+    return -1; // No suitable error recovery rule available.
         }
 
 
@@ -7047,7 +7188,7 @@
             // whether we'll go with the standard, slower, lex() API or the
             // `fast_lex()` one:
             if (typeof lexer.canIUse === 'function') {
-                var lexerInfo = lexer.canIUse();
+                let lexerInfo = lexer.canIUse();
                 if (lexerInfo.fastLex && typeof fastLex === 'function') {
                     lex = fastLex;
                 }
@@ -7100,16 +7241,13 @@
 
 
 
-
-
-
-                    // handle parse error
+    // handle parse error
                     if (!action) {
                         // first see if there's any chance at hitting an error recovery rule:
-                        var error_rule_depth = locateNearestErrorRecoveryRule(state);
-                        var errStr = null;
-                        var errSymbolDescr = (this.describeSymbol(symbol) || symbol);
-                        var expected = this.collect_expected_token_set(state);
+                        let error_rule_depth = locateNearestErrorRecoveryRule(state);
+                        let errStr = null;
+                        let errSymbolDescr = (this.describeSymbol(symbol) || symbol);
+                        let expected = this.collect_expected_token_set(state);
 
                         if (!recovering) {
                             // Report error
@@ -7143,9 +7281,7 @@
 
 
 
-
-
-                            r = this.parseError(p.errStr, p, this.JisonParserError);
+    r = this.parseError(p.errStr, p, this.JisonParserError);
                             if (typeof r !== 'undefined') {
                                 retval = r;
                                 break;
@@ -7168,9 +7304,7 @@
 
 
 
-
-
-                        var esp = recoveringErrorInfo.info_stack_pointer;
+    let esp = recoveringErrorInfo.info_stack_pointer;
 
                         // just recovered from another error
                         if (recovering === ERROR_RECOVERY_TOKEN_DISCARD_COUNT && error_rule_depth >= 0) {
@@ -7197,17 +7331,16 @@
 
 
 
-
-                        }
+    }
 
                         // try to recover from error
                         if (error_rule_depth < 0) {
-                            ASSERT(recovering > 0, "line 897");
+                            ASSERT(recovering > 0, 'Line 1048');
                             recoveringErrorInfo.info_stack_pointer = esp;
 
                             // barf a fatal hairball when we're out of look-ahead symbols and none hit a match
                             // while we are still busy recovering from another error:
-                            var po = this.__error_infos[this.__error_infos.length - 1];
+                            let po = this.__error_infos[this.__error_infos.length - 1];
 
                             // Report error
                             if (typeof lexer.yylineno === 'number') {
@@ -7254,8 +7387,8 @@
                             recoveringErrorInfo.value_stack[esp] = {
                                 yytext: this.copy_yytext(lexer.yytext),
                                 errorRuleDepth: error_rule_depth,
-                                errStr: errStr,
-                                errorSymbolDescr: errSymbolDescr,
+                                errStr,
+                                errSymbolDescr,
                                 expectedStr: expected,
                                 stackSampleLength: error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH
                             };
@@ -7267,8 +7400,7 @@
 
 
 
-
-                        } else {
+    } else {
                             recoveringErrorInfo.value_stack[esp] = {
                                 yytext: this.copy_yytext(lexer.yytext),
                                 errorRuleDepth: error_rule_depth,
@@ -7286,6 +7418,7 @@
 
                         yyrulelen = error_rule_depth;
 
+                        let combineState = NO_ACTION[1];
 
 
 
@@ -7294,7 +7427,7 @@
 
 
 
-                        r = this.performAction.call(yyval, yyloc, NO_ACTION[1], sp - 1, vstack, lstack);
+    r = this.performAction.call(yyval, yyloc, combineState, sp - 1, vstack, lstack);
 
                         if (typeof r !== 'undefined') {
                             retval = r;
@@ -7305,7 +7438,7 @@
                         sp -= yyrulelen;
 
                         // and move the top entries + discarded part of the parse stacks onto the error info stack:
-                        for (var idx = sp - EXTRA_STACK_SAMPLE_DEPTH, top = idx + yyrulelen; idx < top; idx++, esp++) {
+                        for (let idx = sp - EXTRA_STACK_SAMPLE_DEPTH, top = idx + yyrulelen; idx < top; idx++, esp++) {
                             recoveringErrorInfo.symbol_stack[esp] = stack[idx];
                             recoveringErrorInfo.value_stack[esp] = vstack[idx];
                             recoveringErrorInfo.location_stack[esp] = lstack[idx];
@@ -7365,10 +7498,10 @@
                         // only a single parse loop, which handles everything. Our goal is
                         // to eke out every drop of performance in the main parse loop...
 
-                        ASSERT(recoveringErrorInfo, "line 1049");
-                        ASSERT(symbol === TERROR, "line 1050");
-                        ASSERT(!action, "line 1051");
-                        var errorSymbolFromParser = true;
+                        ASSERT(recoveringErrorInfo, 'Line 1204');
+                        ASSERT(symbol === TERROR, 'Line 1205');
+                        ASSERT(!action, 'Line 1206');
+                        let errorSymbolFromParser = true;
                         for (;;) {
                             // retrieve state number from top of stack
                             state = newState;               // sstack[sp - 1];
@@ -7403,9 +7536,7 @@
 
 
 
-
-
-                                // encountered another parse error? If so, break out to main loop
+    // encountered another parse error? If so, break out to main loop
                                 // and take it from there!
                                 if (!action) {
 
@@ -7418,7 +7549,7 @@
 
 
 
-                                    ASSERT(recoveringErrorInfo, "line 1087");
+                                    ASSERT(recoveringErrorInfo, 'Line 1248');
 
                                     // Prep state variables so that upon breaking out of
                                     // this "slow parse loop" and hitting the `continue;`
@@ -7439,9 +7570,7 @@
 
 
 
-
-
-                            switch (action) {
+    switch (action) {
                             // catch misc. parse failures:
                             default:
                                 // this shouldn't happen, unless resolve defaults are off
@@ -7463,12 +7592,12 @@
                                     // Push a special value onto the stack when we're
                                     // shifting the `error` symbol that is related to the
                                     // error we're recovering from.
-                                    ASSERT(recoveringErrorInfo, "line 1131");
+                                    ASSERT(recoveringErrorInfo, 'Line 1305');
                                     vstack[sp] = recoveringErrorInfo;
                                     lstack[sp] = this.yyMergeLocationInfo(null, null, recoveringErrorInfo.loc, lexer.yylloc, true);
                                 } else {
-                                    ASSERT(symbol !== 0, "line 1135");
-                                    ASSERT(preErrorSymbol === 0, "line 1136");
+                                    ASSERT(symbol !== 0, 'Line 1309');
+                                    ASSERT(preErrorSymbol === 0, 'Line 1310');
                                     vstack[sp] = lexer.yytext;
                                     lstack[sp] = this.copy_yylloc(lexer.yylloc);
                                 }
@@ -7477,7 +7606,7 @@
                                 ++sp;
 
                                 if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
-                                    var tokenName = this.getSymbolName(symbol || EOF);
+                                    let tokenName = this.getSymbolName(symbol || EOF);
                                     if (!tokenName) {
                                         tokenName = symbol;
                                     }
@@ -7518,7 +7647,7 @@
                                     }
                                 } else {
                                     // error just occurred, resume old lookahead f/ before error, *unless* that drops us straight back into error mode:
-                                    ASSERT(recovering > 0, "line 1163");
+                                    ASSERT(recovering > 0, 'Line 1352');
                                     symbol = preErrorSymbol;
                                     preErrorSymbol = 0;
 
@@ -7565,7 +7694,7 @@
                                 // while the error symbol hasn't been shifted onto
                                 // the stack yet. Hence we only exit this "slow parse loop"
                                 // when *both* conditions are met!
-                                ASSERT(preErrorSymbol === 0, "line 1194");
+                                ASSERT(preErrorSymbol === 0, 'Line 1383');
                                 if (recovering === 0) {
                                     break;
                                 }
@@ -7583,21 +7712,19 @@
 
 
 
-
-
-                                r = this.performAction.call(yyval, yyloc, newState, sp - 1, vstack, lstack);
+    r = this.performAction.call(yyval, yyloc, newState, sp - 1, vstack, lstack);
 
                                 if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
-                                    var prereduceValue = vstack.slice(sp - yyrulelen, sp);
-                                    var debuggableProductions = [];
-                                    for (var debugIdx = yyrulelen - 1; debugIdx >= 0; debugIdx--) {
-                                        var debuggableProduction = getNonTerminalFromCode(stack[sp - debugIdx]);
+                                    let prereduceValue = vstack.slice(sp - yyrulelen, sp);
+                                    let debuggableProductions = [];
+                                    for (let debugIdx = yyrulelen - 1; debugIdx >= 0; debugIdx--) {
+                                        let debuggableProduction = getNonTerminalFromCode(stack[sp - debugIdx]);
                                         debuggableProductions.push(debuggableProduction);
                                     }
 
                                     // find the current nonterminal name (- nolan)
-                                    var currentNonterminalCode = this_production[0];     // WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];
-                                    var currentNonterminal = getNonTerminalFromCode(currentNonterminalCode);
+                                    let currentNonterminalCode = this_production[0];     // WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];
+                                    let currentNonterminal = getNonTerminalFromCode(currentNonterminalCode);
 
                                     Jison.parserDebugger.push({
                                         action: 'reduce',
@@ -7631,14 +7758,15 @@
                                 sp -= yyrulelen;
 
                                 // don't overwrite the `symbol` variable: use a local var to speed things up:
-                                var ntsymbol = this_production[0];    // push nonterminal (reduce)
-                                stack[sp] = ntsymbol;
-                                vstack[sp] = yyval.$;
-                                lstack[sp] = yyval._$;
-                                // goto new state = table[STATE][NONTERMINAL]
-                                newState = table[sstack[sp - 1]][ntsymbol];
-                                sstack[sp] = newState;
-                                ++sp;
+                                {
+                                    let ntsymbol = this_production[0];    // push nonterminal (reduce)
+                                    stack[sp] = ntsymbol;
+                                    vstack[sp] = yyval.$;
+                                    lstack[sp] = yyval._$;
+                                    // goto new state = table[STATE][NONTERMINAL]
+                                    newState = table[sstack[sp - 1]][ntsymbol];
+                                    sstack[sp] = newState;
+                                    ++sp;
 
 
 
@@ -7648,6 +7776,7 @@
 
 
 
+                                }
                                 continue;
 
                             // accept:
@@ -7699,7 +7828,7 @@
                         // i.e. did the parser already produce a parse result in here?!
                         // *or* did we hit an unsupported parse state, to be handled
                         // in the `switch/default` code further below?
-                        ASSERT(action !== 2, "line 1272");
+                        ASSERT(action !== 2, 'Line 1509');
                         if (!action || action === 1) {
                             continue;
                         }
@@ -7715,9 +7844,7 @@
 
 
 
-
-
-                switch (action) {
+    switch (action) {
                 // catch misc. parse failures:
                 default:
                     // this shouldn't happen, unless resolve defaults are off
@@ -7746,7 +7873,7 @@
                     sstack[sp] = newState; // push state
 
                     if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
-                        var tokenName = this.getSymbolName(symbol || EOF);
+                        let tokenName = this.getSymbolName(symbol || EOF);
                         if (!tokenName) {
                             tokenName = symbol;
                         }
@@ -7763,8 +7890,8 @@
 
                     symbol = 0;
 
-                    ASSERT(preErrorSymbol === 0, "line 1352");         // normal execution / no error
-                    ASSERT(recovering === 0, "line 1353");             // normal execution / no error
+                    ASSERT(preErrorSymbol === 0, 'Line 1619');         // normal execution / no error
+                    ASSERT(recovering === 0, 'Line 1620');             // normal execution / no error
 
                     // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
 
@@ -7775,8 +7902,8 @@
 
                 // reduce:
                 case 2:
-                    ASSERT(preErrorSymbol === 0, "line 1364");         // normal execution / no error
-                    ASSERT(recovering === 0, "line 1365");             // normal execution / no error
+                    ASSERT(preErrorSymbol === 0, 'Line 1631');         // normal execution / no error
+                    ASSERT(recovering === 0, 'Line 1632');             // normal execution / no error
 
                     this_production = this.productions_[newState - 1];  // `this.productions_[]` is zero-based indexed while states start from 1 upwards...
                     yyrulelen = this_production[1];
@@ -7788,21 +7915,19 @@
 
 
 
-
-
-                    r = this.performAction.call(yyval, yyloc, newState, sp - 1, vstack, lstack);
+    r = this.performAction.call(yyval, yyloc, newState, sp - 1, vstack, lstack);
 
                     if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
-                        var prereduceValue = vstack.slice(sp - yyrulelen, sp);
-                        var debuggableProductions = [];
-                        for (var debugIdx = yyrulelen - 1; debugIdx >= 0; debugIdx--) {
-                            var debuggableProduction = getNonTerminalFromCode(stack[sp - debugIdx]);
+                        let prereduceValue = vstack.slice(sp - yyrulelen, sp);
+                        let debuggableProductions = [];
+                        for (let debugIdx = yyrulelen - 1; debugIdx >= 0; debugIdx--) {
+                            let debuggableProduction = getNonTerminalFromCode(stack[sp - debugIdx]);
                             debuggableProductions.push(debuggableProduction);
                         }
 
                         // find the current nonterminal name (- nolan)
-                        var currentNonterminalCode = this_production[0];     // WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];
-                        var currentNonterminal = getNonTerminalFromCode(currentNonterminalCode);
+                        let currentNonterminalCode = this_production[0];     // WARNING: nolan's original code takes this one instead:   this.productions_[newState][0];
+                        let currentNonterminal = getNonTerminalFromCode(currentNonterminalCode);
 
                         Jison.parserDebugger.push({
                             action: 'reduce',
@@ -7833,14 +7958,15 @@
                     sp -= yyrulelen;
 
                     // don't overwrite the `symbol` variable: use a local var to speed things up:
-                    var ntsymbol = this_production[0];    // push nonterminal (reduce)
-                    stack[sp] = ntsymbol;
-                    vstack[sp] = yyval.$;
-                    lstack[sp] = yyval._$;
-                    // goto new state = table[STATE][NONTERMINAL]
-                    newState = table[sstack[sp - 1]][ntsymbol];
-                    sstack[sp] = newState;
-                    ++sp;
+                    {
+                        let ntsymbol = this_production[0];    // push nonterminal (reduce)
+                        stack[sp] = ntsymbol;
+                        vstack[sp] = yyval.$;
+                        lstack[sp] = yyval._$;
+                        // goto new state = table[STATE][NONTERMINAL]
+                        newState = table[sstack[sp - 1]][ntsymbol];
+                        sstack[sp] = newState;
+                        ++sp;
 
 
 
@@ -7850,6 +7976,7 @@
 
 
 
+                    }
                     continue;
 
                 // accept:
@@ -7902,8 +8029,7 @@
             // if it is a known parser or lexer error which has been thrown by parseError() already:
             if (ex instanceof this.JisonParserError) {
                 throw ex;
-            }
-            else if (lexer && typeof lexer.JisonLexerError === 'function' && ex instanceof lexer.JisonLexerError) {
+            } else if (lexer && typeof lexer.JisonLexerError === 'function' && ex instanceof lexer.JisonLexerError) {
                 throw ex;
             }
 
@@ -8164,7 +8290,6 @@
        * @nocollapse
        */
       function JisonLexerError(msg, hash) {
-
         Object.defineProperty(this, 'name', {
           enumerable: false,
           writable: false,
@@ -8181,10 +8306,10 @@
         });
 
         this.hash = hash;
-        var stacktrace;
+        let stacktrace;
 
         if (hash && hash.exception instanceof Error) {
-          var ex2 = hash.exception;
+          const ex2 = hash.exception;
           this.message = ex2.message || msg;
           stacktrace = ex2.stack;
         }
@@ -8216,7 +8341,7 @@
       JisonLexerError.prototype.constructor = JisonLexerError;
       JisonLexerError.prototype.name = 'JisonLexerError';
 
-      var lexer = {
+      const lexer = {
         
     // Code Generator Information Report
     // ---------------------------------
@@ -8258,7 +8383,9 @@
     //
     // --------- END OF REPORT -----------
 
-    EOF: 1,
+
+        EOF: 1,
+
         ERROR: 2,
 
         // JisonLexerError: JisonLexerError,        /// <-- injected by the code generator
@@ -8344,7 +8471,7 @@
 
           if (this.yylloc && show_input_position) {
             if (typeof this.prettyPrintRange === 'function') {
-              var pretty_src = this.prettyPrintRange(this.yylloc);
+              const pretty_src = this.prettyPrintRange(this.yylloc);
 
               if (!/\n\s*$/.test(msg)) {
                 msg += '\n';
@@ -8352,7 +8479,7 @@
 
               msg += '\n  Erroneous area:\n' + this.prettyPrintRange(this.yylloc);
             } else if (typeof this.showPosition === 'function') {
-              var pos_str = this.showPosition();
+              const pos_str = this.showPosition();
 
               if (pos_str) {
                 if (msg.length && msg[msg.length - 1] !== '\n' && pos_str[0] !== '\n') {
@@ -8365,7 +8492,7 @@
           }
 
           /** @constructor */
-          var pei = {
+          const pei = {
             errStr: msg,
             recoverable: !!recoverable,
 
@@ -8391,10 +8518,13 @@
                          * @this {LexErrorInfo}
                          */
             destroy: function destructLexErrorInfo() {
+              // remove cyclic references added to error info:
+              // info.yy = null;
+              // info.lexer = null;
+              // ...
+              const rec = !!this.recoverable;
 
-              var rec = !!this.recoverable;
-
-              for (var key in this) {
+              for (let key in this) {
                 if (this[key] && this.hasOwnProperty(key) && typeof this[key] === 'object') {
                   this[key] = undefined;
                 }
@@ -8417,7 +8547,6 @@
              * @this {RegExpLexer}
              */
         parseError: function lexer_parseError(str, hash, ExceptionClass) {
-
           if (!ExceptionClass) {
             ExceptionClass = this.JisonLexerError;
           }
@@ -8440,16 +8569,16 @@
              * @this {RegExpLexer}
              */
         yyerror: function yyError(str /*, ...args */) {
-          var lineno_msg = 'Lexical error';
+          let lineno_msg = 'Lexical error';
 
           if (this.yylloc) {
             lineno_msg += ' on line ' + (this.yylineno + 1);
           }
 
-          var p = this.constructLexErrorInfo(lineno_msg + ': ' + str, this.options.lexerErrorsAreRecoverable);
+          const p = this.constructLexErrorInfo(lineno_msg + ': ' + str, this.options.lexerErrorsAreRecoverable);
 
           // Add any extra args to the hash under the name `extra_error_attributes`:
-          var args = Array.prototype.slice.call(arguments, 1);
+          let args = Array.prototype.slice.call(arguments, 1);
 
           if (args.length) {
             p.extra_error_attributes = args;
@@ -8471,7 +8600,6 @@
              * @this {RegExpLexer}
              */
         cleanupAfterLex: function lexer_cleanupAfterLex(do_not_nuke_errorinfos) {
-
           // prevent lingering circular references from causing memory leaks:
           this.setInput('', {});
 
@@ -8479,8 +8607,8 @@
           // Userland code must COPY any data/references
           // in the error hash instance(s) it is more permanently interested in.
           if (!do_not_nuke_errorinfos) {
-            for (var i = this.__error_infos.length - 1; i >= 0; i--) {
-              var el = this.__error_infos[i];
+            for (let i = this.__error_infos.length - 1; i >= 0; i--) {
+              let el = this.__error_infos[i];
 
               if (el && typeof el.destroy === 'function') {
                 el.destroy();
@@ -8509,7 +8637,7 @@
 
           this._more = false;
           this._backtrack = false;
-          var col = this.yylloc.last_column;
+          const col = this.yylloc.last_column;
 
           this.yylloc = {
             first_line: this.yylineno + 1,
@@ -8534,7 +8662,7 @@
           // lexer to a usable lexer:
           if (!this.__decompressed) {
             // step 1: decompress the regex list:
-            var rules = this.rules;
+            let rules = this.rules;
 
             for (var i = 0, len = rules.length; i < len; i++) {
               var rule_re = rules[i];
@@ -8546,17 +8674,17 @@
             }
 
             // step 2: unfold the conditions[] set to make these ready for use:
-            var conditions = this.conditions;
+            let conditions = this.conditions;
 
-            for (var k in conditions) {
-              var spec = conditions[k];
-              var rule_ids = spec.rules;
+            for (let k in conditions) {
+              let spec = conditions[k];
+              let rule_ids = spec.rules;
               var len = rule_ids.length;
-              var rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
-              var rule_new_ids = new Array(len + 1);
+              let rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
+              let rule_new_ids = new Array(len + 1);
 
               for (var i = 0; i < len; i++) {
-                var idx = rule_ids[i];
+                let idx = rule_ids[i];
                 var rule_re = rules[idx];
                 rule_regexes[i + 1] = rule_re;
                 rule_new_ids[i + 1] = idx;
@@ -8650,7 +8778,7 @@
              * @this {RegExpLexer}
              */
         editRemainingInput: function lexer_editRemainingInput(callback, cpsArg) {
-          var rv = callback.call(this, this._input, cpsArg);
+          const rv = callback.call(this, this._input, cpsArg);
 
           if (typeof rv !== 'string') {
             if (rv) {
@@ -8671,7 +8799,6 @@
              * @this {RegExpLexer}
              */
         input: function lexer_input() {
-
           if (!this._input) {
             //this.done = true;    -- don't set `done` as we want the lex()/next() API to be able to produce one custom EOF token match after this anyhow. (lexer can match special <<EOF>> tokens and perform user action code for a <<EOF>> match, but only does so *once*)
             return null;
@@ -8682,7 +8809,7 @@
             this.clear();
           }
 
-          var ch = this._input[0];
+          let ch = this._input[0];
           this.yytext += ch;
           this.yyleng++;
           this.offset++;
@@ -8693,15 +8820,15 @@
           // On CRLF, the linenumber is incremented when you fetch the CR or the CRLF combo
           // and we advance immediately past the LF as well, returning both together as if
           // it was all a single 'character' only.
-          var slice_len = 1;
+          let slice_len = 1;
 
-          var lines = false;
+          let lines = false;
 
           if (ch === '\n') {
             lines = true;
           } else if (ch === '\r') {
             lines = true;
-            var ch2 = this._input[1];
+            const ch2 = this._input[1];
 
             if (ch2 === '\n') {
               slice_len++;
@@ -8735,8 +8862,8 @@
              * @this {RegExpLexer}
              */
         unput: function lexer_unput(ch) {
-          var len = ch.length;
-          var lines = ch.split(this.CRLF_Re);
+          let len = ch.length;
+          let lines = ch.split(this.CRLF_Re);
 
           if (!this._clear_state && !this._more) {
             this._clear_state = -1;
@@ -8769,9 +8896,9 @@
             // Get last entirely matched line into the `pre_lines[]` array's
             // last index slot; we don't mind when other previously
             // matched lines end up in the array too.
-            var pre = this.match;
+            let pre = this.match;
 
-            var pre_lines = pre.split(this.CRLF_Re);
+            let pre_lines = pre.split(this.CRLF_Re);
 
             if (pre_lines.length === 1) {
               pre = this.matched;
@@ -8790,9 +8917,9 @@
 
         /**
              * return the upcoming input *which has not been lexed yet*.
-             * This can, for example, be used for custom look-ahead inspection code 
+             * This can, for example, be used for custom look-ahead inspection code
              * in your lexer.
-             * 
+             *
              * The entire pending input string is returned.
              *
              * > ### NOTE ###
@@ -8802,8 +8929,8 @@
              * > features for limited input extraction and which includes the
              * > part of the input which has been lexed by the last token a.k.a.
              * > the *currently lexed* input.
-             * > 
-             * 
+             * >
+             *
              * @public
              * @this {RegExpLexer}
              */
@@ -8830,20 +8957,19 @@
              * @this {RegExpLexer}
              */
         reject: function lexer_reject() {
-
           if (this.options.backtrack_lexer) {
             this._backtrack = true;
           } else {
             // when the `parseError()` call returns, we MUST ensure that the error is registered.
             // We accomplish this by signaling an 'error' token to be produced for the current
             // `.lex()` run.
-            var lineno_msg = 'Lexical error';
+            let lineno_msg = 'Lexical error';
 
             if (this.yylloc) {
               lineno_msg += ' on line ' + (this.yylineno + 1);
             }
 
-            var p = this.constructLexErrorInfo(
+            const p = this.constructLexErrorInfo(
               lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).',
               false
             );
@@ -8883,17 +9009,19 @@
              * @this {RegExpLexer}
              */
         pastInput: function lexer_pastInput(maxSize, maxLines) {
-          var past = this.matched.substring(0, this.matched.length - this.match.length);
+          let past = this.matched.substring(0, this.matched.length - this.match.length);
 
-          if (maxSize < 0)
+          if (maxSize < 0) {
             maxSize = Infinity;
-          else if (!maxSize)
+          } else if (!maxSize) {
             maxSize = 20;
+          }
 
-          if (maxLines < 0)
-            maxLines = Infinity;         // can't ever have more input lines than this!;
-          else if (!maxLines)
+          if (maxLines < 0) {
+            maxLines = Infinity;          // can't ever have more input lines than this!
+          } else if (!maxLines) {
             maxLines = 1;
+          }
 
           // `substr` anticipation: treat \r\n as a single character and take a little
           // more than necessary so that we can still properly check against maxSize
@@ -8902,7 +9030,7 @@
 
           // now that we have a significantly reduced string to process, transform the newlines
           // and chop them, then limit them:
-          var a = past.split(this.CRLF_Re);
+          let a = past.split(this.CRLF_Re);
 
           a = a.slice(-maxLines);
           past = a.join('\n');
@@ -8917,8 +9045,8 @@
         },
 
         /**
-             * return (part of the) upcoming input *including* the input 
-             * matched by the last token (see also the NOTE below). 
+             * return (part of the) upcoming input *including* the input
+             * matched by the last token (see also the NOTE below).
              * This can be used to augment error messages, for example.
              *
              * Limit the returned string length to `maxSize` (default: 20).
@@ -8944,24 +9072,26 @@
              * > to the input *which has not been lexed yet* for look-ahead
              * > inspection or likewise purposes, please consider using the
              * > `lookAhead()` API instead.
-             * > 
-             * 
+             * >
+             *
              * @public
              * @this {RegExpLexer}
              */
         upcomingInput: function lexer_upcomingInput(maxSize, maxLines) {
-          var next = this.match;
-          var source = this._input || '';
+          let next = this.match;
+          let source = this._input || '';
 
-          if (maxSize < 0)
+          if (maxSize < 0) {
             maxSize = next.length + source.length;
-          else if (!maxSize)
+          } else if (!maxSize) {
             maxSize = 20;
+          }
 
-          if (maxLines < 0)
-            maxLines = maxSize;         // can't ever have more input lines than this!;
-          else if (!maxLines)
+          if (maxLines < 0) {
+            maxLines = maxSize;          // can't ever have more input lines than this!
+          } else if (!maxLines) {
             maxLines = 1;
+          }
 
           // `substring` anticipation: treat \r\n as a single character and take a little
           // more than necessary so that we can still properly check against maxSize
@@ -8972,7 +9102,7 @@
 
           // now that we have a significantly reduced string to process, transform the newlines
           // and chop them, then limit them:
-          var a = next.split(this.CRLF_Re, maxLines + 1);     // stop splitting once we have reached just beyond the reuired number of lines.
+          let a = next.split(this.CRLF_Re, maxLines + 1);     // stop splitting once we have reached just beyond the reuired number of lines.
 
           a = a.slice(0, maxLines);
           next = a.join('\n');
@@ -8994,8 +9124,8 @@
              * @this {RegExpLexer}
              */
         showPosition: function lexer_showPosition(maxPrefix, maxPostfix) {
-          var pre = this.pastInput(maxPrefix).replace(/\s/g, ' ');
-          var c = new Array(pre.length + 1).join('-');
+          const pre = this.pastInput(maxPrefix).replace(/\s/g, ' ');
+          let c = new Array(pre.length + 1).join('-');
           return pre + this.upcomingInput(maxPostfix).replace(/\s/g, ' ') + '\n' + c + '^';
         },
 
@@ -9017,8 +9147,7 @@
              * @this {RegExpLexer}
              */
         deriveLocationInfo: function lexer_deriveYYLLOC(actual, preceding, following, current) {
-
-          var loc = {
+          let loc = {
             first_line: 1,
             first_column: 0,
             last_line: 1,
@@ -9162,21 +9291,21 @@
           const CONTEXT = 3;
           const CONTEXT_TAIL = 1;
           const MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT = 2;
-          var input = this.matched + (this._input || '');
-          var lines = input.split('\n');
-          var l0 = Math.max(1, context_loc ? context_loc.first_line : loc.first_line - CONTEXT);
-          var l1 = Math.max(1, context_loc2 ? context_loc2.last_line : loc.last_line + CONTEXT_TAIL);
-          var lineno_display_width = 1 + Math.log10(l1 | 1) | 0;
-          var ws_prefix = new Array(lineno_display_width).join(' ');
-          var nonempty_line_indexes = [[], [], []];
+          let input = this.matched + (this._input || '');
+          let lines = input.split('\n');
+          let l0 = Math.max(1, context_loc ? context_loc.first_line : loc.first_line - CONTEXT);
+          let l1 = Math.max(1, context_loc2 ? context_loc2.last_line : loc.last_line + CONTEXT_TAIL);
+          let lineno_display_width = 1 + Math.log10(l1 | 1) | 0;
+          let ws_prefix = new Array(lineno_display_width).join(' ');
+          let nonempty_line_indexes = [[], [], []];
 
-          var rv = lines.slice(l0 - 1, l1 + 1).map(function injectLineNumber(line, index) {
-            var lno = index + l0;
-            var lno_pfx = (ws_prefix + lno).substr(-lineno_display_width);
-            var rv = lno_pfx + ': ' + line;
-            var errpfx = new Array(lineno_display_width + 1).join('^');
-            var offset = 2 + 1;
-            var len = 0;
+          let rv = lines.slice(l0 - 1, l1 + 1).map(function injectLineNumber(line, index) {
+            let lno = index + l0;
+            let lno_pfx = (ws_prefix + lno).substr(-lineno_display_width);
+            let rv = lno_pfx + ': ' + line;
+            let errpfx = new Array(lineno_display_width + 1).join('^');
+            let offset = 2 + 1;
+            let len = 0;
 
             if (lno === loc.first_line) {
               offset += loc.first_column;
@@ -9191,11 +9320,11 @@
               len = Math.max(2, line.length + 1);
             }
 
-            var nli;
+            let nli;
 
             if (len) {
-              var lead = new Array(offset).join('.');
-              var mark = new Array(len).join('^');
+              let lead = new Array(offset).join('.');
+              let mark = new Array(len).join('^');
               rv += '\n' + errpfx + lead + mark;
               nli = 1;
             } else if (lno < loc.first_line) {
@@ -9214,13 +9343,13 @@
 
           // now make sure we don't print an overly large amount of lead/error/tail area: limit it
           // to the top and bottom line count:
-          for (var i = 0; i <= 2; i++) {
-            var line_arr = nonempty_line_indexes[i];
+          for (let i = 0; i <= 2; i++) {
+            let line_arr = nonempty_line_indexes[i];
 
             if (line_arr.length > 2 * MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT) {
-              var clip_start = line_arr[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
-              var clip_end = line_arr[line_arr.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
-              var intermediate_line = new Array(lineno_display_width + 1).join(' ') + '  (...continued...)';
+              let clip_start = line_arr[MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT - 1] + 1;
+              let clip_end = line_arr[line_arr.length - MINIMUM_VISIBLE_NONEMPTY_LINE_COUNT] - 1;
+              let intermediate_line = new Array(lineno_display_width + 1).join(' ') + '  (...continued...)';
 
               if (i === 1) {
                 intermediate_line += '\n' + new Array(lineno_display_width + 1).join('-') + '  (---------------)';
@@ -9244,13 +9373,13 @@
              * @this {RegExpLexer}
              */
         describeYYLLOC: function lexer_describe_yylloc(yylloc, display_range_too) {
-          var l1 = yylloc.first_line;
-          var l2 = yylloc.last_line;
-          var c1 = yylloc.first_column;
-          var c2 = yylloc.last_column;
-          var dl = l2 - l1;
-          var dc = c2 - c1;
-          var rv;
+          let l1 = yylloc.first_line;
+          let l2 = yylloc.last_line;
+          let c1 = yylloc.first_column;
+          let c2 = yylloc.last_column;
+          let dl = l2 - l1;
+          let dc = c2 - c1;
+          let rv;
 
           if (dl === 0) {
             rv = 'line ' + l1 + ', ';
@@ -9265,8 +9394,8 @@
           }
 
           if (yylloc.range && display_range_too) {
-            var r1 = yylloc.range[0];
-            var r2 = yylloc.range[1] - 1;
+            let r1 = yylloc.range[0];
+            let r2 = yylloc.range[1] - 1;
 
             if (r2 <= r1) {
               rv += ' {String Offset: ' + r1 + '}';
@@ -9297,7 +9426,7 @@
              * @this {RegExpLexer}
              */
         test_match: function lexer_test_match(match, indexed_rule) {
-          var token, lines, backup, match_str, match_str_len;
+          let backup;
 
           if (this.options.backtrack_lexer) {
             // save context
@@ -9329,9 +9458,9 @@
             };
           }
 
-          match_str = match[0];
-          match_str_len = match_str.length;
-          lines = match_str.split(this.CRLF_Re);
+          let match_str = match[0];
+          let match_str_len = match_str.length;
+          let lines = match_str.split(this.CRLF_Re);
 
           if (lines.length > 1) {
             this.yylineno += lines.length - 1;
@@ -9360,7 +9489,7 @@
           // calling this method:
           //
           //   function lexer__performAction(yy, yyrulenumber, YY_START) {...}
-          token = this.performAction.call(
+          let token = this.performAction.call(
             this,
             this.yy,
             indexed_rule,
@@ -9378,7 +9507,7 @@
             return token;
           } else if (this._backtrack) {
             // recover context
-            for (var k in backup) {
+            for (let k in backup) {
               this[k] = backup[k];
             }
 
@@ -9403,7 +9532,6 @@
              * @this {RegExpLexer}
              */
         next: function lexer_next() {
-
           if (this.done) {
             this.clear();
             return this.EOF;
@@ -9413,8 +9541,6 @@
             this.done = true;
           }
 
-          var token, match, tempMatch, index;
-
           if (!this._more) {
             if (!this._clear_state) {
               this._clear_state = 1;
@@ -9423,7 +9549,7 @@
             this.clear();
           }
 
-          var spec = this.__currentRuleSet__;
+          let spec = this.__currentRuleSet__;
 
           if (!spec) {
             // Update the ruleset cache as we apparently encountered a state change or just started lexing.
@@ -9435,13 +9561,13 @@
             // Check whether a *sane* condition has been pushed before: this makes the lexer robust against
             // user-programmer bugs such as https://github.com/zaach/jison-lex/issues/19
             if (!spec || !spec.rules) {
-              var lineno_msg = '';
+              let lineno_msg = '';
 
               if (this.yylloc) {
                 lineno_msg = ' on line ' + (this.yylineno + 1);
               }
 
-              var p = this.constructLexErrorInfo(
+              const p = this.constructLexErrorInfo(
                 'Internal lexer engine error' + lineno_msg + ': The lex grammar programmer pushed a non-existing condition name "' + this.topState() + '"; this is a fatal error and should be reported to the application programmer team!',
                 false
               );
@@ -9451,68 +9577,74 @@
             }
           }
 
-          var rule_ids = spec.rules;
-          var regexes = spec.__rule_regexes;
-          var len = spec.__rule_count;
+          {
+            let rule_ids = spec.rules;
+            let regexes = spec.__rule_regexes;
+            let len = spec.__rule_count;
+            let match;
+            let index;
 
-          // Note: the arrays are 1-based, while `len` itself is a valid index,
-          // hence the non-standard less-or-equal check in the next loop condition!
-          for (var i = 1; i <= len; i++) {
-            tempMatch = this._input.match(regexes[i]);
+            // Note: the arrays are 1-based, while `len` itself is a valid index,
+            // hence the non-standard less-or-equal check in the next loop condition!
+            for (let i = 1; i <= len; i++) {
+              let tempMatch = this._input.match(regexes[i]);
 
-            if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
-              match = tempMatch;
-              index = i;
+              if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
+                match = tempMatch;
+                index = i;
 
-              if (this.options.backtrack_lexer) {
-                token = this.test_match(tempMatch, rule_ids[i]);
+                if (this.options.backtrack_lexer) {
+                  let token = this.test_match(tempMatch, rule_ids[i]);
 
-                if (token !== false) {
-                  return token;
-                } else if (this._backtrack) {
-                  match = undefined;
-                  continue; // rule action called reject() implying a rule MISmatch.
-                } else {
-                  // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-                  return false;
+                  if (token !== false) {
+                    return token;
+                  } else if (this._backtrack) {
+                    match = undefined;
+                    continue; // rule action called reject() implying a rule MISmatch.
+                  } else {
+                    // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+                    return false;
+                  }
+                } else if (!this.options.flex) {
+                  break;
                 }
-              } else if (!this.options.flex) {
-                break;
               }
             }
-          }
 
-          if (match) {
-            token = this.test_match(match, rule_ids[index]);
+            if (match) {
+              let token = this.test_match(match, rule_ids[index]);
 
-            if (token !== false) {
-              return token;
+              if (token !== false) {
+                return token;
+              }
+
+              // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+              return false;
             }
-
-            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-            return false;
           }
 
           if (!this._input) {
             this.done = true;
             this.clear();
             return this.EOF;
-          } else {
-            var lineno_msg = 'Lexical error';
+          }
+
+          {
+            let lineno_msg = 'Lexical error';
 
             if (this.yylloc) {
               lineno_msg += ' on line ' + (this.yylineno + 1);
             }
 
-            var p = this.constructLexErrorInfo(
+            const p = this.constructLexErrorInfo(
               lineno_msg + ': Unrecognized text.',
               this.options.lexerErrorsAreRecoverable
             );
 
-            var pendingInput = this._input;
-            var activeCondition = this.topState();
-            var conditionStackDepth = this.conditionStack.length;
-            token = this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
+            let pendingInput = this._input;
+            let activeCondition = this.topState();
+            let conditionStackDepth = this.conditionStack.length;
+            let token = this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
 
             if (token === this.ERROR) {
               // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
@@ -9537,7 +9669,7 @@
              * @this {RegExpLexer}
              */
         lex: function lexer_lex() {
-          var r;
+          let r;
 
           //this._clear_state = 0;
 
@@ -9585,24 +9717,24 @@
 
           if (!this._more) {
             //
-            // 1) make sure any outside interference is detected ASAP: 
+            // 1) make sure any outside interference is detected ASAP:
             //    these attributes are to be treated as 'const' values
             //    once the lexer has produced them with the token (return value `r`).
             // 2) make sure any subsequent `lex()` API invocation CANNOT
             //    edit the `yytext`, etc. token attributes for the *current*
             //    token, i.e. provide a degree of 'closure safety' so that
             //    code like this:
-            //    
+            //
             //        t1 = lexer.lex();
             //        v = lexer.yytext;
             //        l = lexer.yylloc;
             //        t2 = lexer.lex();
             //        assert(lexer.yytext !== v);
             //        assert(lexer.yylloc !== l);
-            //        
+            //
             //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
             //    these conditions.
-            //    
+            //
             this.yytext = Object.freeze(this.yytext);
 
             this.matches = Object.freeze(this.matches);
@@ -9622,7 +9754,7 @@
              * @this {RegExpLexer}
              */
         fastLex: function lexer_fastLex() {
-          var r;
+          let r;
 
           //this._clear_state = 0;
 
@@ -9632,24 +9764,24 @@
 
           if (!this._more) {
             //
-            // 1) make sure any outside interference is detected ASAP: 
+            // 1) make sure any outside interference is detected ASAP:
             //    these attributes are to be treated as 'const' values
             //    once the lexer has produced them with the token (return value `r`).
             // 2) make sure any subsequent `lex()` API invocation CANNOT
             //    edit the `yytext`, etc. token attributes for the *current*
             //    token, i.e. provide a degree of 'closure safety' so that
             //    code like this:
-            //    
+            //
             //        t1 = lexer.lex();
             //        v = lexer.yytext;
             //        l = lexer.yylloc;
             //        t2 = lexer.lex();
             //        assert(lexer.yytext !== v);
             //        assert(lexer.yylloc !== l);
-            //        
+            //
             //    succeeds. Older (pre-v0.6.5) jison versions did not *guarantee*
             //    these conditions.
-            //    
+            //
             this.yytext = Object.freeze(this.yytext);
 
             this.matches = Object.freeze(this.matches);
@@ -9670,8 +9802,7 @@
              * @this {RegExpLexer}
              */
         canIUse: function lexer_canIUse() {
-
-          var rv = {
+          const rv = {
             fastLex: !(typeof this.pre_lex === 'function' || typeof this.options.pre_lex === 'function' || this.yy && typeof this.yy.pre_lex === 'function' || this.yy && typeof this.yy.post_lex === 'function' || typeof this.options.post_lex === 'function' || typeof this.post_lex === 'function') && typeof this.fastLex === 'function'
           };
 
@@ -9711,14 +9842,14 @@
              * @this {RegExpLexer}
              */
         popState: function lexer_popState() {
-          var n = this.conditionStack.length - 1;
+          const n = this.conditionStack.length - 1;
 
           if (n > 0) {
             this.__currentRuleSet__ = null;
             return this.conditionStack.pop();
-          } else {
-            return this.conditionStack[0];
           }
+
+          return this.conditionStack[0];
         },
 
         /**
@@ -9734,9 +9865,9 @@
 
           if (n >= 0) {
             return this.conditionStack[n];
-          } else {
-            return 'INITIAL';
           }
+
+          return 'INITIAL';
         },
 
         /**
@@ -9747,8 +9878,8 @@
              * @this {RegExpLexer}
              */
         _currentRules: function lexer__currentRules() {
-          var n = this.conditionStack.length - 1;
-          var state;
+          const n = this.conditionStack.length - 1;
+          let state;
 
           if (n >= 0) {
             state = this.conditionStack[n];
@@ -9756,7 +9887,7 @@
             state = 'INITIAL';
           }
 
-          return this.conditions[state] || this.conditions['INITIAL'];
+          return this.conditions[state] || this.conditions.INITIAL;
         },
 
         /**

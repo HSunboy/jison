@@ -11,10 +11,10 @@ bogus: foo bar;
     name: 'JisonParserError',
     message: '$id is not defined',
     stack: `ReferenceError: $id is not defined
-    at Object.parser__PerformAction (/ebnf-parser-cjs.js:7255:32)
-    at Object.parse (/ebnf-parser-cjs.js:10598:40)
-    at Object.parse (/ebnf-parser-cjs.js:23317:23)
-    at Context.testEachParserExample (/ebnf_parse.js:329:19)
+    at Object.parser__PerformAction (/ebnf-parser-cjs.js:7404:32)
+    at Object.parse (/ebnf-parser-cjs.js:10707:24)
+    at Object.parse (/ebnf-parser-cjs.js:23394:23)
+    at Context.testEachParserExample (/ebnf_parse.js:345:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)

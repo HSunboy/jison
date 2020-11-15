@@ -172,13 +172,13 @@ to help jison grok more or less complex action code chunks.
 ^...^
 6: 
 7: 
-    at Object.lexer_parseError [as parseError] (/lex-parser-cjs-es5.js:6105:13)
-    at Object.yyError [as yyerror] (/lex-parser-cjs-es5.js:6131:19)
-    at Object.lexer__performAction [as performAction] (/lex-parser-cjs-es5.js:7520:17)
-    at Object.lexer_test_match [as test_match] (/lex-parser-cjs-es5.js:6982:34)
-    at Object.lexer_next [as next] (/lex-parser-cjs-es5.js:7092:22)
-    at Object.lexer_lex [as lex] (/lex-parser-cjs-es5.js:7168:18)
-    at Context.testEachParserExample (/all-tests.js:221:27)
+    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:8567:13)
+    at Object.yyError [as yyerror] (/lex-parser-cjs.js:8592:19)
+    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:10045:15)
+    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:9497:38)
+    at Object.lexer_next [as next] (/lex-parser-cjs.js:9620:28)
+    at Object.lexer_lex [as lex] (/lex-parser-cjs.js:9705:18)
+    at Context.testEachParserExample (/all-tests.js:232:37)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)

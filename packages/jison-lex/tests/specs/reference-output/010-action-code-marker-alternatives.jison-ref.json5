@@ -7,11 +7,11 @@
       name: 'ReferenceError',
       message: 'log is not defined',
       stack: `ReferenceError: log is not defined
-    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs-es5.js:3508:37), <anonymous>:1543:16)
-    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs-es5.js:3508:37), <anonymous>:1128:36)
-    at Object.lexer_next [as next] (/regexp-lexer-cjs-es5.js:3508:37), <anonymous>:1229:26)
-    at Object.lexer_lex [as lex] (/regexp-lexer-cjs-es5.js:3508:37), <anonymous>:1305:22)
-    at Context.testEachLexerExample (/regexplexer.js:3528:27)
+    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js:13673:31)
+    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js:13673:31)
+    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:13673:31)
+    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:13673:31)
+    at Context.testEachLexerExample (/regexplexer.js:3650:37)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)

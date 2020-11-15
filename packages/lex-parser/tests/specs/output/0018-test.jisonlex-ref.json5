@@ -65,12 +65,12 @@ Parse error on line 5:
 ^
 Expecting end of input, "<", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "CODE", "START_INC", "START_EXC", "%%", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"
 
-    at Object.parseError (/lex-parser-cjs-es5.js:4247:13)
-    at Object.yyError (/lex-parser-cjs-es5.js:4427:21)
-    at Object.parser__PerformAction (/lex-parser-cjs-es5.js:2194:18)
-    at Object.parse (/lex-parser-cjs-es5.js:5325:42)
-    at Object.yyparse [as parse] (/lex-parser-cjs-es5.js:8992:23)
-    at Context.testEachParserExample (/all-tests.js:323:19)
+    at Object.parseError (/lex-parser-cjs.js:6473:15)
+    at Object.yyError (/lex-parser-cjs.js:6656:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:2611:14)
+    at Object.parse (/lex-parser-cjs.js:7720:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:11557:25)
+    at Context.testEachParserExample (/all-tests.js:336:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
