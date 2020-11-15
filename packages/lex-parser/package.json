@@ -5,7 +5,7 @@
     "url": "http://zaa.ch"
   },
   "name": "@gerhobbelt/lex-parser",
-  "version": "0.6.2-220",
+  "version": "0.7.0-220",
   "description": "A parser for lexical grammars used by jison",
   "main": "dist/lex-parser-cjs-es5.js",
   "module": "lex-parser.js",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@gerhobbelt/xregexp": "4.2.0-30",
-    "jison-helpers-lib": "0.6.2-220"
+    "jison-helpers-lib": "0.7.0-220"
   },
   "devDependencies": {
     "@gerhobbelt/babel-cli": "7.0.0-14",

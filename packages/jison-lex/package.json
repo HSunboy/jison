@@ -7,7 +7,7 @@
   "name": "@gerhobbelt/jison-lex",
   "description": "lexical analyzer generator used by jison",
   "license": "MIT",
-  "version": "0.6.2-220",
+  "version": "0.7.0-220",
   "keywords": [
     "jison",
     "parser",
@@ -24,7 +24,7 @@
     "email": "jison@librelist.com",
     "url": "http://github.com/zaach/jison-lex/issues"
   },
-  "main": "dist/regexp-lexer-cjs-es5.js",
+  "main": "dist/regexp-lexer-cjs.js",
   "module": "regexp-lexer.js",
   "bin": {
     "jison-lex": "dist/cli-cjs.js"
@@ -35,11 +35,11 @@
   "dependencies": {
     "ast-util": "0.6.0",
     "@gerhobbelt/json5": "2.0.1-37",
-    "@gerhobbelt/lex-parser": "0.6.2-220",
+    "@gerhobbelt/lex-parser": "0.7.0-220",
     "@gerhobbelt/nomnom": "1.8.4-24",
     "recast": "0.18.5",
     "@gerhobbelt/xregexp": "3.2.0-22",
-    "jison-helpers-lib": "0.6.2-220"
+    "jison-helpers-lib": "0.7.0-220"
   },
   "devDependencies": {
     "@gerhobbelt/js-yaml": "3.10.1-5",
