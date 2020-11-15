@@ -876,7 +876,7 @@ action
         // add braces around ARROW_ACTION so that the action chunk test/compiler
         // will uncover any illegal action code following the arrow operator, e.g.
         // multiple statements separated by semicolon.
-        { $$ = '$$ = (' + $ARROW_ACTION + ');'; }
+        { $$ = '$$ = (\n' + $ARROW_ACTION + '\n);'; }
     | %epsilon
         { $$ = ''; }
     ;
