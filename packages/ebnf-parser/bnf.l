@@ -273,7 +273,7 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                             ` + this.prettyPrintRange(yylloc));
                                         return 'UNTERMINATED_STRING_ERROR';
 
-<*>\"                                   var rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
+<*>\"                                   let rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
                                         yyerror(rmCommonWS`
                                             unterminated string constant encountered while lexing
                                             ${rules}.
@@ -281,7 +281,7 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yylloc));
                                         return 'UNTERMINATED_STRING_ERROR';
-<*>\'                                   var rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
+<*>\'                                   let rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
                                         yyerror(rmCommonWS`
                                             unterminated string constant encountered while lexing
                                             ${rules}.
@@ -289,7 +289,7 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yylloc));
                                         return 'UNTERMINATED_STRING_ERROR';
-<*>\`                                   var rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
+<*>\`                                   let rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
                                         yyerror(rmCommonWS`
                                             unterminated string constant encountered while lexing
                                             ${rules}.
@@ -315,20 +315,20 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 %%
 
 
-var rmCommonWS = helpers.rmCommonWS;
-var dquote     = helpers.dquote;
+const rmCommonWS = helpers.rmCommonWS;
+const dquote     = helpers.dquote;
 
 
 function indent(s, i) {
-    var a = s.split('\n');
-    var pf = (new Array(i + 1)).join(' ');
+    let a = s.split('\n');
+    let pf = (new Array(i + 1)).join(' ');
     return pf + a.join('\n' + pf);
 }
 
 // unescape a string value which is wrapped in quotes/doublequotes
 function unescQuote(str) {
     str = '' + str;
-    var a = str.split('\\\\');
+    let a = str.split('\\\\');
     a = a.map(function (s) {
         return s.replace(/\\'/g, "'").replace(/\\"/g, '"');
     });

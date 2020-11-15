@@ -6,9 +6,9 @@ MOCHA = ../../node_modules/.bin/mocha
 NYC = ../../node_modules/.bin/nyc      --clean=false --temp-directory ../../.nyc_output
 
 ifndef FULL_CODE_COVERAGE
-	LEX = node ./dist/cli-cjs-es5.js -o ./output/$@/
+	LEX = node ./dist/cli-cjs.js -o ./output/$@/
 else
-	LEX = $(NYC) --reporter=lcov -- node ./dist/cli-cjs-es5.js -o ./output/$@/
+	LEX = $(NYC) --reporter=lcov -- node ./dist/cli-cjs.js -o ./output/$@/
 endif
 
 

@@ -5,10 +5,10 @@
 NYC = ../node_modules/.bin/nyc      --clean=false --temp-directory ../.nyc_output
 
 ifndef FULL_CODE_COVERAGE
-	JISON = node ../dist/cli-cjs-es5.js -o ./output/$@/
+	JISON = node ../dist/cli-cjs.js -o ./output/$@/
 	NODE = node
 else
-	JISON = $(NYC) --reporter=lcov -- node ../dist/cli-cjs-es5.js -o ./output/$@/
+	JISON = $(NYC) --reporter=lcov -- node ../dist/cli-cjs.js -o ./output/$@/
 	NODE = $(NYC) --reporter=lcov -- node 
 endif
 
@@ -32,11 +32,7 @@ ERROR_HANDLING_TARGETS =                                        \
 
 
 GITHUB_ISSUE_TARGETS =                                          \
-			issue-51-gho-1										\
-			issue-51-gho-2										\
-			issue-51-gho-3										\
-			issue-51-gho-4										\
-			issue-51-gho-5										\
+			issue-51-gho										\
 			issue-58-gho										\
 			issue-205                                           \
 			issue-205-2                                         \
@@ -347,25 +343,37 @@ handlebars:
 inherited_y:
 	$(JISON) --main ./inherited.y
 
+issue-51-gho: 													\
+			issue-51-gho-1										\
+			issue-51-gho-2										\
+			issue-51-gho-3										\
+			issue-51-gho-4										\
+			issue-51-gho-5										\
+			issue-51-gho-6										
+
 issue-51-gho-1:
-	$(JISON) --main ./$@.jison
-	$(NODE) ./output/$@/$@.js
+	$(JISON) --main ./$@.jison ./issue-51-gho.jisonlex
+	$(NODE) ./output/$@/$@.js ./issue-51-gho.input
 
 issue-51-gho-2:
-	$(JISON) --main ./$@.jison
-	$(NODE) ./output/$@/$@.js
+	-$(JISON) --main ./$@.jison ./issue-51-gho.jisonlex
+	-$(NODE) ./output/$@/$@.js ./issue-51-gho.input
 
 issue-51-gho-3:
-	$(JISON) --main ./$@.jison
-	$(NODE) ./output/$@/$@.js
+	-$(JISON) --main ./$@.jison ./issue-51-gho.jisonlex
+	-$(NODE) ./output/$@/$@.js ./issue-51-gho.input
 
 issue-51-gho-4:
-	$(JISON) --main ./$@.jison
-	$(NODE) ./output/$@/$@.js
+	$(JISON) --main ./$@.jison ./issue-51-gho.jisonlex
+	$(NODE) ./output/$@/$@.js ./issue-51-gho.input
 
 issue-51-gho-5:
-	$(JISON) --main ./$@.jison
-	$(NODE) ./output/$@/$@.js
+	$(JISON) --main ./$@.jison ./issue-51-gho.jisonlex
+	$(NODE) ./output/$@/$@.js ./issue-51-gho.input
+
+issue-51-gho-6:
+	$(JISON) --main ./$@.jison ./issue-51-gho.jisonlex
+	$(NODE) ./output/$@/$@.js ./issue-51-gho.input
 
 issue-58-gho:
 	$(NODE) ./$@.make.js

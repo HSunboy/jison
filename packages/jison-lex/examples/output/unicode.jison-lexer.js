@@ -2122,7 +2122,8 @@ break;
 case 11 : 
 /*! Conditions:: INLINE_COMMENT */ 
 /*! Rule::       . */ 
- for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
+ {
+for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
                 s2 = this.inline_comment_end_markers[rv];
                 if (s2[0] === this.matches[0]) {
                     // we got a POTENTIAL MATCH; let's see if we need more:
@@ -2153,7 +2154,8 @@ case 11 :
                 }
             }
             // collect input until we hit something we know:
-            this.more() 
+            this.more()
+} 
 break;
 case 12 : 
 /*! Conditions:: INLINE_COMMENT */ 
@@ -4130,7 +4132,8 @@ break;
 case 11 : 
 /*! Conditions:: INLINE_COMMENT */ 
 /*! Rule::       . */ 
- for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
+ {
+for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
                 s2 = this.inline_comment_end_markers[rv];
                 if (s2[0] === this.matches[0]) {
                     // we got a POTENTIAL MATCH; let's see if we need more:
@@ -4161,7 +4164,8 @@ case 11 :
                 }
             }
             // collect input until we hit something we know:
-            this.more() 
+            this.more()
+} 
 break;
 case 12 : 
 /*! Conditions:: INLINE_COMMENT */ 

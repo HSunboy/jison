@@ -8,9 +8,9 @@ MOCHA = node_modules/.bin/mocha
 NYC = node_modules/.bin/nyc      --clean=false --temp-directory ./.nyc_output
 
 ifndef FULL_CODE_COVERAGE
-	JISON = node dist/cli-cjs-es5.js
+	JISON = node dist/cli-cjs.js
 else
-	JISON = $(NYC) --reporter=lcov -- node dist/cli-cjs-es5.js
+	JISON = $(NYC) --reporter=lcov -- node dist/cli-cjs.js
 endif
 
 
@@ -448,7 +448,7 @@ examples/yacc-error-recovery: build
 build:                                                                  \
 		subpackages-build                                               \
 		prep_util_dir                                                   \
-		dist/cli-cjs-es5.js                                             \
+		dist/cli-cjs.js                                                 \
 		packages/ebnf-parser/ebnf.y                                     \
 		packages/ebnf-parser/bnf.y                                      \
 		packages/ebnf-parser/bnf.l                                      \
@@ -464,11 +464,11 @@ npm-update: subpackages-npm-update
 
 prep_util_dir:
 	#@[ -d  node_modules/jison-gho/dist ] || echo "### FAILURE: Make sure you have run 'make prep' before as the jison compiler backup utility files are unavailable! ###"
-	#@[ -f  node_modules/jison-gho/dist/cli-cjs-es5.js ] || echo "### FAILURE: Make sure you have run 'make prep' before as the jison compiler backup utility files are unavailable! ###"
+	#@[ -f  node_modules/jison-gho/dist/cli-cjs.js ] || echo "### FAILURE: Make sure you have run 'make prep' before as the jison compiler backup utility files are unavailable! ###"
 	-mkdir -p dist
-	#+[ -f dist/cli-cjs-es5.js     ] || ( cp node_modules/jison-gho/dist/cli-cjs-es5.js      dist/cli-cjs-es5.js      && touch -d 1970/1/1  dist/cli-cjs-es5.js     )
+	#+[ -f dist/cli-cjs.js     ] || ( cp node_modules/jison-gho/dist/cli-cjs.js      dist/cli-cjs.js      && touch -d 1970/1/1  dist/cli-cjs.js     )
 
-dist/cli-cjs-es5.js: dist/jison.js rollup.config-cli.js package.json lib/jison-parser-kernel.js
+dist/cli-cjs.js: dist/jison.js rollup.config-cli.js package.json lib/jison-parser-kernel.js
 	node __patch_version_in_js.js
 	node __patch_parser_kernel_in_js.js
 	-mkdir -p dist

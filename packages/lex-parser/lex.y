@@ -40,19 +40,19 @@ lex
     : init definitions rules_and_epilogue EOF
         {
           $$ = $rules_and_epilogue;
-          for (var key in $definitions) {
+          for (let key in $definitions) {
             $$[key] = $definitions[key];
           }
 
           // if there are any options, add them all, otherwise set options to NULL:
           // can't check for 'empty object' by `if (yy.options) ...` so we do it this way:
-          for (key in yy.options) {
+          for (let key in yy.options) {
             $$.options = yy.options;
             break;
           }
 
           if (yy.actionInclude) {
-            var asrc = yy.actionInclude.join('\n\n');
+            let asrc = yy.actionInclude.join('\n\n');
             // Only a non-empty action code chunk should actually make it through:
             if (asrc.trim() !== '') {
               $$.actionInclude = asrc;
@@ -180,9 +180,9 @@ definitions
                     break;
 
                 case 'names':
-                    var condition_defs = $definition.names;
-                    for (var i = 0, len = condition_defs.length; i < len; i++) {
-                        var name = condition_defs[i][0];
+                    let condition_defs = $definition.names;
+                    for (let i = 0, len = condition_defs.length; i < len; i++) {
+                        let name = condition_defs[i][0];
                         if (name in $$.startConditions && $$.startConditions[name] !== condition_defs[i][1]) {
                             yyerror(rmCommonWS`
                                 You have specified the lexer condition state '${name}' as both
@@ -301,8 +301,8 @@ definition
     //
     | start_inclusive_keyword option_list OPTIONS_END
         {
-            var lst = $option_list;
-            for (var i = 0, len = lst.length; i < len; i++) {
+            let lst = $option_list;
+            for (let i = 0, len = lst.length; i < len; i++) {
                 lst[i][1] = 0;     // flag as 'inclusive'
             }
 
@@ -334,8 +334,8 @@ definition
     //
     | start_exclusive_keyword option_list OPTIONS_END
         {
-            var lst = $option_list;
-            for (var i = 0, len = lst.length; i < len; i++) {
+            let lst = $option_list;
+            for (let i = 0, len = lst.length; i < len; i++) {
                 lst[i][1] = 1;     // flag as 'exclusive'
             }
 
@@ -374,9 +374,9 @@ definition
     //
     | ACTION_START_AT_SOL action ACTION_END
         {
-            var srcCode = trimActionCode($action, $ACTION_START_AT_SOL);
+            let srcCode = trimActionCode($action, $ACTION_START_AT_SOL);
             if (srcCode) {
-                var rv = checkActionBlock(srcCode, @action, yy);
+                let rv = checkActionBlock(srcCode, @action, yy);
                 if (rv) {
                     yyerror(rmCommonWS`
                         The '%{...%}' lexer setup action code section does not compile: ${rv}
@@ -405,8 +405,6 @@ definition
     //
     | ACTION_START_AT_SOL error
         %{
-            var start_marker = $ACTION_START_AT_SOL.trim();
-            var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
             yyerror(rmCommonWS`
                 There's very probably a problem with this '%{...%\}' lexer setup action code section.
 
@@ -427,8 +425,8 @@ definition
     //
     | ACTION_START error
         %{
-            var start_marker = $ACTION_START.trim();
-            var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
+            let start_marker = $ACTION_START.trim();
+            let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
             yyerror(rmCommonWS`
                 The '%{...%\}' lexer setup action code section MUST have its action
                 block start marker (\`%{\`${marker_msg}) positioned
@@ -451,8 +449,8 @@ definition
     //
     | option_keyword option_list OPTIONS_END
         {
-            var lst = $option_list;
-            for (var i = 0, len = lst.length; i < len; i++) {
+            let lst = $option_list;
+            for (let i = 0, len = lst.length; i < len; i++) {
                 yy.options[lst[i][0]] = lst[i][1];
             }
             $$ = null;
@@ -483,9 +481,9 @@ definition
     | import_keyword option_list OPTIONS_END
         {
             // check if there are two unvalued options: 'name path'
-            var lst = $option_list;
-            var len = lst.length;
-            var body;
+            let lst = $option_list;
+            let len = lst.length;
+            let body;
             if (len === 2 && lst[0][1] === true && lst[1][1] === true) {
                 // `name path`:
                 body = {
@@ -533,9 +531,9 @@ definition
     | init_code_keyword option_list ACTION_START action ACTION_END OPTIONS_END
         {
             // check there's only 1 option which is an identifier
-            var lst = $option_list;
-            var len = lst.length;
-            var name;
+            let lst = $option_list;
+            let len = lst.length;
+            let name;
             if (len === 1 && lst[0][1] === true) {
                 // `name`:
                 name = lst[0][0];
@@ -557,8 +555,8 @@ definition
                 `);
             }
 
-            var srcCode = trimActionCode($action, $ACTION_START);
-            var rv = checkActionBlock(srcCode, @action, yy);
+            let srcCode = trimActionCode($action, $ACTION_START);
+            let rv = checkActionBlock(srcCode, @action, yy);
             if (rv) {
                 yyerror(rmCommonWS`
                     The '%code ${name}' initialization code section does not compile: ${rv}
@@ -577,9 +575,9 @@ definition
         }
     | init_code_keyword option_list ACTION_START error OPTIONS_END
         {
-            var start_marker = $ACTION_START.trim();
-            var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
-            var end_marker_msg = marker_msg.replace(/\{/g, '}');
+            let start_marker = $ACTION_START.trim();
+            let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
+            let end_marker_msg = marker_msg.replace(/\{/g, '}');
             yyerror(rmCommonWS`
                 The '%code ID %{...%\}' initialization code section must be properly 
                 wrapped in block start markers (\`%{\`${marker_msg}) 
@@ -741,9 +739,9 @@ rules
     //
     | rules ACTION_START_AT_SOL action ACTION_END
         {
-            var srcCode = trimActionCode($action, $ACTION_START_AT_SOL);
+            let srcCode = trimActionCode($action, $ACTION_START_AT_SOL);
             if (srcCode) {
-                var rv = checkActionBlock(srcCode, @action, yy);
+                let rv = checkActionBlock(srcCode, @action, yy);
                 if (rv) {
                     yyerror(rmCommonWS`
                         The '%{...%}' lexer setup action code section does not compile: ${rv}
@@ -772,8 +770,8 @@ rules
     //
     | rules ACTION_START_AT_SOL error
         %{
-            var start_marker = $ACTION_START_AT_SOL.trim();
-            var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
+            let start_marker = $ACTION_START_AT_SOL.trim();
+            let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
             yyerror(rmCommonWS`
                 There's very probably a problem with this '%{...%\}' lexer setup action code section.
 
@@ -794,13 +792,13 @@ rules
     //
     | rules ACTION_START error
         %{
-            var start_marker = $ACTION_START.trim();
+            let start_marker = $ACTION_START.trim();
             // When the start_marker is not an explicit `%{`, `{` or similar, the error
             // is more probably due to indenting the rule regex, rather than an error
             // in writing the action code block:
             console.error("*** error! marker:", start_marker);
             if (start_marker.indexOf('{') >= 0) {
-                var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
+                let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
                 yyerror(rmCommonWS`
                     The '%{...%\}' lexer setup action code section MUST have its action
                     block start marker (\`%{\`${marker_msg}) positioned
@@ -987,8 +985,8 @@ rule_block
 rule
     : regex ACTION_START action ACTION_END
         {
-            var srcCode = trimActionCode($action, $ACTION_START);
-            var rv = checkActionBlock(srcCode, @action, yy);
+            let srcCode = trimActionCode($action, $ACTION_START);
+            let rv = checkActionBlock(srcCode, @action, yy);
             if (rv) {
                 yyerror(rmCommonWS`
                     The lexer rule's action code section does not compile: ${rv}
@@ -1001,8 +999,8 @@ rule
         }
     | regex ACTION_START_AT_SOL action ACTION_END
         {
-            var srcCode = trimActionCode($action, $ACTION_START_AT_SOL);
-            var rv = checkActionBlock(srcCode, @action, yy);
+            let srcCode = trimActionCode($action, $ACTION_START_AT_SOL);
+            let rv = checkActionBlock(srcCode, @action, yy);
             if (rv) {
                 yyerror(rmCommonWS`
                     The lexer rule's action code section does not compile: ${rv}
@@ -1015,7 +1013,7 @@ rule
         }
     | regex ARROW_ACTION_START action ACTION_END
         {
-            var srcCode = trimActionCode($action);
+            let srcCode = trimActionCode($action);
             // add braces around ARROW_ACTION_CODE so that the action chunk test/compiler
             // will uncover any illegal action code following the arrow operator, e.g.
             // multiple statements separated by semicolon.
@@ -1033,7 +1031,7 @@ rule
                 srcCode = 'return (' + srcCode + '\n)';
             }
 
-            var rv = checkActionBlock(srcCode, @action, yy);
+            let rv = checkActionBlock(srcCode, @action, yy);
             if (rv) {
                 yyerror(rmCommonWS`
                     The lexer rule's 'arrow' action code section does not compile: ${rv}
@@ -1197,7 +1195,7 @@ start_conditions
         {
             // rewrite + accept star '*' as name + check if we allow empty list?
             $$ = $option_list.map(function (el) {
-                var name = el[0];
+                let name = el[0];
 
                 // Validate the given condition state: when it isn't known, print an error message
                 // accordingly:
@@ -1229,7 +1227,7 @@ start_conditions
     | start_conditions_marker option_list error
         {
             // rewrite + accept star '*' as name + check if we allow empty list?
-            var lst = $option_list.map(function (el) {
+            let lst = $option_list.map(function (el) {
                 return el[0];
             });
 
@@ -1304,7 +1302,7 @@ regex
             }
             // a 'keyword' starts with an alphanumeric character,
             // followed by zero or more alphanumerics or digits:
-            var re = new XRegExp('\\w[\\w\\d]*$');
+            let re = new XRegExp('\\w[\\w\\d]*$');
             if (XRegExp.match($$, re)) {
               $$ = $re + "\\b";
             } else {
@@ -1450,14 +1448,14 @@ range_regex
 literal_string
     : STRING_LIT
         {
-            var src = $STRING_LIT;
-            var s = src.substring(1, src.length - 1);
-            var edge = src[0];
+            let src = $STRING_LIT;
+            let s = src.substring(1, src.length - 1);
+            let edge = src[0];
             $$ = encodeRegexLiteralStr(s, edge);
         }
     | CHARACTER_LIT
         {
-            var s = $CHARACTER_LIT;
+            let s = $CHARACTER_LIT;
             $$ = encodeRegexLiteralStr(s);
         }
     ;
@@ -1475,7 +1473,7 @@ option_list
                 `);
             }
             if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS) {
-                var optlist = $option_list.map(function (opt) {
+                let optlist = $option_list.map(function (opt) {
                     return opt[0];
                 });
                 optlist.push($option[0]);
@@ -1546,7 +1544,7 @@ option
         }
     | DUMMY3 error
         {
-            var with_value_msg = ' (with optional value assignment)';
+            let with_value_msg = ' (with optional value assignment)';
             if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
                 with_value_msg = '';
             }
@@ -1573,7 +1571,7 @@ option_name
                 // typos and/or garbage input here producing something that
                 // is usable from a machine perspective.
                 if (!isLegalIdentifierInput($name)) {
-                    var with_value_msg = ' (with optional value assignment)';
+                    let with_value_msg = ' (with optional value assignment)';
                     if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
                         with_value_msg = '';
                     }
@@ -1597,7 +1595,7 @@ option_name
             if (!(yy.__options_flags__ & OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES) || (yy.__options_flags__ & OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME)) {
                 $$ = $star;
             } else {
-                var with_value_msg = ' (with optional value assignment)';
+                let with_value_msg = ' (with optional value assignment)';
                 if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
                     with_value_msg = '';
                 }
@@ -1628,9 +1626,9 @@ epilogue
         }
     | start_epilogue_marker epilogue_chunks 
         {
-            var srcCode = trimActionCode($epilogue_chunks);
+            let srcCode = trimActionCode($epilogue_chunks);
             if (srcCode) {
-                var rv = checkActionBlock(srcCode, @epilogue_chunks, yy);
+                let rv = checkActionBlock(srcCode, @epilogue_chunks, yy);
                 if (rv) {
                     yyerror(rmCommonWS`
                         The '%%' lexer epilogue code does not compile: ${rv}
@@ -1692,9 +1690,9 @@ epilogue_chunk
     //
     : ACTION_START_AT_SOL action ACTION_END
         {
-            var srcCode = trimActionCode($action, $ACTION_START_AT_SOL);
+            let srcCode = trimActionCode($action, $ACTION_START_AT_SOL);
             if (srcCode) {
-                var rv = checkActionBlock(srcCode, @action, yy);
+                let rv = checkActionBlock(srcCode, @action, yy);
                 if (rv) {
                     yyerror(rmCommonWS`
                         The '%{...%}' lexer epilogue code chunk does not compile: ${rv}
@@ -1715,8 +1713,8 @@ epilogue_chunk
     //
     | ACTION_START_AT_SOL error
         %{
-            var start_marker = $ACTION_START_AT_SOL.trim();
-            var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
+            let start_marker = $ACTION_START_AT_SOL.trim();
+            let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
             yyerror(rmCommonWS`
                 There's very probably a problem with this '%{...%\}' lexer setup action code section.
 
@@ -1750,9 +1748,9 @@ include_macro_code
     : include_keyword option_list OPTIONS_END
         {
             // check if there is only 1 unvalued options: 'path'
-            var lst = $option_list;
-            var len = lst.length;
-            var path;
+            let lst = $option_list;
+            let len = lst.length;
+            let path;
             if (len === 1 && lst[0][1] === true) {
                 // `path`:
                 path = lst[0][0];
@@ -1781,11 +1779,11 @@ include_macro_code
             }
 
             // **Aside**: And no, we don't support nested '%include'!
-            var fileContent = fs.readFileSync(path, { encoding: 'utf-8' });
+            let fileContent = fs.readFileSync(path, { encoding: 'utf-8' });
 
-            var srcCode = trimActionCode(fileContent);
+            let srcCode = trimActionCode(fileContent);
             if (srcCode) {
-                var rv = checkActionBlock(srcCode, @$, yy);
+                let rv = checkActionBlock(srcCode, @$, yy);
                 if (rv) {
                     yyerror(rmCommonWS`
                         The source code included from file '${path}' does not compile: ${rv}
@@ -1815,11 +1813,11 @@ include_macro_code
 %%
 
 
-var rmCommonWS = helpers.rmCommonWS;
-var checkActionBlock = helpers.checkActionBlock;
-var mkIdentifier = helpers.mkIdentifier;
-var isLegalIdentifierInput = helpers.isLegalIdentifierInput;
-var trimActionCode = helpers.trimActionCode;
+const rmCommonWS = helpers.rmCommonWS;
+const checkActionBlock = helpers.checkActionBlock;
+const mkIdentifier = helpers.mkIdentifier;
+const isLegalIdentifierInput = helpers.isLegalIdentifierInput;
+const trimActionCode = helpers.trimActionCode;
 
 
 // see also:
@@ -1860,11 +1858,11 @@ const codeCvtTable = {
 // Note about 'b' in the regex below:
 // when inside a literal string, it's BACKSPACE, otherwise it's
 // the regex word edge condition `\b`. Here it's BACKSPACE.
-var codedCharRe = /(?:([sSBwWdDpP])|([*+()${}|[\]\/.^?])|([aberfntv])|([0-7]{1,3})|c([@A-Z])|x([0-9a-fA-F]{2})|u([0-9a-fA-F]{4})|u\{([0-9a-fA-F]{1,8})\}|())/g;
+const codedCharRe = /(?:([sSBwWdDpP])|([*+()${}|[\]\/.^?])|([aberfntv])|([0-7]{1,3})|c([@A-Z])|x([0-9a-fA-F]{2})|u([0-9a-fA-F]{4})|u\{([0-9a-fA-F]{1,8})\}|())/g;
 
 function encodeCharCode(v) {
     if (v < 32) {
-        var rv = codeCvtTable[v];
+        let rv = codeCvtTable[v];
         if (rv) return rv;
         return '\\u' + ('0000' + v.toString(16)).substr(-4);
     } else {
@@ -1874,7 +1872,7 @@ function encodeCharCode(v) {
 
 function encodeUnicodeCodepoint(v) {
     if (v < 32) {
-        var rv = codeCvtTable[v];
+        let rv = codeCvtTable[v];
         if (rv) return rv;
         return '\\u' + ('0000' + v.toString(16)).substr(-4);
     } else {
@@ -1883,10 +1881,10 @@ function encodeUnicodeCodepoint(v) {
 }
 
 function encodeRegexLiteralStr(s, edge) {
-    var rv = '';
+    let rv = '';
     //console.warn("encodeRegexLiteralStr INPUT:", {s, edge});
-    for (var i = 0, l = s.length; i < l; i++) {
-        var c = s[i];
+    for (let i = 0, l = s.length; i < l; i++) {
+        let c = s[i];
         switch (c) {
         case '\\':
             i++;
@@ -1896,7 +1894,7 @@ function encodeRegexLiteralStr(s, edge) {
                     rv += c;
                     continue;
                 }
-                var pos = '\'"`'.indexOf(c);
+                let pos = '\'"`'.indexOf(c);
                 if (pos >= 0) {
                     rv += '\\\\' + c;
                     continue;
@@ -1909,7 +1907,7 @@ function encodeRegexLiteralStr(s, edge) {
                 // we 'fake' the RegExp 'y'=sticky feature cross-platform by using 'g' flag instead
                 // plus an empty capture group at the end of the regex: when that one matches,
                 // we know we did not get a hit.
-                var m = codedCharRe.exec(s);
+                let m = codedCharRe.exec(s);
                 if (m && m[0]) {
                     if (m[1]) {
                         // [1]: regex operators, which occur in a literal string: `\s` --> \\s
@@ -1931,35 +1929,35 @@ function encodeRegexLiteralStr(s, edge) {
                     }
                     if (m[4]) {
                         // [4]: octal char: `\012` --> \x0A
-                        var v = parseInt(m[4], 8);
+                        let v = parseInt(m[4], 8);
                         rv += encodeCharCode(v);
                         i += m[4].length - 1;
                         continue;
                     }
                     if (m[5]) {
                         // [5]: CONTROL char: `\cA` --> \u0001
-                        var v = m[5].charCodeAt(0) - 64;
+                        let v = m[5].charCodeAt(0) - 64;
                         rv += encodeCharCode(v);
                         i++;
                         continue;
                     }
                     if (m[6]) {
                         // [6]: hex char: `\x41` --> A
-                        var v = parseInt(m[6], 16);
+                        let v = parseInt(m[6], 16);
                         rv += encodeCharCode(v);
                         i += m[6].length;
                         continue;
                     }
                     if (m[7]) {
                         // [7]: unicode/UTS2 char: `\u03c0` --> PI
-                        var v = parseInt(m[7], 16);
+                        let v = parseInt(m[7], 16);
                         rv += encodeCharCode(v);
                         i += m[7].length;
                         continue;
                     }
                     if (m[8]) {
                         // [8]: unicode code point: `\u{00003c0}` --> PI
-                        var v = parseInt(m[8], 16);
+                        let v = parseInt(m[8], 16);
                         rv += encodeUnicodeCodepoint(v);
                         i += m[8].length;
                         continue;
@@ -1973,19 +1971,19 @@ function encodeRegexLiteralStr(s, edge) {
 
         default:
             // escape regex operators:
-            var pos = ".*+?^${}()|[]/\\".indexOf(c);
+            let pos = ".*+?^${}()|[]/\\".indexOf(c);
             if (pos >= 0) {
                 rv += '\\' + c;
                 continue;
             }
-            var cc = charCvtTable[c];
+            let cc = charCvtTable[c];
             if (cc) {
                 rv += cc;
                 continue;
             }
-            var cc = c.charCodeAt(0);
+            cc = c.charCodeAt(0);
             if (cc < 32) {
-                var rvp = codeCvtTable[v];
+                let rvp = codeCvtTable[v];
                 if (rvp) {
                     rv += rvp;
                 } else {
@@ -2016,7 +2014,7 @@ function parseValue(v) {
     // http://stackoverflow.com/questions/175739/is-there-a-built-in-way-in-javascript-to-check-if-a-string-is-a-valid-number
     // Note that the `v` check ensures that we do not convert `undefined`, `null` and `''` (empty string!)
     if (v && !isNaN(v)) {
-        var rv = +v;
+        let rv = +v;
         if (isFinite(rv)) {
             return rv;
         }

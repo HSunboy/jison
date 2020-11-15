@@ -1420,7 +1420,8 @@ break;
 case 3 : 
 /*! Conditions:: PARSE_MODE_DETECTION */ 
 /*! Rule::       . */ 
- this.popState();
+ {
+this.popState();
             console.log('detected DEFAULT (value) mode');
             /*
              * When we did not observe one of the special character codes at the forefront of our
@@ -1538,14 +1539,17 @@ case 3 :
             
             // Pick the default parse mode:
             this.pushState('VALUE_MODE');
-            return 'VALUE_PARSE_MODE' 
+            return 'VALUE_PARSE_MODE'
+} 
 break;
 case 4 : 
 /*! Conditions:: PARSE_MODE_DETECTION */ 
 /*! Rule::       $ */ 
- this.popState();
+ {
+this.popState();
             // let the previous lexer state process that EOF for real...
-            return false 
+            return false
+} 
 break;
 case 6 : 
 /*! Conditions:: VALUE_MODE */ 
@@ -2259,7 +2263,8 @@ break;
 case 3 : 
 /*! Conditions:: PARSE_MODE_DETECTION */ 
 /*! Rule::       . */ 
- this.popState();
+ {
+this.popState();
             console.log('detected DEFAULT (value) mode');
             /*
              * When we did not observe one of the special character codes at the forefront of our
@@ -2377,14 +2382,17 @@ case 3 :
             
             // Pick the default parse mode:
             this.pushState('VALUE_MODE');
-            return 'VALUE_PARSE_MODE' 
+            return 'VALUE_PARSE_MODE'
+} 
 break;
 case 4 : 
 /*! Conditions:: PARSE_MODE_DETECTION */ 
 /*! Rule::       $ */ 
- this.popState();
+ {
+this.popState();
             // let the previous lexer state process that EOF for real...
-            return false 
+            return false
+} 
 break;
 case 6 : 
 /*! Conditions:: VALUE_MODE */ 

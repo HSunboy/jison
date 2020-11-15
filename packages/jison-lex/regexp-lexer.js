@@ -383,6 +383,12 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, opts) 
             caseHelper.push([].concat(code, i, ':', match_nr[1]).join(' ').replace(/[\n]/g, '\n  '));
         } else {
             regular_rule_count++;
+            // If action includes the keyword `let` or `const`, then it's ES6 code
+            // which must be scoped to prevent collisions with other action code chunks
+            // in the same large generated switch/case statement:
+            if (/\blet\b/.test(action) || /\bconst\b/.test(action)) {
+                action = '{\n' + action + '\n}';
+            }
             routingCode.push([].concat('case', i, ':', code, action, '\nbreak;').join(' '));
         }
     }

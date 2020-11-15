@@ -94,7 +94,7 @@ optional_end_block
         { $$ = ''; }
     | '%%' extra_parser_module_code
         { 
-            var rv = checkActionBlock($extra_parser_module_code, @extra_parser_module_code);
+            let rv = checkActionBlock($extra_parser_module_code, @extra_parser_module_code);
             if (rv) {
                 yyerror(rmCommonWS`
                     The extra parser module code section (a.k.a. 'epilogue') does not compile: ${rv}
@@ -113,7 +113,7 @@ optional_action_header_block
     | optional_action_header_block ACTION
         {
             $$ = $optional_action_header_block;
-            var rv = checkActionBlock($ACTION, @ACTION);
+            let rv = checkActionBlock($ACTION, @ACTION);
             if (rv) {
                 yyerror(rmCommonWS`
                     action header code block does not compile: ${rv}
@@ -127,7 +127,7 @@ optional_action_header_block
     | optional_action_header_block include_macro_code
         {
             $$ = $optional_action_header_block;
-            var rv = checkActionBlock($include_macro_code, @include_macro_code);
+            let rv = checkActionBlock($include_macro_code, @include_macro_code);
             if (rv) {
                 yyerror(rmCommonWS`
                     action header code block does not compile: ${rv}
@@ -168,7 +168,7 @@ declaration
         { $$ = {token_list: $full_token_definitions}; }
     | ACTION
         { 
-            var rv = checkActionBlock($ACTION, @ACTION);
+            let rv = checkActionBlock($ACTION, @ACTION);
             if (rv) {
                 yyerror(rmCommonWS`
                     action code block does not compile: ${rv}
@@ -181,7 +181,7 @@ declaration
         }
     | include_macro_code
         { 
-            var rv = checkActionBlock($include_macro_code, @include_macro_code);
+            let rv = checkActionBlock($include_macro_code, @include_macro_code);
             if (rv) {
                 yyerror(rmCommonWS`
                     action header code block does not compile: ${rv}
@@ -239,7 +239,7 @@ declaration
         }
     | INIT_CODE init_code_name action_ne
         {
-            var rv = checkActionBlock($action_ne, @action_ne);
+            let rv = checkActionBlock($action_ne, @action_ne);
             if (rv) {
                 yyerror(rmCommonWS`
                     %code "${$init_code_name}" initialization section action code block does not compile: ${rv}
@@ -459,11 +459,11 @@ token_list
 full_token_definitions
     : optional_token_type id_list
         {
-            var rv = [];
-            var lst = $id_list;
-            for (var i = 0, len = lst.length; i < len; i++) {
-                var id = lst[i];
-                var m = {id: id};
+            let rv = [];
+            let lst = $id_list;
+            for (let i = 0, len = lst.length; i < len; i++) {
+                let id = lst[i];
+                let m = {id: id};
                 if ($optional_token_type) {
                     m.type = $optional_token_type;
                 }
@@ -473,7 +473,7 @@ full_token_definitions
         }
     | optional_token_type one_full_token
         {
-            var m = $one_full_token;
+            let m = $one_full_token;
             if ($optional_token_type) {
                 m.type = $optional_token_type;
             }
@@ -677,16 +677,34 @@ handle_action
         {
             $$ = [($handle.length ? $handle.join(' ') : '')];
             if ($action) {
-                var rv = checkActionBlock($action, @action);
+                let rv = checkActionBlock($action.action, @action);
                 if (rv) {
-                    yyerror(rmCommonWS`
-                        production rule action code block does not compile: ${rv}
+                    if (!$action.isArrowAction) {
+                        yyerror(rmCommonWS`
+                            production rule action code block does not compile: ${rv}
 
-                          Erroneous area:
-                        ${yylexer.prettyPrintRange(@action, @handle)}
-                    `);
+                              Erroneous area:
+                            ${yylexer.prettyPrintRange(@action, @handle)}
+                        `);
+                    } else {
+                        let indentedSrc = rmCommonWS([$action.action]).split('\n').join('\n    ');
+
+                        yyerror(rmCommonWS`
+                            production rule arrow action code block does not compile: ${rv}
+
+                            Please be aware that the reported compile error MAY be referring
+                            to the wrapper code which is added by JISON automatically when
+                            processing arrow actions: the entire action code chunk 
+                            (including wrapper) is:
+
+                                ${indentedSrc}
+
+                              Erroneous area:
+                            ${yylexer.prettyPrintRange(@action, @handle)}
+                        `);
+                    }
                 }
-                $$.push($action);
+                $$.push($action.action);
             }
             if ($prec) {
                 if ($handle.length === 0) {
@@ -710,16 +728,34 @@ handle_action
         {
             $$ = [''];
             if ($action) {
-                var rv = checkActionBlock($action, @action);
+                let rv = checkActionBlock($action.action, @action);
                 if (rv) {
-                    yyerror(rmCommonWS`
-                        epsilon production rule action code block does not compile: ${rv}
+                    if (!$action.isArrowAction) {
+                        yyerror(rmCommonWS`
+                            epsilon production rule action code block does not compile: ${rv}
 
-                          Erroneous area:
-                        ${yylexer.prettyPrintRange(@action, @EPSILON)}
-                    `);
+                              Erroneous area:
+                            ${yylexer.prettyPrintRange(@action, @EPSILON)}
+                        `);
+                    } else {
+                        let indentedSrc = rmCommonWS([$action.action]).split('\n').join('\n    ');
+
+                        yyerror(rmCommonWS`
+                            epsilon production rule arrow action code block does not compile: ${rv}
+
+                            Please be aware that the reported compile error MAY be referring
+                            to the wrapper code which is added by JISON automatically when
+                            processing arrow actions: the entire action code chunk 
+                            (including wrapper) is:
+
+                                ${indentedSrc}
+
+                              Erroneous area:
+                            ${yylexer.prettyPrintRange(@action, @EPSILON)}
+                        `);
+                    }
                 }
-                $$.push($action);
+                $$.push($action.action);
             }
             if ($$.length === 1) {
                 $$ = $$[0];
@@ -871,14 +907,42 @@ action_ne
 
 action
     : action_ne
-        { $$ = $action_ne; }
+        { 
+            $$ = {
+                action: $action_ne,
+                isArrowAction: false
+            }; 
+        }
     | ARROW_ACTION
+        // **TODO**:
+        //
         // add braces around ARROW_ACTION so that the action chunk test/compiler
         // will uncover any illegal action code following the arrow operator, e.g.
         // multiple statements separated by semicolon.
-        { $$ = '$$ = (\n' + $ARROW_ACTION + '\n);'; }
+        //
+        // But only do so when the arrow action is not itself surrounded by curly braces
+        // when it would, for instance, attempt to return an object instance.
+        //
+        // Also nuke the possible superfluous semicolon, but *only* when it's in 
+        // the outer-most scope as the user may be defining an IIFE or *function*
+        // as a return value!
+        //
+        // Yeah, this stuff can get pretty hairy!   |:-\
+        { 
+            let src = trimActionCode($ARROW_ACTION);
+            $$ = {
+                action: `
+                        $$ = (
+                            ${src}
+                        );
+                    `,
+                isArrowAction: true
+            };                 
+        }
     | %epsilon
-        { $$ = ''; }
+        { 
+            $$ = null; 
+        }
     ;
 
 action_body
@@ -922,8 +986,8 @@ extra_parser_module_code
 include_macro_code
     : INCLUDE PATH
         {
-            var fileContent = fs.readFileSync($PATH, { encoding: 'utf-8' });
-            var rv = checkActionBlock(fileContent);
+            let fileContent = fs.readFileSync($PATH, { encoding: 'utf-8' });
+            let rv = checkActionBlock(fileContent);
             if (rv) {
                 yyerror(rmCommonWS`
                     included action code file "${$PATH}" does not compile: ${rv}
@@ -971,9 +1035,10 @@ optional_module_code_chunk
 %%
 
 
-var rmCommonWS = helpers.rmCommonWS;
-var dquote = helpers.dquote;
-var checkActionBlock = helpers.checkActionBlock;
+const rmCommonWS = helpers.rmCommonWS;
+const dquote = helpers.dquote;
+const checkActionBlock = helpers.checkActionBlock;
+const trimActionCode = helpers.trimActionCode;
 
 
 // transform ebnf to bnf if necessary
@@ -1004,7 +1069,7 @@ function parseValue(v) {
     // http://stackoverflow.com/questions/175739/is-there-a-built-in-way-in-javascript-to-check-if-a-string-is-a-valid-number
     // Note that the `v` check ensures that we do not convert `undefined`, `null` and `''` (empty string!)
     if (v && !isNaN(v)) {
-        var rv = +v;
+        let rv = +v;
         if (isFinite(rv)) {
             return rv;
         }

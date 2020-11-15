@@ -1,5 +1,5 @@
 
-JISON_VERSION := $(shell node ../../dist/cli-cjs-es5.js -V 2> /dev/null )
+JISON_VERSION := $(shell node ../../dist/cli-cjs.js -V 2> /dev/null )
 
 ROLLUP = ../../node_modules/.bin/rollup
 BABEL = ../../node_modules/.bin/babel
@@ -10,9 +10,9 @@ ifndef JISON_VERSION
 	JISON = sh ../../node_modules/.bin/jison
 else
 ifndef FULL_CODE_COVERAGE
-	JISON = node ../../dist/cli-cjs-es5.js
+	JISON = node ../../dist/cli-cjs.js
 else
-	JISON = $(NYC) --reporter=lcov -- node ../../dist/cli-cjs-es5.js
+	JISON = $(NYC) --reporter=lcov -- node ../../dist/cli-cjs.js
 endif
 endif
 
