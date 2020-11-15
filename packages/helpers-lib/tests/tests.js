@@ -518,8 +518,171 @@ yyerror(rmCommonWS\`
         assert.equal(helpers.trimErrorForTestReporting('a\nb/c/d\ne\\f\\g\n'), 'a\nb/c/d\ne\\f\\g\n');
     });
 
-    it('stripErrorStackPaths: **TBD**', function () {
+    it('stripErrorStackPaths:', function () {
         assert.ok(typeof helpers.stripErrorStackPaths === 'function');
+        // Note to self: top four lines in this fake stacktrace are stacktrace output from inside `nyc` profiler runs:
+        const input = `
+  Erroneous area:
+    at Object.lexer__performAction [as performAction] (W:\\blarg/a/b/c/regexp-lexer-cjs.js:13671:31), <anonymous>:1489:27)
+    at Object.lexer_test_match [as test_match] (W:\\blarg/a/b/c/regexp-lexer-cjs.js:13671:31), <anonymous>:1085:40)
+    at Object.lexer_next [as next] (W:\\blarg/a/b/c/regexp-lexer-cjs.js:13671:31), <anonymous>:1184:34)
+    at Object.lexer_lex [as lex] (W:\\blarg/a/b/c/regexp-lexer-cjs.js:13671:31), <anonymous>:1262:22)
+    at Context.testEachLexerExample (W:\\blarg/a/b/c/regexplexer.js:3649:37)
+    at Object.lexer_parseError [as parseError] (W:\\blarg/lex-parser-cjs.js:8519:13)
+    at Object.yyError [as yyerror] (W:\\blarg/lex-parser-cjs.js:8544:19)
+    at Object.lexer__performAction [as performAction] (W:\\blarg/lex-parser-cjs.js:10107:17)
+    at Object.lexer_test_match [as test_match] (W:\\blarg/lex-parser-cjs.js:9449:38)
+    at Object.lexer_next [as next] (W:\\blarg/lex-parser-cjs.js:9572:28)
+    at Object.lexer_lex [as lex] (W:\\blarg/lex-parser-cjs.js:9657:18)
+    at Context.testEachParserExample (W:\\blarg/all-tests.js:231:37)
+    at callFn (W:\\blarg/runnable.js:364:21)
+    at Test.Runnable.run (W:\\blarg/runnable.js:352:5)
+    at Runner.runTest (W:\\blarg/runner.js:677:10)
+    at W:\\blarg/runner.js:801:12
+    at next (W:\\blarg/runner.js:594:14)
+    at W:\\blarg/runner.js:604:7
+    at next (W:\\blarg/runner.js:486:14)
+    at cbHookRun (W:\\blarg/runner.js:551:7)
+    at done (W:\\blarg/runnable.js:308:5)
+    at callFn (W:\\blarg/runnable.js:387:7)
+    at Hook.Runnable.run (W:\\blarg/runnable.js:352:5)
+    at next (W:\\blarg/runner.js:510:10)
+    at Immediate._onImmediate (W:\\blarg/runner.js:572:5)
+    at processImmediate (W:\\blarg/timers.js:456:21)
+        `;
+        const soll = `
+  Erroneous area:
+    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js:13671:31)
+    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js:13671:31)
+    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:13671:31)
+    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:13671:31)
+    at Context.testEachLexerExample (/regexplexer.js:3649:37)
+    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:8519:13)
+    at Object.yyError [as yyerror] (/lex-parser-cjs.js:8544:19)
+    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:10107:17)
+    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:9449:38)
+    at Object.lexer_next [as next] (/lex-parser-cjs.js:9572:28)
+    at Object.lexer_lex [as lex] (/lex-parser-cjs.js:9657:18)
+    at Context.testEachParserExample (/all-tests.js:231:37)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)
+        `;
+        let ist = helpers.stripErrorStackPaths(input);
+        assert.deepEqual(ist, soll);
+
+        // and re-applying the filter should not have a bad effect either:
+        let ist2 = helpers.stripErrorStackPaths(ist);
+        assert.deepEqual(ist2, soll);
+    });
+
+    it('cleanStackTrace4Comparison:', function () {
+        assert.ok(typeof helpers.cleanStackTrace4Comparison === 'function');
+        // Note to self: top four lines in this fake stacktrace are stacktrace output from inside `nyc` profiler runs:
+        const input = `
+  Erroneous area:
+    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js:13671:31), <anonymous>:1489:27)
+    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js:13671:31), <anonymous>:1085:40)
+    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:13671:31), <anonymous>:1184:34)
+    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:13671:31), <anonymous>:1262:22)
+    at Context.testEachLexerExample (/regexplexer.js:3649:37)
+    at Object.lexer_parseError [as parseError] (W:\\blarg/lex-parser-cjs.js:8519:13)
+    at Object.yyError [as yyerror] (W:\\blarg/lex-parser-cjs.js:8544:19)
+    at Object.lexer__performAction [as performAction] (W:\\blarg/lex-parser-cjs.js:10107:17)
+    at Object.lexer_test_match [as test_match] (W:\\blarg/lex-parser-cjs.js:9449:38)
+    at Object.lexer_next [as next] (W:\\blarg/lex-parser-cjs.js:9572:28)
+    at Object.lexer_lex [as lex] (W:\\blarg/lex-parser-cjs.js:9657:18)
+    at Context.testEachParserExample (W:\\blarg/all-tests.js:231:37)
+    at callFn (W:\\blarg/runnable.js:364:21)
+    at Test.Runnable.run (W:\\blarg/runnable.js:352:5)
+    at Runner.runTest (W:\\blarg/runner.js:677:10)
+    at W:\\blarg/runner.js:801:12
+    at next (W:\\blarg/runner.js:594:14)
+    at W:\\blarg/runner.js:604:7
+    at next (W:\\blarg/runner.js:486:14)
+    at cbHookRun (W:\\blarg/runner.js:551:7)
+    at done (W:\\blarg/runnable.js:308:5)
+    at callFn (W:\\blarg/runnable.js:387:7)
+    at Hook.Runnable.run (W:\\blarg/runnable.js:352:5)
+    at next (W:\\blarg/runner.js:510:10)
+    at Immediate._onImmediate (W:\\blarg/runner.js:572:5)
+    at processImmediate (W:\\blarg/timers.js:456:21)
+        `;
+        const soll = `
+  Erroneous area:
+    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js)
+    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js)
+    at Object.lexer_next [as next] (/regexp-lexer-cjs.js)
+    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js)
+    at Context.testEachLexerExample (/regexplexer.js)
+    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js)
+    at Object.yyError [as yyerror] (/lex-parser-cjs.js)
+    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js)
+    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js)
+    at Object.lexer_next [as next] (/lex-parser-cjs.js)
+    at Object.lexer_lex [as lex] (/lex-parser-cjs.js)
+    at Context.testEachParserExample (/all-tests.js)
+    at callFn (/runnable.js)
+    at Test.Runnable.run (/runnable.js)
+    at Runner.runTest (/runner.js)
+    at /runner.js
+    at next (/runner.js)
+    at /runner.js
+    at next (/runner.js)
+    at cbHookRun (/runner.js)
+    at done (/runnable.js)
+    at callFn (/runnable.js)
+    at Hook.Runnable.run (/runnable.js)
+    at next (/runner.js)
+    at Immediate._onImmediate (/runner.js)
+    at processImmediate (/timers.js)
+        `;
+        let ist = helpers.cleanStackTrace4Comparison(input);
+        assert.deepEqual(ist, soll);
+
+        // and re-applying the filter should not have a bad effect either:
+        let istA = helpers.cleanStackTrace4Comparison(ist);
+        assert.deepEqual(istA, soll);
+
+        const input2 = {
+            a: [
+                {
+                    stack: 'at next (/a/b/c/runner.js:2:3)'
+                }
+               ],
+            b: 1.0,
+            d: false,
+            e: {
+                f: 'x',
+                stack: 'at nextXX (/a/b/c/runnerXX.js:4:5)'
+            }
+        };
+        const soll2 = {
+            a: [
+                {
+                    stack: 'at next (/runner.js)'
+                }
+               ],
+            b: 1.0,
+            d: false,
+            e: {
+                f: 'x',
+                stack: 'at nextXX (/runnerXX.js)'
+            }
+        };
+        let ist2 = helpers.cleanStackTrace4Comparison(input2);
+        assert.deepEqual(ist2, soll2);
     });
 
     it('checkRegExp: **TBD**', function () {

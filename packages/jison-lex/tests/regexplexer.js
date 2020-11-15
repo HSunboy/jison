@@ -4,12 +4,13 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const yaml = require('@gerhobbelt/js-yaml');
 const JSON5 = require('@gerhobbelt/json5');
-//const globby = require('globby');
+const globby = require('globby');
 const XRegExp = require('@gerhobbelt/xregexp');
 const RegExpLexer = require('../dist/regexp-lexer-cjs');
 const helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
 const trimErrorForTestReporting = helpers.trimErrorForTestReporting;
 const stripErrorStackPaths = helpers.stripErrorStackPaths;
+const cleanStackTrace4Comparison = helpers.cleanStackTrace4Comparison;
 
 
 
@@ -1258,7 +1259,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `, "Line 1261");
+        `, "Line 1262");
         console.error('lexer:', typeof lexer);
         lexer.setInput(input);
 
@@ -1286,7 +1287,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `, "Line 1289");
+        `, "Line 1290");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1320,7 +1321,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `, "Line 1323");
+        `, "Line 1324");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1349,7 +1350,7 @@ describe('Lexer Kernel', function () {
           ${lexerSource}
 
           return exports;
-        `, "Line 1352");
+        `, "Line 1353");
         exported.lexer.setInput(input);
 
         assert.equal(exported.lex(), 'X');
@@ -1382,7 +1383,7 @@ describe('Lexer Kernel', function () {
           ${lexerSource}
 
           return lexer;
-        `, "Line 1385");
+        `, "Line 1386");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1409,7 +1410,7 @@ describe('Lexer Kernel', function () {
               lexer, 
               yylex
             };`);
-        let lexer = exec(lexerSource, "Line 1412");
+        let lexer = exec(lexerSource, "Line 1413");
         lexer.lexer.setInput(input);
 
         // two ways to access `lex()`:
@@ -3430,30 +3431,45 @@ function lexer_reset() {
 
 
 
-console.log('exec glob....', __dirname);
-  // var testset = globby.sync([
-  //   __dirname + '/specs/*.jison',
-  //   __dirname + '/specs/*.json5',
-  //   '!'+ __dirname + '/specs/*-ref.json5',
-  //   __dirname + '/specs/*.js',
-  // ]);
-let testset = fs.readFileSync(__dirname + '/specs/testset.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/specs' + l.trim().replace(/^\./, ''));
-console.error({ testset });
-  // also compile and run the lexers in the /examples/ directory:
-  // var testset2 = globby.sync([
-  //   __dirname + '/../examples/*.jison',
-  //   __dirname + '/../examples/*.json5',
-  //   __dirname + '/../examples/*.l',
-  //   __dirname + '/../examples/*.lex',
-  //   __dirname + '/../examples/*.jisonlex',
-  // ]);
-let testset2 = fs.readFileSync(__dirname + '/../examples/testset.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/../examples' + l.trim().replace(/^\./, ''));
-console.error({ testset2 });
-var original_cwd = process.cwd();
 
-testset = testset.sort();
-testset2 = testset2.sort();
+
+
+
+
+
+
+
+function cleanPath(filepath) {
+    // does input path contain a Windows Drive or Network path? 
+    // If so, prevent bugs in path.join() re Windows paths to kick in 
+    // while the input path is an absolute path already anyway:
+    if (!filepath.includes(':')) {
+        filepath = path.join(__dirname, filepath);
+    }
+    return path.normalize(filepath).replace(/\\/g, '/');  // UNIXify the path
+}
+
+
+console.log('exec glob....', __dirname);
+const original_cwd = process.cwd();
+process.chdir(__dirname);
+let testset = globby.sync([
+    './specs/*.jison',
+    './specs/*.json5',
+    '!'+ './specs/*-ref.json5',
+    './specs/*.js',
+]);
+// also compile and run the lexers in the /examples/ directory:
+let testset2 = globby.sync([
+    '../examples/*.jison',
+    '../examples/*.json5',
+    '../examples/*.l',
+    '../examples/*.lex',
+    '../examples/*.jisonlex',
+]);
+
 testset = testset.concat(testset2);     // append testset2 at the end of the list
+testset = testset.sort();
 
 testset = testset.map(function (filepath) {
     // Get document, or throw exception on error
@@ -3463,6 +3479,8 @@ testset = testset.map(function (filepath) {
         let header;
         let extra;
         let grammar;
+
+        filepath = cleanPath(filepath);
 
         if (filepath.match(/\.js$/)) {
             spec = require(filepath);
@@ -3498,12 +3516,12 @@ testset = testset.map(function (filepath) {
             grammar = grammar.replace(/\n/g, '\r\n');
         }
 
-        let refOutFilePath = path.normalize(path.dirname(filepath) + '/reference-output/' + path.basename(filepath) + '-ref.json5');
-        let testOutFilePath = path.normalize(path.dirname(filepath) + '/output/' + path.basename(filepath) + '-ref.json5');
-        let lexerRefFilePath = path.normalize(path.dirname(filepath) + '/reference-output/' + path.basename(filepath) + '-lexer.js');
-        let lexerOutFilePath = path.normalize(path.dirname(filepath) + '/output/' + path.basename(filepath) + '-lexer.js');
-        mkdirp(path.dirname(lexerRefFilePath));
-        mkdirp(path.dirname(lexerOutFilePath));
+        let refOutFilePath = cleanPath(path.join(path.dirname(filepath), 'reference-output', path.basename(filepath) + '-ref.json5'));
+        let testOutFilePath = cleanPath(path.join(path.dirname(filepath), 'output', path.basename(filepath) + '-ref.json5'));
+        let lexerRefFilePath = cleanPath(path.join(path.dirname(filepath), 'reference-output', path.basename(filepath) + '-lexer.js'));
+        let lexerOutFilePath = cleanPath(path.join(path.dirname(filepath), 'output', path.basename(filepath) + '-lexer.js'));
+        mkdirp(path.dirname(refOutFilePath));
+        mkdirp(path.dirname(testOutFilePath));
 
         let refOut;
         try {
@@ -3546,11 +3564,10 @@ testset = testset.map(function (filepath) {
     }
     return false;
 })
-  .filter(function (info) {
-      return !!info;
-  });
-
-var original_cwd = process.cwd();
+.filter(function (info) {
+    return !!info;
+});
+console.error({ testset });
 
 function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key, err) {
     // and produce an alternative structure to JSON-ify:
@@ -3572,7 +3589,7 @@ function reduceWhitespace(src) {
     return src
       .replace(/\r\n|\r/g, '\n')
       .replace(/[ \t]+/g, ' ')
-      .replace(/ $/gm, '');
+      .replace(/ +$/gm, '');
 }
 
 
@@ -3656,7 +3673,9 @@ describe('Test Lexer Grammars', function () {
                     err: trimErrorForTestReporting(ex)
                 });
                 // and make sure lexer !== undefined:
-                lexer = { fail: 1 };
+                if (!lexer) {
+                    lexer = { fail: 1 };
+                }
             } finally {
                 process.chdir(original_cwd);
             }
@@ -3694,7 +3713,7 @@ describe('Test Lexer Grammars', function () {
                 //assert.deepEqual(tokens, filespec.ref);
             } else {
                 fs.writeFileSync(filespec.outputRefPath, refOut, 'utf8');
-                filespec.ref = refOut;
+                filespec.ref = tokens;
             }
             fs.writeFileSync(filespec.outputOutPath, refOut, 'utf8');
 
@@ -3743,8 +3762,8 @@ describe('Test Lexer Grammars', function () {
             // when the test fails:
             //
             // stringify the token sets! (no assert.deepEqual!)
-            let ist = JSON5.stringify(tokens, null, 2);
-            let soll = JSON5.stringify(filespec.ref, null, 2);
+            let ist = JSON5.stringify(cleanStackTrace4Comparison(tokens), null, 2);
+            let soll = JSON5.stringify(cleanStackTrace4Comparison(filespec.ref), null, 2);
             assert.ok(reduceWhitespace(ist) === reduceWhitespace(soll), 'lexer output token stream does not match reference; please compare /output/ vs /reference-output/');
             assert.ok(reduceWhitespace(refSrc) === reduceWhitespace(dumpStr), 'generated source code does not match reference; please compare /output/ vs /reference-output/');
         });

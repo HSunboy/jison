@@ -163,6 +163,7 @@ testset = testset.sort().map(function (filepath) {
     };
 })
 .filter(function (t) {
+  return false;
     return !!t;
 });
 console.log('testset....', testset);

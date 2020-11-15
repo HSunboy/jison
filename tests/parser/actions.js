@@ -640,7 +640,7 @@ describe('Parser Actions', function () {
             }
         };
 
-    //assert.equal(parser.parse('abcabcabcabcab'), "a[b,c]abcabcabcab", "should accept implicit (and correctly numbered) alias for EBNF wildcarded element");
+        //assert.equal(parser.parse('abcabcabcabcab'), "a[b,c]abcabcabcab", "should accept implicit (and correctly numbered) alias for EBNF wildcarded element");
         assert.throws(function () {
             let parser = new Jison.Parser(grammar);
         }, Error, /The action block references the named alias "expr1" which is not available in production/);

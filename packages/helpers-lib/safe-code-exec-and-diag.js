@@ -16,6 +16,7 @@
 import fs from 'fs';
 import path from 'path';
 import JSON5 from '@gerhobbelt/json5';
+import mkdirp from 'mkdirp';
 
 
 
@@ -63,13 +64,21 @@ function convertExceptionToObject(ex) {
     return rv;
 }
 
+
+function find_suitable_app_dump_path() {
+    return process.cwd()
+    .replace(/\\/g, '/')
+    .replace(/\/node_modules\/.*$/, (m) => '/___nm___/')
+    .replace(/(\/jison\/)(.*)$/, (m, p1, p2) => p1 + '___' + p2.split('/').map((d) => d.charAt(0).toUpperCase()).join('_'));
+}
+
 // attempt to dump in one of several locations: first winner is *it*!
 function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
     let dumpfile;
     options = options || {};
 
     try {
-        const dumpPaths = [ (options.outfile ? path.dirname(options.outfile) : null), options.inputPath, process.cwd() ];
+        const dumpPaths = [ (options.outfile ? path.dirname(options.outfile) : null), options.inputPath, find_suitable_app_dump_path() ];
         let dumpName = path.basename(options.inputFilename || options.moduleName || (options.outfile ? path.dirname(options.outfile) : null) || options.defaultModuleName || errname)
         .replace(/\.[a-z]{1,5}$/i, '')          // remove extension .y, .yacc, .jison, ...whatever
         .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
@@ -110,7 +119,7 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
             }
 
             try {
-                dumpfile = path.normalize(dumpPaths[i] + '/' + dumpName);
+                dumpfile = path.normalize(path.join(dumpPaths[i], dumpName));
 
                 const dump = {
                     errname,
@@ -132,6 +141,7 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
                 d = d.split('\n').map((l) => '// ' + l);
                 d = d.join('\n');
 
+                mkdirp(path.dirname(dumpfile));
                 fs.writeFileSync(dumpfile, sourcecode + '\n\n\n' + d, 'utf8');
                 console.error('****** offending generated ' + errname + ' source code dumped into file: ', dumpfile);
                 break;          // abort loop once a dump action was successful!

@@ -9,7 +9,7 @@ const path = require('path');
 
 function exec(src, line, forceDump) {
     return helpers.exec(src, function code_execution_rig(sourcecode, options, errname, debug) {
-        if (forceDump || 1) helpers.dump(sourcecode, errname);
+        if (forceDump) helpers.dump(sourcecode, errname);
         const f = new Function('', sourcecode);
         return f();
     }, {
@@ -87,17 +87,24 @@ describe('Parser Generator API', function () {
         gen.lexer = new Lexer(lexData);
 
         let parserSource = gen.generateCommonJSModule();
-        let exports = exec(`
-            let exports = {};
+        let exp = exec(`
+            // fake it to ensure the checks in the generated code fire:
+            if (typeof exports === "undefined") {
+                var exports = {};
+            }
+            if (typeof require === "undefined") {
+                var require = () => { throw new Error("require has been shimmed") };
+            }
 
             // =================== GENERATED SOURCECODE START ====================
             ${parserSource}
             // =================== GENERATED SOURCECODE END ====================
 
+            console.error("exports = ", exports);
             return exports;
-        `, "Line 98");
+        `, "Line 105");
 
-        assert.ok(exports.parse(input));
+        assert.ok(exp.parse(input));
     });
 
     it('test module generator', function () {
@@ -128,7 +135,7 @@ describe('Parser Generator API', function () {
             // =================== GENERATED SOURCECODE END ====================
 
             return parser;
-        `, "Line 131");
+        `, "Line 138");
 
         assert.ok(parser.parse(input));
     });
@@ -161,7 +168,7 @@ describe('Parser Generator API', function () {
             // =================== GENERATED SOURCECODE END ====================
 
             return parsey;
-        `, "Line 164");
+        `, "Line 171");
 
         assert.ok(parsey.parse(input));
     });
@@ -196,7 +203,7 @@ describe('Parser Generator API', function () {
             // =================== GENERATED SOURCECODE END ====================
 
             return compiler;
-        `, "Line 199");
+        `, "Line 206");
 
         assert.ok(compiler.parser.parse(input));
     });
@@ -285,7 +292,7 @@ describe('Parser Generator API', function () {
             // =================== GENERATED SOURCECODE END ====================
 
             return parser;
-        `, "Line 288");
+        `, "Line 295");
 
         assert.ok(parser.parse(JSON.stringify(grammar.bnf)));
     });
@@ -309,14 +316,12 @@ describe('Parser Generator API', function () {
 
         let parserSource = gen.generateCommonJSModule();
         let parser = exec(`
-            let exports = {};
-
             // =================== GENERATED SOURCECODE START ====================
             ${parserSource}
             // =================== GENERATED SOURCECODE END ====================
 
             return parser;
-        `, "Line 319");
+        `, "Line 324");
 
         assert.equal(parser.parse('y'), 1, 'semantic action');
     });
@@ -340,14 +345,12 @@ describe('Parser Generator API', function () {
 
         let parserSource = gen.generateCommonJSModule();
         let parser = exec(`
-            let exports = {};
-
             // =================== GENERATED SOURCECODE START ====================
             ${parserSource}
             // =================== GENERATED SOURCECODE END ====================
 
             return parser;
-        `, "Line 350");
+        `, "Line 353");
 
         assert.equal(parser.parse('y'), 1, 'semantic action');
     });
@@ -374,7 +377,7 @@ describe('Parser Generator API', function () {
             // =================== GENERATED SOURCECODE END ====================
 
             return parser;
-        `, "Line 377");
+        `, "Line 380");
 
         let p = new parser.Parser();
 
@@ -404,14 +407,12 @@ describe('Parser Generator API', function () {
 
         let parserSource = gen.generateCommonJSModule();
         let parser = exec(`
-            let exports = {};
-
             // =================== GENERATED SOURCECODE START ====================
             ${parserSource}
             // =================== GENERATED SOURCECODE END ====================
 
             return parser;
-        `, "Line 414");
+        `, "Line 415");
 
         assert.equal(parser.parse('y'), 1, 'semantic action');
     });
@@ -507,7 +508,7 @@ describe('Parser Generator API', function () {
             // =================== GENERATED SOURCECODE END ====================
 
             return parser;
-        `, "Line 510");
+        `, "Line 511");
 
         assert.ok(parser.parse(input));
     });
@@ -569,7 +570,7 @@ describe('Parser Generator API', function () {
             // =================== GENERATED SOURCECODE END ====================
 
             return parser;
-        `, "Line 572");
+        `, "Line 573");
 
         let rv = parser.parse(input);
         assert.equal(rv, 42);
@@ -616,7 +617,7 @@ describe('Parser Generator API', function () {
             // =================== GENERATED SOURCECODE END ====================
 
             return parser;
-        `, "Line 619");
+        `, "Line 620");
 
         let rv = parser.parse(input);
         assert.equal(rv, 42);

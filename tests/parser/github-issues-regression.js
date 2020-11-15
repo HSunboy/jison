@@ -25,15 +25,17 @@ describe('Regression Checks', function () {
         let options = {
             noMain: false
         };
-        //options.exportSourceCode = {};
         options.file = filespec.path;
         try {
             let parser = new Jison.Parser(grammar, options);
 
             assert.ok(false, 'should never get here');
         } catch (ex) {
-            console.log('ex:' + ex + ex.stack);
+            //console.log('ex:' + ex.stack);
             assert.ok(true);
+            assert.ok(ex instanceof Error);
+            // the offending bit of action code should be mentioned in the error report:
+            assert.ok(/yyerror\(`named %option value error for \$\{\$option\}\?"/.test(ex.message));
         }
     });
 });

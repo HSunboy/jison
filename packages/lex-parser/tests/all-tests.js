@@ -4,11 +4,12 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const yaml = require('@gerhobbelt/js-yaml');
 const JSON5 = require('@gerhobbelt/json5');
-//const globby = require("globby");
+const globby = require('globby');
 const lex = require('../dist/lex-parser-cjs');
 const helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
 const trimErrorForTestReporting = helpers.trimErrorForTestReporting;
 const stripErrorStackPaths = helpers.stripErrorStackPaths;
+const cleanStackTrace4Comparison = helpers.cleanStackTrace4Comparison;
 
 
 
@@ -59,13 +60,21 @@ function lexer_reset() {
 
 
 
+function cleanPath(filepath) {
+    // does input path contain a Windows Drive or Network path? 
+    // If so, prevent bugs in path.join() re Windows paths to kick in 
+    // while the input path is an absolute path already anyway:
+    if (!filepath.includes(':')) {
+        filepath = path.join(__dirname, filepath);
+    }
+    return path.normalize(filepath).replace(/\\/g, '/');  // UNIXify the path
+}
+
 
 console.log('exec glob....', __dirname);
-  //var testset = globby.sync(__dirname + '/specs/*.jisonlex');
-let testset = fs.readFileSync(__dirname + '/specs/testset.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/specs' + l.trim().replace(/^\./, ''));
-let testset2 = fs.readFileSync(__dirname + '/lex/testset.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/lex' + l.trim().replace(/^\./, ''));
-testset.push(...testset2);
 const original_cwd = process.cwd();
+process.chdir(__dirname);
+var testset = globby.sync(['./specs/*.jisonlex', './lex/*.jisonlex']);
 
 testset = testset.sort();
 
@@ -76,6 +85,8 @@ testset = testset.map(function (filepath) {
         let spec;
         let header;
         let extra;
+
+        filepath = cleanPath(filepath);
 
         if (filepath.match(/\.js$/)) {
             spec = require(filepath);
@@ -104,10 +115,10 @@ testset = testset.map(function (filepath) {
         // extract the grammar to test:
         let grammar = spec.substr(spec.indexOf('\n\n') + 2);
 
-        let refOutFilePath = path.normalize(path.dirname(filepath) + '/reference-output/' + path.basename(filepath) + '-ref.json5');
-        let testOutFilePath = path.normalize(path.dirname(filepath) + '/output/' + path.basename(filepath) + '-ref.json5');
-        let lexerRefFilePath = path.normalize(path.dirname(filepath) + '/reference-output/' + path.basename(filepath) + '-lex.json5');
-        let lexerOutFilePath = path.normalize(path.dirname(filepath) + '/output/' + path.basename(filepath) + '-lex.json5');
+        let refOutFilePath = cleanPath(path.join(path.dirname(filepath), 'reference-output', path.basename(filepath) + '-ref.json5'));
+        let testOutFilePath = cleanPath(path.join(path.dirname(filepath), 'output', path.basename(filepath) + '-ref.json5'));
+        let lexerRefFilePath = cleanPath(path.join(path.dirname(filepath), 'reference-output', path.basename(filepath) + '-lex.json5'));
+        let lexerOutFilePath = cleanPath(path.join(path.dirname(filepath), 'output', path.basename(filepath) + '-lex.json5'));
         mkdirp(path.dirname(refOutFilePath));
         mkdirp(path.dirname(testOutFilePath));
 
@@ -146,9 +157,9 @@ testset = testset.map(function (filepath) {
     }
     return false;
 })
-  .filter(function (info) {
-      return !!info;
-  });
+.filter(function (info) {
+    return !!info;
+});
 console.error({ testset });
 
 function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key, err) {
@@ -171,7 +182,7 @@ function reduceWhitespace(src) {
     return src
       .replace(/\r\n|\r/g, '\n')
       .replace(/[ \t]+/g, ' ')
-      .replace(/ $/gm, '');
+      .replace(/ +$/gm, '');
 }
 
 
@@ -244,7 +255,9 @@ describe('LEX spec lexer', function () {
                     err: trimErrorForTestReporting(ex)
                 });
                 // and make sure ast !== undefined:
-                ast = { fail: 1 };
+                if (!ast) {
+                    ast = { fail: 1 };
+                }
             } finally {
                 process.chdir(original_cwd);
             }
@@ -269,18 +282,18 @@ describe('LEX spec lexer', function () {
             // and potentially matching the stored reference set:
             tokens = JSON5.parse(refOut);
             if (filespec.lexerRef) {
-            // Perform the validations only AFTER we've written the files to output:
-            // several tests produce very large outputs, which we shouldn't let assert() process
-            // for diff reporting as that takes bloody ages:
-            //assert.deepEqual(ast, filespec.ref);
+                // Perform the validations only AFTER we've written the files to output:
+                // several tests produce very large outputs, which we shouldn't let assert() process
+                // for diff reporting as that takes bloody ages:
+                //assert.deepEqual(ast, filespec.ref);
             } else {
                 fs.writeFileSync(filespec.lexerRefPath, refOut, 'utf8');
-                filespec.lexerRef = refOut;
+                filespec.lexerRef = tokens;
             }
             fs.writeFileSync(filespec.lexerOutPath, refOut, 'utf8');
 
             // now that we have saved all data, perform the validation checks:
-            assert.deepEqual(tokens, filespec.lexerRef, 'grammar should be lexed correctly');
+            assert.deepEqual(cleanStackTrace4Comparison(tokens), cleanStackTrace4Comparison(filespec.lexerRef), 'grammar should be lexed correctly');
         });
     });
 });
@@ -353,12 +366,12 @@ describe('LEX parser', function () {
                 //assert.deepEqual(ast, filespec.ref);
             } else {
                 fs.writeFileSync(filespec.outputRefPath, refOut, 'utf8');
-                filespec.ref = refOut;
+                filespec.ref = ast;
             }
             fs.writeFileSync(filespec.outputOutPath, refOut, 'utf8');
 
             // now that we have saved all data, perform the validation checks:
-            assert.deepEqual(ast, filespec.ref, 'grammar should be parsed correctly');
+            assert.deepEqual(cleanStackTrace4Comparison(ast), cleanStackTrace4Comparison(filespec.ref), 'grammar should be parsed correctly');
         });
     });
 });

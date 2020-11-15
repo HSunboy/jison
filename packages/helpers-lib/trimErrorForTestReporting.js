@@ -66,14 +66,50 @@ function shallow_copy_and_strip_depth(src, parentKey) {
 }
 
 
+// strip developer machine specific parts off any paths in a given stacktrace (string)
+// to ease cross-platform comparison of these stacktraces.
 function stripErrorStackPaths(msg) {
     // strip away devbox-specific paths in error stack traces in the output:
+    // and any `nyc` profiler run added trailing cruft has to go too, e.g. ', <anonymous>:1489:27)':
     msg = msg
-    .replace(/\bat ([^\r\n(\\\/]*?)\([^)]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)\)/gi, 'at $1(/$2)')
-    .replace(/\bat [^\r\n ]+?[\\\/]([a-z0-9_-]+\.js:[0-9]+:[0-9]+)/gi, 'at /$1');
+    .replace(/\bat ([^\r\n(\\\/]+?)\([^)]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)\)(?:, <anonymous>:[0-9]+:[0-9]+\))?/gi, 'at $1(/$2:$3)')
+    .replace(/\bat [^\r\n ]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)/gi, 'at /$1:$2')
 
     return msg;
 }
+
+
+// strip off the line/position info from any stacktrace as a assert.deepEqual() on these
+// will otherwise FAIL due to us running this stuff through both regular `node` and 
+// the `nyc` profiler: the latter reformats the sourcecode-under-test, thus producing 
+// exceptions and stacktraces which point completely somewhere else and this would b0rk
+// our test rigs for the jison subpackages.
+function cleanStackTrace4Comparison(obj) {
+    if (typeof obj === 'string') {
+        // and any `nyc` profiler run added trailing cruft has to go too, e.g. ', <anonymous>:1489:27)':
+        let msg = obj
+        .replace(/\bat ([^\r\n(\\\/]+?)\([^)]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)\)(?:, <anonymous>:[0-9]+:[0-9]+\))?/gi, 'at $1(/$2)')
+        .replace(/\bat [^\r\n ]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)/gi, 'at /$1');
+
+        return msg;
+    }
+
+    if (obj) {
+        if (obj.stack) {
+            obj.stack = cleanStackTrace4Comparison(obj.stack);
+        }
+        let keys = Object.keys(obj);
+        for (let i in keys) {
+            let key = keys[i];
+            let el = obj[key];
+            cleanStackTrace4Comparison(el);
+        }
+    }
+    return obj;
+}
+
+
+
 
 
 
@@ -314,5 +350,6 @@ function trimErrorForTestReporting(e) {
 
 export {
     trimErrorForTestReporting,
-    stripErrorStackPaths
+    stripErrorStackPaths,
+    cleanStackTrace4Comparison
 };

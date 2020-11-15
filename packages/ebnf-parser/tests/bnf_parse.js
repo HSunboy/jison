@@ -4,10 +4,11 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const yaml = require('@gerhobbelt/js-yaml');
 const JSON5 = require('@gerhobbelt/json5');
-//const globby = require('globby');
+const globby = require('globby');
 const helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
 const trimErrorForTestReporting = helpers.trimErrorForTestReporting;
 const stripErrorStackPaths = helpers.stripErrorStackPaths;
+const cleanStackTrace4Comparison = helpers.cleanStackTrace4Comparison;
 const bnf = require('../dist/ebnf-parser-cjs');
 
 
@@ -48,18 +49,28 @@ function parser_reset() {
 
 
 
+function cleanPath(filepath) {
+    // does input path contain a Windows Drive or Network path? 
+    // If so, prevent bugs in path.join() re Windows paths to kick in 
+    // while the input path is an absolute path already anyway:
+    if (!filepath.includes(':')) {
+        filepath = path.join(__dirname, filepath);
+    }
+    return path.normalize(filepath).replace(/\\/g, '/');  // UNIXify the path
+}
+
 
 console.log('exec glob....', __dirname);
-// var testset = globby.sync([
-//   __dirname + '/specs/0*.jison',
-//   __dirname + '/specs/0*.bnf',
-//   __dirname + '/specs/0*.ebnf',
-//   __dirname + '/specs/0*.json5',
-//   '!'+ __dirname + '/specs/0*-ref.json5',
-//   __dirname + '/specs/0*.js',
-// ]);
-let testset = fs.readFileSync(__dirname + '/specs/testset.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/specs' + l.trim().replace(/^\./, ''));
-let original_cwd = process.cwd();
+const original_cwd = process.cwd();
+process.chdir(__dirname);
+var testset = globby.sync([
+    './specs/0*.jison',
+    './specs/0*.bnf',
+    './specs/0*.ebnf',
+    './specs/0*.json5',
+    '!'+  './specs/0*-ref.json5',
+    './specs/0*.js',
+]);
 
 testset = testset.sort();
 
@@ -71,6 +82,8 @@ testset = testset.map(function (filepath) {
         let header;
         let extra;
         let grammar;
+
+        filepath = cleanPath(filepath);
 
         if (filepath.match(/\.js$/)) {
             spec = require(filepath);
@@ -105,10 +118,10 @@ testset = testset.map(function (filepath) {
             grammar = grammar.replace(/\n/g, '\r\n');
         }
 
-        let refOutFilePath = path.normalize(path.dirname(filepath) + '/reference-output/' + path.basename(filepath) + '-ref.json5');
-        let testOutFilePath = path.normalize(path.dirname(filepath) + '/output/' + path.basename(filepath) + '-ref.json5');
-        let lexerRefFilePath = path.normalize(path.dirname(filepath) + '/reference-output/' + path.basename(filepath) + '-lex.json5');
-        let lexerOutFilePath = path.normalize(path.dirname(filepath) + '/output/' + path.basename(filepath) + '-lex.json5');
+        let refOutFilePath = cleanPath(path.join(path.dirname(filepath), 'reference-output', path.basename(filepath) + '-ref.json5'));
+        let testOutFilePath = cleanPath(path.join(path.dirname(filepath), 'output', path.basename(filepath) + '-ref.json5'));
+        let lexerRefFilePath = cleanPath(path.join(path.dirname(filepath), 'reference-output', path.basename(filepath) + '-lex.json5'));
+        let lexerOutFilePath = cleanPath(path.join(path.dirname(filepath), 'output', path.basename(filepath) + '-lex.json5'));
         mkdirp(path.dirname(refOutFilePath));
         mkdirp(path.dirname(testOutFilePath));
 
@@ -153,9 +166,9 @@ testset = testset.map(function (filepath) {
     }
     return false;
 })
-  .filter(function (info) {
-      return !!info;
-  });
+.filter(function (info) {
+    return !!info;
+});
 console.error({ testset });
 
 function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key, err) {
@@ -178,7 +191,7 @@ function reduceWhitespace(src) {
     return src
       .replace(/\r\n|\r/g, '\n')
       .replace(/[ \t]+/g, ' ')
-      .replace(/ $/gm, '');
+      .replace(/ +$/gm, '');
 }
 
 
@@ -208,6 +221,7 @@ describe('BNF lexer', function () {
             let err, ast, grammar;
             let tokens = [];
             let lexer = bnf.bnf_parser.parser.lexer;
+            let i = 0;
 
             try {
                 // Change CWD to the directory where the source grammar resides: this helps us properly
@@ -220,7 +234,7 @@ describe('BNF lexer', function () {
                 ast.__original_input__ = grammar;
 
                 let countDown = 4;
-                for (var i = 0; i < 1000; i++) {
+                for (i = 0; i < 1000; i++) {
                     let tok = lexer.lex();
                     tokens.push({
                         id: tok,
@@ -247,7 +261,9 @@ describe('BNF lexer', function () {
                     err: trimErrorForTestReporting(ex)
                 });
                 // and make sure ast !== undefined:
-                ast = { fail: 1 };
+                if (!ast) {
+                    ast = { fail: 1 };
+                }
             } finally {
                 process.chdir(original_cwd);
             }
@@ -284,12 +300,12 @@ describe('BNF lexer', function () {
                 //assert.deepEqual(ast, filespec.ref);
             } else {
                 fs.writeFileSync(filespec.lexerRefPath, refOut, 'utf8');
-                filespec.lexerRef = refOut;
+                filespec.lexerRef = tokens;
             }
             fs.writeFileSync(filespec.lexerOutPath, refOut, 'utf8');
 
             // now that we have saved all data, perform the validation checks:
-            assert.deepEqual(tokens, filespec.lexerRef, 'grammar should be lexed correctly');
+            assert.deepEqual(cleanStackTrace4Comparison(tokens), cleanStackTrace4Comparison(filespec.lexerRef), 'grammar should be lexed correctly');
         });
     });
 });
@@ -358,12 +374,12 @@ describe('BNF parser', function () {
                 //assert.deepEqual(ast, filespec.ref);
             } else {
                 fs.writeFileSync(filespec.outputRefPath, refOut, 'utf8');
-                filespec.ref = refOut;
+                filespec.ref = ast;
             }
             fs.writeFileSync(filespec.outputOutPath, refOut, 'utf8');
 
             // now that we have saved all data, perform the validation checks:
-            assert.deepEqual(ast, filespec.ref, 'grammar should be parsed correctly');
+            assert.deepEqual(cleanStackTrace4Comparison(ast), cleanStackTrace4Comparison(filespec.ref), 'grammar should be parsed correctly');
         });
     });
 });

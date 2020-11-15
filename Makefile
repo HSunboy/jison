@@ -15,7 +15,7 @@ endif
 
 
 
-all: clean-nyc fix-linenumbers sync subpackages build test test-nyc examples-test report-nyc
+all: clean-nyc fix-linenumbers sync subpackages build test examples-test
 
 everything:                         \
 		clean                       \
