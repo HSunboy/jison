@@ -5,13 +5,13 @@ Fork, make your changes, run tests and/or add tests then send a pull request.
 
 ## Required tools for Development
 
-- NodeJS (v12 or later is advised. **Tip**: you might want to look at `nvm` (or [`nvm-for-windows`](https://github.com/coreybutler/nvm-windows)).)
-- NPM
-- GNU make  (make sure you can run the `make` command from your (bash) shell command line)
+- NodeJS (`node` v12 or later is advised. **Tip**: you might want to look at `nvm` (or [`nvm-for-windows`](https://github.com/coreybutler/nvm-windows)).)
+- `npm`
+- GNU `make`  (make sure you can run the `make` command from your (`bash`) shell command line)
 
 When you are working on the Microsoft Windows OS, you can obtain the prerequisite tools
 by installing Git-for-Windows **and its Developer SDK**
-(as only the latter includes *GNU make*, for example, at the time of writing: April 2017):
+(as only the latter includes *GNU `make`*, for example, at the time of writing: April 2017):
 
 - [Git-for-Windows](https://git-for-windows.github.io/)
 - [Git-fo-Windows Developer SDK](https://github.com/git-for-windows/build-extra/releases/latest)
