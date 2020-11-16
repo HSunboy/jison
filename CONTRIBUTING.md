@@ -5,7 +5,7 @@ Fork, make your changes, run tests and/or add tests then send a pull request.
 
 ## Required tools for Development
 
-- NodeJS
+- NodeJS (v12 or later is advised. **Tip**: you might want to look at `nvm` (or [`nvm-for-windows`](https://github.com/coreybutler/nvm-windows)).)
 - NPM
 - GNU make  (make sure you can run the `make` command from your (bash) shell command line)
 
@@ -23,9 +23,9 @@ by installing Git-for-Windows **and its Developer SDK**
 
 ~~`$ git submodule update --init`~~
 
-~~should fetch the submodules listed in this project's `.gitmodules` file and you're good to go!~~ `jison-gho` once was a repository with git submodules, but all of those have been integrated into this single *monorepo*, where, by now, all those subpackages have become **deprecated** as the entire lexer and parser generator API (plus helpers) is available in the jison library itself.
+~~should fetch the submodules listed in this project's `.gitmodules` file and you're good to go!~~ `jison-gho` once was a repository with git submodules, but all of those have been integrated into this single *monorepo*, where, by now, all those subpackages have become **deprecated** as the entire lexer and parser generator API (plus helpers) is available in the `jison-gho` library itself.
 
-Hence, while there's a bunch of `/packages/*/` in this repository, where the build process still invokes each of those subpackages' `Makefile`s in time, building the helpers, lexer and parser libraries and code generators, the end product available to any user is the jison CLI and library ultimately produced in `/dist/` as `cli-*.js` for the CLI and `jison-*.js` for the all-encompasing library.
+Hence, while there's a bunch of `/packages/*/` in this repository, where the build process still invokes each of those subpackages' `Makefile` in time, building the helpers, lexer and parser libraries and code generators, while the end product available to any user is the `jison-gho` CLI and library ultimately produced in `/dist/` as `cli-*.js` for the CLI and `jison-*.js` for the all-encompassing library.
 
 The ~~next~~first step would be to install the required NPM packages for all modules. `make` to the rescue:
 
@@ -106,7 +106,7 @@ Well, you MAY want to try to **nuke the test reference files** (against which th
     make clean-dumpfiles ; make
 
 Of course, a more-or-less risk-averse individual would do well to then go and compare those new generated files in all those
-`.../reference-output/` directories against the ones already checked into the git repository -- I use TortoiseGit plus [Scooter Software's very commendable 'Beyond Compare' tool](https://scootersoftware.com/) to speed up that process and ease the pain of diffing the goods.
+`.../reference-output/` directories against the ones already checked into the git repository -- I use [TortoiseGit](https://tortoisegit.org/) plus [Scooter Software's very commendable 'Beyond Compare' tool](https://scootersoftware.com/) to speed up that process and ease the pain of diffing the goods.
 
 ---
 
