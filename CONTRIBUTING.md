@@ -137,6 +137,7 @@ This one and the patch trickery described above should get you going as a `jison
 > >   That line will be stripped off *before* being dumped in a generated parser.
 > > + all the above stuff is included in more-or-less stripped-down form in a generated parser+lexer output by `jison-gho`.
      <sup>Have a look at a generated parser and you'll recognize the various chunks in there coming from these files.</sup>
+> >
 > > \[...\]
 > > 
 > > Anyway, that's how `jison-gho` is "organized".
