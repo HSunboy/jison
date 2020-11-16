@@ -72,8 +72,8 @@ For several reasons, including:
 - First you install all `npm` packages, including that old `jison`/`jison-gho`, as prescribed by `package.json`.
   
   Nothing fancy or new here.
-- Next, you find yourself a commit in the bleeding which has a 'known good enough' status for the files in '/dist/'. 
-  + One such a commit might be SHA-1: ef64b15e1feeb6f63a704a6625809ec9a727d59d
+- Next, you find yourself a commit in the bleeding edge which has a 'known good enough' status for the files in '/dist/'. 
+  + One such a commit might be [SHA-1: ef64b15e1feeb6f63a704a6625809ec9a727d59d](https://github.com/GerHobbelt/jison/tree/ef64b15e1feeb6f63a704a6625809ec9a727d59d)
   + I'm rather sloppy about marking my commits and sometimes push broken code. So you'll have to try a few commits if you're riding the *edge of the edge* and `/dist/cli-cjs.js` doesn't deliver, but crashes instead. Bugger!
 - Having decided on a commit, you get **all the files in `/dist/` and copy the entire bunch over the same-named ones in `/node_modules/jison-gho/dist/`.
 - you have now successfully "upgraded" the installed bootstrapper `jison-gho` so all your lex/bnf/ebnf grammars will be compiled using that bleeding-edge-forom-`/dist/` as if it were a `npm` release!
