@@ -48,6 +48,7 @@ GITHUB_ISSUE_TARGETS =                                          \
 			issue-357-url-lexing                                \
 			issue-360                                           \
 			issue-362 											\
+			issue-380 											\
 			issue-387
 
 
@@ -364,16 +365,16 @@ issue-51-gho-3:
 	-$(NODE) ./output/$@/$@.js ./issue-51-gho.input
 
 issue-51-gho-4:
-	$(JISON) --main ./$@.jison ./issue-51-gho.jisonlex
-	$(NODE) ./output/$@/$@.js ./issue-51-gho.input
+	-$(JISON) --main ./$@.jison ./issue-51-gho.jisonlex
+	-$(NODE) ./output/$@/$@.js ./issue-51-gho.input
 
 issue-51-gho-5:
-	$(JISON) --main ./$@.jison ./issue-51-gho.jisonlex
-	$(NODE) ./output/$@/$@.js ./issue-51-gho.input
+	-$(JISON) --main ./$@.jison ./issue-51-gho.jisonlex
+	-$(NODE) ./output/$@/$@.js ./issue-51-gho.input
 
 issue-51-gho-6:
-	$(JISON) --main ./$@.jison ./issue-51-gho.jisonlex
-	$(NODE) ./output/$@/$@.js ./issue-51-gho.input
+	-$(JISON) --main ./$@.jison ./issue-51-gho.jisonlex
+	-$(NODE) ./output/$@/$@.js ./issue-51-gho.input
 
 issue-58-gho:
 	$(NODE) ./$@.make.js
@@ -456,6 +457,11 @@ issue-360:
 
 # build *AND* run the test:
 issue-362: documentation--custom-lexer-ULcase documentation--custom-lexer-ULcase-alt
+
+# build *AND* run the test:
+issue-380:
+	$(JISON) --main ./$@.jison
+	$(NODE) ./output/$@/$@.js
 
 # build *AND* run the test:
 issue-387:
