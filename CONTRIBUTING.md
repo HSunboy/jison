@@ -65,7 +65,7 @@ For several reasons, including:
   riddled with `let` variable collisions due to *shared scope* of the many user action chunks in a generated parser (and lexer)
   in its main `switch`/`case` code chunk. Only bleeding edge will support this properly.
 
-** So the key here is to use the bleeding edge to bootstrap the next bleeding edge.**
+**So the key here is to use the bleeding edge to bootstrap the next bleeding edge.**
 
 #### What to do then?
 
