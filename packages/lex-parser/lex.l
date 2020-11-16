@@ -277,7 +277,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 
                                         let atSOL = (!precedingStr /* @ Start Of File */ || precedingStr === '\n');
 
-                                        // Make sure we've the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
+                                        // Make sure we've got the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
                                         let endMarker = this.setupDelimitedActionChunkLexerRegex(marker);
 
                                         // Early sanity check for better error reporting:

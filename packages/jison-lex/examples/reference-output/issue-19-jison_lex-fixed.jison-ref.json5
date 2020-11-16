@@ -90,9 +90,9 @@
   Erroneous area:
 1: ;;a;aBaa
 ^.......^
-    at Object.lexer_parseError [as parseError] (/regexp-lexer-cjs.js:13744:31)
-    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:13744:31)
-    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:13744:31)
+    at Object.lexer_parseError [as parseError] (/regexp-lexer-cjs.js:13819:31)
+    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:13819:31)
+    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:13819:31)
     at Context.testEachLexerExample (/regexplexer.js:3650:37)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)

@@ -117,12 +117,12 @@ Regrettably, it does not exist in the remainder of the input.
 ^..............^^
 3: return true;
 4: }}
-    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:8619:13)
-    at Object.yyError [as yyerror] (/lex-parser-cjs.js:8644:19)
-    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:10208:19)
-    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:9549:38)
-    at Object.lexer_next [as next] (/lex-parser-cjs.js:9672:28)
-    at Object.lexer_lex [as lex] (/lex-parser-cjs.js:9757:18)
+    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:8693:13)
+    at Object.yyError [as yyerror] (/lex-parser-cjs.js:8718:19)
+    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:10282:19)
+    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:9623:38)
+    at Object.lexer_next [as next] (/lex-parser-cjs.js:9746:28)
+    at Object.lexer_lex [as lex] (/lex-parser-cjs.js:9831:18)
     at Context.testEachParserExample (/all-tests.js:232:37)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)

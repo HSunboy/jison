@@ -241,7 +241,7 @@ function _templateObject141() {
 }
 
 function _templateObject140() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant encountered while lexing\n                                            ", ".\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant encountered while parsing\n                                            ", ".\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject140 = function _templateObject140() {
     return data;
@@ -251,7 +251,7 @@ function _templateObject140() {
 }
 
 function _templateObject139() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant encountered while lexing\n                                            ", ".\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant encountered while parsing\n                                            ", ".\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject139 = function _templateObject139() {
     return data;
@@ -261,7 +261,7 @@ function _templateObject139() {
 }
 
 function _templateObject138() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant encountered while lexing\n                                            ", ".\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant encountered while parsing\n                                            ", ".\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject138 = function _templateObject138() {
     return data;
@@ -301,7 +301,7 @@ function _templateObject135() {
 }
 
 function _templateObject134() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in lexer rule action block.\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in parser rule action block.\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject134 = function _templateObject134() {
     return data;
@@ -311,7 +311,7 @@ function _templateObject134() {
 }
 
 function _templateObject133() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in lexer rule action block.\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in parser rule action block.\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject133 = function _templateObject133() {
     return data;
@@ -321,7 +321,7 @@ function _templateObject133() {
 }
 
 function _templateObject132() {
-  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in lexer rule action block.\n\n                                              Erroneous area:\n                                            "]);
+  var data = _taggedTemplateLiteral(["\n                                            unterminated string constant in parser rule action block.\n\n                                              Erroneous area:\n                                            "]);
 
   _templateObject132 = function _templateObject132() {
     return data;
@@ -401,7 +401,7 @@ function _templateObject125() {
 }
 
 function _templateObject124() {
-  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly bracket a grammar rule sublist in '( ... )' brackets.\n    \n          Erroneous area:\n        ", "\n    "]);
+  var data = _taggedTemplateLiteral(["\n        Seems you did not correctly bracket a grammar rule sublist in '( ... )' brackets.\n    \n          Erroneous area:\n        ", "\n    \n          Technical error report:\n        ", "\n    "]);
 
   _templateObject124 = function _templateObject124() {
     return data;
@@ -1321,7 +1321,7 @@ function _templateObject33() {
 }
 
 function _templateObject32() {
-  var data = _taggedTemplateLiteral(["\n            The lexer rule's 'arrow' action code section does not compile: ", "\n    \n            # NOTE that the arrow action automatically wraps the action code\n            # in a `return (...);` statement to prevent hard-to-diagnose run-time\n            # errors down the line.\n    \n              Erroneous area:\n            ", "\n        "], ["\n            The lexer rule's 'arrow' action code section does not compile: ", "\n    \n            # NOTE that the arrow action automatically wraps the action code\n            # in a \\`return (...);\\` statement to prevent hard-to-diagnose run-time\n            # errors down the line.\n    \n              Erroneous area:\n            ", "\n        "]);
+  var data = _taggedTemplateLiteral(["\n            The lexer rule's 'arrow' action code section does not compile: ", "\n    \n            # NOTE that the arrow action automatically wraps the action code\n            # in a `return (...);` statement to prevent hard-to-diagnose run-time\n            # errors down the line.\n            #\n            # Please be aware that the reported compile error MAY be referring\n            # to the wrapper code which is added by JISON automatically when\n            # processing arrow actions: the entire action code chunk \n            # (including wrapper) is:\n    \n                ", "\n    \n              Erroneous area:\n            ", "\n        "], ["\n            The lexer rule's 'arrow' action code section does not compile: ", "\n    \n            # NOTE that the arrow action automatically wraps the action code\n            # in a \\`return (...);\\` statement to prevent hard-to-diagnose run-time\n            # errors down the line.\n            #\n            # Please be aware that the reported compile error MAY be referring\n            # to the wrapper code which is added by JISON automatically when\n            # processing arrow actions: the entire action code chunk \n            # (including wrapper) is:\n    \n                ", "\n    \n              Erroneous area:\n            ", "\n        "]);
 
   _templateObject32 = function _templateObject32() {
     return data;
@@ -2779,7 +2779,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   //
 
 
-  function trimActionCode(src, startMarker) {
+  function trimActionCode(src, options) {
+    options = options || {};
     var s = src.trim(); // remove outermost set of braces UNLESS there's
     // a curly brace in there anywhere: in that case
     // we should leave it up to the sophisticated
@@ -2808,17 +2809,67 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     // TODO: make this is real code edit without that
     // last edge case as a fault condition.
 
-    if (startMarker === '{') {
-      // code is wrapped in `{...}` for sure: remove the wrapping braces.
-      s = s.replace(/^\{([^]*?)\}$/, '$1').trim();
-    } else {
-      // code may not be wrapped or otherwise non-simple: only remove
-      // wrapping braces when we can guarantee they're the only ones there,
-      // i.e. only exist as outer wrapping.
-      s = s.replace(/^\{([^}]*)\}$/, '$1').trim();
+    if (!options.dontTrimSurroundingCurlyBraces) {
+      if (options.startMarker === '{') {
+        // code is wrapped in `{...}` for sure: remove the wrapping braces.
+        s = s.replace(/^\{([^]*?)\}$/, '$1').trim();
+      } else {
+        // code may not be wrapped or otherwise non-simple: only remove
+        // wrapping braces when we can guarantee they're the only ones there,
+        // i.e. only exist as outer wrapping.
+        s = s.replace(/^\{([^}]*)\}$/, '$1').trim();
+      }
     }
 
     s = s.replace(/;+$/, '').trim();
+    return s;
+  } // Put (...) braces around the given (arrow-)action code to ensure
+  // that it MUST be arrow-action legal on test-compile and use.
+  // 
+  // From bnf.y:
+  // 
+  // add braces around ARROW_ACTION so that the action chunk test/compiler
+  // will uncover any illegal action code following the arrow operator, e.g.
+  // multiple statements separated by semicolon.
+  //
+  // But only do so when the arrow action is not itself surrounded by curly braces
+  // when it would, for instance, attempt to return an object instance.
+  //
+  // Also nuke the possible superfluous semicolon, but *only* when it's in 
+  // the outer-most scope as the user may be defining an IIFE or *function*
+  // as a return value!
+  //
+  // Also note there's no need to put braces around the code when it DOES NOT
+  // contain any ';' semicolons or {} curly braces, those being the premier
+  // statement separators in JavaScript. IFF you happen to be a semicolon hater
+  // then your code will have additional newlines to separate statements at 
+  // least and we'll put braces around it to ensure the auto-semicolon JS rule
+  // doesn't kick in at a bad time.
+  // 
+  // WARNING: Bad Things(tm) will happen when you start your action with a comment
+  // and then follow it by a {...} object instance to return: we COULD remove
+  // all comments from the action code and then check again, but we haven't
+  // made that effort yet, so you'll need to rewrite such arrow-action code. 
+  // 
+  // Yeah, this stuff can get pretty hairy!   |:-\
+
+
+  function braceArrowActionCode(src) {
+    var s = src.trim();
+    s = s.replace(/;+$/, '').trim();
+
+    if (s.includes('{') && s.includes('}')) {
+      return s;
+    } // wrap code that contains ANY:
+    // - multiple lines
+    // - comments anywhere (we only check for the initial / so division math will be wrapped as well. Soit.)
+    // - semicolon(s)
+
+
+    if (/[\r\n;\/]/.test(s)) {
+      s = "(\n            ".concat(s, "\n        )");
+    }
+
     return s;
   }
 
@@ -2829,6 +2880,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     prettyPrintAST: prettyPrintAST,
     checkActionBlock: checkActionBlock,
     trimActionCode: trimActionCode,
+    braceArrowActionCode: braceArrowActionCode,
     ID_REGEX_BASE: ID_REGEX_BASE,
     IN_ID_CHARSET: IN_ID_CHARSET
   };
@@ -3412,6 +3464,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     prettyPrintAST: parse2AST.prettyPrintAST,
     checkActionBlock: parse2AST.checkActionBlock,
     trimActionCode: parse2AST.trimActionCode,
+    braceArrowActionCode: parse2AST.braceArrowActionCode,
     ID_REGEX_BASE: parse2AST.ID_REGEX_BASE,
     IN_ID_CHARSET: parse2AST.IN_ID_CHARSET,
     printFunctionSourceCode: stringifier.printFunctionSourceCode,
@@ -4482,7 +4535,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
 
           {
-            var srcCode = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
+            var srcCode = trimActionCode$1(yyvstack[yysp - 1], {
+              startMarker: yyvstack[yysp - 2]
+            });
 
             if (srcCode) {
               var rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
@@ -4629,7 +4684,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               yyparser.yyError(rmCommonWS$1(_templateObject17(), yylexer.prettyPrintRange(yylstack[yysp - 4], yylstack[yysp - 5])));
             }
 
-            var _srcCode = trimActionCode$1(yyvstack[yysp - 2], yyvstack[yysp - 3]);
+            var _srcCode = trimActionCode$1(yyvstack[yysp - 2], {
+              startMarker: yyvstack[yysp - 3]
+            });
 
             var _rv = checkActionBlock$1(_srcCode, yylstack[yysp - 2], yy);
 
@@ -4796,7 +4853,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp); // END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
 
           {
-            var _srcCode2 = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
+            var _srcCode2 = trimActionCode$1(yyvstack[yysp - 1], {
+              startMarker: yyvstack[yysp - 2]
+            });
 
             if (_srcCode2) {
               var _rv2 = checkActionBlock$1(_srcCode2, yylstack[yysp - 1], yy);
@@ -4966,7 +5025,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp); // END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
 
           {
-            var _srcCode3 = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
+            var _srcCode3 = trimActionCode$1(yyvstack[yysp - 1], {
+              startMarker: yyvstack[yysp - 2]
+            });
 
             var _rv3 = checkActionBlock$1(_srcCode3, yylstack[yysp - 1], yy);
 
@@ -4984,7 +5045,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 3, yysp); // END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
 
           {
-            var _srcCode4 = trimActionCode$1(yyvstack[yysp - 1]); // add braces around ARROW_ACTION_CODE so that the action chunk test/compiler
+            var _srcCode4 = trimActionCode$1(yyvstack[yysp - 1], {
+              dontTrimSurroundingCurlyBraces: true
+            }); // add braces around ARROW_ACTION_CODE so that the action chunk test/compiler
             // will uncover any illegal action code following the arrow operator, e.g.
             // multiple statements separated by semicolon.
             //
@@ -4997,16 +5060,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             // will be generated by JISON.
 
 
-            if (/^[^\r\n;\/]+$/.test(_srcCode4)) {
-              _srcCode4 = 'return ' + _srcCode4;
-            } else {
-              _srcCode4 = 'return (' + _srcCode4 + '\n)';
-            }
+            _srcCode4 = 'return ' + braceArrowActionCode$1(_srcCode4);
 
             var _rv4 = checkActionBlock$1(_srcCode4, yylstack[yysp - 1], yy);
 
             if (_rv4) {
-              yyparser.yyError(rmCommonWS$1(_templateObject32(), _rv4, yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 3])));
+              var indentedSrc = rmCommonWS$1([_srcCode4]).split('\n').join('\n    ');
+              yyparser.yyError(rmCommonWS$1(_templateObject32(), _rv4, indentedSrc, yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 3])));
             }
 
             this.$ = [yyvstack[yysp - 3], _srcCode4];
@@ -5435,7 +5495,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             this.$ = yyvstack[yysp];
           } else {
             this.$ = yyvstack[yysp];
-          } //yyparser.log("name expansion for: ", { name: $name_expansion, redux: $name_expansion.replace(/[{}]/g, ''), output: $$ });
+          } //yyparser.log("name expansion for: ", { name: $name_expansion, redux: $name_expansion.replace(/[{}]/g, ''), output: $$ })
 
 
           break;
@@ -5678,7 +5738,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
 
           {
-            var _srcCode6 = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
+            var _srcCode6 = trimActionCode$1(yyvstack[yysp - 1], {
+              startMarker: yyvstack[yysp - 2]
+            });
 
             if (_srcCode6) {
               var _rv6 = checkActionBlock$1(_srcCode6, yylstack[yysp - 1], yy);
@@ -9175,7 +9237,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               var precedingStr = this.matched[this.matched.length - this.match.length - 1];
               var atSOL = !precedingStr
               /* @ Start Of File */
-              || precedingStr === '\n'; // Make sure we've the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
+              || precedingStr === '\n'; // Make sure we've got the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
 
               var endMarker = this.setupDelimitedActionChunkLexerRegex(marker); // Early sanity check for better error reporting:
               // we'd better make sure that end marker indeed does exist in the
@@ -10258,7 +10320,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   var checkActionBlock$1 = helpers.checkActionBlock;
   var mkIdentifier$2 = helpers.mkIdentifier;
   var isLegalIdentifierInput$1 = helpers.isLegalIdentifierInput;
-  var trimActionCode$1 = helpers.trimActionCode; // see also:
+  var trimActionCode$1 = helpers.trimActionCode;
+  var braceArrowActionCode$1 = helpers.braceArrowActionCode; // see also:
   // - https://en.wikipedia.org/wiki/C0_and_C1_control_codes
   // - https://docs.microsoft.com/en-us/dotnet/standard/base-types/character-escapes-in-regular-expressions
   // - https://kangax.github.io/compat-table/es6/#test-RegExp_y_and_u_flags
@@ -17074,9 +17137,22 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             yy.addDeclaration(this.$, {
               include: yyvstack[yysp - 1]
             });
+          } // transform ebnf to bnf if necessary
+
+
+          if (ebnf) {
+            this.$.ebnf = yyvstack[yysp - 2].grammar; // keep the original source EBNF around for possible pretty-printing & AST exports.
+
+            this.$.bnf = transform(yyvstack[yysp - 2].grammar);
+          } else {
+            this.$.bnf = yyvstack[yysp - 2].grammar;
           }
 
-          return extend(this.$, yyvstack[yysp - 2]);
+          if (yyvstack[yysp - 2].actionInclude) {
+            this.$.actionInclude = yyvstack[yysp - 2].actionInclude;
+          }
+
+          return this.$;
 
         case 2:
           /*! Production::    spec : declaration_list "%%" grammar error EOF */
@@ -18057,7 +18133,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this.$ = yyvstack[yysp - 2];
           this._$ = yyparser.yyMergeLocationInfo(yysp - 2, yysp); // END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,-,-,LT,LA,-,-)
 
-          yyparser.yyError(rmCommonWS$3(_templateObject124(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])));
+          yyparser.yyError(rmCommonWS$3(_templateObject124(), yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2]), yyvstack[yysp].errStr));
           break;
 
         case 105:
@@ -18106,7 +18182,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yylstack[yysp]; // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
 
           this.$ = {
-            action: yyvstack[yysp],
+            action: trimActionCode$2(yyvstack[yysp]),
             isArrowAction: false
           };
           break;
@@ -18117,9 +18193,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           this._$ = yylstack[yysp]; // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
 
           {
-            var src = trimActionCode$2(yyvstack[yysp]);
+            var src = trimActionCode$2(yyvstack[yysp], {
+              dontTrimSurroundingCurlyBraces: true
+            });
+            src = braceArrowActionCode$2(src);
             this.$ = {
-              action: "\n                this.$ = (\n                    ".concat(src, "\n                );\n            "),
+              action: "this.$ = ".concat(src),
               isArrowAction: true
             };
           }
@@ -22275,26 +22354,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   var rmCommonWS$3 = helpers.rmCommonWS;
   var dquote$2 = helpers.dquote;
   var checkActionBlock$2 = helpers.checkActionBlock;
-  var trimActionCode$2 = helpers.trimActionCode; // transform ebnf to bnf if necessary
-
-  function extend(json, grammar) {
-    if (ebnf) {
-      json.ebnf = grammar.grammar; // keep the original source EBNF around for possible pretty-printing & AST exports.
-
-      json.bnf = transform(grammar.grammar);
-    } else {
-      json.bnf = grammar.grammar;
-    }
-
-    if (grammar.actionInclude) {
-      json.actionInclude = grammar.actionInclude;
-    }
-
-    return json;
-  } // convert string value to number or boolean value, when possible
+  var trimActionCode$2 = helpers.trimActionCode;
+  var braceArrowActionCode$2 = helpers.braceArrowActionCode; // convert string value to number or boolean value, when possible
   // (and when this is more or less obviously the intent)
   // otherwise produce the string itself as value.
-
 
   function parseValue$1(v) {
     if (v === 'false') {

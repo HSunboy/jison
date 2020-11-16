@@ -477,7 +477,7 @@ if(yylloc&&yylloc.first_line>0){let cnt=yylloc.first_line;let lines=new Array(cn
 // convoluted code that is smarter than our simple regex-based
 // `{...}` trimmer in here!
 //
-function trimActionCode(src,startMarker){let s=src.trim();// remove outermost set of braces UNLESS there's
+function trimActionCode(src,options){options=options||{};let s=src.trim();// remove outermost set of braces UNLESS there's
 // a curly brace in there anywhere: in that case
 // we should leave it up to the sophisticated
 // code analyzer to simplify the code!
@@ -504,11 +504,46 @@ function trimActionCode(src,startMarker){let s=src.trim();// remove outermost se
 //
 // TODO: make this is real code edit without that
 // last edge case as a fault condition.
-if(startMarker==='{'){// code is wrapped in `{...}` for sure: remove the wrapping braces.
+if(!options.dontTrimSurroundingCurlyBraces){if(options.startMarker==='{'){// code is wrapped in `{...}` for sure: remove the wrapping braces.
 s=s.replace(/^\{([^]*?)\}$/,'$1').trim();}else{// code may not be wrapped or otherwise non-simple: only remove
 // wrapping braces when we can guarantee they're the only ones there,
 // i.e. only exist as outer wrapping.
-s=s.replace(/^\{([^}]*)\}$/,'$1').trim();}s=s.replace(/;+$/,'').trim();return s;}var parse2AST={generateMapper4JisonGrammarIdentifiers,parseCodeChunkToAST,compileCodeToES5,prettyPrintAST,checkActionBlock,trimActionCode,ID_REGEX_BASE,IN_ID_CHARSET};function chkBugger$1(src){src=String(src);if(src.match(/\bcov_\w+/)){console.error('### ISTANBUL COVERAGE CODE DETECTED ###\n',src);}}/// HELPER FUNCTION: print the function in source code form, properly indented.
+s=s.replace(/^\{([^}]*)\}$/,'$1').trim();}}s=s.replace(/;+$/,'').trim();return s;}// Put (...) braces around the given (arrow-)action code to ensure
+// that it MUST be arrow-action legal on test-compile and use.
+// 
+// From bnf.y:
+// 
+// add braces around ARROW_ACTION so that the action chunk test/compiler
+// will uncover any illegal action code following the arrow operator, e.g.
+// multiple statements separated by semicolon.
+//
+// But only do so when the arrow action is not itself surrounded by curly braces
+// when it would, for instance, attempt to return an object instance.
+//
+// Also nuke the possible superfluous semicolon, but *only* when it's in 
+// the outer-most scope as the user may be defining an IIFE or *function*
+// as a return value!
+//
+// Also note there's no need to put braces around the code when it DOES NOT
+// contain any ';' semicolons or {} curly braces, those being the premier
+// statement separators in JavaScript. IFF you happen to be a semicolon hater
+// then your code will have additional newlines to separate statements at 
+// least and we'll put braces around it to ensure the auto-semicolon JS rule
+// doesn't kick in at a bad time.
+// 
+// WARNING: Bad Things(tm) will happen when you start your action with a comment
+// and then follow it by a {...} object instance to return: we COULD remove
+// all comments from the action code and then check again, but we haven't
+// made that effort yet, so you'll need to rewrite such arrow-action code. 
+// 
+// Yeah, this stuff can get pretty hairy!   |:-\
+function braceArrowActionCode(src){let s=src.trim();s=s.replace(/;+$/,'').trim();if(s.includes('{')&&s.includes('}')){return s;}// wrap code that contains ANY:
+// - multiple lines
+// - comments anywhere (we only check for the initial / so division math will be wrapped as well. Soit.)
+// - semicolon(s)
+if(/[\r\n;\/]/.test(s)){s=`(
+            ${s}
+        )`;}return s;}var parse2AST={generateMapper4JisonGrammarIdentifiers,parseCodeChunkToAST,compileCodeToES5,prettyPrintAST,checkActionBlock,trimActionCode,braceArrowActionCode,ID_REGEX_BASE,IN_ID_CHARSET};function chkBugger$1(src){src=String(src);if(src.match(/\bcov_\w+/)){console.error('### ISTANBUL COVERAGE CODE DETECTED ###\n',src);}}/// HELPER FUNCTION: print the function in source code form, properly indented.
 /** @public */function printFunctionSourceCode(f){const src=String(f);chkBugger$1(src);return src;}const funcRe=/^function[\s\r\n]*[^\(]*\(([^\)]*)\)[\s\r\n]*\{([^]*?)\}$/;const arrowFuncRe=/^(?:(?:\(([^\)]*)\))|(?:([^\(\)]+)))[\s\r\n]*=>[\s\r\n]*(?:(?:\{([^]*?)\})|(?:(([^\s\r\n\{)])[^]*?)))$/;/// HELPER FUNCTION: print the function **content** in source code form, properly indented,
 /// ergo: produce the code for inlining the function.
 ///
@@ -600,7 +635,7 @@ e=shallow_copy_and_strip_depth(e,cyclerefpath[idx]);}else{idx=linkref.indexOf(e)
 // it will be fed to a test log or other output.
 //
 // Internal use in the unit test rigs.
-function trimErrorForTestReporting(e){cycleref.length=0;cyclerefpath.length=0;linkref.length=0;linkrefpath.length=0;path=['*'];if(e){e=treat_object(e);}cycleref.length=0;cyclerefpath.length=0;linkref.length=0;linkrefpath.length=0;path=['*'];return e;}var helpers={rmCommonWS,camelCase,mkIdentifier,isLegalIdentifierInput,scanRegExp,dquote,trimErrorForTestReporting,stripErrorStackPaths,cleanStackTrace4Comparison,checkRegExp:reHelpers.checkRegExp,getRegExpInfo:reHelpers.getRegExpInfo,exec:exec.exec,dump:exec.dump,convertExceptionToObject:exec.convertExceptionToObject,generateMapper4JisonGrammarIdentifiers:parse2AST.generateMapper4JisonGrammarIdentifiers,parseCodeChunkToAST:parse2AST.parseCodeChunkToAST,compileCodeToES5:parse2AST.compileCodeToES5,prettyPrintAST:parse2AST.prettyPrintAST,checkActionBlock:parse2AST.checkActionBlock,trimActionCode:parse2AST.trimActionCode,ID_REGEX_BASE:parse2AST.ID_REGEX_BASE,IN_ID_CHARSET:parse2AST.IN_ID_CHARSET,printFunctionSourceCode:stringifier.printFunctionSourceCode,printFunctionSourceCodeContainer:stringifier.printFunctionSourceCodeContainer,detectIstanbulGlobal};// See also:
+function trimErrorForTestReporting(e){cycleref.length=0;cyclerefpath.length=0;linkref.length=0;linkrefpath.length=0;path=['*'];if(e){e=treat_object(e);}cycleref.length=0;cyclerefpath.length=0;linkref.length=0;linkrefpath.length=0;path=['*'];return e;}var helpers={rmCommonWS,camelCase,mkIdentifier,isLegalIdentifierInput,scanRegExp,dquote,trimErrorForTestReporting,stripErrorStackPaths,cleanStackTrace4Comparison,checkRegExp:reHelpers.checkRegExp,getRegExpInfo:reHelpers.getRegExpInfo,exec:exec.exec,dump:exec.dump,convertExceptionToObject:exec.convertExceptionToObject,generateMapper4JisonGrammarIdentifiers:parse2AST.generateMapper4JisonGrammarIdentifiers,parseCodeChunkToAST:parse2AST.parseCodeChunkToAST,compileCodeToES5:parse2AST.compileCodeToES5,prettyPrintAST:parse2AST.prettyPrintAST,checkActionBlock:parse2AST.checkActionBlock,trimActionCode:parse2AST.trimActionCode,braceArrowActionCode:parse2AST.braceArrowActionCode,ID_REGEX_BASE:parse2AST.ID_REGEX_BASE,IN_ID_CHARSET:parse2AST.IN_ID_CHARSET,printFunctionSourceCode:stringifier.printFunctionSourceCode,printFunctionSourceCodeContainer:stringifier.printFunctionSourceCodeContainer,detectIstanbulGlobal};// See also:
 // http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508
 // but we keep the prototype.constructor and prototype.name assignment lines too for compatibility
 // with userland code which might access the derived class in a 'classic' way.
@@ -863,7 +898,7 @@ yyparser.yyError(rmCommonWS$1`
         ${yyvstack[yysp].errStr}
     `);break;case 16:/*! Production::    definition : ACTION_START_AT_SOL action ACTION_END */ // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
-{let srcCode=trimActionCode$1(yyvstack[yysp-1],yyvstack[yysp-2]);if(srcCode){let rv=checkActionBlock$1(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$1`
+{let srcCode=trimActionCode$1(yyvstack[yysp-1],{startMarker:yyvstack[yysp-2]});if(srcCode){let rv=checkActionBlock$1(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$1`
                 The '%{...%}' lexer setup action code section does not compile: ${rv}
     
                   Erroneous area:
@@ -955,7 +990,7 @@ name=lst[0][0];}else if(len<=1){yyparser.yyError(rmCommonWS$1`
     
               Erroneous code:
             ${yylexer.prettyPrintRange(yylstack[yysp-4],yylstack[yysp-5])}
-        `);}let srcCode=trimActionCode$1(yyvstack[yysp-2],yyvstack[yysp-3]);let rv=checkActionBlock$1(srcCode,yylstack[yysp-2],yy);if(rv){yyparser.yyError(rmCommonWS$1`
+        `);}let srcCode=trimActionCode$1(yyvstack[yysp-2],{startMarker:yyvstack[yysp-3]});let rv=checkActionBlock$1(srcCode,yylstack[yysp-2],yy);if(rv){yyparser.yyError(rmCommonWS$1`
             The '%code ${name}' initialization code section does not compile: ${rv}
     
               Erroneous area:
@@ -1040,7 +1075,7 @@ this.$=yyvstack[yysp-1].concat(yyvstack[yysp]);break;case 40:/*! Production::   
 this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
 this.$=yyvstack[yysp-1].concat([yyvstack[yysp]]);break;case 41:/*! Production::    rules : rules ACTION_START_AT_SOL action ACTION_END */ // default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-3,yysp);// END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
-{let srcCode=trimActionCode$1(yyvstack[yysp-1],yyvstack[yysp-2]);if(srcCode){let rv=checkActionBlock$1(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$1`
+{let srcCode=trimActionCode$1(yyvstack[yysp-1],{startMarker:yyvstack[yysp-2]});if(srcCode){let rv=checkActionBlock$1(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$1`
                 The '%{...%}' lexer setup action code section does not compile: ${rv}
     
                   Erroneous area:
@@ -1147,14 +1182,14 @@ yyparser.yyError(rmCommonWS$1`
 this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
 this.$=yyvstack[yysp-1];this.$.push(yyvstack[yysp]);break;case 59:/*! Production::    rule : regex ACTION_START action ACTION_END */case 60:/*! Production::    rule : regex ACTION_START_AT_SOL action ACTION_END */ // default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-3,yysp);// END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
-{let srcCode=trimActionCode$1(yyvstack[yysp-1],yyvstack[yysp-2]);let rv=checkActionBlock$1(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$1`
+{let srcCode=trimActionCode$1(yyvstack[yysp-1],{startMarker:yyvstack[yysp-2]});let rv=checkActionBlock$1(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$1`
             The lexer rule's action code section does not compile: ${rv}
     
               Erroneous area:
             ${yylexer.prettyPrintRange(yylstack[yysp-1],yylstack[yysp-3])}
         `);}this.$=[yyvstack[yysp-3],srcCode];}break;case 61:/*! Production::    rule : regex ARROW_ACTION_START action ACTION_END */ // default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-3,yysp);// END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
-{let srcCode=trimActionCode$1(yyvstack[yysp-1]);// add braces around ARROW_ACTION_CODE so that the action chunk test/compiler
+{let srcCode=trimActionCode$1(yyvstack[yysp-1],{dontTrimSurroundingCurlyBraces:true});// add braces around ARROW_ACTION_CODE so that the action chunk test/compiler
 // will uncover any illegal action code following the arrow operator, e.g.
 // multiple statements separated by semicolon.
 //
@@ -1165,12 +1200,19 @@ this._$=yyparser.yyMergeLocationInfo(yysp-3,yysp);// END of default action (gene
 // By doing this, we simplify the token return replacement code replacement
 // process which will be applied to the parsed lexer before its code
 // will be generated by JISON.
-if(/^[^\r\n;\/]+$/.test(srcCode)){srcCode='return '+srcCode;}else{srcCode='return ('+srcCode+'\n)';}let rv=checkActionBlock$1(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$1`
+srcCode='return '+braceArrowActionCode$1(srcCode);let rv=checkActionBlock$1(srcCode,yylstack[yysp-1],yy);if(rv){let indentedSrc=rmCommonWS$1([srcCode]).split('\n').join('\n    ');yyparser.yyError(rmCommonWS$1`
             The lexer rule's 'arrow' action code section does not compile: ${rv}
     
             # NOTE that the arrow action automatically wraps the action code
             # in a \`return (...);\` statement to prevent hard-to-diagnose run-time
             # errors down the line.
+            #
+            # Please be aware that the reported compile error MAY be referring
+            # to the wrapper code which is added by JISON automatically when
+            # processing arrow actions: the entire action code chunk 
+            # (including wrapper) is:
+    
+                ${indentedSrc}
     
               Erroneous area:
             ${yylexer.prettyPrintRange(yylstack[yysp-1],yylstack[yysp-3])}
@@ -1426,7 +1468,7 @@ yyparser.yyError(rmCommonWS$1`
     `);break;case 109:/*! Production::    regex_set_atom : name_expansion */ // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
 this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
 if(XRegExp__default['default']._getUnicodeProperty(yyvstack[yysp].replace(/[{}]/g,''))&&yyvstack[yysp].toUpperCase()!==yyvstack[yysp]){// treat this as part of an XRegExp `\p{...}` Unicode 'General Category' Property cf. http://unicode.org/reports/tr18/#Categories
-this.$=yyvstack[yysp];}else{this.$=yyvstack[yysp];}//yyparser.log("name expansion for: ", { name: $name_expansion, redux: $name_expansion.replace(/[{}]/g, ''), output: $$ });
+this.$=yyvstack[yysp];}else{this.$=yyvstack[yysp];}//yyparser.log("name expansion for: ", { name: $name_expansion, redux: $name_expansion.replace(/[{}]/g, ''), output: $$ })
 break;case 111:/*! Production::    literal_string : STRING_LIT */ // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
 this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
 {let src=yyvstack[yysp];let s=src.substring(1,src.length-1);let edge=src[0];this.$=encodeRegexLiteralStr(s,edge);}break;case 112:/*! Production::    literal_string : CHARACTER_LIT */ // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
@@ -1550,7 +1592,7 @@ yyparser.yyError(rmCommonWS$1`
         ${yyvstack[yysp].errStr}
     `);this.$='';break;case 130:/*! Production::    epilogue_chunk : ACTION_START_AT_SOL action ACTION_END */ // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
-{let srcCode=trimActionCode$1(yyvstack[yysp-1],yyvstack[yysp-2]);if(srcCode){let rv=checkActionBlock$1(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$1`
+{let srcCode=trimActionCode$1(yyvstack[yysp-1],{startMarker:yyvstack[yysp-2]});if(srcCode){let rv=checkActionBlock$1(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$1`
                 The '%{...%}' lexer epilogue code chunk does not compile: ${rv}
     
                   Erroneous area:
@@ -2803,7 +2845,7 @@ let marker=yy_.yytext;// check whether this `%{` marker was located at the start
 // section, etc...
 //let precedingStr = this.pastInput(1,2).replace(/[\r\n]/g, '\n');
 //let precedingStr = this.matched.substr(-this.match.length - 1, 1);
-let precedingStr=this.matched[this.matched.length-this.match.length-1];let atSOL=!precedingStr/* @ Start Of File */||precedingStr==='\n';// Make sure we've the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
+let precedingStr=this.matched[this.matched.length-this.match.length-1];let atSOL=!precedingStr/* @ Start Of File */||precedingStr==='\n';// Make sure we've got the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
 let endMarker=this.setupDelimitedActionChunkLexerRegex(marker);// Early sanity check for better error reporting:
 // we'd better make sure that end marker indeed does exist in the
 // remainder of the input! When it's not, we'll have the `action`
@@ -2985,7 +3027,7 @@ spec.__cached_action_chunk_rule={};// set up empty cache
 action_chunk_regex=spec.__cached_action_chunk_rule[marker];if(!action_chunk_regex){action_chunk_regex=spec.__cached_action_chunk_rule[marker]=new RegExp('^(?:'+marker.replace(/\{/g,'\\{')+'([^]*?)'+action_end_marker.replace(/\}/g,'\\}')+'(?!\\}))');//console.warn('encode new action block regex:', action_chunk_regex);
 }//console.error('new ACTION REGEX:', { i, action_chunk_regex });
 // and patch the lexer regex table for the current lexer condition state:
-regexes[i]=action_chunk_regex;}return action_end_marker;};lexer.warn=function l_warn(){if(this.yy&&this.yy.parser&&typeof this.yy.parser.warn==='function'){return this.yy.parser.warn.apply(this,arguments);}else{console.warn.apply(console,arguments);}};lexer.log=function l_log(){if(this.yy&&this.yy.parser&&typeof this.yy.parser.log==='function'){return this.yy.parser.log.apply(this,arguments);}else{console.log.apply(console,arguments);}};return lexer;}();parser.lexer=lexer;const rmCommonWS$1=helpers.rmCommonWS;const checkActionBlock$1=helpers.checkActionBlock;const mkIdentifier$1=helpers.mkIdentifier;const isLegalIdentifierInput$1=helpers.isLegalIdentifierInput;const trimActionCode$1=helpers.trimActionCode;// see also:
+regexes[i]=action_chunk_regex;}return action_end_marker;};lexer.warn=function l_warn(){if(this.yy&&this.yy.parser&&typeof this.yy.parser.warn==='function'){return this.yy.parser.warn.apply(this,arguments);}else{console.warn.apply(console,arguments);}};lexer.log=function l_log(){if(this.yy&&this.yy.parser&&typeof this.yy.parser.log==='function'){return this.yy.parser.log.apply(this,arguments);}else{console.log.apply(console,arguments);}};return lexer;}();parser.lexer=lexer;const rmCommonWS$1=helpers.rmCommonWS;const checkActionBlock$1=helpers.checkActionBlock;const mkIdentifier$1=helpers.mkIdentifier;const isLegalIdentifierInput$1=helpers.isLegalIdentifierInput;const trimActionCode$1=helpers.trimActionCode;const braceArrowActionCode$1=helpers.braceArrowActionCode;// see also:
 // - https://en.wikipedia.org/wiki/C0_and_C1_control_codes
 // - https://docs.microsoft.com/en-us/dotnet/standard/base-types/character-escapes-in-regular-expressions
 // - https://kangax.github.io/compat-table/es6/#test-RegExp_y_and_u_flags

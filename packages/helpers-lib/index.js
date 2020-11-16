@@ -37,6 +37,7 @@ export default {
     prettyPrintAST: parse2AST.prettyPrintAST,
     checkActionBlock: parse2AST.checkActionBlock,
     trimActionCode: parse2AST.trimActionCode,
+    braceArrowActionCode: parse2AST.braceArrowActionCode,
 
     ID_REGEX_BASE: parse2AST.ID_REGEX_BASE,
     IN_ID_CHARSET: parse2AST.IN_ID_CHARSET,

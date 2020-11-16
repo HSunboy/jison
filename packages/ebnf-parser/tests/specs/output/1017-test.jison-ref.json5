@@ -26,11 +26,11 @@ declaration list error?
 4: %%
 ^..^^
 
-    at Object.parseError (/ebnf-parser-cjs.js:9335:15)
-    at Object.yyError (/ebnf-parser-cjs.js:9518:25)
-    at Object.parser__PerformAction (/ebnf-parser-cjs.js:6540:14)
-    at Object.parse (/ebnf-parser-cjs.js:10582:24)
-    at Object.parse (/ebnf-parser-cjs.js:23544:23)
+    at Object.parseError (/ebnf-parser-cjs.js:9406:15)
+    at Object.yyError (/ebnf-parser-cjs.js:9589:25)
+    at Object.parser__PerformAction (/ebnf-parser-cjs.js:6609:14)
+    at Object.parse (/ebnf-parser-cjs.js:10653:24)
+    at Object.parse (/ebnf-parser-cjs.js:23619:23)
     at Context.testEachParserExample (/ebnf_parse.js:345:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)

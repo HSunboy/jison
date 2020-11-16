@@ -3,7 +3,7 @@
     test: [
       [
         'foo bar',
-        ' node({}, node({})); ',
+        'node({}, node({}))',
       ],
     ],
     hello: [

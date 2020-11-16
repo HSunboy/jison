@@ -1232,7 +1232,8 @@ function checkActionBlock(src, yylloc, options) {
 // convoluted code that is smarter than our simple regex-based
 // `{...}` trimmer in here!
 //
-function trimActionCode(src, startMarker) {
+function trimActionCode(src, options) {
+    options = options || {};
     let s = src.trim();
     // remove outermost set of braces UNLESS there's
     // a curly brace in there anywhere: in that case
@@ -1261,19 +1262,73 @@ function trimActionCode(src, startMarker) {
     //
     // TODO: make this is real code edit without that
     // last edge case as a fault condition.
-    if (startMarker === '{') {
-        // code is wrapped in `{...}` for sure: remove the wrapping braces.
-        s = s.replace(/^\{([^]*?)\}$/, '$1').trim();
-    } else {
-        // code may not be wrapped or otherwise non-simple: only remove
-        // wrapping braces when we can guarantee they're the only ones there,
-        // i.e. only exist as outer wrapping.
-        s = s.replace(/^\{([^}]*)\}$/, '$1').trim();
+    if (!options.dontTrimSurroundingCurlyBraces) {
+        if (options.startMarker === '{') {
+            // code is wrapped in `{...}` for sure: remove the wrapping braces.
+            s = s.replace(/^\{([^]*?)\}$/, '$1').trim();
+        } else {
+            // code may not be wrapped or otherwise non-simple: only remove
+            // wrapping braces when we can guarantee they're the only ones there,
+            // i.e. only exist as outer wrapping.
+            s = s.replace(/^\{([^}]*)\}$/, '$1').trim();
+        }
     }
     s = s.replace(/;+$/, '').trim();
     return s;
 }
 
+
+
+
+
+// Put (...) braces around the given (arrow-)action code to ensure
+// that it MUST be arrow-action legal on test-compile and use.
+// 
+// From bnf.y:
+// 
+// add braces around ARROW_ACTION so that the action chunk test/compiler
+// will uncover any illegal action code following the arrow operator, e.g.
+// multiple statements separated by semicolon.
+//
+// But only do so when the arrow action is not itself surrounded by curly braces
+// when it would, for instance, attempt to return an object instance.
+//
+// Also nuke the possible superfluous semicolon, but *only* when it's in 
+// the outer-most scope as the user may be defining an IIFE or *function*
+// as a return value!
+//
+// Also note there's no need to put braces around the code when it DOES NOT
+// contain any ';' semicolons or {} curly braces, those being the premier
+// statement separators in JavaScript. IFF you happen to be a semicolon hater
+// then your code will have additional newlines to separate statements at 
+// least and we'll put braces around it to ensure the auto-semicolon JS rule
+// doesn't kick in at a bad time.
+// 
+// WARNING: Bad Things(tm) will happen when you start your action with a comment
+// and then follow it by a {...} object instance to return: we COULD remove
+// all comments from the action code and then check again, but we haven't
+// made that effort yet, so you'll need to rewrite such arrow-action code. 
+// 
+// Yeah, this stuff can get pretty hairy!   |:-\
+function braceArrowActionCode(src) {
+    let s = src.trim();
+    s = s.replace(/;+$/, '').trim();
+
+    if (s.includes('{') && s.includes('}')) {
+        return s;
+    }
+    // wrap code that contains ANY:
+    // - multiple lines
+    // - comments anywhere (we only check for the initial / so division math will be wrapped as well. Soit.)
+    // - semicolon(s)
+    if (/[\r\n;\/]/.test(s)) {
+        s = `(
+            ${s}
+        )`;
+    }
+
+    return s;
+}
 
 
 
@@ -1285,6 +1340,7 @@ var parse2AST = {
     prettyPrintAST,
     checkActionBlock,
     trimActionCode,
+    braceArrowActionCode,
 
     ID_REGEX_BASE,
     IN_ID_CHARSET
@@ -1898,6 +1954,7 @@ var helpers = {
     prettyPrintAST: parse2AST.prettyPrintAST,
     checkActionBlock: parse2AST.checkActionBlock,
     trimActionCode: parse2AST.trimActionCode,
+    braceArrowActionCode: parse2AST.braceArrowActionCode,
 
     ID_REGEX_BASE: parse2AST.ID_REGEX_BASE,
     IN_ID_CHARSET: parse2AST.IN_ID_CHARSET,
@@ -2834,7 +2891,7 @@ case 1:
     
     delete yy.options;
     delete yy.actionInclude;
-    return this.$;
+    return this.$
     }
 
 case 2:
@@ -3211,7 +3268,9 @@ case 16:
     
     
     {
-    let srcCode = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
+    let srcCode = trimActionCode$1(yyvstack[yysp - 1], {
+        startMarker: yyvstack[yysp - 2]
+    });
     if (srcCode) {
         let rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
         if (rv) {
@@ -3443,7 +3502,9 @@ case 25:
         `);
     }
     
-    let srcCode = trimActionCode$1(yyvstack[yysp - 2], yyvstack[yysp - 3]);
+    let srcCode = trimActionCode$1(yyvstack[yysp - 2], {
+        startMarker: yyvstack[yysp - 3]
+    });
     let rv = checkActionBlock$1(srcCode, yylstack[yysp - 2], yy);
     if (rv) {
         yyparser.yyError(rmCommonWS$1`
@@ -3703,7 +3764,9 @@ case 41:
     
     
     {
-    let srcCode = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
+    let srcCode = trimActionCode$1(yyvstack[yysp - 1], {
+        startMarker: yyvstack[yysp - 2]
+    });
     if (srcCode) {
         let rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
         if (rv) {
@@ -3968,7 +4031,9 @@ case 60:
     
     
     {
-    let srcCode = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
+    let srcCode = trimActionCode$1(yyvstack[yysp - 1], {
+        startMarker: yyvstack[yysp - 2]
+    });
     let rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
     if (rv) {
         yyparser.yyError(rmCommonWS$1`
@@ -3991,7 +4056,9 @@ case 61:
     
     
     {
-    let srcCode = trimActionCode$1(yyvstack[yysp - 1]);
+    let srcCode = trimActionCode$1(yyvstack[yysp - 1], {
+        dontTrimSurroundingCurlyBraces: true
+    });
     // add braces around ARROW_ACTION_CODE so that the action chunk test/compiler
     // will uncover any illegal action code following the arrow operator, e.g.
     // multiple statements separated by semicolon.
@@ -4003,20 +4070,25 @@ case 61:
     // By doing this, we simplify the token return replacement code replacement
     // process which will be applied to the parsed lexer before its code
     // will be generated by JISON.
-    if (/^[^\r\n;\/]+$/.test(srcCode)) {
-        srcCode = 'return ' + srcCode;
-    } else {
-        srcCode = 'return (' + srcCode + '\n)';
-    }
+    srcCode = 'return ' + braceArrowActionCode$1(srcCode);
     
     let rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
     if (rv) {
+        let indentedSrc = rmCommonWS$1([srcCode]).split('\n').join('\n    ');
+    
         yyparser.yyError(rmCommonWS$1`
             The lexer rule's 'arrow' action code section does not compile: ${rv}
     
             # NOTE that the arrow action automatically wraps the action code
             # in a \`return (...);\` statement to prevent hard-to-diagnose run-time
             # errors down the line.
+            #
+            # Please be aware that the reported compile error MAY be referring
+            # to the wrapper code which is added by JISON automatically when
+            # processing arrow actions: the entire action code chunk 
+            # (including wrapper) is:
+    
+                ${indentedSrc}
     
               Erroneous area:
             ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 3])}
@@ -4680,7 +4752,7 @@ case 109:
     } else {
         this.$ = yyvstack[yysp];
     }
-    //yyparser.log("name expansion for: ", { name: $name_expansion, redux: $name_expansion.replace(/[{}]/g, ''), output: $$ });
+    //yyparser.log("name expansion for: ", { name: $name_expansion, redux: $name_expansion.replace(/[{}]/g, ''), output: $$ })
     break;
 
 case 111:
@@ -5037,7 +5109,9 @@ case 130:
     
     
     {
-    let srcCode = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
+    let srcCode = trimActionCode$1(yyvstack[yysp - 1], {
+        startMarker: yyvstack[yysp - 2]
+    });
     if (srcCode) {
         let rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
         if (rv) {
@@ -10427,7 +10501,7 @@ var lexer = function() {
 
           let atSOL = !precedingStr /* @ Start Of File */ || precedingStr === '\n';
 
-          // Make sure we've the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
+          // Make sure we've got the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
           let endMarker = this.setupDelimitedActionChunkLexerRegex(marker);
 
           // Early sanity check for better error reporting:
@@ -11637,6 +11711,7 @@ const checkActionBlock$1 = helpers.checkActionBlock;
 const mkIdentifier$2 = helpers.mkIdentifier;
 const isLegalIdentifierInput$1 = helpers.isLegalIdentifierInput;
 const trimActionCode$1 = helpers.trimActionCode;
+const braceArrowActionCode$1 = helpers.braceArrowActionCode;
 
 
 // see also:
@@ -16809,7 +16884,7 @@ case 1:
     // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,-,-,-,-)
     
     
-    return yyvstack[yysp - 1];
+    return yyvstack[yysp - 1]
 
 case 2:
     /*! Production::    handle_list : handle */
@@ -20899,7 +20974,19 @@ case 1:
     if (yyvstack[yysp - 1].trim() !== '') {
         yy.addDeclaration(this.$, { include: yyvstack[yysp - 1] });
     }
-    return extend(this.$, yyvstack[yysp - 2]);
+    
+    // transform ebnf to bnf if necessary
+    if (ebnf) {
+        this.$.ebnf = yyvstack[yysp - 2].grammar;        // keep the original source EBNF around for possible pretty-printing & AST exports.
+        this.$.bnf = transform(yyvstack[yysp - 2].grammar);
+    }
+    else {
+        this.$.bnf = yyvstack[yysp - 2].grammar;
+    }
+    if (yyvstack[yysp - 2].actionInclude) {
+        this.$.actionInclude = yyvstack[yysp - 2].actionInclude;
+    }
+    return this.$
 
 case 2:
     /*! Production::    spec : declaration_list "%%" grammar error EOF */
@@ -22232,6 +22319,9 @@ case 100:
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);
     break;
 
@@ -22306,7 +22396,7 @@ case 115:
     
     
     this.$ = {
-        action: yyvstack[yysp],
+        action: trimActionCode$2(yyvstack[yysp]),
         isArrowAction: false
     };
     break;
@@ -22320,13 +22410,12 @@ case 116:
     
     
     {
-    let src = trimActionCode$2(yyvstack[yysp]);
+    let src = trimActionCode$2(yyvstack[yysp], {
+        dontTrimSurroundingCurlyBraces: true
+    });
+    src = braceArrowActionCode$2(src);
     this.$ = {
-        action: `
-                this.$ = (
-                    ${src}
-                );
-            `,
+        action: `this.$ = ${src}`,
         isArrowAction: true
     };
     }
@@ -27560,7 +27649,7 @@ var lexer$2 = function() {
         /*! Conditions:: action */
         /*! Rule::       " */
         yy_.yyerror(rmCommonWS`
-                                            unterminated string constant in lexer rule action block.
+                                            unterminated string constant in parser rule action block.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
@@ -27570,7 +27659,7 @@ var lexer$2 = function() {
         /*! Conditions:: action */
         /*! Rule::       ' */
         yy_.yyerror(rmCommonWS`
-                                            unterminated string constant in lexer rule action block.
+                                            unterminated string constant in parser rule action block.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
@@ -27580,7 +27669,7 @@ var lexer$2 = function() {
         /*! Conditions:: action */
         /*! Rule::       ` */
         yy_.yyerror(rmCommonWS`
-                                            unterminated string constant in lexer rule action block.
+                                            unterminated string constant in parser rule action block.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yy_.yylloc));
@@ -27623,7 +27712,7 @@ var lexer$2 = function() {
           let rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
 
           yy_.yyerror(rmCommonWS`
-                                            unterminated string constant encountered while lexing
+                                            unterminated string constant encountered while parsing
                                             ${rules}.
 
                                               Erroneous area:
@@ -27638,7 +27727,7 @@ var lexer$2 = function() {
           let rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
 
           yy_.yyerror(rmCommonWS`
-                                            unterminated string constant encountered while lexing
+                                            unterminated string constant encountered while parsing
                                             ${rules}.
 
                                               Erroneous area:
@@ -27653,7 +27742,7 @@ var lexer$2 = function() {
           let rules = this.topState() === 'macro' ? 'macro\'s' : this.topState();
 
           yy_.yyerror(rmCommonWS`
-                                            unterminated string constant encountered while lexing
+                                            unterminated string constant encountered while parsing
                                             ${rules}.
 
                                               Erroneous area:
@@ -28240,22 +28329,8 @@ const rmCommonWS$3 = helpers.rmCommonWS;
 const dquote$2 = helpers.dquote;
 const checkActionBlock$2 = helpers.checkActionBlock;
 const trimActionCode$2 = helpers.trimActionCode;
+const braceArrowActionCode$2 = helpers.braceArrowActionCode;
 
-
-// transform ebnf to bnf if necessary
-function extend(json, grammar) {
-    if (ebnf) {
-        json.ebnf = grammar.grammar;        // keep the original source EBNF around for possible pretty-printing & AST exports.
-        json.bnf = transform(grammar.grammar);
-    }
-    else {
-        json.bnf = grammar.grammar;
-    }
-    if (grammar.actionInclude) {
-        json.actionInclude = grammar.actionInclude;
-    }
-    return json;
-}
 
 // convert string value to number or boolean value, when possible
 // (and when this is more or less obviously the intent)
@@ -38502,8 +38577,8 @@ function cliMain(opts) {
     }
 
     function readin(cb) {
-        let stdin = process__default['default'].openStdin(),
-                data = '';
+        let stdin = process__default['default'].openStdin();
+        let data = '';
 
         stdin.setEncoding('utf8');
         stdin.addListener('data', function (chunk) {
@@ -38530,9 +38605,7 @@ function cliMain(opts) {
 
 
 function generateParserString(grammar, optionalLexSection, opts) {
-
-
-//      var settings = Jison.mkStdOptions(opts);
+//      let settings = Jison.mkStdOptions(opts);
 
     let generator = new Jison$1.Generator(grammar, optionalLexSection, opts);
     let srcCode = generator.generate(opts);

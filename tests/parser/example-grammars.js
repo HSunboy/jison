@@ -1,7 +1,7 @@
 const assert = require('chai').assert;
 const Jison = require('../setup').Jison;
 const Lexer = require('../setup').Lexer;
-//const globby = require('globby');
+const globby = require('globby');
 const fs = require('fs');
 const path = require('path');
 const helpers = require('../../packages/helpers-lib');
@@ -140,16 +140,17 @@ const test_list = [
 ];
 
 console.log('exec globby....', __dirname);
-// var testset = globby.sync([
-//   __dirname + '/../../examples/*.jison',
-//   __dirname + '/../../examples/issue-lex-*.js',
-// ]);
-let testset = fs.readFileSync(__dirname + '/../../examples/testset1.txt', 'utf8').split(/\r?\n/g).filter((l) => l.length > 0).map((l) => __dirname + '/../../examples' + l.trim().replace(/^\./, ''));
+const original_cwd = process.cwd();
+process.chdir(__dirname);
+let testset = globby.sync([
+  '../../examples/*.jison',
+  '../../examples/issue-lex-*.js',
+]);
 testset = testset.sort().map(function (filepath) {
     for (let j = 0, lj = test_list.length; j < lj; j++) {
         let fstr = test_list[j].name;
         let pos = filepath.indexOf(fstr);
-    // console.log('pos: ', pos, filepath, fstr);
+        // console.log('pos: ', pos, filepath, fstr);
         if (pos > 0) {
             let to = Object.assign({
                 path: filepath
@@ -168,12 +169,10 @@ testset = testset.sort().map(function (filepath) {
 });
 console.log('testset....', testset);
 
-const original_cwd = process.cwd();
-
 
 describe('Example/Test Grammars', function () {
     testset.forEach(function (filespec) {
-    // process this file:
+        // process this file:
         it('test example: ' + filespec.path.replace(/^.*?\/examples\//, ''), function test_one_example_grammar_now() {
             let grammar;
 

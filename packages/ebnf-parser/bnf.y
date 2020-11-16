@@ -62,7 +62,19 @@ spec
             if ($optional_end_block.trim() !== '') {
                 yy.addDeclaration($$, { include: $optional_end_block });
             }
-            return extend($$, $grammar);
+
+            // transform ebnf to bnf if necessary
+            if (ebnf) {
+                $$.ebnf = $grammar.grammar;        // keep the original source EBNF around for possible pretty-printing & AST exports.
+                $$.bnf = transform($grammar.grammar);
+            }
+            else {
+                $$.bnf = $grammar.grammar;
+            }
+            if ($grammar.actionInclude) {
+                $$.actionInclude = $grammar.actionInclude;
+            }
+            return $$;
         }
     | declaration_list '%%' grammar error EOF
         {
@@ -836,6 +848,9 @@ expression
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @1)}
+
+                  Technical error report:
+                ${$error.errStr}
             `);
         }
     ;
@@ -909,13 +924,11 @@ action
     : action_ne
         { 
             $$ = {
-                action: $action_ne,
+                action: trimActionCode($action_ne),
                 isArrowAction: false
             }; 
         }
     | ARROW_ACTION
-        // **TODO**:
-        //
         // add braces around ARROW_ACTION so that the action chunk test/compiler
         // will uncover any illegal action code following the arrow operator, e.g.
         // multiple statements separated by semicolon.
@@ -929,13 +942,12 @@ action
         //
         // Yeah, this stuff can get pretty hairy!   |:-\
         { 
-            let src = trimActionCode($ARROW_ACTION);
+            let src = trimActionCode($ARROW_ACTION, {
+                dontTrimSurroundingCurlyBraces: true
+            });
+            src = braceArrowActionCode(src);
             $$ = {
-                action: `
-                        $$ = (
-                            ${src}
-                        );
-                    `,
+                action: `$$ = ${src}`,
                 isArrowAction: true
             };                 
         }
@@ -1039,22 +1051,8 @@ const rmCommonWS = helpers.rmCommonWS;
 const dquote = helpers.dquote;
 const checkActionBlock = helpers.checkActionBlock;
 const trimActionCode = helpers.trimActionCode;
+const braceArrowActionCode = helpers.braceArrowActionCode;
 
-
-// transform ebnf to bnf if necessary
-function extend(json, grammar) {
-    if (ebnf) {
-        json.ebnf = grammar.grammar;        // keep the original source EBNF around for possible pretty-printing & AST exports.
-        json.bnf = transform(grammar.grammar);
-    }
-    else {
-        json.bnf = grammar.grammar;
-    }
-    if (grammar.actionInclude) {
-        json.actionInclude = grammar.actionInclude;
-    }
-    return json;
-}
 
 // convert string value to number or boolean value, when possible
 // (and when this is more or less obviously the intent)

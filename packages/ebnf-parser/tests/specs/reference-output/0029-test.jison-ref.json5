@@ -3,11 +3,7 @@
     test: [
       [
         'foo bar',
-        `
-                this.$ = (
-                    $foo
-                );
-            `,
+        'this.$ = $foo',
       ],
     ],
   },

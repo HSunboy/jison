@@ -477,7 +477,7 @@ if(yylloc&&yylloc.first_line>0){let cnt=yylloc.first_line;let lines=new Array(cn
 // convoluted code that is smarter than our simple regex-based
 // `{...}` trimmer in here!
 //
-function trimActionCode(src,startMarker){let s=src.trim();// remove outermost set of braces UNLESS there's
+function trimActionCode(src,options){options=options||{};let s=src.trim();// remove outermost set of braces UNLESS there's
 // a curly brace in there anywhere: in that case
 // we should leave it up to the sophisticated
 // code analyzer to simplify the code!
@@ -504,11 +504,46 @@ function trimActionCode(src,startMarker){let s=src.trim();// remove outermost se
 //
 // TODO: make this is real code edit without that
 // last edge case as a fault condition.
-if(startMarker==='{'){// code is wrapped in `{...}` for sure: remove the wrapping braces.
+if(!options.dontTrimSurroundingCurlyBraces){if(options.startMarker==='{'){// code is wrapped in `{...}` for sure: remove the wrapping braces.
 s=s.replace(/^\{([^]*?)\}$/,'$1').trim();}else{// code may not be wrapped or otherwise non-simple: only remove
 // wrapping braces when we can guarantee they're the only ones there,
 // i.e. only exist as outer wrapping.
-s=s.replace(/^\{([^}]*)\}$/,'$1').trim();}s=s.replace(/;+$/,'').trim();return s;}var parse2AST={generateMapper4JisonGrammarIdentifiers,parseCodeChunkToAST,compileCodeToES5,prettyPrintAST,checkActionBlock,trimActionCode,ID_REGEX_BASE,IN_ID_CHARSET};function chkBugger$1(src){src=String(src);if(src.match(/\bcov_\w+/)){console.error('### ISTANBUL COVERAGE CODE DETECTED ###\n',src);}}/// HELPER FUNCTION: print the function in source code form, properly indented.
+s=s.replace(/^\{([^}]*)\}$/,'$1').trim();}}s=s.replace(/;+$/,'').trim();return s;}// Put (...) braces around the given (arrow-)action code to ensure
+// that it MUST be arrow-action legal on test-compile and use.
+// 
+// From bnf.y:
+// 
+// add braces around ARROW_ACTION so that the action chunk test/compiler
+// will uncover any illegal action code following the arrow operator, e.g.
+// multiple statements separated by semicolon.
+//
+// But only do so when the arrow action is not itself surrounded by curly braces
+// when it would, for instance, attempt to return an object instance.
+//
+// Also nuke the possible superfluous semicolon, but *only* when it's in 
+// the outer-most scope as the user may be defining an IIFE or *function*
+// as a return value!
+//
+// Also note there's no need to put braces around the code when it DOES NOT
+// contain any ';' semicolons or {} curly braces, those being the premier
+// statement separators in JavaScript. IFF you happen to be a semicolon hater
+// then your code will have additional newlines to separate statements at 
+// least and we'll put braces around it to ensure the auto-semicolon JS rule
+// doesn't kick in at a bad time.
+// 
+// WARNING: Bad Things(tm) will happen when you start your action with a comment
+// and then follow it by a {...} object instance to return: we COULD remove
+// all comments from the action code and then check again, but we haven't
+// made that effort yet, so you'll need to rewrite such arrow-action code. 
+// 
+// Yeah, this stuff can get pretty hairy!   |:-\
+function braceArrowActionCode(src){let s=src.trim();s=s.replace(/;+$/,'').trim();if(s.includes('{')&&s.includes('}')){return s;}// wrap code that contains ANY:
+// - multiple lines
+// - comments anywhere (we only check for the initial / so division math will be wrapped as well. Soit.)
+// - semicolon(s)
+if(/[\r\n;\/]/.test(s)){s=`(
+            ${s}
+        )`;}return s;}var parse2AST={generateMapper4JisonGrammarIdentifiers,parseCodeChunkToAST,compileCodeToES5,prettyPrintAST,checkActionBlock,trimActionCode,braceArrowActionCode,ID_REGEX_BASE,IN_ID_CHARSET};function chkBugger$1(src){src=String(src);if(src.match(/\bcov_\w+/)){console.error('### ISTANBUL COVERAGE CODE DETECTED ###\n',src);}}/// HELPER FUNCTION: print the function in source code form, properly indented.
 /** @public */function printFunctionSourceCode(f){const src=String(f);chkBugger$1(src);return src;}const funcRe=/^function[\s\r\n]*[^\(]*\(([^\)]*)\)[\s\r\n]*\{([^]*?)\}$/;const arrowFuncRe=/^(?:(?:\(([^\)]*)\))|(?:([^\(\)]+)))[\s\r\n]*=>[\s\r\n]*(?:(?:\{([^]*?)\})|(?:(([^\s\r\n\{)])[^]*?)))$/;/// HELPER FUNCTION: print the function **content** in source code form, properly indented,
 /// ergo: produce the code for inlining the function.
 ///
@@ -600,7 +635,7 @@ e=shallow_copy_and_strip_depth(e,cyclerefpath[idx]);}else{idx=linkref.indexOf(e)
 // it will be fed to a test log or other output.
 //
 // Internal use in the unit test rigs.
-function trimErrorForTestReporting(e){cycleref.length=0;cyclerefpath.length=0;linkref.length=0;linkrefpath.length=0;path=['*'];if(e){e=treat_object(e);}cycleref.length=0;cyclerefpath.length=0;linkref.length=0;linkrefpath.length=0;path=['*'];return e;}var helpers={rmCommonWS,camelCase,mkIdentifier,isLegalIdentifierInput,scanRegExp,dquote,trimErrorForTestReporting,stripErrorStackPaths,cleanStackTrace4Comparison,checkRegExp:reHelpers.checkRegExp,getRegExpInfo:reHelpers.getRegExpInfo,exec:exec.exec,dump:exec.dump,convertExceptionToObject:exec.convertExceptionToObject,generateMapper4JisonGrammarIdentifiers:parse2AST.generateMapper4JisonGrammarIdentifiers,parseCodeChunkToAST:parse2AST.parseCodeChunkToAST,compileCodeToES5:parse2AST.compileCodeToES5,prettyPrintAST:parse2AST.prettyPrintAST,checkActionBlock:parse2AST.checkActionBlock,trimActionCode:parse2AST.trimActionCode,ID_REGEX_BASE:parse2AST.ID_REGEX_BASE,IN_ID_CHARSET:parse2AST.IN_ID_CHARSET,printFunctionSourceCode:stringifier.printFunctionSourceCode,printFunctionSourceCodeContainer:stringifier.printFunctionSourceCodeContainer,detectIstanbulGlobal};// See also:
+function trimErrorForTestReporting(e){cycleref.length=0;cyclerefpath.length=0;linkref.length=0;linkrefpath.length=0;path=['*'];if(e){e=treat_object(e);}cycleref.length=0;cyclerefpath.length=0;linkref.length=0;linkrefpath.length=0;path=['*'];return e;}var helpers={rmCommonWS,camelCase,mkIdentifier,isLegalIdentifierInput,scanRegExp,dquote,trimErrorForTestReporting,stripErrorStackPaths,cleanStackTrace4Comparison,checkRegExp:reHelpers.checkRegExp,getRegExpInfo:reHelpers.getRegExpInfo,exec:exec.exec,dump:exec.dump,convertExceptionToObject:exec.convertExceptionToObject,generateMapper4JisonGrammarIdentifiers:parse2AST.generateMapper4JisonGrammarIdentifiers,parseCodeChunkToAST:parse2AST.parseCodeChunkToAST,compileCodeToES5:parse2AST.compileCodeToES5,prettyPrintAST:parse2AST.prettyPrintAST,checkActionBlock:parse2AST.checkActionBlock,trimActionCode:parse2AST.trimActionCode,braceArrowActionCode:parse2AST.braceArrowActionCode,ID_REGEX_BASE:parse2AST.ID_REGEX_BASE,IN_ID_CHARSET:parse2AST.IN_ID_CHARSET,printFunctionSourceCode:stringifier.printFunctionSourceCode,printFunctionSourceCodeContainer:stringifier.printFunctionSourceCodeContainer,detectIstanbulGlobal};// See also:
 // http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508
 // but we keep the prototype.constructor and prototype.name assignment lines too for compatibility
 // with userland code which might access the derived class in a 'classic' way.
@@ -1748,7 +1783,9 @@ let yy=this.yy;let yyparser=yy.parser;let yylexer=yy.lexer;switch(yystate){case 
 this.$=yyvstack[yysp-1];this._$=yylstack[yysp-1];// END of default action (generated by JISON mode classic/merge :: 1/2,VT,VA,-,-,LT,LA,-,-)
 break;case 1:/*! Production::    spec : declaration_list "%%" grammar optional_end_block EOF */ // default action (generated by JISON mode classic/merge :: 5/5,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-4,yysp);// END of default action (generated by JISON mode classic/merge :: 5/5,VT,VA,VU,-,LT,LA,-,-)
-this.$=yyvstack[yysp-4];if(yyvstack[yysp-1].trim()!==''){yy.addDeclaration(this.$,{include:yyvstack[yysp-1]});}return extend(this.$,yyvstack[yysp-2]);case 2:/*! Production::    spec : declaration_list "%%" grammar error EOF */ // default action (generated by JISON mode classic/merge :: 5/5,VT,VA,-,-,LT,LA,-,-):
+this.$=yyvstack[yysp-4];if(yyvstack[yysp-1].trim()!==''){yy.addDeclaration(this.$,{include:yyvstack[yysp-1]});}// transform ebnf to bnf if necessary
+if(ebnf){this.$.ebnf=yyvstack[yysp-2].grammar;// keep the original source EBNF around for possible pretty-printing & AST exports.
+this.$.bnf=transform(yyvstack[yysp-2].grammar);}else{this.$.bnf=yyvstack[yysp-2].grammar;}if(yyvstack[yysp-2].actionInclude){this.$.actionInclude=yyvstack[yysp-2].actionInclude;}return this.$;case 2:/*! Production::    spec : declaration_list "%%" grammar error EOF */ // default action (generated by JISON mode classic/merge :: 5/5,VT,VA,-,-,LT,LA,-,-):
 this.$=yyvstack[yysp-4];this._$=yyparser.yyMergeLocationInfo(yysp-4,yysp);// END of default action (generated by JISON mode classic/merge :: 5/5,VT,VA,-,-,LT,LA,-,-)
 yyparser.yyError(rmCommonWS$1`
         illegal input in the parser grammar productions definition section.
@@ -2154,6 +2191,9 @@ yyparser.yyError(rmCommonWS$1`
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp],yylstack[yysp-2])}
+    
+          Technical error report:
+        ${yyvstack[yysp].errStr}
     `);break;case 105:/*! Production::    prec : PREC symbol */ // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
 this.$={prec:yyvstack[yysp]};break;case 106:/*! Production::    prec : PREC error */ // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
@@ -2178,13 +2218,9 @@ yyparser.yyError(rmCommonWS$1`
         ${yylexer.prettyPrintRange(yylstack[yysp],yylstack[yysp-2])}
     `);break;case 115:/*! Production::    action : action_ne */ // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
 this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
-this.$={action:yyvstack[yysp],isArrowAction:false};break;case 116:/*! Production::    action : ARROW_ACTION */ // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
+this.$={action:trimActionCode$1(yyvstack[yysp]),isArrowAction:false};break;case 116:/*! Production::    action : ARROW_ACTION */ // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
 this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
-{let src=trimActionCode$1(yyvstack[yysp]);this.$={action:`
-                this.$ = (
-                    ${src}
-                );
-            `,isArrowAction:true};}break;case 120:/*! Production::    action_body : action_body "{" action_body "}" action_comments_body */ // default action (generated by JISON mode classic/merge :: 5/5,VT,VA,VU,-,LT,LA,-,-):
+{let src=trimActionCode$1(yyvstack[yysp],{dontTrimSurroundingCurlyBraces:true});src=braceArrowActionCode$1(src);this.$={action:`this.$ = ${src}`,isArrowAction:true};}break;case 120:/*! Production::    action_body : action_body "{" action_body "}" action_comments_body */ // default action (generated by JISON mode classic/merge :: 5/5,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-4,yysp);// END of default action (generated by JISON mode classic/merge :: 5/5,VT,VA,VU,-,LT,LA,-,-)
 this.$=yyvstack[yysp-4]+yyvstack[yysp-3]+yyvstack[yysp-2]+yyvstack[yysp-1]+yyvstack[yysp];break;case 121:/*! Production::    action_body : action_body "{" action_body "}" */ // default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-3,yysp);// END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
@@ -3388,15 +3424,15 @@ return 15;case 67:/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       %\
 return 15;case 68:/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       \{ */yy.depth=0;this.pushState('action');return 12;case 69:/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       ->.* */yy_.yytext=yy_.yytext.substr(2,yy_.yyleng-2).trim();return 38;case 70:/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       →.* */yy_.yytext=yy_.yytext.substr(1,yy_.yyleng-1).trim();return 38;case 71:/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       =>.* */yy_.yytext=yy_.yytext.substr(2,yy_.yyleng-2).trim();return 38;case 72:/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       {HEX_NUMBER} */yy_.yytext=parseInt(yy_.yytext,16);return 37;case 73:/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       {DECIMAL_NUMBER}(?![xX0-9a-fA-F]) */yy_.yytext=parseInt(yy_.yytext,10);return 37;case 75:/*! Conditions:: code */ /*! Rule::       [^\r\n]+ */return 46;// the bit of CODE just before EOF... 
 case 76:/*! Conditions:: path */ /*! Rule::       {BR} */this.popState();this.unput(yy_.yytext);break;case 77:/*! Conditions:: path */ /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */yy_.yytext=unescQuote(this.matches[1]);this.popState();return 45;case 78:/*! Conditions:: path */ /*! Rule::       '{QUOTED_STRING_CONTENT}' */yy_.yytext=unescQuote(this.matches[1]);this.popState();return 45;case 79:/*! Conditions:: path */ /*! Rule::       {WS}+ */ // skip whitespace in the line 
 break;case 80:/*! Conditions:: path */ /*! Rule::       [^\s\r\n]+ */this.popState();return 45;case 81:/*! Conditions:: action */ /*! Rule::       " */yy_.yyerror(rmCommonWS`
-                                            unterminated string constant in lexer rule action block.
+                                            unterminated string constant in parser rule action block.
 
                                               Erroneous area:
                                             `+this.prettyPrintRange(yy_.yylloc));return'UNTERMINATED_STRING_ERROR';case 82:/*! Conditions:: action */ /*! Rule::       ' */yy_.yyerror(rmCommonWS`
-                                            unterminated string constant in lexer rule action block.
+                                            unterminated string constant in parser rule action block.
 
                                               Erroneous area:
                                             `+this.prettyPrintRange(yy_.yylloc));return'UNTERMINATED_STRING_ERROR';case 83:/*! Conditions:: action */ /*! Rule::       ` */yy_.yyerror(rmCommonWS`
-                                            unterminated string constant in lexer rule action block.
+                                            unterminated string constant in parser rule action block.
 
                                               Erroneous area:
                                             `+this.prettyPrintRange(yy_.yylloc));return'UNTERMINATED_STRING_ERROR';case 84:/*! Conditions:: option_values */ /*! Rule::       " */yy_.yyerror(rmCommonWS`
@@ -3412,17 +3448,17 @@ break;case 80:/*! Conditions:: path */ /*! Rule::       [^\s\r\n]+ */this.popSta
 
                                               Erroneous area:
                                             `+this.prettyPrintRange(yy_.yylloc));return'UNTERMINATED_STRING_ERROR';case 87:/*! Conditions:: * */ /*! Rule::       " */{let rules=this.topState()==='macro'?'macro\'s':this.topState();yy_.yyerror(rmCommonWS`
-                                            unterminated string constant encountered while lexing
+                                            unterminated string constant encountered while parsing
                                             ${rules}.
 
                                               Erroneous area:
                                             `+this.prettyPrintRange(yy_.yylloc));return'UNTERMINATED_STRING_ERROR';}case 88:/*! Conditions:: * */ /*! Rule::       ' */{let rules=this.topState()==='macro'?'macro\'s':this.topState();yy_.yyerror(rmCommonWS`
-                                            unterminated string constant encountered while lexing
+                                            unterminated string constant encountered while parsing
                                             ${rules}.
 
                                               Erroneous area:
                                             `+this.prettyPrintRange(yy_.yylloc));return'UNTERMINATED_STRING_ERROR';}case 89:/*! Conditions:: * */ /*! Rule::       ` */{let rules=this.topState()==='macro'?'macro\'s':this.topState();yy_.yyerror(rmCommonWS`
-                                            unterminated string constant encountered while lexing
+                                            unterminated string constant encountered while parsing
                                             ${rules}.
 
                                               Erroneous area:
@@ -3432,9 +3468,7 @@ break;case 80:/*! Conditions:: path */ /*! Rule::       [^\s\r\n]+ */this.popSta
                                                 
                                                   Erroneous area:
                                                 `+this.prettyPrintRange(yy_.yylloc));return 2;default:return this.simpleCaseActionClusters[yyrulenumber];}},simpleCaseActionClusters:{/*! Conditions:: action */ /*! Rule::       \/\*[^]*?\*\/ */0:43,/*! Conditions:: action */ /*! Rule::       \/\/[^\r\n]* */1:43,/*! Conditions:: action */ /*! Rule::       "{DOUBLEQUOTED_STRING_CONTENT}" */3:43,/*! Conditions:: action */ /*! Rule::       '{QUOTED_STRING_CONTENT}' */4:43,/*! Conditions:: action */ /*! Rule::       [/"'][^{}/"']+ */5:43,/*! Conditions:: action */ /*! Rule::       [^{}/"']+ */6:43,/*! Conditions:: bnf ebnf */ /*! Rule::       %empty\b */13:39,/*! Conditions:: bnf ebnf */ /*! Rule::       %epsilon\b */14:39,/*! Conditions:: bnf ebnf */ /*! Rule::       Ɛ */15:39,/*! Conditions:: bnf ebnf */ /*! Rule::       ɛ */16:39,/*! Conditions:: bnf ebnf */ /*! Rule::       ε */17:39,/*! Conditions:: bnf ebnf */ /*! Rule::       ϵ */18:39,/*! Conditions:: ebnf */ /*! Rule::       \( */19:7,/*! Conditions:: ebnf */ /*! Rule::       \) */20:8,/*! Conditions:: ebnf */ /*! Rule::       \* */21:9,/*! Conditions:: ebnf */ /*! Rule::       \? */22:10,/*! Conditions:: ebnf */ /*! Rule::       \+ */23:11,/*! Conditions:: options */ /*! Rule::       {NAME} */24:25,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       {ID} */38:24,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       {NAME} */39:25,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       \$end\b */40:41,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       \$eof\b */41:41,/*! Conditions:: token */ /*! Rule::       [^\s\r\n]+ */44:'TOKEN_WORD',/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       : */45:5,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       ; */46:4,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       \| */47:6,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       %debug\b */50:19,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       %parser-type\b */51:32,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       %prec\b */52:42,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       %start\b */53:16,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       %left\b */54:33,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       %right\b */55:34,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       %nonassoc\b */56:35,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       %parse-param[s]? */58:31,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       %code\b */61:23,/*! Conditions:: token bnf ebnf INITIAL */ /*! Rule::       %import\b */62:22,/*! Conditions:: code */ /*! Rule::       [^\r\n]*(\r|\n)+ */74:46,/*! Conditions:: * */ /*! Rule::       $ */91:1},rules:[/*  0: */ /^(?:\/\*[\s\S]*?\*\/)/,/*  1: */ /^(?:\/\/[^\r\n]*)/,/*  2: */ /^(?:\/[^ /]*?['"{}][^ ]*?\/)/,/*  3: */ /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)")/,/*  4: */ /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,/*  5: */ /^(?:[/"'][^{}/"']+)/,/*  6: */ /^(?:[^{}/"']+)/,/*  7: */ /^(?:\{)/,/*  8: */ /^(?:\})/,/*  9: */ /^(?:(\r\n|\n|\r))/,/* 10: */ /^(?:%%)/,/* 11: */ /^(?:;)/,/* 12: */ /^(?:%%)/,/* 13: */ /^(?:%empty\b)/,/* 14: */ /^(?:%epsilon\b)/,/* 15: */ /^(?:Ɛ)/,/* 16: */ /^(?:ɛ)/,/* 17: */ /^(?:ε)/,/* 18: */ /^(?:ϵ)/,/* 19: */ /^(?:\()/,/* 20: */ /^(?:\))/,/* 21: */ /^(?:\*)/,/* 22: */ /^(?:\?)/,/* 23: */ /^(?:\+)/,/* 24: */new XRegExp__default['default']('^(?:([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}\\-_]*(?:[\\p{Alphabetic}\\p{Number}_]))?))',''),/* 25: */ /^(?:=)/,/* 26: */ /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)")/,/* 27: */ /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,/* 28: */ /^(?:`((?:\\`|\\[^`]|[^\\`])*)`)/,/* 29: */ /^(?:\/\/[^\r\n]*)/,/* 30: */ /^(?:\/\*[\s\S]*?\*\/)/,/* 31: */ /^(?:\S+)/,/* 32: */ /^(?:(\r\n|\n|\r)([^\S\n\r])+(?=\S))/,/* 33: */ /^(?:(\r\n|\n|\r))/,/* 34: */ /^(?:([^\S\n\r])+)/,/* 35: */ /^(?:([^\S\n\r])+)/,/* 36: */ /^(?:(\r\n|\n|\r)+)/,/* 37: */new XRegExp__default['default']('^(?:\\[([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*)\\])',''),/* 38: */new XRegExp__default['default']('^(?:([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*))',''),/* 39: */new XRegExp__default['default']('^(?:([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}\\-_]*(?:[\\p{Alphabetic}\\p{Number}_]))?))',''),/* 40: */ /^(?:\$end\b)/,/* 41: */ /^(?:\$eof\b)/,/* 42: */ /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)")/,/* 43: */ /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,/* 44: */ /^(?:\S+)/,/* 45: */ /^(?::)/,/* 46: */ /^(?:;)/,/* 47: */ /^(?:\|)/,/* 48: */ /^(?:%%)/,/* 49: */ /^(?:%ebnf\b)/,/* 50: */ /^(?:%debug\b)/,/* 51: */ /^(?:%parser-type\b)/,/* 52: */ /^(?:%prec\b)/,/* 53: */ /^(?:%start\b)/,/* 54: */ /^(?:%left\b)/,/* 55: */ /^(?:%right\b)/,/* 56: */ /^(?:%nonassoc\b)/,/* 57: */ /^(?:%token\b)/,/* 58: */ /^(?:%parse-param[s]?)/,/* 59: */ /^(?:%option[s]?)/,/* 60: */ /^(?:%lex((?:[^\S\n\r])*(?:(?:\r\n|\n|\r)[\s\S]*?)?(?:\r\n|\n|\r)(?:[^\S\n\r])*)\/lex\b)/,/* 61: */ /^(?:%code\b)/,/* 62: */ /^(?:%import\b)/,/* 63: */ /^(?:%include\b)/,/* 64: */new XRegExp__default['default']('^(?:%([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}\\-_]*(?:[\\p{Alphabetic}\\p{Number}_]))?)([^\\n\\r]*))',''),/* 65: */new XRegExp__default['default']('^(?:<([\\p{Alphabetic}_](?:[\\p{Alphabetic}\\p{Number}_])*)>)',''),/* 66: */ /^(?:\{\{([\s\S]*?)\}\})/,/* 67: */ /^(?:%\{([\s\S]*?)%\})/,/* 68: */ /^(?:\{)/,/* 69: */ /^(?:->.*)/,/* 70: */ /^(?:→.*)/,/* 71: */ /^(?:=>.*)/,/* 72: */ /^(?:(0[Xx][\dA-Fa-f]+))/,/* 73: */ /^(?:([1-9]\d*)(?![\dA-FXa-fx]))/,/* 74: */ /^(?:[^\r\n]*(\r|\n)+)/,/* 75: */ /^(?:[^\r\n]+)/,/* 76: */ /^(?:(\r\n|\n|\r))/,/* 77: */ /^(?:"((?:\\"|\\[^"]|[^\n\r"\\])*)")/,/* 78: */ /^(?:'((?:\\'|\\[^']|[^\n\r'\\])*)')/,/* 79: */ /^(?:([^\S\n\r])+)/,/* 80: */ /^(?:\S+)/,/* 81: */ /^(?:")/,/* 82: */ /^(?:')/,/* 83: */ /^(?:`)/,/* 84: */ /^(?:")/,/* 85: */ /^(?:')/,/* 86: */ /^(?:`)/,/* 87: */ /^(?:")/,/* 88: */ /^(?:')/,/* 89: */ /^(?:`)/,/* 90: */ /^(?:.)/,/* 91: */ /^(?:$)/],conditions:{'action':{rules:[0,1,2,3,4,5,6,7,8,81,82,83,87,88,89,90,91],inclusive:false},'code':{rules:[63,74,75,87,88,89,90,91],inclusive:false},'path':{rules:[29,30,76,77,78,79,80,87,88,89,90,91],inclusive:false},'options':{rules:[24,25,29,30,32,33,34,87,88,89,90,91],inclusive:false},'option_values':{rules:[26,27,28,29,30,31,34,84,85,86,87,88,89,90,91],inclusive:false},'token':{rules:[9,10,11,29,30,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,64,65,66,67,68,69,70,71,72,73,87,88,89,90,91],inclusive:true},'bnf':{rules:[12,13,14,15,16,17,18,29,30,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,87,88,89,90,91],inclusive:true},'ebnf':{rules:[12,13,14,15,16,17,18,19,20,21,22,23,29,30,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,87,88,89,90,91],inclusive:true},'INITIAL':{rules:[29,30,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,87,88,89,90,91],inclusive:true}}};const rmCommonWS=helpers.rmCommonWS;const dquote=helpers.dquote;// unescape a string value which is wrapped in quotes/doublequotes
-function unescQuote(str){str=''+str;let a=str.split('\\\\');a=a.map(function(s){return s.replace(/\\'/g,'\'').replace(/\\"/g,'"');});str=a.join('\\\\');return str;}lexer.warn=function l_warn(){if(this.yy&&this.yy.parser&&typeof this.yy.parser.warn==='function'){return this.yy.parser.warn.apply(this,arguments);}else{console.warn.apply(console,arguments);}};lexer.log=function l_log(){if(this.yy&&this.yy.parser&&typeof this.yy.parser.log==='function'){return this.yy.parser.log.apply(this,arguments);}else{console.log.apply(console,arguments);}};return lexer;}();parser$2.lexer=lexer$1;var ebnf=false;const rmCommonWS$1=helpers.rmCommonWS;const dquote$1=helpers.dquote;const checkActionBlock$1=helpers.checkActionBlock;const trimActionCode$1=helpers.trimActionCode;// transform ebnf to bnf if necessary
-function extend(json,grammar){if(ebnf){json.ebnf=grammar.grammar;// keep the original source EBNF around for possible pretty-printing & AST exports.
-json.bnf=transform(grammar.grammar);}else{json.bnf=grammar.grammar;}if(grammar.actionInclude){json.actionInclude=grammar.actionInclude;}return json;}// convert string value to number or boolean value, when possible
+function unescQuote(str){str=''+str;let a=str.split('\\\\');a=a.map(function(s){return s.replace(/\\'/g,'\'').replace(/\\"/g,'"');});str=a.join('\\\\');return str;}lexer.warn=function l_warn(){if(this.yy&&this.yy.parser&&typeof this.yy.parser.warn==='function'){return this.yy.parser.warn.apply(this,arguments);}else{console.warn.apply(console,arguments);}};lexer.log=function l_log(){if(this.yy&&this.yy.parser&&typeof this.yy.parser.log==='function'){return this.yy.parser.log.apply(this,arguments);}else{console.log.apply(console,arguments);}};return lexer;}();parser$2.lexer=lexer$1;var ebnf=false;const rmCommonWS$1=helpers.rmCommonWS;const dquote$1=helpers.dquote;const checkActionBlock$1=helpers.checkActionBlock;const trimActionCode$1=helpers.trimActionCode;const braceArrowActionCode$1=helpers.braceArrowActionCode;// convert string value to number or boolean value, when possible
 // (and when this is more or less obviously the intent)
 // otherwise produce the string itself as value.
 function parseValue(v){if(v==='false'){return false;}if(v==='true'){return true;}// http://stackoverflow.com/questions/175739/is-there-a-built-in-way-in-javascript-to-check-if-a-string-is-a-valid-number
@@ -3702,7 +3736,7 @@ yyparser.yyError(rmCommonWS$2`
         ${yyvstack[yysp].errStr}
     `);break;case 16:/*! Production::    definition : ACTION_START_AT_SOL action ACTION_END */ // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
-{let srcCode=trimActionCode$2(yyvstack[yysp-1],yyvstack[yysp-2]);if(srcCode){let rv=checkActionBlock$2(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$2`
+{let srcCode=trimActionCode$2(yyvstack[yysp-1],{startMarker:yyvstack[yysp-2]});if(srcCode){let rv=checkActionBlock$2(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$2`
                 The '%{...%}' lexer setup action code section does not compile: ${rv}
     
                   Erroneous area:
@@ -3794,7 +3828,7 @@ name=lst[0][0];}else if(len<=1){yyparser.yyError(rmCommonWS$2`
     
               Erroneous code:
             ${yylexer.prettyPrintRange(yylstack[yysp-4],yylstack[yysp-5])}
-        `);}let srcCode=trimActionCode$2(yyvstack[yysp-2],yyvstack[yysp-3]);let rv=checkActionBlock$2(srcCode,yylstack[yysp-2],yy);if(rv){yyparser.yyError(rmCommonWS$2`
+        `);}let srcCode=trimActionCode$2(yyvstack[yysp-2],{startMarker:yyvstack[yysp-3]});let rv=checkActionBlock$2(srcCode,yylstack[yysp-2],yy);if(rv){yyparser.yyError(rmCommonWS$2`
             The '%code ${name}' initialization code section does not compile: ${rv}
     
               Erroneous area:
@@ -3879,7 +3913,7 @@ this.$=yyvstack[yysp-1].concat(yyvstack[yysp]);break;case 40:/*! Production::   
 this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
 this.$=yyvstack[yysp-1].concat([yyvstack[yysp]]);break;case 41:/*! Production::    rules : rules ACTION_START_AT_SOL action ACTION_END */ // default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-3,yysp);// END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
-{let srcCode=trimActionCode$2(yyvstack[yysp-1],yyvstack[yysp-2]);if(srcCode){let rv=checkActionBlock$2(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$2`
+{let srcCode=trimActionCode$2(yyvstack[yysp-1],{startMarker:yyvstack[yysp-2]});if(srcCode){let rv=checkActionBlock$2(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$2`
                 The '%{...%}' lexer setup action code section does not compile: ${rv}
     
                   Erroneous area:
@@ -3986,14 +4020,14 @@ yyparser.yyError(rmCommonWS$2`
 this._$=yyparser.yyMergeLocationInfo(yysp-1,yysp);// END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
 this.$=yyvstack[yysp-1];this.$.push(yyvstack[yysp]);break;case 59:/*! Production::    rule : regex ACTION_START action ACTION_END */case 60:/*! Production::    rule : regex ACTION_START_AT_SOL action ACTION_END */ // default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-3,yysp);// END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
-{let srcCode=trimActionCode$2(yyvstack[yysp-1],yyvstack[yysp-2]);let rv=checkActionBlock$2(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$2`
+{let srcCode=trimActionCode$2(yyvstack[yysp-1],{startMarker:yyvstack[yysp-2]});let rv=checkActionBlock$2(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$2`
             The lexer rule's action code section does not compile: ${rv}
     
               Erroneous area:
             ${yylexer.prettyPrintRange(yylstack[yysp-1],yylstack[yysp-3])}
         `);}this.$=[yyvstack[yysp-3],srcCode];}break;case 61:/*! Production::    rule : regex ARROW_ACTION_START action ACTION_END */ // default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-3,yysp);// END of default action (generated by JISON mode classic/merge :: 4/4,VT,VA,VU,-,LT,LA,-,-)
-{let srcCode=trimActionCode$2(yyvstack[yysp-1]);// add braces around ARROW_ACTION_CODE so that the action chunk test/compiler
+{let srcCode=trimActionCode$2(yyvstack[yysp-1],{dontTrimSurroundingCurlyBraces:true});// add braces around ARROW_ACTION_CODE so that the action chunk test/compiler
 // will uncover any illegal action code following the arrow operator, e.g.
 // multiple statements separated by semicolon.
 //
@@ -4004,12 +4038,19 @@ this._$=yyparser.yyMergeLocationInfo(yysp-3,yysp);// END of default action (gene
 // By doing this, we simplify the token return replacement code replacement
 // process which will be applied to the parsed lexer before its code
 // will be generated by JISON.
-if(/^[^\r\n;\/]+$/.test(srcCode)){srcCode='return '+srcCode;}else{srcCode='return ('+srcCode+'\n)';}let rv=checkActionBlock$2(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$2`
+srcCode='return '+braceArrowActionCode$2(srcCode);let rv=checkActionBlock$2(srcCode,yylstack[yysp-1],yy);if(rv){let indentedSrc=rmCommonWS$2([srcCode]).split('\n').join('\n    ');yyparser.yyError(rmCommonWS$2`
             The lexer rule's 'arrow' action code section does not compile: ${rv}
     
             # NOTE that the arrow action automatically wraps the action code
             # in a \`return (...);\` statement to prevent hard-to-diagnose run-time
             # errors down the line.
+            #
+            # Please be aware that the reported compile error MAY be referring
+            # to the wrapper code which is added by JISON automatically when
+            # processing arrow actions: the entire action code chunk 
+            # (including wrapper) is:
+    
+                ${indentedSrc}
     
               Erroneous area:
             ${yylexer.prettyPrintRange(yylstack[yysp-1],yylstack[yysp-3])}
@@ -4265,7 +4306,7 @@ yyparser.yyError(rmCommonWS$2`
     `);break;case 109:/*! Production::    regex_set_atom : name_expansion */ // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
 this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
 if(XRegExp__default['default']._getUnicodeProperty(yyvstack[yysp].replace(/[{}]/g,''))&&yyvstack[yysp].toUpperCase()!==yyvstack[yysp]){// treat this as part of an XRegExp `\p{...}` Unicode 'General Category' Property cf. http://unicode.org/reports/tr18/#Categories
-this.$=yyvstack[yysp];}else{this.$=yyvstack[yysp];}//yyparser.log("name expansion for: ", { name: $name_expansion, redux: $name_expansion.replace(/[{}]/g, ''), output: $$ });
+this.$=yyvstack[yysp];}else{this.$=yyvstack[yysp];}//yyparser.log("name expansion for: ", { name: $name_expansion, redux: $name_expansion.replace(/[{}]/g, ''), output: $$ })
 break;case 111:/*! Production::    literal_string : STRING_LIT */ // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
 this._$=yylstack[yysp];// END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
 {let src=yyvstack[yysp];let s=src.substring(1,src.length-1);let edge=src[0];this.$=encodeRegexLiteralStr(s,edge);}break;case 112:/*! Production::    literal_string : CHARACTER_LIT */ // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
@@ -4389,7 +4430,7 @@ yyparser.yyError(rmCommonWS$2`
         ${yyvstack[yysp].errStr}
     `);this.$='';break;case 130:/*! Production::    epilogue_chunk : ACTION_START_AT_SOL action ACTION_END */ // default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-):
 this._$=yyparser.yyMergeLocationInfo(yysp-2,yysp);// END of default action (generated by JISON mode classic/merge :: 3/3,VT,VA,VU,-,LT,LA,-,-)
-{let srcCode=trimActionCode$2(yyvstack[yysp-1],yyvstack[yysp-2]);if(srcCode){let rv=checkActionBlock$2(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$2`
+{let srcCode=trimActionCode$2(yyvstack[yysp-1],{startMarker:yyvstack[yysp-2]});if(srcCode){let rv=checkActionBlock$2(srcCode,yylstack[yysp-1],yy);if(rv){yyparser.yyError(rmCommonWS$2`
                 The '%{...%}' lexer epilogue code chunk does not compile: ${rv}
     
                   Erroneous area:
@@ -5642,7 +5683,7 @@ let marker=yy_.yytext;// check whether this `%{` marker was located at the start
 // section, etc...
 //let precedingStr = this.pastInput(1,2).replace(/[\r\n]/g, '\n');
 //let precedingStr = this.matched.substr(-this.match.length - 1, 1);
-let precedingStr=this.matched[this.matched.length-this.match.length-1];let atSOL=!precedingStr/* @ Start Of File */||precedingStr==='\n';// Make sure we've the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
+let precedingStr=this.matched[this.matched.length-this.match.length-1];let atSOL=!precedingStr/* @ Start Of File */||precedingStr==='\n';// Make sure we've got the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
 let endMarker=this.setupDelimitedActionChunkLexerRegex(marker);// Early sanity check for better error reporting:
 // we'd better make sure that end marker indeed does exist in the
 // remainder of the input! When it's not, we'll have the `action`
@@ -5824,7 +5865,7 @@ spec.__cached_action_chunk_rule={};// set up empty cache
 action_chunk_regex=spec.__cached_action_chunk_rule[marker];if(!action_chunk_regex){action_chunk_regex=spec.__cached_action_chunk_rule[marker]=new RegExp('^(?:'+marker.replace(/\{/g,'\\{')+'([^]*?)'+action_end_marker.replace(/\}/g,'\\}')+'(?!\\}))');//console.warn('encode new action block regex:', action_chunk_regex);
 }//console.error('new ACTION REGEX:', { i, action_chunk_regex });
 // and patch the lexer regex table for the current lexer condition state:
-regexes[i]=action_chunk_regex;}return action_end_marker;};lexer.warn=function l_warn(){if(this.yy&&this.yy.parser&&typeof this.yy.parser.warn==='function'){return this.yy.parser.warn.apply(this,arguments);}else{console.warn.apply(console,arguments);}};lexer.log=function l_log(){if(this.yy&&this.yy.parser&&typeof this.yy.parser.log==='function'){return this.yy.parser.log.apply(this,arguments);}else{console.log.apply(console,arguments);}};return lexer;}();parser$3.lexer=lexer$2;const rmCommonWS$2=helpers.rmCommonWS;const checkActionBlock$2=helpers.checkActionBlock;const mkIdentifier$1=helpers.mkIdentifier;const isLegalIdentifierInput$1=helpers.isLegalIdentifierInput;const trimActionCode$2=helpers.trimActionCode;// see also:
+regexes[i]=action_chunk_regex;}return action_end_marker;};lexer.warn=function l_warn(){if(this.yy&&this.yy.parser&&typeof this.yy.parser.warn==='function'){return this.yy.parser.warn.apply(this,arguments);}else{console.warn.apply(console,arguments);}};lexer.log=function l_log(){if(this.yy&&this.yy.parser&&typeof this.yy.parser.log==='function'){return this.yy.parser.log.apply(this,arguments);}else{console.log.apply(console,arguments);}};return lexer;}();parser$3.lexer=lexer$2;const rmCommonWS$2=helpers.rmCommonWS;const checkActionBlock$2=helpers.checkActionBlock;const mkIdentifier$1=helpers.mkIdentifier;const isLegalIdentifierInput$1=helpers.isLegalIdentifierInput;const trimActionCode$2=helpers.trimActionCode;const braceArrowActionCode$2=helpers.braceArrowActionCode;// see also:
 // - https://en.wikipedia.org/wiki/C0_and_C1_control_codes
 // - https://docs.microsoft.com/en-us/dotnet/standard/base-types/character-escapes-in-regular-expressions
 // - https://kangax.github.io/compat-table/es6/#test-RegExp_y_and_u_flags

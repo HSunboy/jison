@@ -1222,7 +1222,8 @@
     // convoluted code that is smarter than our simple regex-based
     // `{...}` trimmer in here!
     //
-    function trimActionCode(src, startMarker) {
+    function trimActionCode(src, options) {
+        options = options || {};
         let s = src.trim();
         // remove outermost set of braces UNLESS there's
         // a curly brace in there anywhere: in that case
@@ -1251,19 +1252,73 @@
         //
         // TODO: make this is real code edit without that
         // last edge case as a fault condition.
-        if (startMarker === '{') {
-            // code is wrapped in `{...}` for sure: remove the wrapping braces.
-            s = s.replace(/^\{([^]*?)\}$/, '$1').trim();
-        } else {
-            // code may not be wrapped or otherwise non-simple: only remove
-            // wrapping braces when we can guarantee they're the only ones there,
-            // i.e. only exist as outer wrapping.
-            s = s.replace(/^\{([^}]*)\}$/, '$1').trim();
+        if (!options.dontTrimSurroundingCurlyBraces) {
+            if (options.startMarker === '{') {
+                // code is wrapped in `{...}` for sure: remove the wrapping braces.
+                s = s.replace(/^\{([^]*?)\}$/, '$1').trim();
+            } else {
+                // code may not be wrapped or otherwise non-simple: only remove
+                // wrapping braces when we can guarantee they're the only ones there,
+                // i.e. only exist as outer wrapping.
+                s = s.replace(/^\{([^}]*)\}$/, '$1').trim();
+            }
         }
         s = s.replace(/;+$/, '').trim();
         return s;
     }
 
+
+
+
+
+    // Put (...) braces around the given (arrow-)action code to ensure
+    // that it MUST be arrow-action legal on test-compile and use.
+    // 
+    // From bnf.y:
+    // 
+    // add braces around ARROW_ACTION so that the action chunk test/compiler
+    // will uncover any illegal action code following the arrow operator, e.g.
+    // multiple statements separated by semicolon.
+    //
+    // But only do so when the arrow action is not itself surrounded by curly braces
+    // when it would, for instance, attempt to return an object instance.
+    //
+    // Also nuke the possible superfluous semicolon, but *only* when it's in 
+    // the outer-most scope as the user may be defining an IIFE or *function*
+    // as a return value!
+    //
+    // Also note there's no need to put braces around the code when it DOES NOT
+    // contain any ';' semicolons or {} curly braces, those being the premier
+    // statement separators in JavaScript. IFF you happen to be a semicolon hater
+    // then your code will have additional newlines to separate statements at 
+    // least and we'll put braces around it to ensure the auto-semicolon JS rule
+    // doesn't kick in at a bad time.
+    // 
+    // WARNING: Bad Things(tm) will happen when you start your action with a comment
+    // and then follow it by a {...} object instance to return: we COULD remove
+    // all comments from the action code and then check again, but we haven't
+    // made that effort yet, so you'll need to rewrite such arrow-action code. 
+    // 
+    // Yeah, this stuff can get pretty hairy!   |:-\
+    function braceArrowActionCode(src) {
+        let s = src.trim();
+        s = s.replace(/;+$/, '').trim();
+
+        if (s.includes('{') && s.includes('}')) {
+            return s;
+        }
+        // wrap code that contains ANY:
+        // - multiple lines
+        // - comments anywhere (we only check for the initial / so division math will be wrapped as well. Soit.)
+        // - semicolon(s)
+        if (/[\r\n;\/]/.test(s)) {
+            s = `(
+            ${s}
+        )`;
+        }
+
+        return s;
+    }
 
 
 
@@ -1275,6 +1330,7 @@
         prettyPrintAST,
         checkActionBlock,
         trimActionCode,
+        braceArrowActionCode,
 
         ID_REGEX_BASE,
         IN_ID_CHARSET
@@ -1888,6 +1944,7 @@
         prettyPrintAST: parse2AST.prettyPrintAST,
         checkActionBlock: parse2AST.checkActionBlock,
         trimActionCode: parse2AST.trimActionCode,
+        braceArrowActionCode: parse2AST.braceArrowActionCode,
 
         ID_REGEX_BASE: parse2AST.ID_REGEX_BASE,
         IN_ID_CHARSET: parse2AST.IN_ID_CHARSET,
@@ -2582,7 +2639,7 @@
         
         delete yy.options;
         delete yy.actionInclude;
-        return this.$;
+        return this.$
         }
 
     case 2:
@@ -2959,7 +3016,9 @@
         
         
         {
-        let srcCode = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
+        let srcCode = trimActionCode$1(yyvstack[yysp - 1], {
+            startMarker: yyvstack[yysp - 2]
+        });
         if (srcCode) {
             let rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
             if (rv) {
@@ -3191,7 +3250,9 @@
         `);
         }
         
-        let srcCode = trimActionCode$1(yyvstack[yysp - 2], yyvstack[yysp - 3]);
+        let srcCode = trimActionCode$1(yyvstack[yysp - 2], {
+            startMarker: yyvstack[yysp - 3]
+        });
         let rv = checkActionBlock$1(srcCode, yylstack[yysp - 2], yy);
         if (rv) {
             yyparser.yyError(rmCommonWS$1`
@@ -3451,7 +3512,9 @@
         
         
         {
-        let srcCode = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
+        let srcCode = trimActionCode$1(yyvstack[yysp - 1], {
+            startMarker: yyvstack[yysp - 2]
+        });
         if (srcCode) {
             let rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
             if (rv) {
@@ -3716,7 +3779,9 @@
         
         
         {
-        let srcCode = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
+        let srcCode = trimActionCode$1(yyvstack[yysp - 1], {
+            startMarker: yyvstack[yysp - 2]
+        });
         let rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
         if (rv) {
             yyparser.yyError(rmCommonWS$1`
@@ -3739,7 +3804,9 @@
         
         
         {
-        let srcCode = trimActionCode$1(yyvstack[yysp - 1]);
+        let srcCode = trimActionCode$1(yyvstack[yysp - 1], {
+            dontTrimSurroundingCurlyBraces: true
+        });
         // add braces around ARROW_ACTION_CODE so that the action chunk test/compiler
         // will uncover any illegal action code following the arrow operator, e.g.
         // multiple statements separated by semicolon.
@@ -3751,20 +3818,25 @@
         // By doing this, we simplify the token return replacement code replacement
         // process which will be applied to the parsed lexer before its code
         // will be generated by JISON.
-        if (/^[^\r\n;\/]+$/.test(srcCode)) {
-            srcCode = 'return ' + srcCode;
-        } else {
-            srcCode = 'return (' + srcCode + '\n)';
-        }
+        srcCode = 'return ' + braceArrowActionCode$1(srcCode);
         
         let rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
         if (rv) {
+            let indentedSrc = rmCommonWS$1([srcCode]).split('\n').join('\n    ');
+        
             yyparser.yyError(rmCommonWS$1`
             The lexer rule's 'arrow' action code section does not compile: ${rv}
     
             # NOTE that the arrow action automatically wraps the action code
             # in a \`return (...);\` statement to prevent hard-to-diagnose run-time
             # errors down the line.
+            #
+            # Please be aware that the reported compile error MAY be referring
+            # to the wrapper code which is added by JISON automatically when
+            # processing arrow actions: the entire action code chunk 
+            # (including wrapper) is:
+    
+                ${indentedSrc}
     
               Erroneous area:
             ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 3])}
@@ -4428,7 +4500,7 @@
         } else {
             this.$ = yyvstack[yysp];
         }
-        //yyparser.log("name expansion for: ", { name: $name_expansion, redux: $name_expansion.replace(/[{}]/g, ''), output: $$ });
+        //yyparser.log("name expansion for: ", { name: $name_expansion, redux: $name_expansion.replace(/[{}]/g, ''), output: $$ })
         break;
 
     case 111:
@@ -4785,7 +4857,9 @@
         
         
         {
-        let srcCode = trimActionCode$1(yyvstack[yysp - 1], yyvstack[yysp - 2]);
+        let srcCode = trimActionCode$1(yyvstack[yysp - 1], {
+            startMarker: yyvstack[yysp - 2]
+        });
         if (srcCode) {
             let rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
             if (rv) {
@@ -10175,7 +10249,7 @@
 
               let atSOL = !precedingStr /* @ Start Of File */ || precedingStr === '\n';
 
-              // Make sure we've the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
+              // Make sure we've got the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
               let endMarker = this.setupDelimitedActionChunkLexerRegex(marker);
 
               // Early sanity check for better error reporting:
@@ -11385,6 +11459,7 @@
     const mkIdentifier$1 = helpers.mkIdentifier;
     const isLegalIdentifierInput$1 = helpers.isLegalIdentifierInput;
     const trimActionCode$1 = helpers.trimActionCode;
+    const braceArrowActionCode$1 = helpers.braceArrowActionCode;
 
 
     // see also:

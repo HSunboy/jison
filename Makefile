@@ -121,6 +121,9 @@ comparison:
 lexer-comparison: build
 	cd packages/jison-lex && make comparison
 
+lexer-test: build
+	cd packages/jison-lex && make test
+
 examples_directory: build
 	cd examples/ && make all
 

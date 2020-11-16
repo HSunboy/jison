@@ -236,19 +236,19 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 //
 // these error catching rules fix https://github.com/GerHobbelt/jison/issues/13
 <action>\"                              yyerror(rmCommonWS`
-                                            unterminated string constant in lexer rule action block.
+                                            unterminated string constant in parser rule action block.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yylloc));
                                         return 'UNTERMINATED_STRING_ERROR';
 <action>\'                              yyerror(rmCommonWS`
-                                            unterminated string constant in lexer rule action block.
+                                            unterminated string constant in parser rule action block.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yylloc));
                                         return 'UNTERMINATED_STRING_ERROR';
 <action>\`                              yyerror(rmCommonWS`
-                                            unterminated string constant in lexer rule action block.
+                                            unterminated string constant in parser rule action block.
 
                                               Erroneous area:
                                             ` + this.prettyPrintRange(yylloc));
@@ -275,7 +275,7 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 
 <*>\"                                   let rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
                                         yyerror(rmCommonWS`
-                                            unterminated string constant encountered while lexing
+                                            unterminated string constant encountered while parsing
                                             ${rules}.
 
                                               Erroneous area:
@@ -283,7 +283,7 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                         return 'UNTERMINATED_STRING_ERROR';
 <*>\'                                   let rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
                                         yyerror(rmCommonWS`
-                                            unterminated string constant encountered while lexing
+                                            unterminated string constant encountered while parsing
                                             ${rules}.
 
                                               Erroneous area:
@@ -291,7 +291,7 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                         return 'UNTERMINATED_STRING_ERROR';
 <*>\`                                   let rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
                                         yyerror(rmCommonWS`
-                                            unterminated string constant encountered while lexing
+                                            unterminated string constant encountered while parsing
                                             ${rules}.
 
                                               Erroneous area:
