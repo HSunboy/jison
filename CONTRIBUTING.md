@@ -19,15 +19,15 @@ by installing Git-for-Windows **and its Developer SDK**
 
 ## Installing
 
-JISON consists of the main project and a couple of git modules; when you work on JISON itself you MUST install those submodules too:
+~~JISON consists of the main project and a couple of git modules; when you work on JISON itself you MUST install those submodules too:~~
 
-```
-$ git submodule update --init
-```
+~~`$ git submodule update --init`~~
 
-should fetch the submodules listed in this project's `.gitmodules` file and you're good to go!
+~~should fetch the submodules listed in this project's `.gitmodules` file and you're good to go!~~ `jison-gho` once was a repository with git submodules, but all of those have been integrated into this single *monorepo*, where, by now, all those subpackages have become **deprecated** as the entire lexer and parser generator API (plus helpers) is available in the jison library itself.
 
-The next step would be to install the required NPM packages for all modules. `make` to the rescue:
+Hence, while there's a bunch of `/packages/*/` in this repository, where the build process still invokes each of those subpackages' `Makefile`s in time, building the helpers, lexer and parser libraries and code generators, the end product available to any user is the jison CLI and library ultimately produced in `/dist/` as `cli-*.js` for the CLI and `jison-*.js` for the all-encompasing library.
+
+The ~~next~~first step would be to install the required NPM packages for all modules. `make` to the rescue:
 
 ```
 $ make prep
