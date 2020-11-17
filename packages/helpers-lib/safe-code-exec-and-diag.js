@@ -220,7 +220,7 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
 
         if (debug > 1) console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
-        if (options.dumpSourceCodeOnFailure || 1) {
+        if (options.dumpSourceCodeOnFailure) {
             dumpSourceToFile(sourcecode, errname, err_id, options, ex);
         }
 
