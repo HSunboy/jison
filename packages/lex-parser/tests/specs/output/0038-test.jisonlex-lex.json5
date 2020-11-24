@@ -1,7 +1,6 @@
 [
-  12,
   {
-    id: 26,
+    id: 27,
     token: '"UNKNOWN_DECL"',
     yytext: {
       name: 'a',
@@ -19,7 +18,7 @@
     },
   },
   {
-    id: 26,
+    id: 27,
     token: '"UNKNOWN_DECL"',
     yytext: {
       name: 'foo',
@@ -37,7 +36,7 @@
     },
   },
   {
-    id: 26,
+    id: 27,
     token: '"UNKNOWN_DECL"',
     yytext: {
       name: 'a',
@@ -55,7 +54,7 @@
     },
   },
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -85,7 +84,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
@@ -100,7 +99,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '//',
     yylloc: {
@@ -115,7 +114,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -130,7 +129,7 @@
     },
   },
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '',
     yylloc: {
@@ -202,6 +201,17 @@
         41,
         41,
       ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 13,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
     },
   },
 ]

@@ -1,7 +1,6 @@
 [
-  32,
   {
-    id: 19,
+    id: 20,
     token: '"MACRO_NAME"',
     yytext: 'D',
     yylloc: {
@@ -16,7 +15,7 @@
     },
   },
   {
-    id: 45,
+    id: 46,
     token: '"REGEX_SET_START"',
     yytext: '[',
     yylloc: {
@@ -31,7 +30,7 @@
     },
   },
   {
-    id: 47,
+    id: 48,
     token: '"REGEX_SET"',
     yytext: '0-9',
     yylloc: {
@@ -46,7 +45,7 @@
     },
   },
   {
-    id: 46,
+    id: 47,
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
@@ -61,7 +60,7 @@
     },
   },
   {
-    id: 20,
+    id: 21,
     token: '"MACRO_END"',
     yytext: '',
     yylloc: {
@@ -76,7 +75,7 @@
     },
   },
   {
-    id: 19,
+    id: 20,
     token: '"MACRO_NAME"',
     yytext: 'ID',
     yylloc: {
@@ -91,7 +90,7 @@
     },
   },
   {
-    id: 45,
+    id: 46,
     token: '"REGEX_SET_START"',
     yytext: '[',
     yylloc: {
@@ -106,7 +105,7 @@
     },
   },
   {
-    id: 47,
+    id: 48,
     token: '"REGEX_SET"',
     yytext: 'a-zA-Z_',
     yylloc: {
@@ -121,7 +120,7 @@
     },
   },
   {
-    id: 46,
+    id: 47,
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
@@ -136,7 +135,7 @@
     },
   },
   {
-    id: 45,
+    id: 46,
     token: '"REGEX_SET_START"',
     yytext: '[',
     yylloc: {
@@ -151,7 +150,7 @@
     },
   },
   {
-    id: 47,
+    id: 48,
     token: '"REGEX_SET"',
     yytext: 'a-zA-Z0-9_',
     yylloc: {
@@ -166,7 +165,7 @@
     },
   },
   {
-    id: 46,
+    id: 47,
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
@@ -196,7 +195,7 @@
     },
   },
   {
-    id: 20,
+    id: 21,
     token: '"MACRO_END"',
     yytext: '',
     yylloc: {
@@ -211,7 +210,7 @@
     },
   },
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -226,7 +225,7 @@
     },
   },
   {
-    id: 44,
+    id: 45,
     token: "macro name in '{...}' curly braces",
     yytext: '{D}',
     yylloc: {
@@ -241,7 +240,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"ohhai"',
     yylloc: {
@@ -256,7 +255,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -271,7 +270,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -286,7 +285,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'print(9);',
     yylloc: {
@@ -301,7 +300,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -316,7 +315,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -331,7 +330,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"{"',
     yylloc: {
@@ -346,7 +345,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
@@ -361,7 +360,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
@@ -376,7 +375,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: "'{'",
     yylloc: {
@@ -391,7 +390,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
@@ -406,7 +405,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -421,7 +420,7 @@
     },
   },
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '',
     yylloc: {
@@ -493,6 +492,17 @@
         79,
         79,
       ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 33,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
     },
   },
 ]

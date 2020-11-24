@@ -1,7 +1,6 @@
 [
-  15,
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -16,7 +15,7 @@
     },
   },
   {
-    id: 40,
+    id: 41,
     token: '"SPECIAL_GROUP"',
     yytext: '(?:',
     yylloc: {
@@ -31,7 +30,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"foo"',
     yylloc: {
@@ -61,7 +60,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"bar"',
     yylloc: {
@@ -91,7 +90,7 @@
     },
   },
   {
-    id: 42,
+    id: 43,
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\(',
     yylloc: {
@@ -106,7 +105,7 @@
     },
   },
   {
-    id: 42,
+    id: 43,
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\)',
     yylloc: {
@@ -121,7 +120,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
@@ -136,7 +135,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'return 1;',
     yylloc: {
@@ -151,7 +150,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -166,7 +165,7 @@
     },
   },
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '',
     yylloc: {
@@ -238,6 +237,17 @@
         34,
         34,
       ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 16,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
     },
   },
 ]

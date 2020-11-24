@@ -1,7 +1,6 @@
 [
-  17,
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -16,7 +15,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"["',
     yylloc: {
@@ -31,7 +30,7 @@
     },
   },
   {
-    id: 45,
+    id: 46,
     token: '"REGEX_SET_START"',
     yytext: '[',
     yylloc: {
@@ -46,7 +45,7 @@
     },
   },
   {
-    id: 47,
+    id: 48,
     token: '"REGEX_SET"',
     yytext: '^\\]',
     yylloc: {
@@ -61,7 +60,7 @@
     },
   },
   {
-    id: 46,
+    id: 47,
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
@@ -76,7 +75,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"]"',
     yylloc: {
@@ -91,7 +90,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '%{{',
     yylloc: {
@@ -106,7 +105,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: `
 return "%{..%}";
@@ -123,7 +122,7 @@ return "%{..%}";
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -138,7 +137,7 @@ return "%{..%}";
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"CHARACTER_LIT"',
     yytext: 'a',
     yylloc: {
@@ -153,7 +152,7 @@ return "%{..%}";
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '%{',
     yylloc: {
@@ -168,7 +167,7 @@ return "%{..%}";
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: ' return "A"; ',
     yylloc: {
@@ -183,7 +182,7 @@ return "%{..%}";
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -198,7 +197,7 @@ return "%{..%}";
     },
   },
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '',
     yylloc: {
@@ -270,6 +269,17 @@ return "%{..%}";
         61,
         61,
       ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 18,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
     },
   },
 ]

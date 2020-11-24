@@ -1,7 +1,6 @@
 [
-  33,
   {
-    id: 27,
+    id: 28,
     token: '"OPTIONS"',
     yytext: '%options',
     yylloc: {
@@ -346,7 +345,7 @@
     },
   },
   {
-    id: 21,
+    id: 22,
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
@@ -361,7 +360,7 @@
     },
   },
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -376,7 +375,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"foo"',
     yylloc: {
@@ -391,7 +390,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
@@ -406,7 +405,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'return 1;',
     yylloc: {
@@ -421,7 +420,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -436,7 +435,7 @@
     },
   },
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '',
     yylloc: {
@@ -508,6 +507,17 @@
         109,
         109,
       ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 34,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
     },
   },
 ]

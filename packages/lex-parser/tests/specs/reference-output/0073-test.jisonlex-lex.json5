@@ -1,7 +1,6 @@
 [
-  131,
   {
-    id: 27,
+    id: 28,
     token: '"OPTIONS"',
     yytext: '%options',
     yylloc: {
@@ -31,7 +30,7 @@
     },
   },
   {
-    id: 21,
+    id: 22,
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
@@ -46,7 +45,7 @@
     },
   },
   {
-    id: 31,
+    id: 32,
     token: '"START_INC"',
     yytext: '%s',
     yylloc: {
@@ -91,7 +90,7 @@
     },
   },
   {
-    id: 21,
+    id: 22,
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
@@ -106,7 +105,7 @@
     },
   },
   {
-    id: 32,
+    id: 33,
     token: '"START_EXC"',
     yytext: '%x',
     yylloc: {
@@ -136,7 +135,7 @@
     },
   },
   {
-    id: 21,
+    id: 22,
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
@@ -151,7 +150,7 @@
     },
   },
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -166,7 +165,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"enter-test"',
     yylloc: {
@@ -181,7 +180,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -196,7 +195,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -211,7 +210,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'this.begin(',
     yylloc: {
@@ -226,7 +225,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: "'TEST'",
     yylloc: {
@@ -241,7 +240,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: ');',
     yylloc: {
@@ -256,7 +255,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -271,7 +270,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -286,7 +285,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"enter_test"',
     yylloc: {
@@ -301,7 +300,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -316,7 +315,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -331,7 +330,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'this.begin(',
     yylloc: {
@@ -346,7 +345,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: "'TEST'",
     yylloc: {
@@ -361,7 +360,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: ');',
     yylloc: {
@@ -376,7 +375,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -391,7 +390,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -466,7 +465,7 @@
     },
   },
   {
-    id: 21,
+    id: 22,
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
@@ -496,7 +495,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"x"',
     yylloc: {
@@ -511,7 +510,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -526,7 +525,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -541,7 +540,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
@@ -556,7 +555,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: "'T'",
     yylloc: {
@@ -571,7 +570,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
@@ -586,7 +585,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -601,7 +600,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -646,7 +645,7 @@
     },
   },
   {
-    id: 21,
+    id: 22,
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
@@ -676,7 +675,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"z"',
     yylloc: {
@@ -691,7 +690,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -706,7 +705,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -721,7 +720,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
@@ -736,7 +735,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: "'Z'",
     yylloc: {
@@ -751,7 +750,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
@@ -766,7 +765,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -781,7 +780,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -826,7 +825,7 @@
     },
   },
   {
-    id: 21,
+    id: 22,
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
@@ -856,7 +855,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"y"',
     yylloc: {
@@ -871,7 +870,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -886,7 +885,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -901,7 +900,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'this.begin(',
     yylloc: {
@@ -916,7 +915,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: "'INITIAL'",
     yylloc: {
@@ -931,7 +930,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '); return ',
     yylloc: {
@@ -946,7 +945,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: "'TY'",
     yylloc: {
@@ -961,7 +960,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
@@ -976,7 +975,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -991,7 +990,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -1006,7 +1005,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"CHARACTER_LIT"',
     yytext: '"',
     yylloc: {
@@ -1021,7 +1020,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"CHARACTER_LIT"',
     yytext: "'",
     yylloc: {
@@ -1036,7 +1035,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"a"',
     yylloc: {
@@ -1051,7 +1050,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
@@ -1066,7 +1065,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'return 1;',
     yylloc: {
@@ -1081,7 +1080,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -1096,7 +1095,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"CHARACTER_LIT"',
     yytext: '"',
     yylloc: {
@@ -1111,7 +1110,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"CHARACTER_LIT"',
     yytext: "'",
     yylloc: {
@@ -1126,7 +1125,7 @@
     },
   },
   {
-    id: 42,
+    id: 43,
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\\\',
     yylloc: {
@@ -1141,7 +1140,7 @@
     },
   },
   {
-    id: 42,
+    id: 43,
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\*',
     yylloc: {
@@ -1156,7 +1155,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"CHARACTER_LIT"',
     yytext: 'i',
     yylloc: {
@@ -1171,7 +1170,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
@@ -1186,7 +1185,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'return 1;',
     yylloc: {
@@ -1201,7 +1200,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -1216,7 +1215,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"a"',
     yylloc: {
@@ -1231,7 +1230,7 @@
     },
   },
   {
-    id: 42,
+    id: 43,
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\b',
     yylloc: {
@@ -1246,7 +1245,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
@@ -1261,7 +1260,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'return 2;',
     yylloc: {
@@ -1276,7 +1275,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -1291,7 +1290,7 @@
     },
   },
   {
-    id: 43,
+    id: 44,
     token: '"ESCAPED_CHAR"',
     yytext: 1,
     yylloc: {
@@ -1306,7 +1305,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -1321,7 +1320,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -1336,7 +1335,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -1351,7 +1350,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -1366,7 +1365,7 @@
     },
   },
   {
-    id: 43,
+    id: 44,
     token: '"ESCAPED_CHAR"',
     yytext: 10,
     yylloc: {
@@ -1381,7 +1380,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -1396,7 +1395,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -1411,7 +1410,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -1426,7 +1425,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -1441,7 +1440,7 @@
     },
   },
   {
-    id: 43,
+    id: 44,
     token: '"ESCAPED_CHAR"',
     yytext: 255,
     yylloc: {
@@ -1456,7 +1455,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -1471,7 +1470,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -1486,7 +1485,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -1501,7 +1500,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -1516,7 +1515,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"["',
     yylloc: {
@@ -1531,7 +1530,7 @@
     },
   },
   {
-    id: 45,
+    id: 46,
     token: '"REGEX_SET_START"',
     yytext: '[',
     yylloc: {
@@ -1546,7 +1545,7 @@
     },
   },
   {
-    id: 47,
+    id: 48,
     token: '"REGEX_SET"',
     yytext: '^\\\\',
     yylloc: {
@@ -1561,7 +1560,7 @@
     },
   },
   {
-    id: 46,
+    id: 47,
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
@@ -1576,7 +1575,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: '"]"',
     yylloc: {
@@ -1591,7 +1590,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -1606,7 +1605,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -1621,7 +1620,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'return true;',
     yylloc: {
@@ -1636,7 +1635,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -1651,7 +1650,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -1666,7 +1665,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: `'f"oo\\'bar'`,
     yylloc: {
@@ -1681,7 +1680,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -1696,7 +1695,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -1711,7 +1710,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
@@ -1726,7 +1725,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: "'baz2'",
     yylloc: {
@@ -1741,7 +1740,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
@@ -1756,7 +1755,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -1771,7 +1770,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -1786,7 +1785,7 @@
     },
   },
   {
-    id: 49,
+    id: 50,
     token: '"STRING_LIT"',
     yytext: `"fo\\"obar"`,
     yylloc: {
@@ -1801,7 +1800,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '{',
     yylloc: {
@@ -1816,7 +1815,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '{',
     yylloc: {
@@ -1831,7 +1830,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
@@ -1846,7 +1845,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: "'baz'",
     yylloc: {
@@ -1861,7 +1860,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
@@ -1876,7 +1875,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '}',
     yylloc: {
@@ -1891,7 +1890,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -1906,7 +1905,7 @@
     },
   },
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '',
     yylloc: {
@@ -1978,6 +1977,17 @@
         383,
         383,
       ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 132,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
     },
   },
 ]

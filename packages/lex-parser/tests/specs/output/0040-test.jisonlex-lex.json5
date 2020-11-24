@@ -1,8 +1,7 @@
 [
-  21,
   {
-    id: 29,
-    token: '"CODE"',
+    id: 30,
+    token: '"INIT_CODE"',
     yytext: '%code',
     yylloc: {
       first_line: 1,
@@ -31,7 +30,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '%{',
     yylloc: {
@@ -46,7 +45,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: ' x; ',
     yylloc: {
@@ -61,7 +60,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -76,7 +75,7 @@
     },
   },
   {
-    id: 21,
+    id: 22,
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
@@ -91,8 +90,8 @@
     },
   },
   {
-    id: 29,
-    token: '"CODE"',
+    id: 30,
+    token: '"INIT_CODE"',
     yytext: '%code',
     yylloc: {
       first_line: 2,
@@ -121,7 +120,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: '%{',
     yylloc: {
@@ -136,7 +135,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: `
   import JSON5 from '@gerhobbelt/json5';
@@ -155,7 +154,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -170,7 +169,7 @@
     },
   },
   {
-    id: 21,
+    id: 22,
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
@@ -185,7 +184,7 @@
     },
   },
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -215,7 +214,7 @@
     },
   },
   {
-    id: 25,
+    id: 26,
     token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
@@ -230,7 +229,7 @@
     },
   },
   {
-    id: 35,
+    id: 36,
     token: '"ACTION_BODY"',
     yytext: '//',
     yylloc: {
@@ -245,7 +244,7 @@
     },
   },
   {
-    id: 23,
+    id: 24,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
@@ -260,7 +259,7 @@
     },
   },
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '',
     yylloc: {
@@ -332,6 +331,17 @@
         134,
         134,
       ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 22,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
     },
   },
 ]
