@@ -1,6 +1,5 @@
 
 ROLLUP = ../../node_modules/.bin/rollup
-BABEL = ../../node_modules/.bin/babel
 MOCHA = ../../node_modules/.bin/mocha
 NYC = ../../node_modules/.bin/nyc      --clean=false --temp-directory ../../.nyc_output
 

@@ -7,7 +7,7 @@
   "name": "@gerhobbelt/ebnf-parser",
   "version": "0.7.0-220",
   "description": "A parser for BNF and EBNF grammars used by jison",
-  "main": "dist/ebnf-parser-cjs-es5.js",
+  "main": "dist/ebnf-parser-cjs.js",
   "module": "ebnf-parser.js",
   "scripts": {
     "test": "make test",

@@ -1,8 +1,8 @@
+PATH        := ../../node_modules/.bin:${PATH}
 
 JISON_VERSION := $(shell node ../../dist/cli-cjs.js -V 2> /dev/null )
 
 ROLLUP = ../../node_modules/.bin/rollup
-BABEL = ../../node_modules/.bin/babel
 MOCHA = ../../node_modules/.bin/mocha
 NYC = ../../node_modules/.bin/nyc      --clean=false --temp-directory ../../.nyc_output
 
@@ -36,10 +36,13 @@ endif
 	$(JISON) -m es -o lex-parser.js lex.y lex.l
 	-mkdir -p dist
 	$(ROLLUP) -c
-	$(BABEL) dist/lex-parser-cjs.js -o dist/lex-parser-cjs-es5.js
-	$(BABEL) dist/lex-parser-umd.js -o dist/lex-parser-umd-es5.js
 
-test:
+tests/lex/lex-master.jisonlex: tests/lex/lex-master.header.txt lex.l
+	cat tests/lex/lex-master.header.txt lex.l > $@
+	
+prep-test: tests/lex/lex-master.jisonlex
+
+test: prep-test
 	$(MOCHA) --timeout 18000 --check-leaks --globals assert tests/
 
 test-nyc:
@@ -72,7 +75,9 @@ superclean: clean
 
 
 
+clean-dumpfiles:
+	bash -c "find . -type f \( -iname '*fatal_*_dump*' -o -ipath '*reference-output*' -o -ipath '*/lex/output/*' -o -ipath '*/specs/output/*' -o -ipath '*/examples/output/*' \) -print -delete"
 
 
-.PHONY: all prep npm-install build test clean superclean bump git-tag publish npm-update test-nyc
+.PHONY: all prep npm-install build test prep-test clean superclean clean-dumpfiles bump git-tag publish npm-update test-nyc
 

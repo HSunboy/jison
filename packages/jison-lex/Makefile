@@ -2,7 +2,6 @@ PATH        := ../../node_modules/.bin:${PATH}
 
 
 ROLLUP = ../../node_modules/.bin/rollup
-BABEL = ../../node_modules/.bin/babel
 MOCHA = ../../node_modules/.bin/mocha
 NYC = ../../node_modules/.bin/nyc      --clean=false --temp-directory ../../.nyc_output
 
@@ -28,11 +27,7 @@ build:
 	node __patch_lexer_kernel_in_js.js
 	-mkdir -p dist
 	$(ROLLUP) -c
-	$(BABEL) dist/regexp-lexer-cjs.js -o dist/regexp-lexer-cjs-es5.js
-	$(BABEL) dist/regexp-lexer-umd.js -o dist/regexp-lexer-umd-es5.js
 	$(ROLLUP) -c rollup.config-cli.js
-	$(BABEL) dist/cli-cjs.js -o dist/cli-cjs-es5.js
-	$(BABEL) dist/cli-umd.js -o dist/cli-umd-es5.js
 	node __patch_nodebang_in_js.js
 
 test:

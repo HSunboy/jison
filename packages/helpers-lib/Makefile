@@ -1,6 +1,5 @@
 
 ROLLUP = ../../node_modules/.bin/rollup
-BABEL = ../../node_modules/.bin/babel
 MOCHA = ../../node_modules/.bin/mocha
 NYC = ../../node_modules/.bin/nyc      --clean=false --temp-directory ../../.nyc_output
 
@@ -19,8 +18,6 @@ npm-update:
 build:
 	-mkdir -p dist
 	$(ROLLUP) -c
-	$(BABEL) dist/helpers-lib-cjs.js -o dist/helpers-lib-cjs-es5.js
-	$(BABEL) dist/helpers-lib-umd.js -o dist/helpers-lib-umd-es5.js
 
 test:
 	$(MOCHA) --timeout 18000 --check-leaks --globals assert tests/

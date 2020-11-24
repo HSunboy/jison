@@ -3,7 +3,6 @@ PATH        := ./node_modules/.bin:${PATH}
 NANOC := $(shell command -v nanoc 2> /dev/null)
 
 ROLLUP = node_modules/.bin/rollup
-BABEL = node_modules/.bin/babel
 MOCHA = node_modules/.bin/mocha
 NYC = node_modules/.bin/nyc      --clean=false --temp-directory ./.nyc_output
 
@@ -476,8 +475,6 @@ dist/cli-cjs.js: dist/jison.js rollup.config-cli.js package.json lib/jison-parse
 	node __patch_parser_kernel_in_js.js
 	-mkdir -p dist
 	$(ROLLUP) -c rollup.config-cli.js
-	$(BABEL) dist/cli-cjs.js -o dist/cli-cjs-es5.js
-	$(BABEL) dist/cli-umd.js -o dist/cli-umd-es5.js
 	node __patch_nodebang_in_js.js
 
 dist/jison.js: rollup.config.js rollup.config-template.js package.json lib/jison-parser-kernel.js
@@ -485,8 +482,6 @@ dist/jison.js: rollup.config.js rollup.config-template.js package.json lib/jison
 	node __patch_parser_kernel_in_js.js
 	-mkdir -p dist
 	$(ROLLUP) -c
-	$(BABEL) dist/jison-cjs.js -o dist/jison-cjs-es5.js
-	$(BABEL) dist/jison-umd.js -o dist/jison-umd-es5.js
 
 fix-linenumbers:
 	node __patch_linenumbers_in_js.js
