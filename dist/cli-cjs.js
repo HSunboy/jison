@@ -10028,7 +10028,7 @@ var lexer = function() {
         let conditionStackDepth = this.conditionStack.length;
         let token = this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
 
-        if (token === this.ERROR) {
+        //if (token === this.ERROR) {
           // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
           // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
           // has not consumed/modified any pending input or changed state in the error handler:
@@ -10038,7 +10038,7 @@ var lexer = function() {
           activeCondition === this.topState() && conditionStackDepth === this.conditionStack.length) {
             this.input();
           }
-        }
+        //}
 
         return token;
       }
@@ -15407,7 +15407,7 @@ return `{
             let conditionStackDepth = this.conditionStack.length;
 
             let token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
-            if (token === this.ERROR) {
+            //if (token === this.ERROR) {
                 // we can try to recover from a lexer error that \`parseError()\` did not 'recover' for us
                 // by moving forward at least one character at a time IFF the (user-specified?) \`parseError()\`
                 // has not consumed/modified any pending input or changed state in the error handler:
@@ -15421,7 +15421,7 @@ return `{
                 ) {
                     this.input();
                 }
-            }
+            //}
             return token;
         }
     },
@@ -19521,7 +19521,7 @@ var lexer$1 = function() {
         let conditionStackDepth = this.conditionStack.length;
         let token = this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
 
-        if (token === this.ERROR) {
+        //if (token === this.ERROR) {
           // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
           // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
           // has not consumed/modified any pending input or changed state in the error handler:
@@ -19531,7 +19531,7 @@ var lexer$1 = function() {
           activeCondition === this.topState() && conditionStackDepth === this.conditionStack.length) {
             this.input();
           }
-        }
+        //}
 
         return token;
       }
@@ -27103,7 +27103,7 @@ var lexer$2 = function() {
         let conditionStackDepth = this.conditionStack.length;
         let token = this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
 
-        if (token === this.ERROR) {
+        //if (token === this.ERROR) {
           // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
           // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
           // has not consumed/modified any pending input or changed state in the error handler:
@@ -27113,7 +27113,7 @@ var lexer$2 = function() {
           activeCondition === this.topState() && conditionStackDepth === this.conditionStack.length) {
             this.input();
           }
-        }
+        //}
 
         return token;
       }

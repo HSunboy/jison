@@ -248,7 +248,24 @@ describe('LEX spec lexer', function () {
 
             let yy = {
                 parseError: function customMainParseError(str, hash, ExceptionClass) {
-                    console.error("parseError: ", str);
+                    if (0) {
+                        console.error("parseError: ", str, (new Error('')).stack);
+                    }
+                    
+                    // we dump yytext in the token stream, so we can use that to dump a little
+                    // more info for comparison & diagnostics:
+                    this.yytext = {
+                        orig: this.yytext,
+                        errorDiag: {
+                            inputPos: this._input.length,
+                            yytext: this.yytext,
+                            yyleng: this.yyleng,
+                            matches: this.matches,
+                            activeCondition: this.topState(),
+                            conditionStackDepth: this.conditionStack.length,
+                            hash
+                        }
+                    };
                     return -42; // this.ERROR;
                 }
             };
