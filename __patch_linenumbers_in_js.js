@@ -3,7 +3,7 @@ const globby = require('globby');
 const fs = require('fs');
 
  
-globby(['*.js', 'lib/*.js', 'tests/**/*.js', 'packages/*/*.js', 'packages/*/tests/**/*.js']).then(paths => {
+globby(['*.js', 'lib/*.js', 'tests/**/*.js', 'packages/*/*.js', 'packages/*/*.l', 'packages/*/*.y', 'packages/*/tests/**/*.js']).then(paths => {
 	var count = 0;
 
     //console.log(paths);
