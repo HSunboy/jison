@@ -176,7 +176,7 @@ console.error(JSON5.stringify(testset, {
                 return `[...string (length: ${value.length}, lines: ${a.length}) ...]`;
             }
         }
-        if (/^(?:ref|spec|grammar)$/.test(key) && typeof value === 'object') {
+        if (/^(?:ref|lexerRef|spec|grammar)$/.test(key) && typeof value === 'object') {
             return '[... JSON ...]';
         }
         return value;
