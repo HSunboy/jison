@@ -1,4 +1,6 @@
 {
+  id: -1,
+  token: null,
   fail: 1,
   spec: `%%
 "["[^\\]]"]" %{{{{{
@@ -8,54 +10,6 @@ a %{ return "A"; %}
 
 `,
   err: {
-    name: 'JisonLexerError',
-    message: `Lexical error on line 2: 
-Incorrectly terminated action code block. We're expecting the
-'%}}}}}' end marker to go with the given start marker.
-Regrettably, it does not exist in the remainder of the input.
-
-  Erroneous area:
-1: %%
-2: "["[^\\]]"]" %{{{{{
-^..............^^^^^^
-3: return "%{..%}";
-4: }}}}}%`,
-    stack: `JisonLexerError: Lexical error on line 2: 
-Incorrectly terminated action code block. We're expecting the
-'%}}}}}' end marker to go with the given start marker.
-Regrettably, it does not exist in the remainder of the input.
-
-  Erroneous area:
-1: %%
-2: "["[^\\]]"]" %{{{{{
-^..............^^^^^^
-3: return "%{..%}";
-4: }}}}}%
-    at Object.parseError (/lex-parser-cjs.js:6599:15)
-    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:8687:44)
-    at Object.yyError [as yyerror] (/lex-parser-cjs.js:8718:19)
-    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:10282:19)
-    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:9623:38)
-    at Object.lexer_next [as next] (/lex-parser-cjs.js:9746:28)
-    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:9893:18)
-    at fastLex (/lex-parser-cjs.js:7187:27)
-    at Object.parse (/lex-parser-cjs.js:7361:30)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:11697:25)
-    at Context.testEachParserExample (/all-tests.js:336:27)
-    at callFn (/runnable.js:364:21)
-    at Test.Runnable.run (/runnable.js:352:5)
-    at Runner.runTest (/runner.js:677:10)
-    at /runner.js:801:12
-    at next (/runner.js:594:14)
-    at /runner.js:604:7
-    at next (/runner.js:486:14)
-    at cbHookRun (/runner.js:551:7)
-    at done (/runnable.js:308:5)
-    at callFn (/runnable.js:387:7)
-    at Hook.Runnable.run (/runnable.js:352:5)
-    at next (/runner.js:510:10)
-    at Immediate._onImmediate (/runner.js:572:5)
-    at processImmediate (/timers.js:456:21)`,
     hash: {
       errStr: `Lexical error on line 2: 
 Incorrectly terminated action code block. We're expecting the
@@ -85,11 +39,16 @@ Regrettably, it does not exist in the remainder of the input.
       yy: {
         actionInclude: [],
         options: {},
+        startConditions: {},
         __options_flags__: 0,
         __options_category_description__: 'the lexer rules definition section',
-        startConditions: {},
-        __context_description__: [
-          '???CONTEXT???',
+        __inside_scoped_ruleset__: false,
+        __context_cfg_stack__: [
+          {
+            flags: 0,
+            descr: '???',
+            scoped: false,
+          },
         ],
         depth: 0,
         include_command_allowed: false,
@@ -125,5 +84,60 @@ Regrettably, it does not exist in the remainder of the input.
         _backtrack: false,
       },
     },
+    message: `Lexical error on line 2: 
+Incorrectly terminated action code block. We're expecting the
+'%}}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+  Erroneous area:
+1: %%
+2: "["[^\\]]"]" %{{{{{
+^..............^^^^^^
+3: return "%{..%}";
+4: }}}}}%`,
+    name: 'JisonLexerError',
+    stack: `JisonLexerError: Lexical error on line 2: 
+Incorrectly terminated action code block. We're expecting the
+'%}}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+  Erroneous area:
+1: %%
+2: "["[^\\]]"]" %{{{{{
+^..............^^^^^^
+3: return "%{..%}";
+4: }}}}}%
+    at Object.parseError (/lex-parser-cjs.js:6988:15)
+    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:9076:44)
+    at Object.yyError [as yyerror] (/lex-parser-cjs.js:9107:19)
+    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:10671:19)
+    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10012:38)
+    at Object.lexer_next [as next] (/lex-parser-cjs.js:10135:28)
+    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:10282:18)
+    at fastLex (/lex-parser-cjs.js:7576:27)
+    at Object.parse (/lex-parser-cjs.js:7750:30)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12095:25)
+    at Context.testEachParserExample (/all-tests.js:424:27)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
   },
+  __original_input__: `%%
+"["[^\\]]"]" %{{{{{
+return "%{..%}";
+}}}}}%
+a %{ return "A"; %}
+
+`,
 }
