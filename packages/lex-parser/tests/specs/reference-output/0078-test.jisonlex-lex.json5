@@ -1,0 +1,250 @@
+[
+  {
+    id: 34,
+    token: '"%%"',
+    yytext: '%%',
+    yylloc: {
+      first_line: 1,
+      first_column: 0,
+      last_line: 1,
+      last_column: 2,
+      range: [
+        0,
+        2,
+      ],
+    },
+  },
+  {
+    id: 51,
+    token: '"STRING_LIT"',
+    yytext: '"["',
+    yylloc: {
+      first_line: 2,
+      first_column: 0,
+      last_line: 2,
+      last_column: 3,
+      range: [
+        3,
+        6,
+      ],
+    },
+  },
+  {
+    id: 46,
+    token: '"REGEX_SET_START"',
+    yytext: '[',
+    yylloc: {
+      first_line: 2,
+      first_column: 3,
+      last_line: 2,
+      last_column: 4,
+      range: [
+        6,
+        7,
+      ],
+    },
+  },
+  {
+    id: 49,
+    token: '"REGEX_SET"',
+    yytext: "abc -> 'BAD_REGEX' // unterminated regex set...",
+    yylloc: {
+      first_line: 2,
+      first_column: 4,
+      last_line: 2,
+      last_column: 51,
+      range: [
+        7,
+        54,
+      ],
+    },
+  },
+  {
+    id: 48,
+    token: '"UNTERMINATED_REGEX_SET"',
+    yytext: {
+      orig: '',
+      errorDiag: {
+        inputPos: 0,
+        yytext: '',
+        yyleng: 0,
+        matches: [
+          '',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+        hash: {
+          errStr: `Lexical error on line 2: 
+The regex [...] set has not been properly terminated by ']'.
+
+  Erroneous area:
+1: %%
+2: "["[abc -> 'BAD_REGEX' // unterminated regex set...
+^.....................................................^
+`,
+          recoverable: false,
+          text: '',
+          token: null,
+          line: 1,
+          loc: {
+            first_line: 2,
+            first_column: 51,
+            last_line: 2,
+            last_column: 51,
+            range: [
+              54,
+              54,
+            ],
+          },
+          yy: {},
+          lexer: {
+            EOF: 1,
+            ERROR: 2,
+            __error_infos: [
+              {
+                errStr: `Lexical error on line 2: 
+The regex [...] set has not been properly terminated by ']'.
+
+  Erroneous area:
+1: %%
+2: "["[abc -> 'BAD_REGEX' // unterminated regex set...
+^.....................................................^
+`,
+                recoverable: false,
+                text: '',
+                token: null,
+                line: 1,
+                loc: {
+                  first_line: 2,
+                  first_column: 51,
+                  last_line: 2,
+                  last_column: 51,
+                  range: [
+                    54,
+                    54,
+                  ],
+                },
+                yy: {},
+                lexer: '[lexer]',
+              },
+            ],
+            __decompressed: true,
+            done: true,
+            _backtrack: false,
+            _input: '',
+            _more: false,
+            _signaled_error_token: false,
+            _clear_state: 0,
+            conditionStack: [
+              'INITIAL',
+              'rules',
+            ],
+            match: '',
+            matched: `%%
+"["[abc -> 'BAD_REGEX' // unterminated regex set...`,
+            matches: false,
+            yytext: '',
+            offset: 54,
+            base_position: 0,
+            yyleng: 0,
+            yylineno: 1,
+            yylloc: {
+              first_line: 2,
+              first_column: 51,
+              last_line: 2,
+              last_column: 51,
+              range: [
+                54,
+                54,
+              ],
+            },
+            CRLF_Re: {
+              re: '/\\r\\n?|\\n/',
+              source: '\\r\\n?|\\n',
+              flags: '',
+            },
+            options: {
+              xregexp: true,
+              ranges: true,
+              trackPosition: true,
+              easy_keyword_rules: true,
+            },
+            yy: {},
+          },
+        },
+      },
+    },
+    yylloc: '[reference to sibling --> *.[4].yytext.errorDiag.hash.lexer.__error_infos.[0].loc]',
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 2,
+      first_column: 51,
+      last_line: 2,
+      last_column: 51,
+      range: [
+        54,
+        54,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 2,
+      first_column: 51,
+      last_line: 2,
+      last_column: 51,
+      range: [
+        54,
+        54,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 2,
+      first_column: 51,
+      last_line: 2,
+      last_column: 51,
+      range: [
+        54,
+        54,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 2,
+      first_column: 51,
+      last_line: 2,
+      last_column: 51,
+      range: [
+        54,
+        54,
+      ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 9,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
+    },
+  },
+]
