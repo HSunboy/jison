@@ -14,7 +14,7 @@
 import XRegExp from '@gerhobbelt/xregexp';
 import recast from 'recast';
 //import astUtils from 'ast-util';
-import * as babel from '@babel/core';
+// import * as babel from '@babel/core';
 import assert from 'assert';
 
 
@@ -857,40 +857,39 @@ function parseCodeChunkToAST(src, options) {
 }
 
 
-function compileCodeToES5(src, options) {
-    options = Object.assign({}, {
-        ast: true,
-        code: true,
-        sourceMaps: true,
-        comments: true,
-        filename: 'compileCodeToES5.js',
-        sourceFileName: 'compileCodeToES5.js',
-        sourceRoot: '.',
-        sourceType: 'module',
+// function compileCodeToES5(src, options) {
+//     options = Object.assign({}, {
+//         ast: true,
+//         code: true,
+//         sourceMaps: true,
+//         comments: true,
+//         filename: 'compileCodeToES5.js',
+//         sourceFileName: 'compileCodeToES5.js',
+//         sourceRoot: '.',
+//         sourceType: 'module',
 
-        babelrc: false,
+//         babelrc: false,
 
-        ignore: [
-            'node_modules/**/*.js'
-        ],
-        compact: false,
-        retainLines: false,
-        presets: [
-            [ '@babel/preset-env', {
-                targets: {
-                    browsers: [ 'last 2 versions' ],
-                    node: '8.0'
-                }
-            } ]
-        ]
-    }, options);
+//         ignore: [
+//             'node_modules/**/*.js'
+//         ],
+//         compact: false,
+//         retainLines: false,
+//         presets: [
+//             [ '@babel/preset-env', {
+//                 targets: {
+//                     browsers: [ 'last 2 versions' ],
+//                     node: '8.0'
+//                 }
+//             } ]
+//         ]
+//     }, options);
 
-    return babel.transformSync(src, options); // => { code, map, ast }
-}
+//     return babel.transformSync(src, options); // => { code, map, ast }
+// }
 
 
 function prettyPrintAST(ast, options) {
-    options = options || {};
     const defaultOptions = {
         tabWidth: 2,
         quote: 'single',
@@ -900,13 +899,9 @@ function prettyPrintAST(ast, options) {
         // when printing generically.
         reuseWhitespace: false
     };
-    for (let key in defaultOptions) {
-        if (options[key] === undefined) {
-            options[key] = defaultOptions[key];
-        }
-    }
-
-    let s = recast.prettyPrint(ast, defaultOptions);
+    options = Object.assign({}, defaultOptions, options);
+    
+    let s = recast.prettyPrint(ast, options);
     let new_src = s.code;
 
     new_src = new_src
@@ -1081,7 +1076,7 @@ function braceArrowActionCode(src) {
 export default {
     generateMapper4JisonGrammarIdentifiers,
     parseCodeChunkToAST,
-    compileCodeToES5,
+    //compileCodeToES5,
     prettyPrintAST,
     checkActionBlock,
     trimActionCode,

@@ -1,5 +1,7 @@
+const path = require('path');
 const fs = require('fs');
 const XRegExp = require('@gerhobbelt/xregexp');
+const JSON5 = require('@gerhobbelt/json5');
 const assert = require('chai').assert;
 // NodeJS doesn't support ES2015 import statements yet, so we must use the compiled/rollup-ed version instead:
 const helpers = require('../dist/helpers-lib-cjs');
@@ -96,7 +98,7 @@ describe('helpers API', function () {
     it ('rmCommonWS: applied to zero-indent initial line input string (bug regression check)', function () {
         let rmCommonWS = helpers.rmCommonWS;
 
-    // the key part of the next chunk is the ZERO INDENT of the yyerror... line!
+        // the key part of the next chunk is the ZERO INDENT of the yyerror... line!
         assert.strictEqual(rmCommonWS`
 yyerror(rmCommonWS\`
             There's probably an error in one or more of your lexer regex rules.
@@ -161,7 +163,7 @@ yyerror(rmCommonWS\`
         }
     });
 
-  /* istanbul ignore next: test functions' code is injected and then crashes the test due to extra code coverage statements having been injected */
+    /* istanbul ignore next: test functions' code is injected and then crashes the test due to extra code coverage statements having been injected */
     it('printFunctionSourceCode (direct)', function () {
         function d(i) { /* mock for linters */ }
 
@@ -182,7 +184,7 @@ yyerror(rmCommonWS\`
         }
     });
 
-  /* istanbul ignore next: test functions' code is injected and then crashes the test due to extra code coverage statements having been injected */
+    /* istanbul ignore next: test functions' code is injected and then crashes the test due to extra code coverage statements having been injected */
     it('printFunctionSourceCode (indirect)', function () {
         function d(i) { /* mock for linters */ }
 
@@ -210,7 +212,7 @@ yyerror(rmCommonWS\`
         }
     });
 
-  /* istanbul ignore next: test functions' code is injected and then crashes the test due to extra code coverage statements having been injected */
+    /* istanbul ignore next: test functions' code is injected and then crashes the test due to extra code coverage statements having been injected */
     it('printFunctionSourceCodeContainer (direct)', function () {
         function d(i) { /* mock for linters */ }
         let x;          /* mock */
@@ -232,7 +234,7 @@ yyerror(rmCommonWS\`
         }
     });
 
-  /* istanbul ignore next: test functions' code is injected and then crashes the test due to extra code coverage statements having been injected */
+    /* istanbul ignore next: test functions' code is injected and then crashes the test due to extra code coverage statements having been injected */
     it('printFunctionSourceCodeContainer (indirect)', function () {
         function d(i) { /* mock for linters */ }
         let x;          /* mock */
@@ -261,7 +263,7 @@ yyerror(rmCommonWS\`
         }
     });
 
-  // remove all whitespace from input string `src`
+    // remove all whitespace from input string `src`
     function rmAllWS(src) {
         return src.replace(/\s+/g, '');
     }
@@ -271,15 +273,15 @@ yyerror(rmCommonWS\`
         let g = helpers.generateMapper4JisonGrammarIdentifiers(source);
 
         function matchIdRegexBase(re) {
-      //let ist = re.toString();
-      //console.error('RE:', ist);
-      //return /^\/#\(.+\)#\/g$/.test(ist);
+            //let ist = re.toString();
+            //console.error('RE:', ist);
+            //return /^\/#\(.+\)#\/g$/.test(ist);
             return re instanceof XRegExp;
         }
 
         function matchGeneralIdRe(re) {
-      //let ist = re.toString();
-      //return /^\/#\(.+?\)#\/g$/.test(ist);
+            //let ist = re.toString();
+            //return /^\/#\(.+?\)#\/g$/.test(ist);
             return re instanceof XRegExp;
         }
 
@@ -318,15 +320,15 @@ yyerror(rmCommonWS\`
         let g = helpers.generateMapper4JisonGrammarIdentifiers(source);
 
         function matchIdRegexBase(re) {
-      //let ist = re.toString();
-      //console.error('RE:', ist);
-      //return /^\/#\(.+\)#\/g$/.test(ist);
+            //let ist = re.toString();
+            //console.error('RE:', ist);
+            //return /^\/#\(.+\)#\/g$/.test(ist);
             return re instanceof XRegExp;
         }
 
         function matchGeneralIdRe(re) {
-      //let ist = re.toString();
-      //return /^\/#\(.+?\)#\/g$/.test(ist);
+            //let ist = re.toString();
+            //return /^\/#\(.+?\)#\/g$/.test(ist);
             return re instanceof XRegExp;
         }
 
@@ -383,7 +385,7 @@ yyerror(rmCommonWS\`
         assert.deepEqual(cvt, source);
     });
 
-  // auto-init the Unicode mapper:
+    // auto-init the Unicode mapper:
     let mapper;
     function autoInitUnicodeMapper() {
         return {
@@ -455,7 +457,7 @@ yyerror(rmCommonWS\`
         assert.strictEqual(rv, sollwert_src.trim());
     });
 
-  // regression test: recast-0.15.1-32 is boogered and MUST NOT be used!
+    // regression test: recast-0.15.1-32 is boogered and MUST NOT be used!
     it('parseCodeChunkToAST must parse valid jison action code correctly (or your babel/recast version(s) will be boogered!)', function () {
         let rmCommonWS = helpers.rmCommonWS;
 
@@ -509,11 +511,40 @@ yyerror(rmCommonWS\`
         assert.ok(!helpers.isLegalIdentifierInput('1camelCase1'), 'NOT LEGAL: 1camelCase1');
     });
 
-    it('scanRegExp: **TBD**', function () {
+    it('scanRegExp:', function () {
         assert.ok(typeof helpers.scanRegExp === 'function');
+
+        let fixtures = JSON5.parse(fs.readFileSync(path.join(__dirname, 'fixtures/scanRegExp.input.json5'), 'utf8'));
+        let fuzzer = 3;
+        for (let key in fixtures.re) {
+            let txt = fixtures.re[key];
+            let l = helpers.scanRegExp(txt);
+            const master_length = txt.substr(1).lastIndexOf('/') + 2;
+            assert.equal(l, master_length, `RE test ${key} ~ text: '${txt}'`);
+            
+            let txt_sans_leading_slash = txt.substr(1);
+            l = helpers.scanRegExp(txt_sans_leading_slash);
+            assert.equal(l, txt_sans_leading_slash.lastIndexOf('/') + 1, `RE test ${key} SANS LEADING SLASH ~ text: '${txt_sans_leading_slash}'`);
+            
+            fuzzer = (fuzzer * 43) % 17 + 2;
+            let fuzzed_txt = txt + 'ookibooki[(?:((u|U|L))?([^\\n\\\\]|((\\\\(["?\\\\abfnrtv]|[0-7]{1,3}|x[\\dA-Fa-f]+))))+)/'.substr(fuzzer);
+            l = helpers.scanRegExp(fuzzed_txt);
+            assert.equal(l, master_length, `RE test ${key} with FUZZED tail ~ text: '${fuzzed_txt}'`);
+        }
+
+        for (let key in fixtures.source) {
+            let txt = fixtures.source[key];
+            let l = helpers.scanRegExp(txt);
+            assert.equal(l, -1, `SOURCE test ${key} ~ text: '${txt}'`);
+            
+            fuzzer = (fuzzer * 43) % 17 + 2;
+            let fuzzed_txt = txt + '/' + 'ookibooki[(?:((u|U|L))?([^\\n\\\\]|((\\\\(["?\\\\abfnrtv]|[0-7]{1,3}|x[\\dA-Fa-f]+))))+)/'.substr(fuzzer);
+            l = helpers.scanRegExp(fuzzed_txt);
+            assert.equal(l, txt.length + 1, `SOURCE test ${key} with FUZZED tail ~ text: '${fuzzed_txt}'`);
+        }
     });
 
-    it('trimErrorForTestReporting: **TBD**', function () {
+    it('trimErrorForTestReporting:', function () {
         assert.ok(typeof helpers.trimErrorForTestReporting === 'function');
         assert.equal(helpers.trimErrorForTestReporting('a\nb/c/d\ne\\f\\g\n'), 'a\nb/c/d\ne\\f\\g\n');
     });
@@ -685,8 +716,34 @@ yyerror(rmCommonWS\`
         assert.deepEqual(ist2, soll2);
     });
 
-    it('checkRegExp: **TBD**', function () {
+    it('checkRegExp:', function () {
         assert.ok(typeof helpers.checkRegExp === 'function');
+
+        let fixtures = JSON5.parse(fs.readFileSync(path.join(__dirname, 'fixtures/scanRegExp.input.json5'), 'utf8'));
+        let fuzzer = 3;
+        for (let key in fixtures.re) {
+            let txt = fixtures.re[key];
+            let l = helpers.checkRegExp(txt, null, XRegExp);
+            assert.equal(l, false, `RE test ${key} ~ text: '${txt}'`);
+            
+            fuzzer = (fuzzer * 43) % 17 + 2;
+            let fuzzed_txt = txt + 'ookibooki[(?:((u|U|L))?([^\\n\\\\]|((\\\\(["?\\\\abfnrtv]|[0-7]{1,3}|x[\\dA-Fa-f]+))))+)/'.substr(fuzzer);
+            l = helpers.checkRegExp(fuzzed_txt, null, XRegExp);
+            assert.equal(typeof l, 'object', `RE test ${key} with FUZZED ${fuzzer} tail ~ text: '${fuzzed_txt}'`);
+            assert.equal(String(l).indexOf('SyntaxError: Invalid regular expression:'), 0, `RE test ${key} with FUZZED ${fuzzer} tail ~ text: '${fuzzed_txt}'`);
+        }
+
+        for (let key in fixtures.source) {
+            let txt = fixtures.source[key];
+            let l = helpers.checkRegExp(txt, null, XRegExp);
+            assert.equal(l, false, `SOURCE test ${key} ~ text: '${txt}'`);
+            
+            fuzzer = (fuzzer * 43) % 17 + 2;
+            let fuzzed_txt = txt + '/' + 'ookibooki[(?:((u|U|L))?([^\\n\\\\]|((\\\\(["?\\\\abfnrtv]|[0-7]{1,3}|x[\\dA-Fa-f]+))))+)/'.substr(fuzzer);
+            l = helpers.checkRegExp(fuzzed_txt, null, XRegExp);
+            assert.equal(typeof l, 'object', `RE test ${key} with FUZZED ${fuzzer} tail ~ text: '${fuzzed_txt}'`);
+            assert.equal(String(l).indexOf('SyntaxError: Invalid regular expression:'), 0, `RE test ${key} with FUZZED ${fuzzer} tail ~ text: '${fuzzed_txt}'`);
+        }
     });
 
     it('getRegExpInfo: **TBD**', function () {
@@ -722,10 +779,8 @@ yyerror(rmCommonWS\`
         }
     });
 
-    it('compileCodeToES5: test default configuration', function () {
-        assert.ok(typeof helpers.compileCodeToES5 === 'function');
-        let rv = helpers.compileCodeToES5('console.log("hello");');
-        assert.equal(typeof rv.code, 'string');
+    it('extractSymbolTableFromFile: **TBD**', function () {
+        assert.ok(typeof helpers.extractSymbolTableFromFile === 'function');
     });
 });
 

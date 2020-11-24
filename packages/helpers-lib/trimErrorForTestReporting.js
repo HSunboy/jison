@@ -1,10 +1,13 @@
+import safe from './safe-code-exec-and-diag';
+const convertExceptionToObject = safe.convertExceptionToObject;
+
 let cycleref = [];
 let cyclerefpath = [];
 
 let linkref = [];
 let linkrefpath = [];
 
-let path = [];
+let breadcrumbs = [];
 
 function shallow_copy(src) {
     if (typeof src === 'object') {
@@ -14,14 +17,12 @@ function shallow_copy(src) {
 
         let dst = {};
         if (src instanceof Error) {
-            dst.name = src.name;
-            dst.message = src.message;
-            dst.stack = src.stack;
-        }
-
-        for (let k in src) {
-            if (Object.prototype.hasOwnProperty.call(src, k)) {
-                dst[k] = src[k];
+            dst = convertExceptionToObject(src);
+        } else {
+            for (let k in src) {
+                if (Object.prototype.hasOwnProperty.call(src, k)) {
+                    dst[k] = src[k];
+                }
             }
         }
         return dst;
@@ -37,25 +38,23 @@ function shallow_copy_and_strip_depth(src, parentKey) {
         if (src instanceof Array) {
             dst = src.slice();
             for (let i = 0, len = dst.length; i < len; i++) {
-                path.push('[' + i + ']');
+                breadcrumbs.push('[' + i + ']');
                 dst[i] = shallow_copy_and_strip_depth(dst[i], parentKey + '[' + i + ']');
-                path.pop();
+                breadcrumbs.pop();
             }
         } else {
             dst = {};
             if (src instanceof Error) {
-                dst.name = src.name;
-                dst.message = src.message;
-                dst.stack = src.stack;
-            }
-
-            for (let k in src) {
-                if (Object.prototype.hasOwnProperty.call(src, k)) {
-                    let el = src[k];
-                    if (el && typeof el === 'object') {
-                        dst[k] = '[cyclic reference::attribute --> ' + parentKey + '.' + k + ']';
-                    } else {
-                        dst[k] = src[k];
+                dst = convertExceptionToObject(src);
+            } else {
+                for (let k in src) {
+                    if (Object.prototype.hasOwnProperty.call(src, k)) {
+                        let el = src[k];
+                        if (el && typeof el === 'object') {
+                            dst[k] = '[cyclic reference::attribute --> ' + parentKey + '.' + k + ']';
+                        } else {
+                            dst[k] = src[k];
+                        }
                     }
                 }
             }
@@ -73,7 +72,7 @@ function stripErrorStackPaths(msg) {
     // and any `nyc` profiler run added trailing cruft has to go too, e.g. ', <anonymous>:1489:27)':
     msg = msg
     .replace(/\bat ([^\r\n(\\\/]+?)\([^)]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)\)(?:, <anonymous>:[0-9]+:[0-9]+\))?/gi, 'at $1(/$2:$3)')
-    .replace(/\bat [^\r\n ]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)/gi, 'at /$1:$2')
+    .replace(/\bat [^\r\n ]*?[\\\/]([a-z0-9_-]+\.js):([0-9]+:[0-9]+)/gi, 'at /$1:$2');
 
     return msg;
 }
@@ -115,12 +114,15 @@ function cleanStackTrace4Comparison(obj) {
 
 function trim_array_tail(arr) {
     if (arr instanceof Array) {
-        for (var len = arr.length; len > 0; len--) {
+        let len;
+        for (len = arr.length; len > 0; len--) {
             if (arr[len - 1] != null) {
                 break;
             }
         }
-        arr.length = len;
+        if (arr.length !== len) {
+            arr.length = len;
+        }
     }
 }
 
@@ -135,9 +137,9 @@ function treat_value_stack(v) {
                 v = '[reference to sibling array --> ' + linkrefpath[idx] + ', length = ' + v.length + ']';
             } else {
                 cycleref.push(v);
-                cyclerefpath.push(path.join('.'));
+                cyclerefpath.push(breadcrumbs.join('.'));
                 linkref.push(v);
-                linkrefpath.push(path.join('.'));
+                linkrefpath.push(breadcrumbs.join('.'));
 
                 v = treat_error_infos_array(v);
 
@@ -157,7 +159,7 @@ function treat_error_infos_array(arr) {
     for (let key = 0, len = inf.length; key < len; key++) {
         let err = inf[key];
         if (err) {
-            path.push('[' + key + ']');
+            breadcrumbs.push('[' + key + ']');
 
             err = treat_object(err);
 
@@ -172,15 +174,15 @@ function treat_error_infos_array(arr) {
                 trim_array_tail(err.state_stack);
                 trim_array_tail(err.location_stack);
                 if (err.value_stack) {
-                    path.push('value_stack');
+                    breadcrumbs.push('value_stack');
                     err.value_stack = treat_value_stack(err.value_stack);
-                    path.pop();
+                    breadcrumbs.pop();
                 }
             }
 
             inf[key] = err;
 
-            path.pop();
+            breadcrumbs.pop();
         }
     }
     return inf;
@@ -195,9 +197,9 @@ function treat_lexer(l) {
     delete l.__currentRuleSet__;
 
     if (l.__error_infos) {
-        path.push('__error_infos');
+        breadcrumbs.push('__error_infos');
         l.__error_infos = treat_value_stack(l.__error_infos);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     return l;
@@ -211,21 +213,21 @@ function treat_parser(p) {
     delete p.defaultActions;
 
     if (p.__error_infos) {
-        path.push('__error_infos');
+        breadcrumbs.push('__error_infos');
         p.__error_infos = treat_value_stack(p.__error_infos);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     if (p.__error_recovery_infos) {
-        path.push('__error_recovery_infos');
+        breadcrumbs.push('__error_recovery_infos');
         p.__error_recovery_infos = treat_value_stack(p.__error_recovery_infos);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     if (p.lexer) {
-        path.push('lexer');
+        breadcrumbs.push('lexer');
         p.lexer = treat_lexer(p.lexer);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     return p;
@@ -236,15 +238,15 @@ function treat_hash(h) {
     h = shallow_copy(h);
 
     if (h.parser) {
-        path.push('parser');
+        breadcrumbs.push('parser');
         h.parser = treat_parser(h.parser);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     if (h.lexer) {
-        path.push('lexer');
+        breadcrumbs.push('lexer');
         h.lexer = treat_lexer(h.lexer);
-        path.push();
+        breadcrumbs.push();
     }
 
     return h;
@@ -254,69 +256,101 @@ function treat_error_report_info(e) {
     // shallow copy object:
     e = shallow_copy(e);
 
-    if (e && e.hash) {
-        path.push('hash');
+    if (e.hash) {
+        breadcrumbs.push('hash');
         e.hash = treat_hash(e.hash);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     if (e.parser) {
-        path.push('parser');
+        breadcrumbs.push('parser');
         e.parser = treat_parser(e.parser);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     if (e.lexer) {
-        path.push('lexer');
+        breadcrumbs.push('lexer');
         e.lexer = treat_lexer(e.lexer);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     if (e.__error_infos) {
-        path.push('__error_infos');
+        breadcrumbs.push('__error_infos');
         e.__error_infos = treat_value_stack(e.__error_infos);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     if (e.__error_recovery_infos) {
-        path.push('__error_recovery_infos');
+        breadcrumbs.push('__error_recovery_infos');
         e.__error_recovery_infos = treat_value_stack(e.__error_recovery_infos);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     trim_array_tail(e.symbol_stack);
     trim_array_tail(e.state_stack);
     trim_array_tail(e.location_stack);
     if (e.value_stack) {
-        path.push('value_stack');
+        breadcrumbs.push('value_stack');
         e.value_stack = treat_value_stack(e.value_stack);
-        path.pop();
+        breadcrumbs.pop();
+    }
+
+    for (let key in e) {
+        switch (key) {
+        case 'hash':
+        case 'parser':
+        case 'lexer':
+        case '__error_infos':
+        case '__error_recovery_infos':
+        case 'symbol_stack':
+        case 'state_stack':
+        case 'location_stack':
+        case 'value_stack':
+            break;
+
+        default:
+            if (e[key] && typeof e[key] === 'object') {
+                breadcrumbs.push(key);
+                e[key] = treat_object(e[key]);
+                breadcrumbs.pop();
+            }
+            break;
+        }
     }
 
     return e;
 }
 
 function treat_object(e) {
-    if (e && typeof e === 'object') {
-        let idx = cycleref.indexOf(e);
-        if (idx >= 0) {
-            // cyclic reference, most probably an error instance.
-            // we still want it to be READABLE in a way, though:
-            e = shallow_copy_and_strip_depth(e, cyclerefpath[idx]);
-        } else {
-            idx = linkref.indexOf(e);
+    if (e) {
+        if (e instanceof Array) {
+            e = e.slice();
+            for (let key in e) {
+                breadcrumbs.push('[' + key + ']');
+                e[key] = treat_object(e[key]);
+                breadcrumbs.pop();
+            }
+        } else if (typeof e === 'object') {
+            let idx = cycleref.indexOf(e);
             if (idx >= 0) {
-                e = '[reference to sibling --> ' + linkrefpath[idx] + ']';
+                // cyclic reference, most probably an error instance.
+                // we still want it to be READABLE in a way, though:
+                e = shallow_copy_and_strip_depth(e, cyclerefpath[idx]);
             } else {
-                cycleref.push(e);
-                cyclerefpath.push(path.join('.'));
-                linkref.push(e);
-                linkrefpath.push(path.join('.'));
+                idx = linkref.indexOf(e);
+                if (idx >= 0) {
+                    e = '[reference to sibling --> ' + linkrefpath[idx] + ']';
+                } else {
+                    cycleref.push(e);
+                    cyclerefpath.push(breadcrumbs.join('.'));
+                    linkref.push(e);
+                    linkrefpath.push(breadcrumbs.join('.'));
 
-                e = treat_error_report_info(e);
+                    e = treat_error_report_info(e);
 
-                cycleref.pop();
-                cyclerefpath.pop();
+                    cycleref.pop();
+                    cyclerefpath.pop();
+                }
             }
         }
     }
@@ -333,7 +367,7 @@ function trimErrorForTestReporting(e) {
     cyclerefpath.length = 0;
     linkref.length = 0;
     linkrefpath.length = 0;
-    path = [ '*' ];
+    breadcrumbs = [ '*' ];
 
     if (e) {
         e = treat_object(e);
@@ -343,7 +377,7 @@ function trimErrorForTestReporting(e) {
     cyclerefpath.length = 0;
     linkref.length = 0;
     linkrefpath.length = 0;
-    path = [ '*' ];
+    breadcrumbs = [ '*' ];
 
     return e;
 }

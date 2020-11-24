@@ -1,18 +1,17 @@
 'use strict';
 
 var fs = require('fs');
-var path$1 = require('path');
+var path = require('path');
 var JSON5 = require('@gerhobbelt/json5');
 var mkdirp = require('mkdirp');
 var XRegExp = require('@gerhobbelt/xregexp');
 var recast = require('recast');
-var babel = require('@babel/core');
 var assert = require('assert');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
-var path__default = /*#__PURE__*/_interopDefaultLegacy(path$1);
+var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
 var JSON5__default = /*#__PURE__*/_interopDefaultLegacy(JSON5);
 var mkdirp__default = /*#__PURE__*/_interopDefaultLegacy(mkdirp);
 var XRegExp__default = /*#__PURE__*/_interopDefaultLegacy(XRegExp);
@@ -38,7 +37,7 @@ function startsWith(src, searchString) {
 // should also be removed from all subsequent lines in the same template string.
 //
 // See also: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Template_literals
-function rmCommonWS(strings, ...values) {
+function rmCommonWS$1(strings, ...values) {
     // As `strings[]` is an array of strings, each potentially consisting
     // of multiple lines, followed by one(1) value, we have to split each
     // individual string into lines to keep that bit of information intact.
@@ -508,7 +507,7 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
 
         if (debug > 1) console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
-        if (options.dumpSourceCodeOnFailure || 1) {
+        if (options.dumpSourceCodeOnFailure) {
             dumpSourceToFile(sourcecode, errname, err_id, options, ex);
         }
 
@@ -1103,40 +1102,39 @@ function parseCodeChunkToAST(src, options) {
 }
 
 
-function compileCodeToES5(src, options) {
-    options = Object.assign({}, {
-        ast: true,
-        code: true,
-        sourceMaps: true,
-        comments: true,
-        filename: 'compileCodeToES5.js',
-        sourceFileName: 'compileCodeToES5.js',
-        sourceRoot: '.',
-        sourceType: 'module',
+// function compileCodeToES5(src, options) {
+//     options = Object.assign({}, {
+//         ast: true,
+//         code: true,
+//         sourceMaps: true,
+//         comments: true,
+//         filename: 'compileCodeToES5.js',
+//         sourceFileName: 'compileCodeToES5.js',
+//         sourceRoot: '.',
+//         sourceType: 'module',
 
-        babelrc: false,
+//         babelrc: false,
 
-        ignore: [
-            'node_modules/**/*.js'
-        ],
-        compact: false,
-        retainLines: false,
-        presets: [
-            [ '@babel/preset-env', {
-                targets: {
-                    browsers: [ 'last 2 versions' ],
-                    node: '8.0'
-                }
-            } ]
-        ]
-    }, options);
+//         ignore: [
+//             'node_modules/**/*.js'
+//         ],
+//         compact: false,
+//         retainLines: false,
+//         presets: [
+//             [ '@babel/preset-env', {
+//                 targets: {
+//                     browsers: [ 'last 2 versions' ],
+//                     node: '8.0'
+//                 }
+//             } ]
+//         ]
+//     }, options);
 
-    return babel.transformSync(src, options); // => { code, map, ast }
-}
+//     return babel.transformSync(src, options); // => { code, map, ast }
+// }
 
 
 function prettyPrintAST(ast, options) {
-    options = options || {};
     const defaultOptions = {
         tabWidth: 2,
         quote: 'single',
@@ -1146,13 +1144,9 @@ function prettyPrintAST(ast, options) {
         // when printing generically.
         reuseWhitespace: false
     };
-    for (let key in defaultOptions) {
-        if (options[key] === undefined) {
-            options[key] = defaultOptions[key];
-        }
-    }
-
-    let s = recast__default['default'].prettyPrint(ast, defaultOptions);
+    options = Object.assign({}, defaultOptions, options);
+    
+    let s = recast__default['default'].prettyPrint(ast, options);
     let new_src = s.code;
 
     new_src = new_src
@@ -1327,7 +1321,7 @@ function braceArrowActionCode(src) {
 var parse2AST = {
     generateMapper4JisonGrammarIdentifiers,
     parseCodeChunkToAST,
-    compileCodeToES5,
+    //compileCodeToES5,
     prettyPrintAST,
     checkActionBlock,
     trimActionCode,
@@ -1571,13 +1565,15 @@ var reHelpers = {
     getRegExpInfo: getRegExpInfo
 };
 
+const convertExceptionToObject$1 = exec.convertExceptionToObject;
+
 let cycleref = [];
 let cyclerefpath = [];
 
 let linkref = [];
 let linkrefpath = [];
 
-let path = [];
+let breadcrumbs = [];
 
 function shallow_copy(src) {
     if (typeof src === 'object') {
@@ -1587,14 +1583,12 @@ function shallow_copy(src) {
 
         let dst = {};
         if (src instanceof Error) {
-            dst.name = src.name;
-            dst.message = src.message;
-            dst.stack = src.stack;
-        }
-
-        for (let k in src) {
-            if (Object.prototype.hasOwnProperty.call(src, k)) {
-                dst[k] = src[k];
+            dst = convertExceptionToObject$1(src);
+        } else {
+            for (let k in src) {
+                if (Object.prototype.hasOwnProperty.call(src, k)) {
+                    dst[k] = src[k];
+                }
             }
         }
         return dst;
@@ -1610,25 +1604,23 @@ function shallow_copy_and_strip_depth(src, parentKey) {
         if (src instanceof Array) {
             dst = src.slice();
             for (let i = 0, len = dst.length; i < len; i++) {
-                path.push('[' + i + ']');
+                breadcrumbs.push('[' + i + ']');
                 dst[i] = shallow_copy_and_strip_depth(dst[i], parentKey + '[' + i + ']');
-                path.pop();
+                breadcrumbs.pop();
             }
         } else {
             dst = {};
             if (src instanceof Error) {
-                dst.name = src.name;
-                dst.message = src.message;
-                dst.stack = src.stack;
-            }
-
-            for (let k in src) {
-                if (Object.prototype.hasOwnProperty.call(src, k)) {
-                    let el = src[k];
-                    if (el && typeof el === 'object') {
-                        dst[k] = '[cyclic reference::attribute --> ' + parentKey + '.' + k + ']';
-                    } else {
-                        dst[k] = src[k];
+                dst = convertExceptionToObject$1(src);
+            } else {
+                for (let k in src) {
+                    if (Object.prototype.hasOwnProperty.call(src, k)) {
+                        let el = src[k];
+                        if (el && typeof el === 'object') {
+                            dst[k] = '[cyclic reference::attribute --> ' + parentKey + '.' + k + ']';
+                        } else {
+                            dst[k] = src[k];
+                        }
                     }
                 }
             }
@@ -1688,12 +1680,15 @@ function cleanStackTrace4Comparison(obj) {
 
 function trim_array_tail(arr) {
     if (arr instanceof Array) {
-        for (var len = arr.length; len > 0; len--) {
+        let len;
+        for (len = arr.length; len > 0; len--) {
             if (arr[len - 1] != null) {
                 break;
             }
         }
-        arr.length = len;
+        if (arr.length !== len) {
+            arr.length = len;
+        }
     }
 }
 
@@ -1708,9 +1703,9 @@ function treat_value_stack(v) {
                 v = '[reference to sibling array --> ' + linkrefpath[idx] + ', length = ' + v.length + ']';
             } else {
                 cycleref.push(v);
-                cyclerefpath.push(path.join('.'));
+                cyclerefpath.push(breadcrumbs.join('.'));
                 linkref.push(v);
-                linkrefpath.push(path.join('.'));
+                linkrefpath.push(breadcrumbs.join('.'));
 
                 v = treat_error_infos_array(v);
 
@@ -1730,7 +1725,7 @@ function treat_error_infos_array(arr) {
     for (let key = 0, len = inf.length; key < len; key++) {
         let err = inf[key];
         if (err) {
-            path.push('[' + key + ']');
+            breadcrumbs.push('[' + key + ']');
 
             err = treat_object(err);
 
@@ -1745,15 +1740,15 @@ function treat_error_infos_array(arr) {
                 trim_array_tail(err.state_stack);
                 trim_array_tail(err.location_stack);
                 if (err.value_stack) {
-                    path.push('value_stack');
+                    breadcrumbs.push('value_stack');
                     err.value_stack = treat_value_stack(err.value_stack);
-                    path.pop();
+                    breadcrumbs.pop();
                 }
             }
 
             inf[key] = err;
 
-            path.pop();
+            breadcrumbs.pop();
         }
     }
     return inf;
@@ -1768,9 +1763,9 @@ function treat_lexer(l) {
     delete l.__currentRuleSet__;
 
     if (l.__error_infos) {
-        path.push('__error_infos');
+        breadcrumbs.push('__error_infos');
         l.__error_infos = treat_value_stack(l.__error_infos);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     return l;
@@ -1784,21 +1779,21 @@ function treat_parser(p) {
     delete p.defaultActions;
 
     if (p.__error_infos) {
-        path.push('__error_infos');
+        breadcrumbs.push('__error_infos');
         p.__error_infos = treat_value_stack(p.__error_infos);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     if (p.__error_recovery_infos) {
-        path.push('__error_recovery_infos');
+        breadcrumbs.push('__error_recovery_infos');
         p.__error_recovery_infos = treat_value_stack(p.__error_recovery_infos);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     if (p.lexer) {
-        path.push('lexer');
+        breadcrumbs.push('lexer');
         p.lexer = treat_lexer(p.lexer);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     return p;
@@ -1809,15 +1804,15 @@ function treat_hash(h) {
     h = shallow_copy(h);
 
     if (h.parser) {
-        path.push('parser');
+        breadcrumbs.push('parser');
         h.parser = treat_parser(h.parser);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     if (h.lexer) {
-        path.push('lexer');
+        breadcrumbs.push('lexer');
         h.lexer = treat_lexer(h.lexer);
-        path.push();
+        breadcrumbs.push();
     }
 
     return h;
@@ -1827,69 +1822,101 @@ function treat_error_report_info(e) {
     // shallow copy object:
     e = shallow_copy(e);
 
-    if (e && e.hash) {
-        path.push('hash');
+    if (e.hash) {
+        breadcrumbs.push('hash');
         e.hash = treat_hash(e.hash);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     if (e.parser) {
-        path.push('parser');
+        breadcrumbs.push('parser');
         e.parser = treat_parser(e.parser);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     if (e.lexer) {
-        path.push('lexer');
+        breadcrumbs.push('lexer');
         e.lexer = treat_lexer(e.lexer);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     if (e.__error_infos) {
-        path.push('__error_infos');
+        breadcrumbs.push('__error_infos');
         e.__error_infos = treat_value_stack(e.__error_infos);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     if (e.__error_recovery_infos) {
-        path.push('__error_recovery_infos');
+        breadcrumbs.push('__error_recovery_infos');
         e.__error_recovery_infos = treat_value_stack(e.__error_recovery_infos);
-        path.pop();
+        breadcrumbs.pop();
     }
 
     trim_array_tail(e.symbol_stack);
     trim_array_tail(e.state_stack);
     trim_array_tail(e.location_stack);
     if (e.value_stack) {
-        path.push('value_stack');
+        breadcrumbs.push('value_stack');
         e.value_stack = treat_value_stack(e.value_stack);
-        path.pop();
+        breadcrumbs.pop();
+    }
+
+    for (let key in e) {
+        switch (key) {
+        case 'hash':
+        case 'parser':
+        case 'lexer':
+        case '__error_infos':
+        case '__error_recovery_infos':
+        case 'symbol_stack':
+        case 'state_stack':
+        case 'location_stack':
+        case 'value_stack':
+            break;
+
+        default:
+            if (e[key] && typeof e[key] === 'object') {
+                breadcrumbs.push(key);
+                e[key] = treat_object(e[key]);
+                breadcrumbs.pop();
+            }
+            break;
+        }
     }
 
     return e;
 }
 
 function treat_object(e) {
-    if (e && typeof e === 'object') {
-        let idx = cycleref.indexOf(e);
-        if (idx >= 0) {
-            // cyclic reference, most probably an error instance.
-            // we still want it to be READABLE in a way, though:
-            e = shallow_copy_and_strip_depth(e, cyclerefpath[idx]);
-        } else {
-            idx = linkref.indexOf(e);
+    if (e) {
+        if (e instanceof Array) {
+            e = e.slice();
+            for (let key in e) {
+                breadcrumbs.push('[' + key + ']');
+                e[key] = treat_object(e[key]);
+                breadcrumbs.pop();
+            }
+        } else if (typeof e === 'object') {
+            let idx = cycleref.indexOf(e);
             if (idx >= 0) {
-                e = '[reference to sibling --> ' + linkrefpath[idx] + ']';
+                // cyclic reference, most probably an error instance.
+                // we still want it to be READABLE in a way, though:
+                e = shallow_copy_and_strip_depth(e, cyclerefpath[idx]);
             } else {
-                cycleref.push(e);
-                cyclerefpath.push(path.join('.'));
-                linkref.push(e);
-                linkrefpath.push(path.join('.'));
+                idx = linkref.indexOf(e);
+                if (idx >= 0) {
+                    e = '[reference to sibling --> ' + linkrefpath[idx] + ']';
+                } else {
+                    cycleref.push(e);
+                    cyclerefpath.push(breadcrumbs.join('.'));
+                    linkref.push(e);
+                    linkrefpath.push(breadcrumbs.join('.'));
 
-                e = treat_error_report_info(e);
+                    e = treat_error_report_info(e);
 
-                cycleref.pop();
-                cyclerefpath.pop();
+                    cycleref.pop();
+                    cyclerefpath.pop();
+                }
             }
         }
     }
@@ -1906,7 +1933,7 @@ function trimErrorForTestReporting(e) {
     cyclerefpath.length = 0;
     linkref.length = 0;
     linkrefpath.length = 0;
-    path = [ '*' ];
+    breadcrumbs = [ '*' ];
 
     if (e) {
         e = treat_object(e);
@@ -1916,13 +1943,121 @@ function trimErrorForTestReporting(e) {
     cyclerefpath.length = 0;
     linkref.length = 0;
     linkrefpath.length = 0;
-    path = [ '*' ];
+    breadcrumbs = [ '*' ];
 
     return e;
 }
 
+function findSymbolTable(o, sectionName) {
+    if (o) {
+        let s = o[sectionName];
+        if (s && typeof s === 'object' && Object.keys(s).length > 0) {
+            return s;
+        }
+        for (let key in o) {
+            let rv = findSymbolTable(o[key]);
+            if (rv) return rv;
+        }
+    }
+    return null;
+}
+
+
+function extractSymbolTableFromFile(filepath, sectionName) {
+    let source;
+    let import_error;
+
+    sectionName = sectionName || 'symbols_';
+
+    try {
+        filepath = path__default['default'].resolve(filepath);
+
+        source = fs__default['default'].readFileSync(filepath, 'utf8');
+        // It's either a JSON file or a JISON generated output file:
+        //
+        //     symbols_: {
+        //       "symbol": ID, ...
+        //     },
+        try {
+            let obj = JSON5__default['default'].parse(source);
+
+            // two options: 
+            // 
+            // 1. symbol table is part of a larger JSON5 file
+            // 2. JSON5 file specifies the symbol table only & directly,
+            //    i.e. no 'symbols_:' prelude.
+            let s = findSymbolTable(obj, sectionName);
+            if (!s && obj && typeof obj === 'object' && Object.keys(obj).length > 0) {
+                s = obj;
+            }
+            if (!s) {
+                throw new Error(`No symbol table named '${sectionName}' found in the JSON5 file '${filepath}'.`);
+            }
+            predefined_symbols = s;
+        } catch (ex) {
+            import_error = ex;
+
+            // attempt to read the file as a JISON-generated parser source instead:
+            try {
+            	let re = new RegExp(`[\\r\\n]\\s*["']?${sectionName}["']?:\\s*(\\{[\\s\\S]*?\\}),?\\s*[\\r\\n]`);
+                let m = re.exec(source);
+            	console.error("extractSymbolTableFromFile REGEX match:", {re, m});
+                if (m && m[1]) {
+                    source = `
+                        {
+                            // content extracted from file:
+                            ${m[1]}
+                        }
+                    `;
+                    let obj = JSON5__default['default'].parse(source);
+                    let s = findSymbolTable(obj, sectionName);
+                    if (!s) {
+                        // let this error override anything that came before:
+                        import_error = null;
+                        throw new Error(`No symbol table found in the extracted '${sectionName}' section of file '${filepath}'.`);
+                    }
+                    predefined_symbols = s;
+                    import_error = null;
+                } else {
+                    throw new Error(`No potential '${sectionName}' symbol table section found in the file '${filepath}'.`);
+                }
+            } catch (ex2) {
+                if (!import_error) {
+                    import_error = ex2;
+                }
+            }
+        }
+    } catch (ex3) {
+        import_error = ex3;
+    }
+
+    assert__default['default'](predefined_symbols ? !import_error : import_error);
+    if (import_error) {
+        throw new Error((rmCommonWS`
+            Error: '%import symbols <path>' must point to either a JSON file containing 
+            a symbol table (hash table) or a previously generated JISON JavaScript file, 
+            which contains such a symbol table.
+
+            Expected file format: 
+            It's either a JSON file or a JISON generated output file, which contains 
+            a section like this:
+
+                ${sectionName}: {
+                    "symbol": ID, 
+                    ...
+                }
+
+            Reported error:
+                ${import_error}
+        `).trim(), import_error);
+    }
+    assert__default['default'](predefined_symbols);
+    assert__default['default'](typeof predefined_symbols === 'object');
+    return predefined_symbols;
+}
+
 var index = {
-    rmCommonWS,
+    rmCommonWS: rmCommonWS$1,
     camelCase,
     mkIdentifier,
     isLegalIdentifierInput,
@@ -1931,6 +2066,7 @@ var index = {
     trimErrorForTestReporting,
     stripErrorStackPaths,
     cleanStackTrace4Comparison,
+    extractSymbolTableFromFile,
 
     checkRegExp: reHelpers.checkRegExp,
     getRegExpInfo: reHelpers.getRegExpInfo,
@@ -1941,7 +2077,7 @@ var index = {
 
     generateMapper4JisonGrammarIdentifiers: parse2AST.generateMapper4JisonGrammarIdentifiers,
     parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,
-    compileCodeToES5: parse2AST.compileCodeToES5,
+    //compileCodeToES5: parse2AST.compileCodeToES5,
     prettyPrintAST: parse2AST.prettyPrintAST,
     checkActionBlock: parse2AST.checkActionBlock,
     trimActionCode: parse2AST.trimActionCode,
