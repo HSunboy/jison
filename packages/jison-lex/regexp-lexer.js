@@ -3666,7 +3666,7 @@ function generateGenericHeaderComment() {
      *               when such a collision is detected an exception is thrown to prevent the generated run-time
      *               from silently accepting this confusing and potentially hazardous situation!
      *
-     *    cleanupAfterLex: function(do_not_nuke_errorinfos),
+     *    cleanupAfterLex: function(),
      *               Helper function.
      *
      *               This helper API is invoked when the **parse process** has completed: it is the responsibility

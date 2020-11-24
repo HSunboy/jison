@@ -420,6 +420,27 @@ describe('LEX parser', function () {
             let countERRORs = 0;
             let countFATALs = 0;
 
+            let pre_called = 0;
+            lex.parser.pre_parse = function pre(sharedState_yy) {
+                pre_called++;
+            };
+            let post_called = 0;
+            let post_info = null;
+            lex.parser.post_parse = function post(sharedState_yy, resultValue, hash) {
+                post_called++;
+                post_info = {
+                    sharedState_yy,
+                    //resultValue,
+                    hash,
+                    reentrant_call_depth: this.__reentrant_call_depth,
+                    // these are cleared at the end in .parse(), hence we must shallow-copy these:
+                    error_infos_stack: this.__error_infos.slice(),
+                    error_recovery_stack: this.__error_recovery_infos.slice(),
+                    error_infos_stack_size: this.__error_infos.length,
+                    error_recovery_stack_size: this.__error_recovery_infos.length,
+                };
+            };
+
             try {
                 // Change CWD to the directory where the source grammar resides: this helps us properly
                 // %include any files mentioned in the grammar with relative paths:
@@ -453,6 +474,18 @@ describe('LEX parser', function () {
             } finally {
                 process.chdir(original_cwd);
                 if (ast) {
+                    ast.__extra_diag_info__ = {
+                        pre_parse_callback_callCount: pre_called,
+                        post_parse_callback_callCount: post_called,
+                        post_parse_diaginfo: post_info,
+                        
+                        // these are expected to be ZERO as they're fetched AFTER
+                        // parser.cleanupAfterParse() has executed (and cleaned out
+                        // these arrays):
+                        reentrant_call_depth: lex.parser.__reentrant_call_depth,
+                        error_infos_stack_size: lex.parser.__error_infos.length,
+                        error_recovery_stack_size: lex.parser.__error_recovery_infos.length,
+                    };
                     ast.__original_input__ = grammar;
                 }
             }

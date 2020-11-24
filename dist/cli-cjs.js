@@ -6878,6 +6878,14 @@ parse: function parse(input) {
         lexer = this.__lexer__ = Object.create(this.lexer);
     }
 
+    // reset closure-dependent callback(s) which will be set up further down:
+    this.cleanupAfterParse = null;
+
+    this.__error_infos = [];                      // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
+
+    this.__error_recovery_infos = [];             // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
+
+
     let sharedState_yy = {
         parseError: undefined,
         quoteName: undefined,
@@ -8422,7 +8430,7 @@ r = this.performAction.call(yyval, yyloc, newState, sp - 1, vstack, lstack);
             retval = r;
         }
     } finally {
-        retval = this.cleanupAfterParse(retval, true, true);
+        retval = this.cleanupAfterParse(retval, true, false);
         this.__reentrant_call_depth--;
 
         if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
@@ -17158,6 +17166,13 @@ parse: function parse(input) {
         lexer = this.__lexer__ = Object.create(this.lexer);
     }
 
+    // reset closure-dependent callback(s) which will be set up further down:
+    this.cleanupAfterParse = null;
+
+    this.__error_infos = [];                      // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
+
+    this.__error_recovery_infos = [];             // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
+
     let sharedState_yy = {
         parseError: undefined,
         quoteName: undefined,
@@ -17916,7 +17931,7 @@ r = this.performAction.call(yyval, newState, sp - 1, vstack);
             retval = r;
         }
     } finally {
-        retval = this.cleanupAfterParse(retval, true, true);
+        retval = this.cleanupAfterParse(retval, true, false);
         this.__reentrant_call_depth--;
 
         if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
@@ -23953,6 +23968,13 @@ parse: function parse(input) {
         lexer = this.__lexer__ = Object.create(this.lexer);
     }
 
+    // reset closure-dependent callback(s) which will be set up further down:
+    this.cleanupAfterParse = null;
+
+    this.__error_infos = [];                      // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
+
+    this.__error_recovery_infos = [];             // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
+
     let sharedState_yy = {
         parseError: undefined,
         quoteName: undefined,
@@ -25497,7 +25519,7 @@ r = this.performAction.call(yyval, yyloc, newState, sp - 1, vstack, lstack);
             retval = r;
         }
     } finally {
-        retval = this.cleanupAfterParse(retval, true, true);
+        retval = this.cleanupAfterParse(retval, true, false);
         this.__reentrant_call_depth--;
 
         if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
@@ -35845,6 +35867,13 @@ function parse(input, parseParams) {
         lexer = this.__lexer__ = Object.create(this.lexer);
     }
 
+    // reset closure-dependent callback(s) which will be set up further down:
+    this.cleanupAfterParse = null;
+
+    this.__error_infos = [];                      // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
+
+    this.__error_recovery_infos = [];             // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
+
     let sharedState_yy = {
         parseError: undefined,
         quoteName: undefined,
@@ -37573,7 +37602,7 @@ function parse(input, parseParams) {
             retval = r;
         }
     } finally {
-        retval = this.cleanupAfterParse(retval, true, true);
+        retval = this.cleanupAfterParse(retval, true, false);
         this.__reentrant_call_depth--;
 
         if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
