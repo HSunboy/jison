@@ -1,0 +1,18 @@
+[
+  {
+    "id": -1,
+    "token": null,
+    "fail": 1,
+    "err": "ERROR:ReferenceError::yylval is not defined::ReferenceError: yylval is not defined\n    at Object.lexer__performAction [as performAction] (ccalc-lex.js:1896:9)\n    at Object.lexer_test_match [as test_match] (ccalc-lex.js:1438:38)\n    at Object.lexer_next [as next] (ccalc-lex.js:1561:28)\n    at Object.lexer_lex [as lex] (ccalc-lex.js:1646:18)\n    at main_work_function (ccalc-lex.js:2110:27)\n    at Object.__jisonlexer_default_main__ [as main] (ccalc-lex.js:2204:22)\n    at Object.<anonymous> (ccalc-lex.js:2266:13)\n    at Module._compile (loader.js:1137:30)\n    at Object.Module._extensions..js (loader.js:1157:10)\n    at Module.load (loader.js:985:32)"
+  },
+  {
+    "id": -2,
+    "token": null,
+    "summary": {
+      "totalTokenCount": 1,
+      "EOFTokenCount": 0,
+      "ERRORTokenCount": 0,
+      "fatalExceptionCount": 1
+    }
+  }
+]

@@ -1,0 +1,372 @@
+[
+  {
+    "id": "IDENTIFIER",
+    "token": "IDENTIFIER",
+    "yytext": "function",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 0,
+      "last_line": 1,
+      "last_column": 8,
+      "range": [
+        0,
+        8
+      ]
+    }
+  },
+  {
+    "id": "IDENTIFIER",
+    "token": "IDENTIFIER",
+    "yytext": "f",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 9,
+      "last_line": 1,
+      "last_column": 10,
+      "range": [
+        9,
+        10
+      ]
+    }
+  },
+  {
+    "id": "(",
+    "token": "(",
+    "yytext": "(",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 10,
+      "last_line": 1,
+      "last_column": 11,
+      "range": [
+        10,
+        11
+      ]
+    }
+  },
+  {
+    "id": "IDENTIFIER",
+    "token": "IDENTIFIER",
+    "yytext": "a",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 11,
+      "last_line": 1,
+      "last_column": 12,
+      "range": [
+        11,
+        12
+      ]
+    }
+  },
+  {
+    "id": ")",
+    "token": ")",
+    "yytext": ")",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 12,
+      "last_line": 1,
+      "last_column": 13,
+      "range": [
+        12,
+        13
+      ]
+    }
+  },
+  {
+    "id": "{",
+    "token": "{",
+    "yytext": "{",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 14,
+      "last_line": 1,
+      "last_column": 15,
+      "range": [
+        14,
+        15
+      ]
+    }
+  },
+  {
+    "id": "RETURN",
+    "token": "RETURN",
+    "yytext": "return",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 2,
+      "last_line": 2,
+      "last_column": 8,
+      "range": [
+        19,
+        25
+      ]
+    }
+  },
+  {
+    "id": "IDENTIFIER",
+    "token": "IDENTIFIER",
+    "yytext": "a",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 9,
+      "last_line": 2,
+      "last_column": 10,
+      "range": [
+        26,
+        27
+      ]
+    }
+  },
+  {
+    "id": "+",
+    "token": "+",
+    "yytext": "+",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 11,
+      "last_line": 2,
+      "last_column": 12,
+      "range": [
+        28,
+        29
+      ]
+    }
+  },
+  {
+    "id": "I_CONSTANT",
+    "token": "I_CONSTANT",
+    "yytext": "6",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 13,
+      "last_line": 2,
+      "last_column": 14,
+      "range": [
+        30,
+        31
+      ]
+    }
+  },
+  {
+    "id": ";",
+    "token": ";",
+    "yytext": ";",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 14,
+      "last_line": 2,
+      "last_column": 15,
+      "range": [
+        31,
+        32
+      ]
+    }
+  },
+  {
+    "id": "}",
+    "token": "}",
+    "yytext": "}",
+    "yylloc": {
+      "first_line": 3,
+      "first_column": 0,
+      "last_line": 3,
+      "last_column": 1,
+      "range": [
+        34,
+        35
+      ]
+    }
+  },
+  {
+    "id": "INT",
+    "token": "INT",
+    "yytext": "int",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 0,
+      "last_line": 4,
+      "last_column": 3,
+      "range": [
+        37,
+        40
+      ]
+    }
+  },
+  {
+    "id": "IDENTIFIER",
+    "token": "IDENTIFIER",
+    "yytext": "x",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 4,
+      "last_line": 4,
+      "last_column": 5,
+      "range": [
+        41,
+        42
+      ]
+    }
+  },
+  {
+    "id": "=",
+    "token": "=",
+    "yytext": "=",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 6,
+      "last_line": 4,
+      "last_column": 7,
+      "range": [
+        43,
+        44
+      ]
+    }
+  },
+  {
+    "id": "I_CONSTANT",
+    "token": "I_CONSTANT",
+    "yytext": "7",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 8,
+      "last_line": 4,
+      "last_column": 9,
+      "range": [
+        45,
+        46
+      ]
+    }
+  },
+  {
+    "id": "-",
+    "token": "-",
+    "yytext": "-",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 10,
+      "last_line": 4,
+      "last_column": 11,
+      "range": [
+        47,
+        48
+      ]
+    }
+  },
+  {
+    "id": "I_CONSTANT",
+    "token": "I_CONSTANT",
+    "yytext": "3",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 12,
+      "last_line": 4,
+      "last_column": 13,
+      "range": [
+        49,
+        50
+      ]
+    }
+  },
+  {
+    "id": "F_CONSTANT",
+    "token": "F_CONSTANT",
+    "yytext": ".1415E-1",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 13,
+      "last_line": 4,
+      "last_column": 21,
+      "range": [
+        50,
+        58
+      ]
+    }
+  },
+  {
+    "id": ";",
+    "token": ";",
+    "yytext": ";",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 21,
+      "last_line": 4,
+      "last_column": 22,
+      "range": [
+        58,
+        59
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 5,
+      "first_column": 0,
+      "last_line": 5,
+      "last_column": 0,
+      "range": [
+        60,
+        60
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 5,
+      "first_column": 0,
+      "last_line": 5,
+      "last_column": 0,
+      "range": [
+        60,
+        60
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 5,
+      "first_column": 0,
+      "last_line": 5,
+      "last_column": 0,
+      "range": [
+        60,
+        60
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 5,
+      "first_column": 0,
+      "last_line": 5,
+      "last_column": 0,
+      "range": [
+        60,
+        60
+      ]
+    }
+  },
+  {
+    "id": -2,
+    "token": null,
+    "summary": {
+      "totalTokenCount": 24,
+      "EOFTokenCount": 4,
+      "ERRORTokenCount": 0,
+      "fatalExceptionCount": 0
+    }
+  }
+]

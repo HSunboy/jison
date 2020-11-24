@@ -1,0 +1,192 @@
+[
+  {
+    "id": "MACRO_NAME",
+    "token": "MACRO_NAME",
+    "yytext": "DEFINE",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 5,
+      "last_line": 1,
+      "last_column": 11,
+      "range": [
+        5,
+        11
+      ]
+    }
+  },
+  {
+    "id": "CHARACTER_LIT",
+    "token": "CHARACTER_LIT",
+    "yytext": "A",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 12,
+      "last_line": 1,
+      "last_column": 13,
+      "range": [
+        12,
+        13
+      ]
+    }
+  },
+  {
+    "id": "error",
+    "token": "error",
+    "yytext": "=",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 14,
+      "last_line": 1,
+      "last_column": 15,
+      "range": [
+        14,
+        15
+      ]
+    }
+  },
+  {
+    "id": "CHARACTER_LIT",
+    "token": "CHARACTER_LIT",
+    "yytext": "B",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 16,
+      "last_line": 1,
+      "last_column": 17,
+      "range": [
+        16,
+        17
+      ]
+    }
+  },
+  {
+    "id": "CHARACTER_LIT",
+    "token": "CHARACTER_LIT",
+    "yytext": "×",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 18,
+      "last_line": 1,
+      "last_column": 19,
+      "range": [
+        18,
+        19
+      ]
+    }
+  },
+  {
+    "id": "CHARACTER_LIT",
+    "token": "CHARACTER_LIT",
+    "yytext": "C",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 20,
+      "last_line": 1,
+      "last_column": 21,
+      "range": [
+        20,
+        21
+      ]
+    }
+  },
+  {
+    "id": "MACRO_END",
+    "token": "MACRO_END",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 21,
+      "last_line": 1,
+      "last_column": 21,
+      "range": [
+        21,
+        21
+      ]
+    }
+  },
+  {
+    "id": "EOF",
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 0,
+      "last_line": 2,
+      "last_column": 0,
+      "range": [
+        22,
+        22
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 0,
+      "last_line": 2,
+      "last_column": 0,
+      "range": [
+        22,
+        22
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 0,
+      "last_line": 2,
+      "last_column": 0,
+      "range": [
+        22,
+        22
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 0,
+      "last_line": 2,
+      "last_column": 0,
+      "range": [
+        22,
+        22
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 0,
+      "last_line": 2,
+      "last_column": 0,
+      "range": [
+        22,
+        22
+      ]
+    }
+  },
+  {
+    "id": -2,
+    "token": null,
+    "summary": {
+      "totalTokenCount": 12,
+      "EOFTokenCount": 4,
+      "ERRORTokenCount": 0,
+      "fatalExceptionCount": 0
+    }
+  }
+]

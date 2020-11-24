@@ -1,0 +1,226 @@
+[
+  {
+    id: -1,
+    token: null,
+    fail: 1,
+    err: {
+      secondary_exception: {
+        hash: {
+          errStr: `Lexical error on line 20: 
+unsupported lexer input encountered while lexing
+rules (i.e. jison lex regexes) in "rules" state.
+
+    NOTE: When you want this input to be interpreted as a LITERAL part
+          of a lex rule regex, you MUST enclose it in double or
+          single quotes.
+
+          If not, then know that this input is not accepted as a valid
+          regex expression here in jison-lex rules.
+
+  Erroneous area:
+17: (\\r?\\n)+                           return 'NL';
+18: \\s+                             /* skip all whitespace */
+19: \\#[^\\n]*                        /* skip comments */
+20: \\%%[^\\n]*                       /* skip comments */
+^^....^
+21: "gitGraph"                      return 'GG';
+22: "commit"                        return 'COMMIT';`,
+          recoverable: false,
+          text: '%',
+          token: null,
+          line: 19,
+          loc: {
+            first_line: 20,
+            first_column: 2,
+            last_line: 20,
+            last_column: 3,
+            range: [
+              288,
+              289,
+            ],
+          },
+          yy: {
+            actionInclude: [],
+            options: {
+              caseInsensitive: true,
+            },
+            startConditions: {
+              string: 1,
+              options: 1,
+            },
+            __options_flags__: 0,
+            __options_category_description__: 'the lexer rules definition section',
+            __inside_scoped_ruleset__: false,
+            __context_cfg_stack__: [
+              {
+                flags: 0,
+                descr: '???',
+                scoped: false,
+              },
+            ],
+            depth: 0,
+            include_command_allowed: true,
+          },
+          lexer: {
+            yy: {},
+            __decompressed: true,
+            _input: '',
+            _clear_state: -1,
+            _signaled_error_token: false,
+            done: false,
+            yylineno: 0,
+            matched: '',
+            conditionStack: [
+              'INITIAL',
+            ],
+            yylloc: {
+              first_line: 1,
+              first_column: 0,
+              last_line: 1,
+              last_column: 0,
+              range: [
+                0,
+                0,
+              ],
+            },
+            offset: 0,
+            base_position: 0,
+            yytext: '',
+            yyleng: 0,
+            match: '',
+            matches: false,
+            _more: false,
+            _backtrack: false,
+          },
+        },
+        message: `Lexical error on line 20: 
+unsupported lexer input encountered while lexing
+rules (i.e. jison lex regexes) in "rules" state.
+
+    NOTE: When you want this input to be interpreted as a LITERAL part
+          of a lex rule regex, you MUST enclose it in double or
+          single quotes.
+
+          If not, then know that this input is not accepted as a valid
+          regex expression here in jison-lex rules.
+
+  Erroneous area:
+17: (\\r?\\n)+                           return 'NL';
+18: \\s+                             /* skip all whitespace */
+19: \\#[^\\n]*                        /* skip comments */
+20: \\%%[^\\n]*                       /* skip comments */
+^^....^
+21: "gitGraph"                      return 'GG';
+22: "commit"                        return 'COMMIT';`,
+        name: 'JisonLexerError',
+        stack: `JisonLexerError: Lexical error on line 20: 
+unsupported lexer input encountered while lexing
+rules (i.e. jison lex regexes) in "rules" state.
+
+    NOTE: When you want this input to be interpreted as a LITERAL part
+          of a lex rule regex, you MUST enclose it in double or
+          single quotes.
+
+          If not, then know that this input is not accepted as a valid
+          regex expression here in jison-lex rules.
+
+  Erroneous area:
+17: (\\r?\\n)+                           return 'NL';
+18: \\s+                             /* skip all whitespace */
+19: \\#[^\\n]*                        /* skip comments */
+20: \\%%[^\\n]*                       /* skip comments */
+^^....^
+21: "gitGraph"                      return 'GG';
+22: "commit"                        return 'COMMIT';
+    at Object.parseError (/regexp-lexer-cjs.js:6988:15)
+    at Object.lexer_parseError [as parseError] (/regexp-lexer-cjs.js:9076:44)
+    at Object.yyError [as yyerror] (/regexp-lexer-cjs.js:9107:19)
+    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js:11142:15)
+    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js:10012:38)
+    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:10135:28)
+    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:10220:18)
+    at stdLex (/regexp-lexer-cjs.js:7553:27)
+    at Object.parse (/regexp-lexer-cjs.js:7750:30)
+    at Object.yyparse [as parse] (/regexp-lexer-cjs.js:12095:25)
+    at autodetectAndConvertToJSONformat (/regexp-lexer-cjs.js:13288:35)
+    at processGrammar (/regexp-lexer-cjs.js:16345:12)
+    at test_me (/regexp-lexer-cjs.js:14269:23)
+    at new RegExpLexer (/regexp-lexer-cjs.js:14387:17)
+    at Context.testEachLexerExample (/regexplexer.js:3685:25)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
+      },
+      message: `Could not parse jison lexer spec in JSON AUTODETECT mode:
+in JISON Mode we get Error: Lexical error on line 20: 
+unsupported lexer input encountered while lexing
+rules (i.e. jison lex regexes) in "rules" state.
+
+    NOTE: When you want this input to be interpreted as a LITERAL part
+          of a lex rule regex, you MUST enclose it in double or
+          single quotes.
+
+          If not, then know that this input is not accepted as a valid
+          regex expression here in jison-lex rules.
+
+  Erroneous area:
+17: (\\r?\\n)+                           return 'NL';
+18: \\s+                             /* skip all whitespace */
+19: \\#[^\\n]*                        /* skip comments */
+20: \\%%[^\\n]*                       /* skip comments */
+^^....^
+21: "gitGraph"                      return 'GG';
+22: "commit"                        return 'COMMIT';
+
+while JSON5 Mode produces Error: JSON5: invalid character '%' at 11:1`,
+      name: 'Error',
+      stack: `SyntaxError: JSON5: invalid character '%' at 11:1
+    at syntaxError (/index.js:1954:16)
+    at invalidChar (/index.js:1895:13)
+    at Object.value (/index.js:964:16)
+    at lex (/index.js:743:41)
+    at Object.parse (/index.js:689:18)
+    at autodetectAndConvertToJSONformat (/regexp-lexer-cjs.js:13272:51)
+    at processGrammar (/regexp-lexer-cjs.js:16345:12)
+    at test_me (/regexp-lexer-cjs.js:14269:23)
+    at new RegExpLexer (/regexp-lexer-cjs.js:14387:17)
+    at Context.testEachLexerExample (/regexplexer.js:3685:25)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 1,
+      EOFTokenCount: 0,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 1,
+    },
+  },
+]
