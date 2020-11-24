@@ -229,18 +229,18 @@ const lexer_kernel =
         // including expansion work to be done to go from a loaded
         // lexer to a usable lexer:
         if (!this.__decompressed) {
-          // step 1: decompress the regex list:
+            // step 1: decompress the regex list:
             let rules = this.rules;
             for (var i = 0, len = rules.length; i < len; i++) {
                 var rule_re = rules[i];
 
-            // compression: is the RE an xref to another RE slot in the rules[] table?
+                // compression: is the RE an xref to another RE slot in the rules[] table?
                 if (typeof rule_re === 'number') {
                     rules[i] = rules[rule_re];
                 }
             }
 
-          // step 2: unfold the conditions[] set to make these ready for use:
+            // step 2: unfold the conditions[] set to make these ready for use:
             let conditions = this.conditions;
             for (let k in conditions) {
                 let spec = conditions[k];

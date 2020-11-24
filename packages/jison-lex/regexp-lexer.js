@@ -14,7 +14,7 @@ const code_exec = helpers.exec;
 // import astUtils from 'ast-util';
 import assert from 'assert';
 
-const version = '0.6.2-220';                              // require('./package.json').version;
+const version = '0.7.0-220';                              // require('./package.json').version;
 
 
 
@@ -60,7 +60,9 @@ const defaultJisonLexOptions = {
     debug: false,
     enableDebugLogs: false,
     json: false,
-    main: false,                    // CLI: not:(--main option)
+    noMain: true,                   // CLI: not:(--main option)
+    moduleMain: null,               // `main()` function source code if `!noMain` is true
+    moduleMainImports: null,        // require()/import statements required by the `moduleMain` function source code if `!noMain` is true
     dumpSourceCodeOnFailure: true,
     throwErrorOnCompileFailure: true,
 
@@ -82,7 +84,7 @@ const defaultJisonLexOptions = {
     showSource: false,
     exportSourceCode: false,
     exportAST: false,
-    prettyCfg: true,
+    prettyCfg: true,                // use `prettier` (or not) to (re)format the generated parser code.
     pre_lex: undefined,
     post_lex: undefined
 };
@@ -97,7 +99,7 @@ const defaultJisonLexOptions = {
 // default value.
 //
 // When the FIRST argument is STRING "NODEFAULT", then we MUST NOT mix the
-// default values avialable in Jison.defaultJisonOptions.
+// default values available in Jison.defaultJisonOptions.
 //
 // Return a fresh set of options.
 /** @public */
@@ -126,7 +128,33 @@ function mkStdOptions(/*...args*/) {
             }
         }
 
-        // now clean them options up:
+        if (typeof o2.moduleType !== 'undefined') {
+            switch (o2.moduleType) {
+            case 'js':
+            case 'amd':
+            case 'es':
+            case 'commonjs':
+                break;
+
+            // aliases a la `rollup` c.s.:
+            case 'cjs':
+                o2.moduleType = 'commonjs';
+                break;
+
+            case 'iife':
+                o2.moduleType = 'js';
+                break;
+
+            case 'umd':
+                o2.moduleType = 'amd';
+                break;
+
+            default:
+                throw new Error('unsupported moduleType: ' + dquote(o2.moduleType));
+            }
+        }
+
+        // now clean them options up:export
         if (typeof o2.main !== 'undefined') {
             o2.noMain = !o2.main;
         }
@@ -260,7 +288,7 @@ function autodetectAndConvertToJSONformat(lexerSpec, options) {
 
 
 // expand macros and convert matchers to RegExp's
-function prepareRules(dict, actions, caseHelper, tokens, startConditions, opts) {
+function prepareRules(dict, actions, caseHelper, tokens, startConditions, grammarSpec) {
     let m, i, k, rule, action, conditions;
     let active_conditions;
     assert(Array.isArray(dict.rules));
@@ -271,13 +299,13 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, opts) 
     let simple_rule_count = 0;
 
     // Assure all options are camelCased:
-    assert(typeof opts.options['case-insensitive'] === 'undefined');
+    assert(typeof grammarSpec.options['case-insensitive'] === 'undefined');
 
     if (!tokens) {
         tokens = {};
     }
 
-    if (opts.options.flex && rules.length > 0) {
+    if (grammarSpec.options.flex && rules.length > 0) {
         rules.push([ '.', 'console.log("", yytext); /* `flex` lexing mode: the last resort rule! */' ]);
     }
 
@@ -285,7 +313,7 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, opts) 
     // one expansion for when a macro is *inside* a `[...]` and another expansion when a macro
     // is anywhere else in a regex:
     if (dict.macros) {
-        macros = prepareMacros(dict.macros, opts);
+        macros = prepareMacros(dict.macros, grammarSpec);
     }
 
     function tokenNumberReplacement(str, token) {
@@ -343,8 +371,8 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, opts) 
         }
 
         if (typeof m === 'string') {
-            m = expandMacros(m, macros, opts);
-            m = new XRegExp('^(?:' + m + ')', opts.options.caseInsensitive ? 'i' : '');
+            m = expandMacros(m, macros, grammarSpec);
+            m = new XRegExp('^(?:' + m + ')', grammarSpec.options.caseInsensitive ? 'i' : '');
         }
         newRules.push(m);
         action = rule[1];
@@ -609,7 +637,7 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
 
 
 // expand macros within macros and cache the result
-function prepareMacros(dict_macros, opts) {
+function prepareMacros(dict_macros, grammarSpec) {
     let macros = {};
 
     // expand a `{NAME}` macro which exists inside a `[...]` set:
@@ -660,7 +688,7 @@ function prepareMacros(dict_macros, opts) {
                 }
             }
 
-            let mba = setmgmt.reduceRegexToSetBitArray(m, i, opts);
+            let mba = setmgmt.reduceRegexToSetBitArray(m, i, grammarSpec);
 
             let s1;
 
@@ -706,7 +734,7 @@ function prepareMacros(dict_macros, opts) {
 
             // the macro MAY contain other macros which MAY be inside a `[...]` set in this
             // macro or elsewhere, hence we must parse the regex:
-            m = reduceRegex(m, i, opts, expandAllMacrosInSet, expandAllMacrosElsewhere);
+            m = reduceRegex(m, i, grammarSpec, expandAllMacrosInSet, expandAllMacrosElsewhere);
             // propagate deferred exceptions = error reports.
             if (m instanceof Error) {
                 return m;
@@ -798,7 +826,7 @@ function prepareMacros(dict_macros, opts) {
 
     let m, i;
 
-    if (opts.debug) console.log('\n############## RAW macros: ', dict_macros);
+    if (grammarSpec.debug) console.log('\n############## RAW macros: ', dict_macros);
 
     // first we create the part of the dictionary which is targeting the use of macros
     // *inside* `[...]` sets; once we have completed that half of the expansions work,
@@ -818,7 +846,7 @@ function prepareMacros(dict_macros, opts) {
         }
     }
 
-    if (opts.debug) console.log('\n############### expanded macros: ', macros);
+    if (grammarSpec.debug) console.log('\n############### expanded macros: ', macros);
 
     return macros;
 }
@@ -826,7 +854,7 @@ function prepareMacros(dict_macros, opts) {
 
 
 // expand macros in a regex; expands them recursively
-function expandMacros(src, macros, opts) {
+function expandMacros(src, macros, grammarSpec) {
     let expansion_count = 0;
 
     // By the time we call this function `expandMacros` we MUST have expanded and cached all macros already!
@@ -924,7 +952,7 @@ function expandMacros(src, macros, opts) {
     // used macro will expand into, i.e. which and how many submacros it has.
     //
     // This is a BREAKING CHANGE from vanilla jison 0.4.15!
-    let s2 = reduceRegex(src, null, opts, expandAllMacrosInSet, expandAllMacrosElsewhere);
+    let s2 = reduceRegex(src, null, grammarSpec, expandAllMacrosInSet, expandAllMacrosElsewhere);
     // propagate deferred exceptions = error reports.
     if (s2 instanceof Error) {
         throw s2;
@@ -936,7 +964,7 @@ function expandMacros(src, macros, opts) {
     //
     // Also pick the reduced regex when there (potentially) are XRegExp extensions in the original, e.g. `\\p{Number}`,
     // unless the `xregexp` output option has been enabled.
-    if (expansion_count > 0 || (src.indexOf('\\p{') >= 0 && !opts.options.xregexp)) {
+    if (expansion_count > 0 || (src.indexOf('\\p{') >= 0 && !grammarSpec.options.xregexp)) {
         src = s2;
     } else {
         // Check if the reduced regex is smaller in size; when it is, we still go with the new one!
@@ -963,21 +991,20 @@ function prepareStartConditions(conditions) {
     return hash;
 }
 
-function buildActions(dict, tokens, opts) {
+function buildActions(dict, tokens, grammarSpec) {
     let actions = [ dict.actionInclude || '', 'var YYSTATE = YY_START;' ];
-    let tok;
     let toks = {};
     let caseHelper = [];
 
     // tokens: map/array of token numbers to token names
-    for (tok in tokens) {
+    for (let tok in tokens) {
         let idx = parseInt(tok);
         if (idx && idx > 0) {
             toks[tokens[tok]] = idx;
         }
     }
 
-    let gen = prepareRules(dict, actions, caseHelper, tokens && toks, opts.conditions, opts);
+    let gen = prepareRules(dict, actions, caseHelper, tokens && toks, grammarSpec.conditions, grammarSpec);
 
     let code = actions.join('\n');
     'yytext yyleng yylineno yylloc yyerror'.split(' ').forEach(function (yy) {
@@ -1000,6 +1027,85 @@ function buildActions(dict, tokens, opts) {
         simple_rule_count: gen.simple_rule_count
     };
 }
+
+function getInitCodeSection(set, section) {
+    let rv = [];
+
+    for (let i = 0, len = set.length; i < len; i++) {
+        let m = set[i];
+        if (m.qualifier === section) {
+            if (m.include.trim()) {
+                rv.push(m.include);
+            }
+            if (!set.__consumedInitCodeSlots__) {
+                set.__consumedInitCodeSlots__ = [];
+            }
+            set.__consumedInitCodeSlots__[i] = true;
+        }
+    }
+
+    if (rv.length > 0) {
+        let s = rv.join('\n\n\n');
+        return rmCommonWS`
+
+            // START code section "${section}"
+            ${s}
+            // END code section "${section}"
+
+        `;
+    }
+    return '';
+}
+
+function getRemainingInitCodeSections(set, grammarSpec) {
+    let rv = [];
+    let sections_encountered = {};
+
+    if (!set.__consumedInitCodeSlots__) {
+        set.__consumedInitCodeSlots__ = [];
+    }
+    for (let i = 0, len = set.length; i < len; i++) {
+        let m = set[i];
+        if (!set.__consumedInitCodeSlots__[i]) {
+            // first check if the section qualifier has been reported already:
+            if (!sections_encountered[m.qualifier]) {
+                sections_encountered[m.qualifier] = true;
+
+                const msg = rmCommonWS`
+                    Warning: processing unknown   %code '${m.qualifier}'
+
+                    Appending remaining %code '${m.qualifier}' chunks at end of generated output.
+                    Make sure this is as intended -- this also happens when '${m.qualifier}' is 
+                    a MISTYPED %code section identifier!
+                `;
+                if (typeof grammarSpec.warn_cb === 'function') {
+                    grammarSpec.warn_cb(msg);
+                } else if (grammarSpec.warn_cb) {
+                    console.error(msg);
+                } else {
+                    // do not treat as warning; barf hairball instead so that this oddity gets noticed right away!
+                    throw new Error(msg.trim());
+                }
+            }
+
+            rv.push(rmCommonWS`
+
+                // START code section "${m.qualifier}"
+                ${m.include}
+                // END code section "${m.qualifier}"
+
+            `);
+            set.__consumedInitCodeSlots__[i] = true;
+        }
+    }
+
+    if (rv.length > 0) {
+        let s = rv.join('\n\n\n');
+        return s;
+    }
+    return '';
+}
+
 
 //
 // NOTE: this is *almost* a copy of the JisonParserError producing code in
@@ -1097,19 +1203,19 @@ function generateFakeXRegExpClassSrcCode() {
 
 
 /** @constructor */
-function RegExpLexer(dict, input, tokens, build_options) {
-    let opts;
+function RegExpLexer(dict, input, tokens, build_options, yy) {
+    let grammarSpec;
     let dump = false;
 
     function test_me(tweak_cb, description, src_exception, ex_callback) {
-        opts = processGrammar(dict, tokens, build_options);
-        opts.__in_rules_failure_analysis_mode__ = false;
-        prepExportStructures(opts);
-        assert(opts.options);
+        grammarSpec = processGrammar(dict, tokens, build_options);
+        grammarSpec.__in_rules_failure_analysis_mode__ = false;
+        prepExportStructures(grammarSpec.options);
+        assert(grammarSpec.options);
         if (tweak_cb) {
             tweak_cb();
         }
-        let source = generateModuleBody(opts);
+        let source = generateModuleBody(grammarSpec);
         try {
             // The generated code will always have the `lexer` variable declared at local scope
             // as `eval()` will use the local scope.
@@ -1158,7 +1264,7 @@ function RegExpLexer(dict, input, tokens, build_options) {
                 chkBugger(sourcecode);
                 let lexer_f = new Function('', sourcecode);
                 return lexer_f();
-            }, Object.assign({}, opts.options, {
+            }, Object.assign({}, grammarSpec.options, {
                 throwErrorOnCompileFailure: true 
             }), 'lexer');
 
@@ -1185,9 +1291,9 @@ function RegExpLexer(dict, input, tokens, build_options) {
             }
 
             // patch the pre and post handlers in there, now that we have some live code to work with:
-            if (opts.options) {
-                let pre = opts.options.pre_lex;
-                let post = opts.options.post_lex;
+            if (grammarSpec.options) {
+                let pre = grammarSpec.options.pre_lex;
+                let post = grammarSpec.options.post_lex;
                 // since JSON cannot encode functions, we'll have to do it manually now:
                 if (typeof pre === 'function') {
                     lexer.options.pre_lex = pre;
@@ -1197,9 +1303,9 @@ function RegExpLexer(dict, input, tokens, build_options) {
                 }
             }
 
-            if (opts.options.showSource) {
-                if (typeof opts.options.showSource === 'function') {
-                    opts.options.showSource(lexer, source, opts, RegExpLexer);
+            if (grammarSpec.options.showSource) {
+                if (typeof grammarSpec.options.showSource === 'function') {
+                    grammarSpec.options.showSource(lexer, source, grammarSpec, RegExpLexer);
                 } else {
                     console.log('\nGenerated lexer sourcecode:\n----------------------------------------\n', source, '\n----------------------------------------\n');
                 }
@@ -1224,23 +1330,23 @@ function RegExpLexer(dict, input, tokens, build_options) {
         // When we get an exception here, it means some part of the user-specified lexer is botched.
         //
         // Now we go and try to narrow down the problem area/category:
-        assert(opts.options);
-        assert(opts.options.xregexp !== undefined);
-        let orig_xregexp_opt = !!opts.options.xregexp;
+        assert(grammarSpec.options);
+        assert(grammarSpec.options.xregexp !== undefined);
+        let orig_xregexp_opt = !!grammarSpec.options.xregexp;
         if (!test_me(function () {
-            assert(opts.options.xregexp !== undefined);
-            opts.options.xregexp = false;
-            opts.showSource = false;
+            assert(grammarSpec.options.xregexp !== undefined);
+            grammarSpec.options.xregexp = false;
+            grammarSpec.showSource = false;
         }, 'When you have specified %option xregexp, you must also properly IMPORT the XRegExp library in the generated lexer.', ex, null)) {
             if (!test_me(function () {
                 // restore xregexp option setting: the trouble wasn't caused by the xregexp flag i.c.w. incorrect XRegExp library importing!
-                opts.options.xregexp = orig_xregexp_opt;
+                grammarSpec.options.xregexp = orig_xregexp_opt;
 
-                opts.conditions = [];
-                opts.showSource = false;
+                grammarSpec.conditions = [];
+                grammarSpec.showSource = false;
             }, function () {
-                assert(Array.isArray(opts.rules));
-                return (opts.rules.length > 0 ?
+                assert(Array.isArray(grammarSpec.rules));
+                return (grammarSpec.rules.length > 0 ?
                     'One or more of your lexer state names are possibly botched?' :
                     'Your custom lexer is somehow botched.'
                 );
@@ -1249,31 +1355,31 @@ function RegExpLexer(dict, input, tokens, build_options) {
                 if (!test_me(function () {
                     // store the parsed rule set size so we can use that info in case
                     // this attempt also fails:
-                    assert(Array.isArray(opts.rules));
-                    rulesSpecSize = opts.rules.length;
+                    assert(Array.isArray(grammarSpec.rules));
+                    rulesSpecSize = grammarSpec.rules.length;
 
-                    // opts.conditions = [];
-                    opts.rules = [];
-                    opts.showSource = false;
-                    opts.__in_rules_failure_analysis_mode__ = true;
+                    // grammarSpec.conditions = [];
+                    grammarSpec.rules = [];
+                    grammarSpec.showSource = false;
+                    grammarSpec.__in_rules_failure_analysis_mode__ = true;
                 }, 'One or more of your lexer rules are possibly botched?', ex, null)) {
                     // kill each rule action block, one at a time and test again after each 'edit':
                     let rv = false;
                     for (var i = 0, len = rulesSpecSize; i < len; i++) {
                         var lastEditedRuleSpec;
                         rv = test_me(function () {
-                            assert(Array.isArray(opts.rules));
-                            assert(opts.rules.length === rulesSpecSize);
+                            assert(Array.isArray(grammarSpec.rules));
+                            assert(grammarSpec.rules.length === rulesSpecSize);
 
-                            // opts.conditions = [];
-                            // opts.rules = [];
-                            // opts.__in_rules_failure_analysis_mode__ = true;
+                            // grammarSpec.conditions = [];
+                            // grammarSpec.rules = [];
+                            // grammarSpec.__in_rules_failure_analysis_mode__ = true;
 
                             // nuke all rules' actions up to and including rule numero `i`:
                             for (let j = 0; j <= i; j++) {
                                 // rules, when parsed, have 2 or 3 elements: [conditions, handle, action];
                                 // now we want to edit the *action* part:
-                                let rule = opts.rules[j];
+                                let rule = grammarSpec.rules[j];
                                 assert(Array.isArray(rule));
                                 assert(rule.length === 2 || rule.length === 3);
                                 rule.pop();
@@ -1289,13 +1395,13 @@ function RegExpLexer(dict, input, tokens, build_options) {
                     }
                     if (!rv) {
                         test_me(function () {
-                            opts.conditions = [];
-                            opts.rules = [];
-                            opts.performAction = 'null';
-                            // opts.options = {};
-                            // opts.caseHelperInclude = '{}';
-                            opts.showSource = false;
-                            opts.__in_rules_failure_analysis_mode__ = true;
+                            grammarSpec.conditions = [];
+                            grammarSpec.rules = [];
+                            grammarSpec.performAction = 'null';
+                            // grammarSpec.options = {};
+                            // grammarSpec.caseHelperInclude = '{}';
+                            grammarSpec.showSource = false;
+                            grammarSpec.__in_rules_failure_analysis_mode__ = true;
 
                             dump = false;
                         }, 'One or more of your lexer rule action code block(s) are possibly botched?', ex, null);
@@ -1306,33 +1412,36 @@ function RegExpLexer(dict, input, tokens, build_options) {
         throw ex;
     });
 
-    lexer.setInput(input);
+    lexer.setInput(input, yy);
 
     /** @public */
     lexer.generate = function () {
-        return generateFromOpts(opts);
+        return generateFromOpts(grammarSpec);
     };
     /** @public */
     lexer.generateModule = function () {
-        return generateModule(opts);
+        return generateModule(grammarSpec);
     };
     /** @public */
     lexer.generateCommonJSModule = function () {
-        return generateCommonJSModule(opts);
+        return generateCommonJSModule(grammarSpec);
     };
     /** @public */
     lexer.generateESModule = function () {
-        return generateESModule(opts);
+        return generateESModule(grammarSpec);
     };
     /** @public */
     lexer.generateAMDModule = function () {
-        return generateAMDModule(opts);
+        return generateAMDModule(grammarSpec);
     };
 
     // internal APIs to aid testing:
     /** @public */
     lexer.getExpandedMacros = function () {
-        return opts.macros;
+        return grammarSpec.macros;
+    };
+    lexer.getActiveOptions = function () {
+        return grammarSpec;
     };
 
     return lexer;
@@ -1364,8 +1473,7 @@ function RegExpLexer(dict, input, tokens, build_options) {
 */
 function getRegExpLexerPrototype() {
     // --- START lexer kernel ---
-return `{
-    EOF: 1,
+return `EOF: 1,
     ERROR: 2,
 
     // JisonLexerError: JisonLexerError,        /// <-- injected by the code generator
@@ -1589,18 +1697,18 @@ return `{
         // including expansion work to be done to go from a loaded
         // lexer to a usable lexer:
         if (!this.__decompressed) {
-          // step 1: decompress the regex list:
+            // step 1: decompress the regex list:
             let rules = this.rules;
             for (var i = 0, len = rules.length; i < len; i++) {
                 var rule_re = rules[i];
 
-            // compression: is the RE an xref to another RE slot in the rules[] table?
+                // compression: is the RE an xref to another RE slot in the rules[] table?
                 if (typeof rule_re === 'number') {
                     rules[i] = rules[rule_re];
                 }
             }
 
-          // step 2: unfold the conditions[] set to make these ready for use:
+            // step 2: unfold the conditions[] set to make these ready for use:
             let conditions = this.conditions;
             for (let k in conditions) {
                 let spec = conditions[k];
@@ -2747,40 +2855,302 @@ return `{
      */
     stateStackSize: function lexer_stateStackSize() {
         return this.conditionStack.length;
-    }
-}`;
+    }`;
     // --- END lexer kernel ---
 }
+
+
+// --- START of commonJsMain chunk ---
+//
+// default main method for generated commonjs modules
+const commonJsMain = `
+// Note: this function will be invoked with argv[0] being the app JS, i.e.
+//
+//         __jison_default_main__(process.argv.slice(1));
+//
+// which is the same convention as for C programs, shell scripts, etc.
+// NodeJS differs from those in that the first argument *always* is the
+// node executable itself, even when this script was invoked *without*
+// the node prefix, e.g.
+//
+//         ./lexer.js --help
+//
+function __jisonlexer_default_main__(argv) {
+    // When the lexer comes with its own \`main\` function, then use that one:
+    if (typeof exports.lexer.main === 'function') {
+        return exports.lexer.main(argv);
+    }
+
+    // don't dump more than 4 EOF tokens at the end of the stream:
+    const maxEOFTokenCount = 4;
+    // don't dump more than 20 error tokens in the output stream:
+    const maxERRORTokenCount = 20;
+    // maximum number of tokens in the output stream:
+    const maxTokenCount = 10000;
+
+    if (!argv[1] || argv[1] == '--help' || argv[1] == '-h') {
+        console.log(\`
+Usage:
+  $\{path.basename(argv[0])} INFILE [OUTFILE]
+
+Input
+-----
+
+Reads input from INFILE (which may be specified as '-' to specify STDIN for
+use in piped commands, e.g.
+
+  cat "example input" | $\{path.basename(argv[0])} -
+
+The input is lexed into a token stream, which is written to the OUTFILE as
+an array of JSON nodes.
+
+Output
+------
+
+When the OUTFILE is not specified, its path & name are derived off the INFILE,
+appending the '.lexed.json' suffix. Hence
+
+  $\{path.basename(argv[0])} path/foo.bar
+
+will have its token stream written to the 'path/foo.bar.lexed.json' file.
+
+Errors
+------
+
+A (fatal) failure during lexing (i.e. an exception thrown) will be logged as
+a special fatal error token:
+
+  {
+      id: -1,  // this signals a fatal failure
+      token: null,
+      fail: 1,
+      msg: <the extended error exception type, message and stacktrace as STRING>
+  }
+
+Application Exit Codes
+----------------------
+
+This particular error situation will produce the same exit code as a successful
+lexing: exitcode 0 (zero: SUCCESS)
+
+However, any failure to read/write the files will be reported as errors with
+exitcode 1 (one: FAILURE)
+
+Limits
+------
+
+- The lexer output (token stream) is limited to $\{maxTokenCount} tokens.
+- The token stream will end with at most $\{maxEOFTokenCount} EOF tokens.
+- The token stream will end when at most $\{maxERRORTokenCount} ERROR tokens have been
+  produced by the lexer.
+\`);
+        process.exit(1);
+    }
+
+    function main_work_function(input) {
+        const lexer = exports.lexer;
+
+        let yy = {
+            parseError: function customMainParseError(str, hash, ExceptionClass) {
+                console.error("parseError: ", str);
+                return this.ERROR;
+            }
+        };
+        let tokens = [];
+        
+        let countEOFs = 0;
+        let countERRORs = 0;
+        let countFATALs = 0;
+
+        try {
+            lexer.setInput(input, yy);
+
+            for (i = 0; i < maxTokenCount; i++) {
+                let tok = lexer.lex();
+                tokens.push({
+                    id: tok,
+                    token: (tok === 1 ? 'EOF' : tok),    // lexer.describeSymbol(tok),
+                    yytext: lexer.yytext,
+                    yylloc: lexer.yylloc
+                });
+                if (tok === lexer.EOF) {
+                    // and make sure EOF stays EOF, i.e. continued invocation of \`lex()\` will only
+                    // produce more EOF tokens at the same location:
+                    countEOFs++;
+                    if (countEOFs >= maxEOFTokenCount) {
+                        break;
+                    }
+                }
+                else if (tok === lexer.ERROR) {
+                    countERRORs++;
+                    if (countERRORs >= maxERRORTokenCount) {
+                        break;
+                    }
+                }
+            }
+        } catch (ex) {
+            countFATALs++;
+            // save the error:
+            let stk = '' + ex.stack;
+            stk = stk.replace(/\\t/g, '  ')
+            .replace(/  at (.+?)\\(.*?[\\\\/]([^\\\\/\\s]+)\\)/g, '  at $1($2)');
+            let msg = 'ERROR:' + ex.name + '::' + ex.message + '::' + stk;
+            tokens.push({
+                id: -1,
+                token: null,
+                fail: 1,
+                err: msg,
+            });
+        }
+
+        // write a summary node at the end of the stream:
+        tokens.push({
+            id: -2,
+            token: null,
+            summary: {
+                totalTokenCount: tokens.length,
+                EOFTokenCount: countEOFs,
+                ERRORTokenCount: countERRORs,
+                fatalExceptionCount: countFATALs
+            }
+        });
+        return tokens;
+    }
+
+    //const [ , ...args ] = argv;
+    let must_read_from_stdin = (argv[1] === '-');
+    let input_path = (!must_read_from_stdin ? path.normalize(argv[1]) : '(stdin)');
+    let must_write_to_stdout = (argv[2] === '-');
+    let output_path = (!must_write_to_stdout ? (path.normalize(argv[2] || (must_read_from_stdin ? input_path : 'stdin') + '.lexed.json')) : '(stdout)');
+    const print_summary_and_write_to_output = (tokens) => {
+        let summary = tokens[tokens.length - 1].summary;
+
+        console.log(\`
+////////////////////////////////////////////////////////////////////////////                    
+// Lexer output: 
+//
+// - total # tokens read:                         $\{summary.totalTokenCount} 
+// - # of EOF totkens:                            $\{summary.EOFTokenCount} 
+// - # of ERROR tokens produced by the lexer:     $\{summary.ERRORTokenCount}
+// - # of fatal crashes, i.e. lexer exceptions:   $\{summary.fatalExceptionCount}
+////////////////////////////////////////////////////////////////////////////
+\`);
+
+        let dst = JSON.stringify(tokens, null, 2);
+        if (!must_write_to_stdout) {
+            fs.writeFileSync(output_path, dst, 'utf8');
+        } else {
+            console.log(dst);                
+        }
+    };
+
+    if (!must_read_from_stdin) {
+        try {
+            const input = fs.readFileSync(input_path, 'utf8');
+            let tokens = main_work_function(input);
+
+            print_summary_and_write_to_output(tokens);
+
+            process.exit(0); // SUCCESS!
+        } catch (ex2) {
+            console.error("Failure:\\n", ex2, \`
+
+Input filepath:  $\{input_path}
+Output filepath: $\{output_path}               
+            \`);
+            process.exit(1);   // FAIL
+        }
+    } else {
+        if (process.stdin.isTTY) {
+            console.error(\`
+Error: 
+You specified to read from STDIN without piping anything into the application.
+
+Manual entry from the console is not supported.
+            \`);
+            process.exit(1);
+        } else {
+            // Accepting piped content. E.g.:
+            // echo "pass in this string as input" | ./example-script
+            const stdin = process.openStdin();
+            let data = '';
+            stdin.setEncoding(encoding);
+
+            stdin.on('readable', function () {
+                let chunk;
+                while (chunk = stdin.read()) {
+                    data += chunk;
+                }
+            });
+
+            stdin.on('end', function () {
+                // There MAY be a trailing \\n from the user hitting enter. Send it along.
+                //data = data.replace(/\\n$/, '')
+                try {
+                    let tokens = main_work_function(data);
+
+                    print_summary_and_write_to_output(tokens);
+
+                    process.exit(0);   // SUCCESS!
+                } catch (ex2) {
+                    console.error("Failure:\\n", ex2, \`
+
+Input filepath:  $\{input_path}
+Output filepath: $\{output_path}               
+                    \`);
+                    process.exit(1);   // FAIL
+                }
+            });
+        }
+    }
+}
+`;
+// --- END of commonJsMain chunk ---
+
+const commonJsMainImports = `
+const fs = require('fs');
+const path = require('path');
+`;
+
+const commonES6MainImports = `
+const fs = require('fs');
+const path = require('path');
+//import fs from 'fs';
+//import path from 'path';
+`;
+
 
 chkBugger(getRegExpLexerPrototype());
 RegExpLexer.prototype = (new Function(rmCommonWS`
     "use strict";
 
-    return ${getRegExpLexerPrototype()};
+    return {
+        ${getRegExpLexerPrototype()}
+    };
 `))();
 
 
 // The lexer code stripper, driven by optimization analysis settings and
 // lexer options, which cannot be changed at run-time.
-function stripUnusedLexerCode(src, opt) {
-    //   uses yyleng: ..................... ${opt.lexerActionsUseYYLENG}
-    //   uses yylineno: ................... ${opt.lexerActionsUseYYLINENO}
-    //   uses yytext: ..................... ${opt.lexerActionsUseYYTEXT}
-    //   uses yylloc: ..................... ${opt.lexerActionsUseYYLOC}
-    //   uses ParseError API: ............. ${opt.lexerActionsUseParseError}
-    //   uses location tracking & editing:  ${opt.lexerActionsUseLocationTracking}
-    //   uses more() API: ................. ${opt.lexerActionsUseMore}
-    //   uses unput() API: ................ ${opt.lexerActionsUseUnput}
-    //   uses reject() API: ............... ${opt.lexerActionsUseReject}
-    //   uses less() API: ................. ${opt.lexerActionsUseLess}
+function stripUnusedLexerCode(src, grammarSpec) {
+    //   uses yyleng: ..................... ${grammarSpec.lexerActionsUseYYLENG}
+    //   uses yylineno: ................... ${grammarSpec.lexerActionsUseYYLINENO}
+    //   uses yytext: ..................... ${grammarSpec.lexerActionsUseYYTEXT}
+    //   uses yylloc: ..................... ${grammarSpec.lexerActionsUseYYLOC}
+    //   uses ParseError API: ............. ${grammarSpec.lexerActionsUseParseError}
+    //   uses location tracking & editing:  ${grammarSpec.lexerActionsUseLocationTracking}
+    //   uses more() API: ................. ${grammarSpec.lexerActionsUseMore}
+    //   uses unput() API: ................ ${grammarSpec.lexerActionsUseUnput}
+    //   uses reject() API: ............... ${grammarSpec.lexerActionsUseReject}
+    //   uses less() API: ................. ${grammarSpec.lexerActionsUseLess}
     //   uses display APIs pastInput(), upcomingInput(), showPosition():
-    //        ............................. ${opt.lexerActionsUseDisplayAPIs}
-    //   uses describeYYLLOC() API: ....... ${opt.lexerActionsUseDescribeYYLOC}
+    //        ............................. ${grammarSpec.lexerActionsUseDisplayAPIs}
+    //   uses describeYYLLOC() API: ....... ${grammarSpec.lexerActionsUseDescribeYYLOC}
 
     let new_src;
     try {
-        let ast = helpers.parseCodeChunkToAST(src, opt);
-        new_src = helpers.prettyPrintAST(ast, opt);
+        let ast = helpers.parseCodeChunkToAST(src, grammarSpec.options.prettyCfg);
+        new_src = helpers.prettyPrintAST(ast, grammarSpec.options.prettyCfg);
     } catch (ex) {
         let line = ex.lineNumber || 0;
         let a = src.split(/\r?\n/g);
@@ -2826,7 +3196,7 @@ function stripUnusedLexerCode(src, opt) {
         // the need to use yystack! Hence yystack is only there for very special use action code.)
 
 
-        if (devDebug || this.DEBUG) {
+        if (this.DEBUG) {
             console.log('Optimization analysis: ', {
                 actionsUseYYLENG: this.actionsUseYYLENG,
                 actionsUseYYLINENO: this.actionsUseYYLINENO,
@@ -2866,38 +3236,38 @@ function stripUnusedLexerCode(src, opt) {
         //
         // Options:
         //
-        //   backtracking: .................... ${opt.options.backtrack_lexer}
-        //   location.ranges: ................. ${opt.options.ranges}
-        //   location line+column tracking: ... ${opt.options.trackPosition}
+        //   backtracking: .................... ${grammarSpec.options.backtrack_lexer}
+        //   location.ranges: ................. ${grammarSpec.options.ranges}
+        //   location line+column tracking: ... ${grammarSpec.options.trackPosition}
         //
         //
         // Forwarded Parser Analysis flags:
         //
-        //   uses yyleng: ..................... ${opt.parseActionsUseYYLENG}
-        //   uses yylineno: ................... ${opt.parseActionsUseYYLINENO}
-        //   uses yytext: ..................... ${opt.parseActionsUseYYTEXT}
-        //   uses yylloc: ..................... ${opt.parseActionsUseYYLOC}
-        //   uses lexer values: ............... ${opt.parseActionsUseValueTracking} / ${opt.parseActionsUseValueAssignment}
-        //   location tracking: ............... ${opt.parseActionsUseLocationTracking}
-        //   location assignment: ............. ${opt.parseActionsUseLocationAssignment}
+        //   uses yyleng: ..................... ${grammarSpec.parseActionsUseYYLENG}
+        //   uses yylineno: ................... ${grammarSpec.parseActionsUseYYLINENO}
+        //   uses yytext: ..................... ${grammarSpec.parseActionsUseYYTEXT}
+        //   uses yylloc: ..................... ${grammarSpec.parseActionsUseYYLOC}
+        //   uses lexer values: ............... ${grammarSpec.parseActionsUseValueTracking} / ${grammarSpec.parseActionsUseValueAssignment}
+        //   location tracking: ............... ${grammarSpec.parseActionsUseLocationTracking}
+        //   location assignment: ............. ${grammarSpec.parseActionsUseLocationAssignment}
         //
         //
         // Lexer Analysis flags:
         //
-        //   uses yyleng: ..................... ${opt.lexerActionsUseYYLENG}
-        //   uses yylineno: ................... ${opt.lexerActionsUseYYLINENO}
-        //   uses yytext: ..................... ${opt.lexerActionsUseYYTEXT}
-        //   uses yylloc: ..................... ${opt.lexerActionsUseYYLOC}
-        //   uses ParseError API: ............. ${opt.lexerActionsUseParseError}
-        //   uses yyerror: .................... ${opt.lexerActionsUseYYERROR}
-        //   uses location tracking & editing:  ${opt.lexerActionsUseLocationTracking}
-        //   uses more() API: ................. ${opt.lexerActionsUseMore}
-        //   uses unput() API: ................ ${opt.lexerActionsUseUnput}
-        //   uses reject() API: ............... ${opt.lexerActionsUseReject}
-        //   uses less() API: ................. ${opt.lexerActionsUseLess}
+        //   uses yyleng: ..................... ${grammarSpec.lexerActionsUseYYLENG}
+        //   uses yylineno: ................... ${grammarSpec.lexerActionsUseYYLINENO}
+        //   uses yytext: ..................... ${grammarSpec.lexerActionsUseYYTEXT}
+        //   uses yylloc: ..................... ${grammarSpec.lexerActionsUseYYLOC}
+        //   uses ParseError API: ............. ${grammarSpec.lexerActionsUseParseError}
+        //   uses yyerror: .................... ${grammarSpec.lexerActionsUseYYERROR}
+        //   uses location tracking & editing:  ${grammarSpec.lexerActionsUseLocationTracking}
+        //   uses more() API: ................. ${grammarSpec.lexerActionsUseMore}
+        //   uses unput() API: ................ ${grammarSpec.lexerActionsUseUnput}
+        //   uses reject() API: ............... ${grammarSpec.lexerActionsUseReject}
+        //   uses less() API: ................. ${grammarSpec.lexerActionsUseLess}
         //   uses display APIs pastInput(), upcomingInput(), showPosition():
-        //        ............................. ${opt.lexerActionsUseDisplayAPIs}
-        //   uses describeYYLLOC() API: ....... ${opt.lexerActionsUseDescribeYYLOC}
+        //        ............................. ${grammarSpec.lexerActionsUseDisplayAPIs}
+        //   uses describeYYLLOC() API: ....... ${grammarSpec.lexerActionsUseDescribeYYLOC}
         //
         // --------- END OF REPORT -----------
 
@@ -2913,16 +3283,16 @@ function stripUnusedLexerCode(src, opt) {
 // generate lexer source from a grammar
 /**  @public */
 function generate(dict, tokens, build_options) {
-    let opt = processGrammar(dict, tokens, build_options);
+    let grammarSpec = processGrammar(dict, tokens, build_options);
 
-    return generateFromOpts(opt);
+    return generateFromOpts(grammarSpec);
 }
 
 // process the grammar and build final data structures and functions
 /**  @public */
 function processGrammar(dict, tokens, build_options) {
     build_options = build_options || {};
-    let opts = {
+    let grammarSpec = {
         // include the knowledge passed through `build_options` about which lexer
         // features will actually be *used* by the environment (which in 99.9%
         // of cases is a jison *parser*):
@@ -2962,24 +3332,24 @@ function processGrammar(dict, tokens, build_options) {
         lexerActionsUseReject: '???',
         lexerActionsUseLess: '???',
         lexerActionsUseDisplayAPIs: '???',
-        lexerActionsUseDescribeYYLOC: '???'
+        lexerActionsUseDescribeYYLOC: '???',
     };
 
     dict = autodetectAndConvertToJSONformat(dict, build_options) || {};
 
     // Feed the possibly reprocessed 'dictionary' above back to the caller
     // (for use by our error diagnostic assistance code)
-    opts.lex_rule_dictionary = dict;
+    grammarSpec.lex_rule_dictionary = dict;
+    grammarSpec.codeSections = dict.codeSections || [];     // [ array of {qualifier,include} pairs ]
+    grammarSpec.importDecls = dict.importDecls || [];       // [ array of {name,path} pairs ] list of files with (partial?) symbol tables.
+    grammarSpec.unknownDecls = dict.unknownDecls || [];     // [ array of {name,value} pairs ]
 
     // Always provide the lexer with an options object, even if it's empty!
     // Make sure to camelCase all options:
-    opts.options = mkStdOptions(build_options, dict.options);
+    grammarSpec.options = mkStdOptions(build_options, dict.options);
 
-    opts.moduleType = opts.options.moduleType;
-    opts.moduleName = opts.options.moduleName;
-
-    opts.conditions = prepareStartConditions(dict.startConditions);
-    opts.conditions.INITIAL = {
+    grammarSpec.conditions = prepareStartConditions(dict.startConditions);
+    grammarSpec.conditions.INITIAL = {
         rules: [],
         inclusive: true
     };
@@ -2987,51 +3357,51 @@ function processGrammar(dict, tokens, build_options) {
     // only produce rule action code blocks when there are any rules at all;
     // a "custom lexer" has ZERO rules and must be defined entirely in
     // other code blocks:
-    let code = (dict.rules ? buildActions(dict, tokens, opts) : {});
-    opts.performAction = code.actions;
-    opts.caseHelperInclude = code.caseHelperInclude;
-    opts.rules = code.rules || [];
-    opts.macros = code.macros;
+    let code = (dict.rules ? buildActions(dict, tokens, grammarSpec) : {});
+    grammarSpec.performAction = code.actions;
+    grammarSpec.caseHelperInclude = code.caseHelperInclude;
+    grammarSpec.rules = code.rules || [];
+    grammarSpec.macros = code.macros;
 
-    opts.regular_rule_count = code.regular_rule_count;
-    opts.simple_rule_count = code.simple_rule_count;
+    grammarSpec.regular_rule_count = code.regular_rule_count;
+    grammarSpec.simple_rule_count = code.simple_rule_count;
 
-    opts.conditionStack = [ 'INITIAL' ];
+    grammarSpec.conditionStack = [ 'INITIAL' ];
 
-    opts.actionInclude = (dict.actionInclude || '');
-    opts.moduleInclude = (opts.moduleInclude || '') + (dict.moduleInclude || '').trim();
+    grammarSpec.actionInclude = (dict.actionInclude || '');
+    grammarSpec.moduleInclude = (grammarSpec.moduleInclude || '') + (dict.moduleInclude || '').trim();
 
-    return opts;
+    return grammarSpec;
 }
 
 // Assemble the final source from the processed grammar
 /**  @public */
-function generateFromOpts(opt) {
+function generateFromOpts(grammarSpec) {
     let code = '';
 
-    switch (opt.moduleType) {
+    switch (grammarSpec.options.moduleType) {
     case 'js':
-        code = generateModule(opt);
+        code = generateModule(grammarSpec);
         break;
     case 'amd':
-        code = generateAMDModule(opt);
+        code = generateAMDModule(grammarSpec);
         break;
     case 'es':
-        code = generateESModule(opt);
+        code = generateESModule(grammarSpec);
         break;
     case 'commonjs':
-        code = generateCommonJSModule(opt);
+        code = generateCommonJSModule(grammarSpec);
         break;
     default:
-        throw new Error('unsupported moduleType: ' + opt.moduleType);
+        throw new Error('unsupported moduleType: ' + grammarSpec.options.moduleType);
     }
 
     return code;
 }
 
-function generateRegexesInitTableCode(opt) {
-    let a = opt.rules;
-    let print_xregexp = opt.options && opt.options.xregexp;
+function generateRegexesInitTableCode(grammarSpec) {
+    let a = grammarSpec.rules;
+    let print_xregexp = grammarSpec.options && grammarSpec.options.xregexp;
     let id_display_width = (1 + Math.log10(a.length | 1) | 0);
     let ws_prefix = new Array(id_display_width).join(' ');
     let b = a.map(function generateXRegExpInitCode(re, idx) {
@@ -3054,7 +3424,7 @@ function generateRegexesInitTableCode(opt) {
     return b.join(',\n');
 }
 
-function generateModuleBody(opt) {
+function generateModuleBody(grammarSpec) {
     // make the JSON output look more like JavaScript:
     function cleanupJSON(str) {
         str = str.replace(/ {2}"rules": \[/g, '  rules: [');
@@ -3162,7 +3532,7 @@ function generateModuleBody(opt) {
 
 
     let out;
-    if (opt.rules.length > 0 || opt.__in_rules_failure_analysis_mode__) {
+    if (grammarSpec.rules.length > 0 || grammarSpec.__in_rules_failure_analysis_mode__) {
         // we don't mind that the `test_me()` code above will have this `lexer` variable re-defined:
         // JavaScript is fine with that.
         let code = [ rmCommonWS`
@@ -3172,36 +3542,18 @@ function generateModuleBody(opt) {
 
         // get the RegExpLexer.prototype in source code form:
         let protosrc = getRegExpLexerPrototype();
-        // and strip off the surrounding bits we don't want:
-        protosrc = protosrc
-        .replace(/^[\s\r\n]*\{/, '')
-        .replace(/\s*\}[\s\r\n]*$/, '')
-        .trim();
         code.push(protosrc + ',\n');
 
-        assert(opt.options);
+        assert(grammarSpec.options);
         // Assure all options are camelCased:
-        assert(typeof opt.options['case-insensitive'] === 'undefined');
+        assert(typeof grammarSpec.options['case-insensitive'] === 'undefined');
 
-        code.push('    options: ' + produceOptions(opt.options));
+        code.push('    options: ' + produceOptions(grammarSpec.options));
 
-/*
-        function isEmpty(code) {
-            switch (typeof code) {
-            case 'undefined':
-            case 'null':
-                return true;
-
-            case 'string':
-
-            }
-        }
-*/
-
-        let performActionCode = String(opt.performAction);
-        let simpleCaseActionClustersCode = String(opt.caseHelperInclude);
-        let rulesCode = generateRegexesInitTableCode(opt);
-        let conditionsCode = cleanupJSON(JSON.stringify(opt.conditions, null, 2));
+        let performActionCode = String(grammarSpec.performAction);
+        let simpleCaseActionClustersCode = String(grammarSpec.caseHelperInclude);
+        let rulesCode = generateRegexesInitTableCode(grammarSpec);
+        let conditionsCode = cleanupJSON(JSON.stringify(grammarSpec.conditions, null, 2));
         code.push(rmCommonWS`,
             JisonLexerError: JisonLexerError,
             performAction: ${performActionCode},
@@ -3213,7 +3565,7 @@ function generateModuleBody(opt) {
         };
         `);
 
-        opt.is_custom_lexer = false;
+        grammarSpec.is_custom_lexer = false;
 
         out = code.join('');
     } else {
@@ -3225,12 +3577,12 @@ function generateModuleBody(opt) {
         // what crazy stuff (or lack thereof) the userland code is pulling in the `actionInclude` chunk.
         out = '\n';
 
-        assert(opt.regular_rule_count === 0);
-        assert(opt.simple_rule_count === 0);
-        opt.is_custom_lexer = true;
+        assert(grammarSpec.regular_rule_count === 0);
+        assert(grammarSpec.simple_rule_count === 0);
+        grammarSpec.is_custom_lexer = true;
 
-        if (opt.actionInclude) {
-            out += opt.actionInclude + (!opt.actionInclude.match(/;[\s\r\n]*$/) ? ';' : '') + '\n';
+        if (grammarSpec.actionInclude) {
+            out += grammarSpec.actionInclude + (!grammarSpec.actionInclude.match(/;[\s\r\n]*$/) ? ';' : '') + '\n';
         }
     }
 
@@ -3468,41 +3820,51 @@ function generateGenericHeaderComment() {
     return out;
 }
 
-function prepareOptions(opt) {
-    opt = opt || {};
+function prepareOptions(grammarSpec) {
+    grammarSpec = grammarSpec || {};
 
     // check for illegal identifier
-    if (!opt.moduleName || !opt.moduleName.match(/^[a-zA-Z_$][a-zA-Z0-9_$\.]*$/)) {
-        if (opt.moduleName) {
-            let msg = 'WARNING: The specified moduleName "' + opt.moduleName + '" is illegal (only characters [a-zA-Z0-9_$] and "." dot are accepted); using the default moduleName "lexer" instead.';
-            if (typeof opt.warn_cb === 'function') {
-                opt.warn_cb(msg);
+    let moduleName = grammarSpec.options.moduleName;
+    if (!moduleName || !moduleName.match(/^[a-zA-Z_$][a-zA-Z0-9_$\.]*$/)) {
+        if (moduleName) {
+            let msg = `WARNING: The specified moduleName "${moduleName}" is illegal (only characters [a-zA-Z0-9_$] and "." dot are accepted); using the default moduleName "lexer" instead.`;
+            if (typeof grammarSpec.warn_cb === 'function') {
+                grammarSpec.warn_cb(msg);
+            } else if (grammarSpec.warn_cb) {
+                console.error(msg);
             } else {
                 // do not treat as warning; barf hairball instead so that this oddity gets noticed right away!
                 throw new Error(msg);
             }
         }
-        opt.moduleName = 'lexer';
+        grammarSpec.options.moduleName = 'lexer';
     }
 
-    prepExportStructures(opt);
+    prepExportStructures(grammarSpec.options);
 
-    return opt;
+    return grammarSpec;
 }
 
-function generateModule(opt) {
-    opt = prepareOptions(opt);
-    let modIncSrc = (opt.moduleInclude ? opt.moduleInclude + ';' : '');
+function generateModule(grammarSpec) {
+    grammarSpec = prepareOptions(grammarSpec);
+    let modIncSrc = (grammarSpec.moduleInclude ? grammarSpec.moduleInclude + ';' : '');
 
     let src = rmCommonWS`
         ${generateGenericHeaderComment()}
 
-        var ${opt.moduleName} = (function () {
+        var ${grammarSpec.options.moduleName} = (function () {
             "use strict";
+
+            ${getInitCodeSection(grammarSpec.codeSections, 'imports')}
+            ${getInitCodeSection(grammarSpec.codeSections, 'init')}
 
             ${jisonLexerErrorDefinition}
 
-            ${generateModuleBody(opt)}
+            ${getInitCodeSection(grammarSpec.codeSections, 'required')}
+
+            ${generateModuleBody(grammarSpec)}
+
+            ${getRemainingInitCodeSections(grammarSpec.codeSections, grammarSpec)}
 
             ${modIncSrc}
 
@@ -3510,14 +3872,14 @@ function generateModule(opt) {
         })();
     `;
 
-    src = stripUnusedLexerCode(src, opt);
-    opt.exportSourceCode.all = src;
+    src = stripUnusedLexerCode(src, grammarSpec);
+    grammarSpec.options.exportSourceCode.all = src;
     return src;
 }
 
-function generateAMDModule(opt) {
-    opt = prepareOptions(opt);
-    let modIncSrc = (opt.moduleInclude ? opt.moduleInclude + ';' : '');
+function generateAMDModule(grammarSpec) {
+    grammarSpec = prepareOptions(grammarSpec);
+    let modIncSrc = (grammarSpec.moduleInclude ? grammarSpec.moduleInclude + ';' : '');
 
     let src = rmCommonWS`
         ${generateGenericHeaderComment()}
@@ -3525,9 +3887,16 @@ function generateAMDModule(opt) {
         define([], function () {
             "use strict";
 
+            ${getInitCodeSection(grammarSpec.codeSections, 'imports')}
+            ${getInitCodeSection(grammarSpec.codeSections, 'init')}
+
             ${jisonLexerErrorDefinition}
 
-            ${generateModuleBody(opt)}
+            ${getInitCodeSection(grammarSpec.codeSections, 'required')}
+
+            ${generateModuleBody(grammarSpec)}
+
+            ${getRemainingInitCodeSections(grammarSpec.codeSections, grammarSpec)}
 
             ${modIncSrc}
 
@@ -3535,24 +3904,61 @@ function generateAMDModule(opt) {
         });
     `;
 
-    src = stripUnusedLexerCode(src, opt);
-    opt.exportSourceCode.all = src;
+    src = stripUnusedLexerCode(src, grammarSpec);
+    grammarSpec.options.exportSourceCode.all = src;
     return src;
 }
 
-function generateESModule(opt) {
-    opt = prepareOptions(opt);
-    let modIncSrc = (opt.moduleInclude ? opt.moduleInclude + ';' : '');
+function generateESModule(grammarSpec) {
+    grammarSpec = prepareOptions(grammarSpec);
+    let modIncSrc = (grammarSpec.moduleInclude ? grammarSpec.moduleInclude + ';' : '');
+    let moduleNameAsCode = '';
+    let moduleImportsAsCode = '';
+    let exportMain = '';
+    let invokeMain = '';
+    if (!grammarSpec.options.noMain) {
+        moduleNameAsCode = String(grammarSpec.options.moduleMain || commonJsMain);
+        moduleImportsAsCode = String(grammarSpec.options.moduleMainImports || commonES6MainImports);
+
+        exportMain = rmCommonWS`
+            yymain,
+            yyExecMain as main,
+        `;
+        
+        invokeMain = rmCommonWS`
+            let yymain = ${moduleNameAsCode.trim()};
+
+            function yyExecMain() {
+              yymain(process.argv.slice(1));
+            }
+
+            // IFF this is the main module executed by NodeJS,
+            // then run 'main()' immediately:
+            if (typeof module !== 'undefined') {
+              yyExecMain();
+            }
+        `;
+    }
 
     let src = rmCommonWS`
         ${generateGenericHeaderComment()}
 
+        ${moduleImportsAsCode}
+
+        ${getInitCodeSection(grammarSpec.codeSections, 'imports')}
+
         const lexer = (function () {
             "use strict";
 
+            ${getInitCodeSection(grammarSpec.codeSections, 'init')}
+
             ${jisonLexerErrorDefinition}
 
-            ${generateModuleBody(opt)}
+            ${getInitCodeSection(grammarSpec.codeSections, 'required')}
+
+            ${generateModuleBody(grammarSpec)}
+
+            ${getRemainingInitCodeSections(grammarSpec.codeSections, grammarSpec)}
 
             ${modIncSrc}
 
@@ -3563,30 +3969,63 @@ function generateESModule(opt) {
             return lexer.lex.apply(lexer, arguments);
         }
 
+        ${invokeMain}
+
         export {
             lexer,
-            yylex as lex
+            yylex as lex,
+            ${exportMain}
         };
     `;
 
-    src = stripUnusedLexerCode(src, opt);
-    opt.exportSourceCode.all = src;
+    src = stripUnusedLexerCode(src, grammarSpec);
+    grammarSpec.options.exportSourceCode.all = src;
     return src;
 }
 
-function generateCommonJSModule(opt) {
-    opt = prepareOptions(opt);
-    let modIncSrc = (opt.moduleInclude ? opt.moduleInclude + ';' : '');
+function generateCommonJSModule(grammarSpec) {
+    grammarSpec = prepareOptions(grammarSpec);
+    let modIncSrc = (grammarSpec.moduleInclude ? grammarSpec.moduleInclude + ';' : '');
+    let moduleNameAsCode = '';
+    let moduleImportsAsCode = '';
+    let main = '';
+    let moduleName = grammarSpec.options.moduleName;
+    if (!grammarSpec.options.noMain) {
+        moduleNameAsCode = String(grammarSpec.options.moduleMain || commonJsMain);
+        moduleImportsAsCode = String(grammarSpec.options.moduleMainImports || commonJsMainImports);
+
+        main = rmCommonWS`
+            if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
+                exports.main = ${moduleNameAsCode.trim()};
+
+                // IFF this is the main module executed by NodeJS,
+                // then run 'main()' immediately:
+                if (typeof module !== 'undefined' && require.main === module) {
+                  exports.main(process.argv.slice(1));
+                }
+            }
+        `;
+    }
 
     let src = rmCommonWS`
         ${generateGenericHeaderComment()}
 
-        var ${opt.moduleName} = (function () {
+        ${moduleImportsAsCode}
+
+        ${getInitCodeSection(grammarSpec.codeSections, 'imports')}
+
+        var ${moduleName} = (function () {
             "use strict";
+
+            ${getInitCodeSection(grammarSpec.codeSections, 'init')}
 
             ${jisonLexerErrorDefinition}
 
-            ${generateModuleBody(opt)}
+            ${getInitCodeSection(grammarSpec.codeSections, 'required')}
+
+            ${generateModuleBody(grammarSpec)}
+
+            ${getRemainingInitCodeSections(grammarSpec.codeSections, grammarSpec)}
 
             ${modIncSrc}
 
@@ -3594,15 +4033,17 @@ function generateCommonJSModule(opt) {
         })();
 
         if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-            exports.lexer = ${opt.moduleName};
+            exports.lexer = ${moduleName};
             exports.lex = function () {
-                return ${opt.moduleName}.lex.apply(lexer, arguments);
+                return ${moduleName}.lex.apply(lexer, arguments);
             };
         }
+
+        ${main}
     `;
 
-    src = stripUnusedLexerCode(src, opt);
-    opt.exportSourceCode.all = src;
+    src = stripUnusedLexerCode(src, grammarSpec);
+    grammarSpec.options.exportSourceCode.all = src;
     return src;
 }
 
