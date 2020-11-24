@@ -39,10 +39,7 @@
 lex
     : init definitions rules_and_epilogue EOF
         {
-          $$ = $rules_and_epilogue;
-          for (let key in $definitions) {
-            $$[key] = $definitions[key];
-          }
+          $$ = Object.assign($rules_and_epilogue, $definitions);
 
           // if there are any options, add them all, otherwise set options to NULL:
           // can't check for 'empty object' by `if (yy.options) ...` so we do it this way:
@@ -67,67 +64,68 @@ lex
 
 rules_and_epilogue
     : start_productions_marker rules epilogue
-      {
-        if ($epilogue) {
-            $$ = { rules: $rules, moduleInclude: $epilogue };
-        } else {
-            $$ = { rules: $rules };
+        {
+            if ($epilogue) {
+                $$ = { rules: $rules, moduleInclude: $epilogue };
+            } else {
+                $$ = { rules: $rules };
+            }
+            yy.popContext('Line 73');
         }
-      }
     | start_productions_marker error epilogue
-      {
-        yyerror(rmCommonWS`
-            There's probably an error in one or more of your lexer regex rules.
-            The lexer rule spec should have this structure:
+        {
+            yyerror(rmCommonWS`
+                There's probably an error in one or more of your lexer regex rules.
+                The lexer rule spec should have this structure:
 
-                    regex  action_code
+                        regex  action_code
 
-            where 'regex' is a lex-style regex expression (see the
-            jison and jison-lex documentation) which is intended to match a chunk
-            of the input to lex, while the 'action_code' block is the JS code
-            which will be invoked when the regex is matched. The 'action_code' block
-            may be any (indented!) set of JS statements, optionally surrounded
-            by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
+                where 'regex' is a lex-style regex expression (see the
+                jison and jison-lex documentation) which is intended to match a chunk
+                of the input to lex, while the 'action_code' block is the JS code
+                which will be invoked when the regex is matched. The 'action_code' block
+                may be any (indented!) set of JS statements, optionally surrounded
+                by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
 
-              Erroneous code:
-            ${yylexer.prettyPrintRange(@error)}
+                  Erroneous code:
+                ${yylexer.prettyPrintRange(@error)}
 
-              Technical error report:
-            ${$error.errStr}
-        `);
-      }
-    | start_productions_marker rules
-      {
-        $$ = { rules: $rules };
-      }
-    | start_productions_marker error
-      {
-        yyerror(rmCommonWS`
-            There's probably an error in one or more of your lexer regex rules.
-            There's an error in your lexer regex rules section.
-            Maybe you did not correctly separate the lexer sections with
-            a '%%' on an otherwise empty line? Did you correctly
-            delimit every rule's action code block?
-            The lexer spec file should have this structure:
+                  Technical error report:
+                ${$error.errStr}
+            `);
+            yy.popContext('Line 96');
+            $$ = { rules: [] };
+        }
+    | start_productions_marker DUMMY error
+        {
+            yyerror(rmCommonWS`
+                There's probably an error in one or more of your lexer regex rules.
+                There's an error in your lexer regex rules section.
+                Maybe you did not correctly separate the lexer sections with
+                a '%%' on an otherwise empty line? Did you correctly
+                delimit every rule's action code block?
+                The lexer spec file should have this structure:
 
-                definitions
-                %%
-                rules
-                %%                  // <-- only needed if ...
-                extra_module_code   // <-- ... epilogue is present.
+                    definitions
+                    %%
+                    rules
+                    %%                  // <-- only needed if ...
+                    extra_module_code   // <-- ... epilogue is present.
 
-              Erroneous code:
-            ${yylexer.prettyPrintRange(@error)}
+                  Erroneous code:
+                ${yylexer.prettyPrintRange(@error)}
 
-              Technical error report:
-            ${$error.errStr}
-        `);
-      }
+                  Technical error report:
+                ${$error.errStr}
+            `);
+            yy.popContext('Line 121');
+            $$ = { rules: [] };
+        }
     | ε
-      /* Note: an empty rules set is allowed when you are setting up an `%options custom_lexer` */
-      {
-        $$ = { rules: [] };
-      }
+        /* Note: an empty rules set is allowed when you are setting up an `%options custom_lexer` */
+        {
+            $$ = { rules: [] };
+        }
     ;
 
 // because JISON doesn't support mid-rule actions,
@@ -137,8 +135,6 @@ init
         {
             yy.actionInclude = [];
             if (!yy.options) yy.options = {};
-            yy.__options_flags__ = 0;
-            yy.__options_category_description__ = '???';
 
             // Store the `%s` and `%x` condition states in `yy` to ensure the rules section of the
             // lex language parser can reach these and use them for validating whether the lexer
@@ -151,20 +147,39 @@ init
             // on/off the context description stack to help the lexer produce
             // better informing error messages in case of a subsequent lexer
             // fail.
-            yy.__context_description__ = ['???CONTEXT???'];
+            yy.__options_flags__ = 0;
+            yy.__options_category_description__ = '???';
+            yy.__inside_scoped_ruleset__ = false;
 
-            yy.pushContextDescription = function (str) {
-                yy.__context_description__.push(str);
+            yy.__context_cfg_stack__ = [];
+
+            yy.pushContext = function () {
+                yy.__context_cfg_stack__.push({
+                    flags: yy.__options_flags__,
+                    descr: yy.__options_category_description__,
+                    scoped: yy.__inside_scoped_ruleset__,
+                });
             };
-            yy.popContextDescription = function () {
-                if (yy.__context_description__.length > 1) {
-                    yy.__context_description__.pop();
+            yy.popContext = function (msg) {
+                if (yy.__context_cfg_stack__.length >= 1) {
+                    let r = yy.__context_cfg_stack__.pop();
+
+                    yy.__options_flags__ = r.flags;
+                    yy.__options_category_description__ = r.descr;
+                    yy.__inside_scoped_ruleset__ = r.scoped;
                 } else {
-                    yyerror('__context_description__ stack depleted! Contact a developer!');
+                    yyerror('__context_cfg_stack__ stack depleted! Contact a developer! ' + msg);
                 }
             };
-            yy.getContextDescription = function () {
-                return yy.__context_description__[yy.__context_description__.length - 1];
+            yy.getContextDepth = function () {
+                return yy.__context_cfg_stack__.length;
+            };
+            yy.restoreContextDepth = function (depth) {
+                if (depth > yy.__context_cfg_stack__.length) {
+                    yyerror(`__context_cfg_stack__ stack CANNOT be reset to depth ${depth} as it is too shallow already: actual depth is ${yy.__context_cfg_stack__.length}. Contact a developer!`);
+                } else {
+                    yy.__context_cfg_stack__.length = depth;
+                }
             };
         }
     ;
@@ -194,9 +209,6 @@ definitions
 
                                   Erroneous code:
                                 ${yylexer.prettyPrintRange(@definition, @1)}
-
-                                  Technical error report:
-                                ${$definition.errStr}
                             `);
                         }
                         $$.startConditions[name] = condition_defs[i][1];     // flag as 'exclusive'/'inclusive'
@@ -306,6 +318,8 @@ definition
                 lst[i][1] = 0;     // flag as 'inclusive'
             }
 
+            yy.popContext('Line 321');
+
             $$ = {
                 type: 'names',
                 names: lst         // 'inclusive' conditions have value 0, 'exclusive' conditions have value 1
@@ -326,6 +340,8 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
+            yy.popContext('Line 343');
+            $$ = null;
         }
     //
     // may be an *exclusive lexer condition* set specification, e.g.
@@ -338,6 +354,8 @@ definition
             for (let i = 0, len = lst.length; i < len; i++) {
                 lst[i][1] = 1;     // flag as 'exclusive'
             }
+
+            yy.popContext('Line 358');
 
             $$ = {
                 type: 'names',
@@ -359,6 +377,8 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
+            yy.popContext('Line 380');
+            $$ = null;
         }
     //
     // may be a *lexer setup code section*, e.g.
@@ -374,7 +394,7 @@ definition
     //
     | ACTION_START_AT_SOL action ACTION_END
         {
-            let srcCode = trimActionCode($action, {
+            let srcCode = trimActionCode($action + $ACTION_END, {
                 startMarker: $ACTION_START_AT_SOL
             });
             if (srcCode) {
@@ -455,23 +475,41 @@ definition
             for (let i = 0, len = lst.length; i < len; i++) {
                 yy.options[lst[i][0]] = lst[i][1];
             }
+            yy.popContext('Line 478');
             $$ = null;
         }
     //
     // see the alternative above: this rule is added to aid error
     // diagnosis of user coding.
     //
-    | option_keyword error
+    | option_keyword error OPTIONS_END
         {
             yyerror(rmCommonWS`
                 ill defined %options line.
 
-                  Erroneous code:
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(@error, @option_keyword, @OPTIONS_END)}
+
+                  Technical error report:
+                ${$error.errStr}
+            `);
+            yy.popContext('Line 496');
+            $$ = null;
+        }
+    | option_keyword error
+        {
+            // TODO ...
+            yyerror(rmCommonWS`
+                %options don't seem terminated?
+
+                  Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @option_keyword)}
 
                   Technical error report:
                 ${$error.errStr}
             `);
+            yy.popContext('Line 511');
+            $$ = null;
         }
     | UNKNOWN_DECL
         {
@@ -510,6 +548,8 @@ definition
                 `);
             }
 
+            yy.popContext('Line 551');
+
             $$ = {
                 type: 'imports',
                 body: body
@@ -529,6 +569,8 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
+            yy.popContext('Line 572');
+            $$ = null;
         }
     | init_code_keyword option_list ACTION_START action ACTION_END OPTIONS_END
         {
@@ -557,18 +599,21 @@ definition
                 `);
             }
 
-            let srcCode = trimActionCode($action, {
+            let srcCode = trimActionCode($action + $ACTION_END, {
                 startMarker: $ACTION_START
             });
             let rv = checkActionBlock(srcCode, @action, yy);
             if (rv) {
                 yyerror(rmCommonWS`
-                    The '%code ${name}' initialization code section does not compile: ${rv}
+                    The '%code ${name}' initialization section's action code block does not compile: ${rv}
 
                       Erroneous area:
                     ${yylexer.prettyPrintRange(@action, @init_code_keyword)}
                 `);
             }
+
+            yy.popContext('Line 615');
+
             $$ = {
                 type: 'codeSection',
                 body: {
@@ -595,6 +640,8 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
+            yy.popContext('Line 643');
+            $$ = null;
         }
     | init_code_keyword error ACTION_START /* ...action */ error OPTIONS_END
         {
@@ -610,6 +657,8 @@ definition
                   Technical error report:
                 ${$error1.errStr}
             `);
+            yy.popContext('Line 660');
+            $$ = null;
         }
     | init_code_keyword error OPTIONS_END
         {
@@ -629,6 +678,8 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
+            yy.popContext('Line 681');
+            $$ = null;
         }
     | error
         {
@@ -651,6 +702,7 @@ definition
 option_keyword
     : OPTIONS
         {
+            yy.pushContext();
             yy.__options_flags__ = OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;
             yy.__options_category_description__ = $OPTIONS;
         }
@@ -659,22 +711,25 @@ option_keyword
 import_keyword
     : IMPORT
         {
+            yy.pushContext();
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;
             yy.__options_category_description__ = $IMPORT;
         }
     ;
 
 init_code_keyword
-    : CODE
+    : INIT_CODE
         {
+            yy.pushContext();
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS | OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;
-            yy.__options_category_description__ = $CODE;
+            yy.__options_category_description__ = $INIT_CODE;
         }
     ;
 
 include_keyword
     : INCLUDE
         {
+            yy.pushContext();
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;
             yy.__options_category_description__ = $INCLUDE;
         }
@@ -683,6 +738,7 @@ include_keyword
 start_inclusive_keyword
     : START_INC
         {
+            yy.pushContext();
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;
             yy.__options_category_description__ = 'the inclusive lexer start conditions set (%s)';
         }
@@ -691,6 +747,7 @@ start_inclusive_keyword
 start_exclusive_keyword
     : START_EXC
         {
+            yy.pushContext();
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;
             yy.__options_category_description__ = 'the exclusive lexer start conditions set (%x)';
         }
@@ -699,6 +756,7 @@ start_exclusive_keyword
 start_conditions_marker
     : '<'
         {
+            yy.pushContext();
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES | OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME;
             yy.__options_category_description__ = 'the <...> delimited set of lexer start conditions';
         }
@@ -707,6 +765,7 @@ start_conditions_marker
 start_productions_marker
     : '%%'
         {
+            yy.pushContext();
             yy.__options_flags__ = 0;
             yy.__options_category_description__ = 'the lexer rules definition section';
         }
@@ -715,6 +774,7 @@ start_productions_marker
 start_epilogue_marker
     : '%%'
         {
+            yy.pushContext();
             yy.__options_flags__ = 0;
             yy.__options_category_description__ = 'the lexer epilogue section';
         }
@@ -723,195 +783,15 @@ start_epilogue_marker
 rules
     : rules scoped_rules_collective
         {
-            $$ = $rules.concat($scoped_rules_collective);
+            if ($scoped_rules_collective) {
+                $$ = $rules.concat($scoped_rules_collective);
+            }
         }
     | rules rule
         {
-            $$ = $rules.concat([$rule]);
-        }
-    //
-    // may be a *lexer setup code section*, e.g.
-    //
-    //     %{
-    //        console.log('setup info message');
-    //     %}
-    //
-    // **Note** that the action block start marker `%{` MUST be positioned
-    // at the start of a line to be accepted; indented action code blocks
-    // are always related to a preceding lexer spec item, such as a
-    // lexer match rule expression (see 'lexer rules').
-    //
-    | rules ACTION_START_AT_SOL action ACTION_END
-        {
-            let srcCode = trimActionCode($action, {
-                startMarker: $ACTION_START_AT_SOL
-            });
-            if (srcCode) {
-                let rv = checkActionBlock(srcCode, @action, yy);
-                if (rv) {
-                    yyerror(rmCommonWS`
-                        The '%{...%}' lexer setup action code section does not compile: ${rv}
-
-                          Erroneous area:
-                        ${yylexer.prettyPrintRange(@action, @ACTION_START_AT_SOL)}
-                    `);
-                }
-                yy.actionInclude.push(srcCode);
+            if ($rule) {
+                $$ = $rules.concat([$rule]);
             }
-            $$ = $rules;
-        }
-    //
-    // see the alternative above: this rule is added to aid error
-    // diagnosis of user coding.
-    //
-    | rules UNTERMINATED_ACTION_BLOCK
-        %{
-            // The issue has already been reported by the lexer. No need to repeat
-            // ourselves with another error report from here.
-            $$ = $rules;
-        %}
-    //
-    // see the alternative above: this rule is added to aid error
-    // diagnosis of user coding.
-    //
-    | rules ACTION_START_AT_SOL error
-        %{
-            let start_marker = $ACTION_START_AT_SOL.trim();
-            let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
-            yyerror(rmCommonWS`
-                There's very probably a problem with this '%{...%\}' lexer setup action code section.
-
-                  Erroneous area:
-                ${yylexer.prettyPrintRange(@ACTION_START_AT_SOL)}
-
-                  Technical error report:
-                ${$error.errStr}
-            `);
-            $$ = $rules;
-        %}
-    //
-    // see the alternative above: this rule is added to aid error
-    // diagnosis of user coding.
-    //
-    // This rule detects the presence of an unattached *indented*
-    // action code block.
-    //
-    | rules ACTION_START error
-        %{
-            let start_marker = $ACTION_START.trim();
-            // When the start_marker is not an explicit `%{`, `{` or similar, the error
-            // is more probably due to indenting the rule regex, rather than an error
-            // in writing the action code block:
-            console.error("*** error! marker:", start_marker);
-            if (start_marker.indexOf('{') >= 0) {
-                let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
-                yyerror(rmCommonWS`
-                    The '%{...%\}' lexer setup action code section MUST have its action
-                    block start marker (\`%{\`${marker_msg}) positioned
-                    at the start of a line to be accepted: *indented* action code blocks
-                    (such as this one) are always related to an immediately preceding lexer spec item,
-                    e.g. a lexer match rule expression (see 'lexer rules').
-
-                      Erroneous area:
-                    ${yylexer.prettyPrintRange(@ACTION_START)}
-
-                      Technical error report:
-                    ${$error.errStr}
-                `);
-            } else {
-                yyerror(rmCommonWS`
-                    There's probably an error in one or more of your lexer regex rules.
-                    Did you perhaps indent the rule regex? Note that all rule regexes
-                    MUST start at the start of the line, i.e. text column 1. Indented text
-                    is perceived as JavaScript action code related to the last lexer
-                    rule regex.
-
-                      Erroneous code:
-                    ${yylexer.prettyPrintRange(@error)}
-
-                      Technical error report:
-                    ${$error.errStr}
-                `);
-            }
-            $$ = $rules;
-        %}
-    | rules start_inclusive_keyword
-        {
-            yyerror(rmCommonWS`
-                \`${yy.__options_category_description__}\` statements must be placed in
-                the top section of the lexer spec file, above the first '%%'
-                separator. You cannot specify any in the second section as has been
-                done here.
-
-                  Erroneous code:
-                ${yylexer.prettyPrintRange(@start_inclusive_keyword)}
-            `);
-            $$ = $rules;
-        }
-    | rules start_exclusive_keyword
-        {
-            yyerror(rmCommonWS`
-                \`${yy.__options_category_description__}\` statements must be placed in
-                the top section of the lexer spec file, above the first '%%'
-                separator. You cannot specify any in the second section as has been
-                done here.
-
-                  Erroneous code:
-                ${yylexer.prettyPrintRange(@start_exclusive_keyword)}
-            `);
-            $$ = $rules;
-        }
-    | rules option_keyword
-        {
-            yyerror(rmCommonWS`
-                \`${yy.__options_category_description__}\` statements must be placed in
-                the top section of the lexer spec file, above the first '%%'
-                separator. You cannot specify any in the second section as has been
-                done here.
-
-                  Erroneous code:
-                ${yylexer.prettyPrintRange(@option_keyword)}
-            `);
-            $$ = $rules;
-        }
-    | rules UNKNOWN_DECL
-        {
-            yyerror(rmCommonWS`
-                \`${yy.__options_category_description__}\` statements must be placed in
-                the top section of the lexer spec file, above the first '%%'
-                separator. You cannot specify any in the second section as has been
-                done here.
-
-                  Erroneous code:
-                ${yylexer.prettyPrintRange(@UNKNOWN_DECL)}
-            `);
-            $$ = $rules;
-        }
-    | rules import_keyword
-        {
-            yyerror(rmCommonWS`
-                \`${yy.__options_category_description__}\` statements must be placed in
-                the top section of the lexer spec file, above the first '%%'
-                separator. You cannot specify any in the second section as has been
-                done here.
-
-                  Erroneous code:
-                ${yylexer.prettyPrintRange(@import_keyword)}
-            `);
-            $$ = $rules;
-        }
-    | rules init_code_keyword
-        {
-            yyerror(rmCommonWS`
-                \`${yy.__options_category_description__}\` statements must be placed in
-                the top section of the lexer spec file, above the first '%%'
-                separator. You cannot specify any in the second section as has been
-                done here.
-
-                  Erroneous code:
-                ${yylexer.prettyPrintRange(@init_code_keyword)}
-            `);
-            $$ = $rules;
         }
     | ε
         { $$ = []; }
@@ -923,6 +803,9 @@ scoped_rules_collective
             if ($start_conditions) {
                 $rule.unshift($start_conditions);
             }
+
+            yy.popContext('Line 807');
+
             $$ = [$rule];
         }
     | start_conditions '{' rule_block '}'
@@ -932,6 +815,9 @@ scoped_rules_collective
                     d.unshift($start_conditions);
                 });
             }
+
+            yy.popContext('Line 819');
+
             $$ = $rule_block;
         }
     | start_conditions '{' error '}'[sentinel]
@@ -948,6 +834,8 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
+            yy.popContext('Line 837');
+            $$ = null;
         }
     | start_conditions '{' error
         {
@@ -963,6 +851,8 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
+            yy.popContext('Line 854');
+            $$ = null;
         }
     | start_conditions error '}'
         {
@@ -978,12 +868,19 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
+            yy.popContext('Line 871');
+            $$ = null;
         }
     ;
 
 rule_block
     : rule_block rule
-        { $$ = $rule_block; $$.push($rule); }
+        { 
+            $$ = $rule_block; 
+            if ($rule) {
+                $$.push($rule); 
+            }
+        }
     | ε
         { $$ = []; }
     ;
@@ -991,7 +888,7 @@ rule_block
 rule
     : regex ACTION_START action ACTION_END
         {
-            let srcCode = trimActionCode($action, {
+            let srcCode = trimActionCode($action + $ACTION_END, {
                 startMarker: $ACTION_START
             });
             let rv = checkActionBlock(srcCode, @action, yy);
@@ -1007,7 +904,7 @@ rule
         }
     | regex ACTION_START_AT_SOL action ACTION_END
         {
-            let srcCode = trimActionCode($action, {
+            let srcCode = trimActionCode($action + $ACTION_END, {
                 startMarker: $ACTION_START_AT_SOL
             });
             let rv = checkActionBlock(srcCode, @action, yy);
@@ -1023,7 +920,7 @@ rule
         }
     | regex ARROW_ACTION_START action ACTION_END
         {
-            let srcCode = trimActionCode($action, {
+            let srcCode = trimActionCode($action + $ACTION_END, {
                 dontTrimSurroundingCurlyBraces: true
             });
             // add braces around ARROW_ACTION_CODE so that the action chunk test/compiler
@@ -1157,6 +1054,208 @@ rule
                 ${$error.errStr}
             `);
         }
+    // ---------------------------------------------------------------------------------           
+    // ---- additional chunks one MAY encounter *instead* of a regular lexer rule: -----
+    // ---------------------------------------------------------------------------------           
+    //
+    // may be a *lexer setup code section*, e.g.
+    //
+    //     %{
+    //        console.log('setup info message');
+    //     %}
+    //
+    // **Note** that the action block start marker `%{` MUST be positioned
+    // at the start of a line to be accepted; indented action code blocks
+    // are always related to a preceding lexer spec item, such as a
+    // lexer match rule expression (see 'lexer rules').
+    //
+    | ACTION_START_AT_SOL action ACTION_END
+        {
+            if (yy.__inside_scoped_ruleset__) {
+                yyerror(rmCommonWS`
+                    '%{...%}' lexer setup action code sections are not accepted inside 
+                    '<...>{ ... }' scoped rule blocks. Move this action code to the top
+                    of the '%%' section instead.
+
+                      Erroneous area:
+                    ${yylexer.prettyPrintRange(@$)}
+                `);
+            } else {
+                let srcCode = trimActionCode($action + $ACTION_END, {
+                    startMarker: $ACTION_START_AT_SOL
+                });
+                if (srcCode) {
+                    let rv = checkActionBlock(srcCode, @action, yy);
+                    if (rv) {
+                        yyerror(rmCommonWS`
+                            The '%{...%}' lexer setup action code section does not compile: ${rv}
+
+                              Erroneous area:
+                            ${yylexer.prettyPrintRange(@action, @ACTION_START_AT_SOL)}
+                        `);
+                    }
+                    yy.actionInclude.push(srcCode);
+                }
+            }
+            $$ = null;
+        }
+    //
+    // see the alternative above: this rule is added to aid error
+    // diagnosis of user coding.
+    //
+    | UNTERMINATED_ACTION_BLOCK
+        %{
+            // The issue has already been reported by the lexer. No need to repeat
+            // ourselves with another error report from here.
+            $$ = null;
+        %}
+    //
+    // see the alternative above: this rule is added to aid error
+    // diagnosis of user coding.
+    //
+    | ACTION_START_AT_SOL error
+        %{
+            let start_marker = $ACTION_START_AT_SOL.trim();
+            let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
+            yyerror(rmCommonWS`
+                There's very probably a problem with this '%{...%\}' lexer setup action code section.
+
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(@ACTION_START_AT_SOL)}
+
+                  Technical error report:
+                ${$error.errStr}
+            `);
+            $$ = null;
+        %}
+    //
+    // see the alternative above: this rule is added to aid error
+    // diagnosis of user coding.
+    //
+    // This rule detects the presence of an unattached *indented*
+    // action code block.
+    //
+    | ACTION_START error
+        %{
+            let start_marker = $ACTION_START.trim();
+            // When the start_marker is not an explicit `%{`, `{` or similar, the error
+            // is more probably due to indenting the rule regex, rather than an error
+            // in writing the action code block:
+            if (start_marker.indexOf('{') >= 0) {
+                let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
+                yyerror(rmCommonWS`
+                    The '%{...%\}' lexer setup action code section MUST have its action
+                    block start marker (\`%{\`${marker_msg}) positioned
+                    at the start of a line to be accepted: *indented* action code blocks
+                    (such as this one) are always related to an immediately preceding lexer spec item,
+                    e.g. a lexer match rule expression (see 'lexer rules').
+
+                      Erroneous area:
+                    ${yylexer.prettyPrintRange(@ACTION_START)}
+
+                      Technical error report:
+                    ${$error.errStr}
+                `);
+            } else {
+                yyerror(rmCommonWS`
+                    There's probably an error in one or more of your lexer regex rules.
+                    Did you perhaps indent the rule regex? Note that all rule regexes
+                    MUST start at the start of the line, i.e. text column 1. Indented text
+                    is perceived as JavaScript action code related to the last lexer
+                    rule regex.
+
+                      Erroneous code:
+                    ${yylexer.prettyPrintRange(@error)}
+
+                      Technical error report:
+                    ${$error.errStr}
+                `);
+            }
+            $$ = null;
+        %}
+    | start_inclusive_keyword
+        {
+            yyerror(rmCommonWS`
+                \`${yy.__options_category_description__}\` statements must be placed in
+                the top section of the lexer spec file, above the first '%%'
+                separator. You cannot specify any in the second section as has been
+                done here.
+
+                  Erroneous code:
+                ${yylexer.prettyPrintRange(@start_inclusive_keyword)}
+            `);
+            yy.popContext('Line 1187');
+            $$ = null;
+        }
+    | start_exclusive_keyword
+        {
+            yyerror(rmCommonWS`
+                \`${yy.__options_category_description__}\` statements must be placed in
+                the top section of the lexer spec file, above the first '%%'
+                separator. You cannot specify any in the second section as has been
+                done here.
+
+                  Erroneous code:
+                ${yylexer.prettyPrintRange(@start_exclusive_keyword)}
+            `);
+            yy.popContext('Line 1201');
+            $$ = null;
+        }
+    | option_keyword
+        {
+            yyerror(rmCommonWS`
+                \`${yy.__options_category_description__}\` statements must be placed in
+                the top section of the lexer spec file, above the first '%%'
+                separator. You cannot specify any in the second section as has been
+                done here.
+
+                  Erroneous code:
+                ${yylexer.prettyPrintRange(@option_keyword)}
+            `);
+            yy.popContext('Line 1215');
+            $$ = null;
+        }
+    | UNKNOWN_DECL
+        {
+            yyerror(rmCommonWS`
+                \`${$UNKNOWN_DECL.name}\` statements must be placed in
+                the top section of the lexer spec file, above the first '%%'
+                separator. You cannot specify any in the second section as has been
+                done here.
+
+                  Erroneous code:
+                ${yylexer.prettyPrintRange(@UNKNOWN_DECL)}
+            `);
+            $$ = null;
+        }
+    | import_keyword
+        {
+            yyerror(rmCommonWS`
+                \`${yy.__options_category_description__}\` statements must be placed in
+                the top section of the lexer spec file, above the first '%%'
+                separator. You cannot specify any in the second section as has been
+                done here.
+
+                  Erroneous code:
+                ${yylexer.prettyPrintRange(@import_keyword)}
+            `);
+            yy.popContext('Line 1242');
+            $$ = null;
+        }
+    | init_code_keyword
+        {
+            yyerror(rmCommonWS`
+                \`${yy.__options_category_description__}\` statements must be placed in
+                the top section of the lexer spec file, above the first '%%'
+                separator. You cannot specify any in the second section as has been
+                done here.
+
+                  Erroneous code:
+                ${yylexer.prettyPrintRange(@init_code_keyword)}
+            `);
+            yy.popContext('Line 1256');
+            $$ = null;
+        }
     ;
 
 action
@@ -1172,6 +1271,7 @@ action
                   Its use is not permitted at this position:
                 ${yylexer.prettyPrintRange(@INCLUDE_PLACEMENT_ERROR, @-1)}
             `);
+            $$ = $action;
         }
     | action BRACKET_MISSING
         {
@@ -1181,6 +1281,7 @@ action
                   Offending action body:
                 ${yylexer.prettyPrintRange(@BRACKET_MISSING, @-1)}
             `);
+            $$ = $action;
         }
     | action BRACKET_SURPLUS
         {
@@ -1190,6 +1291,7 @@ action
                   Offending action body:
                 ${yylexer.prettyPrintRange(@BRACKET_SURPLUS, @-1)}
             `);
+            $$ = $action;
         }
     | action UNTERMINATED_STRING_ERROR
         {
@@ -1202,6 +1304,7 @@ action
                   Offending action body:
                 ${yylexer.prettyPrintRange(@UNTERMINATED_STRING_ERROR, @-1)}
             `);
+            $$ = $action;
         }
     | ε
         { $$ = ''; }
@@ -1238,6 +1341,13 @@ start_conditions
                 return name;
             });
 
+            // Optimization: these two calls cancel one another out here:
+            //
+            // yy.popContext('Line 1346');
+            // yy.pushContext();
+
+            yy.__inside_scoped_ruleset__ = true;
+
             // '<' '*' '>'
             //    { $$ = ['*']; }
         }
@@ -1259,6 +1369,15 @@ start_conditions
                   Technical error report:
                 ${$error.errStr}
             `);
+
+            // Optimization: these two calls cancel one another out here:
+            //
+            // yy.popContext('Line 1375');
+            // yy.pushContext();
+
+            yy.__inside_scoped_ruleset__ = true;
+
+            $$= null;
         }
     ;
 
@@ -1506,7 +1625,9 @@ option_list
                 `);
             }
             $$ = $option_list;
-            $$.push($option);
+            if ($option) {
+                $$.push($option);
+            }
         }
     | option_list option
         {
@@ -1520,11 +1641,34 @@ option_list
                 `);
             }
             $$ = $option_list;
-            $$.push($option);
+            if ($option) {
+                $$.push($option);
+            }
         }
     | option
         {
-            $$ = [$option];
+            $$ = [];
+            if ($option) {
+                $$.push($option);
+            }
+        }
+    | option_list ','[comma] error?[err] '=' option_value
+        {
+            let with_value_msg = ' (with optional value assignment)';
+            if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
+                with_value_msg = '';
+            }
+            yyerror(rmCommonWS`
+                Expected a valid option name${with_value_msg} in a ${yy.__options_category_description__} statement.
+
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(@err, @comma)}
+
+                  Technical error report:
+                ${$err ? $err.errStr : '---'}
+            `);
+
+            $$ = $option_list;
         }
     ;
 
@@ -1558,23 +1702,32 @@ option
                   Technical error report:
                 ${$error.errStr}
             `);
+            $$ = null;
         }
-    | DUMMY3 error
-        {
-            let with_value_msg = ' (with optional value assignment)';
-            if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
-                with_value_msg = '';
-            }
-            yyerror(rmCommonWS`
-                Expected a valid option name${with_value_msg} in a ${yy.__options_category_description__} statement.
-
-                  Erroneous area:
-                ${yylexer.prettyPrintRange(@error, @-1)}
-
-                  Technical error report:
-                ${$error.errStr}
-            `);
-        }
+// WARNING: this production placed here will cause a LR(1) conflict, due to the options not necessarily being
+// separated by ',' comma's, so it is ambiguous if 'option_name = option_value' should then be interpreted 
+// as a correct option *or* as a lone 'option_name' *plus* '%epsilon = option_value'.
+//
+// To resolve this conflict, we move this production to the 'option_list' where it MAY be applied when the
+// option_list is comma-separated.
+//
+//    | error?[err] '=' option_value
+//        {
+//            let with_value_msg = ' (with optional value assignment)';
+//            if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
+//                with_value_msg = '';
+//            }
+//            yyerror(rmCommonWS`
+//                Expected a valid option name${with_value_msg} in a ${yy.__options_category_description__} statement.
+//
+//                  Erroneous area:
+//                ${yylexer.prettyPrintRange(@err, @-1)}
+//
+//                  Technical error report:
+//                ${$err.errStr}
+//            `);
+//        }
+//        $$ = null;
     ;
 
 option_name
@@ -1582,7 +1735,7 @@ option_name
         {
             // validate that this is legal input under the given circumstances, i.e. parser context:
             if (yy.__options_flags__ & OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES) {
-                $$ = mkIdentifier($name);
+                let identifier = mkIdentifier($name);
                 // check if the transformation is obvious & trivial to humans;
                 // if not, report an error as we don't want confusion due to
                 // typos and/or garbage input here producing something that
@@ -1598,10 +1751,14 @@ option_name
                         identifiers, with the addition that option names MAY contain
                         '-' dashes, e.g. 'example-option-1'.
 
+                        Suggested name:
+                            ${identifier}
+
                           Erroneous area:
                         ${yylexer.prettyPrintRange(@name, @-1)}
                     `);
                 }
+                $$ = identifier;
             } else {
                 $$ = $name;
             }
@@ -1637,12 +1794,18 @@ option_value
     ;
 
 epilogue
-    : start_epilogue_marker
+    : %empty
         {
             $$ = '';
         }
-    | start_epilogue_marker epilogue_chunks 
+    | start_epilogue_marker 
         {
+            yy.popContext('Line 1803');
+
+            $$ = '';
+        }
+    | start_epilogue_marker epilogue_chunks
+        { 
             let srcCode = trimActionCode($epilogue_chunks);
             if (srcCode) {
                 let rv = checkActionBlock(srcCode, @epilogue_chunks, yy);
@@ -1655,40 +1818,17 @@ epilogue
                     `);
                 }
             }
+
+            yy.popContext('Line 1822');
+
             $$ = srcCode;
         }
-    | start_epilogue_marker error
-      {
-        yyerror(rmCommonWS`
-            There's an error in your lexer epilogue code block.
-
-              Erroneous code:
-            ${yylexer.prettyPrintRange(@error, @1)}
-
-              Technical error report:
-            ${$error.errStr}
-        `);
-      }
     ;
 
 epilogue_chunks
     : epilogue_chunks epilogue_chunk
         {
             $$ = $epilogue_chunks + $epilogue_chunk;
-        }
-    | epilogue_chunks error
-        {
-            // TODO ...
-            yyerror(rmCommonWS`
-                Module code declaration error?
-
-                  Erroneous code:
-                ${yylexer.prettyPrintRange(@error)}
-
-                  Technical error report:
-                ${$error.errStr}
-            `);
-            $$ = '';
         }
     | epilogue_chunk
         {
@@ -1711,7 +1851,7 @@ epilogue_chunk
                 startMarker: $ACTION_START_AT_SOL
             });
             if (srcCode) {
-                let rv = checkActionBlock(srcCode, @action, yy);
+                let rv = checkActionBlock(srcCode + $ACTION_END, @action, yy);
                 if (rv) {
                     yyerror(rmCommonWS`
                         The '%{...%}' lexer epilogue code chunk does not compile: ${rv}
@@ -1761,6 +1901,19 @@ epilogue_chunk
             // for these should be deferred until we've collected the entire epilogue.
             $$ = $TRAILING_CODE_CHUNK;
         }
+    | error
+        {
+            yyerror(rmCommonWS`
+                There's an error in your lexer epilogue code block.
+
+                  Erroneous code:
+                ${yylexer.prettyPrintRange(@error, @-1)}
+
+                  Technical error report:
+                ${$error.errStr}
+            `);
+            $$ = '';
+        }
     ;
 
 include_macro_code
@@ -1780,9 +1933,6 @@ include_macro_code
 
                       Erroneous code:
                     ${yylexer.prettyPrintRange(@option_list, @include_keyword)}
-
-                      Technical error report:
-                    ${$error.errStr}
                 `);
             } else {
                 yyerror(rmCommonWS`
@@ -1791,9 +1941,6 @@ include_macro_code
 
                       Erroneous code:
                     ${yylexer.prettyPrintRange(@option_list, @include_keyword)}
-
-                      Technical error report:
-                    ${$error.errStr}
                 `);
             }
 
@@ -1813,6 +1960,9 @@ include_macro_code
                 }
             }
 
+            yy.popContext('Line 1963');
+
+            // And no, we don't support nested '%include':
             $$ = '\n// Included by Jison: ' + path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + path + '\n\n';
         }
     | include_keyword error
@@ -1826,6 +1976,8 @@ include_macro_code
                   Technical error report:
                 ${$error.errStr}
             `);
+            yy.popContext('Line 1979');
+            $$ = null;
         }
     ;
 
