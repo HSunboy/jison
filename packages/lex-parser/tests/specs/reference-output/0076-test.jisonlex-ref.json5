@@ -1,0 +1,17 @@
+{
+  rules: [
+    [
+      '\\[[abc \\xA0 \\u1234 \\166 def]\\]',
+      "return 'GOOD_REGEX'",
+    ],
+  ],
+  macros: {},
+  startConditions: {},
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  __original_input__: `%%
+"["[abc \\xA0 \\u1234 \\166 def]"]" -> 'GOOD_REGEX'
+
+`,
+}

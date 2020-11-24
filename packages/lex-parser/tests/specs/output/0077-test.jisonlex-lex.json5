@@ -1,0 +1,238 @@
+[
+  {
+    id: 34,
+    token: '"%%"',
+    yytext: '%%',
+    yylloc: {
+      first_line: 1,
+      first_column: 0,
+      last_line: 1,
+      last_column: 2,
+      range: [
+        0,
+        2,
+      ],
+    },
+  },
+  {
+    id: 50,
+    token: '"STRING_LIT"',
+    yytext: '"["',
+    yylloc: {
+      first_line: 2,
+      first_column: 0,
+      last_line: 2,
+      last_column: 3,
+      range: [
+        3,
+        6,
+      ],
+    },
+  },
+  {
+    id: 46,
+    token: '"REGEX_SET_START"',
+    yytext: '[',
+    yylloc: {
+      first_line: 2,
+      first_column: 3,
+      last_line: 2,
+      last_column: 4,
+      range: [
+        6,
+        7,
+      ],
+    },
+  },
+  {
+    id: 48,
+    token: '"REGEX_SET"',
+    yytext: "abc -> 'BAD_REGEX' // unterminated regex set...",
+    yylloc: {
+      first_line: 2,
+      first_column: 4,
+      last_line: 2,
+      last_column: 51,
+      range: [
+        7,
+        54,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: null,
+    yytext: '[object Object]\n',
+    yylloc: {
+      first_line: 2,
+      first_column: 51,
+      last_line: 3,
+      last_column: 0,
+      range: [
+        54,
+        55,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: null,
+    yytext: '[object Object]\n',
+    yylloc: {
+      first_line: 3,
+      first_column: 0,
+      last_line: 4,
+      last_column: 0,
+      range: [
+        55,
+        56,
+      ],
+    },
+  },
+  {
+    id: 48,
+    token: '"REGEX_SET"',
+    yytext: "// Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...",
+    yylloc: {
+      first_line: 4,
+      first_column: 0,
+      last_line: 4,
+      last_column: 105,
+      range: [
+        56,
+        161,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: null,
+    yytext: '[object Object]\n',
+    yylloc: {
+      first_line: 4,
+      first_column: 105,
+      last_line: 5,
+      last_column: 0,
+      range: [
+        161,
+        162,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: null,
+    yytext: '[object Object]\n',
+    yylloc: {
+      first_line: 5,
+      first_column: 0,
+      last_line: 6,
+      last_column: 0,
+      range: [
+        162,
+        163,
+      ],
+    },
+  },
+  {
+    id: 48,
+    token: '"REGEX_SET"',
+    yytext: `"dummy" -> 'GOOD_DUMMY'`,
+    yylloc: {
+      first_line: 6,
+      first_column: 0,
+      last_line: 6,
+      last_column: 23,
+      range: [
+        163,
+        186,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: null,
+    yytext: '[object Object]\n',
+    yylloc: {
+      first_line: 6,
+      first_column: 23,
+      last_line: 7,
+      last_column: 0,
+      range: [
+        186,
+        187,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 7,
+      first_column: 0,
+      last_line: 7,
+      last_column: 0,
+      range: [
+        187,
+        187,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 7,
+      first_column: 0,
+      last_line: 7,
+      last_column: 0,
+      range: [
+        187,
+        187,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 7,
+      first_column: 0,
+      last_line: 7,
+      last_column: 0,
+      range: [
+        187,
+        187,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 7,
+      first_column: 0,
+      last_line: 7,
+      last_column: 0,
+      range: [
+        187,
+        187,
+      ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 15,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 5,
+      fatalExceptionCount: 0,
+    },
+  },
+]
