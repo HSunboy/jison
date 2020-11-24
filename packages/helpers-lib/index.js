@@ -11,6 +11,8 @@ import stringifier from './code-stringification';
 import detectIstanbulGlobal from './detect-istanbul';
 import reHelpers from './validate-regex';
 import { trimErrorForTestReporting, stripErrorStackPaths, cleanStackTrace4Comparison } from './trimErrorForTestReporting';
+import extractSymbolTableFromFile from './extractSymbolTableFromJSON5File';
+
 
 
 export default {
@@ -23,6 +25,7 @@ export default {
     trimErrorForTestReporting,
     stripErrorStackPaths,
     cleanStackTrace4Comparison,
+    extractSymbolTableFromFile,
 
     checkRegExp: reHelpers.checkRegExp,
     getRegExpInfo: reHelpers.getRegExpInfo,
@@ -33,7 +36,7 @@ export default {
 
     generateMapper4JisonGrammarIdentifiers: parse2AST.generateMapper4JisonGrammarIdentifiers,
     parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,
-    compileCodeToES5: parse2AST.compileCodeToES5,
+    //compileCodeToES5: parse2AST.compileCodeToES5,
     prettyPrintAST: parse2AST.prettyPrintAST,
     checkActionBlock: parse2AST.checkActionBlock,
     trimActionCode: parse2AST.trimActionCode,
