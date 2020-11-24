@@ -16,12 +16,13 @@
 "style"               return 'STYLE';
 "default"             return 'DEFAULT';
 "linkStyle"           return 'LINKSTYLE';
+"interpolate"         return 'INTERPOLATE';
 "classDef"            return 'CLASSDEF';
 "class"               return 'CLASS';
 "click"               return 'CLICK';
 "graph"               return 'GRAPH';
 "subgraph"            return 'subgraph';
-"end"\s*              return 'end';
+"end"\b\s*            return 'end';
 "LR"                  return 'DIR';
 "RL"                  return 'DIR';
 "TB"                  return 'DIR';
@@ -57,13 +58,17 @@
 \s*\-\-\s*               return '--';
 \s*\-\.\s*               return '-.';
 \s*\=\=\s*               return '==';
+"(-"                  return '(-';
+"-)"                  return '-)';
 \-                    return 'MINUS';
 "."                   return 'DOT';
 \+                    return 'PLUS';
 \%                    return 'PCT';
 "="                   return 'EQUALS';
 \=                    return 'EQUALS';
-[\u0021-\u0027\u002A-\u002E\u003F\u0041-\u005A\u005C\u005F-\u007A\u00AA\u00B5\u00BA\u00C0-\u00D6\u00D8-\u00F6]|
+[A-Za-z]+             return 'ALPHA';
+[!"#$%&'*+,-.`?\\_/]  return 'PUNCTUATION';
+[\u00AA\u00B5\u00BA\u00C0-\u00D6\u00D8-\u00F6]|
 [\u00F8-\u02C1\u02C6-\u02D1\u02E0-\u02E4\u02EC\u02EE\u0370-\u0374\u0376\u0377]|
 [\u037A-\u037D\u0386\u0388-\u038A\u038C\u038E-\u03A1\u03A3-\u03F5]|
 [\u03F7-\u0481\u048A-\u0527\u0531-\u0556\u0559\u0561-\u0587\u05D0-\u05EA]|
@@ -123,8 +128,8 @@
 [\uFB38-\uFB3C\uFB3E\uFB40\uFB41\uFB43\uFB44\uFB46-\uFBB1\uFBD3-\uFD3D]|
 [\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFB\uFE70-\uFE74\uFE76-\uFEFC]|
 [\uFF21-\uFF3A\uFF41-\uFF5A\uFF66-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF]|
-[\uFFD2-\uFFD7\uFFDA-\uFFDC_\/]
-                      return 'ALPHA';
+[\uFFD2-\uFFD7\uFFDA-\uFFDC]
+                      return 'UNICODE_TEXT';
 "|"                   return 'PIPE';
 "("                   return 'PS';
 ")"                   return 'PE';
@@ -243,6 +248,10 @@ vertex:  alphaNum SQS text SQE
         {$$ = $1;yy.addVertex($1,$4,'circle');}
     | alphaNum PS PS text PE PE spaceList
         {$$ = $1;yy.addVertex($1,$4,'circle');}
+    | alphaNum '(-' text '-)'
+        {$$ = $1;yy.addVertex($1,$3,'ellipse');}
+    | alphaNum '(-' text '-)' spaceList
+        {$$ = $1;yy.addVertex($1,$3,'ellipse');}
     | alphaNum PS text PE
         {$$ = $1;yy.addVertex($1,$3,'round');}
     | alphaNum PS text PE spaceList
@@ -404,6 +413,14 @@ linkStyleStatement
           {$$ = $1;yy.updateLink($3,$5);}
     | LINKSTYLE SPACE NUM SPACE stylesOpt
           {$$ = $1;yy.updateLink($3,$5);}
+    | LINKSTYLE SPACE DEFAULT SPACE INTERPOLATE SPACE alphaNum SPACE stylesOpt
+          {$$ = $1;yy.updateLinkInterpolate($3,$7);yy.updateLink($3,$9);}
+    | LINKSTYLE SPACE NUM SPACE INTERPOLATE SPACE alphaNum SPACE stylesOpt
+          {$$ = $1;yy.updateLinkInterpolate($3,$7);yy.updateLink($3,$9);}
+    | LINKSTYLE SPACE DEFAULT SPACE INTERPOLATE SPACE alphaNum
+          {$$ = $1;yy.updateLinkInterpolate($3,$7);}
+    | LINKSTYLE SPACE NUM SPACE INTERPOLATE SPACE alphaNum
+          {$$ = $1;yy.updateLinkInterpolate($3,$7);}
     ;
 
 commentStatement: PCT PCT commentText;
@@ -429,7 +446,7 @@ textToken      : textNoTagsToken | TAGSTART | TAGEND | '=='  | '--' | PCT | DEFA
 
 textNoTagsToken: alphaNumToken | SPACE | MINUS | keywords ;
 
-alphaNumToken  : ALPHA | NUM | COLON | COMMA | PLUS | EQUALS | MULT | DOT | BRKT ;
+alphaNumToken  : ALPHA | PUNCTUATION | UNICODE_TEXT | NUM | COLON | COMMA | PLUS | EQUALS | MULT | DOT | BRKT ;
 
 graphCodeTokens:  PIPE | PS | PE | SQS | SQE | DIAMOND_START | DIAMOND_STOP | TAG_START | TAG_END | ARROW_CROSS | ARROW_POINT | ARROW_CIRCLE | ARROW_OPEN | QUOTE | SEMI ;
 %%

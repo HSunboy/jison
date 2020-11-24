@@ -59,7 +59,7 @@ function get_reduced_error_info_obj(hash) {
     };    
 }
 
-parser.main = function compiledRunner(args) {
+function compiledRunner(args) {
     var inp = 'xxx(x(x)x)xxx';
     console.log('input = ', inp);
 

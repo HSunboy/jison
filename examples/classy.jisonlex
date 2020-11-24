@@ -33,7 +33,7 @@ id                          [a-zA-Z][a-zA-Z0-9]*
 ")"                         return 'RPAREN';
 ";"                         return 'SEMICOLON';
 \s+                         /* skip whitespace */
-"."                         throw 'Illegal character';
+.                           yyerror('Illegal character');
 <<EOF>>                     return 'ENDOFFILE';
 
 

@@ -33,7 +33,7 @@
 
 var assert = require("assert");
 
-parser.main = function () {
+function buggerit() {
     // set up an aborting error handler which does not throw an exception
     // but returns a special parse 'result' instead:
     var errmsg = null;

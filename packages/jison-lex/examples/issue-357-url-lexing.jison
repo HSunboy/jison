@@ -35,16 +35,3 @@
 
 var assert = require("assert");
 
-parser.main = function () {
-    var rv = parser.parse('a+b');
-    console.log("test #1: 'a+b' ==> ", rv, parser.yy);
-    // assert.equal(rv, '+aDabX:a');
-
-    rv = parser.parse('a-b');
-    console.log("test #2: 'a-b' ==> ", rv);
-    // assert.equal(rv, 'XE');
-
-    // if you get past the assert(), you're good.
-    console.log("tested OK");
-};
-

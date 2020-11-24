@@ -1,5 +1,5 @@
 
-parser.main = function (args) {
+lexer.main = function (args) {
     if (!args[1]) {
       console.log('Usage: ' + args[0] + ' FILE');
       process.exit(1);
@@ -17,11 +17,11 @@ parser.main = function (args) {
 
     function process_one_line(source) {
       try {
-        var rv = parser.parse(source);
+        var rv = lexer.parse(source);
 
         process.stdout.write(JSON.stringify(rv, null, 2) + '\n');
       } catch (ex) {
-        process.stdout.write("Parse error:\n" + JSON.stringify(ex, null, 2) + "\nfor input:\n" + source + '\n');
+        process.stdout.write("Lexing error:\n" + JSON.stringify(ex, null, 2) + "\nfor input:\n" + source + '\n');
       }
     }
 
@@ -56,12 +56,12 @@ parser.main = function (args) {
     } else {
       try {
         var source = require('fs').readFileSync(require('path').normalize(args[1]), 'utf8');
-        var rv = parser.parse(source);
+        var rv = lexer.parse(source);
 
         process.stdout.write(JSON.stringify(rv, null, 2));
         return +rv || 0;
       } catch (ex) {
-        process.stdout.write("Parse error:\n" + JSON.stringify(ex, null, 2) + "\nfor input file:\n" + args[1]);
+        process.stdout.write("Lexing error:\n" + JSON.stringify(ex, null, 2) + "\nfor input file:\n" + args[1]);
         return 66;
       }
     }

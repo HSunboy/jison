@@ -2,12 +2,14 @@
 // test_input: DEFINE A = B × C
 // ...
 //  
+%code imports %{
+  const XRegExp = require('@gerhobbelt/xregexp');
+%}
+
 
 
 %code imports %{
-  import JSON5 from '@gerhobbelt/json5';
-
-  import helpers from '../../helpers-lib';
+  const helpers = require('../../../helpers-lib');
 %}
 
 

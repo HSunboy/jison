@@ -2,7 +2,7 @@
 
 %%
 \s+         {/* skip whitespace */}
-[0-9]+         {return 'NAT';}
+[0-9]+      {return 'NAT';}
 "+"         {return '+';}
 
 /lex

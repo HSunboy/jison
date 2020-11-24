@@ -3,7 +3,7 @@
 // test_input: "πyαε"
 
 %code imports %{
-  import XRegExp from '@gerhobbelt/xregexp';        // for helping out the `%options xregexp` in the lexer
+  const XRegExp = require('@gerhobbelt/xregexp');        // for helping out the `%options xregexp` in the lexer
 %}
 
 %options xregexp

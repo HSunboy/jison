@@ -15,7 +15,7 @@
 
 [\n]+             return 'NL';
 "showInfo"		  return 'showInfo';
-"info"		  return 'info';
+"info"		      return 'info';
 "say"			  return 'say';
 ":"[^#\n;]+       return 'TXT';
 <<EOF>>           return 'EOF';

@@ -20,9 +20,9 @@
 
 
 
-
-
-
+%code imports %{
+    const XRegExp = require('@gerhobbelt/xregexp');
+%}
 
 
 %options ranges

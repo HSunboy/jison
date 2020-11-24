@@ -65,7 +65,7 @@ stmt  : ZZ
  * A good brief description of Bison error token usage can be found in the bison manual:
  * The Bison Manual (2002 version of the book) for version 1.35.
  *
- * Also information can be found our book:
+ * Also information can be found in the book:
  * Compiler Construction: Principles and Practice by Kenneth Louden, ISBN: 0534939724,
  * Published by Brooks and Cole. Pages 247-250.
  *
