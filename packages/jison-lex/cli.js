@@ -8,10 +8,19 @@ const mkIdentifier = helpers.mkIdentifier;
 
 import RegExpLexer from './regexp-lexer.js';
 
-const version = '0.6.2-220';                              // require('./package.json').version;
+import assert from 'assert';
+
+
+assert(RegExpLexer);
+assert(RegExpLexer.defaultJisonLexOptions);
+assert(typeof RegExpLexer.mkStdOptions === 'function');
+
+
+const version = '0.7.0-220';                              // require('./package.json').version;
 
 
 function getCommandlineOptions() {
+    const defaults = RegExpLexer.defaultJisonLexOptions;
     let opts = nomnom
         .script('jison-lex')
         .unknownOptionTreatment(false)              // do not accept unknown options!
@@ -24,7 +33,7 @@ function getCommandlineOptions() {
             json: {
                 abbr: 'j',
                 flag: true,
-                default: false,
+                default: defaults.json,
                 help: 'jison will expect a grammar in either JSON/JSON5 or JISON format: the precise format is autodetected.'
             },
             outfile: {
@@ -35,32 +44,36 @@ function getCommandlineOptions() {
             debug: {
                 abbr: 't',
                 flag: true,
-                default: false,
+                default: defaults.debug,
+                transform: function (val) {
+                    console.error('debug arg:', {val});
+                    return parseInt(val);
+                },
                 help: 'Debug mode.'
             },
             dumpSourceCodeOnFailure: {
                 full: 'dump-sourcecode-on-failure',
                 flag: true,
-                default: true,
+                default: defaults.dumpSourceCodeOnFailure,
                 help: 'Dump the generated source code to a special named file when the internal generator tests fail, i.e. when the generated source code does not compile in the JavaScript engine. Enabling this option helps you to diagnose/debug crashes (thrown exceptions) in the code generator due to various reasons: you can, for example, load the dumped sourcecode in another environment (e.g. NodeJS) to get more info on the precise location and cause of the compile failure.'
             },
             throwErrorOnCompileFailure: {
                 full: 'throw-on-compile-failure',
                 flag: true,
-                default: true,
+                default: defaults.throwErrorOnCompileFailure,
                 help: 'Throw an exception when the generated source code fails to compile in the JavaScript engine. **WARNING**: Turning this feature OFF permits the code generator to produce non-working source code and treat that as SUCCESS. This MAY be desirable code generator behaviour, but only rarely.'
             },
             reportStats: {
                 full: 'info',
                 abbr: 'I',
                 flag: true,
-                default: false,
-                help: 'Report some statistics about the generated parser.'
+                default: defaults.reportStats,
+                help: 'Report some statistics about the generated lexer.'
             },
             moduleType: {
                 full: 'module-type',
                 abbr: 'm',
-                default: 'commonjs',
+                default: defaults.moduleType,
                 metavar: 'TYPE',
                 choices: [ 'commonjs', 'amd', 'js', 'es' ],
                 help: 'The type of module to generate (commonjs, amd, es, js)'
@@ -75,7 +88,7 @@ function getCommandlineOptions() {
                 full: 'main',
             	abbr: 'x',
                 flag: true,
-                default: false,
+                default: !defaults.noMain,
                 help: 'Include .main() entry point in generated commonjs module.'
             },
             moduleMain: {
@@ -83,6 +96,40 @@ function getCommandlineOptions() {
                 abbr: 'y',
                 metavar: 'NAME',
                 help: 'The main module function definition.'
+            },
+            prettyCfg: {
+                full: 'pretty',
+                flag: true,
+                metavar: 'false|true|CFGFILE',
+                default: defaults.prettyCfg,
+                transform: function (val) {
+                    console.log("prettyCfg:", {val});
+                    switch (val) {
+                    case 'false':
+                    case '0':
+                        return false;
+
+                    case 'true':
+                    case '1':
+                        return true;
+
+                    default:
+                        try {
+                            let src = fs.readFileSync(val, "utf8");
+                            let cfg = JSON5.parse(src);
+                            return cfg;
+                        } catch (ex) {
+                            console.error(rmCommonWS`
+                                Cannot open/read/decode the prettyPrint config file '${val}'.
+
+                                Error: ${ex.message}
+
+                            `);
+                            throw ex;
+                        }
+                    }
+                },
+                help: "Output the generated code pretty-formatted; turning this option OFF will output the generated code as-is a.k.a. 'raw'."
             },
             version: {
                 abbr: 'V',
