@@ -1540,7 +1540,30 @@ name_expansion
 any_group_regex
     : REGEX_SET_START regex_set REGEX_SET_END
         { $$ = $REGEX_SET_START + $regex_set + $REGEX_SET_END; }
-    | REGEX_SET_START regex_set error
+    | REGEX_SET_START REGEX_SET_END
+        {
+            yyerror(rmCommonWS`
+                Empty lex rule regex set '[]' is not legal. 
+
+                If you want to match ANY character (including CR/LF characters) you may
+                write '[^]' or '[\s\S]', which are standard idioms for this in JavaScript.
+
+                  Erroneous regex set:
+                ${yylexer.prettyPrintRange(@REGEX_SET_END, @REGEX_SET_START)}
+            `);
+            $ = null;
+        }
+    | REGEX_SET_START regex_set? UNTERMINATED_REGEX_SET
+        {
+            yyerror(rmCommonWS`
+                Seems you did not correctly bracket a lex rule regex set in '[...]' brackets.
+
+                  Unterminated regex set:
+                ${yylexer.prettyPrintRange(@UNTERMINATED_REGEX_SET, @REGEX_SET_START)}
+            `);
+            $ = null;
+        }
+    | REGEX_SET_START error
         {
             yyerror(rmCommonWS`
                 Seems you did not correctly bracket a lex rule regex set in '[...]' brackets.
