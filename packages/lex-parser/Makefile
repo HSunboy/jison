@@ -7,7 +7,11 @@ MOCHA = ../../node_modules/.bin/mocha
 NYC = ../../node_modules/.bin/nyc      --clean=false --temp-directory ../../.nyc_output
 
 ifndef JISON_VERSION
-	JISON = sh ../../node_modules/.bin/jison
+ifndef FULL_CODE_COVERAGE
+	JISON = node ../../dist-known-good/cli-cjs.js
+else
+	JISON = $(NYC) --reporter=lcov -- node ../../dist-known-good/cli-cjs.js
+endif
 else
 ifndef FULL_CODE_COVERAGE
 	JISON = node ../../dist/cli-cjs.js
