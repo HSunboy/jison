@@ -11,6 +11,7 @@ const helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
 const trimErrorForTestReporting = helpers.trimErrorForTestReporting;
 const stripErrorStackPaths = helpers.stripErrorStackPaths;
 const cleanStackTrace4Comparison = helpers.cleanStackTrace4Comparison;
+const rmCommonWS = helpers.rmCommonWS;
 
 
 
@@ -1259,7 +1260,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `, "Line 1262");
+        `, "Line 1263");
         console.error('lexer:', typeof lexer);
         lexer.setInput(input);
 
@@ -1287,7 +1288,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `, "Line 1290");
+        `, "Line 1291");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1321,7 +1322,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `, "Line 1324");
+        `, "Line 1325");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1350,7 +1351,7 @@ describe('Lexer Kernel', function () {
           ${lexerSource}
 
           return exports;
-        `, "Line 1353");
+        `, "Line 1354");
         exported.lexer.setInput(input);
 
         assert.equal(exported.lex(), 'X');
@@ -1383,7 +1384,7 @@ describe('Lexer Kernel', function () {
           ${lexerSource}
 
           return lexer;
-        `, "Line 1386");
+        `, "Line 1387");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1410,7 +1411,7 @@ describe('Lexer Kernel', function () {
               lexer, 
               yylex
             };`);
-        let lexer = exec(lexerSource, "Line 1413");
+        let lexer = exec(lexerSource, "Line 1414");
         lexer.lexer.setInput(input);
 
         // two ways to access `lex()`:
@@ -3449,6 +3450,20 @@ function cleanPath(filepath) {
     return path.normalize(filepath).replace(/\\/g, '/');  // UNIXify the path
 }
 
+function extractYAMLheader(src) {
+    // extract the top comment (possibly empty), which carries the title, etc. metadata:
+    let header = src.substr(0, src.indexOf('\n\n') + 1);
+
+    // check if this chunk is indeed a YAML header: we ASSUME it contains at least
+    // one line looking like this:
+    let is_yaml_chunk = header.split('\n').filter((l) => l.replace(/^\/\/ ?/gm, '').trim() === '...').length > 0;
+    if (!is_yaml_chunk) {
+        return '';
+    }
+    return header;
+}
+
+
 
 console.log('exec glob....', __dirname);
 const original_cwd = process.cwd();
@@ -3487,18 +3502,18 @@ testset = testset.map(function (filepath) {
 
             let hdrspec = fs.readFileSync(filepath, 'utf8').replace(/\r\n|\r/g, '\n');
 
-            // extract the top comment, which carries the title, etc. metadata:
-            header = hdrspec.substr(0, hdrspec.indexOf('\n\n') + 1);
+            // extract the top comment (possibly empty), which carries the title, etc. metadata:
+            header = extractYAMLheader(hdrspec);
 
             grammar = spec;
         } else {
             spec = fs.readFileSync(filepath, 'utf8').replace(/\r\n|\r/g, '\n');
 
-            // extract the top comment, which carries the title, etc. metadata:
-            header = spec.substr(0, spec.indexOf('\n\n') + 1);
+            // extract the top comment (possibly empty), which carries the title, etc. metadata:
+            header = extractYAMLheader(spec);
 
             // extract the grammar to test:
-            grammar = spec.substr(spec.indexOf('\n\n') + 2);
+            grammar = spec.substr(header.length);
         }
 
         // then strip off the comment prefix for every line:
@@ -3510,7 +3525,7 @@ testset = testset.map(function (filepath) {
         //console.error("YAML safeload:", { header, filepath });
         let doc = yaml.safeLoad(header, {
             filename: filepath
-        });
+        }) || {};
 
         if (doc.crlf && typeof grammar === 'string') {
             grammar = grammar.replace(/\n/g, '\r\n');
@@ -3567,7 +3582,21 @@ testset = testset.map(function (filepath) {
 .filter(function (info) {
     return !!info;
 });
-console.error({ testset });
+console.error(JSON5.stringify(testset, {
+    replacer: function (key, value) {
+        if (typeof value === 'string') {
+            let a = value.split('\n');
+            if (value.length > 500 || a.length > 5) {
+                return `[...string (length: ${value.length}, lines: ${a.length}) ...]`;
+            }
+        }
+        if (/^(?:ref|spec|grammar)$/.test(key) && typeof value === 'object') {
+            return '[... JSON ...]';
+        }
+        return value;
+    },
+    space: 2,
+}));
 
 function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key, err) {
     // and produce an alternative structure to JSON-ify:
@@ -3617,6 +3646,13 @@ describe('Test Lexer Grammars', function () {
 
         let testname = 'test: ' + filespec.path.replace(/^.*?\/specs\//, '').replace(/^.*?\/examples\//, '../examples/') + (title ? ' :: ' + title : '');
 
+        // don't dump more than 4 EOF tokens at the end of the stream:
+        const maxEOFTokenCount = 4;
+        // don't dump more than 20 error tokens in the output stream:
+        const maxERRORTokenCount = 20;
+        // maximum number of tokens in the output stream:
+        const maxTokenCount = 10000;
+
         console.error('generate test: ', testname);
 
         // and create a test for it:
@@ -3626,6 +3662,18 @@ describe('Test Lexer Grammars', function () {
             let i = 0;
             let lexer;
             let lexerSourceCode;
+
+            let yy = {
+                parseError: function customMainParseError(str, hash, ExceptionClass) {
+                    console.error("parseError: ", str);
+                    return -42; // this.ERROR;
+                }
+            };
+        
+            let countEOFs = 0;
+            let countERRORs = 0;
+            let countParseErrorCalls = 0;
+            let countFATALs = 0;
 
             try {
                 // Change CWD to the directory where the source grammar resides: this helps us properly
@@ -3643,10 +3691,9 @@ describe('Test Lexer Grammars', function () {
                             options: options
                         };
                     }
-                });
+                }, yy);
 
-                let countDown = 4;
-                for (i = 0; i < 1000; i++) {
+                for (i = 0; i < maxTokenCount; i++) {
                     let tok = lexer.lex();
                     tokens.push({
                         id: tok,
@@ -3657,20 +3704,35 @@ describe('Test Lexer Grammars', function () {
                     if (tok === lexer.EOF) {
                         // and make sure EOF stays EOF, i.e. continued invocation of `lex()` will only
                         // produce more EOF tokens at the same location:
-                        countDown--;
-                        if (countDown <= 0) {
+                        countEOFs++;
+                        if (countEOFs >= maxEOFTokenCount) {
+                            break;
+                        }
+                    }
+                    else if (tok === lexer.ERROR) {
+                        countERRORs++;
+                        if (countERRORs >= maxERRORTokenCount) {
+                            break;
+                        }
+                    }
+                    else if (tok === -42) {
+                        countParseErrorCalls++;
+                        if (countParseErrorCalls >= maxERRORTokenCount) {
                             break;
                         }
                     }
                 }
             } catch (ex) {
+                countFATALs++;
+                
                 // save the error:
-                tokens.push(-1);
                 err = ex;
                 tokens.push({
+                    id: -1,
+                    token: null,
                     fail: 1,
                     meta: filespec.spec.meta,
-                    err: trimErrorForTestReporting(ex)
+                    err: ex
                 });
                 // and make sure lexer !== undefined:
                 if (!lexer) {
@@ -3680,11 +3742,22 @@ describe('Test Lexer Grammars', function () {
                 process.chdir(original_cwd);
             }
 
-            // also store the number of tokens we received:
-            tokens.unshift(i);
+            // write a summary node at the end of the stream:
+            tokens.push({
+                id: -2,
+                token: null,
+                summary: {
+                    totalTokenCount: tokens.length,
+                    EOFTokenCount: countEOFs,
+                    ERRORTokenCount: countERRORs,
+                    ParseErrorCallCount: countParseErrorCalls,
+                    fatalExceptionCount: countFATALs
+                }
+            });
             // if (lexerSourceCode) {
             //   tokens.push(lexerSourceCode);
             // }
+            tokens = trimErrorForTestReporting(tokens);
 
             // either we check/test the correctness of the collected input, iff there's
             // a reference provided, OR we create the reference file for future use:
@@ -3719,13 +3792,13 @@ describe('Test Lexer Grammars', function () {
 
             let refSrc, dumpStr;
             if (lexerSourceCode) {
-                dumpStr = `
+                dumpStr = rmCommonWS`
                     ${lexerSourceCode.sourceCode.replace(/\r\n|\r/g, '\n')};
 
                     //=============================================================================
                     //                     JISON-LEX OPTIONS:
 
-                    ${JSON5.stringify(lexerSourceCode.options, { space: 2 })}
+                    const lexerSpecConglomerate = ${JSON5.stringify(lexerSourceCode.options, { space: 2 })}
 
                 `;
             } else {
@@ -3764,8 +3837,8 @@ describe('Test Lexer Grammars', function () {
             // stringify the token sets! (no assert.deepEqual!)
             let ist = JSON5.stringify(cleanStackTrace4Comparison(tokens), null, 2);
             let soll = JSON5.stringify(cleanStackTrace4Comparison(filespec.ref), null, 2);
-            assert.ok(reduceWhitespace(ist) === reduceWhitespace(soll), 'lexer output token stream does not match reference; please compare /output/ vs /reference-output/');
-            assert.ok(reduceWhitespace(refSrc) === reduceWhitespace(dumpStr), 'generated source code does not match reference; please compare /output/ vs /reference-output/');
+            assert.equal(reduceWhitespace(ist), reduceWhitespace(soll), 'lexer output token stream does not match reference; please compare /output/ vs /reference-output/');
+            assert.equal(reduceWhitespace(cleanStackTrace4Comparison(refSrc)), reduceWhitespace(cleanStackTrace4Comparison(dumpStr)), 'generated source code does not match reference; please compare /output/ vs /reference-output/');
         });
     });
 });

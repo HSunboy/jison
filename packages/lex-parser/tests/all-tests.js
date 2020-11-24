@@ -76,7 +76,15 @@ const original_cwd = process.cwd();
 process.chdir(__dirname);
 var testset = globby.sync(['./specs/*.jisonlex', './lex/*.jisonlex']);
 
-testset = testset.sort();
+testset = testset.sort((a, b) => {
+    let rv;
+    if (a.includes('/lex/') && !b.includes('/lex/')) {
+        rv = 1;
+    } else {
+        rv = a.localeCompare(b);
+    }
+    return rv;
+});
 
 testset = testset.map(function (filepath) {
     // Get document, or throw exception on error
@@ -110,7 +118,7 @@ testset = testset.map(function (filepath) {
 
         let doc = yaml.safeLoad(header, {
             filename: filepath
-        });
+        }) || {};
 
         // extract the grammar to test:
         let grammar = spec.substr(spec.indexOf('\n\n') + 2);
@@ -160,7 +168,21 @@ testset = testset.map(function (filepath) {
 .filter(function (info) {
     return !!info;
 });
-console.error({ testset });
+console.error(JSON5.stringify(testset, {
+    replacer: function (key, value) {
+        if (typeof value === 'string') {
+            let a = value.split('\n');
+            if (value.length > 500 || a.length > 5) {
+                return `[...string (length: ${value.length}, lines: ${a.length}) ...]`;
+            }
+        }
+        if (/^(?:ref|spec|grammar)$/.test(key) && typeof value === 'object') {
+            return '[... JSON ...]';
+        }
+        return value;
+    },
+    space: 2,
+}));
 
 function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key, err) {
     // and produce an alternative structure to JSON-ify:
@@ -205,30 +227,49 @@ describe('LEX spec lexer', function () {
 
         let testname = 'test: ' + filespec.path.replace(/^.*?\/specs\//, '').replace(/^.*?\/lex\//, '/lex/') + (title ? ' :: ' + title : '');
 
+        // don't dump more than 4 EOF tokens at the end of the stream:
+        const maxEOFTokenCount = 4;
+        // don't dump more than 20 error tokens in the output stream:
+        const maxERRORTokenCount = 20;
+        // maximum number of tokens in the output stream:
+        const maxTokenCount = 10000;
+
         console.error('generate test: ', testname);
 
         // and create a test for it:
         it(testname, function testEachParserExample() {
-            let err, ast, grammar;
+            let err;
+            let i = 0;
             let tokens = [];
+            
             let lexer = lex.parser.lexer;
+
+            let grammar = filespec.grammar;
+
+            let yy = {
+                parseError: function customMainParseError(str, hash, ExceptionClass) {
+                    console.error("parseError: ", str);
+                    return -42; // this.ERROR;
+                }
+            };
+        
+            let countEOFs = 0;
+            let countERRORs = 0;
+            let countParseErrorCalls = 0;
+            let countFATALs = 0;
 
             try {
                 // Change CWD to the directory where the source grammar resides: this helps us properly
                 // %include any files mentioned in the grammar with relative paths:
                 process.chdir(path.dirname(filespec.path));
 
-                grammar = filespec.grammar; // "%% test: foo bar | baz ; hello: world ;";
-
                 if (filespec.meta.crlf) {
                     grammar = grammar.replace(/\n/g, '\r\n');
                 }
 
-                ast = lexer.setInput(grammar);
-                ast.__original_input__ = grammar;
+                lexer.setInput(grammar, yy);
 
-                let countDown = 4;
-                for (var i = 0; i < 1000; i++) {
+                for (i = 0; i < maxTokenCount; i++) {
                     let tok = lexer.lex();
                     tokens.push({
                         id: tok,
@@ -239,34 +280,56 @@ describe('LEX spec lexer', function () {
                     if (tok === lexer.EOF) {
                         // and make sure EOF stays EOF, i.e. continued invocation of `lex()` will only
                         // produce more EOF tokens at the same location:
-                        countDown--;
-                        if (countDown <= 0) {
+                        countEOFs++;
+                        if (countEOFs >= maxEOFTokenCount) {
+                            break;
+                        }
+                    }
+                    else if (tok === lexer.ERROR) {
+                        countERRORs++;
+                        if (countERRORs >= maxERRORTokenCount) {
+                            break;
+                        }
+                    }
+                    else if (tok === -42) {
+                        countParseErrorCalls++;
+                        if (countParseErrorCalls >= maxERRORTokenCount) {
                             break;
                         }
                     }
                 }
             } catch (ex) {
+                countFATALs++;
+                
                 // save the error:
-                tokens.push(-1);
                 err = ex;
                 tokens.push({
+                    id: -1,
+                    token: null,
                     fail: 1,
                     meta: filespec.spec.meta,
-                    err: trimErrorForTestReporting(ex)
+                    err: ex
                 });
-                // and make sure ast !== undefined:
-                if (!ast) {
-                    ast = { fail: 1 };
-                }
             } finally {
                 process.chdir(original_cwd);
             }
 
-            // also store the number of tokens we received:
-            tokens.unshift(i);
+            // write a summary node at the end of the stream:
+            tokens.push({
+                id: -2,
+                token: null,
+                summary: {
+                    totalTokenCount: tokens.length,
+                    EOFTokenCount: countEOFs,
+                    ERRORTokenCount: countERRORs,
+                    ParseErrorCallCount: countParseErrorCalls,
+                    fatalExceptionCount: countFATALs
+                }
+            });
             // if (lexerSourceCode) {
             //   tokens.push(lexerSourceCode);
             // }
+            tokens = trimErrorForTestReporting(tokens);
 
             // either we check/test the correctness of the collected input, iff there's
             // a reference provided, OR we create the reference file for future use:
@@ -281,11 +344,12 @@ describe('LEX spec lexer', function () {
             // and convert it back so we have a `tokens` set that's cleaned up
             // and potentially matching the stored reference set:
             tokens = JSON5.parse(refOut);
+
             if (filespec.lexerRef) {
                 // Perform the validations only AFTER we've written the files to output:
                 // several tests produce very large outputs, which we shouldn't let assert() process
                 // for diff reporting as that takes bloody ages:
-                //assert.deepEqual(ast, filespec.ref);
+                //assert.deepEqual(ast, filespec.lexerRef);
             } else {
                 fs.writeFileSync(filespec.lexerRefPath, refOut, 'utf8');
                 filespec.lexerRef = tokens;
@@ -319,34 +383,64 @@ describe('LEX parser', function () {
 
         // and create a test for it:
 
-        it('test: ' + filespec.path.replace(/^.*?\/specs\//, '').replace(/^.*?\/lex\//, '/lex/') + (title ? ' :: ' + title : ''), function testEachParserExample() {
-            let err, ast, grammar;
+        let testname = 'test: ' + filespec.path.replace(/^.*?\/specs\//, '').replace(/^.*?\/lex\//, '/lex/') + (title ? ' :: ' + title : '');
+
+        // don't dump more than 4 EOF tokens at the end of the stream:
+        const maxEOFTokenCount = 4;
+        // don't dump more than 20 error tokens in the output stream:
+        const maxERRORTokenCount = 20;
+        // maximum number of tokens in the output stream:
+        const maxTokenCount = 10000;
+
+        console.error('generate test: ', testname);
+
+        it('test: ' + testname, function testEachParserExample() {
+            let err, ast;
+
+            let grammar = filespec.grammar;
+        
+            let countEOFs = 0;
+            let countERRORs = 0;
+            let countFATALs = 0;
 
             try {
                 // Change CWD to the directory where the source grammar resides: this helps us properly
                 // %include any files mentioned in the grammar with relative paths:
                 process.chdir(path.dirname(filespec.path));
 
-                grammar = filespec.grammar; // "%% test: foo bar | baz ; hello: world ;";
-
                 if (filespec.meta.crlf) {
                     grammar = grammar.replace(/\n/g, '\r\n');
                 }
 
+                // reset parser:lexer internals for the extreme situation where the `lex.parse()` invocation below
+                // will crash BEFORE it has set the lexer input, thus resulting in the lexer context not having
+                // been reset since the last test and thus containing lingering cruft from the last test. 
+                // 
+                // Ugly!
+                let lexer = lex.parser.lexer;
+                lexer.setInput("FUBAR");
+
+                // run parser                
                 ast = lex.parse(grammar);
-                ast.__original_input__ = grammar;
             } catch (ex) {
                 // save the error:
                 err = ex;
                 // and make sure ast !== undefined:
                 ast = {
+                    id: -1,
+                    token: null,
                     fail: 1,
                     spec: filespec.grammar,
-                    err: trimErrorForTestReporting(ex)
+                    err: ex
                 };
             } finally {
                 process.chdir(original_cwd);
+                if (ast) {
+                    ast.__original_input__ = grammar;
+                }
             }
+
+            ast = trimErrorForTestReporting(ast);
 
             // either we check/test the correctness of the collected input, iff there's
             // a reference provided, OR we create the reference file for future use:

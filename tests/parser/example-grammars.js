@@ -139,7 +139,7 @@ const test_list = [
     }
 ];
 
-console.log('exec globby....', __dirname);
+console.log('exec glob....', __dirname);
 const original_cwd = process.cwd();
 process.chdir(__dirname);
 let testset = globby.sync([
@@ -164,10 +164,23 @@ testset = testset.sort().map(function (filepath) {
     };
 })
 .filter(function (t) {
-  return false;
     return !!t;
 });
-console.log('testset....', testset);
+console.error(JSON5.stringify(testset, {
+    replacer: function (key, value) {
+        if (typeof value === 'string') {
+            let a = value.split('\n');
+            if (value.length > 500 || a.length > 5) {
+                return `[...string (length: ${value.length}, lines: ${a.length}) ...]`;
+            }
+        }
+        if (/^(?:ref|spec|grammar)$/.test(key) && typeof value === 'object') {
+            return '[... JSON ...]';
+        }
+        return value;
+    },
+    space: 2,
+}));
 
 
 describe('Example/Test Grammars', function () {
