@@ -343,7 +343,8 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 
 
 //
-// This rule is "specially made" as we want to recognize `{{` markers as special markers, just like `%{`,
+// The start marker recognition rule is "specially made" as we want to recognize 
+// `{{` markers as special markers, just like `%{`,
 // while we also want to recognize `{` markers, but only while we are parsing lexer
 // match rules.
 // Meanwhile, the `<rules>{WS}+/!(?:"|"|"%"|"->"|"=>"|"→"|{WS}|{BR})` rule here
@@ -445,6 +446,9 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 // which is announced by `%%`, `|` or `;`:
 "%%"|"|"|";"                            this.popState();
                                         this.unput(yytext);
+                                        return 'OPTIONS_END';
+
+<<EOF>>                                 this.popState();
                                         return 'OPTIONS_END';
 
 // some options may be followed by an action block or `%include`d action block:
@@ -600,7 +604,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
                                         return 'START_EXC';
 
 "%code"                                 this.pushState('options');
-                                        return 'CODE';
+                                        return 'INIT_CODE';
 "%import"                               this.pushState('options');
                                         return 'IMPORT';
 "%pointer"                              return 'FLEX_POINTER_MODE';
@@ -655,8 +659,12 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 "{"                                     return '{';
 "}"                                     return '}';
 
-
-<set>(?:"\\"[^{BR}]|[^\]{])+            return 'REGEX_SET';
+// We don't bother decoding escaped characters inside a regex [...] set as those will
+// be converted anyway (and without any fuss) once we feed the regex into a XRegExp
+// instance in the engine. 
+// The only thing we must bother about is the user using NAME_BRACE macro expansions
+// inside a regex [...] set, hence the special exclusion of '{' here:
+<set>(?:"\\"[^{BR}]|[^\]\{{BR}])+       return 'REGEX_SET';
 <set>"{"                                return 'REGEX_SET';
 <set>"]"                                this.popState();
                                         return 'REGEX_SET_END';
@@ -767,13 +775,16 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
                                             ` + this.prettyPrintRange(yylloc));
                                         return 'error';
 
-<*>.                                    yyerror(rmCommonWS`
-                                            unsupported lexer input: ${dquote(yytext)}
-                                            while lexing in ${dquote(this.topState())} state.
+<*>.                                    %{
+                                            /* b0rk on bad characters */
+                                            yyerror(rmCommonWS`
+	                                            unsupported lexer input: ${dquote(yytext)}
+	                                            while lexing in ${dquote(this.topState())} state.
 
-                                              Erroneous area:
-                                            ` + this.prettyPrintRange(yylloc));
-                                        return 'error';
+	                                              Erroneous area:
+	                                            ` + this.prettyPrintRange(yylloc));
+	                                        return 'error';
+                                        %}
 
 <*><<EOF>>                              return 'EOF';
 
