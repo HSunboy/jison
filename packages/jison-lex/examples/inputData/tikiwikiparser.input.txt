@@ -1,0 +1,3 @@
+{bold} (box) ~center colortext~ 
+(:italic:) header6 header5 header4 header3 header2 header1 link strikethrough table titlebar 
+<underscore> wikilink

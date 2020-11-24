@@ -1,0 +1,4 @@
+class t extends bubbaloo;
+42 === (a + b - 3)  // comment
+?msg?
+999

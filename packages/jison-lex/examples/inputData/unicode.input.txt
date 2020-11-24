@@ -1,0 +1,4 @@
+ * - lexer macro expansion inside regex sets, e.g. `[{NAME}...]`
+/* End of grammar */
+%%
+999

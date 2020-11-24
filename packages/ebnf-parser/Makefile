@@ -1,3 +1,4 @@
+PATH        := ../../node_modules/.bin:${PATH}
 
 JISON_VERSION := $(shell node ../../dist/cli-cjs.js -V 2> /dev/null )
 
@@ -33,8 +34,6 @@ build:
 ifeq ($(wildcard ../../node_modules/.bin/jison),)
 	$(error "### FAILURE: Make sure you have run 'make prep' before as the jison compiler is unavailable! ###")
 endif
-
-	node __patch_version_in_js.js
 
 	$(JISON) -m es bnf.y bnf.l
 	mv bnf.js parser.js
@@ -83,7 +82,9 @@ superclean: clean
 
 
 
+clean-dumpfiles:
+	bash -c "find . -type f \( -iname '*fatal_*_dump*' -o -ipath '*reference-output*' -o -ipath '*/lex/output/*' -o -ipath '*/specs/output/*' -o -ipath '*/examples/output/*' \) -print -delete"
 
 
-.PHONY: all prep npm-install build test clean superclean bump git-tag publish npm-update test-nyc
+.PHONY: all prep npm-install build test clean superclean clean-dumpfiles bump git-tag publish npm-update test-nyc
 

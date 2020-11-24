@@ -1,0 +1,3 @@
+PROGRAM BUGGABOO;
+(* extensions: to ways to spell "external" and "->" ok for "^" *)
+999

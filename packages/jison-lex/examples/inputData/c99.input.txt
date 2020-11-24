@@ -1,0 +1,4 @@
+function f(a) { 
+  return a + 6; 
+} 
+int x = 7 - 3.1415E-1;

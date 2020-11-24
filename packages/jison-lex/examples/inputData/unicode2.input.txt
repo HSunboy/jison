@@ -1,0 +1,8 @@
+Match simple floating point values, for example `1.0`, but also `9.`, `.05` or just `7`:
+// 1.0e7
+// .5e7
+5 / 3e4
+.                       return 'INVALID';
+/* End of grammar */
+%%
+999
