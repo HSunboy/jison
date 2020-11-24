@@ -1,16 +1,17 @@
 // rollup.config.js
 import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
 
 import base from './rollup.config-template.js';
+const outputGlobals = base.output.globals;
 
 export default Object.assign(base, {
   input: 'lib/cli.js',
   //treeshake: false,
   output: [
-  	  {
+	  {
 	    file: 'dist/cli-cjs.js',
-	    format: 'cjs'
+	    format: 'cjs',
+	    exports: 'default',
 	  },
 	  {
 	    file: 'dist/cli-es6.js',
@@ -19,7 +20,9 @@ export default Object.assign(base, {
 	  {
 	    file: 'dist/cli-umd.js',
 	    name: 'jison-cli',
-	    format: 'umd'
+	    format: 'umd',
+	    exports: 'default',
+	    globals: outputGlobals,
 	  }
   ],
 });

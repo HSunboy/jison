@@ -20,10 +20,24 @@ export default {
   //    format: 'umd'
   //  }
   //],
+  output: {
+    globals: {
+      '@gerhobbelt/json5': 'JSON5',
+      '@gerhobbelt/nomnom': 'nomnom',
+      '@gerhobbelt/xregexp': 'XRegExp',
+      'assert': 'assert',
+      'fs': 'fs',
+      'jison-helpers-lib': 'helpers',
+      'mkdirp': 'mkdirp',
+      'path': 'path',
+      'process': 'process',
+      'recast': 'recast',
+    },
+  },
   plugins: [
     resolve({
       // use "module" field for ES6 module if possible
-      // 
+      //
       // use "main" field or index.js, even if it's not an ES6 module
       // (needs to be converted from CommonJS to ES6
       // – see https://github.com/rollup/rollup-plugin-commonjs
@@ -42,25 +56,27 @@ export default {
     })
   ],
   external: [
+    '@babel/core',
     '@gerhobbelt/ast-util',
-    'ast-util',
+    '@gerhobbelt/ebnf-parser',
+    '@gerhobbelt/jison-lex',
+    '@gerhobbelt/jison2json',
+    '@gerhobbelt/json2jison',
     '@gerhobbelt/json5',
+    '@gerhobbelt/lex-parser',
     '@gerhobbelt/nomnom',
     '@gerhobbelt/prettier-miscellaneous',
     '@gerhobbelt/recast',
-    'recast',
     '@gerhobbelt/xregexp',
-    'jison-helpers-lib',
-    '@gerhobbelt/lex-parser',
-    '@gerhobbelt/jison-lex',
-    '@gerhobbelt/ebnf-parser',
-    '@gerhobbelt/jison2json',
-    '@gerhobbelt/json2jison',
-    'jison-gho',
     'assert',
+    'ast-util',
     'fs',
+    'jison-gho',
+    'jison-helpers-lib',
+    'mkdirp',
     'path',
     'process',
+    'recast',
   ]
 };
 

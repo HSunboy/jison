@@ -1,8 +1,8 @@
 // rollup.config.js
 import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
 
 import base from '../../rollup.config-template.js';
+const outputGlobals = base.output.globals;
 
 export default Object.assign(base, {
   input: 'regexp-lexer.js',
@@ -10,7 +10,8 @@ export default Object.assign(base, {
   output: [
   	  {
 	    file: 'dist/regexp-lexer-cjs.js',
-	    format: 'cjs'
+	    format: 'cjs',
+	    exports: 'default',
 	  },
 	  {
 	    file: 'dist/regexp-lexer-es6.js',
@@ -19,7 +20,9 @@ export default Object.assign(base, {
 	  {
 	    file: 'dist/regexp-lexer-umd.js',
 	    name: 'regexp-lexer',
-	    format: 'umd'
+	    format: 'umd',
+	    exports: 'default',
+	    globals: outputGlobals,
 	  }
   ],
 });

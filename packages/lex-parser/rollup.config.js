@@ -1,8 +1,8 @@
 // rollup.config.js
 import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
 
 import base from '../../rollup.config-template.js';
+const outputGlobals = base.output.globals;
 
 export default Object.assign(base, {
   input: 'lex-parser.js',
@@ -10,7 +10,8 @@ export default Object.assign(base, {
   output: [
   	  {
 	    file: 'dist/lex-parser-cjs.js',
-	    format: 'cjs'
+	    format: 'cjs',
+	    exports: 'default',
 	  },
 	  {
 	    file: 'dist/lex-parser-es6.js',
@@ -19,7 +20,9 @@ export default Object.assign(base, {
 	  {
 	    file: 'dist/lex-parser-umd.js',
 	    name: 'lex-parser',
-	    format: 'umd'
+	    format: 'umd',
+	    exports: 'default',
+	    globals: outputGlobals,
 	  }
   ],
 });
