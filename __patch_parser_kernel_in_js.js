@@ -45,17 +45,17 @@ if (test) {
 
 
 globby(['lib/jison.js']).then(paths => {
-    var count = 0;
-    var edit_cnt = 0;
+    let count = 0;
+    let edit_cnt = 0;
 
     //console.log(paths);
     paths.forEach(path => {
-        var updated = false;
+        let updated = false;
 
         //console.log('path: ', path);
 
-        var src = fs.readFileSync(path, 'utf8');
-        var dst = src
+        let src = fs.readFileSync(path, 'utf8');
+        let dst = src
         .replace(/(\/\/ --- START parser kernel ---)[^]+?(\/\/ --- END( of)? parser kernel ---)/, function f(m, p1, p2) {
             edit_cnt++;
             return p1 + `

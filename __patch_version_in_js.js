@@ -6,17 +6,17 @@ const globby = require('globby');
 const fs = require('fs');
 
  
-globby(['lib/jison*.js', 'lib/cli*.js']).then(paths => {
-	var count = 0;
+globby(['lib/jison*.js', 'lib/cli*.js', 'packages/*/*lexer*.js', 'packages/*/*parse*.js', 'packages/*/*cli*.js']).then(paths => {
+    let count = 0;
 
     //console.log(paths);
     paths.forEach(path => {
-    	var updated = false;
+    	let updated = false;
 
     	//console.log('path: ', path);
 
-    	var src = fs.readFileSync(path, 'utf8');
-    	src = src.replace(/^(\s*var version = )([^;]+;)/gm, function repl(s, m1, m2) {
+    	let src = fs.readFileSync(path, 'utf8');
+    	src = src.replace(/^(\s*const version = )([^;]+;)/gm, function repl(s, m1, m2) {
     		if (m2 !== "'" + version + "';") {
     			updated = true;
     		}
@@ -35,15 +35,15 @@ globby(['lib/jison*.js', 'lib/cli*.js']).then(paths => {
 
      
     globby(['packages/**/package*.json']).then(paths => {
-        var count = 0;
+        let count = 0;
 
         //console.log(paths);
         paths.forEach(path => {
-            var updated = false;
+            let updated = false;
 
             //console.log('path: ', path);
 
-            var src = fs.readFileSync(path, 'utf8');
+            let src = fs.readFileSync(path, 'utf8');
             // line looks like:  "version": "0.6.1-200",
             src = src.replace(/^(\s*"version":\s*")([^"\s]+)(",)/gm, function repl(s, m1, m2, m3) {
                 if (m2 !== version) {
