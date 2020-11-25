@@ -785,12 +785,16 @@ rules
         {
             if ($scoped_rules_collective) {
                 $$ = $rules.concat($scoped_rules_collective);
+            } else {
+                $$ = $rules;
             }
         }
     | rules rule
         {
             if ($rule) {
                 $$ = $rules.concat([$rule]);
+            } else {
+                $$ = $rules;
             }
         }
     | ε
