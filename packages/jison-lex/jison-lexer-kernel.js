@@ -229,8 +229,8 @@ const lexer_kernel =
         if (!this.__decompressed) {
             // step 1: decompress the regex list:
             let rules = this.rules;
-            for (var i = 0, len = rules.length; i < len; i++) {
-                var rule_re = rules[i];
+            for (let i = 0, len = rules.length; i < len; i++) {
+                let rule_re = rules[i];
 
                 // compression: is the RE an xref to another RE slot in the rules[] table?
                 if (typeof rule_re === 'number') {
@@ -245,13 +245,13 @@ const lexer_kernel =
 
                 let rule_ids = spec.rules;
 
-                var len = rule_ids.length;
+                let len = rule_ids.length;
                 let rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
                 let rule_new_ids = new Array(len + 1);
 
-                for (var i = 0; i < len; i++) {
+                for (let i = 0; i < len; i++) {
                     let idx = rule_ids[i];
-                    var rule_re = rules[idx];
+                    let rule_re = rules[idx];
                     rule_regexes[i + 1] = rule_re;
                     rule_new_ids[i + 1] = idx;
                 }

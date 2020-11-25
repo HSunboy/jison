@@ -122,7 +122,7 @@ function mkStdOptions(/*...args*/) {
         // clone input (while camel-casing the options), so we do not modify those either.
         let o2 = {};
 
-        for (var p in o) {
+        for (let p in o) {
             if (typeof o[p] !== 'undefined' && h.call(o, p)) {
                 o2[mkIdentifier(p)] = o[p];
             }
@@ -168,7 +168,7 @@ function mkStdOptions(/*...args*/) {
         }
 
         // now see if we have an overriding option here:
-        for (var p in o2) {
+        for (let p in o2) {
             if (h.call(o2, p)) {
                 if (typeof o2[p] !== 'undefined') {
                     opts[p] = o2[p];
@@ -482,8 +482,8 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
         switch (c1) {
         case '[':
             // this is starting a set within the regex: scan until end of set!
-            var set_content = [];
-            var l = new Array(UNICODE_BASE_PLANE_MAX_CP + 1);
+            let set_content = [];
+            let l = new Array(UNICODE_BASE_PLANE_MAX_CP + 1);
 
             while (s.length) {
                 let inner = s.match(SET_PART_RE);
@@ -531,12 +531,12 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
             }
 
             // find out which set expression is optimal in size:
-            var s1 = setmgmt.produceOptimizedRegex4Set(l);
+            let s1 = setmgmt.produceOptimizedRegex4Set(l);
 
             // check if the source regex set potentially has any expansions (guestimate!)
             //
             // The indexOf('{') picks both XRegExp Unicode escapes and JISON lexer macros, which is perfect for us here.
-            var has_expansions = (se.indexOf('{') >= 0);
+            let has_expansions = (se.indexOf('{') >= 0);
 
             se = '[' + se + ']';
 
@@ -992,7 +992,7 @@ function prepareStartConditions(conditions) {
 }
 
 function buildActions(dict, tokens, grammarSpec) {
-    let actions = [ dict.actionInclude || '', 'var YYSTATE = YY_START;' ];
+    let actions = [ dict.actionInclude || '', 'const YYSTATE = YY_START;' ];
     let toks = {};
     let caseHelper = [];
 
@@ -1015,7 +1015,7 @@ function buildActions(dict, tokens, grammarSpec) {
         caseHelperInclude: '{\n' + caseHelper.join(',') + '\n}',
 
         actions: `function lexer__performAction(yy, yyrulenumber, YY_START) {
-            var yy_ = this;
+            const yy_ = this;
 
             ${code}
         }`,
@@ -1365,8 +1365,8 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
                 }, 'One or more of your lexer rules are possibly botched?', ex, null)) {
                     // kill each rule action block, one at a time and test again after each 'edit':
                     let rv = false;
-                    for (var i = 0, len = rulesSpecSize; i < len; i++) {
-                        var lastEditedRuleSpec;
+                    for (let i = 0, len = rulesSpecSize; i < len; i++) {
+                        let lastEditedRuleSpec;
                         rv = test_me(function () {
                             assert(Array.isArray(grammarSpec.rules));
                             assert(grammarSpec.rules.length === rulesSpecSize);
@@ -1637,22 +1637,20 @@ return `EOF: 1,
      * @public
      * @this {RegExpLexer}
      */
-    cleanupAfterLex: function lexer_cleanupAfterLex(do_not_nuke_errorinfos) {
+    cleanupAfterLex: function lexer_cleanupAfterLex() {
         // prevent lingering circular references from causing memory leaks:
         this.setInput('', {});
 
         // nuke the error hash info instances created during this run.
         // Userland code must COPY any data/references
         // in the error hash instance(s) it is more permanently interested in.
-        if (!do_not_nuke_errorinfos) {
-            for (let i = this.__error_infos.length - 1; i >= 0; i--) {
-                let el = this.__error_infos[i];
-                if (el && typeof el.destroy === 'function') {
-                    el.destroy();
-                }
+        for (let i = this.__error_infos.length - 1; i >= 0; i--) {
+            let el = this.__error_infos[i];
+            if (el && typeof el.destroy === 'function') {
+                el.destroy();
             }
-            this.__error_infos.length = 0;
         }
+        this.__error_infos.length = 0;
 
         return this;
     },
@@ -1699,8 +1697,8 @@ return `EOF: 1,
         if (!this.__decompressed) {
             // step 1: decompress the regex list:
             let rules = this.rules;
-            for (var i = 0, len = rules.length; i < len; i++) {
-                var rule_re = rules[i];
+            for (let i = 0, len = rules.length; i < len; i++) {
+                let rule_re = rules[i];
 
                 // compression: is the RE an xref to another RE slot in the rules[] table?
                 if (typeof rule_re === 'number') {
@@ -1715,13 +1713,13 @@ return `EOF: 1,
 
                 let rule_ids = spec.rules;
 
-                var len = rule_ids.length;
+                let len = rule_ids.length;
                 let rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in \`lexer_next()\` fast and simple!
                 let rule_new_ids = new Array(len + 1);
 
-                for (var i = 0; i < len; i++) {
+                for (let i = 0; i < len; i++) {
                     let idx = rule_ids[i];
-                    var rule_re = rules[idx];
+                    let rule_re = rules[idx];
                     rule_regexes[i + 1] = rule_re;
                     rule_new_ids[i + 1] = idx;
                 }
@@ -2604,7 +2602,13 @@ return `EOF: 1,
             let conditionStackDepth = this.conditionStack.length;
 
             let token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
-            if (token === this.ERROR) {
+            //if (token === this.ERROR) {
+            //    ^^^^^^^^^^^^^^^^^^^^ WARNING: no matter what token the error handler produced, 
+            //                         it MUST move the cursor forward or you'ld end up in 
+            //                         an infinite lex loop, unless one or more of the following 
+            //                         conditions was changed, so as to change the internal lexer 
+            //                         state and thus enable it to produce a different token:
+            //                         
                 // we can try to recover from a lexer error that \`parseError()\` did not 'recover' for us
                 // by moving forward at least one character at a time IFF the (user-specified?) \`parseError()\`
                 // has not consumed/modified any pending input or changed state in the error handler:
@@ -2618,7 +2622,7 @@ return `EOF: 1,
                 ) {
                     this.input();
                 }
-            }
+            //}
             return token;
         }
     },
@@ -3650,8 +3654,8 @@ function generateGenericHeaderComment() {
      *               Produces a new errorInfo \'hash object\' which can be passed into \`parseError()\`.
      *               See it\'s use in this lexer kernel in many places; example usage:
      *
-     *                   var infoObj = lexer.constructParseErrorInfo(\'fail!\', true);
-     *                   var retVal = lexer.parseError(infoObj.errStr, infoObj, lexer.JisonLexerError);
+     *                   let infoObj = lexer.constructParseErrorInfo(\'fail!\', true);
+     *                   let retVal = lexer.parseError(infoObj.errStr, infoObj, lexer.JisonLexerError);
      *
      *    options: { ... lexer %options ... },
      *
@@ -3852,7 +3856,7 @@ function generateModule(grammarSpec) {
     let src = rmCommonWS`
         ${generateGenericHeaderComment()}
 
-        var ${grammarSpec.options.moduleName} = (function () {
+        const ${grammarSpec.options.moduleName} = (function () {
             "use strict";
 
             ${getInitCodeSection(grammarSpec.codeSections, 'imports')}
@@ -3926,7 +3930,7 @@ function generateESModule(grammarSpec) {
         `;
         
         invokeMain = rmCommonWS`
-            let yymain = ${moduleNameAsCode.trim()};
+            const yymain = ${moduleNameAsCode.trim()};
 
             function yyExecMain() {
               yymain(process.argv.slice(1));
@@ -4014,7 +4018,7 @@ function generateCommonJSModule(grammarSpec) {
 
         ${getInitCodeSection(grammarSpec.codeSections, 'imports')}
 
-        var ${moduleName} = (function () {
+        const ${moduleName} = (function () {
             "use strict";
 
             ${getInitCodeSection(grammarSpec.codeSections, 'init')}
