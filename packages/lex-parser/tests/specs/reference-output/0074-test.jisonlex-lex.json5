@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"["',
     yylloc: {
@@ -45,7 +45,7 @@
     },
   },
   {
-    id: 48,
+    id: 49,
     token: '"REGEX_SET"',
     yytext: '^\\\\',
     yylloc: {
@@ -105,7 +105,8 @@ rules (i.e. jison lex regexes) in "rules" state.
 2: "["[^\\\\]]"]" -> 'BAD_REGEX'
 ^..........^
 3: 
-4: `,
+4: 
+`,
           recoverable: false,
           text: ']',
           token: null,
@@ -145,7 +146,8 @@ rules (i.e. jison lex regexes) in "rules" state.
 2: "["[^\\\\]]"]" -> 'BAD_REGEX'
 ^..........^
 3: 
-4: `,
+4: 
+`,
                 recoverable: false,
                 text: ']',
                 token: null,
@@ -221,7 +223,7 @@ rules (i.e. jison lex regexes) in "rules" state.
     yylloc: '[reference to sibling --> *.[5].yytext.errorDiag.hash.lexer.__error_infos.[0].loc]',
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"]"',
     yylloc: {
@@ -377,7 +379,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       totalTokenCount: 16,
       EOFTokenCount: 4,
       ERRORTokenCount: 1,
-      ParseErrorCallCount: 0,
+      ParseErrorCallCount: 1,
+      DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },
   },

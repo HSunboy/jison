@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'section',
     yylloc: {
@@ -105,7 +105,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'imports',
     yylloc: {
@@ -341,6 +341,7 @@
       EOFTokenCount: 4,
       ERRORTokenCount: 0,
       ParseErrorCallCount: 0,
+      DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },
   },

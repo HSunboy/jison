@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'ping',
     yylloc: {
@@ -45,7 +45,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: '666',
     yylloc: {
@@ -60,7 +60,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'bla',
     yylloc: {
@@ -90,7 +90,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'blub',
     yylloc: {
@@ -105,7 +105,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'bool1',
     yylloc: {
@@ -120,7 +120,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 's1',
     yylloc: {
@@ -150,7 +150,7 @@
     },
   },
   {
-    id: 52,
+    id: 53,
     token: '"OPTION_STRING"',
     yytext: '"s1value"',
     yylloc: {
@@ -165,7 +165,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 's2',
     yylloc: {
@@ -195,7 +195,7 @@
     },
   },
   {
-    id: 52,
+    id: 53,
     token: '"OPTION_STRING"',
     yytext: "'s2value'",
     yylloc: {
@@ -210,7 +210,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 's3',
     yylloc: {
@@ -240,7 +240,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'false',
     yylloc: {
@@ -255,7 +255,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 's4',
     yylloc: {
@@ -285,7 +285,7 @@
     },
   },
   {
-    id: 52,
+    id: 53,
     token: '"OPTION_STRING"',
     yytext: '"false"',
     yylloc: {
@@ -300,7 +300,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'a-b-c',
     yylloc: {
@@ -330,7 +330,7 @@
     },
   },
   {
-    id: 52,
+    id: 53,
     token: '"OPTION_STRING"',
     yytext: '"d"',
     yylloc: {
@@ -375,7 +375,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"foo"',
     yylloc: {
@@ -517,6 +517,7 @@
       EOFTokenCount: 4,
       ERRORTokenCount: 0,
       ParseErrorCallCount: 0,
+      DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },
   },

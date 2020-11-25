@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'token-stack',
     yylloc: {
@@ -60,7 +60,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"foo"',
     yylloc: {
@@ -202,6 +202,7 @@
       EOFTokenCount: 4,
       ERRORTokenCount: 0,
       ParseErrorCallCount: 0,
+      DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },
   },

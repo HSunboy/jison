@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"["',
     yylloc: {
@@ -45,7 +45,7 @@
     },
   },
   {
-    id: 48,
+    id: 49,
     token: '"REGEX_SET"',
     yytext: 'abc',
     yylloc: {
@@ -60,23 +60,185 @@
     },
   },
   {
-    id: -42,
-    token: null,
-    yytext: '[object Object]\n',
-    yylloc: {
-      first_line: 2,
-      first_column: 7,
-      last_line: 3,
-      last_column: 0,
-      range: [
-        10,
-        11,
-      ],
+    id: 48,
+    token: '"UNTERMINATED_REGEX_SET"',
+    yytext: {
+      orig: '',
+      errorDiag: {
+        inputPos: 25,
+        yytext: '',
+        yyleng: 0,
+        matches: [
+          '\n',
+          '\n',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+        hash: {
+          errStr: `Lexical error on line 2: 
+regex [...] sets cannot span multiple lines.
+
+If you want a CR/LF to be part of a regex set, you can simply
+specify those as character escapes '\\r' and '\\n'.
+
+  Erroneous area:
+1: %%
+2: "["[abc
+^.........^
+3: def]"]" -> 'BAD_REGEX'
+4: 
+`,
+          recoverable: false,
+          text: '',
+          token: null,
+          line: 1,
+          loc: {
+            first_line: 2,
+            first_column: 7,
+            last_line: 2,
+            last_column: 7,
+            range: [
+              10,
+              10,
+            ],
+          },
+          yy: {
+            depth: 0,
+            include_command_allowed: false,
+          },
+          lexer: {
+            EOF: 1,
+            ERROR: 2,
+            __error_infos: [
+              {
+                errStr: `Lexical error on line 2: 
+regex [...] sets cannot span multiple lines.
+
+If you want a CR/LF to be part of a regex set, you can simply
+specify those as character escapes '\\r' and '\\n'.
+
+  Erroneous area:
+1: %%
+2: "["[abc
+^.........^
+3: def]"]" -> 'BAD_REGEX'
+4: 
+`,
+                recoverable: false,
+                text: '',
+                token: null,
+                line: 1,
+                loc: {
+                  first_line: 2,
+                  first_column: 7,
+                  last_line: 2,
+                  last_column: 7,
+                  range: [
+                    10,
+                    10,
+                  ],
+                },
+                yy: {
+                  depth: 0,
+                  include_command_allowed: false,
+                },
+                lexer: '[lexer]',
+              },
+              {
+                errStr: `Lexical error on line 3: 
+unsupported lexer input encountered while lexing
+rules (i.e. jison lex regexes) in "rules" state.
+
+    NOTE: When you want this input to be interpreted as a LITERAL part
+          of a lex rule regex, you MUST enclose it in double or
+          single quotes.
+
+          If not, then know that this input is not accepted as a valid
+          regex expression here in jison-lex rules.
+
+  Erroneous area:
+1: %%
+2: "["[abc
+3: def]"]" -> 'BAD_REGEX'
+^.....^
+4: 
+5: 
+`,
+                recoverable: false,
+                text: ']',
+                token: null,
+                line: 2,
+                loc: {
+                  first_line: 3,
+                  first_column: 3,
+                  last_line: 3,
+                  last_column: 4,
+                  range: [
+                    14,
+                    15,
+                  ],
+                },
+                yy: '[reference to sibling --> *.[4].yytext.errorDiag.hash.lexer.__error_infos.[0].yy]',
+                lexer: '[lexer]',
+              },
+            ],
+            __decompressed: true,
+            done: true,
+            _backtrack: false,
+            _input: '',
+            _more: false,
+            _signaled_error_token: false,
+            _clear_state: 0,
+            conditionStack: [
+              'INITIAL',
+              'code',
+            ],
+            match: '',
+            matched: `%%
+"["[abc
+def]"]" -> 'BAD_REGEX'
+
+`,
+            matches: false,
+            yytext: '',
+            offset: 35,
+            base_position: 0,
+            yyleng: 0,
+            yylineno: 4,
+            yylloc: {
+              first_line: 5,
+              first_column: 0,
+              last_line: 5,
+              last_column: 0,
+              range: [
+                35,
+                35,
+              ],
+            },
+            CRLF_Re: {
+              re: '/\\r\\n?|\\n/',
+              source: '\\r\\n?|\\n',
+              flags: '',
+            },
+            options: {
+              xregexp: true,
+              ranges: true,
+              trackPosition: true,
+              easy_keyword_rules: true,
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+          },
+        },
+      },
     },
+    yylloc: '[reference to sibling --> *.[4].yytext.errorDiag.hash.lexer.__error_infos.[0].loc]',
   },
   {
-    id: 48,
-    token: '"REGEX_SET"',
+    id: 52,
+    token: '"CHARACTER_LIT"',
     yytext: 'def',
     yylloc: {
       first_line: 3,
@@ -90,22 +252,117 @@
     },
   },
   {
-    id: 47,
-    token: '"REGEX_SET_END"',
-    yytext: ']',
-    yylloc: {
-      first_line: 3,
-      first_column: 3,
-      last_line: 3,
-      last_column: 4,
-      range: [
-        14,
-        15,
-      ],
+    id: 2,
+    token: '"error"',
+    yytext: {
+      orig: ']',
+      errorDiag: {
+        inputPos: 20,
+        yytext: ']',
+        yyleng: 1,
+        matches: [
+          ']',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+        hash: {
+          errStr: `Lexical error on line 3: 
+unsupported lexer input encountered while lexing
+rules (i.e. jison lex regexes) in "rules" state.
+
+    NOTE: When you want this input to be interpreted as a LITERAL part
+          of a lex rule regex, you MUST enclose it in double or
+          single quotes.
+
+          If not, then know that this input is not accepted as a valid
+          regex expression here in jison-lex rules.
+
+  Erroneous area:
+1: %%
+2: "["[abc
+3: def]"]" -> 'BAD_REGEX'
+^.....^
+4: 
+5: 
+`,
+          recoverable: false,
+          text: ']',
+          token: null,
+          line: 2,
+          loc: {
+            first_line: 3,
+            first_column: 3,
+            last_line: 3,
+            last_column: 4,
+            range: [
+              14,
+              15,
+            ],
+          },
+          yy: {
+            depth: 0,
+            include_command_allowed: false,
+          },
+          lexer: {
+            EOF: 1,
+            ERROR: 2,
+            __error_infos: '[reference to sibling array --> *.[4].yytext.errorDiag.hash.lexer.__error_infos, length = 2]',
+            __decompressed: true,
+            done: true,
+            _backtrack: false,
+            _input: '',
+            _more: false,
+            _signaled_error_token: false,
+            _clear_state: 0,
+            conditionStack: [
+              'INITIAL',
+              'code',
+            ],
+            match: '',
+            matched: `%%
+"["[abc
+def]"]" -> 'BAD_REGEX'
+
+`,
+            matches: false,
+            yytext: '',
+            offset: 35,
+            base_position: 0,
+            yyleng: 0,
+            yylineno: 4,
+            yylloc: {
+              first_line: 5,
+              first_column: 0,
+              last_line: 5,
+              last_column: 0,
+              range: [
+                35,
+                35,
+              ],
+            },
+            CRLF_Re: {
+              re: '/\\r\\n?|\\n/',
+              source: '\\r\\n?|\\n',
+              flags: '',
+            },
+            options: {
+              xregexp: true,
+              ranges: true,
+              trackPosition: true,
+              easy_keyword_rules: true,
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+          },
+        },
+      },
     },
+    yylloc: '[reference to sibling --> *.[4].yytext.errorDiag.hash.lexer.__error_infos.[1].loc]',
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"]"',
     yylloc: {
@@ -260,8 +517,9 @@
     summary: {
       totalTokenCount: 17,
       EOFTokenCount: 4,
-      ERRORTokenCount: 0,
-      ParseErrorCallCount: 1,
+      ERRORTokenCount: 1,
+      ParseErrorCallCount: 2,
+      DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },
   },

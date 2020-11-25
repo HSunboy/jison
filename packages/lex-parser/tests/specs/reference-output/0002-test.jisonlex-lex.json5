@@ -30,7 +30,7 @@
     },
   },
   {
-    id: 48,
+    id: 49,
     token: '"REGEX_SET"',
     yytext: '0-9',
     yylloc: {
@@ -105,7 +105,7 @@
     },
   },
   {
-    id: 48,
+    id: 49,
     token: '"REGEX_SET"',
     yytext: 'a-zA-Z',
     yylloc: {
@@ -195,7 +195,7 @@
     },
   },
   {
-    id: 48,
+    id: 49,
     token: '"REGEX_SET"',
     yytext: '_',
     yylloc: {
@@ -270,7 +270,7 @@
     },
   },
   {
-    id: 48,
+    id: 49,
     token: '"REGEX_SET"',
     yytext: '_',
     yylloc: {
@@ -390,7 +390,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"ohhai"',
     yylloc: {
@@ -480,7 +480,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"{"',
     yylloc: {
@@ -652,6 +652,7 @@
       EOFTokenCount: 4,
       ERRORTokenCount: 0,
       ParseErrorCallCount: 0,
+      DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },
   },

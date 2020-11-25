@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"a"',
     yylloc: {
@@ -90,7 +90,7 @@
     },
   },
   {
-    id: 54,
+    id: 55,
     token: '"TRAILING_CODE_CHUNK"',
     yytext: ` return 1;
   //
@@ -175,6 +175,7 @@
       EOFTokenCount: 4,
       ERRORTokenCount: 0,
       ParseErrorCallCount: 0,
+      DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },
   },

@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'easy_keyword_rules',
     yylloc: {
@@ -60,7 +60,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'TEST',
     yylloc: {
@@ -75,7 +75,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'TEST2',
     yylloc: {
@@ -120,7 +120,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'EAT',
     yylloc: {
@@ -165,7 +165,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"enter-test"',
     yylloc: {
@@ -285,7 +285,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"enter_test"',
     yylloc: {
@@ -420,7 +420,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'TEST',
     yylloc: {
@@ -450,7 +450,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'EAT',
     yylloc: {
@@ -495,7 +495,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"x"',
     yylloc: {
@@ -675,7 +675,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"z"',
     yylloc: {
@@ -810,7 +810,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'TEST',
     yylloc: {
@@ -855,7 +855,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"y"',
     yylloc: {
@@ -1005,7 +1005,7 @@
     },
   },
   {
-    id: 51,
+    id: 52,
     token: '"CHARACTER_LIT"',
     yytext: '"',
     yylloc: {
@@ -1020,7 +1020,7 @@
     },
   },
   {
-    id: 51,
+    id: 52,
     token: '"CHARACTER_LIT"',
     yytext: "'",
     yylloc: {
@@ -1035,7 +1035,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"a"',
     yylloc: {
@@ -1095,7 +1095,7 @@
     },
   },
   {
-    id: 51,
+    id: 52,
     token: '"CHARACTER_LIT"',
     yytext: '"',
     yylloc: {
@@ -1110,7 +1110,7 @@
     },
   },
   {
-    id: 51,
+    id: 52,
     token: '"CHARACTER_LIT"',
     yytext: "'",
     yylloc: {
@@ -1155,7 +1155,7 @@
     },
   },
   {
-    id: 51,
+    id: 52,
     token: '"CHARACTER_LIT"',
     yytext: 'i',
     yylloc: {
@@ -1215,7 +1215,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"a"',
     yylloc: {
@@ -1515,7 +1515,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"["',
     yylloc: {
@@ -1545,7 +1545,7 @@
     },
   },
   {
-    id: 48,
+    id: 49,
     token: '"REGEX_SET"',
     yytext: '^\\\\',
     yylloc: {
@@ -1575,7 +1575,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"]"',
     yylloc: {
@@ -1665,7 +1665,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: `'f"oo\\'bar'`,
     yylloc: {
@@ -1785,7 +1785,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: `"fo\\"obar"`,
     yylloc: {
@@ -1987,6 +1987,7 @@
       EOFTokenCount: 4,
       ERRORTokenCount: 0,
       ParseErrorCallCount: 0,
+      DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },
   },

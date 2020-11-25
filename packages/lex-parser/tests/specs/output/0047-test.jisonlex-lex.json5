@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 51,
+    id: 52,
     token: '"CHARACTER_LIT"',
     yytext: "'",
     yylloc: {
@@ -60,7 +60,7 @@
     },
   },
   {
-    id: 48,
+    id: 49,
     token: '"REGEX_SET"',
     yytext: "^\\\\'",
     yylloc: {
@@ -255,7 +255,7 @@
     },
   },
   {
-    id: 51,
+    id: 52,
     token: '"CHARACTER_LIT"',
     yytext: "'",
     yylloc: {
@@ -397,6 +397,7 @@
       EOFTokenCount: 4,
       ERRORTokenCount: 0,
       ParseErrorCallCount: 0,
+      DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },
   },

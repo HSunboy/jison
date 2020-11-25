@@ -1,58 +1,68 @@
 {
+  id: -1,
+  token: null,
   fail: 1,
   spec: `%%
-"["[^\\\\]]"]" %{{{{{
+"["[^\\\\]"]" %{{{{{
 return "%{..%}";
 }}}}}%
 
 `,
   err: {
-    name: 'JisonLexerError',
-    message: `Lexical error on line 2: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
-
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
+    hash: {
+      errStr: `Lexical error on line 2: 
+Incorrectly terminated action code block. We're expecting the
+'%}}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
 
   Erroneous area:
 1: %%
-2: "["[^\\\\]]"]" %{{{{{
-^..........^
-3: return "%{..%}";
-4: }}}}}%`,
-    stack: `JisonLexerError: Lexical error on line 2: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
-
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
-
-  Erroneous area:
-1: %%
-2: "["[^\\\\]]"]" %{{{{{
-^..........^
+2: "["[^\\\\]"]" %{{{{{
+^..............^^^^^^
 3: return "%{..%}";
 4: }}}}}%
-    at Object.parseError (/lex-parser-cjs.js:6599:15)
-    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:8687:44)
-    at Object.yyError [as yyerror] (/lex-parser-cjs.js:8718:19)
-    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:10747:15)
-    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:9623:38)
-    at Object.lexer_next [as next] (/lex-parser-cjs.js:9746:28)
-    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:9893:18)
-    at fastLex (/lex-parser-cjs.js:7187:27)
-    at Object.parse (/lex-parser-cjs.js:7361:30)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:11697:25)
-    at Context.testEachParserExample (/all-tests.js:336:27)
+`,
+      recoverable: false,
+      text: '%{{{{{',
+      token: null,
+      line: 1,
+    },
+    message: `Lexical error on line 2: 
+Incorrectly terminated action code block. We're expecting the
+'%}}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+  Erroneous area:
+1: %%
+2: "["[^\\\\]"]" %{{{{{
+^..............^^^^^^
+3: return "%{..%}";
+4: }}}}}%
+`,
+    name: 'JisonLexerError',
+    stack: `JisonLexerError: Lexical error on line 2: 
+Incorrectly terminated action code block. We're expecting the
+'%}}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+  Erroneous area:
+1: %%
+2: "["[^\\\\]"]" %{{{{{
+^..............^^^^^^
+3: return "%{..%}";
+4: }}}}}%
+
+    at Object.parseError (/lex-parser-cjs.js:7067:15)
+    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:9162:44)
+    at Object.yyError [as yyerror] (/lex-parser-cjs.js:9193:19)
+    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:10760:19)
+    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10098:38)
+    at Object.lexer_next [as next] (/lex-parser-cjs.js:10221:28)
+    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:10368:18)
+    at fastLex (/lex-parser-cjs.js:7662:27)
+    at Object.parse (/lex-parser-cjs.js:7836:30)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12231:25)
+    at Context.testEachParserExample (/all-tests.js:466:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -67,78 +77,73 @@ rules (i.e. jison lex regexes) in "rules" state.
     at next (/runner.js:510:10)
     at Immediate._onImmediate (/runner.js:572:5)
     at processImmediate (/timers.js:456:21)`,
-    hash: {
-      errStr: `Lexical error on line 2: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
-
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
-
-  Erroneous area:
-1: %%
-2: "["[^\\\\]]"]" %{{{{{
-^..........^
-3: return "%{..%}";
-4: }}}}}%`,
-      recoverable: false,
-      text: ']',
-      token: null,
-      line: 1,
-      loc: {
-        first_line: 2,
-        first_column: 8,
-        last_line: 2,
-        last_column: 9,
-        range: [
-          11,
-          12,
-        ],
-      },
-      yy: {
+  },
+  __extra_diag_info__: {
+    pre_parse_callback_callCount: 1,
+    post_parse_callback_callCount: 1,
+    post_parse_diaginfo: {
+      sharedState_yy: {
         actionInclude: [],
         options: {},
+        startConditions: {},
         __options_flags__: 0,
         __options_category_description__: 'the lexer rules definition section',
-        startConditions: {},
-        __context_description__: [
-          '???CONTEXT???',
+        __inside_scoped_ruleset__: false,
+        __context_cfg_stack__: [
+          {
+            flags: 0,
+            descr: '???',
+            scoped: false,
+          },
         ],
+        depth: 0,
+        include_command_allowed: false,
       },
-      lexer: {
-        yy: {},
-        _input: '',
-        _clear_state: -1,
-        _signaled_error_token: false,
-        done: false,
-        yylineno: 0,
-        matched: '',
-        conditionStack: [
-          'INITIAL',
-        ],
-        yylloc: {
-          first_line: 1,
-          first_column: 0,
-          last_line: 1,
-          last_column: 0,
-          range: [
-            0,
-            0,
-          ],
+      hash: {
+        errStr: null,
+        exception: null,
+        text: '%{{{{{',
+        value: '%{{{{{',
+        token: '"$accept"',
+        token_id: 0,
+        line: 1,
+        expected: null,
+        recoverable: false,
+        state: 92,
+        action: 2,
+        new_state: 92,
+        stack_pointer: 7,
+      },
+      reentrant_call_depth: 1,
+      error_infos_stack: [
+        {
+          errStr: null,
+          exception: null,
+          text: '%{{{{{',
+          value: '%{{{{{',
+          token: '"$accept"',
+          token_id: 0,
+          line: 1,
+          expected: null,
+          recoverable: false,
+          state: 92,
+          action: 2,
+          new_state: 92,
+          stack_pointer: 7,
         },
-        offset: 0,
-        base_position: 0,
-        yytext: '',
-        yyleng: 0,
-        match: '',
-        matches: false,
-        _more: false,
-        _backtrack: false,
-      },
+      ],
+      error_recovery_stack: [],
+      error_infos_stack_size: 1,
+      error_recovery_stack_size: 0,
     },
+    reentrant_call_depth: 0,
+    error_infos_stack_size: 0,
+    error_recovery_stack_size: 0,
   },
+  __original_input__: `%%
+"["[^\\\\]"]" %{{{{{
+return "%{..%}";
+}}}}}%
+
+`,
 }

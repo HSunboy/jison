@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'base',
     yylloc: {
@@ -30,7 +30,7 @@
     },
   },
   {
-    id: 52,
+    id: 53,
     token: '"OPTION_STRING"',
     yytext: '"./base.file"',
     yylloc: {
@@ -75,7 +75,7 @@
     },
   },
   {
-    id: 53,
+    id: 54,
     token: '"OPTION_VALUE"',
     yytext: 'extension',
     yylloc: {
@@ -90,7 +90,7 @@
     },
   },
   {
-    id: 52,
+    id: 53,
     token: '"OPTION_STRING"',
     yytext: '"/tmp/qux"',
     yylloc: {
@@ -277,6 +277,7 @@
       EOFTokenCount: 4,
       ERRORTokenCount: 0,
       ParseErrorCallCount: 0,
+      DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },
   },

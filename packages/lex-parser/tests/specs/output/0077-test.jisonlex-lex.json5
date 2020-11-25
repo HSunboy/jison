@@ -15,7 +15,7 @@
     },
   },
   {
-    id: 50,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"["',
     yylloc: {
@@ -45,7 +45,7 @@
     },
   },
   {
-    id: 48,
+    id: 49,
     token: '"REGEX_SET"',
     yytext: "abc -> 'BAD_REGEX' // unterminated regex set...",
     yylloc: {
@@ -60,106 +60,233 @@
     },
   },
   {
-    id: -42,
-    token: null,
-    yytext: '[object Object]\n',
-    yylloc: {
-      first_line: 2,
-      first_column: 51,
-      last_line: 3,
-      last_column: 0,
-      range: [
-        54,
-        55,
-      ],
-    },
-  },
-  {
-    id: -42,
-    token: null,
-    yytext: '[object Object]\n',
-    yylloc: {
-      first_line: 3,
-      first_column: 0,
-      last_line: 4,
-      last_column: 0,
-      range: [
-        55,
-        56,
-      ],
-    },
-  },
-  {
     id: 48,
-    token: '"REGEX_SET"',
-    yytext: "// Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...",
-    yylloc: {
-      first_line: 4,
-      first_column: 0,
-      last_line: 4,
-      last_column: 105,
-      range: [
-        56,
-        161,
-      ],
+    token: '"UNTERMINATED_REGEX_SET"',
+    yytext: {
+      orig: '',
+      errorDiag: {
+        inputPos: 133,
+        yytext: '',
+        yyleng: 0,
+        matches: [
+          '\n',
+          '\n',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+        hash: {
+          errStr: `Lexical error on line 2: 
+regex [...] sets cannot span multiple lines.
+
+If you want a CR/LF to be part of a regex set, you can simply
+specify those as character escapes '\\r' and '\\n'.
+
+  Erroneous area:
+1: %%
+2: "["[abc -> 'BAD_REGEX' // unterminated regex set...
+^.....................................................^
+3: 
+4: // Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...
+`,
+          recoverable: false,
+          text: '',
+          token: null,
+          line: 1,
+          loc: {
+            first_line: 2,
+            first_column: 51,
+            last_line: 2,
+            last_column: 51,
+            range: [
+              54,
+              54,
+            ],
+          },
+          yy: {
+            depth: 0,
+            include_command_allowed: false,
+          },
+          lexer: {
+            EOF: 1,
+            ERROR: 2,
+            __error_infos: [
+              {
+                errStr: `Lexical error on line 2: 
+regex [...] sets cannot span multiple lines.
+
+If you want a CR/LF to be part of a regex set, you can simply
+specify those as character escapes '\\r' and '\\n'.
+
+  Erroneous area:
+1: %%
+2: "["[abc -> 'BAD_REGEX' // unterminated regex set...
+^.....................................................^
+3: 
+4: // Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...
+`,
+                recoverable: false,
+                text: '',
+                token: null,
+                line: 1,
+                loc: {
+                  first_line: 2,
+                  first_column: 51,
+                  last_line: 2,
+                  last_column: 51,
+                  range: [
+                    54,
+                    54,
+                  ],
+                },
+                yy: {
+                  depth: 0,
+                  include_command_allowed: false,
+                },
+                lexer: '[lexer]',
+              },
+            ],
+            __decompressed: true,
+            done: true,
+            _backtrack: false,
+            _input: '',
+            _more: false,
+            _signaled_error_token: false,
+            _clear_state: 0,
+            conditionStack: [
+              'INITIAL',
+              'code',
+            ],
+            match: '',
+            matched: `%%
+"["[abc -> 'BAD_REGEX' // unterminated regex set...
+
+// Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...
+
+"dummy" -> 'GOOD_DUMMY'
+`,
+            matches: false,
+            yytext: '',
+            offset: 187,
+            base_position: 0,
+            yyleng: 0,
+            yylineno: 6,
+            yylloc: {
+              first_line: 7,
+              first_column: 0,
+              last_line: 7,
+              last_column: 0,
+              range: [
+                187,
+                187,
+              ],
+            },
+            CRLF_Re: {
+              re: '/\\r\\n?|\\n/',
+              source: '\\r\\n?|\\n',
+              flags: '',
+            },
+            options: {
+              xregexp: true,
+              ranges: true,
+              trackPosition: true,
+              easy_keyword_rules: true,
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+          },
+        },
+      },
     },
+    yylloc: '[reference to sibling --> *.[4].yytext.errorDiag.hash.lexer.__error_infos.[0].loc]',
   },
   {
-    id: -42,
-    token: null,
-    yytext: '[object Object]\n',
-    yylloc: {
-      first_line: 4,
-      first_column: 105,
-      last_line: 5,
-      last_column: 0,
-      range: [
-        161,
-        162,
-      ],
-    },
-  },
-  {
-    id: -42,
-    token: null,
-    yytext: '[object Object]\n',
-    yylloc: {
-      first_line: 5,
-      first_column: 0,
-      last_line: 6,
-      last_column: 0,
-      range: [
-        162,
-        163,
-      ],
-    },
-  },
-  {
-    id: 48,
-    token: '"REGEX_SET"',
-    yytext: `"dummy" -> 'GOOD_DUMMY'`,
+    id: 51,
+    token: '"STRING_LIT"',
+    yytext: '"dummy"',
     yylloc: {
       first_line: 6,
       first_column: 0,
+      last_line: 6,
+      last_column: 7,
+      range: [
+        163,
+        170,
+      ],
+    },
+  },
+  {
+    id: 35,
+    token: '"ARROW_ACTION_START"',
+    yytext: '->',
+    yylloc: {
+      first_line: 6,
+      first_column: 8,
+      last_line: 6,
+      last_column: 10,
+      range: [
+        171,
+        173,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: ' ',
+    yylloc: {
+      first_line: 6,
+      first_column: 10,
+      last_line: 6,
+      last_column: 11,
+      range: [
+        173,
+        174,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: "'GOOD_DUMMY'",
+    yylloc: {
+      first_line: 6,
+      first_column: 11,
       last_line: 6,
       last_column: 23,
       range: [
-        163,
+        174,
         186,
       ],
     },
   },
   {
-    id: -42,
-    token: null,
-    yytext: '[object Object]\n',
+    id: 24,
+    token: '"ACTION_END"',
+    yytext: '',
     yylloc: {
       first_line: 6,
       first_column: 23,
+      last_line: 6,
+      last_column: 23,
+      range: [
+        186,
+        186,
+      ],
+    },
+  },
+  {
+    id: 34,
+    token: '"%%"',
+    yytext: '',
+    yylloc: {
+      first_line: 7,
+      first_column: 0,
       last_line: 7,
       last_column: 0,
       range: [
-        186,
+        187,
         187,
       ],
     },
@@ -231,7 +358,8 @@
       totalTokenCount: 15,
       EOFTokenCount: 4,
       ERRORTokenCount: 0,
-      ParseErrorCallCount: 5,
+      ParseErrorCallCount: 1,
+      DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },
   },

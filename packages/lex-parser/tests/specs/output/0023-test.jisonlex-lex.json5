@@ -1,7 +1,6 @@
 [
-  5,
   {
-    id: 33,
+    id: 34,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
@@ -16,7 +15,7 @@
     },
   },
   {
-    id: 49,
+    id: 51,
     token: '"STRING_LIT"',
     yytext: '"["',
     yylloc: {
@@ -31,7 +30,7 @@
     },
   },
   {
-    id: 45,
+    id: 46,
     token: '"REGEX_SET_START"',
     yytext: '[',
     yylloc: {
@@ -46,7 +45,7 @@
     },
   },
   {
-    id: 47,
+    id: 49,
     token: '"REGEX_SET"',
     yytext: '^\\\\',
     yylloc: {
@@ -61,7 +60,7 @@
     },
   },
   {
-    id: 46,
+    id: 47,
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
@@ -75,194 +74,559 @@
       ],
     },
   },
-  -1,
   {
-    fail: 1,
-    err: {
-      name: 'JisonLexerError',
-      message: `Lexical error on line 2: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
-
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
+    id: 51,
+    token: '"STRING_LIT"',
+    yytext: '"]"',
+    yylloc: {
+      first_line: 2,
+      first_column: 8,
+      last_line: 2,
+      last_column: 11,
+      range: [
+        11,
+        14,
+      ],
+    },
+  },
+  {
+    id: 25,
+    token: '"UNTERMINATED_ACTION_BLOCK"',
+    yytext: {
+      orig: '%{{{{{',
+      errorDiag: {
+        inputPos: 26,
+        yytext: '%{{{{{',
+        yyleng: 6,
+        matches: [
+          '%{{{{{',
+        ],
+        activeCondition: 'action',
+        conditionStackDepth: 3,
+        hash: {
+          errStr: `Lexical error on line 2: 
+Incorrectly terminated action code block. We're expecting the
+'%}}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
 
   Erroneous area:
 1: %%
-2: "["[^\\\\]]"]" %{{{{{
-^..........^
-3: return "%{..%}";
-4: }}}}}%`,
-      stack: `JisonLexerError: Lexical error on line 2: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
-
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
-
-  Erroneous area:
-1: %%
-2: "["[^\\\\]]"]" %{{{{{
-^..........^
+2: "["[^\\\\]"]" %{{{{{
+^..............^^^^^^
 3: return "%{..%}";
 4: }}}}}%
-    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:8693:13)
-    at Object.yyError [as yyerror] (/lex-parser-cjs.js:8718:19)
-    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:10747:15)
-    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:9623:38)
-    at Object.lexer_next [as next] (/lex-parser-cjs.js:9746:28)
-    at Object.lexer_lex [as lex] (/lex-parser-cjs.js:9831:18)
-    at Context.testEachParserExample (/all-tests.js:232:37)
-    at callFn (/runnable.js:364:21)
-    at Test.Runnable.run (/runnable.js:352:5)
-    at Runner.runTest (/runner.js:677:10)
-    at /runner.js:801:12
-    at next (/runner.js:594:14)
-    at /runner.js:604:7
-    at next (/runner.js:486:14)
-    at cbHookRun (/runner.js:551:7)
-    at done (/runnable.js:308:5)
-    at callFn (/runnable.js:387:7)
-    at Hook.Runnable.run (/runnable.js:352:5)
-    at next (/runner.js:510:10)
-    at Immediate._onImmediate (/runner.js:572:5)
-    at processImmediate (/timers.js:456:21)`,
-      hash: {
-        errStr: `Lexical error on line 2: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
-
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
-
-  Erroneous area:
-1: %%
-2: "["[^\\\\]]"]" %{{{{{
-^..........^
-3: return "%{..%}";
-4: }}}}}%`,
-        recoverable: false,
-        text: ']',
-        token: null,
-        line: 1,
-        loc: {
-          first_line: 2,
-          first_column: 8,
-          last_line: 2,
-          last_column: 9,
-          range: [
-            11,
-            12,
-          ],
-        },
-        yy: {},
-        lexer: {
-          EOF: 1,
-          ERROR: 2,
-          __error_infos: [
-            {
-              errStr: `Lexical error on line 2: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
-
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
-
-  Erroneous area:
-1: %%
-2: "["[^\\\\]]"]" %{{{{{
-^..........^
-3: return "%{..%}";
-4: }}}}}%`,
-              recoverable: false,
-              text: ']',
-              token: null,
-              line: 1,
-              loc: {
-                first_line: 2,
-                first_column: 8,
-                last_line: 2,
-                last_column: 9,
-                range: [
-                  11,
-                  12,
-                ],
-              },
-              yy: {},
-              lexer: '[lexer]',
-            },
-          ],
-          __decompressed: true,
-          done: false,
-          _backtrack: false,
-          _input: `"]" %{{{{{
-return "%{..%}";
-}}}}}%
-
 `,
-          _more: false,
-          _signaled_error_token: false,
-          _clear_state: 1,
-          conditionStack: [
-            'INITIAL',
-            'rules',
-          ],
-          match: ']',
-          matched: '%%\n"["[^\\\\]]',
-          matches: [
-            ']',
-          ],
-          yytext: ']',
-          offset: 12,
-          base_position: 0,
-          yyleng: 1,
-          yylineno: 1,
-          yylloc: {
+          recoverable: false,
+          text: '%{{{{{',
+          token: null,
+          line: 1,
+          loc: {
             first_line: 2,
-            first_column: 8,
+            first_column: 12,
             last_line: 2,
-            last_column: 9,
+            last_column: 18,
             range: [
-              11,
-              12,
+              15,
+              21,
             ],
           },
-          CRLF_Re: {
-            re: '/\\r\\n?|\\n/',
-            source: '\\r\\n?|\\n',
-            flags: '',
+          yy: {
+            depth: 0,
+            include_command_allowed: false,
           },
-          options: {
-            xregexp: true,
-            ranges: true,
-            trackPosition: true,
-            easy_keyword_rules: true,
-          },
-          yy: {},
-          __original_input__: `%%
-"["[^\\\\]]"]" %{{{{{
+          lexer: {
+            EOF: 1,
+            ERROR: 2,
+            __error_infos: [
+              {
+                errStr: `Lexical error on line 2: 
+Incorrectly terminated action code block. We're expecting the
+'%}}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+  Erroneous area:
+1: %%
+2: "["[^\\\\]"]" %{{{{{
+^..............^^^^^^
+3: return "%{..%}";
+4: }}}}}%
+`,
+                recoverable: false,
+                text: '%{{{{{',
+                token: null,
+                line: 1,
+                loc: {
+                  first_line: 2,
+                  first_column: 12,
+                  last_line: 2,
+                  last_column: 18,
+                  range: [
+                    15,
+                    21,
+                  ],
+                },
+                yy: {
+                  depth: 0,
+                  include_command_allowed: false,
+                },
+                lexer: '[lexer]',
+              },
+              {
+                errStr: `Lexical error on line 4: 
+unsupported lexer input encountered while lexing
+rules (i.e. jison lex regexes) in "rules" state.
+
+    NOTE: When you want this input to be interpreted as a LITERAL part
+          of a lex rule regex, you MUST enclose it in double or
+          single quotes.
+
+          If not, then know that this input is not accepted as a valid
+          regex expression here in jison-lex rules.
+
+  Erroneous area:
+1: %%
+2: "["[^\\\\]"]" %{{{{{
+3: return "%{..%}";
+4: }}}}}%
+^.......^
+5: 
+6: 
+`,
+                recoverable: false,
+                text: '%',
+                token: null,
+                line: 3,
+                loc: {
+                  first_line: 4,
+                  first_column: 5,
+                  last_line: 4,
+                  last_column: 6,
+                  range: [
+                    44,
+                    45,
+                  ],
+                },
+                yy: '[reference to sibling --> *.[6].yytext.errorDiag.hash.lexer.__error_infos.[0].yy]',
+                lexer: '[lexer]',
+              },
+            ],
+            __decompressed: true,
+            done: true,
+            _backtrack: false,
+            _input: '',
+            _more: false,
+            _signaled_error_token: false,
+            _clear_state: 0,
+            conditionStack: [
+              'INITIAL',
+              'code',
+            ],
+            match: '',
+            matched: `%%
+"["[^\\\\]"]" %{{{{{
 return "%{..%}";
 }}}}}%
 
 `,
+            matches: false,
+            yytext: '',
+            offset: 47,
+            base_position: 0,
+            yyleng: 0,
+            yylineno: 5,
+            yylloc: {
+              first_line: 6,
+              first_column: 0,
+              last_line: 6,
+              last_column: 0,
+              range: [
+                47,
+                47,
+              ],
+            },
+            CRLF_Re: {
+              re: '/\\r\\n?|\\n/',
+              source: '\\r\\n?|\\n',
+              flags: '',
+            },
+            options: {
+              xregexp: true,
+              ranges: true,
+              trackPosition: true,
+              easy_keyword_rules: true,
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+          },
         },
       },
+    },
+    yylloc: '[reference to sibling --> *.[6].yytext.errorDiag.hash.lexer.__error_infos.[0].loc]',
+  },
+  {
+    id: 24,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 2,
+      first_column: 18,
+      last_line: 2,
+      last_column: 18,
+      range: [
+        21,
+        21,
+      ],
+    },
+  },
+  {
+    id: 52,
+    token: '"CHARACTER_LIT"',
+    yytext: 'return',
+    yylloc: {
+      first_line: 3,
+      first_column: 0,
+      last_line: 3,
+      last_column: 6,
+      range: [
+        22,
+        28,
+      ],
+    },
+  },
+  {
+    id: 26,
+    token: '"ACTION_START"',
+    yytext: ' ',
+    yylloc: {
+      first_line: 3,
+      first_column: 6,
+      last_line: 3,
+      last_column: 7,
+      range: [
+        28,
+        29,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: '"%{..%}"',
+    yylloc: {
+      first_line: 3,
+      first_column: 7,
+      last_line: 3,
+      last_column: 15,
+      range: [
+        29,
+        37,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: ';',
+    yylloc: {
+      first_line: 3,
+      first_column: 15,
+      last_line: 3,
+      last_column: 16,
+      range: [
+        37,
+        38,
+      ],
+    },
+  },
+  {
+    id: 24,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 3,
+      first_column: 16,
+      last_line: 3,
+      last_column: 16,
+      range: [
+        38,
+        38,
+      ],
+    },
+  },
+  {
+    id: 5,
+    token: '"}"',
+    yytext: '}',
+    yylloc: {
+      first_line: 4,
+      first_column: 0,
+      last_line: 4,
+      last_column: 1,
+      range: [
+        39,
+        40,
+      ],
+    },
+  },
+  {
+    id: 5,
+    token: '"}"',
+    yytext: '}',
+    yylloc: {
+      first_line: 4,
+      first_column: 1,
+      last_line: 4,
+      last_column: 2,
+      range: [
+        40,
+        41,
+      ],
+    },
+  },
+  {
+    id: 5,
+    token: '"}"',
+    yytext: '}',
+    yylloc: {
+      first_line: 4,
+      first_column: 2,
+      last_line: 4,
+      last_column: 3,
+      range: [
+        41,
+        42,
+      ],
+    },
+  },
+  {
+    id: 5,
+    token: '"}"',
+    yytext: '}',
+    yylloc: {
+      first_line: 4,
+      first_column: 3,
+      last_line: 4,
+      last_column: 4,
+      range: [
+        42,
+        43,
+      ],
+    },
+  },
+  {
+    id: 5,
+    token: '"}"',
+    yytext: '}',
+    yylloc: {
+      first_line: 4,
+      first_column: 4,
+      last_line: 4,
+      last_column: 5,
+      range: [
+        43,
+        44,
+      ],
+    },
+  },
+  {
+    id: 2,
+    token: '"error"',
+    yytext: {
+      orig: '%',
+      errorDiag: {
+        inputPos: 2,
+        yytext: '%',
+        yyleng: 1,
+        matches: [
+          '%',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+        hash: {
+          errStr: `Lexical error on line 4: 
+unsupported lexer input encountered while lexing
+rules (i.e. jison lex regexes) in "rules" state.
+
+    NOTE: When you want this input to be interpreted as a LITERAL part
+          of a lex rule regex, you MUST enclose it in double or
+          single quotes.
+
+          If not, then know that this input is not accepted as a valid
+          regex expression here in jison-lex rules.
+
+  Erroneous area:
+1: %%
+2: "["[^\\\\]"]" %{{{{{
+3: return "%{..%}";
+4: }}}}}%
+^.......^
+5: 
+6: 
+`,
+          recoverable: false,
+          text: '%',
+          token: null,
+          line: 3,
+          loc: {
+            first_line: 4,
+            first_column: 5,
+            last_line: 4,
+            last_column: 6,
+            range: [
+              44,
+              45,
+            ],
+          },
+          yy: {
+            depth: 0,
+            include_command_allowed: false,
+          },
+          lexer: {
+            EOF: 1,
+            ERROR: 2,
+            __error_infos: '[reference to sibling array --> *.[6].yytext.errorDiag.hash.lexer.__error_infos, length = 2]',
+            __decompressed: true,
+            done: true,
+            _backtrack: false,
+            _input: '',
+            _more: false,
+            _signaled_error_token: false,
+            _clear_state: 0,
+            conditionStack: [
+              'INITIAL',
+              'code',
+            ],
+            match: '',
+            matched: `%%
+"["[^\\\\]"]" %{{{{{
+return "%{..%}";
+}}}}}%
+
+`,
+            matches: false,
+            yytext: '',
+            offset: 47,
+            base_position: 0,
+            yyleng: 0,
+            yylineno: 5,
+            yylloc: {
+              first_line: 6,
+              first_column: 0,
+              last_line: 6,
+              last_column: 0,
+              range: [
+                47,
+                47,
+              ],
+            },
+            CRLF_Re: {
+              re: '/\\r\\n?|\\n/',
+              source: '\\r\\n?|\\n',
+              flags: '',
+            },
+            options: {
+              xregexp: true,
+              ranges: true,
+              trackPosition: true,
+              easy_keyword_rules: true,
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+          },
+        },
+      },
+    },
+    yylloc: '[reference to sibling --> *.[6].yytext.errorDiag.hash.lexer.__error_infos.[1].loc]',
+  },
+  {
+    id: 34,
+    token: '"%%"',
+    yytext: '',
+    yylloc: {
+      first_line: 6,
+      first_column: 0,
+      last_line: 6,
+      last_column: 0,
+      range: [
+        47,
+        47,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 6,
+      first_column: 0,
+      last_line: 6,
+      last_column: 0,
+      range: [
+        47,
+        47,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 6,
+      first_column: 0,
+      last_line: 6,
+      last_column: 0,
+      range: [
+        47,
+        47,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 6,
+      first_column: 0,
+      last_line: 6,
+      last_column: 0,
+      range: [
+        47,
+        47,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 6,
+      first_column: 0,
+      last_line: 6,
+      last_column: 0,
+      range: [
+        47,
+        47,
+      ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 24,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 1,
+      ParseErrorCallCount: 2,
+      DetectedParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
     },
   },
 ]
