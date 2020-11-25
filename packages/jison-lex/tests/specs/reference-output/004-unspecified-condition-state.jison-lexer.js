@@ -15,24 +15,24 @@ spec file:
     <NUMBER>LEXER_RULE_REGEX    return 'TOK';
     
   Erroneous code:
-7: <NUMBER>\\d+         -> 'NUMBER';
+8: <NUMBER>\\d+         -> 'NUMBER';
 ^...^^^^^^
-8: 
+9: 
 
 
-while JSON5 Mode produces Error: JSON5: invalid character '%' at 2:1`,
+while JSON5 Mode produces Error: JSON5: invalid character '%' at 3:1`,
     type: 'Error',
-    stack: `SyntaxError: JSON5: invalid character '%' at 2:1
+    stack: `SyntaxError: JSON5: invalid character '%' at 3:1
     at syntaxError (/index.js:1954:16)
     at invalidChar (/index.js:1895:13)
     at Object.value (/index.js:964:16)
     at lex (/index.js:743:41)
     at Object.parse (/index.js:689:18)
-    at autodetectAndConvertToJSONformat (/regexp-lexer-cjs.js:12846:51)
-    at processGrammar (/regexp-lexer-cjs.js:15577:12)
-    at test_me (/regexp-lexer-cjs.js:13765:16)
-    at new RegExpLexer (/regexp-lexer-cjs.js:13883:17)
-    at Context.testEachLexerExample (/regexplexer.js:3637:25)
+    at autodetectAndConvertToJSONformat (/regexp-lexer-cjs.js:13412:51)
+    at processGrammar (/regexp-lexer-cjs.js:16489:12)
+    at test_me (/regexp-lexer-cjs.js:14409:23)
+    at new RegExpLexer (/regexp-lexer-cjs.js:14527:17)
+    at Context.testEachLexerExample (/regexplexer.js:3685:25)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)

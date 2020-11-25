@@ -1,5 +1,5 @@
 
-                    
+
 // custom lexer...
   console.log('The moment the custom lexer gets defined...');
   var lexer = {
@@ -17,10 +17,10 @@
   };
 ;
 
-                    //=============================================================================
-                    //                     JISON-LEX OPTIONS:
+//=============================================================================
+//                     JISON-LEX OPTIONS:
 
-                    {
+const lexerSpecConglomerate = {
   lexerActionsUseYYLENG: '???',
   lexerActionsUseYYLINENO: '???',
   lexerActionsUseYYTEXT: '???',
@@ -66,11 +66,26 @@
     EOF: 1, 
   }`,
   },
+  codeSections: [
+    {
+      qualifier: 'init',
+      include: "console.log('init')",
+    },
+    {
+      qualifier: '__misc__',
+      include: "console.log('_x_misc_x_')",
+    },
+  ],
+  importDecls: [],
+  unknownDecls: [],
   options: {
     moduleType: 'commonjs',
     debug: false,
     enableDebugLogs: false,
     json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
     dumpSourceCodeOnFailure: true,
     throwErrorOnCompileFailure: true,
     defaultModuleName: 'lexer',
@@ -81,12 +96,12 @@
     ranges: false,
     trackPosition: true,
     caseInsensitive: false,
-    exportSourceCode: false,
+    exportSourceCode: {
+      enabled: false,
+    },
     exportAST: false,
     prettyCfg: true,
-    noMain: true,
   },
-  moduleType: 'commonjs',
   conditions: {
     INITIAL: {
       rules: [],
@@ -94,7 +109,7 @@
     },
   },
   performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
-            var yy_ = this;
+            const yy_ = this;
 
             // custom lexer...
   console.log('The moment the custom lexer gets defined...');
@@ -111,7 +126,7 @@
     ERROR: 2,
     EOF: 1, 
   }
-var YYSTATE = YY_START;
+const YYSTATE = YY_START;
 /* no rules ==> no rule SWITCH! */
         }`,
   caseHelperInclude: `{
@@ -144,4 +159,3 @@ var YYSTATE = YY_START;
   is_custom_lexer: true,
 }
 
-                

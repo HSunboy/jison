@@ -49,11 +49,11 @@ write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
 2: "["[]"]" -> 'BAD_REGEX' // empty regex set...
 ^......^
 
-    at Object.parseError (/lex-parser-cjs.js:7067:15)
-    at Object.yyError (/lex-parser-cjs.js:7257:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:4808:14)
-    at Object.parse (/lex-parser-cjs.js:8524:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12231:25)
+    at Object.parseError (/lex-parser-cjs.js:7071:15)
+    at Object.yyError (/lex-parser-cjs.js:7261:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4812:14)
+    at Object.parse (/lex-parser-cjs.js:8528:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12235:25)
     at Context.testEachParserExample (/all-tests.js:466:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
