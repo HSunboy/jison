@@ -628,8 +628,8 @@ definition
             let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
             let end_marker_msg = marker_msg.replace(/\{/g, '}');
             yyerror(rmCommonWS`
-                The '%code ID %{...%\}' initialization code section must be properly 
-                wrapped in block start markers (\`%{\`${marker_msg}) 
+                The '%code ID %{...%\}' initialization code section must be properly
+                wrapped in block start markers (\`%{\`${marker_msg})
                 and matching end markers (\`%}\`${end_marker_msg}). Expected format:
 
                     %code qualifier_name {action code}
@@ -646,9 +646,9 @@ definition
     | init_code_keyword error ACTION_START /* ...action */ error OPTIONS_END
         {
             yyerror(rmCommonWS`
-                Each '%code' initialization code section must be qualified by a name, 
-				e.g. 'required' before the action code itself:
-				
+                Each '%code' initialization code section must be qualified by a name,
+                e.g. 'required' before the action code itself:
+
                     %code qualifier_name {action code}
 
                   Erroneous code:
@@ -663,12 +663,12 @@ definition
     | init_code_keyword error OPTIONS_END
         {
             yyerror(rmCommonWS`
-                Each '%code' initialization code section must be qualified by a name, 
-				e.g. 'required' before the action code itself.
+                Each '%code' initialization code section must be qualified by a name,
+                e.g. 'required' before the action code itself.
 
-                The '%code ID %{...%\}' initialization code section must be properly 
-                wrapped in block start markers (e.g. \`%{\`) and matching end markers 
-				(e.g. \`%}\`). Expected format:
+                The '%code ID %{...%\}' initialization code section must be properly
+                wrapped in block start markers (e.g. \`%{\`) and matching end markers
+                (e.g. \`%}\`). Expected format:
 
                     %code qualifier_name {action code}
 
@@ -875,10 +875,10 @@ scoped_rules_collective
 
 rule_block
     : rule_block rule
-        { 
-            $$ = $rule_block; 
+        {
+            $$ = $rule_block;
             if ($rule) {
-                $$.push($rule); 
+                $$.push($rule);
             }
         }
     | ε
@@ -949,7 +949,7 @@ rule
                     #
                     # Please be aware that the reported compile error MAY be referring
                     # to the wrapper code which is added by JISON automatically when
-                    # processing arrow actions: the entire action code chunk 
+                    # processing arrow actions: the entire action code chunk
                     # (including wrapper) is:
 
                         ${indentedSrc}
@@ -1054,9 +1054,9 @@ rule
                 ${$error.errStr}
             `);
         }
-    // ---------------------------------------------------------------------------------           
+    // ---------------------------------------------------------------------------------
     // ---- additional chunks one MAY encounter *instead* of a regular lexer rule: -----
-    // ---------------------------------------------------------------------------------           
+    // ---------------------------------------------------------------------------------
     //
     // may be a *lexer setup code section*, e.g.
     //
@@ -1073,7 +1073,7 @@ rule
         {
             if (yy.__inside_scoped_ruleset__) {
                 yyerror(rmCommonWS`
-                    '%{...%}' lexer setup action code sections are not accepted inside 
+                    '%{...%}' lexer setup action code sections are not accepted inside
                     '<...>{ ... }' scoped rule blocks. Move this action code to the top
                     of the '%%' section instead.
 
@@ -1543,7 +1543,7 @@ any_group_regex
     | REGEX_SET_START REGEX_SET_END
         {
             yyerror(rmCommonWS`
-                Empty lex rule regex set '[]' is not legal. 
+                Empty lex rule regex set '[]' is not legal.
 
                 If you want to match ANY character (including CR/LF characters) you may
                 write '[^]' or '[\s\S]', which are standard idioms for this in JavaScript.
@@ -1728,7 +1728,7 @@ option
             $$ = null;
         }
 // WARNING: this production placed here will cause a LR(1) conflict, due to the options not necessarily being
-// separated by ',' comma's, so it is ambiguous if 'option_name = option_value' should then be interpreted 
+// separated by ',' comma's, so it is ambiguous if 'option_name = option_value' should then be interpreted
 // as a correct option *or* as a lone 'option_name' *plus* '%epsilon = option_value'.
 //
 // To resolve this conflict, we move this production to the 'option_list' where it MAY be applied when the
@@ -1821,14 +1821,14 @@ epilogue
         {
             $$ = '';
         }
-    | start_epilogue_marker 
+    | start_epilogue_marker
         {
-            yy.popContext('Line 1803');
+            yy.popContext('Line 1826');
 
             $$ = '';
         }
     | start_epilogue_marker epilogue_chunks
-        { 
+        {
             let srcCode = trimActionCode($epilogue_chunks);
             if (srcCode) {
                 let rv = checkActionBlock(srcCode, @epilogue_chunks, yy);
@@ -1842,7 +1842,7 @@ epilogue
                 }
             }
 
-            yy.popContext('Line 1822');
+            yy.popContext('Line 1845');
 
             $$ = srcCode;
         }
@@ -1864,9 +1864,9 @@ epilogue_chunk
     // `%include` automatically injects a `ACTION_START` / `ACTION_START_AT_SOL` token.
     // We don't tolerate `ACTION_START` tokens -- indented `%{` markers -- in the epilogue.
     //
-    // To help epilogue code to delineate code chunks from %include blocks in 
-    // pathological condition, we do support wrapping chunks of epilogue 
-    // in `%{...%}`. 
+    // To help epilogue code to delineate code chunks from %include blocks in
+    // pathological condition, we do support wrapping chunks of epilogue
+    // in `%{...%}`.
     //
     : ACTION_START_AT_SOL action ACTION_END
         {
@@ -1983,7 +1983,7 @@ include_macro_code
                 }
             }
 
-            yy.popContext('Line 1963');
+            yy.popContext('Line 1986');
 
             // And no, we don't support nested '%include':
             $$ = '\n// Included by Jison: ' + path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + path + '\n\n';
@@ -1999,7 +1999,7 @@ include_macro_code
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 1979');
+            yy.popContext('Line 2002');
             $$ = null;
         }
     ;
