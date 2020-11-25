@@ -354,7 +354,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 
 
 //
-// The start marker recognition rule is "specially made" as we want to recognize 
+// The start marker recognition rule is "specially made" as we want to recognize
 // `{{` markers as special markers, just like `%{`,
 // while we also want to recognize `{` markers, but only while we are parsing lexer
 // match rules.
@@ -676,7 +676,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 
 // We don't bother decoding escaped characters inside a regex [...] set as those will
 // be converted anyway (and without any fuss) once we feed the regex into a XRegExp
-// instance in the engine. 
+// instance in the engine.
 // The only thing we must bother about is the user using NAME_BRACE macro expansions
 // inside a regex [...] set, hence the special exclusion of '{' here:
 (?:"\\"[^{BR}]|[^\]\{{BR}])+            return 'REGEX_SET';
@@ -684,7 +684,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 "]"                                     this.popState();
                                         return 'REGEX_SET_END';
 
-{BR}                                    %{ 
+{BR}                                    %{
                                             this.popState();
                                             this.unput(yytext);
                                             yyerror(rmCommonWS`
@@ -829,13 +829,13 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 <*>.                                    %{
                                             /* b0rk on bad characters */
                                             yyerror(rmCommonWS`
-	                                            unsupported lexer input: ${dquote(yytext)}
-	                                            while lexing in ${dquote(this.topState())} state.
+                                                unsupported lexer input: ${dquote(yytext)}
+                                                while lexing in ${dquote(this.topState())} state.
 
-	                                              Erroneous area:
+                                                  Erroneous area:
                                                 ${this.prettyPrintRange(yylloc)}
                                             `);
-	                                        return 'error';
+                                            return 'error';
                                         %}
 
 <*><<EOF>>                              return 'EOF';

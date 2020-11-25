@@ -7,7 +7,7 @@
   err: {
     hash: {
       errStr: `
-Empty lex rule regex set '[]' is not legal. 
+Empty lex rule regex set '[]' is not legal.
     
 If you want to match ANY character (including CR/LF characters) you may
 write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
@@ -29,7 +29,7 @@ write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
       stack_pointer: 8,
     },
     message: `
-Empty lex rule regex set '[]' is not legal. 
+Empty lex rule regex set '[]' is not legal.
     
 If you want to match ANY character (including CR/LF characters) you may
 write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
@@ -40,7 +40,7 @@ write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
 `,
     name: 'JisonParserError',
     stack: `JisonParserError: 
-Empty lex rule regex set '[]' is not legal. 
+Empty lex rule regex set '[]' is not legal.
     
 If you want to match ANY character (including CR/LF characters) you may
 write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
@@ -108,7 +108,7 @@ write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
       error_infos_stack: [
         {
           errStr: `
-Empty lex rule regex set '[]' is not legal. 
+Empty lex rule regex set '[]' is not legal.
     
 If you want to match ANY character (including CR/LF characters) you may
 write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
@@ -148,7 +148,7 @@ write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
       error_recovery_stack: [
         {
           errStr: `
-Empty lex rule regex set '[]' is not legal. 
+Empty lex rule regex set '[]' is not legal.
     
 If you want to match ANY character (including CR/LF characters) you may
 write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
