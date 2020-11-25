@@ -246,8 +246,16 @@ describe('LEX spec lexer', function () {
 
             let grammar = filespec.grammar;
 
+            let countEOFs = 0;
+            let countERRORs = 0;
+            let countParseErrorCalls = 0;
+            let countDetectedParseErrorCalls = 0;
+            let countFATALs = 0;
+
             let yy = {
                 parseError: function customMainParseError(str, hash, ExceptionClass) {
+                    countParseErrorCalls++;
+
                     if (0) {
                         console.error("parseError: ", str, (new Error('')).stack);
                     }
@@ -270,11 +278,6 @@ describe('LEX spec lexer', function () {
                 }
             };
         
-            let countEOFs = 0;
-            let countERRORs = 0;
-            let countParseErrorCalls = 0;
-            let countFATALs = 0;
-
             try {
                 // Change CWD to the directory where the source grammar resides: this helps us properly
                 // %include any files mentioned in the grammar with relative paths:
@@ -309,8 +312,8 @@ describe('LEX spec lexer', function () {
                         }
                     }
                     else if (tok === -42) {
-                        countParseErrorCalls++;
-                        if (countParseErrorCalls >= maxERRORTokenCount) {
+                        countDetectedParseErrorCalls++;
+                        if (countDetectedParseErrorCalls >= maxERRORTokenCount) {
                             break;
                         }
                     }
@@ -340,6 +343,7 @@ describe('LEX spec lexer', function () {
                     EOFTokenCount: countEOFs,
                     ERRORTokenCount: countERRORs,
                     ParseErrorCallCount: countParseErrorCalls,
+                    DetectedParseErrorCallCount: countDetectedParseErrorCalls,
                     fatalExceptionCount: countFATALs
                 }
             });
