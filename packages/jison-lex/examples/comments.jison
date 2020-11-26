@@ -3,7 +3,7 @@
 // ...
 //  
 
-%include "include/comments.helpers.js"
+%include "includes/comments.helpers.js"
 
 lineEnd (\n\r|\r\n|[\n\r])
 commentName ([a-zA-Z]+("|"|[a-zA-Z]+)*(?=[\s]*))
