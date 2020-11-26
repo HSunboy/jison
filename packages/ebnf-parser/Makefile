@@ -34,7 +34,7 @@ npm-update:
 	-rm -f package-lock.json
 
 build:
-ifeq ($(wildcard ../../node_modules/.bin/jison),)
+ifeq ($(wildcard ../../dist-known-good/cli-cjs.js),)
 	$(error "### FAILURE: Make sure you have run 'make prep' before as the jison compiler is unavailable! ###")
 endif
 

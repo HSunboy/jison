@@ -6,6 +6,7 @@ import scanRegExp from './scanRegExp';
 import isLegalIdentifierInput from './isLegalIdentifierInput';
 import dquote from './dquote';
 import exec from './safe-code-exec-and-diag';
+import mkdirp from './mkdirp';
 import parse2AST from './parse-code-chunk-to-AST';
 import stringifier from './code-stringification';
 import detectIstanbulGlobal from './detect-istanbul';
@@ -33,6 +34,8 @@ export default {
     exec: exec.exec,
     dump: exec.dump,
     convertExceptionToObject: exec.convertExceptionToObject,
+
+    mkdirp,
 
     generateMapper4JisonGrammarIdentifiers: parse2AST.generateMapper4JisonGrammarIdentifiers,
     parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,

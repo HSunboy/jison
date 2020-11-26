@@ -782,5 +782,9 @@ yyerror(rmCommonWS\`
     it('extractSymbolTableFromFile: **TBD**', function () {
         assert.ok(typeof helpers.extractSymbolTableFromFile === 'function');
     });
+
+    it('mkdirp: **TBD**', function () {
+        assert.ok(typeof helpers.mkdirp === 'function');
+    });
 });
 

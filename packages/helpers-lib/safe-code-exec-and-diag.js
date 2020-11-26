@@ -16,7 +16,9 @@
 import fs from 'fs';
 import path from 'path';
 import JSON5 from '@gerhobbelt/json5';
-import mkdirp from 'mkdirp';
+
+import mkdirp from './mkdirp';
+import mkIdentifier from './mkIdentifier';
 
 
 
@@ -79,9 +81,12 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
 
     try {
         const dumpPaths = [ (options.outfile ? path.dirname(options.outfile) : null), options.inputPath, find_suitable_app_dump_path() ];
-        let dumpName = path.basename(options.inputFilename || options.moduleName || (options.outfile ? path.dirname(options.outfile) : null) || options.defaultModuleName || errname)
-        .replace(/\.[a-z]{1,5}$/i, '')          // remove extension .y, .yacc, .jison, ...whatever
-        .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
+        let dumpName = options.inputFilename || options.moduleName || (options.outfile ? path.dirname(options.outfile) : null) || options.defaultModuleName || errname;
+        // get the base name (i.e. the file name without extension)
+        // i.e. strip off only the extension and keep any other dots in the filename
+        dumpName = path.basename(dumpName, path.extname(dumpName));
+        // make sure it's legal in the destination filesystem: the least common denominator:
+        dumpName = mkIdentifier(dumpName)
         .substr(0, 100);
         if (dumpName === '' || dumpName === '_') {
             dumpName = '__bugger__';
@@ -97,8 +102,8 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
         }
 
         err_id = err_id || 'XXX';
-        err_id = err_id
-        .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
+        // make sure it's legal in the destination filesystem: the least common denominator.
+        err_id = mkIdentifier(err_id)
         .substr(0, 50);
 
         const ts = new Date();

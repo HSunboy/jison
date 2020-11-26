@@ -41,7 +41,6 @@
     "@gerhobbelt/nomnom": "1.8.4-30",
     "@gerhobbelt/xregexp": "4.4.0-32",
     "ast-util": "0.6.0",
-    "mkdirp": "^1.0.4",
     "recast": "0.20.4"
   },
   "devDependencies": {

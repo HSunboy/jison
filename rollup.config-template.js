@@ -28,7 +28,6 @@ export default {
       'assert': 'assert',
       'fs': 'fs',
       'jison-helpers-lib': 'helpers',
-      'mkdirp': 'mkdirp',
       'path': 'path',
       'process': 'process',
       'recast': 'recast',

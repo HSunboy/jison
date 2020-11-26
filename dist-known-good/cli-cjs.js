@@ -6,7 +6,6 @@
 var fs = require('fs');
 var path$1 = require('path');
 var JSON5 = require('@gerhobbelt/json5');
-var mkdirp = require('mkdirp');
 var XRegExp = require('@gerhobbelt/xregexp');
 var recast = require('recast');
 var babel = require('@babel/core');
@@ -20,7 +19,6 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
 var path__default = /*#__PURE__*/_interopDefaultLegacy(path$1);
 var JSON5__default = /*#__PURE__*/_interopDefaultLegacy(JSON5);
-var mkdirp__default = /*#__PURE__*/_interopDefaultLegacy(mkdirp);
 var XRegExp__default = /*#__PURE__*/_interopDefaultLegacy(XRegExp);
 var recast__default = /*#__PURE__*/_interopDefaultLegacy(recast);
 var assert__default = /*#__PURE__*/_interopDefaultLegacy(assert$1);
@@ -438,7 +436,7 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
                 d = d.split('\n').map((l) => '// ' + l);
                 d = d.join('\n');
 
-                mkdirp__default['default'](path__default['default'].dirname(dumpfile));
+                mkdirp(path__default['default'].dirname(dumpfile));
                 fs__default['default'].writeFileSync(dumpfile, sourcecode + '\n\n\n' + d, 'utf8');
                 console.error('****** offending generated ' + errname + ' source code dumped into file: ', dumpfile);
                 break;          // abort loop once a dump action was successful!
@@ -38416,18 +38414,6 @@ function getCommandlineOptions() {
     return opts;
 }
 
-
-function cliMain(opts) {
-    //opts = Jison.mkStdOptions(opts);
-
-    function isDirectory(fp) {
-        try {
-            return fs__default['default'].lstatSync(fp).isDirectory();
-        } catch (e) {
-            return false;
-        }
-    }
-
     function mkdirp(fp) {
         if (!fp || fp === '.' || fp.length === 0) {
             return false;
@@ -38453,6 +38439,18 @@ function cliMain(opts) {
         }
         return false;
     }
+
+function cliMain(opts) {
+    //opts = Jison.mkStdOptions(opts);
+
+    function isDirectory(fp) {
+        try {
+            return fs__default['default'].lstatSync(fp).isDirectory();
+        } catch (e) {
+            return false;
+        }
+    }
+
 
     function processInputFile() {
         // getting raw files

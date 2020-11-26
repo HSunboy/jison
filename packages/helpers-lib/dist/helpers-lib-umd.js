@@ -1,15 +1,14 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('fs'), require('path'), require('@gerhobbelt/json5'), require('mkdirp'), require('@gerhobbelt/xregexp'), require('recast'), require('assert')) :
-    typeof define === 'function' && define.amd ? define(['fs', 'path', '@gerhobbelt/json5', 'mkdirp', '@gerhobbelt/xregexp', 'recast', 'assert'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.helpers = factory(global.fs, global.path, global.JSON5, global.mkdirp, global.XRegExp, global.recast, global.assert));
-}(this, (function (fs, path, JSON5, mkdirp, XRegExp, recast, assert) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('fs'), require('path'), require('@gerhobbelt/json5'), require('@gerhobbelt/xregexp'), require('recast'), require('assert')) :
+    typeof define === 'function' && define.amd ? define(['fs', 'path', '@gerhobbelt/json5', '@gerhobbelt/xregexp', 'recast', 'assert'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.helpers = factory(global.fs, global.path, global.JSON5, global.XRegExp, global.recast, global.assert));
+}(this, (function (fs, path, JSON5, XRegExp, recast, assert) { 'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
     var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
     var JSON5__default = /*#__PURE__*/_interopDefaultLegacy(JSON5);
-    var mkdirp__default = /*#__PURE__*/_interopDefaultLegacy(mkdirp);
     var XRegExp__default = /*#__PURE__*/_interopDefaultLegacy(XRegExp);
     var recast__default = /*#__PURE__*/_interopDefaultLegacy(recast);
     var assert__default = /*#__PURE__*/_interopDefaultLegacy(assert);
@@ -299,6 +298,33 @@
         return s;
     }
 
+    // Return `true` when the directory has been created
+    function mkdirp(fp) {
+        if (!fp || fp === '.') {
+            return false;
+        }
+        try {
+            fs__default['default'].mkdirSync(fp);
+            return true;
+        } catch (e) {
+            if (e.code === 'ENOENT') {
+                let parent = path__default['default'].dirname(fp);
+                // Did we hit the root directory by now? If so, abort!
+                // Else, create the parent; iff that fails, we fail too...
+                if (parent !== fp && mkdirp(parent)) {
+                    try {
+                        // Retry creating the original directory: it should succeed now
+                        fs__default['default'].mkdirSync(fp);
+                        return true;
+                    } catch (e) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     //
 
 
@@ -362,9 +388,12 @@
 
         try {
             const dumpPaths = [ (options.outfile ? path__default['default'].dirname(options.outfile) : null), options.inputPath, find_suitable_app_dump_path() ];
-            let dumpName = path__default['default'].basename(options.inputFilename || options.moduleName || (options.outfile ? path__default['default'].dirname(options.outfile) : null) || options.defaultModuleName || errname)
-            .replace(/\.[a-z]{1,5}$/i, '')          // remove extension .y, .yacc, .jison, ...whatever
-            .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
+            let dumpName = options.inputFilename || options.moduleName || (options.outfile ? path__default['default'].dirname(options.outfile) : null) || options.defaultModuleName || errname;
+            // get the base name (i.e. the file name without extension)
+            // i.e. strip off only the extension and keep any other dots in the filename
+            dumpName = path__default['default'].basename(dumpName, path__default['default'].extname(dumpName));
+            // make sure it's legal in the destination filesystem: the least common denominator:
+            dumpName = mkIdentifier(dumpName)
             .substr(0, 100);
             if (dumpName === '' || dumpName === '_') {
                 dumpName = '__bugger__';
@@ -380,8 +409,8 @@
             }
 
             err_id = err_id || 'XXX';
-            err_id = err_id
-            .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
+            // make sure it's legal in the destination filesystem: the least common denominator.
+            err_id = mkIdentifier(err_id)
             .substr(0, 50);
 
             const ts = new Date();
@@ -424,7 +453,7 @@
                     d = d.split('\n').map((l) => '// ' + l);
                     d = d.join('\n');
 
-                    mkdirp__default['default'](path__default['default'].dirname(dumpfile));
+                    mkdirp(path__default['default'].dirname(dumpfile));
                     fs__default['default'].writeFileSync(dumpfile, sourcecode + '\n\n\n' + d, 'utf8');
                     console.error('****** offending generated ' + errname + ' source code dumped into file: ', dumpfile);
                     break;          // abort loop once a dump action was successful!
@@ -2076,6 +2105,8 @@
         exec: exec.exec,
         dump: exec.dump,
         convertExceptionToObject: exec.convertExceptionToObject,
+
+        mkdirp,
 
         generateMapper4JisonGrammarIdentifiers: parse2AST.generateMapper4JisonGrammarIdentifiers,
         parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,

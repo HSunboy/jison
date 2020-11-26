@@ -5,6 +5,7 @@ import nomnom from '@gerhobbelt/nomnom';
 
 import helpers from '../helpers-lib';
 const mkIdentifier = helpers.mkIdentifier;
+const mkdirp = helpers.mkdirp;
 
 import RegExpLexer from './regexp-lexer.js';
 
@@ -162,88 +163,70 @@ function cliMain(opts) {
         }
     }
 
-    function mkdirp(fp) {
-        if (!fp || fp === '.' || fp.length === 0) {
-            return false;
-        }
-        try {
-            fs.mkdirSync(fp);
-            return true;
-        } catch (e) {
-            if (e.code === 'ENOENT') {
-                let parent = path.dirname(fp);
-                // Did we hit the root directory by now? If so, abort!
-                // Else, create the parent; iff that fails, we fail too...
-                if (parent !== fp && mkdirp(parent)) {
-                    try {
-                        // Retry creating the original directory: it should succeed now
-                        fs.mkdirSync(fp);
-                        return true;
-                    } catch (e) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     function processInputFile() {
         // getting raw files
         let lex;
         let original_cwd = process.cwd();
 
-        let raw = fs.readFileSync(path.normalize(opts.file), 'utf8');
+        try {
+            let raw = fs.readFileSync(path.normalize(opts.file), 'utf8');
 
-        // making best guess at json mode
-        opts.json = path.extname(opts.file) === '.json' || opts.json;
+            // making best guess at json mode
+            opts.json = (path.extname(opts.file) === '.json' || opts.json);
 
-        // When only the directory part of the output path was specified, then we
-        // do NOT have the target module name in there as well!
-        let outpath = opts.outfile;
-        if (typeof outpath === 'string') {
-            if (/[\\\/]$/.test(outpath) || isDirectory(outpath)) {
-                opts.outfile = null;
-                outpath = outpath.replace(/[\\\/]$/, '');
+            // When only the directory part of the output path was specified, then we
+            // do NOT have the target module name in there as well!
+            let outpath = opts.outfile;
+            if (typeof outpath === 'string') {
+                if (/[\\\/]$/.test(outpath) || isDirectory(outpath)) {
+                    opts.outfile = null;
+                    outpath = outpath.replace(/[\\\/]$/, '');
+                } else {
+                    outpath = path.dirname(outpath);
+                }
             } else {
-                outpath = path.dirname(outpath);
+                outpath = null;
             }
-        } else {
-            outpath = null;
+            if (outpath && outpath.length > 0) {
+                outpath += '/';
+            } else {
+                outpath = '';
+            }
+
+            // setting output file name and module name based on input file name
+            // if they aren't specified.
+            let name = path.basename(opts.outfile || opts.file);
+
+            // get the base name (i.e. the file name without extension)
+            // i.e. strip off only the extension and keep any other dots in the filename
+            name = path.basename(name, path.extname(name));
+
+            opts.outfile = opts.outfile || (outpath + name + '.js');
+            if (!opts.moduleName && name) {
+                opts.moduleName = opts.defaultModuleName = mkIdentifier(name);
+            }
+
+            // Change CWD to the directory where the source grammar resides: this helps us properly
+            // %include any files mentioned in the grammar with relative paths:
+            let new_cwd = path.dirname(path.normalize(opts.file));
+            process.chdir(new_cwd);
+
+            opts.outfile = path.normalize(opts.outfile);
+            mkdirp(path.dirname(opts.outfile));
+
+            let lexer = cli.generateLexerString(raw, opts);
+
+            // and change back to the CWD we started out with:
+            process.chdir(original_cwd);
+
+            fs.writeFileSync(opts.outfile, lexer);
+            console.log('JISON-LEX output for module [' + opts.moduleName + '] has been written to file:', opts.outfile);
+        } catch (ex) {
+            console.error('JISON-LEX failed to compile module [' + opts.moduleName + ']:', ex);
+        } finally {
+            // reset CWD to the original path, no matter what happened
+            process.chdir(original_cwd);
         }
-        if (outpath && outpath.length > 0) {
-            outpath += '/';
-        } else {
-            outpath = '';
-        }
-
-        // setting output file name and module name based on input file name
-        // if they aren't specified.
-        let name = path.basename(opts.outfile || opts.file);
-
-        // get the base name (i.e. the file name without extension)
-        // i.e. strip off only the extension and keep any other dots in the filename
-        name = path.basename(name, path.extname(name));
-
-        opts.outfile = opts.outfile || (outpath + name + '.js');
-        if (!opts.moduleName && name) {
-            opts.moduleName = opts.defaultModuleName = mkIdentifier(name);
-        }
-
-        // Change CWD to the directory where the source grammar resides: this helps us properly
-        // %include any files mentioned in the grammar with relative paths:
-        let new_cwd = path.dirname(path.normalize(opts.file));
-        process.chdir(new_cwd);
-
-        let lexer = cli.generateLexerString(raw, opts);
-
-        // and change back to the CWD we started out with:
-        process.chdir(original_cwd);
-
-        opts.outfile = path.normalize(opts.outfile);
-        mkdirp(path.dirname(opts.outfile));
-        fs.writeFileSync(opts.outfile, lexer);
-        console.log('JISON-LEX output for module [' + opts.moduleName + '] has been written to file:', opts.outfile);
     }
 
     function readin(cb) {
