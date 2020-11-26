@@ -1191,6 +1191,7 @@
     //
     // Return either the parsed AST (object) or an error message (string).
     function checkActionBlock(src, yylloc, options) {
+        options = options || {};
         if (options.doNotTestCompile) {
             return false;        // simply accept everything...
         }
@@ -1199,7 +1200,7 @@
         if (!src.trim()) {
             return false;
         }
-        
+
         // make sure reasonable line numbers, etc. are reported in any
         // potential parse errors by pushing the source code down:
         if (yylloc && yylloc.first_line > 0) {
