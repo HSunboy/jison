@@ -1068,6 +1068,13 @@ parse: function parse(input) {
         lexer = this.__lexer__ = Object.create(this.lexer);
     }
 
+    // reset closure-dependent callback(s) which will be set up further down:
+    this.cleanupAfterParse = null;
+
+    this.__error_infos = [];                      // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
+
+    this.__error_recovery_infos = [];             // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
+
     let sharedState_yy = {
         parseError: undefined,
         quoteName: undefined,
@@ -1834,7 +1841,7 @@ r = this.performAction.call(yyval, newState, sp - 1, vstack);
             retval = r;
         }
     } finally {
-        retval = this.cleanupAfterParse(retval, true, true);
+        retval = this.cleanupAfterParse(retval, true, false);
         this.__reentrant_call_depth--;
 
         if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
@@ -3440,18 +3447,18 @@ var lexer = function() {
         let conditionStackDepth = this.conditionStack.length;
         let token = this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
 
-        if (token === this.ERROR) {
-          // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
-          // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
-          // has not consumed/modified any pending input or changed state in the error handler:
-          if (!this.matches && // and make sure the input has been modified/consumed ...
-          pendingInput === this._input && // ...or the lexer state has been modified significantly enough
-          // to merit a non-consuming error handling action right now.
-          activeCondition === this.topState() && conditionStackDepth === this.conditionStack.length) {
-            this.input();
-          }
+        //if (token === this.ERROR) {
+        // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
+        // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
+        // has not consumed/modified any pending input or changed state in the error handler:
+        if (!this.matches && // and make sure the input has been modified/consumed ...
+        pendingInput === this._input && // ...or the lexer state has been modified significantly enough
+        // to merit a non-consuming error handling action right now.
+        activeCondition === this.topState() && conditionStackDepth === this.conditionStack.length) {
+          this.input();
         }
 
+        //}
         return token;
       }
     },
