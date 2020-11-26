@@ -2,10 +2,10 @@
 
 
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('fs'), require('path'), require('@gerhobbelt/nomnom'), require('@gerhobbelt/json5'), require('mkdirp'), require('@gerhobbelt/xregexp'), require('recast'), require('assert')) :
-    typeof define === 'function' && define.amd ? define(['fs', 'path', '@gerhobbelt/nomnom', '@gerhobbelt/json5', 'mkdirp', '@gerhobbelt/xregexp', 'recast', 'assert'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global['jison-lex'] = factory(global.fs, global.path, global.nomnom, global.JSON5, global.mkdirp, global.XRegExp, global.recast, global.assert));
-}(this, (function (fs, path, nomnom, JSON5$1, mkdirp, XRegExp, recast, assert$1) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('fs'), require('path'), require('@gerhobbelt/nomnom'), require('@gerhobbelt/json5'), require('@gerhobbelt/xregexp'), require('recast'), require('assert')) :
+    typeof define === 'function' && define.amd ? define(['fs', 'path', '@gerhobbelt/nomnom', '@gerhobbelt/json5', '@gerhobbelt/xregexp', 'recast', 'assert'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global['jison-lex'] = factory(global.fs, global.path, global.nomnom, global.JSON5, global.XRegExp, global.recast, global.assert));
+}(this, (function (fs, path, nomnom, JSON5$1, XRegExp, recast, assert$1) { 'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -13,7 +13,6 @@
     var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
     var nomnom__default = /*#__PURE__*/_interopDefaultLegacy(nomnom);
     var JSON5__default = /*#__PURE__*/_interopDefaultLegacy(JSON5$1);
-    var mkdirp__default = /*#__PURE__*/_interopDefaultLegacy(mkdirp);
     var XRegExp__default = /*#__PURE__*/_interopDefaultLegacy(XRegExp);
     var recast__default = /*#__PURE__*/_interopDefaultLegacy(recast);
     var assert__default = /*#__PURE__*/_interopDefaultLegacy(assert$1);
@@ -303,6 +302,33 @@
         return s;
     }
 
+    // Return `true` when the directory has been created
+    function mkdirp(fp) {
+        if (!fp || fp === '.') {
+            return false;
+        }
+        try {
+            fs__default['default'].mkdirSync(fp);
+            return true;
+        } catch (e) {
+            if (e.code === 'ENOENT') {
+                let parent = path__default['default'].dirname(fp);
+                // Did we hit the root directory by now? If so, abort!
+                // Else, create the parent; iff that fails, we fail too...
+                if (parent !== fp && mkdirp(parent)) {
+                    try {
+                        // Retry creating the original directory: it should succeed now
+                        fs__default['default'].mkdirSync(fp);
+                        return true;
+                    } catch (e) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     //
 
 
@@ -366,9 +392,12 @@
 
         try {
             const dumpPaths = [ (options.outfile ? path__default['default'].dirname(options.outfile) : null), options.inputPath, find_suitable_app_dump_path() ];
-            let dumpName = path__default['default'].basename(options.inputFilename || options.moduleName || (options.outfile ? path__default['default'].dirname(options.outfile) : null) || options.defaultModuleName || errname)
-            .replace(/\.[a-z]{1,5}$/i, '')          // remove extension .y, .yacc, .jison, ...whatever
-            .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
+            let dumpName = options.inputFilename || options.moduleName || (options.outfile ? path__default['default'].dirname(options.outfile) : null) || options.defaultModuleName || errname;
+            // get the base name (i.e. the file name without extension)
+            // i.e. strip off only the extension and keep any other dots in the filename
+            dumpName = path__default['default'].basename(dumpName, path__default['default'].extname(dumpName));
+            // make sure it's legal in the destination filesystem: the least common denominator:
+            dumpName = mkIdentifier(dumpName)
             .substr(0, 100);
             if (dumpName === '' || dumpName === '_') {
                 dumpName = '__bugger__';
@@ -384,8 +413,8 @@
             }
 
             err_id = err_id || 'XXX';
-            err_id = err_id
-            .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
+            // make sure it's legal in the destination filesystem: the least common denominator.
+            err_id = mkIdentifier(err_id)
             .substr(0, 50);
 
             const ts = new Date();
@@ -428,7 +457,7 @@
                     d = d.split('\n').map((l) => '// ' + l);
                     d = d.join('\n');
 
-                    mkdirp__default['default'](path__default['default'].dirname(dumpfile));
+                    mkdirp(path__default['default'].dirname(dumpfile));
                     fs__default['default'].writeFileSync(dumpfile, sourcecode + '\n\n\n' + d, 'utf8');
                     console.error('****** offending generated ' + errname + ' source code dumped into file: ', dumpfile);
                     break;          // abort loop once a dump action was successful!
@@ -2081,6 +2110,8 @@
         dump: exec.dump,
         convertExceptionToObject: exec.convertExceptionToObject,
 
+        mkdirp,
+
         generateMapper4JisonGrammarIdentifiers: parse2AST.generateMapper4JisonGrammarIdentifiers,
         parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,
         //compileCodeToES5: parse2AST.compileCodeToES5,
@@ -2813,7 +2844,7 @@
         } else {
             this.$ = { rules: yyvstack[yysp - 1] };
         }
-        yy.popContext('Line 75');
+        yy.popContext('Line 76');
         break;
 
     case 3:
@@ -2843,7 +2874,7 @@
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-        yy.popContext('Line 98');
+        yy.popContext('Line 99');
         this.$ = { rules: [] };
         break;
 
@@ -2875,7 +2906,7 @@
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-        yy.popContext('Line 123');
+        yy.popContext('Line 124');
         this.$ = { rules: [] };
         break;
 
@@ -3074,10 +3105,9 @@
     case 10:
         /*! Production::    definition : MACRO_NAME error */
 
-        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
-        this.$ = yyvstack[yysp - 1];
+        // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$2`
@@ -3089,6 +3119,7 @@
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
+        this.$ = null;
         break;
 
     case 11:
@@ -3105,7 +3136,7 @@
             lst[i][1] = 0;     // flag as 'inclusive'
         }
         
-        yy.popContext('Line 323');
+        yy.popContext('Line 325');
         
         this.$ = {
             type: 'names',
@@ -3131,7 +3162,7 @@
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-        yy.popContext('Line 345');
+        yy.popContext('Line 347');
         this.$ = null;
         break;
 
@@ -3149,7 +3180,7 @@
             lst[i][1] = 1;     // flag as 'exclusive'
         }
         
-        yy.popContext('Line 360');
+        yy.popContext('Line 362');
         
         this.$ = {
             type: 'names',
@@ -3175,7 +3206,7 @@
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-        yy.popContext('Line 382');
+        yy.popContext('Line 384');
         this.$ = null;
         break;
 
@@ -3282,10 +3313,12 @@
         
         {
         let lst = yyvstack[yysp - 1];
+        // Apply the %option to the current lexing process immediately, as it MAY
+        // impact the lexer's behaviour, e.g. `%option do-not-test-compile`
         for (let i = 0, len = lst.length; i < len; i++) {
             yy.options[lst[i][0]] = lst[i][1];
         }
-        yy.popContext('Line 480');
+        yy.popContext('Line 484');
         this.$ = null;
         }
         break;
@@ -3299,7 +3332,7 @@
         
         
         yyparser.yyError(rmCommonWS$2`
-        ill defined %options line.
+        ill defined '${yyvstack[yysp - 2]} line.
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2], yylstack[yysp])}
@@ -3307,7 +3340,7 @@
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-        yy.popContext('Line 498');
+        yy.popContext('Line 502');
         this.$ = null;
         break;
 
@@ -3321,7 +3354,7 @@
         
         // TODO ...
         yyparser.yyError(rmCommonWS$2`
-        %options don't seem terminated?
+        ${yyvstack[yysp - 1]} don't seem terminated?
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
@@ -3329,7 +3362,7 @@
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-        yy.popContext('Line 513');
+        yy.popContext('Line 517');
         this.$ = null;
         break;
 
@@ -3384,7 +3417,7 @@
         `);
         }
         
-        yy.popContext('Line 553');
+        yy.popContext('Line 557');
         
         this.$ = {
             type: 'imports',
@@ -3413,7 +3446,7 @@
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-        yy.popContext('Line 574');
+        yy.popContext('Line 578');
         this.$ = null;
         break;
 
@@ -3464,7 +3497,7 @@
         `);
         }
         
-        yy.popContext('Line 617');
+        yy.popContext('Line 621');
         
         this.$ = {
             type: 'codeSection',
@@ -3501,7 +3534,7 @@
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-        yy.popContext('Line 645');
+        yy.popContext('Line 649');
         this.$ = null;
         }
         break;
@@ -3526,7 +3559,7 @@
           Technical error report:
         ${yyvstack[yysp - 3].errStr}
     `);
-        yy.popContext('Line 662');
+        yy.popContext('Line 666');
         this.$ = null;
         break;
 
@@ -3554,17 +3587,16 @@
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-        yy.popContext('Line 683');
+        yy.popContext('Line 687');
         this.$ = null;
         break;
 
     case 29:
         /*! Production::    definition : error */
 
-        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-):
-        this.$ = yyvstack[yysp];
+        // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
         this._$ = yylstack[yysp];
-        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-)
+        // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
         yyparser.yyError(rmCommonWS$2`
@@ -3580,6 +3612,7 @@
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
+        this.$ = null;
         break;
 
     case 30:
@@ -3751,7 +3784,7 @@
             yyvstack[yysp].unshift(yyvstack[yysp - 1]);
         }
         
-        yy.popContext('Line 813');
+        yy.popContext('Line 818');
         
         this.$ = [yyvstack[yysp]];
         break;
@@ -3770,7 +3803,7 @@
             });
         }
         
-        yy.popContext('Line 825');
+        yy.popContext('Line 830');
         
         this.$ = yyvstack[yysp - 1];
         break;
@@ -3795,7 +3828,7 @@
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-        yy.popContext('Line 843');
+        yy.popContext('Line 848');
         this.$ = null;
         break;
 
@@ -3819,7 +3852,7 @@
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-        yy.popContext('Line 860');
+        yy.popContext('Line 865');
         this.$ = null;
         break;
 
@@ -3843,7 +3876,7 @@
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-        yy.popContext('Line 877');
+        yy.popContext('Line 882');
         this.$ = null;
         break;
 
@@ -4135,7 +4168,7 @@
         let start_marker = yyvstack[yysp - 1].trim();
         // When the start_marker is not an explicit `%{`, `{` or similar, the error
         // is more probably due to indenting the rule regex, rather than an error
-        // in writing the action code block:
+        // in writing the setup action code block:
         if (start_marker.indexOf('{') >= 0) {
             let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
             yyparser.yyError(rmCommonWS$2`
@@ -4187,7 +4220,7 @@
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-        yy.popContext('Line 1193');
+        yy.popContext('Line 1198');
         this.$ = null;
         break;
 
@@ -4208,7 +4241,7 @@
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-        yy.popContext('Line 1207');
+        yy.popContext('Line 1212');
         this.$ = null;
         break;
 
@@ -4229,7 +4262,7 @@
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-        yy.popContext('Line 1221');
+        yy.popContext('Line 1226');
         this.$ = null;
         break;
 
@@ -4270,7 +4303,7 @@
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-        yy.popContext('Line 1248');
+        yy.popContext('Line 1253');
         this.$ = null;
         break;
 
@@ -4291,7 +4324,7 @@
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-        yy.popContext('Line 1262');
+        yy.popContext('Line 1267');
         this.$ = null;
         break;
 
@@ -4450,7 +4483,7 @@
         
         // Optimization: these two calls cancel one another out here:
         //
-        // yy.popContext('Line 1352');
+        // yy.popContext('Line 1357');
         // yy.pushContext();
         
         yy.__inside_scoped_ruleset__ = true;
@@ -4488,7 +4521,7 @@
         
         // Optimization: these two calls cancel one another out here:
         //
-        // yy.popContext('Line 1381');
+        // yy.popContext('Line 1386');
         // yy.pushContext();
         
         yy.__inside_scoped_ruleset__ = true;
@@ -5182,7 +5215,7 @@
         // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
         
         
-        yy.popContext('Line 1840');
+        yy.popContext('Line 1845');
         
         this.$ = '';
         break;
@@ -5209,7 +5242,7 @@
             }
         }
         
-        yy.popContext('Line 1859');
+        yy.popContext('Line 1864');
         
         this.$ = srcCode;
         }
@@ -5313,10 +5346,10 @@
         // check if there is only 1 unvalued options: 'path'
         let lst = yyvstack[yysp - 1];
         let len = lst.length;
-        let path;
+        let include_path;
         if (len === 1 && lst[0][1] === true) {
             // `path`:
-            path = lst[0][0];
+            include_path = lst[0][0];
         } else if (len <= 1) {
             yyparser.yyError(rmCommonWS$2`
             You did not specify a legal file path for the '%include' statement, which must have the format:
@@ -5335,26 +5368,45 @@
         `);
         }
         
-        // **Aside**: And no, we don't support nested '%include'!
-        let fileContent = fs__default['default'].readFileSync(path, { encoding: 'utf-8' });
-        
-        let srcCode = trimActionCode$1(fileContent);
-        if (srcCode) {
-            let rv = checkActionBlock$1(srcCode, this._$, yy);
-            if (rv) {
-                yyparser.yyError(rmCommonWS$2`
-                The source code included from file '${path}' does not compile: ${rv}
+        if (!fs__default['default'].existsSync(include_path)) {
+            yyparser.yyError(rmCommonWS$2`
+            Cannot %include "${include_path}":
+            The file does not exist.
     
-                  Erroneous area:
-                ${yylexer.prettyPrintRange(this._$)}
-            `);
+            The current working directory (set up by JISON) is:
+    
+              ${process.cwd()}
+    
+            hence the full path to the given %include file is:
+    
+              ${path__default['default'].resolve(include_path)}
+    
+              Erroneous area:
+            ${yylexer.prettyPrintRange(this._$)}
+        `);
+            this.$ = '\n\n\n\n';
+        } else {
+            // **Aside**: And no, we don't support nested '%include'!
+            let fileContent = fs__default['default'].readFileSync(path__default['default'], { encoding: 'utf-8' });
+        
+            let srcCode = trimActionCode$1(fileContent);
+            if (srcCode) {
+                let rv = checkActionBlock$1(srcCode, this._$, yy);
+                if (rv) {
+                    yyparser.yyError(rmCommonWS$2`
+                    The source code included from file '${include_path}' does not compile: ${rv}
+    
+                      Erroneous area:
+                    ${yylexer.prettyPrintRange(this._$)}
+                `);
+                }
             }
+        
+            yy.popContext('Line 2023');
+        
+            // And no, we don't support nested '%include':
+            this.$ = '\n// Included by Jison: ' + include_path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + include_path + '\n\n';
         }
-        
-        yy.popContext('Line 2000');
-        
-        // And no, we don't support nested '%include':
-        this.$ = '\n// Included by Jison: ' + path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + path + '\n\n';
         }
         break;
 
@@ -5375,7 +5427,7 @@
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-        yy.popContext('Line 2016');
+        yy.popContext('Line 2040');
         this.$ = null;
         break;
 
@@ -14836,6 +14888,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
         if (args.length) {
             p.extra_error_attributes = args;
         }
+        p.yyErrorInvoked = true;   // so parseError() user code can easily recognize it is invoked from any yyerror() in the spec action code chunks
 
         return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
     },
@@ -15203,6 +15256,7 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
                 lineno_msg += ' on line ' + (this.yylineno + 1);
             }
             const p = this.constructLexErrorInfo(lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).', false);
+            p.isLexerBacktrackingNotSupportedError = true;            // when this is true, you 'know' the produced error token will be queued.
             this._signaled_error_token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
         }
         return this;
@@ -15816,7 +15870,27 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
             let activeCondition = this.topState();
             let conditionStackDepth = this.conditionStack.length;
 
-            let token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
+            // when this flag is set in your parseError() \`hash\`, you 'know' you cannot manipute \`yytext\` to be anything but 
+            // a string value, unless
+            // - you either get to experience a lexer crash once it invokes .input() with your manipulated \`yytext\` object,
+            // - or you must forward the lex cursor yourself by invoking \`yy.input()\` or equivalent, *before* you go and
+            //   tweak that \`yytext\`.
+            p.lexerHasAlreadyForwardedCursorBy1 = (!this.matches);
+
+            // Simplify use of (advanced) custom parseError() handlers: every time we encounter an error,
+            // which HAS NOT consumed any input yet (thus causing an infinite lexer loop unless we take special action),
+            // we FIRST consume ONE character of input, BEFORE we call parseError().
+            // 
+            // This implies that the parseError() now can call \`unput(this.yytext)\` if it wants to only change lexer
+            // state via popState/pushState, but otherwise this would make for a cleaner parseError() implementation
+            // as there's no conditional check for \`hash.lexerHasAlreadyForwardedCursorBy1\` needed in there any more.
+            // 
+            // Since that flag is new as of jison-gho 0.7.0, as is this new consume1+parseError() behaviour, only
+            // sophisticated userland parseError() methods will need to be reviewed.
+            // Haven't found any of those in the (Open Source) wild today, so this should be safe to change...
+
+            // *** CONSUME 1 ***:
+                        
             //if (token === this.ERROR) {
             //    ^^^^^^^^^^^^^^^^^^^^ WARNING: no matter what token the error handler produced, 
             //                         it MUST move the cursor forward or you'ld end up in 
@@ -15838,7 +15912,18 @@ JisonLexerError.prototype.name = 'JisonLexerError';`;
                     this.input();
                 }
             //}
-            return token;
+
+            // *** PARSE-ERROR ***:
+            // 
+            // Note:
+            // userland code in there may \`unput()\` what was done, after checking the \`hash.lexerHasAlreadyForwardedCursorBy1\` flag.
+            // Caveat emptor! :: When you simply \`unput()\` the \`yytext\` without at least changing the lexer condition state 
+            // via popState/pushState, you WILL end up with an infinite lexer loop. 
+            // 
+            // This kernel code has been coded to prevent this dangerous situation unless you specifically seek it out
+            // in your custom parseError handler.
+                        
+            return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
         }
     },
 
@@ -17226,6 +17311,7 @@ const path = require('path');
     RegExpLexer.autodetectAndConvertToJSONformat = autodetectAndConvertToJSONformat;
 
     const mkIdentifier$3 = helpers.mkIdentifier;
+    const mkdirp$1 = helpers.mkdirp;
 
 
     assert__default['default'](RegExpLexer);
@@ -17379,86 +17465,68 @@ const path = require('path');
             }
         }
 
-        function mkdirp(fp) {
-            if (!fp || fp === '.' || fp.length === 0) {
-                return false;
-            }
-            try {
-                fs__default['default'].mkdirSync(fp);
-                return true;
-            } catch (e) {
-                if (e.code === 'ENOENT') {
-                    let parent = path__default['default'].dirname(fp);
-                    // Did we hit the root directory by now? If so, abort!
-                    // Else, create the parent; iff that fails, we fail too...
-                    if (parent !== fp && mkdirp(parent)) {
-                        try {
-                            // Retry creating the original directory: it should succeed now
-                            fs__default['default'].mkdirSync(fp);
-                            return true;
-                        } catch (e) {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-
         function processInputFile() {
             let original_cwd = process.cwd();
 
-            let raw = fs__default['default'].readFileSync(path__default['default'].normalize(opts.file), 'utf8');
+            try {
+                let raw = fs__default['default'].readFileSync(path__default['default'].normalize(opts.file), 'utf8');
 
-            // making best guess at json mode
-            opts.json = path__default['default'].extname(opts.file) === '.json' || opts.json;
+                // making best guess at json mode
+                opts.json = (path__default['default'].extname(opts.file) === '.json' || opts.json);
 
-            // When only the directory part of the output path was specified, then we
-            // do NOT have the target module name in there as well!
-            let outpath = opts.outfile;
-            if (typeof outpath === 'string') {
-                if (/[\\\/]$/.test(outpath) || isDirectory(outpath)) {
-                    opts.outfile = null;
-                    outpath = outpath.replace(/[\\\/]$/, '');
+                // When only the directory part of the output path was specified, then we
+                // do NOT have the target module name in there as well!
+                let outpath = opts.outfile;
+                if (typeof outpath === 'string') {
+                    if (/[\\\/]$/.test(outpath) || isDirectory(outpath)) {
+                        opts.outfile = null;
+                        outpath = outpath.replace(/[\\\/]$/, '');
+                    } else {
+                        outpath = path__default['default'].dirname(outpath);
+                    }
                 } else {
-                    outpath = path__default['default'].dirname(outpath);
+                    outpath = null;
                 }
-            } else {
-                outpath = null;
+                if (outpath && outpath.length > 0) {
+                    outpath += '/';
+                } else {
+                    outpath = '';
+                }
+
+                // setting output file name and module name based on input file name
+                // if they aren't specified.
+                let name = path__default['default'].basename(opts.outfile || opts.file);
+
+                // get the base name (i.e. the file name without extension)
+                // i.e. strip off only the extension and keep any other dots in the filename
+                name = path__default['default'].basename(name, path__default['default'].extname(name));
+
+                opts.outfile = opts.outfile || (outpath + name + '.js');
+                if (!opts.moduleName && name) {
+                    opts.moduleName = opts.defaultModuleName = mkIdentifier$3(name);
+                }
+
+                // Change CWD to the directory where the source grammar resides: this helps us properly
+                // %include any files mentioned in the grammar with relative paths:
+                let new_cwd = path__default['default'].dirname(path__default['default'].normalize(opts.file));
+                process.chdir(new_cwd);
+
+                opts.outfile = path__default['default'].normalize(opts.outfile);
+                mkdirp$1(path__default['default'].dirname(opts.outfile));
+
+                let lexer = cli.generateLexerString(raw, opts);
+
+                // and change back to the CWD we started out with:
+                process.chdir(original_cwd);
+
+                fs__default['default'].writeFileSync(opts.outfile, lexer);
+                console.log('JISON-LEX output for module [' + opts.moduleName + '] has been written to file:', opts.outfile);
+            } catch (ex) {
+                console.error('JISON-LEX failed to compile module [' + opts.moduleName + ']:', ex);
+            } finally {
+                // reset CWD to the original path, no matter what happened
+                process.chdir(original_cwd);
             }
-            if (outpath && outpath.length > 0) {
-                outpath += '/';
-            } else {
-                outpath = '';
-            }
-
-            // setting output file name and module name based on input file name
-            // if they aren't specified.
-            let name = path__default['default'].basename(opts.outfile || opts.file);
-
-            // get the base name (i.e. the file name without extension)
-            // i.e. strip off only the extension and keep any other dots in the filename
-            name = path__default['default'].basename(name, path__default['default'].extname(name));
-
-            opts.outfile = opts.outfile || (outpath + name + '.js');
-            if (!opts.moduleName && name) {
-                opts.moduleName = opts.defaultModuleName = mkIdentifier$3(name);
-            }
-
-            // Change CWD to the directory where the source grammar resides: this helps us properly
-            // %include any files mentioned in the grammar with relative paths:
-            let new_cwd = path__default['default'].dirname(path__default['default'].normalize(opts.file));
-            process.chdir(new_cwd);
-
-            let lexer = cli.generateLexerString(raw, opts);
-
-            // and change back to the CWD we started out with:
-            process.chdir(original_cwd);
-
-            opts.outfile = path__default['default'].normalize(opts.outfile);
-            mkdirp(path__default['default'].dirname(opts.outfile));
-            fs__default['default'].writeFileSync(opts.outfile, lexer);
-            console.log('JISON-LEX output for module [' + opts.moduleName + '] has been written to file:', opts.outfile);
         }
 
         function readin(cb) {

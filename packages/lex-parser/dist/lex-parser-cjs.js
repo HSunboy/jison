@@ -4,7 +4,6 @@ var XRegExp = require('@gerhobbelt/xregexp');
 var JSON5 = require('@gerhobbelt/json5');
 var fs = require('fs');
 var path = require('path');
-var mkdirp = require('mkdirp');
 var recast = require('recast');
 var assert$1 = require('assert');
 
@@ -14,7 +13,6 @@ var XRegExp__default = /*#__PURE__*/_interopDefaultLegacy(XRegExp);
 var JSON5__default = /*#__PURE__*/_interopDefaultLegacy(JSON5);
 var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
 var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
-var mkdirp__default = /*#__PURE__*/_interopDefaultLegacy(mkdirp);
 var recast__default = /*#__PURE__*/_interopDefaultLegacy(recast);
 var assert__default = /*#__PURE__*/_interopDefaultLegacy(assert$1);
 
@@ -303,6 +301,33 @@ function dquote(s) {
     return s;
 }
 
+// Return `true` when the directory has been created
+function mkdirp(fp) {
+    if (!fp || fp === '.') {
+        return false;
+    }
+    try {
+        fs__default['default'].mkdirSync(fp);
+        return true;
+    } catch (e) {
+        if (e.code === 'ENOENT') {
+            let parent = path__default['default'].dirname(fp);
+            // Did we hit the root directory by now? If so, abort!
+            // Else, create the parent; iff that fails, we fail too...
+            if (parent !== fp && mkdirp(parent)) {
+                try {
+                    // Retry creating the original directory: it should succeed now
+                    fs__default['default'].mkdirSync(fp);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 //
 
 
@@ -366,9 +391,12 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
 
     try {
         const dumpPaths = [ (options.outfile ? path__default['default'].dirname(options.outfile) : null), options.inputPath, find_suitable_app_dump_path() ];
-        let dumpName = path__default['default'].basename(options.inputFilename || options.moduleName || (options.outfile ? path__default['default'].dirname(options.outfile) : null) || options.defaultModuleName || errname)
-        .replace(/\.[a-z]{1,5}$/i, '')          // remove extension .y, .yacc, .jison, ...whatever
-        .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
+        let dumpName = options.inputFilename || options.moduleName || (options.outfile ? path__default['default'].dirname(options.outfile) : null) || options.defaultModuleName || errname;
+        // get the base name (i.e. the file name without extension)
+        // i.e. strip off only the extension and keep any other dots in the filename
+        dumpName = path__default['default'].basename(dumpName, path__default['default'].extname(dumpName));
+        // make sure it's legal in the destination filesystem: the least common denominator:
+        dumpName = mkIdentifier(dumpName)
         .substr(0, 100);
         if (dumpName === '' || dumpName === '_') {
             dumpName = '__bugger__';
@@ -384,8 +412,8 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
         }
 
         err_id = err_id || 'XXX';
-        err_id = err_id
-        .replace(/[^a-z0-9_]/ig, '_')           // make sure it's legal in the destination filesystem: the least common denominator.
+        // make sure it's legal in the destination filesystem: the least common denominator.
+        err_id = mkIdentifier(err_id)
         .substr(0, 50);
 
         const ts = new Date();
@@ -428,7 +456,7 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
                 d = d.split('\n').map((l) => '// ' + l);
                 d = d.join('\n');
 
-                mkdirp__default['default'](path__default['default'].dirname(dumpfile));
+                mkdirp(path__default['default'].dirname(dumpfile));
                 fs__default['default'].writeFileSync(dumpfile, sourcecode + '\n\n\n' + d, 'utf8');
                 console.error('****** offending generated ' + errname + ' source code dumped into file: ', dumpfile);
                 break;          // abort loop once a dump action was successful!
@@ -2081,6 +2109,8 @@ var helpers = {
     dump: exec.dump,
     convertExceptionToObject: exec.convertExceptionToObject,
 
+    mkdirp,
+
     generateMapper4JisonGrammarIdentifiers: parse2AST.generateMapper4JisonGrammarIdentifiers,
     parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,
     //compileCodeToES5: parse2AST.compileCodeToES5,
@@ -2813,7 +2843,7 @@ case 2:
     } else {
         this.$ = { rules: yyvstack[yysp - 1] };
     }
-    yy.popContext('Line 75');
+    yy.popContext('Line 76');
     break;
 
 case 3:
@@ -2843,7 +2873,7 @@ case 3:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 98');
+    yy.popContext('Line 99');
     this.$ = { rules: [] };
     break;
 
@@ -2875,7 +2905,7 @@ case 4:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 123');
+    yy.popContext('Line 124');
     this.$ = { rules: [] };
     break;
 
@@ -3074,10 +3104,9 @@ case 9:
 case 10:
     /*! Production::    definition : MACRO_NAME error */
 
-    // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp - 1];
+    // default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yyparser.yyMergeLocationInfo(yysp - 1, yysp);
-    // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,-,-,LT,LA,-,-)
+    // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
     
     
     yyparser.yyError(rmCommonWS$2`
@@ -3089,6 +3118,7 @@ case 10:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
+    this.$ = null;
     break;
 
 case 11:
@@ -3105,7 +3135,7 @@ case 11:
         lst[i][1] = 0;     // flag as 'inclusive'
     }
     
-    yy.popContext('Line 323');
+    yy.popContext('Line 325');
     
     this.$ = {
         type: 'names',
@@ -3131,7 +3161,7 @@ case 12:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 345');
+    yy.popContext('Line 347');
     this.$ = null;
     break;
 
@@ -3149,7 +3179,7 @@ case 13:
         lst[i][1] = 1;     // flag as 'exclusive'
     }
     
-    yy.popContext('Line 360');
+    yy.popContext('Line 362');
     
     this.$ = {
         type: 'names',
@@ -3175,7 +3205,7 @@ case 14:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 382');
+    yy.popContext('Line 384');
     this.$ = null;
     break;
 
@@ -3282,10 +3312,12 @@ case 19:
     
     {
     let lst = yyvstack[yysp - 1];
+    // Apply the %option to the current lexing process immediately, as it MAY
+    // impact the lexer's behaviour, e.g. `%option do-not-test-compile`
     for (let i = 0, len = lst.length; i < len; i++) {
         yy.options[lst[i][0]] = lst[i][1];
     }
-    yy.popContext('Line 480');
+    yy.popContext('Line 484');
     this.$ = null;
     }
     break;
@@ -3299,7 +3331,7 @@ case 20:
     
     
     yyparser.yyError(rmCommonWS$2`
-        ill defined %options line.
+        ill defined '${yyvstack[yysp - 2]} line.
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp - 1], yylstack[yysp - 2], yylstack[yysp])}
@@ -3307,7 +3339,7 @@ case 20:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 498');
+    yy.popContext('Line 502');
     this.$ = null;
     break;
 
@@ -3321,7 +3353,7 @@ case 21:
     
     // TODO ...
     yyparser.yyError(rmCommonWS$2`
-        %options don't seem terminated?
+        ${yyvstack[yysp - 1]} don't seem terminated?
     
           Erroneous area:
         ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
@@ -3329,7 +3361,7 @@ case 21:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 513');
+    yy.popContext('Line 517');
     this.$ = null;
     break;
 
@@ -3384,7 +3416,7 @@ case 23:
         `);
     }
     
-    yy.popContext('Line 553');
+    yy.popContext('Line 557');
     
     this.$ = {
         type: 'imports',
@@ -3413,7 +3445,7 @@ case 24:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 574');
+    yy.popContext('Line 578');
     this.$ = null;
     break;
 
@@ -3464,7 +3496,7 @@ case 25:
         `);
     }
     
-    yy.popContext('Line 617');
+    yy.popContext('Line 621');
     
     this.$ = {
         type: 'codeSection',
@@ -3501,7 +3533,7 @@ case 26:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 645');
+    yy.popContext('Line 649');
     this.$ = null;
     }
     break;
@@ -3526,7 +3558,7 @@ case 27:
           Technical error report:
         ${yyvstack[yysp - 3].errStr}
     `);
-    yy.popContext('Line 662');
+    yy.popContext('Line 666');
     this.$ = null;
     break;
 
@@ -3554,17 +3586,16 @@ case 28:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 683');
+    yy.popContext('Line 687');
     this.$ = null;
     break;
 
 case 29:
     /*! Production::    definition : error */
 
-    // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-):
-    this.$ = yyvstack[yysp];
+    // default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-):
     this._$ = yylstack[yysp];
-    // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,-,-,LT,LA,-,-)
+    // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
     
     
     yyparser.yyError(rmCommonWS$2`
@@ -3580,6 +3611,7 @@ case 29:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
+    this.$ = null;
     break;
 
 case 30:
@@ -3751,7 +3783,7 @@ case 42:
         yyvstack[yysp].unshift(yyvstack[yysp - 1]);
     }
     
-    yy.popContext('Line 813');
+    yy.popContext('Line 818');
     
     this.$ = [yyvstack[yysp]];
     break;
@@ -3770,7 +3802,7 @@ case 43:
         });
     }
     
-    yy.popContext('Line 825');
+    yy.popContext('Line 830');
     
     this.$ = yyvstack[yysp - 1];
     break;
@@ -3795,7 +3827,7 @@ case 44:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 843');
+    yy.popContext('Line 848');
     this.$ = null;
     break;
 
@@ -3819,7 +3851,7 @@ case 45:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 860');
+    yy.popContext('Line 865');
     this.$ = null;
     break;
 
@@ -3843,7 +3875,7 @@ case 46:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 877');
+    yy.popContext('Line 882');
     this.$ = null;
     break;
 
@@ -4135,7 +4167,7 @@ case 59:
     let start_marker = yyvstack[yysp - 1].trim();
     // When the start_marker is not an explicit `%{`, `{` or similar, the error
     // is more probably due to indenting the rule regex, rather than an error
-    // in writing the action code block:
+    // in writing the setup action code block:
     if (start_marker.indexOf('{') >= 0) {
         let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
         yyparser.yyError(rmCommonWS$2`
@@ -4187,7 +4219,7 @@ case 60:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1193');
+    yy.popContext('Line 1198');
     this.$ = null;
     break;
 
@@ -4208,7 +4240,7 @@ case 61:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1207');
+    yy.popContext('Line 1212');
     this.$ = null;
     break;
 
@@ -4229,7 +4261,7 @@ case 62:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1221');
+    yy.popContext('Line 1226');
     this.$ = null;
     break;
 
@@ -4270,7 +4302,7 @@ case 64:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1248');
+    yy.popContext('Line 1253');
     this.$ = null;
     break;
 
@@ -4291,7 +4323,7 @@ case 65:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1262');
+    yy.popContext('Line 1267');
     this.$ = null;
     break;
 
@@ -4450,7 +4482,7 @@ case 73:
     
     // Optimization: these two calls cancel one another out here:
     //
-    // yy.popContext('Line 1352');
+    // yy.popContext('Line 1357');
     // yy.pushContext();
     
     yy.__inside_scoped_ruleset__ = true;
@@ -4488,7 +4520,7 @@ case 74:
     
     // Optimization: these two calls cancel one another out here:
     //
-    // yy.popContext('Line 1381');
+    // yy.popContext('Line 1386');
     // yy.pushContext();
     
     yy.__inside_scoped_ruleset__ = true;
@@ -5182,7 +5214,7 @@ case 127:
     // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
     
     
-    yy.popContext('Line 1840');
+    yy.popContext('Line 1845');
     
     this.$ = '';
     break;
@@ -5209,7 +5241,7 @@ case 128:
         }
     }
     
-    yy.popContext('Line 1859');
+    yy.popContext('Line 1864');
     
     this.$ = srcCode;
     }
@@ -5313,10 +5345,10 @@ case 136:
     // check if there is only 1 unvalued options: 'path'
     let lst = yyvstack[yysp - 1];
     let len = lst.length;
-    let path;
+    let include_path;
     if (len === 1 && lst[0][1] === true) {
         // `path`:
-        path = lst[0][0];
+        include_path = lst[0][0];
     } else if (len <= 1) {
         yyparser.yyError(rmCommonWS$2`
             You did not specify a legal file path for the '%include' statement, which must have the format:
@@ -5335,26 +5367,45 @@ case 136:
         `);
     }
     
-    // **Aside**: And no, we don't support nested '%include'!
-    let fileContent = fs__default['default'].readFileSync(path, { encoding: 'utf-8' });
+    if (!fs__default['default'].existsSync(include_path)) {
+        yyparser.yyError(rmCommonWS$2`
+            Cannot %include "${include_path}":
+            The file does not exist.
     
-    let srcCode = trimActionCode$1(fileContent);
-    if (srcCode) {
-        let rv = checkActionBlock$1(srcCode, this._$, yy);
-        if (rv) {
-            yyparser.yyError(rmCommonWS$2`
-                The source code included from file '${path}' does not compile: ${rv}
+            The current working directory (set up by JISON) is:
     
-                  Erroneous area:
-                ${yylexer.prettyPrintRange(this._$)}
-            `);
+              ${process.cwd()}
+    
+            hence the full path to the given %include file is:
+    
+              ${path__default['default'].resolve(include_path)}
+    
+              Erroneous area:
+            ${yylexer.prettyPrintRange(this._$)}
+        `);
+        this.$ = '\n\n\n\n';
+    } else {
+        // **Aside**: And no, we don't support nested '%include'!
+        let fileContent = fs__default['default'].readFileSync(path__default['default'], { encoding: 'utf-8' });
+    
+        let srcCode = trimActionCode$1(fileContent);
+        if (srcCode) {
+            let rv = checkActionBlock$1(srcCode, this._$, yy);
+            if (rv) {
+                yyparser.yyError(rmCommonWS$2`
+                    The source code included from file '${include_path}' does not compile: ${rv}
+    
+                      Erroneous area:
+                    ${yylexer.prettyPrintRange(this._$)}
+                `);
+            }
         }
+    
+        yy.popContext('Line 2023');
+    
+        // And no, we don't support nested '%include':
+        this.$ = '\n// Included by Jison: ' + include_path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + include_path + '\n\n';
     }
-    
-    yy.popContext('Line 2000');
-    
-    // And no, we don't support nested '%include':
-    this.$ = '\n// Included by Jison: ' + path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + path + '\n\n';
     }
     break;
 
@@ -5375,7 +5426,7 @@ case 137:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 2016');
+    yy.popContext('Line 2040');
     this.$ = null;
     break;
 
