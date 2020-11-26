@@ -87,62 +87,50 @@ LEX_XMPL_MAIN = $(LEX) --main -o examples/output/ -x
 
 examples_gitgraph:
 	$(LEX_XMPL_MAIN) examples/gitGraph.jison
-	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/gitGraph.input.txt
 	node examples/output/gitGraph.js    					examples/inputData/gitGraph.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_pplex:
-	$(LEX_XMPL_MAIN) examples/pplex.l
-	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/pplex.input.txt
-	node examples/output/pplex.js    						examples/inputData/pplex.input.txt                    			examples/output/$@.test-run.tokens.json
+	#$(LEX_XMPL_MAIN) examples/gnucobol-pplex.l
+	#node examples/output/gnucobol-pplex.js    						examples/inputData/gnucobol-pplex.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_gnucobol:
 	$(LEX_XMPL_MAIN) examples/gnucobol-scanner.l
-	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/gnucobol-scanner.input.txt
 	#node examples/output/gnucobol-scanner.js    			examples/inputData/gnucobol-scanner.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_icl_grammar:
 	$(LEX_XMPL_MAIN) examples/icl-grammar.jisonlex
-	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/icl-grammar.input.txt
 	node examples/output/icl-grammar.js    					examples/inputData/icl-grammar.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_issue51:
 	$(LEX_XMPL_MAIN) examples/issue-51-gho.jisonlex
-	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/issue-51-gho.input.txt
 	node examples/output/issue-51-gho.js    				examples/inputData/issue-51-gho.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_issue1:
 	$(LEX_XMPL_MAIN) examples/issue-crash-1.jison
-	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/issue-crash-1.input.txt
 	node examples/output/issue-crash-1.js    				examples/inputData/issue-crash-1.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_jslex:
 	$(LEX_XMPL_MAIN) examples/js-lex.jisonlex
-	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/js-lex.input.txt
 	node examples/output/js-lex.js    						examples/inputData/js-lex.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_mermaid:
 	$(LEX_XMPL_MAIN) examples/mermaid.jison
-	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/mermaid.input.txt
 	node examples/output/mermaid.js    						examples/inputData/mermaid.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_seval:
-	$(LEX_XMPL_MAIN) examples/seval.jisonlex
-	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/seval.input.txt
-	node examples/output/seval.js    						examples/inputData/seval.input.txt                    			examples/output/$@.test-run.tokens.json
+	#$(LEX_XMPL_MAIN) examples/seval.jisonlex
+	#node examples/output/seval.js    						examples/inputData/seval.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_shapemap:
 	$(LEX_XMPL_MAIN) examples/ShapeMapJison.jison
-	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/ShapeMapJison.input.txt
 	node examples/output/ShapeMapJison.js    				examples/inputData/ShapeMapJison.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_shex:
 	$(LEX_XMPL_MAIN) examples/ShExJison.jison
-	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/ShExJison.input.txt
 	node examples/output/ShExJison.js    					examples/inputData/ShExJison.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_with_includes_test:
 	$(LEX_XMPL_MAIN) examples/with-includes.test.lex
-	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/with-includes.test.input.txt
 	node examples/output/with-includes.test.js    			examples/inputData/with-includes.test.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_lex:
