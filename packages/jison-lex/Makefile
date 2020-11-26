@@ -6,9 +6,9 @@ MOCHA = ../../node_modules/.bin/mocha
 NYC = ../../node_modules/.bin/nyc      --clean=false --temp-directory ../../.nyc_output
 
 ifndef FULL_CODE_COVERAGE
-	LEX = node ./dist/cli-cjs.js -o ./output/$@/
+	LEX = node ./dist/cli-cjs.js
 else
-	LEX = $(NYC) --reporter=lcov -- node ./dist/cli-cjs.js -o ./output/$@/
+	LEX = $(NYC) --reporter=lcov -- node ./dist/cli-cjs.js
 endif
 
 
@@ -39,140 +39,222 @@ test-nyc:
 
 
 examples:                                           \
-		examples_include                            \
-		examples_lex                                \
 		examples_basic2_lex                         \
 		examples_basic_lex                          \
 		examples_c99                                \
 		examples_ccalc_lex                          \
+		examples_ccalc_jisonlex                     \
 		examples_classy                             \
 		examples_codegen_feature_tester_base        \
 		examples_comments                           \
 		examples_compiled_calc_parse                \
 		examples_faking                             \
 		examples_floop                              \
+		examples_gitgraph							\
+		examples_gnucobol							\
 		examples_handlebars                         \
+		examples_icl_grammar						\
+		examples_include                            \
+		examples_issue1								\
+		examples_issue51							\
 		examples_issue_url_lexing                   \
 		examples_issue_x1                           \
 		examples_issue_x2                           \
+		examples_jslex								\
+		examples_lex                                \
 		examples_lex_grammar                        \
 		examples_lexer_comm_debug                   \
+		examples_mermaid							\
 		examples_pascal                             \
+		examples_pplex								\
 		examples_regex                              \
-		examples_xregexp                            \
 		examples_semwhitespace                      \
+		examples_seval								\
+		examples_shapemap							\
+		examples_shex								\
 		examples_tikiwikiparser                     \
-		examples_unicode2                           \
 		examples_unicode                            \
+		examples_unicode2                           \
 		examples_with_custom_lexer                  \
-		examples_with_includes
+		examples_with_includes 						\
+		examples_with_includes_test					\
+		examples_xregexp
+
+# Note:
+# One or more examples will OVERRIDE the '-o path' argument by specifying it a second time.
+# That's perfectly fine with the way our current CLI arg parser works.
+LEX_XMPL_MAIN = $(LEX) --main -o examples/output/ -x
+
+examples_gitgraph:
+	$(LEX_XMPL_MAIN) examples/gitGraph.jison
+	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/gitGraph.input.txt
+	node examples/output/gitGraph.js    					examples/inputData/gitGraph.input.txt                    			examples/output/$@.test-run.tokens.json
+
+examples_pplex:
+	$(LEX_XMPL_MAIN) examples/pplex.l
+	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/pplex.input.txt
+	node examples/output/pplex.js    						examples/inputData/pplex.input.txt                    			examples/output/$@.test-run.tokens.json
+
+examples_gnucobol:
+	$(LEX_XMPL_MAIN) examples/gnucobol-scanner.l
+	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/gnucobol-scanner.input.txt
+	#node examples/output/gnucobol-scanner.js    			examples/inputData/gnucobol-scanner.input.txt                    			examples/output/$@.test-run.tokens.json
+
+examples_icl_grammar:
+	$(LEX_XMPL_MAIN) examples/icl-grammar.jisonlex
+	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/icl-grammar.input.txt
+	node examples/output/icl-grammar.js    					examples/inputData/icl-grammar.input.txt                    			examples/output/$@.test-run.tokens.json
+
+examples_issue51:
+	$(LEX_XMPL_MAIN) examples/issue-51-gho.jisonlex
+	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/issue-51-gho.input.txt
+	node examples/output/issue-51-gho.js    				examples/inputData/issue-51-gho.input.txt                    			examples/output/$@.test-run.tokens.json
+
+examples_issue1:
+	$(LEX_XMPL_MAIN) examples/issue-crash-1.jison
+	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/issue-crash-1.input.txt
+	node examples/output/issue-crash-1.js    				examples/inputData/issue-crash-1.input.txt                    			examples/output/$@.test-run.tokens.json
+
+examples_jslex:
+	$(LEX_XMPL_MAIN) examples/js-lex.jisonlex
+	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/js-lex.input.txt
+	node examples/output/js-lex.js    						examples/inputData/js-lex.input.txt                    			examples/output/$@.test-run.tokens.json
+
+examples_mermaid:
+	$(LEX_XMPL_MAIN) examples/mermaid.jison
+	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/mermaid.input.txt
+	node examples/output/mermaid.js    						examples/inputData/mermaid.input.txt                    			examples/output/$@.test-run.tokens.json
+
+examples_seval:
+	$(LEX_XMPL_MAIN) examples/seval.jisonlex
+	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/seval.input.txt
+	node examples/output/seval.js    						examples/inputData/seval.input.txt                    			examples/output/$@.test-run.tokens.json
+
+examples_shapemap:
+	$(LEX_XMPL_MAIN) examples/ShapeMapJison.jison
+	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/ShapeMapJison.input.txt
+	node examples/output/ShapeMapJison.js    				examples/inputData/ShapeMapJison.input.txt                    			examples/output/$@.test-run.tokens.json
+
+examples_shex:
+	$(LEX_XMPL_MAIN) examples/ShExJison.jison
+	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/ShExJison.input.txt
+	node examples/output/ShExJison.js    					examples/inputData/ShExJison.input.txt                    			examples/output/$@.test-run.tokens.json
+
+examples_with_includes_test:
+	$(LEX_XMPL_MAIN) examples/with-includes.test.lex
+	cp -n examples/inputData/with_custom_lexer.input.txt examples/inputData/with-includes.test.input.txt
+	node examples/output/with-includes.test.js    			examples/inputData/with-includes.test.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_lex:
-	$(LEX) --main examples/lex.l -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/lex.l
 	node examples/output/lex.js    							examples/inputData/lex.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_include:
-	$(LEX) --main examples/with-includes.test.lex -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/with-includes.test.lex
 	node examples/output/with-includes.test.js    			examples/inputData/with-includes.test.input.txt                 examples/output/$@.test-run.tokens.json
 
 examples_basic2_lex:
-	$(LEX) --main examples/basic2_lex.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/basic2_lex.jison
 	node examples/output/basic2_lex.js    					examples/inputData/basic2_lex.input.txt                    		examples/output/$@.test-run.tokens.json
 
 examples_basic_lex:
-	$(LEX) --main examples/basic_lex.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/basic_lex.jison
 	node examples/output/basic_lex.js    					examples/inputData/basic_lex.input.txt                    		examples/output/$@.test-run.tokens.json
 
 examples_c99:
-	$(LEX) --main examples/c99.l -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/c99.l
 	node examples/output/c99.js    							examples/inputData/c99.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_ccalc_lex:
-	$(LEX) --main examples/ccalc-lex.l -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/ccalc-lex.l
 	node examples/output/ccalc-lex.js    					examples/inputData/ccalc-lex.input.txt                    		examples/output/$@.test-run.tokens.json
 
+examples_ccalc_jisonlex:
+	$(LEX_XMPL_MAIN) examples/ccalc-lex.jisonlex   -o examples/output/ccalc-jisonlex.js
+	node examples/output/ccalc-jisonlex.js    				examples/inputData/ccalc-jisonlex.input.txt                    		examples/output/$@.test-run.tokens.json
+
 examples_classy:
-	$(LEX) --main examples/classy.jisonlex -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/classy.jisonlex
 	node examples/output/classy.js    						examples/inputData/classy.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_codegen_feature_tester_base:
-	$(LEX) --main examples/codegen-feature-tester-base.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/codegen-feature-tester-base.jison
 	node examples/output/codegen-feature-tester-base.js    	examples/inputData/codegen-feature-tester-base.input.txt        examples/output/$@.test-run.tokens.json
 
 examples_comments:
-	$(LEX) --main examples/comments.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/comments.jison
 	node examples/output/comments.js    					examples/inputData/comments.input.txt                    		examples/output/$@.test-run.tokens.json
 
 examples_compiled_calc_parse:
-	$(LEX) --main examples/compiled_calc_parse.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/compiled_calc_parse.jison
 	node examples/output/compiled_calc_parse.js    			examples/inputData/compiled_calc_parse.input.txt                examples/output/$@.test-run.tokens.json
 
 examples_faking:
-	$(LEX) --main examples/faking-multiple-start-rules-alt.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/faking-multiple-start-rules-alt.jison
 	node examples/output/faking-multiple-start-rules-alt.js    examples/inputData/faking-multiple-start-rules-alt.input.txt         examples/output/$@.test-run.tokens.json
 
 examples_floop:
-	$(LEX) --main examples/floop.l -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/floop.l
 	node examples/output/floop.js    						examples/inputData/floop.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_handlebars:
-	$(LEX) --main examples/handlebars.jison.l -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/handlebars.jison.l
 	node examples/output/handlebars.jison.js    			examples/inputData/handlebars.jison.input.txt                   examples/output/$@.test-run.tokens.json
 
 examples_issue_x1:
-	$(LEX) --main examples/issue-19-jison_lex-fixed.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/issue-19-jison_lex-fixed.jison
 	node examples/output/issue-19-jison_lex-fixed.js    	examples/inputData/issue-19-jison_lex-fixed.input.txt           examples/output/$@.test-run.tokens.json
 
 examples_issue_x2:
-	$(LEX) --main examples/issue-19-jison_lex.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/issue-19-jison_lex.jison
 	node examples/output/issue-19-jison_lex.js    			examples/inputData/issue-19-jison_lex.input.txt                 examples/output/$@.test-run.tokens.json
 
 examples_issue_url_lexing:
-	$(LEX) --main examples/issue-357-url-lexing.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/issue-357-url-lexing.jison
 	node examples/output/issue-357-url-lexing.js    		examples/inputData/issue-357-url-lexing.input.txt               examples/output/$@.test-run.tokens.json
 
 examples_lex_grammar:
-	$(LEX) --main examples/lex_grammar.jisonlex -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/lex_grammar.jisonlex
 	node examples/output/lex_grammar.js    					examples/inputData/lex_grammar.input.txt                    	examples/output/$@.test-run.tokens.json
 
 examples_lexer_comm_debug:
-	$(LEX) --main examples/parser-to-lexer-communication-test-w-debug.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/parser-to-lexer-communication-test-w-debug.jison
 	node examples/output/parser-to-lexer-communication-test-w-debug.js    examples/inputData/parser-to-lexer-communication-test-w-debug.input.txt       examples/output/$@.test-run.tokens.json
 
 examples_pascal:
-	$(LEX) --main examples/pascal.l -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/pascal.l
 	node examples/output/pascal.js    						examples/inputData/pascal.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_regex:
-	$(LEX) --main examples/regex.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/regex.jison
 	node examples/output/regex.js    						examples/inputData/regex.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_xregexp:
-	$(LEX) --main examples/xregexp.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/xregexp.jison
 	node examples/output/xregexp.js    						examples/inputData/xregexp.input.txt                    		examples/output/$@.test-run.tokens.json
 
 examples_semwhitespace:
-	$(LEX) --main examples/semwhitespace_lex.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/semwhitespace_lex.jison
 	node examples/output/semwhitespace_lex.js    			examples/inputData/semwhitespace_lex.input.txt                  examples/output/$@.test-run.tokens.json
 
 examples_tikiwikiparser:
-	$(LEX) --main examples/tikiwikiparser.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/tikiwikiparser.jison
 	node examples/output/tikiwikiparser.js    				examples/inputData/tikiwikiparser.input.txt                    	examples/output/$@.test-run.tokens.json
 
 examples_unicode:
-	$(LEX) --main examples/unicode.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/unicode.jison
 	node examples/output/unicode.js    						examples/inputData/unicode.input.txt                    		examples/output/$@.test-run.tokens.json
 
 examples_unicode2:
-	$(LEX) --main examples/unicode2.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/unicode2.jison
 	node examples/output/unicode2.js    					examples/inputData/unicode2.input.txt                    		examples/output/$@.test-run.tokens.json
 
 examples_with_includes:
-	$(LEX) --main examples/with-includes.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/with-includes.jison
 	node examples/output/with-includes.js    				examples/inputData/with-includes.input.txt                    	examples/output/$@.test-run.tokens.json
 
 examples_with_custom_lexer:
-	$(LEX) --main examples/with_custom_lexer.jison -o examples/output/ -x
+	$(LEX_XMPL_MAIN) examples/with_custom_lexer.jison
 	node examples/output/with_custom_lexer.js    			examples/inputData/with_custom_lexer.input.txt                  examples/output/$@.test-run.tokens.json
 
 
@@ -222,5 +304,45 @@ clean-dumpfiles:
 	bash -c "find . -type f \( -iname '*fatal_*_dump*' -o -ipath '*reference-output*' -o -ipath '*/lex/output/*' -o -ipath '*/specs/output/*' -o -ipath '*/examples/output/*' \) -print -delete"
 
 
-.PHONY: all prep npm-install build test examples clean_comparison clean superclean clean-dumpfiles bump git-tag publish examples_lex examples_include examples_basic2_lex examples_basic_lex examples_c99 examples_ccalc_lex examples_classy examples_codegen_feature_tester_base examples_comments examples_compiled_calc_parse examples_faking examples_floop examples_handlebars examples_issue_url_lexing examples_issue_x1 examples_issue_x2 examples_lex_grammar examples_lexer_comm_debug examples_pascal examples_regex examples_semwhitespace examples_tikiwikiparser examples_unicode2 examples_unicode examples_with_custom_lexer examples_with_includes comparison npm-update test-nyc
+.PHONY: all prep npm-install build test examples clean_comparison clean superclean clean-dumpfiles bump git-tag publish comparison npm-update test-nyc \
+		examples_basic2_lex                         \
+		examples_basic_lex                          \
+		examples_c99                                \
+		examples_ccalc_lex                          \
+		examples_ccalc_jisonlex                     \
+		examples_classy                             \
+		examples_codegen_feature_tester_base        \
+		examples_comments                           \
+		examples_compiled_calc_parse                \
+		examples_faking                             \
+		examples_floop                              \
+		examples_gitgraph							\
+		examples_gnucobol							\
+		examples_handlebars                         \
+		examples_icl_grammar						\
+		examples_include                            \
+		examples_issue1								\
+		examples_issue51							\
+		examples_issue_url_lexing                   \
+		examples_issue_x1                           \
+		examples_issue_x2                           \
+		examples_jslex								\
+		examples_lex                                \
+		examples_lex_grammar                        \
+		examples_lexer_comm_debug                   \
+		examples_mermaid							\
+		examples_pascal                             \
+		examples_pplex								\
+		examples_regex                              \
+		examples_semwhitespace                      \
+		examples_seval								\
+		examples_shapemap							\
+		examples_shex								\
+		examples_tikiwikiparser                     \
+		examples_unicode                            \
+		examples_unicode2                           \
+		examples_with_custom_lexer                  \
+		examples_with_includes 						\
+		examples_with_includes_test					\
+		examples_xregexp
 
