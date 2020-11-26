@@ -1,5 +1,5 @@
 
-                    
+
 const lexer = {
 /* JISON-LEX-ANALYTICS-REPORT */
 EOF: 1,
@@ -150,6 +150,7 @@ EOF: 1,
         if (args.length) {
             p.extra_error_attributes = args;
         }
+        p.yyErrorInvoked = true;   // so parseError() user code can easily recognize it is invoked from any yyerror() in the spec action code chunks
 
         return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
     },
@@ -166,22 +167,20 @@ EOF: 1,
      * @public
      * @this {RegExpLexer}
      */
-    cleanupAfterLex: function lexer_cleanupAfterLex(do_not_nuke_errorinfos) {
+    cleanupAfterLex: function lexer_cleanupAfterLex() {
         // prevent lingering circular references from causing memory leaks:
         this.setInput('', {});
 
         // nuke the error hash info instances created during this run.
         // Userland code must COPY any data/references
         // in the error hash instance(s) it is more permanently interested in.
-        if (!do_not_nuke_errorinfos) {
-            for (let i = this.__error_infos.length - 1; i >= 0; i--) {
-                let el = this.__error_infos[i];
-                if (el && typeof el.destroy === 'function') {
-                    el.destroy();
-                }
+        for (let i = this.__error_infos.length - 1; i >= 0; i--) {
+            let el = this.__error_infos[i];
+            if (el && typeof el.destroy === 'function') {
+                el.destroy();
             }
-            this.__error_infos.length = 0;
         }
+        this.__error_infos.length = 0;
 
         return this;
     },
@@ -226,31 +225,31 @@ EOF: 1,
         // including expansion work to be done to go from a loaded
         // lexer to a usable lexer:
         if (!this.__decompressed) {
-          // step 1: decompress the regex list:
+            // step 1: decompress the regex list:
             let rules = this.rules;
-            for (var i = 0, len = rules.length; i < len; i++) {
-                var rule_re = rules[i];
+            for (let i = 0, len = rules.length; i < len; i++) {
+                let rule_re = rules[i];
 
-            // compression: is the RE an xref to another RE slot in the rules[] table?
+                // compression: is the RE an xref to another RE slot in the rules[] table?
                 if (typeof rule_re === 'number') {
                     rules[i] = rules[rule_re];
                 }
             }
 
-          // step 2: unfold the conditions[] set to make these ready for use:
+            // step 2: unfold the conditions[] set to make these ready for use:
             let conditions = this.conditions;
             for (let k in conditions) {
                 let spec = conditions[k];
 
                 let rule_ids = spec.rules;
 
-                var len = rule_ids.length;
+                let len = rule_ids.length;
                 let rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
                 let rule_new_ids = new Array(len + 1);
 
-                for (var i = 0; i < len; i++) {
+                for (let i = 0; i < len; i++) {
                     let idx = rule_ids[i];
-                    var rule_re = rules[idx];
+                    let rule_re = rules[idx];
                     rule_regexes[i + 1] = rule_re;
                     rule_new_ids[i + 1] = idx;
                 }
@@ -519,6 +518,7 @@ EOF: 1,
                 lineno_msg += ' on line ' + (this.yylineno + 1);
             }
             const p = this.constructLexErrorInfo(lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).', false);
+            p.isLexerBacktrackingNotSupportedError = true;            // when this is true, you 'know' the produced error token will be queued.
             this._signaled_error_token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
         }
         return this;
@@ -1132,8 +1132,34 @@ EOF: 1,
             let activeCondition = this.topState();
             let conditionStackDepth = this.conditionStack.length;
 
-            let token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
-            if (token === this.ERROR) {
+            // when this flag is set in your parseError() `hash`, you 'know' you cannot manipute `yytext` to be anything but 
+            // a string value, unless
+            // - you either get to experience a lexer crash once it invokes .input() with your manipulated `yytext` object,
+            // - or you must forward the lex cursor yourself by invoking `yy.input()` or equivalent, *before* you go and
+            //   tweak that `yytext`.
+            p.lexerHasAlreadyForwardedCursorBy1 = (!this.matches);
+
+            // Simplify use of (advanced) custom parseError() handlers: every time we encounter an error,
+            // which HAS NOT consumed any input yet (thus causing an infinite lexer loop unless we take special action),
+            // we FIRST consume ONE character of input, BEFORE we call parseError().
+            // 
+            // This implies that the parseError() now can call `unput(this.yytext)` if it wants to only change lexer
+            // state via popState/pushState, but otherwise this would make for a cleaner parseError() implementation
+            // as there's no conditional check for `hash.lexerHasAlreadyForwardedCursorBy1` needed in there any more.
+            // 
+            // Since that flag is new as of jison-gho 0.7.0, as is this new consume1+parseError() behaviour, only
+            // sophisticated userland parseError() methods will need to be reviewed.
+            // Haven't found any of those in the (Open Source) wild today, so this should be safe to change...
+
+            // *** CONSUME 1 ***:
+                        
+            //if (token === this.ERROR) {
+            //    ^^^^^^^^^^^^^^^^^^^^ WARNING: no matter what token the error handler produced, 
+            //                         it MUST move the cursor forward or you'ld end up in 
+            //                         an infinite lex loop, unless one or more of the following 
+            //                         conditions was changed, so as to change the internal lexer 
+            //                         state and thus enable it to produce a different token:
+            //                         
                 // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
                 // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
                 // has not consumed/modified any pending input or changed state in the error handler:
@@ -1147,8 +1173,19 @@ EOF: 1,
                 ) {
                     this.input();
                 }
-            }
-            return token;
+            //}
+
+            // *** PARSE-ERROR ***:
+            // 
+            // Note:
+            // userland code in there may `unput()` what was done, after checking the `hash.lexerHasAlreadyForwardedCursorBy1` flag.
+            // Caveat emptor! :: When you simply `unput()` the `yytext` without at least changing the lexer condition state 
+            // via popState/pushState, you WILL end up with an infinite lexer loop. 
+            // 
+            // This kernel code has been coded to prevent this dangerous situation unless you specifically seek it out
+            // in your custom parseError handler.
+                        
+            return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
         }
     },
 
@@ -1390,10 +1427,10 @@ EOF: 1,
 },
     JisonLexerError: JisonLexerError,
     performAction: function lexer__performAction(yy, yyrulenumber, YY_START) {
-            var yy_ = this;
+            const yy_ = this;
 
             
-var YYSTATE = YY_START;
+const YYSTATE = YY_START;
 switch(yyrulenumber) {
 case 0 : 
 /*! Conditions:: PERCENT_ALLOWED */ 
@@ -1566,10 +1603,10 @@ default:
 };
 ;
 
-                    //=============================================================================
-                    //                     JISON-LEX OPTIONS:
+//=============================================================================
+//                     JISON-LEX OPTIONS:
 
-                    {
+const lexerSpecConglomerate = {
   lexerActionsUseYYLENG: '???',
   lexerActionsUseYYLINENO: '???',
   lexerActionsUseYYTEXT: '???',
@@ -1716,466 +1753,7 @@ var assert = require("assert");
 
 var print = (typeof console !== 'undefined' ? function __print__() {
     console.log.apply(null, ['  '].concat(Array.prototype.slice.call(arguments, 0)));
-} : function __dummy__() {});
-
-
-
-
-
-
-
-
-
-
-parser.pre_parse = function (yy) {
-    print("parsing: ", yy.lexer.upcomingInput(-1 /* i.e. produce the entire (unparsed) input string */));
-
-    parser.lexer.options.post_lex = function (token) {
-        print("lex() ==> ", token, '[' + this.yytext + ']', parser.describeSymbol(token));
-    };
-};
-
-
-
-if (0) {
-    parser.trace = function () {
-        print.apply(null, ['TRACE: '].concat(Array.prototype.slice.call(arguments, 0)));
-    };
-}
-
-
-
-parser.yy.parseError = function parseError(str, hash, ExceptionClass) {
-    assert(hash.yy);
-    assert(this);
-    assert(this !== parser.yy);
-    assert(this === hash.yy.parser || this === hash.yy.lexer);
-    if (hash.recoverable) {
-        hash.yy.parser.trace(str);
-        hash.yy.lastErrorMessage = str;
-        hash.yy.lastErrorHash = hash;
-    } else {
-        console.error(str, hash && hash.exception);
-        throw new ExceptionClass(str, hash);
-    }
-};
-
-
-
-
-
-// Included by Jison: includes/benchmark.js:
-
-/**
- * Provide a generic performance timer, which strives to produce highest possible accuracy time measurements.
- * 
- * methods:
- * 
- * - \`start()\` (re)starts the timer and 'marks' the current time for ID="start". 
- *   \`.start()\` also CLEARS ALL .mark_delta() timers!
- *
- * - \`mark(ID)\` calculates the elapsed time for the current timer in MILLISECONDS (floating point) 
- *   since \`.start()\`. \`.mark_delta()\` then updates the 'start/mark time' for the given ID.
- *
- *   ID *may* be NULL, in which case \`.mark()\` will not update any 'start/mark time'.
- *    
- * - \`mark_delta(ID, START_ID)\` calculates the elapsed time for the current timer in MILLISECONDS (floating point) since 
- *   the last call to \`.mark_delta()\` or \`.mark()\` with the same ID. \`.mark_delta()\` then updates the 
- *   'start/mark time' for the given ID.
- *
- *   When the optional START_ID is specified, the delta is calculated against the last marked time 
- *   for that START_ID.
- *
- *   When the ID is NULL or not specified, then the default ID of "start" will be assumed.
- *   
- *   This results in consecutive calls to \`.mark_delta()\` with the same ID to produce 
- *   each of the time intervals between the calls, while consecutive calls to
- *   \`.mark()\` with he same ID would produce an increase each time instead as the time 
- *   between the \`.mark()\` call and the original \`.start()\` increases.
- * 
- * Notes:
- * 
- * - when you invoke \`.mark()\` or \`.mark_delta()\` without having called .start() before, 
- *   then the timer is started at the mark.
- * 
- * - \`.start()\` will erase all stored 'start/mark times' which may have been
- *   set by \`.mark()\` or \`.mark_delta()\` before -- you may call \`.start()\` multiple times for
- *   the same timer instance, after all.
- * 
- * - you are responsible to manage the IDs for \`.mark()\` and \`.mark_delta()\`. The ID MUST NOT be "start" 
- *   as ID = "start" identifies the .start() timer.
- * 
- * References for the internal implementation:
- * 
- *    - http://updates.html5rocks.com/2012/08/When-milliseconds-are-not-enough-performance-now
- *    - http://ejohn.org/blog/accuracy-of-javascript-time/
- *
- * @class 
- * @constructor
- */
-function PerformanceTimer() {
-  /* @private */ var start_time = false;
-  var obj = {
-  };
-  // feature detect:
-  /* @private */ var f, tv;
-  /* @private */ var p = (typeof window !== 'undefined' && window.performance);
-  if (p && p.timing.navigationStart && p.now) {
-    f = function () {
-      return p.now();
-    };
-  } else if (p && typeof p.webkitNow === 'function') {
-    f = function () {
-      return p.webkitNow();
-    };
-  } else {
-    p = (typeof process !== 'undefined' && process.hrtime);
-    if (typeof p === 'function') {
-      tv = p();
-      if (tv && tv.length === 2) {
-        f = function () {
-          var rv = p();
-          return rv[0] * 1e3 + rv[1] * 1e-6;
-        };
-      } 
-    } 
-    if (!f) {
-      f = function () {
-        return Date.now();
-      };
-      try {
-        f();
-      } catch (ex) {
-        f = function () {
-          return +new Date();
-        };
-      }
-    }
-  }
-
-  obj.start = function () {
-    start_time = {
-      start: f()
-    };
-    return obj;
-  };
-  
-  obj.mark = function (id, start_id) {
-    if (start_time === false) this.start();
-    var end_time = f();
-    var begin_time = start_time[start_id || id || "start"];
-    if (!begin_time) {
-      begin_time = end_time;
-    }
-    var rv = end_time - begin_time;
-    if (id) {
-      start_time[id] = end_time;
-    }
-    return rv;
-  };
-  
-  obj.mark_delta = function (id) {
-    if (start_time === false) this.start();
-    id = id || "start";
-    var end_time = f();
-    var begin_time = start_time[id];
-    if (!begin_time) {
-      begin_time = end_time;
-    }
-    var rv = end_time - begin_time;
-    start_time[id] = end_time;
-    return rv;
-  };
-  
-  obj.reset_mark = function (id) {
-    id = id || "start";
-    start_time[id] = null;
-    return obj;
-  };
-
-  obj.get_mark = function (id) {
-    id = id || "start";
-    return start_time[id];
-  };
-
-  obj.mark_sample_and_hold = function (id) {
-    if (start_time === false) this.start();
-    id = id || "start";
-    // sample ...
-    var end_time = f();
-    var begin_time = start_time[id];
-    if (!begin_time) {
-      begin_time = end_time;
-      // ... and hold
-      start_time[id] = begin_time;
-    }
-    var rv = end_time - begin_time;
-    return rv;
-  };
-
-  return obj;
-}
-
-var perf = PerformanceTimer();
-
-
-
-// round to the number of decimal digits:
-function r(v, n) {
-    var m = Math.pow(10, n | 0);
-    v *= m;
-    v = Math.round(v);
-    return v / m;
-}
-
-// run the benchmark on function \`f\` for at least 5 seconds.
-function bench(f, n, minimum_run_time, setup_f, destroy_f) {
-    var factor = 50;
-    var run = 1;         // factor of 50 !  
-    n |= 0;
-    n /= run;
-    n |= 0;
-    n = Math.max(n, 1); // --> minimum number of tests: 1*run*factor
-    
-    minimum_run_time |= 0;
-    if (!minimum_run_time) {
-        // default: 5 seconds minimum run time:
-        minimum_run_time = 5000 * 1.01 /* overhead compensation */;     
-    }
-    minimum_run_time = Math.max(minimum_run_time, 1000);    // absolute minimum run time: 1 second
-
-    perf.mark('monitor');
-
-    if (setup_f) {
-        setup_f(f, n, minimum_run_time);
-    }
-
-    // measure a short run and determine the run count based on this result:
-    perf.mark('bench');
-    // 50 x f(): that seems a sort of 'sweet spot' for NodeJS v5, at least for some benchmarks...
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-
-    var sample1 = perf.mark('bench');
-    var fmultiplier = 250 / sample1;
-    var multiplier = Math.max(1, (fmultiplier + 0.5) | 0);
-    run = Math.max(run, multiplier);
-    console.log("run multiplier: ", run);
-
-    // get the number of tests internal to the test function: 1 or more
-    var internal_cnt = f();
-    if (typeof internal_cnt === 'number' && (internal_cnt | 0) === internal_cnt) {
-        factor *= internal_cnt;
-    }
-
-    var last_report = 500;
-    var ts = [];
-    for (var i = 0; i < n; i++) {
-        perf.mark('bench');
-        for (var j = 0; j < run; j++) {
-            // 50 x f(): that seems a sort of 'sweet spot' for NodeJS v5, at least for some benchmarks...
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-        }
-        ts.push(perf.mark('bench'));
-        var consumed = perf.mark_sample_and_hold('monitor');
-        //console.log('consumed', consumed, ts[ts.length - 1], i);
-        if (last_report <= consumed) {
-            console.log('#' + (ts.length * factor));
-            last_report = consumed + 1000;
-        }
-        if (consumed < minimum_run_time || ts.length < 10) {
-            // stay in the loop until 5 seconds have expired or at least 10 rounds have been executed!
-            i = Math.min(i, n - 2);
-        }
-    }
-
-    if (destroy_f) {
-        destroy_f(f, n, minimum_run_time);
-    }
-
-    var consumed = perf.mark_sample_and_hold('monitor');
-    
-    var sum = 0;
-    for (var i = 0, cnt = ts.length; i < cnt; i++) {
-        sum += ts[i];
-    }
-    var avg = sum / cnt;
-
-    var dev = 0;
-    var peak = 0;
-    for (var i = 0; i < cnt; i++) {
-        var delta = Math.abs(ts[i] - avg);
-        dev += delta;
-        peak = Math.max(peak, delta);
-    }
-    dev /= cnt;
-    var sample_size = run * factor;
-    console.log(["Time: total: ", r(sum, 0) + 'ms',
-        ", sample_count: ", cnt,
-        ", # runs: ", cnt * sample_size,
-        ", # runs/sec: ", r(cnt * sample_size * 1000 / sum, 1),
-        ", average: ", r(avg / sample_size, 4) + 'ms',
-        ", deviation: ", r(100 * dev / avg, 2) + '%',
-        ", peak_deviation: ", r(100 * peak / avg, 2) + '%',
-        ", total overhead: ", r(consumed - sum, 0) + 'ms'].join('')
-    );
-}
-
-// End Of Include by Jison: includes/benchmark.js
-
-
-
-
-
-
-parser.main = function () {
-    print("Running benchmark...");
-    var t1 = perf.start();
-
-    var basenum = 1;
-
-    function test() {
-        const formulas_and_expectations =  [
-            basenum + '+2*(3-5--+--+6!)-7/-8%',                      1523.5 + basenum,
-            basenum + '+2*0.7%^PI^2+4+5',                            9 + basenum, /* this bets on JS floating point calculations discarding the small difference with this integer value... */
-            basenum + '+(2+3*++++)+5+6+7+8+9 9',                     74 + basenum, // with error recovery and all it gives you a value...
-            basenum + '+2*(3!-5!-6!)/7/8',                           -29.785714285714285 + basenum,
-        ];
-
-        basenum++;
-
-        for (var i = 0, len = formulas_and_expectations.length; i < len; i += 2) {
-            var formula = formulas_and_expectations[i];
-            var expectation = formulas_and_expectations[i + 1];
-
-            var rv = parser.parse(formula);
-            print("'" + formula + "' ==> ", rv, "\\n");
-            if (isNaN(rv) && isNaN(expectation)) {
-              assert(1);
-            } else {
-              assert.equal(rv, expectation);
-            }
-        }
-        return formulas_and_expectations.length / 2;
-    }
-
-    if (0) {
-        print = function dummy() {};
-    }
-    if (0x1) {
-        test();
-    } else {
-        bench(test);
-    }
-
-    // if you get past the assert(), you're good.
-    print("tested OK @", r(perf.mark(), 2), " ms");
-}`,
+} : function __dummy__() {})`,
     macros: {},
     startConditions: {
       PERCENT_ALLOWED: 0,
@@ -2184,13 +1762,20 @@ parser.main = function () {
     importDecls: [],
     unknownDecls: [],
   },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
   options: {
     moduleType: 'commonjs',
     debug: false,
     enableDebugLogs: false,
     json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
     dumpSourceCodeOnFailure: true,
     throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
     defaultModuleName: 'lexer',
     xregexp: false,
     lexerErrorsAreRecoverable: false,
@@ -2199,12 +1784,12 @@ parser.main = function () {
     ranges: false,
     trackPosition: true,
     caseInsensitive: false,
-    exportSourceCode: false,
+    exportSourceCode: {
+      enabled: false,
+    },
     exportAST: false,
     prettyCfg: true,
-    noMain: true,
   },
-  moduleType: 'commonjs',
   conditions: {
     PERCENT_ALLOWED: {
       rules: [
@@ -2250,10 +1835,10 @@ parser.main = function () {
     },
   },
   performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
-            var yy_ = this;
+            const yy_ = this;
 
             
-var YYSTATE = YY_START;
+const YYSTATE = YY_START;
 switch(yyrulenumber) {
 case 0 : 
 /*! Conditions:: PERCENT_ALLOWED */ 
@@ -2573,468 +2158,8 @@ var assert = require("assert");
 
 var print = (typeof console !== 'undefined' ? function __print__() {
     console.log.apply(null, ['  '].concat(Array.prototype.slice.call(arguments, 0)));
-} : function __dummy__() {});
-
-
-
-
-
-
-
-
-
-
-parser.pre_parse = function (yy) {
-    print("parsing: ", yy.lexer.upcomingInput(-1 /* i.e. produce the entire (unparsed) input string */));
-
-    parser.lexer.options.post_lex = function (token) {
-        print("lex() ==> ", token, '[' + this.yytext + ']', parser.describeSymbol(token));
-    };
-};
-
-
-
-if (0) {
-    parser.trace = function () {
-        print.apply(null, ['TRACE: '].concat(Array.prototype.slice.call(arguments, 0)));
-    };
-}
-
-
-
-parser.yy.parseError = function parseError(str, hash, ExceptionClass) {
-    assert(hash.yy);
-    assert(this);
-    assert(this !== parser.yy);
-    assert(this === hash.yy.parser || this === hash.yy.lexer);
-    if (hash.recoverable) {
-        hash.yy.parser.trace(str);
-        hash.yy.lastErrorMessage = str;
-        hash.yy.lastErrorHash = hash;
-    } else {
-        console.error(str, hash && hash.exception);
-        throw new ExceptionClass(str, hash);
-    }
-};
-
-
-
-
-
-// Included by Jison: includes/benchmark.js:
-
-/**
- * Provide a generic performance timer, which strives to produce highest possible accuracy time measurements.
- * 
- * methods:
- * 
- * - \`start()\` (re)starts the timer and 'marks' the current time for ID="start". 
- *   \`.start()\` also CLEARS ALL .mark_delta() timers!
- *
- * - \`mark(ID)\` calculates the elapsed time for the current timer in MILLISECONDS (floating point) 
- *   since \`.start()\`. \`.mark_delta()\` then updates the 'start/mark time' for the given ID.
- *
- *   ID *may* be NULL, in which case \`.mark()\` will not update any 'start/mark time'.
- *    
- * - \`mark_delta(ID, START_ID)\` calculates the elapsed time for the current timer in MILLISECONDS (floating point) since 
- *   the last call to \`.mark_delta()\` or \`.mark()\` with the same ID. \`.mark_delta()\` then updates the 
- *   'start/mark time' for the given ID.
- *
- *   When the optional START_ID is specified, the delta is calculated against the last marked time 
- *   for that START_ID.
- *
- *   When the ID is NULL or not specified, then the default ID of "start" will be assumed.
- *   
- *   This results in consecutive calls to \`.mark_delta()\` with the same ID to produce 
- *   each of the time intervals between the calls, while consecutive calls to
- *   \`.mark()\` with he same ID would produce an increase each time instead as the time 
- *   between the \`.mark()\` call and the original \`.start()\` increases.
- * 
- * Notes:
- * 
- * - when you invoke \`.mark()\` or \`.mark_delta()\` without having called .start() before, 
- *   then the timer is started at the mark.
- * 
- * - \`.start()\` will erase all stored 'start/mark times' which may have been
- *   set by \`.mark()\` or \`.mark_delta()\` before -- you may call \`.start()\` multiple times for
- *   the same timer instance, after all.
- * 
- * - you are responsible to manage the IDs for \`.mark()\` and \`.mark_delta()\`. The ID MUST NOT be "start" 
- *   as ID = "start" identifies the .start() timer.
- * 
- * References for the internal implementation:
- * 
- *    - http://updates.html5rocks.com/2012/08/When-milliseconds-are-not-enough-performance-now
- *    - http://ejohn.org/blog/accuracy-of-javascript-time/
- *
- * @class 
- * @constructor
- */
-function PerformanceTimer() {
-  /* @private */ var start_time = false;
-  var obj = {
-  };
-  // feature detect:
-  /* @private */ var f, tv;
-  /* @private */ var p = (typeof window !== 'undefined' && window.performance);
-  if (p && p.timing.navigationStart && p.now) {
-    f = function () {
-      return p.now();
-    };
-  } else if (p && typeof p.webkitNow === 'function') {
-    f = function () {
-      return p.webkitNow();
-    };
-  } else {
-    p = (typeof process !== 'undefined' && process.hrtime);
-    if (typeof p === 'function') {
-      tv = p();
-      if (tv && tv.length === 2) {
-        f = function () {
-          var rv = p();
-          return rv[0] * 1e3 + rv[1] * 1e-6;
-        };
-      } 
-    } 
-    if (!f) {
-      f = function () {
-        return Date.now();
-      };
-      try {
-        f();
-      } catch (ex) {
-        f = function () {
-          return +new Date();
-        };
-      }
-    }
-  }
-
-  obj.start = function () {
-    start_time = {
-      start: f()
-    };
-    return obj;
-  };
-  
-  obj.mark = function (id, start_id) {
-    if (start_time === false) this.start();
-    var end_time = f();
-    var begin_time = start_time[start_id || id || "start"];
-    if (!begin_time) {
-      begin_time = end_time;
-    }
-    var rv = end_time - begin_time;
-    if (id) {
-      start_time[id] = end_time;
-    }
-    return rv;
-  };
-  
-  obj.mark_delta = function (id) {
-    if (start_time === false) this.start();
-    id = id || "start";
-    var end_time = f();
-    var begin_time = start_time[id];
-    if (!begin_time) {
-      begin_time = end_time;
-    }
-    var rv = end_time - begin_time;
-    start_time[id] = end_time;
-    return rv;
-  };
-  
-  obj.reset_mark = function (id) {
-    id = id || "start";
-    start_time[id] = null;
-    return obj;
-  };
-
-  obj.get_mark = function (id) {
-    id = id || "start";
-    return start_time[id];
-  };
-
-  obj.mark_sample_and_hold = function (id) {
-    if (start_time === false) this.start();
-    id = id || "start";
-    // sample ...
-    var end_time = f();
-    var begin_time = start_time[id];
-    if (!begin_time) {
-      begin_time = end_time;
-      // ... and hold
-      start_time[id] = begin_time;
-    }
-    var rv = end_time - begin_time;
-    return rv;
-  };
-
-  return obj;
-}
-
-var perf = PerformanceTimer();
-
-
-
-// round to the number of decimal digits:
-function r(v, n) {
-    var m = Math.pow(10, n | 0);
-    v *= m;
-    v = Math.round(v);
-    return v / m;
-}
-
-// run the benchmark on function \`f\` for at least 5 seconds.
-function bench(f, n, minimum_run_time, setup_f, destroy_f) {
-    var factor = 50;
-    var run = 1;         // factor of 50 !  
-    n |= 0;
-    n /= run;
-    n |= 0;
-    n = Math.max(n, 1); // --> minimum number of tests: 1*run*factor
-    
-    minimum_run_time |= 0;
-    if (!minimum_run_time) {
-        // default: 5 seconds minimum run time:
-        minimum_run_time = 5000 * 1.01 /* overhead compensation */;     
-    }
-    minimum_run_time = Math.max(minimum_run_time, 1000);    // absolute minimum run time: 1 second
-
-    perf.mark('monitor');
-
-    if (setup_f) {
-        setup_f(f, n, minimum_run_time);
-    }
-
-    // measure a short run and determine the run count based on this result:
-    perf.mark('bench');
-    // 50 x f(): that seems a sort of 'sweet spot' for NodeJS v5, at least for some benchmarks...
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-    f();
-
-    var sample1 = perf.mark('bench');
-    var fmultiplier = 250 / sample1;
-    var multiplier = Math.max(1, (fmultiplier + 0.5) | 0);
-    run = Math.max(run, multiplier);
-    console.log("run multiplier: ", run);
-
-    // get the number of tests internal to the test function: 1 or more
-    var internal_cnt = f();
-    if (typeof internal_cnt === 'number' && (internal_cnt | 0) === internal_cnt) {
-        factor *= internal_cnt;
-    }
-
-    var last_report = 500;
-    var ts = [];
-    for (var i = 0; i < n; i++) {
-        perf.mark('bench');
-        for (var j = 0; j < run; j++) {
-            // 50 x f(): that seems a sort of 'sweet spot' for NodeJS v5, at least for some benchmarks...
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-            f();
-        }
-        ts.push(perf.mark('bench'));
-        var consumed = perf.mark_sample_and_hold('monitor');
-        //console.log('consumed', consumed, ts[ts.length - 1], i);
-        if (last_report <= consumed) {
-            console.log('#' + (ts.length * factor));
-            last_report = consumed + 1000;
-        }
-        if (consumed < minimum_run_time || ts.length < 10) {
-            // stay in the loop until 5 seconds have expired or at least 10 rounds have been executed!
-            i = Math.min(i, n - 2);
-        }
-    }
-
-    if (destroy_f) {
-        destroy_f(f, n, minimum_run_time);
-    }
-
-    var consumed = perf.mark_sample_and_hold('monitor');
-    
-    var sum = 0;
-    for (var i = 0, cnt = ts.length; i < cnt; i++) {
-        sum += ts[i];
-    }
-    var avg = sum / cnt;
-
-    var dev = 0;
-    var peak = 0;
-    for (var i = 0; i < cnt; i++) {
-        var delta = Math.abs(ts[i] - avg);
-        dev += delta;
-        peak = Math.max(peak, delta);
-    }
-    dev /= cnt;
-    var sample_size = run * factor;
-    console.log(["Time: total: ", r(sum, 0) + 'ms',
-        ", sample_count: ", cnt,
-        ", # runs: ", cnt * sample_size,
-        ", # runs/sec: ", r(cnt * sample_size * 1000 / sum, 1),
-        ", average: ", r(avg / sample_size, 4) + 'ms',
-        ", deviation: ", r(100 * dev / avg, 2) + '%',
-        ", peak_deviation: ", r(100 * peak / avg, 2) + '%',
-        ", total overhead: ", r(consumed - sum, 0) + 'ms'].join('')
-    );
-}
-
-// End Of Include by Jison: includes/benchmark.js
-
-
-
-
-
-
-parser.main = function () {
-    print("Running benchmark...");
-    var t1 = perf.start();
-
-    var basenum = 1;
-
-    function test() {
-        const formulas_and_expectations =  [
-            basenum + '+2*(3-5--+--+6!)-7/-8%',                      1523.5 + basenum,
-            basenum + '+2*0.7%^PI^2+4+5',                            9 + basenum, /* this bets on JS floating point calculations discarding the small difference with this integer value... */
-            basenum + '+(2+3*++++)+5+6+7+8+9 9',                     74 + basenum, // with error recovery and all it gives you a value...
-            basenum + '+2*(3!-5!-6!)/7/8',                           -29.785714285714285 + basenum,
-        ];
-
-        basenum++;
-
-        for (var i = 0, len = formulas_and_expectations.length; i < len; i += 2) {
-            var formula = formulas_and_expectations[i];
-            var expectation = formulas_and_expectations[i + 1];
-
-            var rv = parser.parse(formula);
-            print("'" + formula + "' ==> ", rv, "\\n");
-            if (isNaN(rv) && isNaN(expectation)) {
-              assert(1);
-            } else {
-              assert.equal(rv, expectation);
-            }
-        }
-        return formulas_and_expectations.length / 2;
-    }
-
-    if (0) {
-        print = function dummy() {};
-    }
-    if (0x1) {
-        test();
-    } else {
-        bench(test);
-    }
-
-    // if you get past the assert(), you're good.
-    print("tested OK @", r(perf.mark(), 2), " ms");
-}`,
+} : function __dummy__() {})`,
   __in_rules_failure_analysis_mode__: false,
   is_custom_lexer: false,
 }
 
-                
