@@ -268,10 +268,145 @@ describe('LALR(1)', function () {
     });
 
     it('test BNF grammar bootstrap', function () {
-        let grammar = "%%\n\nspec\n    : declaration_list '%%' grammar EOF\n        {$$ = $1; $$.bnf = $3; return $$;}\n    | declaration_list '%%' grammar '%%' EOF\n        {$$ = $1; $$.bnf = $3; return $$;}\n    ;\n\ndeclaration_list\n    : declaration_list declaration\n        {$$ = $1; yy.addDeclaration($$, $2);}\n    | \n        %{$$ = {};%}\n    ;\n\ndeclaration\n    : START id\n        %{$$ = {start: $2};%}\n    | operator\n        %{$$ = {operator: $1};%}\n    ;\n\noperator\n    : associativity token_list\n        {$$ = [$1]; $$.push.apply($$, $2);}\n    ;\n\nassociativity\n    : LEFT\n        {$$ = 'left';}\n    | RIGHT\n        {$$ = 'right';}\n    | NONASSOC\n        {$$ = 'nonassoc';}\n    ;\n\ntoken_list\n    : token_list symbol\n        {$$ = $1; $$.push($2);}\n    | symbol\n        {$$ = [$1];}\n    ;\n\ngrammar\n    : production_list\n        {$$ = $1;}\n    ;\n\nproduction_list\n    : production_list production\n        {$$ = $1; $$[$2[0]] = $2[1];}\n    | production\n        %{$$ = {}; $$[$1[0]] = $1[1];%}\n    ;\n\nproduction\n    : id ':' handle_list ';'\n        {$$ = [$1, $3];}\n    ;\n\nhandle_list\n    : handle_list '|' handle_action\n        {$$ = $1; $$.push($3);}\n    | handle_action\n        {$$ = [$1];}\n    ;\n\nhandle_action\n    : handle action prec\n        {$$ = [($1.length ? $1.join(' ') : '')];\n            if($2) $$.push($2);\n            if($3) $$.push($3);\n            if ($$.length === 1) $$ = $$[0];\n        }\n    ;\n\nhandle\n    : handle symbol\n        {$$ = $1; $$.push($2)}\n    | \n        {$$ = [];}\n    ;\n\nprec\n    : PREC symbol\n        %{$$ = {prec: $2};%}\n    | \n        {$$ = null;}\n    ;\n\nsymbol\n    : id\n        {$$ = $1;}\n    | STRING\n        {$$ = yytext;}\n    ;\n\nid\n    : ID\n        {$$ = yytext;}\n    ;\n\naction\n    : ACTION\n        {$$ = yytext;}\n    | \n        {$$ = '';}\n    ;\n\n";
+        let grammar = `
+%%
 
-        let lex = "\n%%\n\\s+    \t{/* skip whitespace */}\n\"/*\"[^*]*\"*\"    \t{return yy.lexComment(this);}\n[a-zA-Z][a-zA-Z0-9_-]*    \t{return 'ID';}\n'\"'[^\"]+'\"'    \t{yytext = yytext.substr(1, yyleng-2); return 'STRING';}\n\"'\"[^']+\"'\"    \t{yytext = yytext.substr(1, yyleng-2); return 'STRING';}\n\":\"    \t{return ':';}\n\";\"    \t{return ';';}\n\"|\"    \t{return '|';}\n\"%%\"    \t{return '%%';}\n\"%prec\"    \t{return 'PREC';}\n\"%start\"    \t{return 'START';}\n\"%left\"    \t{return 'LEFT';}\n\"%right\"    \t{return 'RIGHT';}\n\"%nonassoc\"    \t{return 'NONASSOC';}\n\"%\"[a-zA-Z]+[^\\n]*    \t{/* ignore unrecognized decl */}\n\"{{\"[^}]*\"}\"    \t{return yy.lexAction(this);}\n\"{\"[^}]*\"}\"    \t{yytext = yytext.substr(1, yyleng-2); return 'ACTION';}\n\"%{\"(.|\\n)*?\"%}\"    	{yytext = yytext.substr(2, yyleng-4);return 'ACTION';} \n.    \t{/* ignore bad characters */}\n<<EOF>>    \t{return 'EOF';}\n\n%%\n\n";
+spec
+    : declaration_list '%%' grammar EOF
+        {$$ = $1; $$.bnf = $3; return $$;}
+    | declaration_list '%%' grammar '%%' EOF
+        {$$ = $1; $$.bnf = $3; return $$;}
+    ;
 
+declaration_list
+    : declaration_list declaration
+        {$$ = $1; yy.addDeclaration($$, $2);}
+    | 
+        %{$$ = {};%}
+    ;
+
+declaration
+    : START id
+        %{$$ = {start: $2};%}
+    | operator
+        %{$$ = {operator: $1};%}
+    ;
+
+operator
+    : associativity token_list
+        {$$ = [$1]; $$.push.apply($$, $2);}
+    ;
+
+associativity
+    : LEFT
+        {$$ = 'left';}
+    | RIGHT
+        {$$ = 'right';}
+    | NONASSOC
+        {$$ = 'nonassoc';}
+    ;
+
+token_list
+    : token_list symbol
+        {$$ = $1; $$.push($2);}
+    | symbol
+        {$$ = [$1];}
+    ;
+
+grammar
+    : production_list
+        {$$ = $1;}
+    ;
+
+production_list
+    : production_list production
+        {$$ = $1; $$[$2[0]] = $2[1];}
+    | production
+        %{$$ = {}; $$[$1[0]] = $1[1];%}
+    ;
+
+production
+    : id ':' handle_list ';'
+        {$$ = [$1, $3];}
+    ;
+
+handle_list
+    : handle_list '|' handle_action
+        {$$ = $1; $$.push($3);}
+    | handle_action
+        {$$ = [$1];}
+    ;
+
+handle_action
+    : handle action prec
+        {$$ = [($1.length ? $1.join(' ') : '')];
+            if($2) $$.push($2);
+            if($3) $$.push($3);
+            if ($$.length === 1) $$ = $$[0];
+        }
+    ;
+
+handle
+    : handle symbol
+        {$$ = $1; $$.push($2)}
+    | 
+        {$$ = [];}
+    ;
+
+prec
+    : PREC symbol
+        %{$$ = {prec: $2};%}
+    | 
+        {$$ = null;}
+    ;
+
+symbol
+    : id
+        {$$ = $1;}
+    | STRING
+        {$$ = yytext;}
+    ;
+
+id
+    : ID
+        {$$ = yytext;}
+    ;
+
+action
+    : ACTION
+        {$$ = yytext;}
+    | 
+        {$$ = '';}
+    ;
+
+        `;
+
+        let lex = `
+%%
+\\s+    \t{/* skip whitespace */}
+"/*"[^*]*"*"    \t{return yy.lexComment(this);}
+[a-zA-Z][a-zA-Z0-9_-]*    \t{return 'ID';}
+'"'[^"]+'"'    \t{yytext = yytext.substr(1, yyleng-2); return 'STRING';}
+"'"[^']+"'"    \t{yytext = yytext.substr(1, yyleng-2); return 'STRING';}
+":"    \t{return ':';}
+";"    \t{return ';';}
+"|"    \t{return '|';}
+"%%"    \t{return '%%';}
+"%prec"    \t{return 'PREC';}
+"%start"    \t{return 'START';}
+"%left"    \t{return 'LEFT';}
+"%right"    \t{return 'RIGHT';}
+"%nonassoc"    \t{return 'NONASSOC';}
+"%"[a-zA-Z]+[^]*    \t{/* ignore unrecognized decl */}
+"{{"[^}]*"}"    \t{return yy.lexAction(this);}
+"{"[^}]*"}"    \t{yytext = yytext.substr(1, yyleng-2); return 'ACTION';}
+"%{"(.|)*?"%}"        {yytext = yytext.substr(2, yyleng-4);return 'ACTION';} 
+.    \t{/* ignore bad characters */}
+<<EOF>>    \t{return 'EOF';}
+
+%%
+
+        `;
 
         let gen = new Jison.Generator(grammar, { type: 'lalr', hasPartialLrUpgradeOnConflict: false });
         gen.lexer = new Lexer(lex);
