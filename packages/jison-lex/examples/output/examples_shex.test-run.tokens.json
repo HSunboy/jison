@@ -1,0 +1,18 @@
+[
+  {
+    "id": -1,
+    "token": null,
+    "fail": 1,
+    "err": "ERROR:Error::Cannot find module '@shexjs/util'\nRequire stack:\n- W:\\Projects\\sites\\library.visyond.gov\\80\\lib\\tooling\\jison\\packages\\jison-lex\\examples\\output\\ShExJison.js::Error: Cannot find module '@shexjs/util'\nRequire stack:\n- W:\\Projects\\sites\\library.visyond.gov\\80\\lib\\tooling\\jison\\packages\\jison-lex\\examples\\output\\ShExJison.js\n    at Function.Module._resolveFilename (loader.js:965:15)\n    at Function.Module._load (loader.js:841:27)\n    at Module.require (loader.js:1025:19)\n    at require (helpers.js:72:18)\n    at Object.lexer__performAction [as performAction] (ShExJison.js:1900:24)\n    at Object.lexer_test_match [as test_match] (ShExJison.js:1437:38)\n    at Object.lexer_next [as next] (ShExJison.js:1560:28)\n    at Object.lexer_lex [as lex] (ShExJison.js:1682:18)\n    at main_work_function (ShExJison.js:2987:27)\n    at Object.__jisonlexer_default_main__ [as main] (ShExJison.js:3081:22)"
+  },
+  {
+    "id": -2,
+    "token": null,
+    "summary": {
+      "totalTokenCount": 1,
+      "EOFTokenCount": 0,
+      "ERRORTokenCount": 0,
+      "fatalExceptionCount": 1
+    }
+  }
+]

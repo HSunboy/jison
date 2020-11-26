@@ -1,0 +1,18 @@
+[
+  {
+    "id": -1,
+    "token": null,
+    "fail": 1,
+    "err": "ERROR:Error::Cannot find module './ShapeMapSymbols'\nRequire stack:\n- W:\\Projects\\sites\\library.visyond.gov\\80\\lib\\tooling\\jison\\packages\\jison-lex\\examples\\output\\ShapeMapJison.js::Error: Cannot find module './ShapeMapSymbols'\nRequire stack:\n- W:\\Projects\\sites\\library.visyond.gov\\80\\lib\\tooling\\jison\\packages\\jison-lex\\examples\\output\\ShapeMapJison.js\n    at Function.Module._resolveFilename (loader.js:965:15)\n    at Function.Module._load (loader.js:841:27)\n    at Module.require (loader.js:1025:19)\n    at require (helpers.js:72:18)\n    at Object.lexer__performAction [as performAction] (ShapeMapJison.js:1898:24)\n    at Object.lexer_test_match [as test_match] (ShapeMapJison.js:1437:38)\n    at Object.lexer_next [as next] (ShapeMapJison.js:1560:28)\n    at Object.lexer_lex [as lex] (ShapeMapJison.js:1682:18)\n    at main_work_function (ShapeMapJison.js:2698:27)\n    at Object.__jisonlexer_default_main__ [as main] (ShapeMapJison.js:2792:22)"
+  },
+  {
+    "id": -2,
+    "token": null,
+    "summary": {
+      "totalTokenCount": 1,
+      "EOFTokenCount": 0,
+      "ERRORTokenCount": 0,
+      "fatalExceptionCount": 1
+    }
+  }
+]
