@@ -1964,10 +1964,10 @@ include_macro_code
             // check if there is only 1 unvalued options: 'path'
             let lst = $option_list;
             let len = lst.length;
-            let path;
+            let include_path;
             if (len === 1 && lst[0][1] === true) {
                 // `path`:
-                path = lst[0][0];
+                include_path = lst[0][0];
             } else if (len <= 1) {
                 yyerror(rmCommonWS`
                     You did not specify a legal file path for the '%include' statement, which must have the format:
@@ -1986,9 +1986,9 @@ include_macro_code
                 `);
             }
 
-            if (!fs.existsSync(path)) {
+            if (!fs.existsSync(include_path)) {
                 yyerror(rmCommonWS`
-                    Cannot %include "${path}":
+                    Cannot %include "${include_path}":
                     The file does not exist.
 
                     The current working directory (set up by JISON) is:
@@ -1997,7 +1997,7 @@ include_macro_code
 
                     hence the full path to the given %include file is:
 
-                      ${path.resolve(path)}
+                      ${path.resolve(include_path)}
 
                       Erroneous area:
                     ${yylexer.prettyPrintRange(@$)}
@@ -2012,7 +2012,7 @@ include_macro_code
                     let rv = checkActionBlock(srcCode, @$, yy);
                     if (rv) {
                         yyerror(rmCommonWS`
-                            The source code included from file '${path}' does not compile: ${rv}
+                            The source code included from file '${include_path}' does not compile: ${rv}
 
                               Erroneous area:
                             ${yylexer.prettyPrintRange(@$)}
@@ -2023,7 +2023,7 @@ include_macro_code
                 yy.popContext('Line 2023');
 
                 // And no, we don't support nested '%include':
-                $$ = '\n// Included by Jison: ' + path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + path + '\n\n';
+                $$ = '\n// Included by Jison: ' + include_path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + include_path + '\n\n';
             }
         }
     | include_keyword error
