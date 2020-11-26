@@ -4051,6 +4051,13 @@ parse: function parse(input) {
         lexer = this.__lexer__ = Object.create(this.lexer);
     }
 
+    // reset closure-dependent callback(s) which will be set up further down:
+    this.cleanupAfterParse = null;
+
+    this.__error_infos = [];                      // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
+
+    this.__error_recovery_infos = [];             // INTERNAL USE ONLY: the set of parseErrorInfo objects created since the last cleanup
+
     let sharedState_yy = {
         parseError: undefined,
         quoteName: undefined,
@@ -4890,7 +4897,7 @@ let esp = recoveringErrorInfo.info_stack_pointer;
 
                     // try to recover from error
                     if (error_rule_depth < 0) {
-                        ASSERT(recovering > 0, 'Line 1048');
+                        ASSERT(recovering > 0, 'Line 4900');
                         recoveringErrorInfo.info_stack_pointer = esp;
 
                         // barf a fatal hairball when we're out of look-ahead symbols and none hit a match
@@ -5053,9 +5060,9 @@ r = this.performAction.call(yyval, yyloc, combineState, sp - 1, vstack, lstack);
                     // only a single parse loop, which handles everything. Our goal is
                     // to eke out every drop of performance in the main parse loop...
 
-                    ASSERT(recoveringErrorInfo, 'Line 1204');
-                    ASSERT(symbol === TERROR, 'Line 1205');
-                    ASSERT(!action, 'Line 1206');
+                    ASSERT(recoveringErrorInfo, 'Line 5063');
+                    ASSERT(symbol === TERROR, 'Line 5064');
+                    ASSERT(!action, 'Line 5065');
                     let errorSymbolFromParser = true;
                     for (;;) {
                         // retrieve state number from top of stack
@@ -5104,7 +5111,7 @@ r = this.performAction.call(yyval, yyloc, combineState, sp - 1, vstack, lstack);
 
 
 
-                                ASSERT(recoveringErrorInfo, 'Line 1248');
+                                ASSERT(recoveringErrorInfo, 'Line 5114');
 
                                 // Prep state variables so that upon breaking out of
                                 // this "slow parse loop" and hitting the `continue;`
@@ -5147,12 +5154,12 @@ switch (action) {
                                 // Push a special value onto the stack when we're
                                 // shifting the `error` symbol that is related to the
                                 // error we're recovering from.
-                                ASSERT(recoveringErrorInfo, 'Line 1305');
+                                ASSERT(recoveringErrorInfo, 'Line 5157');
                                 vstack[sp] = recoveringErrorInfo;
                                 lstack[sp] = this.yyMergeLocationInfo(null, null, recoveringErrorInfo.loc, lexer.yylloc, true);
                             } else {
-                                ASSERT(symbol !== 0, 'Line 1309');
-                                ASSERT(preErrorSymbol === 0, 'Line 1310');
+                                ASSERT(symbol !== 0, 'Line 5161');
+                                ASSERT(preErrorSymbol === 0, 'Line 5162');
                                 vstack[sp] = lexer.yytext;
                                 lstack[sp] = this.copy_yylloc(lexer.yylloc);
                             }
@@ -5202,7 +5209,7 @@ switch (action) {
                                 }
                             } else {
                                 // error just occurred, resume old lookahead f/ before error, *unless* that drops us straight back into error mode:
-                                ASSERT(recovering > 0, 'Line 1352');
+                                ASSERT(recovering > 0, 'Line 5212');
                                 symbol = preErrorSymbol;
                                 preErrorSymbol = 0;
 
@@ -5249,7 +5256,7 @@ switch (action) {
                             // while the error symbol hasn't been shifted onto
                             // the stack yet. Hence we only exit this "slow parse loop"
                             // when *both* conditions are met!
-                            ASSERT(preErrorSymbol === 0, 'Line 1383');
+                            ASSERT(preErrorSymbol === 0, 'Line 5259');
                             if (recovering === 0) {
                                 break;
                             }
@@ -5383,7 +5390,7 @@ r = this.performAction.call(yyval, yyloc, newState, sp - 1, vstack, lstack);
                     // i.e. did the parser already produce a parse result in here?!
                     // *or* did we hit an unsupported parse state, to be handled
                     // in the `switch/default` code further below?
-                    ASSERT(action !== 2, 'Line 1509');
+                    ASSERT(action !== 2, 'Line 5393');
                     if (!action || action === 1) {
                         continue;
                     }
@@ -5445,8 +5452,8 @@ switch (action) {
 
                 symbol = 0;
 
-                ASSERT(preErrorSymbol === 0, 'Line 1619');         // normal execution / no error
-                ASSERT(recovering === 0, 'Line 1620');             // normal execution / no error
+                ASSERT(preErrorSymbol === 0, 'Line 5455');         // normal execution / no error
+                ASSERT(recovering === 0, 'Line 5456');             // normal execution / no error
 
                 // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
 
@@ -5457,8 +5464,8 @@ switch (action) {
 
             // reduce:
             case 2:
-                ASSERT(preErrorSymbol === 0, 'Line 1631');         // normal execution / no error
-                ASSERT(recovering === 0, 'Line 1632');             // normal execution / no error
+                ASSERT(preErrorSymbol === 0, 'Line 5467');         // normal execution / no error
+                ASSERT(recovering === 0, 'Line 5468');             // normal execution / no error
 
                 this_production = this.productions_[newState - 1];  // `this.productions_[]` is zero-based indexed while states start from 1 upwards...
                 yyrulelen = this_production[1];
@@ -5595,7 +5602,7 @@ r = this.performAction.call(yyval, yyloc, newState, sp - 1, vstack, lstack);
             retval = r;
         }
     } finally {
-        retval = this.cleanupAfterParse(retval, true, true);
+        retval = this.cleanupAfterParse(retval, true, false);
         this.__reentrant_call_depth--;
 
         if (typeof Jison !== 'undefined' && Jison.parserDebugger) {
@@ -7202,18 +7209,18 @@ var lexer = function() {
         let conditionStackDepth = this.conditionStack.length;
         let token = this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
 
-        if (token === this.ERROR) {
-          // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
-          // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
-          // has not consumed/modified any pending input or changed state in the error handler:
-          if (!this.matches && // and make sure the input has been modified/consumed ...
-          pendingInput === this._input && // ...or the lexer state has been modified significantly enough
-          // to merit a non-consuming error handling action right now.
-          activeCondition === this.topState() && conditionStackDepth === this.conditionStack.length) {
-            this.input();
-          }
+        //if (token === this.ERROR) {
+        // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
+        // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
+        // has not consumed/modified any pending input or changed state in the error handler:
+        if (!this.matches && // and make sure the input has been modified/consumed ...
+        pendingInput === this._input && // ...or the lexer state has been modified significantly enough
+        // to merit a non-consuming error handling action right now.
+        activeCondition === this.topState() && conditionStackDepth === this.conditionStack.length) {
+          this.input();
         }
 
+        //}
         return token;
       }
     },

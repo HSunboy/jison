@@ -3,7 +3,7 @@ import bnf from './parser';
 import transform from './ebnf-transform';
 import jisonlex from '../lex-parser';
 
-const version = '0.6.2-220';                              // require('./package.json').version;
+const version = '0.7.0-220';                              // require('./package.json').version;
 
 function parse(grammar) {
     return bnf.parser.parse(grammar);
