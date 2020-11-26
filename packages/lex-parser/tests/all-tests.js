@@ -267,14 +267,18 @@ describe('LEX spec lexer', function () {
                         this.input();
                     }
                     if (!hash.isLexerBacktrackingNotSupportedError) {
+                        // WARNING: it may appear there is no need for shallow copy as a new hash 
+                        // is created for every parseError() call; HOWEVER, every hash instance is
+                        // tracked in an error queue, which will be cleaned up when the parser
+                        // (or userland code) invokes the `cleanupAfterLex()` API.
                         const rv = Object.assign({}, hash);
-                        // nuke lexer / parser references in there:
-                        delete rv.lexer;
-                        delete rv.parser;
                         if (rv.yy) {
+                            // shallow copy to keep (most of) current internal lexer state intact:
                             rv.yy = Object.assign({}, rv.yy);
-                            delete rv.yy.lexer;
-                            delete rv.yy.parser;
+                        }
+                        if (rv.loc) {
+                            rv.loc = Object.assign({}, rv.loc);
+                            rv.loc.range = rv.loc.range.slice();
                         }
 
                         rv.errorDiag = {
