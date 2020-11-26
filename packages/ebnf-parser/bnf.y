@@ -106,7 +106,7 @@ optional_end_block
         { $$ = ''; }
     | '%%' extra_parser_module_code
         { 
-            let rv = checkActionBlock($extra_parser_module_code, @extra_parser_module_code);
+            let rv = checkActionBlock($extra_parser_module_code, @extra_parser_module_code, yy);
             if (rv) {
                 yyerror(rmCommonWS`
                     The extra parser module code section (a.k.a. 'epilogue') does not compile: ${rv}
@@ -125,7 +125,7 @@ optional_action_header_block
     | optional_action_header_block ACTION
         {
             $$ = $optional_action_header_block;
-            let rv = checkActionBlock($ACTION, @ACTION);
+            let rv = checkActionBlock($ACTION, @ACTION, yy);
             if (rv) {
                 yyerror(rmCommonWS`
                     action header code block does not compile: ${rv}
@@ -139,7 +139,7 @@ optional_action_header_block
     | optional_action_header_block include_macro_code
         {
             $$ = $optional_action_header_block;
-            let rv = checkActionBlock($include_macro_code, @include_macro_code);
+            let rv = checkActionBlock($include_macro_code, @include_macro_code, yy);
             if (rv) {
                 yyerror(rmCommonWS`
                     action header code block does not compile: ${rv}
@@ -180,7 +180,7 @@ declaration
         { $$ = {token_list: $full_token_definitions}; }
     | ACTION
         { 
-            let rv = checkActionBlock($ACTION, @ACTION);
+            let rv = checkActionBlock($ACTION, @ACTION, yy);
             if (rv) {
                 yyerror(rmCommonWS`
                     action code block does not compile: ${rv}
@@ -193,7 +193,7 @@ declaration
         }
     | include_macro_code
         { 
-            let rv = checkActionBlock($include_macro_code, @include_macro_code);
+            let rv = checkActionBlock($include_macro_code, @include_macro_code, yy);
             if (rv) {
                 yyerror(rmCommonWS`
                     action header code block does not compile: ${rv}
@@ -251,7 +251,7 @@ declaration
         }
     | INIT_CODE init_code_name action_ne
         {
-            let rv = checkActionBlock($action_ne, @action_ne);
+            let rv = checkActionBlock($action_ne, @action_ne, yy);
             if (rv) {
                 yyerror(rmCommonWS`
                     %code "${$init_code_name}" initialization section action code block does not compile: ${rv}
@@ -689,7 +689,7 @@ handle_action
         {
             $$ = [($handle.length ? $handle.join(' ') : '')];
             if ($action) {
-                let rv = checkActionBlock($action.action, @action);
+                let rv = checkActionBlock($action.action, @action, yy);
                 if (rv) {
                     if (!$action.isArrowAction) {
                         yyerror(rmCommonWS`
@@ -740,7 +740,7 @@ handle_action
         {
             $$ = [''];
             if ($action) {
-                let rv = checkActionBlock($action.action, @action);
+                let rv = checkActionBlock($action.action, @action, yy);
                 if (rv) {
                     if (!$action.isArrowAction) {
                         yyerror(rmCommonWS`
@@ -999,7 +999,7 @@ include_macro_code
     : INCLUDE PATH
         {
             let fileContent = fs.readFileSync($PATH, { encoding: 'utf-8' });
-            let rv = checkActionBlock(fileContent);
+            let rv = checkActionBlock(fileContent, @$, yy);
             if (rv) {
                 yyerror(rmCommonWS`
                     included action code file "${$PATH}" does not compile: ${rv}
