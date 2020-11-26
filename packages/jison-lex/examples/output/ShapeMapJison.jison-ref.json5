@@ -7,11 +7,11 @@
       message: 'require is not defined',
       name: 'ReferenceError',
       stack: `ReferenceError: require is not defined
-    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js:14323:31)
-    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js:14323:31)
-    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:14323:31)
-    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:14323:31)
-    at Context.testEachLexerExample (/regexplexer.js:3697:37)
+    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js:14531:31)
+    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js:14531:31)
+    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:14531:31)
+    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:14531:31)
+    at Context.testEachLexerExample (/regexplexer.js:3732:37)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)

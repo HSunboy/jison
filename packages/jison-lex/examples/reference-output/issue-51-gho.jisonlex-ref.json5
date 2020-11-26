@@ -66,7 +66,7 @@
             },
             yy: {},
             lexer: '[lexer]',
-            lexerWillNeedToForwardCursor: true,
+            lexerHasAlreadyForwardedCursorBy1: true,
           },
           {
             errStr: `Lexical error on line 1: Unrecognized text.
@@ -91,7 +91,7 @@
             },
             yy: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
-            lexerWillNeedToForwardCursor: true,
+            lexerHasAlreadyForwardedCursorBy1: true,
           },
           {
             errStr: `Lexical error on line 1: Unrecognized text.
@@ -116,7 +116,7 @@
             },
             yy: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
-            lexerWillNeedToForwardCursor: true,
+            lexerHasAlreadyForwardedCursorBy1: true,
           },
           {
             errStr: `Lexical error on line 2: Unrecognized text.
@@ -141,7 +141,7 @@
             },
             yy: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
-            lexerWillNeedToForwardCursor: true,
+            lexerHasAlreadyForwardedCursorBy1: true,
           },
           {
             errStr: `Lexical error on line 2: Unrecognized text.
@@ -166,7 +166,7 @@
             },
             yy: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
-            lexerWillNeedToForwardCursor: true,
+            lexerHasAlreadyForwardedCursorBy1: true,
           },
           {
             errStr: `Lexical error on line 2: Unrecognized text.
@@ -191,7 +191,7 @@
             },
             yy: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
-            lexerWillNeedToForwardCursor: true,
+            lexerHasAlreadyForwardedCursorBy1: true,
           },
           {
             errStr: `Lexical error on line 2: Unrecognized text.
@@ -216,7 +216,7 @@
             },
             yy: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
-            lexerWillNeedToForwardCursor: true,
+            lexerHasAlreadyForwardedCursorBy1: true,
           },
           {
             errStr: `Lexical error on line 2: Unrecognized text.
@@ -241,7 +241,7 @@
             },
             yy: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
-            lexerWillNeedToForwardCursor: true,
+            lexerHasAlreadyForwardedCursorBy1: true,
           },
         ],
         __decompressed: true,
@@ -282,7 +282,7 @@
         },
         yy: {},
       },
-      lexerWillNeedToForwardCursor: true,
+      lexerHasAlreadyForwardedCursorBy1: true,
       errorDiag: {
         inputPos: 25,
         yytext: ' ',
@@ -376,7 +376,7 @@
         },
         yy: {},
       },
-      lexerWillNeedToForwardCursor: true,
+      lexerHasAlreadyForwardedCursorBy1: true,
       errorDiag: {
         inputPos: 21,
         yytext: ' ',
@@ -500,7 +500,7 @@
         },
         yy: {},
       },
-      lexerWillNeedToForwardCursor: true,
+      lexerHasAlreadyForwardedCursorBy1: true,
       errorDiag: {
         inputPos: 11,
         yytext: '\n',
@@ -594,7 +594,7 @@
         },
         yy: {},
       },
-      lexerWillNeedToForwardCursor: true,
+      lexerHasAlreadyForwardedCursorBy1: true,
       errorDiag: {
         inputPos: 7,
         yytext: ' ',
@@ -673,7 +673,7 @@
         },
         yy: {},
       },
-      lexerWillNeedToForwardCursor: true,
+      lexerHasAlreadyForwardedCursorBy1: true,
       errorDiag: {
         inputPos: 6,
         yytext: 'F',
@@ -752,7 +752,7 @@
         },
         yy: {},
       },
-      lexerWillNeedToForwardCursor: true,
+      lexerHasAlreadyForwardedCursorBy1: true,
       errorDiag: {
         inputPos: 5,
         yytext: 'O',
@@ -831,7 +831,7 @@
         },
         yy: {},
       },
-      lexerWillNeedToForwardCursor: true,
+      lexerHasAlreadyForwardedCursorBy1: true,
       errorDiag: {
         inputPos: 4,
         yytext: 'O',
@@ -910,7 +910,7 @@
         },
         yy: {},
       },
-      lexerWillNeedToForwardCursor: true,
+      lexerHasAlreadyForwardedCursorBy1: true,
       errorDiag: {
         inputPos: 3,
         yytext: ' ',

@@ -124,7 +124,7 @@
             },
             yy: {},
             lexer: '[lexer]',
-            lexerWillNeedToForwardCursor: true,
+            lexerHasAlreadyForwardedCursorBy1: true,
           },
         ],
         __decompressed: true,
@@ -168,7 +168,7 @@
         },
         yy: {},
       },
-      lexerWillNeedToForwardCursor: true,
+      lexerHasAlreadyForwardedCursorBy1: true,
       errorDiag: {
         inputPos: 2,
         yytext: 'B',

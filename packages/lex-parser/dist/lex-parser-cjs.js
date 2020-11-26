@@ -5386,7 +5386,7 @@ case 136:
         this.$ = '\n\n\n\n';
     } else {
         // **Aside**: And no, we don't support nested '%include'!
-        let fileContent = fs__default['default'].readFileSync(path__default['default'], { encoding: 'utf-8' });
+        let fileContent = fs__default['default'].readFileSync(include_path, { encoding: 'utf-8' });
     
         let srcCode = trimActionCode$1(fileContent);
         if (srcCode) {

@@ -1,5 +1,4 @@
 [
-  10,
   {
     id: 'DEFINE',
     token: 'DEFINE',
@@ -163,6 +162,17 @@
         16,
         16,
       ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 11,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
     },
   },
 ]
