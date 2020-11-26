@@ -410,8 +410,9 @@ definition
                     `);
                 }
                 yy.actionInclude.push(srcCode);
+            } else {
+                $$ = null;
             }
-            $$ = null;
         }
     //
     // see the alternative above: this rule is added to aid error
@@ -474,6 +475,8 @@ definition
     | option_keyword option_list OPTIONS_END
         {
             let lst = $option_list;
+			// Apply the %option to the current lexing process immediately, as it MAY
+			// impact the lexer's behaviour, e.g. `%option do-not-test-compile`
             for (let i = 0, len = lst.length; i < len; i++) {
                 yy.options[lst[i][0]] = lst[i][1];
             }
@@ -487,7 +490,7 @@ definition
     | option_keyword error OPTIONS_END
         {
             yyerror(rmCommonWS`
-                ill defined %options line.
+                ill defined '${$option_keyword} line.
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @option_keyword, @OPTIONS_END)}
@@ -502,7 +505,7 @@ definition
         {
             // TODO ...
             yyerror(rmCommonWS`
-                %options don't seem terminated?
+                ${$option_keyword} don't seem terminated?
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @option_keyword)}
@@ -1146,7 +1149,7 @@ rule
             let start_marker = $ACTION_START.trim();
             // When the start_marker is not an explicit `%{`, `{` or similar, the error
             // is more probably due to indenting the rule regex, rather than an error
-            // in writing the action code block:
+            // in writing the setup action code block:
             if (start_marker.indexOf('{') >= 0) {
                 let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
                 yyerror(rmCommonWS`
@@ -1981,26 +1984,45 @@ include_macro_code
                 `);
             }
 
-            // **Aside**: And no, we don't support nested '%include'!
-            let fileContent = fs.readFileSync(path, { encoding: 'utf-8' });
+            if (!fs.existsSync(path)) {
+                yyerror(rmCommonWS`
+                    Cannot %include "${path}":
+                    The file does not exist.
 
-            let srcCode = trimActionCode(fileContent);
-            if (srcCode) {
-                let rv = checkActionBlock(srcCode, @$, yy);
-                if (rv) {
-                    yyerror(rmCommonWS`
-                        The source code included from file '${path}' does not compile: ${rv}
+                    The current working directory (set up by JISON) is:
 
-                          Erroneous area:
-                        ${yylexer.prettyPrintRange(@$)}
-                    `);
+                      ${process.cwd()}
+
+                    hence the full path to the given %include file is:
+
+                      ${path.resolve(path)}
+
+                      Erroneous area:
+                    ${yylexer.prettyPrintRange(@$)}
+                `);
+                $$ = '\n\n\n\n';
+            } else {
+                // **Aside**: And no, we don't support nested '%include'!
+                let fileContent = fs.readFileSync(path, { encoding: 'utf-8' });
+
+                let srcCode = trimActionCode(fileContent);
+                if (srcCode) {
+                    let rv = checkActionBlock(srcCode, @$, yy);
+                    if (rv) {
+                        yyerror(rmCommonWS`
+                            The source code included from file '${path}' does not compile: ${rv}
+
+                              Erroneous area:
+                            ${yylexer.prettyPrintRange(@$)}
+                        `);
+                    }
                 }
+
+                yy.popContext('Line 2008');
+
+                // And no, we don't support nested '%include':
+                $$ = '\n// Included by Jison: ' + path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + path + '\n\n';
             }
-
-            yy.popContext('Line 2000');
-
-            // And no, we don't support nested '%include':
-            $$ = '\n// Included by Jison: ' + path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + path + '\n\n';
         }
     | include_keyword error
         {
@@ -2013,7 +2035,7 @@ include_macro_code
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 2016');
+            yy.popContext('Line 2024');
             $$ = null;
         }
     ;
