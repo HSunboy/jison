@@ -2,7 +2,7 @@
 
 // Converts json grammar format to Jison grammar format
 
-const version = require('./package.json').version;
+const version = '0.7.0-220';
 
 const path = require('path');
 const fs = require('fs');
