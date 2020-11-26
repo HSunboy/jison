@@ -3070,11 +3070,11 @@ case 9:
         // macro:
         if (yyvstack[yysp - 2].toUpperCase() !== yyvstack[yysp - 2]) {
             yyparser.yyError(rmCommonWS$2`
-              Cannot use name "${$MACRO_NAME}" as a macro name
+              Cannot use name '${$MACRO_NAME}' as a macro name
               as it clashes with the same XRegExp "\\p{..}" Unicode \'General Category\'
               Property name.
               Use all-uppercase macro names, e.g. name your macro
-              "${$MACRO_NAME.toUpperCase()}" to work around this issue
+              '${$MACRO_NAME.toUpperCase()}' to work around this issue
               or give your offending macro a different name.
     
                 Erroneous area:
