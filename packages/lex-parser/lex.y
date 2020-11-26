@@ -2005,7 +2005,7 @@ include_macro_code
                 $$ = '\n\n\n\n';
             } else {
                 // **Aside**: And no, we don't support nested '%include'!
-                let fileContent = fs.readFileSync(path, { encoding: 'utf-8' });
+                let fileContent = fs.readFileSync(include_path, { encoding: 'utf-8' });
 
                 let srcCode = trimActionCode(fileContent);
                 if (srcCode) {
