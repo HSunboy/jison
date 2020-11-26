@@ -153,6 +153,7 @@ const lexer_kernel =
         if (args.length) {
             p.extra_error_attributes = args;
         }
+        p.yyErrorInvoked = true;   // so parseError() user code can easily recognize it is invoked from any yyerror() in the spec action code chunks
 
         return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
     },
@@ -520,6 +521,7 @@ const lexer_kernel =
                 lineno_msg += ' on line ' + (this.yylineno + 1);
             }
             const p = this.constructLexErrorInfo(lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).', false);
+            p.isLexerBacktrackingNotSupportedError = true;            // when this is true, you 'know' the produced error token will be queued.
             this._signaled_error_token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
         }
         return this;
@@ -1132,6 +1134,13 @@ const lexer_kernel =
             let pendingInput = this._input;
             let activeCondition = this.topState();
             let conditionStackDepth = this.conditionStack.length;
+
+            // when this flag is set in your parseError() `hash`, you 'know' you cannot manipute `yytext` to be anything but 
+            // a string value, unless
+            // - you either get to experience a lexer crash once it invokes .input() with your manipulated `yytext` object,
+            // - or you must forward the lex cursor yourself by invoking `yy.input()` or equivalent, *before* you go and
+            //   tweak that `yytext`.
+            p.lexerWillNeedToForwardCursor = (!this.matches);
 
             let token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
             //if (token === this.ERROR) {

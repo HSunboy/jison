@@ -2096,7 +2096,7 @@ describe('Lexer Kernel', function () {
                 parseError: function (str, hash) {
                     counter++;
                     assert.ok(hash.lexer);
-          // eat two more characters
+                    // eat two more characters
                     c1 = hash.lexer.input();
                     c2 = hash.lexer.input();
                     return 'alt';
@@ -3667,6 +3667,40 @@ describe('Test Lexer Grammars', function () {
             let yy = {
                 parseError: function customMainParseError(str, hash, ExceptionClass) {
                     console.error("parseError: ", str);
+
+                    // augment the returned value when possible:
+                    if (hash.lexerWillNeedToForwardCursor) {
+                        // advance cursor already: do what the lexer would otherwise be doing
+                        // right after we returned to caller from here:
+                        this.input();
+                    }
+                    if (!hash.isLexerBacktrackingNotSupportedError) {
+                        const rv = Object.assign({}, hash);
+                        // nuke lexer / parser references in there:
+                        delete rv.lexer;
+                        delete rv.parser;
+                        if (rv.yy) {
+                            rv.yy = Object.assign({}, rv.yy);
+                            delete rv.yy.lexer;
+                            delete rv.yy.parser;
+                        }
+
+                        rv.errorDiag = {
+                            inputPos: this._input ? this._input.length : -1,
+                            yytext: this.yytext,
+                            yyleng: this.yyleng,
+                            matches: this.matches,
+                            activeCondition: this.topState(),
+                            conditionStackDepth: this.conditionStack.length,
+                        };
+
+                        //if (hash.yyErrorInvoked) ... 
+                        
+                        // we dump yytext in the token stream, so we can use that to dump a little
+                        // more info for comparison & diagnostics:
+                        this.yytext = rv;
+                    }
+
                     return -42; // this.ERROR;
                 }
             };
