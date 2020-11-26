@@ -41,9 +41,9 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 
 
 
-%x action code path options option_values
+%x action code options
 %s token
-%s bnf ebnf
+%s ebnf
 
 
 
@@ -55,38 +55,351 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 
 %%
 
-<action>"/*"[^]*?"*/"                   return 'ACTION_BODY';
-<action>"//"[^\r\n]*                    return 'ACTION_BODY';
-<action>"/"[^ /]*?['"{}][^ ]*?"/"       return 'ACTION_BODY'; // regexp with braces or quotes (and no spaces)
-<action>\"{DOUBLEQUOTED_STRING_CONTENT}\"
+// Comments should be gobbled and discarded anywhere
+// *except* the code/action blocks:
+<INITIAL,ebnf,token,options>"//"[^\r\n]*
+                                        /* skip single-line comment */
+<INITIAL,ebnf,token,options>"/*"[^]*?"*/"
+                                        /* skip multi-line comment */
+
+
+//===================== <action> section start =============================
+<action>{
+
+// Here we recognize the action code blocks in a grammar parser spec, including those chunks of
+// user-defined action code which are wrapped in `%{...%}` or `{{...}}`.
+//
+// These `%{...%}` and `{{...}}` chunks are special in that *anything
+// **except the given 'end marker' (`%}` and `}}` respectively)** may
+// exist within the markers: those contents will be copied verbatim.
+//
+// Note the 'fringe case' where one or more of those end markers
+// is an integral part of your action code: you then have the choice to
+// either use the other chunk format *or* not wrap [that part of] your
+// code in any special marker block, but rely on the lexer rules for
+// parsing a regular `{...}` JavaScript code chunk instead.
+//
+// Thus these won't lex/parse correctly:
+//
+// `%{ return '%}'; %}`
+// `{{ return '{{}}'; }}`
+// `{{ return '%{ {{ }} %}'; }}`
+//
+// while these would:
+//
+// `{{ return '%}'; }}`
+// `%{ return '{{}}'; %}`
+// `{ return '%{ {{ }} %}'; }`
+// `{ return '%}'; }`
+// `{ return '{{}}'; }`
+//
+// Since 0.6.5 we also allow another approach, which can be used instead:
+// 'repeated `{` markers', which is like the `%{...%}` and `{{...}}` in that
+// anything that's not the corresponding end marker is accepted as content
+// as far as the lexer is concerned (the parser will want to check the validity
+// of the entire action code block before using it as part of the generated
+// lexer/parser kernel code though), e.g. these would lex as valid chunks:
+//
+// `%{{ return '%}'; %}}`
+// `{{{ return '{{}}'; }}}`
+// `{{{ return '%{ {{ }} %}'; }}}`
+// `%{{{ return ['%}','%}}']; %}}}`
+//
+// To speed up the lexer and keep things simple, we test these lexer rules
+// *only when we're sure to match them*, while we use an advanced
+// feature of the lexer kernel by *generating the proper lexer rule regex on the fly*
+// at the moment when we find we need it: for this we employ some
+// intimate knowledge of the lexer kernel which will be generated for this
+// lexer spec: for this we only the lexer rule for `%{...%}` to exist, as
+// we will pick up that one and modify it on the fly as the need occurs.
+//
+
+"%{"([^]*?)"%}"/!"}"                    yytext = this.matches[1];
+                                        yy.include_command_allowed = false;
                                         return 'ACTION_BODY';
-<action>\'{QUOTED_STRING_CONTENT}\'
+
+"%include"                              if (yy.include_command_allowed) {
+                                            // This is an include instruction in place of (part of) an action:
+                                            this.pushState('options');
+                                            return 'INCLUDE';
+                                        } else {
+                                            // TODO
+                                            yyerror(rmCommonWS`
+                                                %include statements must occur on a line on their own and cannot occur inside an action code block.
+                                                Its use is not permitted at this position.
+
+                                                  Erroneous area:
+                                                ${this.prettyPrintRange(yylloc)}
+                                            `);
+                                            return 'INCLUDE_PLACEMENT_ERROR';
+                                        }
+
+"/*"[^]*?"*/"                           //yy.include_command_allowed = false; -- doesn't impact include-allowed state
                                         return 'ACTION_BODY';
-<action>[/"'][^{}/"']+                  return 'ACTION_BODY';
-<action>[^{}/"']+                       return 'ACTION_BODY';
-<action>"{"                             yy.depth++; return '{';
-<action>"}"                             if (yy.depth === 0) { 
-                                            this.popState(); 
-                                        } else { 
-                                            yy.depth--; 
-                                        } 
-                                        return '}';
+"//".*                                  yy.include_command_allowed = false;
+                                        return 'ACTION_BODY';
+
+// make sure to terminate before the current rule spec ends,
+// which is announced by a `;` semicolon on a separate line:
+";"                                     if (yy.depth === 0) {
+                                            this.popState();
+                                            this.unput(yytext);
+                                            // yytext = '';    --- ommitted as this is the side-effect of .unput(yytext) already!
+                                            return 'ACTION_END';
+                                        } else {
+                                            return 'ACTION_BODY';
+                                        }
+
+// make sure to terminate before the next rule alternative,
+// which is announced by `|`:
+"|"                                     if (yy.depth === 0) {
+                                            this.popState();
+                                            this.unput(yytext);
+                                            // yytext = '';    --- ommitted as this is the side-effect of .unput(yytext) already!
+                                            return 'ACTION_END';
+                                        } else {
+                                            return 'ACTION_BODY';
+                                        }
+
+// make sure to terminate before the rule section ends,
+// which is announced by `%%`:
+"%%"                                    if (yy.depth === 0) {
+                                            this.popState();
+                                            this.unput(yytext);
+                                            // yytext = '';    --- ommitted as this is the side-effect of .unput(yytext) already!
+                                            return 'ACTION_END';
+                                        } else {
+                                            return 'ACTION_BODY';
+                                        }
+
+// regexp in action code handling:
+//
+// simply scan using an Esprima-equivalent regex scanner: when the next
+// bit turns out to be a regex, assume it is one and pass it on.
+//
+// To prevent trouble with confusing this with a divide operator,
+// only accept regexes which at least start with a non-whitespace
+// character, otherwise we can bet it's a divide operator most
+// probably.
+"/"/\s                                  return 'ACTION_BODY';       // most probably a `/` divide operator.
+"/".*
+                                        yy.include_command_allowed = false;
+                                        let l = scanRegExp(yytext);
+                                        if (l > 0) {
+                                            this.unput(yytext.substring(l));
+                                            yytext = yytext.substring(0, l);
+                                        } else {
+                                            // assume it's a division operator:
+                                            this.unput(yytext.substring(1));
+                                            yytext = yytext[0];
+                                        }
+                                        return 'ACTION_BODY';
+
+\"{DOUBLEQUOTED_STRING_CONTENT}\"|\'{QUOTED_STRING_CONTENT}\'|\`{ES2017_STRING_CONTENT}\`
+                                        yy.include_command_allowed = false;
+                                        return 'ACTION_BODY';
+// Gobble an entire line of code unless there's chance there's
+// a regex, string, comment, {...} block start or end brace or sentinel
+// in it: then only gobble everything up to that particular
+// character and let the lexer handle that one, and what follows,
+// in the round. Meanwhile we have us some action code pass on.
+[^/"'`%\{\}\/{BR}]+                     yy.include_command_allowed = false;
+                                        return 'ACTION_BODY';
+"%"                                     yy.include_command_allowed = false;
+                                        return 'ACTION_BODY';
+
+"{"                                     yy.depth++;
+                                        yy.include_command_allowed = false;
+                                        return 'ACTION_BODY';
+"}"                                     yy.include_command_allowed = false;
+                                        if (yy.depth <= 0) {
+                                            yyerror(rmCommonWS`
+                                                too many closing curly braces in parser rule action block.
+
+                                                Note: the action code chunk may be too complex for jison to parse
+                                                easily; we suggest you wrap the action code chunk in '%{...%}'
+                                                to help jison grok more or less complex action code chunks.
+
+                                                  Erroneous area:
+                                                ${this.prettyPrintRange(yylloc)}
+                                            `);
+                                            return 'BRACKET_SURPLUS';
+                                        } else {
+                                            yy.depth--;
+                                            // Contrary to the lexer language, the parser grammar language
+                                            // REQUIRES braces around action code chunks, hence when we've
+                                            // hit the top-most brace level, we *know* we're at the end
+                                            // of the action code block!
+                                            if (yy.depth === 0) {
+                                                this.popState();
+                                                // this.unput(yytext);
+                                                // yytext = '}';
+                                                return 'ACTION_END';
+                                            }
+                                        }
+                                        return 'ACTION_BODY';
+
+// Note that parser options & commands should be at the start-of-line, i.e.
+// without leading whitespace. The only parser command which we do accept
+// here after the last indent is `%include`, which is considered (part
+// of) the rule's action code block.
+(?:[\s\r\n]*?){BR}+{WS}+
+                                        yy.include_command_allowed = true;
+                                        return 'ACTION_BODY';           // keep empty lines as-is inside action code blocks.
+{WS}+                                   return 'ACTION_BODY';
+{BR}                                    if (yy.depth > 0) {
+                                            yy.include_command_allowed = true;
+                                            return 'ACTION_BODY';       // keep empty lines as-is inside action code blocks.
+                                        } else {
+                                            // end of action code chunk; allow parent mode to see this mode-terminating linebreak too.
+                                            this.popState();
+                                            this.unput(yytext);
+                                            // yytext = '';    --- ommitted as this is the side-effect of .unput(yytext) already!
+                                            return 'ACTION_END';
+                                        }
+<<EOF>>                                 yy.include_command_allowed = false;
+                                        if (yy.depth !== 0) {
+                                            yyerror(rmCommonWS`
+                                                missing ${yy.depth} closing curly braces in parser rule action block.
+
+                                                Note: the action code chunk may be too complex for jison to parse
+                                                easily; we suggest you wrap the action code chunk in '%{...%}'
+                                                to help jison grok more or less complex action code chunks.
+
+                                                  Erroneous area:
+                                                ${this.prettyPrintRange(yylloc)}
+                                            `);
+                                            return 'BRACKET_MISSING';
+                                        }
+                                        this.popState();
+                                        yytext = '';
+                                        return 'ACTION_END';
+
+}
+//===================== <action> section end =============================
+
+
+
+//
+// Recognize any of these action code start markers:
+// `%{`, `{{`, `%{{`, `{{{`, `%{{{`, ...
+// and modify the lexer engine to provide the proper matching rule for the case at hand
+// (which is NIL in case the action code chunk starts with `{`!) as described near the
+// top of this lexer spec file, where the action state lexer rules reside.
+//
+<INITIAL,ebnf,code,options>(?:[%\{]\{+)|"{"
+                                    {
+                                        yy.depth = 0;
+                                        yy.include_command_allowed = false;
+                                        this.pushState('action');
+
+                                        // keep matched string in local variable as the `unput()` call at the end will also 'unput' `yytext`,
+                                        // which for our purposes here is highly undesirable (see trimActionCode() use in the BNF parser spec).
+                                        let marker = yytext;
+
+                                        // check whether this `%{` marker was located at the start of the line:
+                                        // if it is, we treat it as a different token to signal the grammar we've
+                                        // got an action which stands on its own, i.e. is not a rule action, %code
+                                        // section, etc...
+                                        //let precedingStr = this.pastInput(1,2).replace(/[\r\n]/g, '\n');
+                                        //let precedingStr = this.matched.substr(-this.match.length - 1, 1);
+                                        let precedingStr = this.matched[this.matched.length - this.match.length - 1];
+
+                                        let atSOL = (!precedingStr /* @ Start Of File */ || precedingStr === '\n');
+
+                                        // Make sure we've got the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
+                                        let endMarker = this.setupDelimitedActionChunkLexerRegex(marker);
+
+                                        // Early sanity check for better error reporting:
+                                        // we'd better make sure that end marker indeed does exist in the
+                                        // remainder of the input! When it's not, we'll have the `action`
+                                        // lexer state running past its due date as it'll then go and spit
+                                        // out a 'too may closing braces' error report at some spot way
+                                        // beyond the intended end of the action code chunk.
+                                        //
+                                        // Writing the wrong end marker is a common user mistake, we can
+                                        // easily look ahead and check for it now and report a proper hint
+                                        // to cover this failure mode in a more helpful manner.
+                                        let remaining = this.lookAhead();
+                                        let prevEnd = 0;
+                                        let endMarkerIndex;
+                                        for (;;) {
+                                            endMarkerIndex = remaining.indexOf(endMarker, prevEnd);
+                                            // check for both simple non-existence *and* non-match due to trailing braces,
+                                            // e.g. in this input: `%{{...%}}}` -- note the 3rd curly closing brace.
+                                            if (endMarkerIndex >= 0 && remaining[endMarkerIndex + endMarker.length] === '}') {
+                                                prevEnd = endMarkerIndex + endMarker.length;
+                                                continue;
+                                            }
+                                            if (endMarkerIndex < 0) {
+                                                yyerror(rmCommonWS`
+                                                    Incorrectly terminated action code block. We're expecting the
+                                                    '${endMarker}' end marker to go with the given start marker.
+                                                    Regrettably, it does not exist in the remainder of the input.
+
+                                                      Erroneous area:
+                                                    ${this.prettyPrintRange(yylloc)}
+                                                `);
+                                                return 'UNTERMINATED_ACTION_BLOCK';
+                                            }
+                                            break;
+                                        }
+
+                                        // Allow the start marker to be re-matched by the generated lexer rule regex:
+                                        this.unput(marker);
+
+                                        // Now RESET `yytext` to what it was originally, i.e. un-unput that lexer variable explicitly:
+                                        yytext = marker;
+
+                                        // and allow the next lexer round to match and execute the suitable lexer rule(s) to parse this incoming action code block.
+                                        if (atSOL) {
+                                            return 'ACTION_START_AT_SOL';
+                                        }
+                                        return 'ACTION_START';
+                                    }
+
+
+"->"                                    yy.depth = 0;
+                                        yy.include_command_allowed = false;
+                                        this.pushState('action');
+                                        return 'ARROW_ACTION_START';
+"→"                                     yy.depth = 0;
+                                        yy.include_command_allowed = false;
+                                        this.pushState('action');
+                                        return 'ARROW_ACTION_START';
+"=>"                                    yy.depth = 0;
+                                        yy.include_command_allowed = false;
+                                        this.pushState('action');
+                                        return 'ARROW_ACTION_START';
+
+
+
+
+
+
 
 <token>{BR}                             this.popState();
 <token>"%%"                             this.popState();
 <token>";"                              this.popState();
 
-<bnf,ebnf>"%%"                          this.pushState('code'); 
+<ebnf>"%%"                              this.popState();
+                                        this.pushState('code');
+                                        return '%%';
+// Also support those parsers which don't have a trailing code section
+// by faking a '%%' sentinel and an empty code section following that
+// one:
+<ebnf><<EOF>>                           this.popState();
+                                        this.pushState('code');
                                         return '%%';
 
 // Support bison's `%empty` (and our own alias `%epsilon`) to identify an empty rule alt:
-<bnf,ebnf>"%empty"                      return 'EPSILON';
-<bnf,ebnf>"%epsilon"                    return 'EPSILON';
+<ebnf>"%empty"                          return 'EPSILON';
+<ebnf>"%epsilon"                        return 'EPSILON';
 // See also https://en.wikipedia.org/wiki/Epsilon#Glyph_variants
-<bnf,ebnf>"\u0190"                      return 'EPSILON';
-<bnf,ebnf>"\u025B"                      return 'EPSILON';
-<bnf,ebnf>"\u03B5"                      return 'EPSILON';
-<bnf,ebnf>"\u03F5"                      return 'EPSILON';
+<ebnf>"\u0190"                          return 'EPSILON';
+<ebnf>"\u025B"                          return 'EPSILON';
+<ebnf>"\u03B5"                          return 'EPSILON';
+<ebnf>"\u03F5"                          return 'EPSILON';
 
 <ebnf>"("                               return '(';
 <ebnf>")"                               return ')';
@@ -94,41 +407,81 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 <ebnf>"?"                               return '?';
 <ebnf>"+"                               return '+';
 
-<options>{NAME}                         return 'NAME';
-<options>"="                            this.pushState('option_values'); 
-                                        return '=';
-<option_values>{
+//===================== <options> section start =============================
+<options>{
 
-\"{DOUBLEQUOTED_STRING_CONTENT}\"
-                                        yytext = unescQuote(this.matches[1], /\\"/g); 
-                                        this.popState(); 
-                                        return 'OPTION_STRING_VALUE';   // value is always a string type
-\'{QUOTED_STRING_CONTENT}\'
-                                        yytext = unescQuote(this.matches[1], /\\'/g); 
-                                        this.popState(); 
-                                        return 'OPTION_STRING_VALUE';   // value is always a string type
-\`{ES2017_STRING_CONTENT}\`
-                                        yytext = unescQuote(this.matches[1], /\\`/g); 
-                                        this.popState(); 
-                                        return 'OPTION_STRING_VALUE';   // value is always a string type
+"="                                     return '=';
+
+\"{DOUBLEQUOTED_STRING_CONTENT}\"       return 'OPTION_STRING';
+\'{QUOTED_STRING_CONTENT}\'             return 'OPTION_STRING';
+\`{ES2017_STRING_CONTENT}\`             return 'OPTION_STRING';
+
+// make sure to terminate before the section ends,
+// which is announced by `%%`, `|` or `;`:
+"%%"|"|"|";"                            this.popState();
+                                        this.unput(yytext);
+                                        return 'OPTIONS_END';
+
+<<EOF>>                                 this.popState();
+                                        return 'OPTIONS_END';
+
+// some options may be followed by an action block or `%include`d action block:
+// when this happens, let the parser cope by stacking an 'action' mode inside
+// the 'options' mode.
+// This is necessary to get a different lexer token stream for these two scenarios,
+// which are functionally different:
+//
+//     1:  %code option(s)... %{ action %}
+//
+//     2:  %code option(s)...
+//         %{ action %}
+//
+// NOTE: we do not worry about *deep nesting* 'action' and 'options' modes
+// via `%include` lexing, e.g.:
+//
+//     %code option(s)... %include 2nd_level_option(s) %include(illegal!) 3rd_level...
+//
+// While the lexer may not object (and thus *incorrectly reset `yy.depth` to
+// ZERO(0) in the inner `%include` lex action above, for example!) the grammar/parser
+// should be able to check against this eventuality and barf an appropriately
+// formulated hairball. <wink>
+//
+"%include"                              yy.depth = 0;
+                                        yy.include_command_allowed = true;
+                                        this.pushState('action');
+                                        // push the parsed '%include' back into the input-to-parse
+                                        // to trigger the `<action>` state to re-parse it
+                                        // and issue the desired follow-up token: 'INCLUDE':
+                                        this.unput(yytext);
+                                        return 'ACTION_START';
+
+// We don't mind and allow the lexer to be 'dumb' here as the parser will
+// catch any abuse / incorrect input and report accordingly.
+","                                     return ',';
+"*"                                     return '*';
+
+// The 'options' mode also serves to lex extended `%token` specs a la bison:
+"<"{ID}">"                              yytext = this.matches[1];
+                                        return 'TOKEN_TYPE';
+
+{ANY_LITERAL_CHAR}+                     return 'OPTION_VALUE';
+
+/* skip leading whitespace on the next line of input, when followed by more options */
+{BR}{WS}+(?=\S)                         /* ignore */
+/* otherwise the EOL marks the end of the options statement */
+{BR}                                    this.popState();
+                                        this.unput(yytext);
+                                        return 'OPTIONS_END';
+{WS}+                                   /* skip whitespace */
 
 }
+//===================== <options> section end =============================
 
-// Comments should be gobbled and discarded anywhere *except* the code/action blocks:
-<INITIAL,ebnf,bnf,token,path,options,option_values>"//"[^\r\n]*
-                                        /* skip single-line comment */
-<INITIAL,ebnf,bnf,token,path,options,option_values>"/*"[^]*?"*/"
-                                        /* skip multi-line comment */
 
-<option_values>[^\s\r\n]+               this.popState(); 
-                                        return 'OPTION_VALUE';
 
-<options>{BR}{WS}+(?=\S)                /* skip leading whitespace on the next line of input, when followed by more options */
-<options>{BR}                           this.popState(); return 'OPTIONS_END';
-<options,option_values>{WS}+            /* skip whitespace */
 
-{WS}+                                   /* skip whitespace */
 {BR}+                                   /* skip newlines */
+{WS}+                                   /* skip whitespace */
 
 "["{ID}"]"                              yytext = this.matches[1]; return 'ALIAS';
 {ID}                                    return 'ID';
@@ -140,21 +493,17 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 // as we use `$end` for that one!
 "$eof"                                  return 'EOF_ID';
 
-\"{DOUBLEQUOTED_STRING_CONTENT}\"       %{
-                                            yytext = unescQuote(this.matches[1], /\\"/g);
-                                            return 'STRING';
-                                        %}
-\'{QUOTED_STRING_CONTENT}\'             %{
-                                            yytext = unescQuote(this.matches[1], /\\'/g);
-                                            return 'STRING';
-                                        %}
+\"{DOUBLEQUOTED_STRING_CONTENT}\"       return 'STRING_LIT';
+\'{QUOTED_STRING_CONTENT}\'             return 'STRING_LIT';
+\`{ES2017_STRING_CONTENT}\`             return 'STRING_LIT';
 
-<token>[^\s\r\n]+                       return 'TOKEN_WORD';
+<token>{ANY_LITERAL_CHAR}+              return 'TOKEN_WORD';
 ":"                                     return ':';
 ";"                                     return ';';
 "|"                                     return '|';
-"%%"                                    this.pushState(yy.ebnf ? 'ebnf' : 'bnf'); return '%%';
-"%ebnf"                                 yy.ebnf = true; return 'EBNF';
+"%%"                                    this.pushState('ebnf');
+                                        return '%%';
+"%ebnf"                                 return 'EBNF';
 "%debug"                                return 'DEBUG';
 "%parser-type"                          return 'PARSER_TYPE';
 "%prec"                                 return 'PREC';
@@ -163,47 +512,65 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 "%right"                                return 'RIGHT';
 "%nonassoc"                             return 'NONASSOC';
 "%token"                                this.pushState('token'); return 'TOKEN';
+"%on_error_recovery_shift"              return 'ON_ERROR_RECOVERY_SHIFT';
+"%on_error_recovery_reduce"             return 'ON_ERROR_RECOVERY_REDUCE';
 "%parse-param"[s]?                      return 'PARSE_PARAM';
-"%option"[s]?                           this.pushState('options'); return 'OPTIONS';
+"%option"[s]?                           this.pushState('options');
+                                        return 'OPTIONS';
+
 "%lex"{LEX_CONTENT}"/lex"               %{
                                             // remove the %lex../lex wrapper and return the pure lex section:
                                             yytext = this.matches[1];
                                             return 'LEX_BLOCK';
                                         %}
 
-"%code"                                 return 'INIT_CODE';
-"%import"                               return 'IMPORT';
-<INITIAL,ebnf,bnf,code>"%include"       this.pushState('path'); 
-                                        return 'INCLUDE';
+"%code"                                 this.pushState('options');
+                                        return 'INIT_CODE';
+"%import"                               this.pushState('options');
+                                        return 'IMPORT';
 
-"%"{NAME}([^\r\n]*)                     %{
+<INITIAL,ebnf,code>"%include"           %{
+                                            yy.depth = 0;
+                                            yy.include_command_allowed = true;
+
+                                            // check whether this `%include` command was located at the start of the line:
+                                            // if it is, we treat it as a different token to signal the grammar we've
+                                            // got an action which stands on its own.
+                                            let precedingStr = this.matched[this.matched.length - this.match.length - 1];
+
+                                            let atSOL = (!precedingStr /* @ Start Of File */ || precedingStr === '\n');
+
+                                            this.pushState('action');
+                                            // push the parsed '%include' back into the input-to-parse
+                                            // to trigger the `<action>` state to re-parse it
+                                            // and issue the desired follow-up token: 'INCLUDE':
+                                            this.unput(yytext);
+
+                                            // and allow the next lexer round to match and execute the suitable lexer rule(s) to parse this incoming action code block.
+                                            if (atSOL) {
+                                                return 'ACTION_START_AT_SOL';
+                                            }
+                                            return 'ACTION_START';
+                                        %}
+
+<INITIAL,ebnf,code>"%"{NAME}([^\r\n]*)
+                                        %{
                                             /* ignore unrecognized decl */
                                             this.warn(rmCommonWS`
-                                                EBNF: ignoring unsupported parser option ${dquote(yytext)}
+                                                ignoring unsupported parser option ${dquote(yytext)}
                                                 while lexing in ${dquote(this.topState())} state.
 
                                                   Erroneous area:
-                                                ` + this.prettyPrintRange(yylloc));
-                                            yytext = [
-                                                this.matches[1],            // {NAME}
-                                                this.matches[2].trim()      // optional value/parameters
-                                            ];
+                                                ${this.prettyPrintRange(yylloc)}
+                                            `);
+                                            yytext = {
+                                                name: this.matches[1],              // {NAME}
+                                                value: this.matches[2].trim()       // optional value/parameters
+                                            };
                                             return 'UNKNOWN_DECL';
                                         %}
-"<"{ID}">"                              yytext = this.matches[1]; 
+"<"{ID}">"                              yytext = this.matches[1];
                                         return 'TOKEN_TYPE';
-"{{"([^]*?)"}}"                         yytext = this.matches[1].replace(/\}\\\}/g, '}}');  // unescape any literal '}\}' that exists within the action code block
-                                        return 'ACTION';
-"%{"([^]*?)"%}"                         yytext = this.matches[1].replace(/%\\\}/g, '%}');   // unescape any literal '%\}' that exists within the action code block
-                                        return 'ACTION';
-"{"                                     yy.depth = 0; this.pushState('action'); 
-                                        return '{';
-"->".*                                  yytext = yytext.substr(2, yyleng - 2).trim(); 
-                                        return 'ARROW_ACTION';
-"→".*                                   yytext = yytext.substr(1, yyleng - 1).trim(); 
-                                        return 'ARROW_ACTION';
-"=>".*                                  yytext = yytext.substr(2, yyleng - 2).trim(); 
-                                        return 'ARROW_ACTION';
 {HEX_NUMBER}                            yytext = parseInt(yytext, 16); return 'INTEGER';
 {DECIMAL_NUMBER}(?![xX0-9a-fA-F])       yytext = parseInt(yytext, 10); return 'INTEGER';
 
@@ -211,24 +578,9 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 // in the trailing CODE block, only accept these `%include` macros when
 // they appear at the start of a line and make sure the rest of lexer
 // regexes account for this one so it'll match that way only:
-<code>[^\r\n]*(\r|\n)+                  return 'CODE';
-<code>[^\r\n]+                          return 'CODE';      // the bit of CODE just before EOF...
-
-
-<path>{BR}                              this.popState(); this.unput(yytext);
-
-<path>\"{DOUBLEQUOTED_STRING_CONTENT}\"
-                                        yytext = unescQuote(this.matches[1]);
-                                        this.popState();
-                                        return 'PATH';
-<path>\'{QUOTED_STRING_CONTENT}\'
-                                        yytext = unescQuote(this.matches[1]);
-                                        this.popState();
-                                        return 'PATH';
-
-<path>{WS}+                             // skip whitespace in the line
-<path>[^\s\r\n]+                        this.popState();
-                                        return 'PATH';
+<code>(?:[^%{BR}][^{BR}]*{BR}+)+        return 'TRAILING_CODE_CHUNK';      // shortcut to grab a large bite at once when we're sure not to encounter any `%include` in there at start-of-line.
+<code>[^{BR}]*{BR}+                     return 'TRAILING_CODE_CHUNK';
+<code>[^{BR}]+                          return 'TRAILING_CODE_CHUNK';      // the bit of CODE just before EOF...
 
 
 // detect and report unterminated string constants ASAP
@@ -239,38 +591,44 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                             unterminated string constant in parser rule action block.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yylloc));
+                                            ${this.prettyPrintRange(yylloc)}
+                                        `);
                                         return 'UNTERMINATED_STRING_ERROR';
 <action>\'                              yyerror(rmCommonWS`
                                             unterminated string constant in parser rule action block.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yylloc));
+                                            ${this.prettyPrintRange(yylloc)}
+                                        `);
                                         return 'UNTERMINATED_STRING_ERROR';
 <action>\`                              yyerror(rmCommonWS`
                                             unterminated string constant in parser rule action block.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yylloc));
+                                            ${this.prettyPrintRange(yylloc)}
+                                        `);
                                         return 'UNTERMINATED_STRING_ERROR';
 
-<option_values>\"                       yyerror(rmCommonWS`
+<options>\"                             yyerror(rmCommonWS`
                                             unterminated string constant in %options entry.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yylloc));
+                                            ${this.prettyPrintRange(yylloc)}
+                                        `);
                                         return 'UNTERMINATED_STRING_ERROR';
-<option_values>\'                       yyerror(rmCommonWS`
+<options>\'                             yyerror(rmCommonWS`
                                             unterminated string constant in %options entry.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yylloc));
+                                            ${this.prettyPrintRange(yylloc)}
+                                        `);
                                         return 'UNTERMINATED_STRING_ERROR';
-<option_values>\`                       yyerror(rmCommonWS`
+<options>\`                             yyerror(rmCommonWS`
                                             unterminated string constant in %options entry.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yylloc));
+                                            ${this.prettyPrintRange(yylloc)}
+                                        `);
                                         return 'UNTERMINATED_STRING_ERROR';
 
 <*>\"                                   let rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
@@ -279,7 +637,8 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                             ${rules}.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yylloc));
+                                            ${this.prettyPrintRange(yylloc)}
+                                        `);
                                         return 'UNTERMINATED_STRING_ERROR';
 <*>\'                                   let rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
                                         yyerror(rmCommonWS`
@@ -287,7 +646,8 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                             ${rules}.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yylloc));
+                                            ${this.prettyPrintRange(yylloc)}
+                                        `);
                                         return 'UNTERMINATED_STRING_ERROR';
 <*>\`                                   let rules = (this.topState() === 'macro' ? 'macro\'s' : this.topState());
                                         yyerror(rmCommonWS`
@@ -295,18 +655,33 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                             ${rules}.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yylloc));
+                                            ${this.prettyPrintRange(yylloc)}
+                                        `);
                                         return 'UNTERMINATED_STRING_ERROR';
 
+
+<options>.                              yyerror(rmCommonWS`
+                                            unsupported parser input: ${dquote(yytext)}
+                                            while lexing in ${dquote(this.topState())} state.
+
+                                            If this input was intentional, you might want to put quotes around
+                                            it; any JavaScript string quoting style is accepted (single quotes,
+                                            double quotes *or* backtick quotes a la ES6 string templates).
+
+                                              Erroneous area:
+                                            ${this.prettyPrintRange(yylloc)}
+                                        `);
+                                        return 'error';
 
 <*>.                                    %{
                                             /* b0rk on bad characters */
                                             yyerror(rmCommonWS`
                                                 unsupported parser input: ${dquote(yytext)}
                                                 while lexing in ${dquote(this.topState())} state.
-                                                
+
                                                   Erroneous area:
-                                                ` + this.prettyPrintRange(yylloc));
+                                                ${this.prettyPrintRange(yylloc)}
+                                            `);
                                             return 'error';
                                         %}
 
@@ -317,24 +692,104 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 
 const rmCommonWS = helpers.rmCommonWS;
 const dquote     = helpers.dquote;
+const scanRegExp = helpers.scanRegExp;
 
 
-function indent(s, i) {
-    let a = s.split('\n');
-    let pf = (new Array(i + 1)).join(' ');
-    return pf + a.join('\n' + pf);
-}
 
-// unescape a string value which is wrapped in quotes/doublequotes
-function unescQuote(str) {
-    str = '' + str;
-    let a = str.split('\\\\');
-    a = a.map(function (s) {
-        return s.replace(/\\'/g, "'").replace(/\\"/g, '"');
-    });
-    str = a.join('\\\\');
-    return str;
-}
+
+
+
+// Calculate the end marker to match and produce a
+// lexer rule to match when the need arrises:
+lexer.setupDelimitedActionChunkLexerRegex = function lexer__setupDelimitedActionChunkLexerRegex(marker) {
+    // Special: when we encounter `{` as the start of the action code block,
+    // we DO NOT patch the `%{...%}` lexer rule as we will handle `{...}`
+    // elsewhere in the lexer anyway: we cannot use a simple regex like
+    // `/{[^]*?}/` to match an entire action code block after all!
+    let doNotPatch = (marker === '{');
+
+    let action_end_marker = marker.replace(/\{/g, '}');
+
+    if (!doNotPatch) {
+        // Note: this bit comes straight from the lexer kernel!
+        //
+        // Get us the currently active set of lexer rules.
+        // (This is why we push the 'action' lexer condition state above *before*
+        // we commence and work on the ruleset itself.)
+        let spec = this.__currentRuleSet__;
+        if (!spec) {
+            // Update the ruleset cache as we apparently encountered a state change or just started lexing.
+            // The cache is set up for fast lookup -- we assume a lexer will switch states much less often than it will
+            // invoke the `lex()` token-producing API and related APIs, hence caching the set for direct access helps
+            // speed up those activities a tiny bit.
+            spec = this.__currentRuleSet__ = this._currentRules();
+        }
+
+        let regexes = spec.__rule_regexes;
+        let len = spec.__rule_count;
+        let rules = spec.rules;
+        let i;
+        let action_chunk_regex;
+
+        // Must we still locate the rule to patch or have we done
+        // that already during a previous encounter?
+        //
+        // WARNING: our cache/patch must live beyond the current lexer+parser invocation:
+        // our patching must remain detected indefinitely to ensure subsequent invocations
+        // of the parser will still work as expected!
+        // This implies that we CANNOT store anything in the `yy` context as that one
+        // is short-lived: `yy` dies once the current parser.parse() has completed!
+        // Hence we store our patch data in the lexer instance itself: in `spec`.
+        //
+        if (!spec.__action_chunk_rule_idx) {
+            // **WARNING**: *(this bit, like so much else in here, comes straight from the lexer kernel)*
+            //
+            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
+            let orig_re_str1 = '/^(?:%\\{([^]*?)%\\}(?!\\}))/';
+            let orig_re_str2 = '/^(?:%\\{([\\s\\S]*?)%\\}(?!\\}))/';   // the XRegExp 'cross-platform' version of the same.
+
+            // Note: the arrays are 1-based, while `len` itself is a valid index,
+            // hence the non-standard less-or-equal check in the next loop condition!
+            for (i = 1; i <= len; i++) {
+                let rule_re = regexes[i];
+                let re_str = rule_re.toString();
+                //console.error('test regexes:', {i, len, re1: re_str, match1: rule_re.toString() === orig_re_str1, match1: rule_re.toString() === orig_re_str2});
+                if (re_str === orig_re_str1 || re_str === orig_re_str2) {
+                    spec.__action_chunk_rule_idx = i;
+                    break;
+                }
+            }
+
+            if (!spec.__action_chunk_rule_idx) {
+                //console.error('ruleset dump:', spec);
+                throw new Error('INTERNAL DEV ERROR: cannot locate %{...%} rule regex!');
+            }
+
+            // As we haven't initialized yet, we're sure the rule cache doesn't exist either.
+            // Make it happen:
+            spec.__cached_action_chunk_rule = {};   // set up empty cache
+        }
+
+        i = spec.__action_chunk_rule_idx;
+
+        // Must we build the lexer rule or did we already run this variant
+        // through this lexer before? When the latter, fetch the cached version!
+        action_chunk_regex = spec.__cached_action_chunk_rule[marker];
+        if (!action_chunk_regex) {
+            action_chunk_regex = spec.__cached_action_chunk_rule[marker] = new RegExp('^(?:' + marker.replace(/\{/g, '\\{') + '([^]*?)' + action_end_marker.replace(/\}/g, '\\}') + '(?!\\}))');
+            //console.warn('encode new action block regex:', action_chunk_regex);
+        }
+        //console.error('new ACTION REGEX:', { i, action_chunk_regex });
+        // and patch the lexer regex table for the current lexer condition state:
+        regexes[i] = action_chunk_regex;
+    }
+
+    return action_end_marker;
+};
+
+
+
+
 
 
 lexer.warn = function l_warn() {
