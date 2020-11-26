@@ -1,8 +1,9 @@
 ﻿// title: Simple lexer example - a lexer spec without any errors
-// test_input: /*a*//*b*///c
+// test_input: /*a*//*bBfoo*///c
 // ...
 //  
 
+%include "include/comments.helpers.js"
 
 lineEnd (\n\r|\r\n|[\n\r])
 commentName ([a-zA-Z]+("|"|[a-zA-Z]+)*(?=[\s]*))
