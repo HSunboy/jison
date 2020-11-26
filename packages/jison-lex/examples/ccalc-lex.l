@@ -19,6 +19,8 @@
 
 // %option noyywrap
 
+%option do-not-test-compile                 // jison-gho option to tell it not to assume the action code is valid JavaScript code.
+
 %{
 %}
 

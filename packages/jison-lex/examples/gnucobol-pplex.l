@@ -53,6 +53,8 @@
 %option noyyget_debug
 %option noyyset_debug
 
+%option do-not-test-compile
+
 %{
 #undef	YY_READ_BUF_SIZE
 #define	YY_READ_BUF_SIZE	32768
