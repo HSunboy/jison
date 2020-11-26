@@ -30,9 +30,11 @@
 %{
     const OPTION_DOES_NOT_ACCEPT_VALUE = 0x0001;
     const OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES = 0x0002;
-    const OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME = 0x0004;
-    const OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS = 0x0008;
-    const OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS = 0x0010;
+    const OPTION_ACCEPTS_000_IDENTIFIER_NAMES = 0x0004;    
+    // ^^^ extension of OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES: '8bit', etc. is a 'legal' identifier now too, but '42' (pure number) is not!
+    const OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME = 0x0008;
+    const OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS = 0x0010;
+    const OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS = 0x0020;
 %}
 
 
@@ -70,7 +72,7 @@ rules_and_epilogue
             } else {
                 $$ = { rules: $rules };
             }
-            yy.popContext('Line 73');
+            yy.popContext('Line 75');
         }
     | start_productions_marker error epilogue
         {
@@ -93,7 +95,7 @@ rules_and_epilogue
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 96');
+            yy.popContext('Line 98');
             $$ = { rules: [] };
         }
     | start_productions_marker DUMMY error
@@ -118,7 +120,7 @@ rules_and_epilogue
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 121');
+            yy.popContext('Line 123');
             $$ = { rules: [] };
         }
     | ε
@@ -318,7 +320,7 @@ definition
                 lst[i][1] = 0;     // flag as 'inclusive'
             }
 
-            yy.popContext('Line 321');
+            yy.popContext('Line 323');
 
             $$ = {
                 type: 'names',
@@ -340,7 +342,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 343');
+            yy.popContext('Line 345');
             $$ = null;
         }
     //
@@ -355,7 +357,7 @@ definition
                 lst[i][1] = 1;     // flag as 'exclusive'
             }
 
-            yy.popContext('Line 358');
+            yy.popContext('Line 360');
 
             $$ = {
                 type: 'names',
@@ -377,7 +379,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 380');
+            yy.popContext('Line 382');
             $$ = null;
         }
     //
@@ -475,7 +477,7 @@ definition
             for (let i = 0, len = lst.length; i < len; i++) {
                 yy.options[lst[i][0]] = lst[i][1];
             }
-            yy.popContext('Line 478');
+            yy.popContext('Line 480');
             $$ = null;
         }
     //
@@ -493,7 +495,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 496');
+            yy.popContext('Line 498');
             $$ = null;
         }
     | option_keyword error
@@ -508,7 +510,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 511');
+            yy.popContext('Line 513');
             $$ = null;
         }
     | UNKNOWN_DECL
@@ -548,7 +550,7 @@ definition
                 `);
             }
 
-            yy.popContext('Line 551');
+            yy.popContext('Line 553');
 
             $$ = {
                 type: 'imports',
@@ -569,7 +571,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 572');
+            yy.popContext('Line 574');
             $$ = null;
         }
     | init_code_keyword option_list ACTION_START action ACTION_END OPTIONS_END
@@ -612,7 +614,7 @@ definition
                 `);
             }
 
-            yy.popContext('Line 615');
+            yy.popContext('Line 617');
 
             $$ = {
                 type: 'codeSection',
@@ -640,7 +642,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 643');
+            yy.popContext('Line 645');
             $$ = null;
         }
     | init_code_keyword error ACTION_START /* ...action */ error OPTIONS_END
@@ -657,7 +659,7 @@ definition
                   Technical error report:
                 ${$error1.errStr}
             `);
-            yy.popContext('Line 660');
+            yy.popContext('Line 662');
             $$ = null;
         }
     | init_code_keyword error OPTIONS_END
@@ -678,7 +680,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 681');
+            yy.popContext('Line 683');
             $$ = null;
         }
     | error
@@ -703,7 +705,7 @@ option_keyword
     : OPTIONS
         {
             yy.pushContext();
-            yy.__options_flags__ = OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;
+            yy.__options_flags__ = OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES | OPTION_ACCEPTS_000_IDENTIFIER_NAMES;
             yy.__options_category_description__ = $OPTIONS;
         }
     ;
@@ -808,7 +810,7 @@ scoped_rules_collective
                 $rule.unshift($start_conditions);
             }
 
-            yy.popContext('Line 811');
+            yy.popContext('Line 813');
 
             $$ = [$rule];
         }
@@ -820,7 +822,7 @@ scoped_rules_collective
                 });
             }
 
-            yy.popContext('Line 823');
+            yy.popContext('Line 825');
 
             $$ = $rule_block;
         }
@@ -838,7 +840,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 841');
+            yy.popContext('Line 843');
             $$ = null;
         }
     | start_conditions '{' error
@@ -855,7 +857,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 858');
+            yy.popContext('Line 860');
             $$ = null;
         }
     | start_conditions error '}'
@@ -872,7 +874,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 875');
+            yy.popContext('Line 877');
             $$ = null;
         }
     ;
@@ -1188,7 +1190,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@start_inclusive_keyword)}
             `);
-            yy.popContext('Line 1191');
+            yy.popContext('Line 1193');
             $$ = null;
         }
     | start_exclusive_keyword
@@ -1202,7 +1204,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@start_exclusive_keyword)}
             `);
-            yy.popContext('Line 1205');
+            yy.popContext('Line 1207');
             $$ = null;
         }
     | option_keyword
@@ -1216,7 +1218,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@option_keyword)}
             `);
-            yy.popContext('Line 1219');
+            yy.popContext('Line 1221');
             $$ = null;
         }
     | UNKNOWN_DECL
@@ -1243,7 +1245,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@import_keyword)}
             `);
-            yy.popContext('Line 1246');
+            yy.popContext('Line 1248');
             $$ = null;
         }
     | init_code_keyword
@@ -1257,7 +1259,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@init_code_keyword)}
             `);
-            yy.popContext('Line 1260');
+            yy.popContext('Line 1262');
             $$ = null;
         }
     ;
@@ -1347,7 +1349,7 @@ start_conditions
 
             // Optimization: these two calls cancel one another out here:
             //
-            // yy.popContext('Line 1350');
+            // yy.popContext('Line 1352');
             // yy.pushContext();
 
             yy.__inside_scoped_ruleset__ = true;
@@ -1376,7 +1378,7 @@ start_conditions
 
             // Optimization: these two calls cancel one another out here:
             //
-            // yy.popContext('Line 1379');
+            // yy.popContext('Line 1381');
             // yy.pushContext();
 
             yy.__inside_scoped_ruleset__ = true;
@@ -1762,28 +1764,36 @@ option_name
         {
             // validate that this is legal input under the given circumstances, i.e. parser context:
             if (yy.__options_flags__ & OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES) {
-                let identifier = mkIdentifier($name);
+                let name = $name;
+                let identifier = mkIdentifier(name);
                 // check if the transformation is obvious & trivial to humans;
                 // if not, report an error as we don't want confusion due to
                 // typos and/or garbage input here producing something that
                 // is usable from a machine perspective.
-                if (!isLegalIdentifierInput($name)) {
-                    let with_value_msg = ' (with optional value assignment)';
-                    if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
-                        with_value_msg = '';
+                if (!isLegalIdentifierInput(name)) {
+                    name = name.replace(/\d/g, '');
+                    if (!isLegalIdentifierInput(name) || !(yy.__options_flags__ & OPTION_ACCEPTS_000_IDENTIFIER_NAMES)) {
+                        let with_value_msg = ' (with optional value assignment)';
+                        if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
+                            with_value_msg = '';
+                        }
+                        yyerror(rmCommonWS`
+                            Expected a valid name/argument${with_value_msg} in a ${yy.__options_category_description__} statement.
+                            Entries (names) must look like regular programming language
+                            identifiers, with the addition that option names MAY contain
+                            '-' dashes, e.g. 'example-option-1'.
+
+                            You may also start an option identifier with a number, but 
+                            then it must not be *only* a number, so '%option 8bit' is okay,
+                            while '%option 42' is not okay.
+
+                            Suggested name:
+                                ${identifier}
+
+                              Erroneous area:
+                            ${yylexer.prettyPrintRange(@name, @-1)}
+                        `);
                     }
-                    yyerror(rmCommonWS`
-                        Expected a valid name/argument${with_value_msg} in a ${yy.__options_category_description__} statement.
-                        Entries (names) must look like regular programming language
-                        identifiers, with the addition that option names MAY contain
-                        '-' dashes, e.g. 'example-option-1'.
-
-                        Suggested name:
-                            ${identifier}
-
-                          Erroneous area:
-                        ${yylexer.prettyPrintRange(@name, @-1)}
-                    `);
                 }
                 $$ = identifier;
             } else {
@@ -1827,7 +1837,7 @@ epilogue
         }
     | start_epilogue_marker
         {
-            yy.popContext('Line 1830');
+            yy.popContext('Line 1840');
 
             $$ = '';
         }
@@ -1846,7 +1856,7 @@ epilogue
                 }
             }
 
-            yy.popContext('Line 1849');
+            yy.popContext('Line 1859');
 
             $$ = srcCode;
         }
@@ -1874,11 +1884,11 @@ epilogue_chunk
     //
     : ACTION_START_AT_SOL action ACTION_END
         {
-            let srcCode = trimActionCode($action, {
+            let srcCode = trimActionCode($action + $ACTION_END, {
                 startMarker: $ACTION_START_AT_SOL
             });
             if (srcCode) {
-                let rv = checkActionBlock(srcCode + $ACTION_END, @action, yy);
+                let rv = checkActionBlock(srcCode, @action, yy);
                 if (rv) {
                     yyerror(rmCommonWS`
                         The '%{...%}' lexer epilogue code chunk does not compile: ${rv}
@@ -1987,7 +1997,7 @@ include_macro_code
                 }
             }
 
-            yy.popContext('Line 1990');
+            yy.popContext('Line 2000');
 
             // And no, we don't support nested '%include':
             $$ = '\n// Included by Jison: ' + path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + path + '\n\n';
@@ -2003,7 +2013,7 @@ include_macro_code
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 2006');
+            yy.popContext('Line 2016');
             $$ = null;
         }
     ;

@@ -1162,15 +1162,21 @@
     //
     // Return either the parsed AST (object) or an error message (string).
     function checkActionBlock(src, yylloc, options) {
+        if (options.doNotTestCompile) {
+            return false;        // simply accept everything...
+        }
+
+        // empty action code is A-okay all the time:
+        if (!src.trim()) {
+            return false;
+        }
+        
         // make sure reasonable line numbers, etc. are reported in any
         // potential parse errors by pushing the source code down:
         if (yylloc && yylloc.first_line > 0) {
             let cnt = yylloc.first_line;
             let lines = new Array(cnt);
             src = lines.join('\n') + src;
-        }
-        if (!src.trim()) {
-            return false;
         }
 
         try {

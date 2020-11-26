@@ -1158,15 +1158,21 @@ function prettyPrintAST(ast, options) {
 //
 // Return either the parsed AST (object) or an error message (string).
 function checkActionBlock(src, yylloc, options) {
+    if (options.doNotTestCompile) {
+        return false;        // simply accept everything...
+    }
+
+    // empty action code is A-okay all the time:
+    if (!src.trim()) {
+        return false;
+    }
+    
     // make sure reasonable line numbers, etc. are reported in any
     // potential parse errors by pushing the source code down:
     if (yylloc && yylloc.first_line > 0) {
         let cnt = yylloc.first_line;
         let lines = new Array(cnt);
         src = lines.join('\n') + src;
-    }
-    if (!src.trim()) {
-        return false;
     }
 
     try {
@@ -2739,9 +2745,11 @@ performAction: function parser__PerformAction(yyloc, yystate /* action[1] */, yy
 
           const OPTION_DOES_NOT_ACCEPT_VALUE = 0x0001;
     const OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES = 0x0002;
-    const OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME = 0x0004;
-    const OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS = 0x0008;
-    const OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS = 0x0010;
+    const OPTION_ACCEPTS_000_IDENTIFIER_NAMES = 0x0004;    
+    // ^^^ extension of OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES: '8bit', etc. is a 'legal' identifier now too, but '42' (pure number) is not!
+    const OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME = 0x0008;
+    const OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS = 0x0010;
+    const OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS = 0x0020;
 
           switch (yystate) {
 case 0:
@@ -2797,7 +2805,7 @@ case 2:
     } else {
         this.$ = { rules: yyvstack[yysp - 1] };
     }
-    yy.popContext('Line 73');
+    yy.popContext('Line 75');
     break;
 
 case 3:
@@ -2827,7 +2835,7 @@ case 3:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 96');
+    yy.popContext('Line 98');
     this.$ = { rules: [] };
     break;
 
@@ -2859,7 +2867,7 @@ case 4:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 121');
+    yy.popContext('Line 123');
     this.$ = { rules: [] };
     break;
 
@@ -3089,7 +3097,7 @@ case 11:
         lst[i][1] = 0;     // flag as 'inclusive'
     }
     
-    yy.popContext('Line 321');
+    yy.popContext('Line 323');
     
     this.$ = {
         type: 'names',
@@ -3115,7 +3123,7 @@ case 12:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 343');
+    yy.popContext('Line 345');
     this.$ = null;
     break;
 
@@ -3133,7 +3141,7 @@ case 13:
         lst[i][1] = 1;     // flag as 'exclusive'
     }
     
-    yy.popContext('Line 358');
+    yy.popContext('Line 360');
     
     this.$ = {
         type: 'names',
@@ -3159,7 +3167,7 @@ case 14:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 380');
+    yy.popContext('Line 382');
     this.$ = null;
     break;
 
@@ -3269,7 +3277,7 @@ case 19:
     for (let i = 0, len = lst.length; i < len; i++) {
         yy.options[lst[i][0]] = lst[i][1];
     }
-    yy.popContext('Line 478');
+    yy.popContext('Line 480');
     this.$ = null;
     }
     break;
@@ -3291,7 +3299,7 @@ case 20:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 496');
+    yy.popContext('Line 498');
     this.$ = null;
     break;
 
@@ -3313,7 +3321,7 @@ case 21:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 511');
+    yy.popContext('Line 513');
     this.$ = null;
     break;
 
@@ -3368,7 +3376,7 @@ case 23:
         `);
     }
     
-    yy.popContext('Line 551');
+    yy.popContext('Line 553');
     
     this.$ = {
         type: 'imports',
@@ -3397,7 +3405,7 @@ case 24:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 572');
+    yy.popContext('Line 574');
     this.$ = null;
     break;
 
@@ -3448,7 +3456,7 @@ case 25:
         `);
     }
     
-    yy.popContext('Line 615');
+    yy.popContext('Line 617');
     
     this.$ = {
         type: 'codeSection',
@@ -3473,8 +3481,8 @@ case 26:
     let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
     let end_marker_msg = marker_msg.replace(/\{/g, '}');
     yyparser.yyError(rmCommonWS$2`
-        The '%code ID %{...%\}' initialization code section must be properly 
-        wrapped in block start markers (\`%{\`${marker_msg}) 
+        The '%code ID %{...%\}' initialization code section must be properly
+        wrapped in block start markers (\`%{\`${marker_msg})
         and matching end markers (\`%}\`${end_marker_msg}). Expected format:
     
             %code qualifier_name {action code}
@@ -3485,7 +3493,7 @@ case 26:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 643');
+    yy.popContext('Line 645');
     this.$ = null;
     }
     break;
@@ -3499,7 +3507,7 @@ case 27:
     
     
     yyparser.yyError(rmCommonWS$2`
-        Each '%code' initialization code section must be qualified by a name, 
+        Each '%code' initialization code section must be qualified by a name,
         e.g. 'required' before the action code itself:
     
             %code qualifier_name {action code}
@@ -3510,7 +3518,7 @@ case 27:
           Technical error report:
         ${yyvstack[yysp - 3].errStr}
     `);
-    yy.popContext('Line 660');
+    yy.popContext('Line 662');
     this.$ = null;
     break;
 
@@ -3523,11 +3531,11 @@ case 28:
     
     
     yyparser.yyError(rmCommonWS$2`
-        Each '%code' initialization code section must be qualified by a name, 
+        Each '%code' initialization code section must be qualified by a name,
         e.g. 'required' before the action code itself.
     
-        The '%code ID %{...%\}' initialization code section must be properly 
-        wrapped in block start markers (e.g. \`%{\`) and matching end markers 
+        The '%code ID %{...%\}' initialization code section must be properly
+        wrapped in block start markers (e.g. \`%{\`) and matching end markers
         (e.g. \`%}\`). Expected format:
     
             %code qualifier_name {action code}
@@ -3538,7 +3546,7 @@ case 28:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 681');
+    yy.popContext('Line 683');
     this.$ = null;
     break;
 
@@ -3576,7 +3584,7 @@ case 30:
     
     
     yy.pushContext();
-    yy.__options_flags__ = OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;
+    yy.__options_flags__ = OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES | OPTION_ACCEPTS_000_IDENTIFIER_NAMES;
     yy.__options_category_description__ = yyvstack[yysp];
     break;
 
@@ -3690,6 +3698,8 @@ case 39:
     
     if (yyvstack[yysp]) {
         this.$ = yyvstack[yysp - 1].concat(yyvstack[yysp]);
+    } else {
+        this.$ = yyvstack[yysp - 1];
     }
     break;
 
@@ -3703,6 +3713,8 @@ case 40:
     
     if (yyvstack[yysp]) {
         this.$ = yyvstack[yysp - 1].concat([yyvstack[yysp]]);
+    } else {
+        this.$ = yyvstack[yysp - 1];
     }
     break;
 
@@ -3731,7 +3743,7 @@ case 42:
         yyvstack[yysp].unshift(yyvstack[yysp - 1]);
     }
     
-    yy.popContext('Line 807');
+    yy.popContext('Line 813');
     
     this.$ = [yyvstack[yysp]];
     break;
@@ -3750,7 +3762,7 @@ case 43:
         });
     }
     
-    yy.popContext('Line 819');
+    yy.popContext('Line 825');
     
     this.$ = yyvstack[yysp - 1];
     break;
@@ -3775,7 +3787,7 @@ case 44:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 837');
+    yy.popContext('Line 843');
     this.$ = null;
     break;
 
@@ -3799,7 +3811,7 @@ case 45:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 854');
+    yy.popContext('Line 860');
     this.$ = null;
     break;
 
@@ -3823,7 +3835,7 @@ case 46:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 871');
+    yy.popContext('Line 877');
     this.$ = null;
     break;
 
@@ -3835,9 +3847,9 @@ case 47:
     // END of default action (generated by JISON mode classic/merge :: 2/2,VT,VA,VU,-,LT,LA,-,-)
     
     
-    this.$ = yyvstack[yysp - 1]; 
+    this.$ = yyvstack[yysp - 1];
     if (yyvstack[yysp]) {
-        this.$.push(yyvstack[yysp]); 
+        this.$.push(yyvstack[yysp]);
     }
     break;
 
@@ -3906,7 +3918,7 @@ case 51:
             #
             # Please be aware that the reported compile error MAY be referring
             # to the wrapper code which is added by JISON automatically when
-            # processing arrow actions: the entire action code chunk 
+            # processing arrow actions: the entire action code chunk
             # (including wrapper) is:
     
                 ${indentedSrc}
@@ -4052,7 +4064,7 @@ case 56:
     {
     if (yy.__inside_scoped_ruleset__) {
         yyparser.yyError(rmCommonWS$2`
-            '%{...%}' lexer setup action code sections are not accepted inside 
+            '%{...%}' lexer setup action code sections are not accepted inside
             '<...>{ ... }' scoped rule blocks. Move this action code to the top
             of the '%%' section instead.
     
@@ -4167,7 +4179,7 @@ case 60:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1187');
+    yy.popContext('Line 1193');
     this.$ = null;
     break;
 
@@ -4188,7 +4200,7 @@ case 61:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1201');
+    yy.popContext('Line 1207');
     this.$ = null;
     break;
 
@@ -4209,7 +4221,7 @@ case 62:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1215');
+    yy.popContext('Line 1221');
     this.$ = null;
     break;
 
@@ -4250,7 +4262,7 @@ case 64:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1242');
+    yy.popContext('Line 1248');
     this.$ = null;
     break;
 
@@ -4271,7 +4283,7 @@ case 65:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1256');
+    yy.popContext('Line 1262');
     this.$ = null;
     break;
 
@@ -4430,7 +4442,7 @@ case 73:
     
     // Optimization: these two calls cancel one another out here:
     //
-    // yy.popContext('Line 1346');
+    // yy.popContext('Line 1352');
     // yy.pushContext();
     
     yy.__inside_scoped_ruleset__ = true;
@@ -4468,7 +4480,7 @@ case 74:
     
     // Optimization: these two calls cancel one another out here:
     //
-    // yy.popContext('Line 1375');
+    // yy.popContext('Line 1381');
     // yy.pushContext();
     
     yy.__inside_scoped_ruleset__ = true;
@@ -4798,7 +4810,7 @@ case 105:
     
     
     yyparser.yyError(rmCommonWS$2`
-        Empty lex rule regex set '[]' is not legal. 
+        Empty lex rule regex set '[]' is not legal.
     
         If you want to match ANY character (including CR/LF characters) you may
         write '[^]' or '[\s\S]', which are standard idioms for this in JavaScript.
@@ -5064,28 +5076,36 @@ case 122:
     {
     // validate that this is legal input under the given circumstances, i.e. parser context:
     if (yy.__options_flags__ & OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES) {
-        let identifier = mkIdentifier$1(yyvstack[yysp]);
+        let name = yyvstack[yysp];
+        let identifier = mkIdentifier$1(name);
         // check if the transformation is obvious & trivial to humans;
         // if not, report an error as we don't want confusion due to
         // typos and/or garbage input here producing something that
         // is usable from a machine perspective.
-        if (!isLegalIdentifierInput$1(yyvstack[yysp])) {
-            let with_value_msg = ' (with optional value assignment)';
-            if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
-                with_value_msg = '';
+        if (!isLegalIdentifierInput$1(name)) {
+            name = name.replace(/\d/g, '');
+            if (!isLegalIdentifierInput$1(name) || !(yy.__options_flags__ & OPTION_ACCEPTS_000_IDENTIFIER_NAMES)) {
+                let with_value_msg = ' (with optional value assignment)';
+                if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
+                    with_value_msg = '';
+                }
+                yyparser.yyError(rmCommonWS$2`
+                    Expected a valid name/argument${with_value_msg} in a ${yy.__options_category_description__} statement.
+                    Entries (names) must look like regular programming language
+                    identifiers, with the addition that option names MAY contain
+                    '-' dashes, e.g. 'example-option-1'.
+    
+                    You may also start an option identifier with a number, but 
+                    then it must not be *only* a number, so '%option 8bit' is okay,
+                    while '%option 42' is not okay.
+    
+                    Suggested name:
+                        ${identifier}
+    
+                      Erroneous area:
+                    ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+                `);
             }
-            yyparser.yyError(rmCommonWS$2`
-                Expected a valid name/argument${with_value_msg} in a ${yy.__options_category_description__} statement.
-                Entries (names) must look like regular programming language
-                identifiers, with the addition that option names MAY contain
-                '-' dashes, e.g. 'example-option-1'.
-    
-                Suggested name:
-                    ${identifier}
-    
-                  Erroneous area:
-                ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
-            `);
         }
         this.$ = identifier;
     } else {
@@ -5154,7 +5174,7 @@ case 127:
     // END of default action (generated by JISON mode classic/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
     
     
-    yy.popContext('Line 1826');
+    yy.popContext('Line 1840');
     
     this.$ = '';
     break;
@@ -5181,7 +5201,7 @@ case 128:
         }
     }
     
-    yy.popContext('Line 1845');
+    yy.popContext('Line 1859');
     
     this.$ = srcCode;
     }
@@ -5196,11 +5216,11 @@ case 131:
     
     
     {
-    let srcCode = trimActionCode$1(yyvstack[yysp - 1], {
+    let srcCode = trimActionCode$1(yyvstack[yysp - 1] + yyvstack[yysp], {
         startMarker: yyvstack[yysp - 2]
     });
     if (srcCode) {
-        let rv = checkActionBlock$1(srcCode + yyvstack[yysp], yylstack[yysp - 1], yy);
+        let rv = checkActionBlock$1(srcCode, yylstack[yysp - 1], yy);
         if (rv) {
             yyparser.yyError(rmCommonWS$2`
                 The '%{...%}' lexer epilogue code chunk does not compile: ${rv}
@@ -5323,7 +5343,7 @@ case 136:
         }
     }
     
-    yy.popContext('Line 1986');
+    yy.popContext('Line 2000');
     
     // And no, we don't support nested '%include':
     this.$ = '\n// Included by Jison: ' + path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + path + '\n\n';
@@ -5347,7 +5367,7 @@ case 137:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 2002');
+    yy.popContext('Line 2016');
     this.$ = null;
     break;
 
@@ -13251,6 +13271,7 @@ const defaultJisonLexOptions = {
     moduleMainImports: null,        // require()/import statements required by the `moduleMain` function source code if `!noMain` is true
     dumpSourceCodeOnFailure: true,
     throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
 
     moduleName: undefined,
     defaultModuleName: 'lexer',
@@ -13272,7 +13293,7 @@ const defaultJisonLexOptions = {
     exportAST: false,
     prettyCfg: true,                // use `prettier` (or not) to (re)format the generated parser code.
     pre_lex: undefined,
-    post_lex: undefined
+    post_lex: undefined,
 };
 
 
@@ -16581,6 +16602,7 @@ function generateModuleBody(grammarSpec) {
             noMain: 1,
             dumpSourceCodeOnFailure: 1,
             throwErrorOnCompileFailure: 1,
+            doNotTestCompile: 1,
             reportStats: 1,
             file: 1,
             outfile: 1,

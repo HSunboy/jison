@@ -65,6 +65,7 @@ const defaultJisonLexOptions = {
     moduleMainImports: null,        // require()/import statements required by the `moduleMain` function source code if `!noMain` is true
     dumpSourceCodeOnFailure: true,
     throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
 
     moduleName: undefined,
     defaultModuleName: 'lexer',
@@ -86,7 +87,7 @@ const defaultJisonLexOptions = {
     exportAST: false,
     prettyCfg: true,                // use `prettier` (or not) to (re)format the generated parser code.
     pre_lex: undefined,
-    post_lex: undefined
+    post_lex: undefined,
 };
 
 
@@ -3446,6 +3447,7 @@ function generateModuleBody(grammarSpec) {
             noMain: 1,
             dumpSourceCodeOnFailure: 1,
             throwErrorOnCompileFailure: 1,
+            doNotTestCompile: 1,
             reportStats: 1,
             file: 1,
             outfile: 1,
