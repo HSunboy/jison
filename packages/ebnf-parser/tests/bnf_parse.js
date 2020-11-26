@@ -1,7 +1,6 @@
 const assert = require('chai').assert;
 const fs = require('fs');
 const path = require('path');
-const mkdirp = require('mkdirp');
 const yaml = require('@gerhobbelt/js-yaml');
 const JSON5 = require('@gerhobbelt/json5');
 const globby = require('globby');
@@ -9,6 +8,7 @@ const helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
 const trimErrorForTestReporting = helpers.trimErrorForTestReporting;
 const stripErrorStackPaths = helpers.stripErrorStackPaths;
 const cleanStackTrace4Comparison = helpers.cleanStackTrace4Comparison;
+const mkdirp = helpers.mkdirp;
 const bnf = require('../dist/ebnf-parser-cjs');
 
 
