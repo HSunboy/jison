@@ -4,6 +4,7 @@ const Lexer = require('../setup').Lexer;
 const globby = require('globby');
 const fs = require('fs');
 const path = require('path');
+const JSON5 = require('json5');
 const helpers = require('../../packages/helpers-lib');
 const code_exec = helpers.exec;
 
