@@ -1,0 +1,98 @@
+{
+  rules: [
+    [
+      '{id}',
+      "return 'IDENT'",
+    ],
+    [
+      '{digit}',
+      "return 'NUMBER'",
+    ],
+    [
+      `"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*"`,
+      "yytext = yytext.substr(1,yyleng-2); return 'STRING'",
+    ],
+    [
+      '$',
+      "return 'EOF'",
+    ],
+  ],
+  macros: {
+    digit: '[0-9]',
+    id: '[a-zA-Z_\\$][a-zA-Z0-9_\\$]*',
+    esc: '\\\\',
+  },
+  startConditions: {},
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  __extra_diag_info__: {
+    pre_parse_callback_callCount: 1,
+    post_parse_callback_callCount: 1,
+    post_parse_diaginfo: {
+      sharedState_yy: {
+        startConditions: {},
+        __options_flags__: 0,
+        __options_category_description__: '???',
+        __inside_scoped_ruleset__: false,
+        __context_cfg_stack__: [],
+        depth: 0,
+        include_command_allowed: false,
+      },
+      hash: {
+        errStr: null,
+        exception: null,
+        text: '',
+        value: '',
+        token: '"$accept"',
+        token_id: 0,
+        line: 14,
+        expected: null,
+        recoverable: false,
+        state: 24,
+        action: 2,
+        new_state: 1,
+        stack_pointer: 5,
+      },
+      reentrant_call_depth: 1,
+      error_infos_stack: [
+        {
+          errStr: null,
+          exception: null,
+          text: '',
+          value: '',
+          token: '"$accept"',
+          token_id: 0,
+          line: 14,
+          expected: null,
+          recoverable: false,
+          state: 24,
+          action: 2,
+          new_state: 1,
+          stack_pointer: 5,
+        },
+      ],
+      error_recovery_stack: [],
+      error_infos_stack_size: 1,
+      error_recovery_stack_size: 0,
+    },
+    reentrant_call_depth: 0,
+    error_infos_stack_size: 0,
+    error_recovery_stack_size: 0,
+  },
+  __original_input__: `digit [0-9]
+id [a-zA-Z_\\$][a-zA-Z0-9_\\$]*
+esc \\\\
+
+%%
+
+
+{id}                            return 'IDENT'
+{digit}                         return 'NUMBER'
+// next line is lightly wrong: the trailing semicolon (which is part of the regex, but the action code does not seem to reflect this with \`yyleng-2\`:
+\\"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*\\"
+								yytext = yytext.substr(1,yyleng-2); return 'STRING';
+
+
+<<EOF>>                         return 'EOF';`,
+}
