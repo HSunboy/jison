@@ -1,0 +1,258 @@
+{
+  id: -1,
+  token: null,
+  fail: 1,
+  spec: `
+%option 8bit
+%option case-insensitive
+%option never-interactive
+%option prefix="pp"
+
+%option stack
+
+%option noyy_top_state
+%option noyy_scan_buffer
+%option noyy_scan_bytes
+%option noyy_scan_string
+
+%option noyyget_extra
+%option noyyset_extra
+%option noyyget_leng
+%option noyyget_text
+%option noyyget_lineno
+%option noyyset_lineno
+%option noyyget_in
+%option noyyset_in
+%option noyyget_out
+%option noyyset_out
+%option noyyget_lval
+%option noyyset_lval
+%option noyyget_lloc
+%option noyyset_lloc
+%option noyyget_debug
+%option noyyset_debug
+
+// bad option identifers:
+%option 6445
+%option 42-42
+%option 8
+%option ''
+%option " "
+%option -
+%option '-'
+%option {x}
+%option __beelzebub!
+%option @you
+%option me@home
+%option #no-more-bad-S
+%option foo:bar
+%option "a=b"
+%option ~a
+%option $a$
+%option a#b
+
+%%
+
+\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  return 'date';
+":"                         return ':';
+[\\s\\r\\n]					return 'WS';
+<<EOF>>                     return 'EOF';
+.                           return 'INVALID';
+
+`,
+  err: {
+    hash: {
+      errStr: 'Parsing aborted due to exception.',
+      text: '6445',
+      value: '6445',
+      token: '"$accept"',
+      token_id: 0,
+      line: 31,
+      expected: null,
+      recoverable: false,
+      state: 54,
+      action: 2,
+      new_state: 122,
+      stack_pointer: 5,
+    },
+    message: 'name.replace is not a function',
+    name: 'JisonParserError',
+    stack: `TypeError: name.replace is not a function
+    at Object.parser__PerformAction (/lex-parser-cjs.js:5124:25)
+    at Object.parse (/lex-parser-cjs.js:8582:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12289:25)
+    at Context.testEachParserExample (/all-tests.js:466:27)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
+  },
+  __extra_diag_info__: {
+    pre_parse_callback_callCount: 1,
+    post_parse_callback_callCount: 1,
+    post_parse_diaginfo: {
+      sharedState_yy: {
+        actionInclude: [],
+        options: {
+          _8bit: true,
+          caseInsensitive: true,
+          neverInteractive: true,
+          prefix: 'pp',
+          stack: true,
+          noyy_top_state: true,
+          noyy_scan_buffer: true,
+          noyy_scan_bytes: true,
+          noyy_scan_string: true,
+          noyyget_extra: true,
+          noyyset_extra: true,
+          noyyget_leng: true,
+          noyyget_text: true,
+          noyyget_lineno: true,
+          noyyset_lineno: true,
+          noyyget_in: true,
+          noyyset_in: true,
+          noyyget_out: true,
+          noyyset_out: true,
+          noyyget_lval: true,
+          noyyset_lval: true,
+          noyyget_lloc: true,
+          noyyset_lloc: true,
+          noyyget_debug: true,
+          noyyset_debug: true,
+        },
+        startConditions: {},
+        __options_flags__: 6,
+        __options_category_description__: '%option',
+        __inside_scoped_ruleset__: false,
+        __context_cfg_stack__: [
+          {
+            flags: 0,
+            descr: '???',
+            scoped: false,
+          },
+        ],
+      },
+      hash: {
+        errStr: null,
+        exception: null,
+        text: '6445',
+        value: '6445',
+        token: '"$accept"',
+        token_id: 0,
+        line: 31,
+        expected: null,
+        recoverable: false,
+        state: 54,
+        action: 2,
+        new_state: 122,
+        stack_pointer: 5,
+      },
+      reentrant_call_depth: 1,
+      error_infos_stack: [
+        {
+          errStr: 'Parsing aborted due to exception.',
+          text: '6445',
+          value: '6445',
+          token: '"$accept"',
+          token_id: 0,
+          line: 31,
+          expected: null,
+          recoverable: false,
+          state: 54,
+          action: 2,
+          new_state: 122,
+          stack_pointer: 5,
+        },
+        {
+          errStr: null,
+          exception: null,
+          text: '6445',
+          value: '6445',
+          token: '"$accept"',
+          token_id: 0,
+          line: 31,
+          expected: null,
+          recoverable: false,
+          state: 54,
+          action: 2,
+          new_state: 122,
+          stack_pointer: 5,
+        },
+      ],
+      error_recovery_stack: [],
+      error_infos_stack_size: 2,
+      error_recovery_stack_size: 0,
+    },
+    reentrant_call_depth: 0,
+    error_infos_stack_size: 0,
+    error_recovery_stack_size: 0,
+  },
+  __original_input__: `
+%option 8bit
+%option case-insensitive
+%option never-interactive
+%option prefix="pp"
+
+%option stack
+
+%option noyy_top_state
+%option noyy_scan_buffer
+%option noyy_scan_bytes
+%option noyy_scan_string
+
+%option noyyget_extra
+%option noyyset_extra
+%option noyyget_leng
+%option noyyget_text
+%option noyyget_lineno
+%option noyyset_lineno
+%option noyyget_in
+%option noyyset_in
+%option noyyget_out
+%option noyyset_out
+%option noyyget_lval
+%option noyyset_lval
+%option noyyget_lloc
+%option noyyset_lloc
+%option noyyget_debug
+%option noyyset_debug
+
+// bad option identifers:
+%option 6445
+%option 42-42
+%option 8
+%option ''
+%option " "
+%option -
+%option '-'
+%option {x}
+%option __beelzebub!
+%option @you
+%option me@home
+%option #no-more-bad-S
+%option foo:bar
+%option "a=b"
+%option ~a
+%option $a$
+%option a#b
+
+%%
+
+\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  return 'date';
+":"                         return ':';
+[\\s\\r\\n]					return 'WS';
+<<EOF>>                     return 'EOF';
+.                           return 'INVALID';
+
+`,
+}

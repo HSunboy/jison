@@ -1,0 +1,221 @@
+{
+  id: -1,
+  token: null,
+  fail: 1,
+  spec: `%%
+"A"		 -> 'A'
+%x  				// is not accepted here
+"B"		 -> 'B'
+`,
+  err: {
+    hash: {
+      errStr: `
+\`the exclusive lexer start conditions set (%x)\` statements must be placed in
+the top section of the lexer spec file, above the first '%%'
+separator. You cannot specify any in the second section as has been
+done here.
+    
+  Erroneous code:
+1: %%
+2: "A"   -> 'A'
+3: %x      // is not accepted here
+^..^^
+4: "B"   -> 'B'
+5: 
+`,
+      exception: null,
+      text: '%x',
+      value: '%x',
+      token: '"$accept"',
+      token_id: 0,
+      line: 2,
+      recoverable: false,
+      state: 79,
+      action: 2,
+      new_state: 61,
+      stack_pointer: 6,
+    },
+    message: `
+\`the exclusive lexer start conditions set (%x)\` statements must be placed in
+the top section of the lexer spec file, above the first '%%'
+separator. You cannot specify any in the second section as has been
+done here.
+    
+  Erroneous code:
+1: %%
+2: "A"   -> 'A'
+3: %x      // is not accepted here
+^..^^
+4: "B"   -> 'B'
+5: 
+`,
+    name: 'JisonParserError',
+    stack: `JisonParserError: 
+\`the exclusive lexer start conditions set (%x)\` statements must be placed in
+the top section of the lexer spec file, above the first '%%'
+separator. You cannot specify any in the second section as has been
+done here.
+    
+  Erroneous code:
+1: %%
+2: "A"   -> 'A'
+3: %x      // is not accepted here
+^..^^
+4: "B"   -> 'B'
+5: 
+
+    at Object.parseError (/lex-parser-cjs.js:7125:15)
+    at Object.yyError (/lex-parser-cjs.js:7315:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4232:14)
+    at Object.parse (/lex-parser-cjs.js:8582:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12289:25)
+    at Context.testEachParserExample (/all-tests.js:466:27)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
+  },
+  __extra_diag_info__: {
+    pre_parse_callback_callCount: 1,
+    post_parse_callback_callCount: 1,
+    post_parse_diaginfo: {
+      sharedState_yy: {
+        actionInclude: [],
+        options: {},
+        startConditions: {},
+        __options_flags__: 3,
+        __options_category_description__: 'the exclusive lexer start conditions set (%x)',
+        __inside_scoped_ruleset__: false,
+        __context_cfg_stack__: [
+          {
+            flags: 0,
+            descr: '???',
+            scoped: false,
+          },
+          {
+            flags: 0,
+            descr: 'the lexer rules definition section',
+            scoped: false,
+          },
+        ],
+        depth: 0,
+        include_command_allowed: false,
+      },
+      hash: {
+        errStr: null,
+        exception: null,
+        text: '%x',
+        value: '%x',
+        token: '"$accept"',
+        token_id: 0,
+        line: 2,
+        expected: null,
+        recoverable: false,
+        state: 79,
+        action: 2,
+        new_state: 61,
+        stack_pointer: 6,
+      },
+      reentrant_call_depth: 1,
+      error_infos_stack: [
+        {
+          errStr: `
+\`the exclusive lexer start conditions set (%x)\` statements must be placed in
+the top section of the lexer spec file, above the first '%%'
+separator. You cannot specify any in the second section as has been
+done here.
+    
+  Erroneous code:
+1: %%
+2: "A"   -> 'A'
+3: %x      // is not accepted here
+^..^^
+4: "B"   -> 'B'
+5: 
+`,
+          exception: null,
+          text: '%x',
+          value: '%x',
+          token: '"$accept"',
+          token_id: 0,
+          line: 2,
+          recoverable: false,
+          state: 79,
+          action: 2,
+          new_state: 61,
+          stack_pointer: 6,
+        },
+        {
+          errStr: null,
+          exception: null,
+          text: '%x',
+          value: '%x',
+          token: '"$accept"',
+          token_id: 0,
+          line: 2,
+          expected: null,
+          recoverable: false,
+          state: 79,
+          action: 2,
+          new_state: 61,
+          stack_pointer: 6,
+        },
+      ],
+      error_recovery_stack: [
+        {
+          errStr: `
+\`the exclusive lexer start conditions set (%x)\` statements must be placed in
+the top section of the lexer spec file, above the first '%%'
+separator. You cannot specify any in the second section as has been
+done here.
+    
+  Erroneous code:
+1: %%
+2: "A"   -> 'A'
+3: %x      // is not accepted here
+^..^^
+4: "B"   -> 'B'
+5: 
+`,
+          exception: null,
+          text: '%x',
+          value: '%x',
+          token: '"$accept"',
+          token_id: 0,
+          line: 2,
+          recoverable: false,
+          state: 79,
+          action: 2,
+          new_state: 61,
+          stack_pointer: 6,
+          base_pointer: 9,
+          info_stack_pointer: 9,
+          root_failure_pointer: 6,
+          yyError: true,
+          errorRuleDepth: -1,
+          recovering: 0,
+        },
+      ],
+      error_infos_stack_size: 2,
+      error_recovery_stack_size: 1,
+    },
+    reentrant_call_depth: 0,
+    error_infos_stack_size: 0,
+    error_recovery_stack_size: 0,
+  },
+  __original_input__: `%%
+"A"		 -> 'A'
+%x  				// is not accepted here
+"B"		 -> 'B'
+`,
+}

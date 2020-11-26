@@ -1,0 +1,331 @@
+{
+  id: -1,
+  token: null,
+  fail: 1,
+  spec: `%s subsetA subsetB
+
+%%
+"A"		 -> 'A'
+
+<subsetA>{
+
+"C"		 -> 'C'
+
+<subsetB>{
+
+"B"		 -> 'B'
+
+}
+
+"D"		 -> 'D'
+
+}
+
+`,
+  err: {
+    hash: {
+      errStr: `
+Seems you did not correctly bracket a lexer rules set inside
+the start condition
+  <subsetA> { rules... }
+as a terminating curly brace '}' could not be found.
+    
+  Erroneous area:
+ 6: <subsetA>{
+ 7: 
+ 8: "C"   -> 'C'
+ 9: 
+10: <subsetB>{
+^^..^
+11: 
+12: "B"   -> 'B'
+    
+  Technical error report:
+Parse error on line 10:
+<subsetB>{
+^
+Expecting "}", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
+`,
+      exception: null,
+      text: '<',
+      value: '<',
+      token: '"<"',
+      token_id: 3,
+      line: 9,
+      recoverable: false,
+      state: 170,
+      action: 2,
+      new_state: 45,
+      stack_pointer: 8,
+    },
+    message: `
+Seems you did not correctly bracket a lexer rules set inside
+the start condition
+  <subsetA> { rules... }
+as a terminating curly brace '}' could not be found.
+    
+  Erroneous area:
+ 6: <subsetA>{
+ 7: 
+ 8: "C"   -> 'C'
+ 9: 
+10: <subsetB>{
+^^..^
+11: 
+12: "B"   -> 'B'
+    
+  Technical error report:
+Parse error on line 10:
+<subsetB>{
+^
+Expecting "}", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
+`,
+    name: 'JisonParserError',
+    stack: `JisonParserError: 
+Seems you did not correctly bracket a lexer rules set inside
+the start condition
+  <subsetA> { rules... }
+as a terminating curly brace '}' could not be found.
+    
+  Erroneous area:
+ 6: <subsetA>{
+ 7: 
+ 8: "C"   -> 'C'
+ 9: 
+10: <subsetB>{
+^^..^
+11: 
+12: "B"   -> 'B'
+    
+  Technical error report:
+Parse error on line 10:
+<subsetB>{
+^
+Expecting "}", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
+
+    at Object.parseError (/lex-parser-cjs.js:7125:15)
+    at Object.yyError (/lex-parser-cjs.js:7315:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:3840:14)
+    at Object.parse (/lex-parser-cjs.js:8379:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12289:25)
+    at Context.testEachParserExample (/all-tests.js:466:27)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
+  },
+  __extra_diag_info__: {
+    pre_parse_callback_callCount: 1,
+    post_parse_callback_callCount: 1,
+    post_parse_diaginfo: {
+      sharedState_yy: {
+        actionInclude: [],
+        options: {},
+        startConditions: {
+          subsetA: 0,
+          subsetB: 0,
+        },
+        __options_flags__: 11,
+        __options_category_description__: 'the <...> delimited set of lexer start conditions',
+        __inside_scoped_ruleset__: true,
+        __context_cfg_stack__: [
+          {
+            flags: 0,
+            descr: '???',
+            scoped: false,
+          },
+          {
+            flags: 0,
+            descr: 'the lexer rules definition section',
+            scoped: false,
+          },
+        ],
+        depth: 0,
+        include_command_allowed: false,
+      },
+      hash: {
+        errStr: null,
+        exception: null,
+        text: '<',
+        value: '<',
+        token: '"<"',
+        token_id: 3,
+        line: 9,
+        expected: null,
+        recoverable: false,
+        state: 170,
+        action: 2,
+        new_state: 45,
+        stack_pointer: 8,
+      },
+      reentrant_call_depth: 1,
+      error_infos_stack: [
+        {
+          errStr: `Parse error on line 10:
+<subsetB>{
+^
+Expecting "}", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"`,
+          exception: null,
+          text: '<',
+          value: '<',
+          token: '"<"',
+          token_id: 3,
+          line: 9,
+          recoverable: true,
+          state: 169,
+          action: 0,
+          new_state: 196,
+          stack_pointer: 8,
+        },
+        {
+          errStr: `
+Seems you did not correctly bracket a lexer rules set inside
+the start condition
+  <subsetA> { rules... }
+as a terminating curly brace '}' could not be found.
+    
+  Erroneous area:
+ 6: <subsetA>{
+ 7: 
+ 8: "C"   -> 'C'
+ 9: 
+10: <subsetB>{
+^^..^
+11: 
+12: "B"   -> 'B'
+    
+  Technical error report:
+Parse error on line 10:
+<subsetB>{
+^
+Expecting "}", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
+`,
+          exception: null,
+          text: '<',
+          value: '<',
+          token: '"<"',
+          token_id: 3,
+          line: 9,
+          recoverable: false,
+          state: 170,
+          action: 2,
+          new_state: 45,
+          stack_pointer: 8,
+        },
+        {
+          errStr: null,
+          exception: null,
+          text: '<',
+          value: '<',
+          token: '"<"',
+          token_id: 3,
+          line: 9,
+          expected: null,
+          recoverable: false,
+          state: 170,
+          action: 2,
+          new_state: 45,
+          stack_pointer: 8,
+        },
+      ],
+      error_recovery_stack: [
+        {
+          errStr: `Parse error on line 10:
+<subsetB>{
+^
+Expecting "}", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"`,
+          exception: null,
+          text: '<',
+          value: '<',
+          token: '"<"',
+          token_id: 3,
+          line: 9,
+          recoverable: true,
+          state: 169,
+          action: 0,
+          new_state: 196,
+          stack_pointer: 8,
+          base_pointer: 12,
+          info_stack_pointer: 16,
+          root_failure_pointer: 8,
+        },
+        {
+          errStr: `
+Seems you did not correctly bracket a lexer rules set inside
+the start condition
+  <subsetA> { rules... }
+as a terminating curly brace '}' could not be found.
+    
+  Erroneous area:
+ 6: <subsetA>{
+ 7: 
+ 8: "C"   -> 'C'
+ 9: 
+10: <subsetB>{
+^^..^
+11: 
+12: "B"   -> 'B'
+    
+  Technical error report:
+Parse error on line 10:
+<subsetB>{
+^
+Expecting "}", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
+`,
+          exception: null,
+          text: '<',
+          value: '<',
+          token: '"<"',
+          token_id: 3,
+          line: 9,
+          recoverable: false,
+          state: 170,
+          action: 2,
+          new_state: 45,
+          stack_pointer: 8,
+          base_pointer: 12,
+          info_stack_pointer: 12,
+          root_failure_pointer: 8,
+          yyError: true,
+          errorRuleDepth: -1,
+          recovering: 3,
+        },
+      ],
+      error_infos_stack_size: 3,
+      error_recovery_stack_size: 2,
+    },
+    reentrant_call_depth: 0,
+    error_infos_stack_size: 0,
+    error_recovery_stack_size: 0,
+  },
+  __original_input__: `%s subsetA subsetB
+
+%%
+"A"		 -> 'A'
+
+<subsetA>{
+
+"C"		 -> 'C'
+
+<subsetB>{
+
+"B"		 -> 'B'
+
+}
+
+"D"		 -> 'D'
+
+}
+
+`,
+}

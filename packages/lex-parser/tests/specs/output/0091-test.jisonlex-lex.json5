@@ -1,0 +1,425 @@
+[
+  {
+    id: 28,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 1,
+      first_column: 0,
+      last_line: 1,
+      last_column: 7,
+      range: [
+        0,
+        7,
+      ],
+    },
+  },
+  {
+    id: 54,
+    token: '"OPTION_VALUE"',
+    yytext: 'do-not-test-compile',
+    yylloc: {
+      first_line: 1,
+      first_column: 8,
+      last_line: 1,
+      last_column: 27,
+      range: [
+        8,
+        27,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 27,
+      last_line: 1,
+      last_column: 27,
+      range: [
+        27,
+        27,
+      ],
+    },
+  },
+  {
+    id: 23,
+    token: '"ACTION_START_AT_SOL"',
+    yytext: '%{',
+    yylloc: {
+      first_line: 3,
+      first_column: 0,
+      last_line: 3,
+      last_column: 0,
+      range: [
+        29,
+        29,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: `
+	Here's line A, which is not JavaScript.
+`,
+    yylloc: {
+      first_line: 3,
+      first_column: 0,
+      last_line: 5,
+      last_column: 2,
+      range: [
+        29,
+        75,
+      ],
+    },
+  },
+  {
+    id: 24,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 5,
+      first_column: 2,
+      last_line: 5,
+      last_column: 2,
+      range: [
+        75,
+        75,
+      ],
+    },
+  },
+  {
+    id: 34,
+    token: '"%%"',
+    yytext: '%%',
+    yylloc: {
+      first_line: 7,
+      first_column: 0,
+      last_line: 7,
+      last_column: 2,
+      range: [
+        77,
+        79,
+      ],
+    },
+  },
+  {
+    id: 23,
+    token: '"ACTION_START_AT_SOL"',
+    yytext: '{{',
+    yylloc: {
+      first_line: 8,
+      first_column: 0,
+      last_line: 8,
+      last_column: 0,
+      range: [
+        80,
+        80,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: `
+	Ditto for line B!
+`,
+    yylloc: {
+      first_line: 8,
+      first_column: 0,
+      last_line: 10,
+      last_column: 2,
+      range: [
+        80,
+        104,
+      ],
+    },
+  },
+  {
+    id: 24,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 10,
+      first_column: 2,
+      last_line: 10,
+      last_column: 2,
+      range: [
+        104,
+        104,
+      ],
+    },
+  },
+  {
+    id: 51,
+    token: '"STRING_LIT"',
+    yytext: '"X"',
+    yylloc: {
+      first_line: 11,
+      first_column: 0,
+      last_line: 11,
+      last_column: 3,
+      range: [
+        105,
+        108,
+      ],
+    },
+  },
+  {
+    id: 26,
+    token: '"ACTION_START"',
+    yytext: '{{',
+    yylloc: {
+      first_line: 11,
+      first_column: 4,
+      last_line: 11,
+      last_column: 4,
+      range: [
+        109,
+        109,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: `
+		Dit is X.
+	`,
+    yylloc: {
+      first_line: 11,
+      first_column: 4,
+      last_line: 13,
+      last_column: 3,
+      range: [
+        109,
+        127,
+      ],
+    },
+  },
+  {
+    id: 24,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 13,
+      first_column: 3,
+      last_line: 13,
+      last_column: 3,
+      range: [
+        127,
+        127,
+      ],
+    },
+  },
+  {
+    id: 51,
+    token: '"STRING_LIT"',
+    yytext: '"Y"',
+    yylloc: {
+      first_line: 14,
+      first_column: 0,
+      last_line: 14,
+      last_column: 3,
+      range: [
+        128,
+        131,
+      ],
+    },
+  },
+  {
+    id: 26,
+    token: '"ACTION_START"',
+    yytext: '%{',
+    yylloc: {
+      first_line: 14,
+      first_column: 4,
+      last_line: 14,
+      last_column: 4,
+      range: [
+        132,
+        132,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: ' en dat is Y; ',
+    yylloc: {
+      first_line: 14,
+      first_column: 4,
+      last_line: 14,
+      last_column: 22,
+      range: [
+        132,
+        150,
+      ],
+    },
+  },
+  {
+    id: 24,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 14,
+      first_column: 22,
+      last_line: 14,
+      last_column: 22,
+      range: [
+        150,
+        150,
+      ],
+    },
+  },
+  {
+    id: 14,
+    token: '"."',
+    yytext: '.',
+    yylloc: {
+      first_line: 15,
+      first_column: 0,
+      last_line: 15,
+      last_column: 1,
+      range: [
+        151,
+        152,
+      ],
+    },
+  },
+  {
+    id: 26,
+    token: '"ACTION_START"',
+    yytext: '%{{',
+    yylloc: {
+      first_line: 15,
+      first_column: 3,
+      last_line: 15,
+      last_column: 3,
+      range: [
+        154,
+        154,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: ' zeg maar PUNT. ',
+    yylloc: {
+      first_line: 15,
+      first_column: 3,
+      last_line: 15,
+      last_column: 25,
+      range: [
+        154,
+        176,
+      ],
+    },
+  },
+  {
+    id: 24,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 15,
+      first_column: 25,
+      last_line: 15,
+      last_column: 25,
+      range: [
+        176,
+        176,
+      ],
+    },
+  },
+  {
+    id: 34,
+    token: '"%%"',
+    yytext: '',
+    yylloc: {
+      first_line: 16,
+      first_column: 0,
+      last_line: 16,
+      last_column: 0,
+      range: [
+        177,
+        177,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 16,
+      first_column: 0,
+      last_line: 16,
+      last_column: 0,
+      range: [
+        177,
+        177,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 16,
+      first_column: 0,
+      last_line: 16,
+      last_column: 0,
+      range: [
+        177,
+        177,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 16,
+      first_column: 0,
+      last_line: 16,
+      last_column: 0,
+      range: [
+        177,
+        177,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 16,
+      first_column: 0,
+      last_line: 16,
+      last_column: 0,
+      range: [
+        177,
+        177,
+      ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 27,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      DetectedParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
+    },
+  },
+]
