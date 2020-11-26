@@ -1,5 +1,4 @@
 [
-  5,
   {
     id: ';',
     token: ';',
@@ -75,130 +74,211 @@
       ],
     },
   },
-  -1,
   {
-    fail: 1,
-    err: {
-      name: 'JisonLexerError',
-      message: `Lexical error on line 1: Unrecognized text.
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
 
   Erroneous area:
 1: ;;a;aBaa
 ^.......^`,
-      stack: `JisonLexerError: Lexical error on line 1: Unrecognized text.
-
-  Erroneous area:
-1: ;;a;aBaa
-^.......^
-    at Object.lexer_parseError [as parseError] (/regexp-lexer-cjs.js:13819:31)
-    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:13819:31)
-    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:13819:31)
-    at Context.testEachLexerExample (/regexplexer.js:3650:37)
-    at callFn (/runnable.js:364:21)
-    at Test.Runnable.run (/runnable.js:352:5)
-    at Runner.runTest (/runner.js:677:10)
-    at /runner.js:801:12
-    at next (/runner.js:594:14)
-    at /runner.js:604:7
-    at next (/runner.js:486:14)
-    at cbHookRun (/runner.js:551:7)
-    at done (/runnable.js:308:5)
-    at callFn (/runnable.js:387:7)
-    at Hook.Runnable.run (/runnable.js:352:5)
-    at next (/runner.js:510:10)
-    at Immediate._onImmediate (/runner.js:572:5)
-    at processImmediate (/timers.js:456:21)`,
-      hash: {
-        errStr: `Lexical error on line 1: Unrecognized text.
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 5,
+        last_line: 1,
+        last_column: 6,
+        range: [
+          5,
+          6,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: [
+          {
+            errStr: `Lexical error on line 1: Unrecognized text.
 
   Erroneous area:
 1: ;;a;aBaa
 ^.......^`,
-        recoverable: false,
-        text: '',
-        token: null,
-        line: 0,
-        loc: {
+            recoverable: false,
+            text: '',
+            token: null,
+            line: 0,
+            loc: {
+              first_line: 1,
+              first_column: 5,
+              last_line: 1,
+              last_column: 6,
+              range: [
+                5,
+                6,
+              ],
+            },
+            yy: {},
+            lexer: '[lexer]',
+            lexerWillNeedToForwardCursor: true,
+          },
+        ],
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'MLC',
+          'MLC',
+          'MLC',
+        ],
+        match: '',
+        matched: ';;a;aBaa',
+        matches: false,
+        yytext: '',
+        offset: 8,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 0,
+        yylloc: {
           first_line: 1,
-          first_column: 5,
+          first_column: 8,
           last_line: 1,
-          last_column: 5,
+          last_column: 8,
           range: [
-            5,
-            5,
+            8,
+            8,
           ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          trackPosition: true,
         },
         yy: {},
-        lexer: {
-          EOF: 1,
-          ERROR: 2,
-          __error_infos: [
-            {
-              errStr: `Lexical error on line 1: Unrecognized text.
-
-  Erroneous area:
-1: ;;a;aBaa
-^.......^`,
-              recoverable: false,
-              text: '',
-              token: null,
-              line: 0,
-              loc: {
-                first_line: 1,
-                first_column: 5,
-                last_line: 1,
-                last_column: 5,
-                range: [
-                  5,
-                  5,
-                ],
-              },
-              yy: {},
-              lexer: '[lexer]',
-            },
-          ],
-          __decompressed: true,
-          done: false,
-          _backtrack: false,
-          _input: 'Baa',
-          _more: false,
-          _signaled_error_token: false,
-          _clear_state: 1,
-          conditionStack: [
-            'INITIAL',
-            'MLC',
-            'MLC',
-            'MLC',
-          ],
-          match: '',
-          matched: ';;a;a',
-          matches: false,
-          yytext: '',
-          offset: 5,
-          base_position: 0,
-          yyleng: 0,
-          yylineno: 0,
-          yylloc: {
-            first_line: 1,
-            first_column: 5,
-            last_line: 1,
-            last_column: 5,
-            range: [
-              5,
-              5,
-            ],
-          },
-          CRLF_Re: {
-            re: '/\\r\\n?|\\n/',
-            source: '\\r\\n?|\\n',
-            flags: '',
-          },
-          options: {
-            trackPosition: true,
-          },
-          yy: {},
-        },
       },
+      lexerWillNeedToForwardCursor: true,
+      errorDiag: {
+        inputPos: 2,
+        yytext: 'B',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'MLC',
+        conditionStackDepth: 4,
+      },
+    },
+    yylloc: '[reference to sibling --> *.[5].yytext.lexer.__error_infos.[0].loc]',
+  },
+  {
+    id: 'ID',
+    token: 'ID',
+    yytext: 'a',
+    yylloc: {
+      first_line: 1,
+      first_column: 6,
+      last_line: 1,
+      last_column: 7,
+      range: [
+        6,
+        7,
+      ],
+    },
+  },
+  {
+    id: 'ID',
+    token: 'ID',
+    yytext: 'a',
+    yylloc: {
+      first_line: 1,
+      first_column: 7,
+      last_line: 1,
+      last_column: 8,
+      range: [
+        7,
+        8,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 8,
+      last_line: 1,
+      last_column: 8,
+      range: [
+        8,
+        8,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 8,
+      last_line: 1,
+      last_column: 8,
+      range: [
+        8,
+        8,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 8,
+      last_line: 1,
+      last_column: 8,
+      range: [
+        8,
+        8,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 8,
+      last_line: 1,
+      last_column: 8,
+      range: [
+        8,
+        8,
+      ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 12,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 1,
+      fatalExceptionCount: 0,
     },
   },
 ]

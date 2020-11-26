@@ -78,7 +78,131 @@
     id: 2,
     token: '"error"',
     yytext: {
-      orig: ']',
+      errStr: `Lexical error on line 2: 
+unsupported lexer input encountered while lexing
+rules (i.e. jison lex regexes) in "rules" state.
+
+    NOTE: When you want this input to be interpreted as a LITERAL part
+          of a lex rule regex, you MUST enclose it in double or
+          single quotes.
+
+          If not, then know that this input is not accepted as a valid
+          regex expression here in jison-lex rules.
+
+  Erroneous area:
+1: %%
+2: "["[^\\\\]]"]" -> 'BAD_REGEX'
+^..........^
+3: 
+4: 
+`,
+      recoverable: false,
+      text: ']',
+      token: null,
+      line: 1,
+      loc: {
+        first_line: 2,
+        first_column: 8,
+        last_line: 2,
+        last_column: 9,
+        range: [
+          11,
+          12,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: [
+          {
+            errStr: `Lexical error on line 2: 
+unsupported lexer input encountered while lexing
+rules (i.e. jison lex regexes) in "rules" state.
+
+    NOTE: When you want this input to be interpreted as a LITERAL part
+          of a lex rule regex, you MUST enclose it in double or
+          single quotes.
+
+          If not, then know that this input is not accepted as a valid
+          regex expression here in jison-lex rules.
+
+  Erroneous area:
+1: %%
+2: "["[^\\\\]]"]" -> 'BAD_REGEX'
+^..........^
+3: 
+4: 
+`,
+            recoverable: false,
+            text: ']',
+            token: null,
+            line: 1,
+            loc: {
+              first_line: 2,
+              first_column: 8,
+              last_line: 2,
+              last_column: 9,
+              range: [
+                11,
+                12,
+              ],
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+            lexer: '[lexer]',
+          },
+        ],
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `%%
+"["[^\\\\]]"]" -> 'BAD_REGEX'
+
+`,
+        matches: false,
+        yytext: '',
+        offset: 32,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 3,
+        yylloc: {
+          first_line: 4,
+          first_column: 0,
+          last_line: 4,
+          last_column: 0,
+          range: [
+            32,
+            32,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+      },
       errorDiag: {
         inputPos: 20,
         yytext: ']',
@@ -88,139 +212,9 @@
         ],
         activeCondition: 'rules',
         conditionStackDepth: 2,
-        hash: {
-          errStr: `Lexical error on line 2: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
-
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
-
-  Erroneous area:
-1: %%
-2: "["[^\\\\]]"]" -> 'BAD_REGEX'
-^..........^
-3: 
-4: 
-`,
-          recoverable: false,
-          text: ']',
-          token: null,
-          line: 1,
-          loc: {
-            first_line: 2,
-            first_column: 8,
-            last_line: 2,
-            last_column: 9,
-            range: [
-              11,
-              12,
-            ],
-          },
-          yy: {
-            depth: 0,
-            include_command_allowed: false,
-          },
-          lexer: {
-            EOF: 1,
-            ERROR: 2,
-            __error_infos: [
-              {
-                errStr: `Lexical error on line 2: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
-
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
-
-  Erroneous area:
-1: %%
-2: "["[^\\\\]]"]" -> 'BAD_REGEX'
-^..........^
-3: 
-4: 
-`,
-                recoverable: false,
-                text: ']',
-                token: null,
-                line: 1,
-                loc: {
-                  first_line: 2,
-                  first_column: 8,
-                  last_line: 2,
-                  last_column: 9,
-                  range: [
-                    11,
-                    12,
-                  ],
-                },
-                yy: {
-                  depth: 0,
-                  include_command_allowed: false,
-                },
-                lexer: '[lexer]',
-              },
-            ],
-            __decompressed: true,
-            done: true,
-            _backtrack: false,
-            _input: '',
-            _more: false,
-            _signaled_error_token: false,
-            _clear_state: 0,
-            conditionStack: [
-              'INITIAL',
-              'code',
-            ],
-            match: '',
-            matched: `%%
-"["[^\\\\]]"]" -> 'BAD_REGEX'
-
-`,
-            matches: false,
-            yytext: '',
-            offset: 32,
-            base_position: 0,
-            yyleng: 0,
-            yylineno: 3,
-            yylloc: {
-              first_line: 4,
-              first_column: 0,
-              last_line: 4,
-              last_column: 0,
-              range: [
-                32,
-                32,
-              ],
-            },
-            CRLF_Re: {
-              re: '/\\r\\n?|\\n/',
-              source: '\\r\\n?|\\n',
-              flags: '',
-            },
-            options: {
-              xregexp: true,
-              ranges: true,
-              trackPosition: true,
-              easy_keyword_rules: true,
-            },
-            yy: {
-              depth: 0,
-              include_command_allowed: false,
-            },
-          },
-        },
       },
     },
-    yylloc: '[reference to sibling --> *.[5].yytext.errorDiag.hash.lexer.__error_infos.[0].loc]',
+    yylloc: '[reference to sibling --> *.[5].yytext.lexer.__error_infos.[0].loc]',
   },
   {
     id: 51,

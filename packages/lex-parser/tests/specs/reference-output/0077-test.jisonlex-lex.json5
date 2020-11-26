@@ -63,7 +63,124 @@
     id: 48,
     token: '"UNTERMINATED_REGEX_SET"',
     yytext: {
-      orig: '',
+      errStr: `Lexical error on line 2: 
+regex [...] sets cannot span multiple lines.
+
+If you want a CR/LF to be part of a regex set, you can simply
+specify those as character escapes '\\r' and '\\n'.
+
+  Erroneous area:
+1: %%
+2: "["[abc -> 'BAD_REGEX' // unterminated regex set...
+^.....................................................^
+3: 
+4: // Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...
+`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 1,
+      loc: {
+        first_line: 2,
+        first_column: 51,
+        last_line: 2,
+        last_column: 51,
+        range: [
+          54,
+          54,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: [
+          {
+            errStr: `Lexical error on line 2: 
+regex [...] sets cannot span multiple lines.
+
+If you want a CR/LF to be part of a regex set, you can simply
+specify those as character escapes '\\r' and '\\n'.
+
+  Erroneous area:
+1: %%
+2: "["[abc -> 'BAD_REGEX' // unterminated regex set...
+^.....................................................^
+3: 
+4: // Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...
+`,
+            recoverable: false,
+            text: '',
+            token: null,
+            line: 1,
+            loc: {
+              first_line: 2,
+              first_column: 51,
+              last_line: 2,
+              last_column: 51,
+              range: [
+                54,
+                54,
+              ],
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+            lexer: '[lexer]',
+          },
+        ],
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `%%
+"["[abc -> 'BAD_REGEX' // unterminated regex set...
+
+// Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...
+
+"dummy" -> 'GOOD_DUMMY'
+`,
+        matches: false,
+        yytext: '',
+        offset: 187,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 6,
+        yylloc: {
+          first_line: 7,
+          first_column: 0,
+          last_line: 7,
+          last_column: 0,
+          range: [
+            187,
+            187,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+      },
       errorDiag: {
         inputPos: 133,
         yytext: '',
@@ -74,132 +191,9 @@
         ],
         activeCondition: 'rules',
         conditionStackDepth: 2,
-        hash: {
-          errStr: `Lexical error on line 2: 
-regex [...] sets cannot span multiple lines.
-
-If you want a CR/LF to be part of a regex set, you can simply
-specify those as character escapes '\\r' and '\\n'.
-
-  Erroneous area:
-1: %%
-2: "["[abc -> 'BAD_REGEX' // unterminated regex set...
-^.....................................................^
-3: 
-4: // Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...
-`,
-          recoverable: false,
-          text: '',
-          token: null,
-          line: 1,
-          loc: {
-            first_line: 2,
-            first_column: 51,
-            last_line: 2,
-            last_column: 51,
-            range: [
-              54,
-              54,
-            ],
-          },
-          yy: {
-            depth: 0,
-            include_command_allowed: false,
-          },
-          lexer: {
-            EOF: 1,
-            ERROR: 2,
-            __error_infos: [
-              {
-                errStr: `Lexical error on line 2: 
-regex [...] sets cannot span multiple lines.
-
-If you want a CR/LF to be part of a regex set, you can simply
-specify those as character escapes '\\r' and '\\n'.
-
-  Erroneous area:
-1: %%
-2: "["[abc -> 'BAD_REGEX' // unterminated regex set...
-^.....................................................^
-3: 
-4: // Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...
-`,
-                recoverable: false,
-                text: '',
-                token: null,
-                line: 1,
-                loc: {
-                  first_line: 2,
-                  first_column: 51,
-                  last_line: 2,
-                  last_column: 51,
-                  range: [
-                    54,
-                    54,
-                  ],
-                },
-                yy: {
-                  depth: 0,
-                  include_command_allowed: false,
-                },
-                lexer: '[lexer]',
-              },
-            ],
-            __decompressed: true,
-            done: true,
-            _backtrack: false,
-            _input: '',
-            _more: false,
-            _signaled_error_token: false,
-            _clear_state: 0,
-            conditionStack: [
-              'INITIAL',
-              'code',
-            ],
-            match: '',
-            matched: `%%
-"["[abc -> 'BAD_REGEX' // unterminated regex set...
-
-// Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...
-
-"dummy" -> 'GOOD_DUMMY'
-`,
-            matches: false,
-            yytext: '',
-            offset: 187,
-            base_position: 0,
-            yyleng: 0,
-            yylineno: 6,
-            yylloc: {
-              first_line: 7,
-              first_column: 0,
-              last_line: 7,
-              last_column: 0,
-              range: [
-                187,
-                187,
-              ],
-            },
-            CRLF_Re: {
-              re: '/\\r\\n?|\\n/',
-              source: '\\r\\n?|\\n',
-              flags: '',
-            },
-            options: {
-              xregexp: true,
-              ranges: true,
-              trackPosition: true,
-              easy_keyword_rules: true,
-            },
-            yy: {
-              depth: 0,
-              include_command_allowed: false,
-            },
-          },
-        },
       },
     },
-    yylloc: '[reference to sibling --> *.[4].yytext.errorDiag.hash.lexer.__error_infos.[0].loc]',
+    yylloc: '[reference to sibling --> *.[4].yytext.lexer.__error_infos.[0].loc]',
   },
   {
     id: 51,

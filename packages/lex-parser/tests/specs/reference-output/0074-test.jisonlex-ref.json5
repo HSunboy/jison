@@ -78,7 +78,7 @@ rules (i.e. jison lex regexes) in "rules" state.
     at fastLex (/lex-parser-cjs.js:7733:27)
     at Object.parse (/lex-parser-cjs.js:7907:30)
     at Object.yyparse [as parse] (/lex-parser-cjs.js:12302:25)
-    at Context.testEachParserExample (/all-tests.js:466:27)
+    at Context.testEachParserExample (/all-tests.js:489:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)

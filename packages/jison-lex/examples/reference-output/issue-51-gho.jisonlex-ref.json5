@@ -17,300 +17,983 @@
   {
     id: -42,
     token: -42,
-    yytext: '',
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+^.....^
+2: foo FOO foo`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 3,
+        last_line: 1,
+        last_column: 4,
+        range: [
+          3,
+          4,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: [
+          {
+            errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+^.....^
+2: foo FOO foo`,
+            recoverable: false,
+            text: '',
+            token: null,
+            line: 0,
+            loc: {
+              first_line: 1,
+              first_column: 3,
+              last_line: 1,
+              last_column: 4,
+              range: [
+                3,
+                4,
+              ],
+            },
+            yy: {},
+            lexer: '[lexer]',
+            lexerWillNeedToForwardCursor: true,
+          },
+          {
+            errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+^.........^
+2: foo FOO foo`,
+            recoverable: false,
+            text: '',
+            token: null,
+            line: 0,
+            loc: {
+              first_line: 1,
+              first_column: 7,
+              last_line: 1,
+              last_column: 8,
+              range: [
+                7,
+                8,
+              ],
+            },
+            yy: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            lexerWillNeedToForwardCursor: true,
+          },
+          {
+            errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+^...................^
+2: foo FOO foo`,
+            recoverable: false,
+            text: '',
+            token: null,
+            line: 0,
+            loc: {
+              first_line: 1,
+              first_column: 17,
+              last_line: 2,
+              last_column: 0,
+              range: [
+                17,
+                18,
+              ],
+            },
+            yy: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            lexerWillNeedToForwardCursor: true,
+          },
+          {
+            errStr: `Lexical error on line 2: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+2: foo FOO foo
+^.....^`,
+            recoverable: false,
+            text: '',
+            token: null,
+            line: 1,
+            loc: {
+              first_line: 2,
+              first_column: 3,
+              last_line: 2,
+              last_column: 4,
+              range: [
+                21,
+                22,
+              ],
+            },
+            yy: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            lexerWillNeedToForwardCursor: true,
+          },
+          {
+            errStr: `Lexical error on line 2: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+2: foo FOO foo
+^......^`,
+            recoverable: false,
+            text: '',
+            token: null,
+            line: 1,
+            loc: {
+              first_line: 2,
+              first_column: 4,
+              last_line: 2,
+              last_column: 5,
+              range: [
+                22,
+                23,
+              ],
+            },
+            yy: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            lexerWillNeedToForwardCursor: true,
+          },
+          {
+            errStr: `Lexical error on line 2: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+2: foo FOO foo
+^.......^`,
+            recoverable: false,
+            text: '',
+            token: null,
+            line: 1,
+            loc: {
+              first_line: 2,
+              first_column: 5,
+              last_line: 2,
+              last_column: 6,
+              range: [
+                23,
+                24,
+              ],
+            },
+            yy: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            lexerWillNeedToForwardCursor: true,
+          },
+          {
+            errStr: `Lexical error on line 2: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+2: foo FOO foo
+^........^`,
+            recoverable: false,
+            text: '',
+            token: null,
+            line: 1,
+            loc: {
+              first_line: 2,
+              first_column: 6,
+              last_line: 2,
+              last_column: 7,
+              range: [
+                24,
+                25,
+              ],
+            },
+            yy: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            lexerWillNeedToForwardCursor: true,
+          },
+          {
+            errStr: `Lexical error on line 2: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+2: foo FOO foo
+^.........^`,
+            recoverable: false,
+            text: '',
+            token: null,
+            line: 1,
+            loc: {
+              first_line: 2,
+              first_column: 7,
+              last_line: 2,
+              last_column: 8,
+              range: [
+                25,
+                26,
+              ],
+            },
+            yy: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            lexerWillNeedToForwardCursor: true,
+          },
+        ],
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+        ],
+        match: '',
+        matched: 'foo foo foofoofoo\nfoo FOO foo',
+        matches: false,
+        yytext: '',
+        offset: 29,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 1,
+        yylloc: {
+          first_line: 2,
+          first_column: 11,
+          last_line: 2,
+          last_column: 11,
+          range: [
+            29,
+            29,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          trackPosition: true,
+        },
+        yy: {},
+      },
+      lexerWillNeedToForwardCursor: true,
+      errorDiag: {
+        inputPos: 25,
+        yytext: ' ',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[0].loc]',
+  },
+  {
+    id: 'foo',
+    token: 'foo',
+    yytext: 'foo',
     yylloc: {
       first_line: 1,
-      first_column: 3,
+      first_column: 4,
       last_line: 1,
-      last_column: 3,
+      last_column: 7,
       range: [
-        3,
-        3,
+        4,
+        7,
       ],
     },
   },
   {
     id: -42,
     token: -42,
-    yytext: '',
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+^.........^
+2: foo FOO foo`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 7,
+        last_line: 1,
+        last_column: 8,
+        range: [
+          7,
+          8,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[1].yytext.lexer.__error_infos, length = 8]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+        ],
+        match: '',
+        matched: 'foo foo foofoofoo\nfoo FOO foo',
+        matches: false,
+        yytext: '',
+        offset: 29,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 1,
+        yylloc: {
+          first_line: 2,
+          first_column: 11,
+          last_line: 2,
+          last_column: 11,
+          range: [
+            29,
+            29,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          trackPosition: true,
+        },
+        yy: {},
+      },
+      lexerWillNeedToForwardCursor: true,
+      errorDiag: {
+        inputPos: 21,
+        yytext: ' ',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[1].loc]',
+  },
+  {
+    id: 'foo',
+    token: 'foo',
+    yytext: 'foo',
     yylloc: {
       first_line: 1,
-      first_column: 3,
+      first_column: 8,
       last_line: 1,
-      last_column: 3,
+      last_column: 11,
       range: [
-        3,
-        3,
+        8,
+        11,
+      ],
+    },
+  },
+  {
+    id: 'foo',
+    token: 'foo',
+    yytext: 'foo',
+    yylloc: {
+      first_line: 1,
+      first_column: 11,
+      last_line: 1,
+      last_column: 14,
+      range: [
+        11,
+        14,
+      ],
+    },
+  },
+  {
+    id: 'foo',
+    token: 'foo',
+    yytext: 'foo',
+    yylloc: {
+      first_line: 1,
+      first_column: 14,
+      last_line: 1,
+      last_column: 17,
+      range: [
+        14,
+        17,
       ],
     },
   },
   {
     id: -42,
     token: -42,
-    yytext: '',
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+^...................^
+2: foo FOO foo`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 17,
+        last_line: 2,
+        last_column: 0,
+        range: [
+          17,
+          18,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[1].yytext.lexer.__error_infos, length = 8]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+        ],
+        match: '',
+        matched: 'foo foo foofoofoo\nfoo FOO foo',
+        matches: false,
+        yytext: '',
+        offset: 29,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 1,
+        yylloc: {
+          first_line: 2,
+          first_column: 11,
+          last_line: 2,
+          last_column: 11,
+          range: [
+            29,
+            29,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          trackPosition: true,
+        },
+        yy: {},
+      },
+      lexerWillNeedToForwardCursor: true,
+      errorDiag: {
+        inputPos: 11,
+        yytext: '\n',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[2].loc]',
+  },
+  {
+    id: 'foo',
+    token: 'foo',
+    yytext: 'foo',
     yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
+      first_line: 2,
+      first_column: 0,
+      last_line: 2,
       last_column: 3,
       range: [
-        3,
-        3,
+        18,
+        21,
       ],
     },
   },
   {
     id: -42,
     token: -42,
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
-      range: [
-        3,
-        3,
-      ],
+    yytext: {
+      errStr: `Lexical error on line 2: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+2: foo FOO foo
+^.....^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 1,
+      loc: {
+        first_line: 2,
+        first_column: 3,
+        last_line: 2,
+        last_column: 4,
+        range: [
+          21,
+          22,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[1].yytext.lexer.__error_infos, length = 8]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+        ],
+        match: '',
+        matched: 'foo foo foofoofoo\nfoo FOO foo',
+        matches: false,
+        yytext: '',
+        offset: 29,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 1,
+        yylloc: {
+          first_line: 2,
+          first_column: 11,
+          last_line: 2,
+          last_column: 11,
+          range: [
+            29,
+            29,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          trackPosition: true,
+        },
+        yy: {},
+      },
+      lexerWillNeedToForwardCursor: true,
+      errorDiag: {
+        inputPos: 7,
+        yytext: ' ',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
     },
+    yylloc: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[3].loc]',
   },
   {
     id: -42,
     token: -42,
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
-      range: [
-        3,
-        3,
-      ],
+    yytext: {
+      errStr: `Lexical error on line 2: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+2: foo FOO foo
+^......^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 1,
+      loc: {
+        first_line: 2,
+        first_column: 4,
+        last_line: 2,
+        last_column: 5,
+        range: [
+          22,
+          23,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[1].yytext.lexer.__error_infos, length = 8]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+        ],
+        match: '',
+        matched: 'foo foo foofoofoo\nfoo FOO foo',
+        matches: false,
+        yytext: '',
+        offset: 29,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 1,
+        yylloc: {
+          first_line: 2,
+          first_column: 11,
+          last_line: 2,
+          last_column: 11,
+          range: [
+            29,
+            29,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          trackPosition: true,
+        },
+        yy: {},
+      },
+      lexerWillNeedToForwardCursor: true,
+      errorDiag: {
+        inputPos: 6,
+        yytext: 'F',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
     },
+    yylloc: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[4].loc]',
   },
   {
     id: -42,
     token: -42,
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
-      range: [
-        3,
-        3,
-      ],
+    yytext: {
+      errStr: `Lexical error on line 2: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+2: foo FOO foo
+^.......^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 1,
+      loc: {
+        first_line: 2,
+        first_column: 5,
+        last_line: 2,
+        last_column: 6,
+        range: [
+          23,
+          24,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[1].yytext.lexer.__error_infos, length = 8]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+        ],
+        match: '',
+        matched: 'foo foo foofoofoo\nfoo FOO foo',
+        matches: false,
+        yytext: '',
+        offset: 29,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 1,
+        yylloc: {
+          first_line: 2,
+          first_column: 11,
+          last_line: 2,
+          last_column: 11,
+          range: [
+            29,
+            29,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          trackPosition: true,
+        },
+        yy: {},
+      },
+      lexerWillNeedToForwardCursor: true,
+      errorDiag: {
+        inputPos: 5,
+        yytext: 'O',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
     },
+    yylloc: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[5].loc]',
   },
   {
     id: -42,
     token: -42,
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
-      range: [
-        3,
-        3,
-      ],
+    yytext: {
+      errStr: `Lexical error on line 2: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+2: foo FOO foo
+^........^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 1,
+      loc: {
+        first_line: 2,
+        first_column: 6,
+        last_line: 2,
+        last_column: 7,
+        range: [
+          24,
+          25,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[1].yytext.lexer.__error_infos, length = 8]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+        ],
+        match: '',
+        matched: 'foo foo foofoofoo\nfoo FOO foo',
+        matches: false,
+        yytext: '',
+        offset: 29,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 1,
+        yylloc: {
+          first_line: 2,
+          first_column: 11,
+          last_line: 2,
+          last_column: 11,
+          range: [
+            29,
+            29,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          trackPosition: true,
+        },
+        yy: {},
+      },
+      lexerWillNeedToForwardCursor: true,
+      errorDiag: {
+        inputPos: 4,
+        yytext: 'O',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
     },
+    yylloc: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[6].loc]',
   },
   {
     id: -42,
     token: -42,
-    yytext: '',
+    yytext: {
+      errStr: `Lexical error on line 2: Unrecognized text.
+
+  Erroneous area:
+1: foo foo foofoofoo
+2: foo FOO foo
+^.........^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 1,
+      loc: {
+        first_line: 2,
+        first_column: 7,
+        last_line: 2,
+        last_column: 8,
+        range: [
+          25,
+          26,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[1].yytext.lexer.__error_infos, length = 8]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+        ],
+        match: '',
+        matched: 'foo foo foofoofoo\nfoo FOO foo',
+        matches: false,
+        yytext: '',
+        offset: 29,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 1,
+        yylloc: {
+          first_line: 2,
+          first_column: 11,
+          last_line: 2,
+          last_column: 11,
+          range: [
+            29,
+            29,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          trackPosition: true,
+        },
+        yy: {},
+      },
+      lexerWillNeedToForwardCursor: true,
+      errorDiag: {
+        inputPos: 3,
+        yytext: ' ',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: '[reference to sibling --> *.[1].yytext.lexer.__error_infos.[7].loc]',
+  },
+  {
+    id: 'foo',
+    token: 'foo',
+    yytext: 'foo',
     yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
+      first_line: 2,
+      first_column: 8,
+      last_line: 2,
+      last_column: 11,
       range: [
-        3,
-        3,
+        26,
+        29,
       ],
     },
   },
   {
-    id: -42,
-    token: -42,
+    id: 1,
+    token: 'EOF',
     yytext: '',
     yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
+      first_line: 2,
+      first_column: 11,
+      last_line: 2,
+      last_column: 11,
       range: [
-        3,
-        3,
+        29,
+        29,
       ],
     },
   },
   {
-    id: -42,
-    token: -42,
+    id: 1,
+    token: 'EOF',
     yytext: '',
     yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
+      first_line: 2,
+      first_column: 11,
+      last_line: 2,
+      last_column: 11,
       range: [
-        3,
-        3,
+        29,
+        29,
       ],
     },
   },
   {
-    id: -42,
-    token: -42,
+    id: 1,
+    token: 'EOF',
     yytext: '',
     yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
+      first_line: 2,
+      first_column: 11,
+      last_line: 2,
+      last_column: 11,
       range: [
-        3,
-        3,
+        29,
+        29,
       ],
     },
   },
   {
-    id: -42,
-    token: -42,
+    id: 1,
+    token: 'EOF',
     yytext: '',
     yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
+      first_line: 2,
+      first_column: 11,
+      last_line: 2,
+      last_column: 11,
       range: [
-        3,
-        3,
-      ],
-    },
-  },
-  {
-    id: -42,
-    token: -42,
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
-      range: [
-        3,
-        3,
-      ],
-    },
-  },
-  {
-    id: -42,
-    token: -42,
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
-      range: [
-        3,
-        3,
-      ],
-    },
-  },
-  {
-    id: -42,
-    token: -42,
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
-      range: [
-        3,
-        3,
-      ],
-    },
-  },
-  {
-    id: -42,
-    token: -42,
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
-      range: [
-        3,
-        3,
-      ],
-    },
-  },
-  {
-    id: -42,
-    token: -42,
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
-      range: [
-        3,
-        3,
-      ],
-    },
-  },
-  {
-    id: -42,
-    token: -42,
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
-      range: [
-        3,
-        3,
-      ],
-    },
-  },
-  {
-    id: -42,
-    token: -42,
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
-      range: [
-        3,
-        3,
-      ],
-    },
-  },
-  {
-    id: -42,
-    token: -42,
-    yytext: '',
-    yylloc: {
-      first_line: 1,
-      first_column: 3,
-      last_line: 1,
-      last_column: 3,
-      range: [
-        3,
-        3,
+        29,
+        29,
       ],
     },
   },
@@ -318,10 +1001,10 @@
     id: -2,
     token: null,
     summary: {
-      totalTokenCount: 21,
-      EOFTokenCount: 0,
+      totalTokenCount: 19,
+      EOFTokenCount: 4,
       ERRORTokenCount: 0,
-      ParseErrorCallCount: 20,
+      ParseErrorCallCount: 8,
       fatalExceptionCount: 0,
     },
   },

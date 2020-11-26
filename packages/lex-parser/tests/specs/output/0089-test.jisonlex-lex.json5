@@ -1548,18 +1548,44 @@
     id: 2,
     token: '"error"',
     yytext: {
-      orig: '!',
-      errorDiag: {
-        inputPos: 317,
-        yytext: '!',
-        yyleng: 1,
-        matches: [
-          '!',
+      errStr: `Lexical error on line 40: 
+unsupported lexer input: "!"
+while lexing in "options" state.
+
+If this input was intentional, you might want to put quotes around
+it; any JavaScript string quoting style is accepted (single quotes,
+double quotes *or* backtick quotes a la ES6 string templates).
+
+  Erroneous area:
+37: %option -
+38: %option '-'
+39: %option {x}
+40: %option __beelzebub!
+^^.....................^
+41: %option @you
+42: %option me@home
+`,
+      recoverable: false,
+      text: '!',
+      token: null,
+      line: 39,
+      loc: {
+        first_line: 40,
+        first_column: 19,
+        last_line: 40,
+        last_column: 20,
+        range: [
+          677,
+          678,
         ],
-        activeCondition: 'options',
-        conditionStackDepth: 2,
-        hash: {
-          errStr: `Lexical error on line 40: 
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: [
+          {
+            errStr: `Lexical error on line 40: 
 unsupported lexer input: "!"
 while lexing in "options" state.
 
@@ -1576,68 +1602,28 @@ double quotes *or* backtick quotes a la ES6 string templates).
 41: %option @you
 42: %option me@home
 `,
-          recoverable: false,
-          text: '!',
-          token: null,
-          line: 39,
-          loc: {
-            first_line: 40,
-            first_column: 19,
-            last_line: 40,
-            last_column: 20,
-            range: [
-              677,
-              678,
-            ],
+            recoverable: false,
+            text: '!',
+            token: null,
+            line: 39,
+            loc: {
+              first_line: 40,
+              first_column: 19,
+              last_line: 40,
+              last_column: 20,
+              range: [
+                677,
+                678,
+              ],
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+            lexer: '[lexer]',
           },
-          yy: {
-            depth: 0,
-            include_command_allowed: false,
-          },
-          lexer: {
-            EOF: 1,
-            ERROR: 2,
-            __error_infos: [
-              {
-                errStr: `Lexical error on line 40: 
-unsupported lexer input: "!"
-while lexing in "options" state.
-
-If this input was intentional, you might want to put quotes around
-it; any JavaScript string quoting style is accepted (single quotes,
-double quotes *or* backtick quotes a la ES6 string templates).
-
-  Erroneous area:
-37: %option -
-38: %option '-'
-39: %option {x}
-40: %option __beelzebub!
-^^.....................^
-41: %option @you
-42: %option me@home
-`,
-                recoverable: false,
-                text: '!',
-                token: null,
-                line: 39,
-                loc: {
-                  first_line: 40,
-                  first_column: 19,
-                  last_line: 40,
-                  last_column: 20,
-                  range: [
-                    677,
-                    678,
-                  ],
-                },
-                yy: {
-                  depth: 0,
-                  include_command_allowed: false,
-                },
-                lexer: '[lexer]',
-              },
-              {
-                errStr: `Lexical error on line 44: 
+          {
+            errStr: `Lexical error on line 44: 
 unsupported lexer input: ":"
 while lexing in "options" state.
 
@@ -1654,25 +1640,25 @@ double quotes *or* backtick quotes a la ES6 string templates).
 45: %option "a=b"
 46: %option ~a
 `,
-                recoverable: false,
-                text: ':',
-                token: null,
-                line: 43,
-                loc: {
-                  first_line: 44,
-                  first_column: 11,
-                  last_line: 44,
-                  last_column: 12,
-                  range: [
-                    742,
-                    743,
-                  ],
-                },
-                yy: '[reference to sibling --> *.[103].yytext.errorDiag.hash.lexer.__error_infos.[0].yy]',
-                lexer: '[lexer]',
-              },
-              {
-                errStr: `Lexical error on line 47: 
+            recoverable: false,
+            text: ':',
+            token: null,
+            line: 43,
+            loc: {
+              first_line: 44,
+              first_column: 11,
+              last_line: 44,
+              last_column: 12,
+              range: [
+                742,
+                743,
+              ],
+            },
+            yy: '[reference to sibling --> *.[103].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+          },
+          {
+            errStr: `Lexical error on line 47: 
 unsupported lexer input: "$"
 while lexing in "options" state.
 
@@ -1689,25 +1675,25 @@ double quotes *or* backtick quotes a la ES6 string templates).
 48: %option a#b
 49: 
 `,
-                recoverable: false,
-                text: '$',
-                token: null,
-                line: 46,
-                loc: {
-                  first_line: 47,
-                  first_column: 8,
-                  last_line: 47,
-                  last_column: 9,
-                  range: [
-                    780,
-                    781,
-                  ],
-                },
-                yy: '[reference to sibling --> *.[103].yytext.errorDiag.hash.lexer.__error_infos.[0].yy]',
-                lexer: '[lexer]',
-              },
-              {
-                errStr: `Lexical error on line 47: 
+            recoverable: false,
+            text: '$',
+            token: null,
+            line: 46,
+            loc: {
+              first_line: 47,
+              first_column: 8,
+              last_line: 47,
+              last_column: 9,
+              range: [
+                780,
+                781,
+              ],
+            },
+            yy: '[reference to sibling --> *.[103].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+          },
+          {
+            errStr: `Lexical error on line 47: 
 unsupported lexer input: "$"
 while lexing in "options" state.
 
@@ -1724,37 +1710,37 @@ double quotes *or* backtick quotes a la ES6 string templates).
 48: %option a#b
 49: 
 `,
-                recoverable: false,
-                text: '$',
-                token: null,
-                line: 46,
-                loc: {
-                  first_line: 47,
-                  first_column: 10,
-                  last_line: 47,
-                  last_column: 11,
-                  range: [
-                    782,
-                    783,
-                  ],
-                },
-                yy: '[reference to sibling --> *.[103].yytext.errorDiag.hash.lexer.__error_infos.[0].yy]',
-                lexer: '[lexer]',
-              },
-            ],
-            __decompressed: true,
-            done: true,
-            _backtrack: false,
-            _input: '',
-            _more: false,
-            _signaled_error_token: false,
-            _clear_state: 0,
-            conditionStack: [
-              'INITIAL',
-              'code',
-            ],
-            match: '',
-            matched: `
+            recoverable: false,
+            text: '$',
+            token: null,
+            line: 46,
+            loc: {
+              first_line: 47,
+              first_column: 10,
+              last_line: 47,
+              last_column: 11,
+              range: [
+                782,
+                783,
+              ],
+            },
+            yy: '[reference to sibling --> *.[103].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+          },
+        ],
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `
 %option 8bit
 %option case-insensitive
 %option never-interactive
@@ -1812,42 +1798,50 @@ double quotes *or* backtick quotes a la ES6 string templates).
 .                           return 'INVALID';
 
 `,
-            matches: false,
-            yytext: '',
-            offset: 995,
-            base_position: 0,
-            yyleng: 0,
-            yylineno: 57,
-            yylloc: {
-              first_line: 58,
-              first_column: 0,
-              last_line: 58,
-              last_column: 0,
-              range: [
-                995,
-                995,
-              ],
-            },
-            CRLF_Re: {
-              re: '/\\r\\n?|\\n/',
-              source: '\\r\\n?|\\n',
-              flags: '',
-            },
-            options: {
-              xregexp: true,
-              ranges: true,
-              trackPosition: true,
-              easy_keyword_rules: true,
-            },
-            yy: {
-              depth: 0,
-              include_command_allowed: false,
-            },
-          },
+        matches: false,
+        yytext: '',
+        offset: 995,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 57,
+        yylloc: {
+          first_line: 58,
+          first_column: 0,
+          last_line: 58,
+          last_column: 0,
+          range: [
+            995,
+            995,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
         },
       },
+      errorDiag: {
+        inputPos: 317,
+        yytext: '!',
+        yyleng: 1,
+        matches: [
+          '!',
+        ],
+        activeCondition: 'options',
+        conditionStackDepth: 2,
+      },
     },
-    yylloc: '[reference to sibling --> *.[103].yytext.errorDiag.hash.lexer.__error_infos.[0].loc]',
+    yylloc: '[reference to sibling --> *.[103].yytext.lexer.__error_infos.[0].loc]',
   },
   {
     id: 22,
@@ -2033,18 +2027,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     id: 2,
     token: '"error"',
     yytext: {
-      orig: ':',
-      errorDiag: {
-        inputPos: 252,
-        yytext: ':',
-        yyleng: 1,
-        matches: [
-          ':',
-        ],
-        activeCondition: 'options',
-        conditionStackDepth: 2,
-        hash: {
-          errStr: `Lexical error on line 44: 
+      errStr: `Lexical error on line 44: 
 unsupported lexer input: ":"
 while lexing in "options" state.
 
@@ -2061,41 +2044,38 @@ double quotes *or* backtick quotes a la ES6 string templates).
 45: %option "a=b"
 46: %option ~a
 `,
-          recoverable: false,
-          text: ':',
-          token: null,
-          line: 43,
-          loc: {
-            first_line: 44,
-            first_column: 11,
-            last_line: 44,
-            last_column: 12,
-            range: [
-              742,
-              743,
-            ],
-          },
-          yy: {
-            depth: 0,
-            include_command_allowed: false,
-          },
-          lexer: {
-            EOF: 1,
-            ERROR: 2,
-            __error_infos: '[reference to sibling array --> *.[103].yytext.errorDiag.hash.lexer.__error_infos, length = 4]',
-            __decompressed: true,
-            done: true,
-            _backtrack: false,
-            _input: '',
-            _more: false,
-            _signaled_error_token: false,
-            _clear_state: 0,
-            conditionStack: [
-              'INITIAL',
-              'code',
-            ],
-            match: '',
-            matched: `
+      recoverable: false,
+      text: ':',
+      token: null,
+      line: 43,
+      loc: {
+        first_line: 44,
+        first_column: 11,
+        last_line: 44,
+        last_column: 12,
+        range: [
+          742,
+          743,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[103].yytext.lexer.__error_infos, length = 4]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `
 %option 8bit
 %option case-insensitive
 %option never-interactive
@@ -2153,42 +2133,50 @@ double quotes *or* backtick quotes a la ES6 string templates).
 .                           return 'INVALID';
 
 `,
-            matches: false,
-            yytext: '',
-            offset: 995,
-            base_position: 0,
-            yyleng: 0,
-            yylineno: 57,
-            yylloc: {
-              first_line: 58,
-              first_column: 0,
-              last_line: 58,
-              last_column: 0,
-              range: [
-                995,
-                995,
-              ],
-            },
-            CRLF_Re: {
-              re: '/\\r\\n?|\\n/',
-              source: '\\r\\n?|\\n',
-              flags: '',
-            },
-            options: {
-              xregexp: true,
-              ranges: true,
-              trackPosition: true,
-              easy_keyword_rules: true,
-            },
-            yy: {
-              depth: 0,
-              include_command_allowed: false,
-            },
-          },
+        matches: false,
+        yytext: '',
+        offset: 995,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 57,
+        yylloc: {
+          first_line: 58,
+          first_column: 0,
+          last_line: 58,
+          last_column: 0,
+          range: [
+            995,
+            995,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
         },
       },
+      errorDiag: {
+        inputPos: 252,
+        yytext: ':',
+        yyleng: 1,
+        matches: [
+          ':',
+        ],
+        activeCondition: 'options',
+        conditionStackDepth: 2,
+      },
     },
-    yylloc: '[reference to sibling --> *.[103].yytext.errorDiag.hash.lexer.__error_infos.[1].loc]',
+    yylloc: '[reference to sibling --> *.[103].yytext.lexer.__error_infos.[1].loc]',
   },
   {
     id: 54,
@@ -2329,18 +2317,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     id: 2,
     token: '"error"',
     yytext: {
-      orig: '$',
-      errorDiag: {
-        inputPos: 214,
-        yytext: '$',
-        yyleng: 1,
-        matches: [
-          '$',
-        ],
-        activeCondition: 'options',
-        conditionStackDepth: 2,
-        hash: {
-          errStr: `Lexical error on line 47: 
+      errStr: `Lexical error on line 47: 
 unsupported lexer input: "$"
 while lexing in "options" state.
 
@@ -2357,41 +2334,38 @@ double quotes *or* backtick quotes a la ES6 string templates).
 48: %option a#b
 49: 
 `,
-          recoverable: false,
-          text: '$',
-          token: null,
-          line: 46,
-          loc: {
-            first_line: 47,
-            first_column: 8,
-            last_line: 47,
-            last_column: 9,
-            range: [
-              780,
-              781,
-            ],
-          },
-          yy: {
-            depth: 0,
-            include_command_allowed: false,
-          },
-          lexer: {
-            EOF: 1,
-            ERROR: 2,
-            __error_infos: '[reference to sibling array --> *.[103].yytext.errorDiag.hash.lexer.__error_infos, length = 4]',
-            __decompressed: true,
-            done: true,
-            _backtrack: false,
-            _input: '',
-            _more: false,
-            _signaled_error_token: false,
-            _clear_state: 0,
-            conditionStack: [
-              'INITIAL',
-              'code',
-            ],
-            match: '',
-            matched: `
+      recoverable: false,
+      text: '$',
+      token: null,
+      line: 46,
+      loc: {
+        first_line: 47,
+        first_column: 8,
+        last_line: 47,
+        last_column: 9,
+        range: [
+          780,
+          781,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[103].yytext.lexer.__error_infos, length = 4]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `
 %option 8bit
 %option case-insensitive
 %option never-interactive
@@ -2449,42 +2423,50 @@ double quotes *or* backtick quotes a la ES6 string templates).
 .                           return 'INVALID';
 
 `,
-            matches: false,
-            yytext: '',
-            offset: 995,
-            base_position: 0,
-            yyleng: 0,
-            yylineno: 57,
-            yylloc: {
-              first_line: 58,
-              first_column: 0,
-              last_line: 58,
-              last_column: 0,
-              range: [
-                995,
-                995,
-              ],
-            },
-            CRLF_Re: {
-              re: '/\\r\\n?|\\n/',
-              source: '\\r\\n?|\\n',
-              flags: '',
-            },
-            options: {
-              xregexp: true,
-              ranges: true,
-              trackPosition: true,
-              easy_keyword_rules: true,
-            },
-            yy: {
-              depth: 0,
-              include_command_allowed: false,
-            },
-          },
+        matches: false,
+        yytext: '',
+        offset: 995,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 57,
+        yylloc: {
+          first_line: 58,
+          first_column: 0,
+          last_line: 58,
+          last_column: 0,
+          range: [
+            995,
+            995,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
         },
       },
+      errorDiag: {
+        inputPos: 214,
+        yytext: '$',
+        yyleng: 1,
+        matches: [
+          '$',
+        ],
+        activeCondition: 'options',
+        conditionStackDepth: 2,
+      },
     },
-    yylloc: '[reference to sibling --> *.[103].yytext.errorDiag.hash.lexer.__error_infos.[2].loc]',
+    yylloc: '[reference to sibling --> *.[103].yytext.lexer.__error_infos.[2].loc]',
   },
   {
     id: 54,
@@ -2505,18 +2487,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     id: 2,
     token: '"error"',
     yytext: {
-      orig: '$',
-      errorDiag: {
-        inputPos: 212,
-        yytext: '$',
-        yyleng: 1,
-        matches: [
-          '$',
-        ],
-        activeCondition: 'options',
-        conditionStackDepth: 2,
-        hash: {
-          errStr: `Lexical error on line 47: 
+      errStr: `Lexical error on line 47: 
 unsupported lexer input: "$"
 while lexing in "options" state.
 
@@ -2533,41 +2504,38 @@ double quotes *or* backtick quotes a la ES6 string templates).
 48: %option a#b
 49: 
 `,
-          recoverable: false,
-          text: '$',
-          token: null,
-          line: 46,
-          loc: {
-            first_line: 47,
-            first_column: 10,
-            last_line: 47,
-            last_column: 11,
-            range: [
-              782,
-              783,
-            ],
-          },
-          yy: {
-            depth: 0,
-            include_command_allowed: false,
-          },
-          lexer: {
-            EOF: 1,
-            ERROR: 2,
-            __error_infos: '[reference to sibling array --> *.[103].yytext.errorDiag.hash.lexer.__error_infos, length = 4]',
-            __decompressed: true,
-            done: true,
-            _backtrack: false,
-            _input: '',
-            _more: false,
-            _signaled_error_token: false,
-            _clear_state: 0,
-            conditionStack: [
-              'INITIAL',
-              'code',
-            ],
-            match: '',
-            matched: `
+      recoverable: false,
+      text: '$',
+      token: null,
+      line: 46,
+      loc: {
+        first_line: 47,
+        first_column: 10,
+        last_line: 47,
+        last_column: 11,
+        range: [
+          782,
+          783,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[103].yytext.lexer.__error_infos, length = 4]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `
 %option 8bit
 %option case-insensitive
 %option never-interactive
@@ -2625,42 +2593,50 @@ double quotes *or* backtick quotes a la ES6 string templates).
 .                           return 'INVALID';
 
 `,
-            matches: false,
-            yytext: '',
-            offset: 995,
-            base_position: 0,
-            yyleng: 0,
-            yylineno: 57,
-            yylloc: {
-              first_line: 58,
-              first_column: 0,
-              last_line: 58,
-              last_column: 0,
-              range: [
-                995,
-                995,
-              ],
-            },
-            CRLF_Re: {
-              re: '/\\r\\n?|\\n/',
-              source: '\\r\\n?|\\n',
-              flags: '',
-            },
-            options: {
-              xregexp: true,
-              ranges: true,
-              trackPosition: true,
-              easy_keyword_rules: true,
-            },
-            yy: {
-              depth: 0,
-              include_command_allowed: false,
-            },
-          },
+        matches: false,
+        yytext: '',
+        offset: 995,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 57,
+        yylloc: {
+          first_line: 58,
+          first_column: 0,
+          last_line: 58,
+          last_column: 0,
+          range: [
+            995,
+            995,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
         },
       },
+      errorDiag: {
+        inputPos: 212,
+        yytext: '$',
+        yyleng: 1,
+        matches: [
+          '$',
+        ],
+        activeCondition: 'options',
+        conditionStackDepth: 2,
+      },
     },
-    yylloc: '[reference to sibling --> *.[103].yytext.errorDiag.hash.lexer.__error_infos.[3].loc]',
+    yylloc: '[reference to sibling --> *.[103].yytext.lexer.__error_infos.[3].loc]',
   },
   {
     id: 22,

@@ -77,7 +77,7 @@ The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpect
     at Object.parser__PerformAction (/lex-parser-cjs.js:3227:22)
     at Object.parse (/lex-parser-cjs.js:8595:24)
     at Object.yyparse [as parse] (/lex-parser-cjs.js:12302:25)
-    at Context.testEachParserExample (/all-tests.js:466:27)
+    at Context.testEachParserExample (/all-tests.js:489:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)

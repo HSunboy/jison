@@ -93,18 +93,42 @@
     id: 25,
     token: '"UNTERMINATED_ACTION_BLOCK"',
     yytext: {
-      orig: '%{{{{{',
-      errorDiag: {
-        inputPos: 26,
-        yytext: '%{{{{{',
-        yyleng: 6,
-        matches: [
-          '%{{{{{',
+      errStr: `Lexical error on line 2: 
+Incorrectly terminated action code block. We're expecting the
+'%}}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+  Erroneous area:
+1: %%
+2: "["[^\\\\]"]" %{{{{{
+^..............^^^^^^
+3: return "%{..%}";
+4: }}}}}%
+`,
+      recoverable: false,
+      text: '%{{{{{',
+      token: null,
+      line: 1,
+      loc: {
+        first_line: 2,
+        first_column: 12,
+        last_line: 2,
+        last_column: 18,
+        range: [
+          15,
+          21,
         ],
-        activeCondition: 'action',
-        conditionStackDepth: 3,
-        hash: {
-          errStr: `Lexical error on line 2: 
+      },
+      yy: {
+        depth: 0,
+        include_command_allowed: false,
+      },
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: [
+          {
+            errStr: `Lexical error on line 2: 
 Incorrectly terminated action code block. We're expecting the
 '%}}}}}' end marker to go with the given start marker.
 Regrettably, it does not exist in the remainder of the input.
@@ -116,63 +140,28 @@ Regrettably, it does not exist in the remainder of the input.
 3: return "%{..%}";
 4: }}}}}%
 `,
-          recoverable: false,
-          text: '%{{{{{',
-          token: null,
-          line: 1,
-          loc: {
-            first_line: 2,
-            first_column: 12,
-            last_line: 2,
-            last_column: 18,
-            range: [
-              15,
-              21,
-            ],
+            recoverable: false,
+            text: '%{{{{{',
+            token: null,
+            line: 1,
+            loc: {
+              first_line: 2,
+              first_column: 12,
+              last_line: 2,
+              last_column: 18,
+              range: [
+                15,
+                21,
+              ],
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+            lexer: '[lexer]',
           },
-          yy: {
-            depth: 0,
-            include_command_allowed: false,
-          },
-          lexer: {
-            EOF: 1,
-            ERROR: 2,
-            __error_infos: [
-              {
-                errStr: `Lexical error on line 2: 
-Incorrectly terminated action code block. We're expecting the
-'%}}}}}' end marker to go with the given start marker.
-Regrettably, it does not exist in the remainder of the input.
-
-  Erroneous area:
-1: %%
-2: "["[^\\\\]"]" %{{{{{
-^..............^^^^^^
-3: return "%{..%}";
-4: }}}}}%
-`,
-                recoverable: false,
-                text: '%{{{{{',
-                token: null,
-                line: 1,
-                loc: {
-                  first_line: 2,
-                  first_column: 12,
-                  last_line: 2,
-                  last_column: 18,
-                  range: [
-                    15,
-                    21,
-                  ],
-                },
-                yy: {
-                  depth: 0,
-                  include_command_allowed: false,
-                },
-                lexer: '[lexer]',
-              },
-              {
-                errStr: `Lexical error on line 4: 
+          {
+            errStr: `Lexical error on line 4: 
 unsupported lexer input encountered while lexing
 rules (i.e. jison lex regexes) in "rules" state.
 
@@ -192,78 +181,86 @@ rules (i.e. jison lex regexes) in "rules" state.
 5: 
 6: 
 `,
-                recoverable: false,
-                text: '%',
-                token: null,
-                line: 3,
-                loc: {
-                  first_line: 4,
-                  first_column: 5,
-                  last_line: 4,
-                  last_column: 6,
-                  range: [
-                    44,
-                    45,
-                  ],
-                },
-                yy: '[reference to sibling --> *.[6].yytext.errorDiag.hash.lexer.__error_infos.[0].yy]',
-                lexer: '[lexer]',
-              },
-            ],
-            __decompressed: true,
-            done: true,
-            _backtrack: false,
-            _input: '',
-            _more: false,
-            _signaled_error_token: false,
-            _clear_state: 0,
-            conditionStack: [
-              'INITIAL',
-              'code',
-            ],
-            match: '',
-            matched: `%%
+            recoverable: false,
+            text: '%',
+            token: null,
+            line: 3,
+            loc: {
+              first_line: 4,
+              first_column: 5,
+              last_line: 4,
+              last_column: 6,
+              range: [
+                44,
+                45,
+              ],
+            },
+            yy: '[reference to sibling --> *.[6].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+          },
+        ],
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `%%
 "["[^\\\\]"]" %{{{{{
 return "%{..%}";
 }}}}}%
 
 `,
-            matches: false,
-            yytext: '',
-            offset: 47,
-            base_position: 0,
-            yyleng: 0,
-            yylineno: 5,
-            yylloc: {
-              first_line: 6,
-              first_column: 0,
-              last_line: 6,
-              last_column: 0,
-              range: [
-                47,
-                47,
-              ],
-            },
-            CRLF_Re: {
-              re: '/\\r\\n?|\\n/',
-              source: '\\r\\n?|\\n',
-              flags: '',
-            },
-            options: {
-              xregexp: true,
-              ranges: true,
-              trackPosition: true,
-              easy_keyword_rules: true,
-            },
-            yy: {
-              depth: 0,
-              include_command_allowed: false,
-            },
-          },
+        matches: false,
+        yytext: '',
+        offset: 47,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 5,
+        yylloc: {
+          first_line: 6,
+          first_column: 0,
+          last_line: 6,
+          last_column: 0,
+          range: [
+            47,
+            47,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
         },
       },
+      errorDiag: {
+        inputPos: 26,
+        yytext: '%{{{{{',
+        yyleng: 6,
+        matches: [
+          '%{{{{{',
+        ],
+        activeCondition: 'action',
+        conditionStackDepth: 3,
+      },
     },
-    yylloc: '[reference to sibling --> *.[6].yytext.errorDiag.hash.lexer.__error_infos.[0].loc]',
+    yylloc: '[reference to sibling --> *.[6].yytext.lexer.__error_infos.[0].loc]',
   },
   {
     id: 24,
@@ -434,18 +431,7 @@ return "%{..%}";
     id: 2,
     token: '"error"',
     yytext: {
-      orig: '%',
-      errorDiag: {
-        inputPos: 2,
-        yytext: '%',
-        yyleng: 1,
-        matches: [
-          '%',
-        ],
-        activeCondition: 'rules',
-        conditionStackDepth: 2,
-        hash: {
-          errStr: `Lexical error on line 4: 
+      errStr: `Lexical error on line 4: 
 unsupported lexer input encountered while lexing
 rules (i.e. jison lex regexes) in "rules" state.
 
@@ -465,82 +451,90 @@ rules (i.e. jison lex regexes) in "rules" state.
 5: 
 6: 
 `,
-          recoverable: false,
-          text: '%',
-          token: null,
-          line: 3,
-          loc: {
-            first_line: 4,
-            first_column: 5,
-            last_line: 4,
-            last_column: 6,
-            range: [
-              44,
-              45,
-            ],
-          },
-          yy: {
-            depth: 0,
-            include_command_allowed: false,
-          },
-          lexer: {
-            EOF: 1,
-            ERROR: 2,
-            __error_infos: '[reference to sibling array --> *.[6].yytext.errorDiag.hash.lexer.__error_infos, length = 2]',
-            __decompressed: true,
-            done: true,
-            _backtrack: false,
-            _input: '',
-            _more: false,
-            _signaled_error_token: false,
-            _clear_state: 0,
-            conditionStack: [
-              'INITIAL',
-              'code',
-            ],
-            match: '',
-            matched: `%%
+      recoverable: false,
+      text: '%',
+      token: null,
+      line: 3,
+      loc: {
+        first_line: 4,
+        first_column: 5,
+        last_line: 4,
+        last_column: 6,
+        range: [
+          44,
+          45,
+        ],
+      },
+      yy: {
+        depth: 0,
+        include_command_allowed: false,
+      },
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[6].yytext.lexer.__error_infos, length = 2]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `%%
 "["[^\\\\]"]" %{{{{{
 return "%{..%}";
 }}}}}%
 
 `,
-            matches: false,
-            yytext: '',
-            offset: 47,
-            base_position: 0,
-            yyleng: 0,
-            yylineno: 5,
-            yylloc: {
-              first_line: 6,
-              first_column: 0,
-              last_line: 6,
-              last_column: 0,
-              range: [
-                47,
-                47,
-              ],
-            },
-            CRLF_Re: {
-              re: '/\\r\\n?|\\n/',
-              source: '\\r\\n?|\\n',
-              flags: '',
-            },
-            options: {
-              xregexp: true,
-              ranges: true,
-              trackPosition: true,
-              easy_keyword_rules: true,
-            },
-            yy: {
-              depth: 0,
-              include_command_allowed: false,
-            },
-          },
+        matches: false,
+        yytext: '',
+        offset: 47,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 5,
+        yylloc: {
+          first_line: 6,
+          first_column: 0,
+          last_line: 6,
+          last_column: 0,
+          range: [
+            47,
+            47,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
         },
       },
+      errorDiag: {
+        inputPos: 2,
+        yytext: '%',
+        yyleng: 1,
+        matches: [
+          '%',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+      },
     },
-    yylloc: '[reference to sibling --> *.[6].yytext.errorDiag.hash.lexer.__error_infos.[1].loc]',
+    yylloc: '[reference to sibling --> *.[6].yytext.lexer.__error_infos.[1].loc]',
   },
   {
     id: 34,

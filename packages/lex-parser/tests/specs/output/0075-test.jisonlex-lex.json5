@@ -63,19 +63,40 @@
     id: 48,
     token: '"UNTERMINATED_REGEX_SET"',
     yytext: {
-      orig: '',
-      errorDiag: {
-        inputPos: 25,
-        yytext: '',
-        yyleng: 0,
-        matches: [
-          '\n',
-          '\n',
+      errStr: `Lexical error on line 2: 
+regex [...] sets cannot span multiple lines.
+
+If you want a CR/LF to be part of a regex set, you can simply
+specify those as character escapes '\\r' and '\\n'.
+
+  Erroneous area:
+1: %%
+2: "["[abc
+^.........^
+3: def]"]" -> 'BAD_REGEX'
+4: 
+`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 1,
+      loc: {
+        first_line: 2,
+        first_column: 7,
+        last_line: 2,
+        last_column: 7,
+        range: [
+          10,
+          10,
         ],
-        activeCondition: 'rules',
-        conditionStackDepth: 2,
-        hash: {
-          errStr: `Lexical error on line 2: 
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: [
+          {
+            errStr: `Lexical error on line 2: 
 regex [...] sets cannot span multiple lines.
 
 If you want a CR/LF to be part of a regex set, you can simply
@@ -88,64 +109,28 @@ specify those as character escapes '\\r' and '\\n'.
 3: def]"]" -> 'BAD_REGEX'
 4: 
 `,
-          recoverable: false,
-          text: '',
-          token: null,
-          line: 1,
-          loc: {
-            first_line: 2,
-            first_column: 7,
-            last_line: 2,
-            last_column: 7,
-            range: [
-              10,
-              10,
-            ],
+            recoverable: false,
+            text: '',
+            token: null,
+            line: 1,
+            loc: {
+              first_line: 2,
+              first_column: 7,
+              last_line: 2,
+              last_column: 7,
+              range: [
+                10,
+                10,
+              ],
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+            lexer: '[lexer]',
           },
-          yy: {
-            depth: 0,
-            include_command_allowed: false,
-          },
-          lexer: {
-            EOF: 1,
-            ERROR: 2,
-            __error_infos: [
-              {
-                errStr: `Lexical error on line 2: 
-regex [...] sets cannot span multiple lines.
-
-If you want a CR/LF to be part of a regex set, you can simply
-specify those as character escapes '\\r' and '\\n'.
-
-  Erroneous area:
-1: %%
-2: "["[abc
-^.........^
-3: def]"]" -> 'BAD_REGEX'
-4: 
-`,
-                recoverable: false,
-                text: '',
-                token: null,
-                line: 1,
-                loc: {
-                  first_line: 2,
-                  first_column: 7,
-                  last_line: 2,
-                  last_column: 7,
-                  range: [
-                    10,
-                    10,
-                  ],
-                },
-                yy: {
-                  depth: 0,
-                  include_command_allowed: false,
-                },
-                lexer: '[lexer]',
-              },
-              {
-                errStr: `Lexical error on line 3: 
+          {
+            errStr: `Lexical error on line 3: 
 unsupported lexer input encountered while lexing
 rules (i.e. jison lex regexes) in "rules" state.
 
@@ -164,77 +149,86 @@ rules (i.e. jison lex regexes) in "rules" state.
 4: 
 5: 
 `,
-                recoverable: false,
-                text: ']',
-                token: null,
-                line: 2,
-                loc: {
-                  first_line: 3,
-                  first_column: 3,
-                  last_line: 3,
-                  last_column: 4,
-                  range: [
-                    14,
-                    15,
-                  ],
-                },
-                yy: '[reference to sibling --> *.[4].yytext.errorDiag.hash.lexer.__error_infos.[0].yy]',
-                lexer: '[lexer]',
-              },
-            ],
-            __decompressed: true,
-            done: true,
-            _backtrack: false,
-            _input: '',
-            _more: false,
-            _signaled_error_token: false,
-            _clear_state: 0,
-            conditionStack: [
-              'INITIAL',
-              'code',
-            ],
-            match: '',
-            matched: `%%
+            recoverable: false,
+            text: ']',
+            token: null,
+            line: 2,
+            loc: {
+              first_line: 3,
+              first_column: 3,
+              last_line: 3,
+              last_column: 4,
+              range: [
+                14,
+                15,
+              ],
+            },
+            yy: '[reference to sibling --> *.[4].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+          },
+        ],
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `%%
 "["[abc
 def]"]" -> 'BAD_REGEX'
 
 `,
-            matches: false,
-            yytext: '',
-            offset: 35,
-            base_position: 0,
-            yyleng: 0,
-            yylineno: 4,
-            yylloc: {
-              first_line: 5,
-              first_column: 0,
-              last_line: 5,
-              last_column: 0,
-              range: [
-                35,
-                35,
-              ],
-            },
-            CRLF_Re: {
-              re: '/\\r\\n?|\\n/',
-              source: '\\r\\n?|\\n',
-              flags: '',
-            },
-            options: {
-              xregexp: true,
-              ranges: true,
-              trackPosition: true,
-              easy_keyword_rules: true,
-            },
-            yy: {
-              depth: 0,
-              include_command_allowed: false,
-            },
-          },
+        matches: false,
+        yytext: '',
+        offset: 35,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 4,
+        yylloc: {
+          first_line: 5,
+          first_column: 0,
+          last_line: 5,
+          last_column: 0,
+          range: [
+            35,
+            35,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
         },
       },
+      errorDiag: {
+        inputPos: 25,
+        yytext: '',
+        yyleng: 0,
+        matches: [
+          '\n',
+          '\n',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+      },
     },
-    yylloc: '[reference to sibling --> *.[4].yytext.errorDiag.hash.lexer.__error_infos.[0].loc]',
+    yylloc: '[reference to sibling --> *.[4].yytext.lexer.__error_infos.[0].loc]',
   },
   {
     id: 52,
@@ -255,18 +249,7 @@ def]"]" -> 'BAD_REGEX'
     id: 2,
     token: '"error"',
     yytext: {
-      orig: ']',
-      errorDiag: {
-        inputPos: 20,
-        yytext: ']',
-        yyleng: 1,
-        matches: [
-          ']',
-        ],
-        activeCondition: 'rules',
-        conditionStackDepth: 2,
-        hash: {
-          errStr: `Lexical error on line 3: 
+      errStr: `Lexical error on line 3: 
 unsupported lexer input encountered while lexing
 rules (i.e. jison lex regexes) in "rules" state.
 
@@ -285,81 +268,86 @@ rules (i.e. jison lex regexes) in "rules" state.
 4: 
 5: 
 `,
-          recoverable: false,
-          text: ']',
-          token: null,
-          line: 2,
-          loc: {
-            first_line: 3,
-            first_column: 3,
-            last_line: 3,
-            last_column: 4,
-            range: [
-              14,
-              15,
-            ],
-          },
-          yy: {
-            depth: 0,
-            include_command_allowed: false,
-          },
-          lexer: {
-            EOF: 1,
-            ERROR: 2,
-            __error_infos: '[reference to sibling array --> *.[4].yytext.errorDiag.hash.lexer.__error_infos, length = 2]',
-            __decompressed: true,
-            done: true,
-            _backtrack: false,
-            _input: '',
-            _more: false,
-            _signaled_error_token: false,
-            _clear_state: 0,
-            conditionStack: [
-              'INITIAL',
-              'code',
-            ],
-            match: '',
-            matched: `%%
+      recoverable: false,
+      text: ']',
+      token: null,
+      line: 2,
+      loc: {
+        first_line: 3,
+        first_column: 3,
+        last_line: 3,
+        last_column: 4,
+        range: [
+          14,
+          15,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[4].yytext.lexer.__error_infos, length = 2]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `%%
 "["[abc
 def]"]" -> 'BAD_REGEX'
 
 `,
-            matches: false,
-            yytext: '',
-            offset: 35,
-            base_position: 0,
-            yyleng: 0,
-            yylineno: 4,
-            yylloc: {
-              first_line: 5,
-              first_column: 0,
-              last_line: 5,
-              last_column: 0,
-              range: [
-                35,
-                35,
-              ],
-            },
-            CRLF_Re: {
-              re: '/\\r\\n?|\\n/',
-              source: '\\r\\n?|\\n',
-              flags: '',
-            },
-            options: {
-              xregexp: true,
-              ranges: true,
-              trackPosition: true,
-              easy_keyword_rules: true,
-            },
-            yy: {
-              depth: 0,
-              include_command_allowed: false,
-            },
-          },
+        matches: false,
+        yytext: '',
+        offset: 35,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 4,
+        yylloc: {
+          first_line: 5,
+          first_column: 0,
+          last_line: 5,
+          last_column: 0,
+          range: [
+            35,
+            35,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
         },
       },
+      errorDiag: {
+        inputPos: 20,
+        yytext: ']',
+        yyleng: 1,
+        matches: [
+          ']',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+      },
     },
-    yylloc: '[reference to sibling --> *.[4].yytext.errorDiag.hash.lexer.__error_infos.[1].loc]',
+    yylloc: '[reference to sibling --> *.[4].yytext.lexer.__error_infos.[1].loc]',
   },
   {
     id: 51,
