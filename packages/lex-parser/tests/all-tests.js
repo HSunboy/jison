@@ -261,41 +261,35 @@ describe('LEX spec lexer', function () {
                     }
 
                     // augment the returned value when possible:
-                    if (hash.lexerWillNeedToForwardCursor) {
-                        // advance cursor already: do what the lexer would otherwise be doing
-                        // right after we returned to caller from here:
-                        this.input();
-                    }
-                    if (!hash.isLexerBacktrackingNotSupportedError) {
-                        // WARNING: it may appear there is no need for shallow copy as a new hash 
-                        // is created for every parseError() call; HOWEVER, every hash instance is
-                        // tracked in an error queue, which will be cleaned up when the parser
-                        // (or userland code) invokes the `cleanupAfterLex()` API.
-                        const rv = Object.assign({}, hash);
-                        if (rv.yy) {
-                            // shallow copy to keep (most of) current internal lexer state intact:
-                            rv.yy = Object.assign({}, rv.yy);
-                        }
-                        if (rv.loc) {
-                            rv.loc = Object.assign({}, rv.loc);
-                            rv.loc.range = rv.loc.range.slice();
-                        }
 
-                        rv.errorDiag = {
-                            inputPos: this._input ? this._input.length : -1,
-                            yytext: this.yytext,
-                            yyleng: this.yyleng,
-                            matches: this.matches,
-                            activeCondition: this.topState(),
-                            conditionStackDepth: this.conditionStack.length,
-                        };
-
-                        //if (hash.yyErrorInvoked) ... 
-                        
-                        // we dump yytext in the token stream, so we can use that to dump a little
-                        // more info for comparison & diagnostics:
-                        this.yytext = rv;
+                    // WARNING: it may appear there is no need for shallow copy as a new hash 
+                    // is created for every parseError() call; HOWEVER, every hash instance is
+                    // tracked in an error queue, which will be cleaned up when the parser
+                    // (or userland code) invokes the `cleanupAfterLex()` API.
+                    const rv = Object.assign({}, hash);
+                    if (rv.yy) {
+                        // shallow copy to keep (most of) current internal lexer state intact:
+                        rv.yy = Object.assign({}, rv.yy);
                     }
+                    if (rv.loc) {
+                        rv.loc = Object.assign({}, rv.loc);
+                        rv.loc.range = rv.loc.range.slice();
+                    }
+
+                    rv.errorDiag = {
+                        inputPos: this._input ? this._input.length : -1,
+                        yytext: this.yytext,
+                        yyleng: this.yyleng,
+                        matches: this.matches,
+                        activeCondition: this.topState(),
+                        conditionStackDepth: this.conditionStack.length,
+                    };
+
+                    //if (hash.yyErrorInvoked) ... 
+                    
+                    // we dump yytext in the token stream, so we can use that to dump a little
+                    // more info for comparison & diagnostics:
+                    this.yytext = rv;
                     
                     return -42; // this.ERROR;
                 }

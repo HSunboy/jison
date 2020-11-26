@@ -615,34 +615,32 @@ describe('Lexer Kernel', function () {
             ex1 = ex;
         }
         // since the lexer has been using the standard parseError method,
-        // which throws an exception **AND DOES NOT MOVE THE READ CURSOR FORWARD**,
-        // we WILL observe the same error again on the next invocation:
-        try {
-            lexer.lex();
-            assert(false, 'should never get here!');
-        } catch (ex) {
-            assert(ex instanceof Error);
-            assert(ex instanceof JisonLexerError);
-            assert(/JisonLexerError:[^]*?Unrecognized text\./.test(ex));
-            assert(ex.hash);
-            assert.equal(typeof ex.hash.errStr, 'string');
-            assert.equal(typeof ex.message, 'string');
+        // which throws an exception **AND MOVES THE READ CURSOR 1 CHARACTER FORWARD**,
+        // we WILL NOT observe the same error again on the next invocation:
+        // 
+        // (Note: this is a breaking change in jison-gho lexer behaviour since 0.7.0!)
+        assert.equal(lexer.yytext, 'y');          // the one character shifted on error should end up in the lexer "value", i.e. `yytext`!
+        assert.equal(lexer.lex(), 'X');
+        assert.equal(lexer.yytext, 'x');
+        
+        assert.equal(lexer._input, '');
+        // and push back the read content, for a re-lex in the next bit of test...
+        lexer.unput('yx');
+        assert.equal(lexer._input, 'yx');
 
-            assert.strictEqual(ex.message, ex1.message);
-            let check_items = [ 'text', 'line', 'loc', 'errStr' ];
-            check_items.forEach(function (item) {
-                assert.deepEqual(ex[item], ex1[item], "both exceptions should have a matching member '" + item + "'");
-            });
-        }
-        // however, when we apply a non-throwing parseError, we MUST shift one character
+        // Also, when we apply a non-throwing parseError, we must observe the lexer has already shifted one character
         // forward on error:
         lexer.parseError = function (str, hash) {
             assert(hash);
             assert(str);
             // and make sure the `this` reference points right back at the current *lexer* instance!
             assert.equal(this, lexer);
+            assert.equal(this.yytext, 'y');          // the one character shifted on error should end up in the lexer "value", i.e. `yytext`!
+            // BUT it should not show up in the error hash.yytext, as that one was sampled BEFORE the 1-char-consume anti-infinite-loop countermeasure:
+            assert.equal(hash.text, '');
+            return -42;
         };
-        assert.equal(lexer.lex(), lexer.ERROR);
+        assert.equal(lexer.lex(), -42);
         assert.equal(lexer.yytext, 'y');          // the one character shifted on error should end up in the lexer "value", i.e. `yytext`!
 
         assert.equal(lexer.lex(), 'X');
@@ -700,14 +698,15 @@ describe('Lexer Kernel', function () {
             //  yytext: this.yytext
             //});
 
-            // consume at least one character of input as if everything was hunky-dory:
+            // at least one character of input has *already* consumed as if everything was hunky-dory:
             if (!this.matches) {
-                assert.strictEqual(this.yytext, '');
-                this.input();
-                assert.ok(this.yytext.length > 0);
+                assert.strictEqual(this.yytext.length, 1);
+                assert.ok('yz'.includes(this.yytext));      // this error should happen for both the Y and Z chracters in the test input
+                assert.ok(hash.lexerHasAlreadyForwardedCursorBy1);
             } else {
-                assert.ok(this.yytext.length > 0);
+                assert.ok(!hash.lexerHasAlreadyForwardedCursorBy1);
             }
+            assert.ok(this.yytext.length > 0);
             return 'FIX_' + String(this.yytext).toUpperCase();
         };
 
@@ -1260,7 +1259,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `, "Line 1263");
+        `, "Line 1262");
         console.error('lexer:', typeof lexer);
         lexer.setInput(input);
 
@@ -1288,7 +1287,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `, "Line 1291");
+        `, "Line 1290");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1322,7 +1321,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `, "Line 1325");
+        `, "Line 1324");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1351,7 +1350,7 @@ describe('Lexer Kernel', function () {
           ${lexerSource}
 
           return exports;
-        `, "Line 1354");
+        `, "Line 1353");
         exported.lexer.setInput(input);
 
         assert.equal(exported.lex(), 'X');
@@ -1384,7 +1383,7 @@ describe('Lexer Kernel', function () {
           ${lexerSource}
 
           return lexer;
-        `, "Line 1387");
+        `, "Line 1386");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1411,7 +1410,7 @@ describe('Lexer Kernel', function () {
               lexer, 
               yylex
             };`);
-        let lexer = exec(lexerSource, "Line 1414");
+        let lexer = exec(lexerSource, "Line 1413");
         lexer.lexer.setInput(input);
 
         // two ways to access `lex()`:
@@ -2088,7 +2087,7 @@ describe('Lexer Kernel', function () {
         let input = 'xyz ?';
 
         let counter = 0;
-        let c1, c2;
+        let c1, c2, c3;
 
         let lexer = new RegExpLexer(dict);
         lexer.setInput(input, {
@@ -2097,8 +2096,9 @@ describe('Lexer Kernel', function () {
                     counter++;
                     assert.ok(hash.lexer);
                     // eat two more characters
-                    c1 = hash.lexer.input();
-                    c2 = hash.lexer.input();
+                    c1 = hash.text;
+                    c2 = this.yytext;
+                    c3 = hash.lexer.input();
                     return 'alt';
                 }
             }
@@ -2107,13 +2107,15 @@ describe('Lexer Kernel', function () {
         assert.equal(lexer.yytext, 'x');
         assert.equal(lexer.lex(), 'alt');
         assert.equal(counter, 1);
-        assert.equal(c1, 'y');
-        assert.equal(c2, 'z');
+        assert.equal(c1, '');
+        assert.equal(c2, 'y');
+        assert.equal(c3, 'z');
         assert.equal(lexer.yytext, 'yz');
         assert.equal(lexer.lex(), 'alt');
         assert.equal(counter, 2);
-        assert.equal(c1, ' ');
-        assert.equal(c2, '?');
+        assert.equal(c1, '');
+        assert.equal(c2, ' ');
+        assert.equal(c3, '?');
         assert.equal(lexer.yytext, ' ?');
         assert.equal(lexer.lex(), lexer.EOF);
         assert.equal(lexer.yytext, '');
@@ -3669,41 +3671,35 @@ describe('Test Lexer Grammars', function () {
                     console.error("parseError: ", str);
 
                     // augment the returned value when possible:
-                    if (hash.lexerWillNeedToForwardCursor) {
-                        // advance cursor already: do what the lexer would otherwise be doing
-                        // right after we returned to caller from here:
-                        this.input();
-                    }
-                    if (!hash.isLexerBacktrackingNotSupportedError) {
-                        // WARNING: it may appear there is no need for shallow copy as a new hash 
-                        // is created for every parseError() call; HOWEVER, every hash instance is
-                        // tracked in an error queue, which will be cleaned up when the parser
-                        // (or userland code) invokes the `cleanupAfterLex()` API.
-                        const rv = Object.assign({}, hash);
-                        if (rv.yy) {
-                            // shallow copy to keep (most of) current internal lexer state intact:
-                            rv.yy = Object.assign({}, rv.yy);
-                        }
-                        if (rv.loc) {
-                            rv.loc = Object.assign({}, rv.loc);
-                            rv.loc.range = rv.loc.range.slice();
-                        }
 
-                        rv.errorDiag = {
-                            inputPos: this._input ? this._input.length : -1,
-                            yytext: this.yytext,
-                            yyleng: this.yyleng,
-                            matches: this.matches,
-                            activeCondition: this.topState(),
-                            conditionStackDepth: this.conditionStack.length,
-                        };
-
-                        //if (hash.yyErrorInvoked) ... 
-                        
-                        // we dump yytext in the token stream, so we can use that to dump a little
-                        // more info for comparison & diagnostics:
-                        this.yytext = rv;
+                    // WARNING: it may appear there is no need for shallow copy as a new hash 
+                    // is created for every parseError() call; HOWEVER, every hash instance is
+                    // tracked in an error queue, which will be cleaned up when the parser
+                    // (or userland code) invokes the `cleanupAfterLex()` API.
+                    const rv = Object.assign({}, hash);
+                    if (rv.yy) {
+                        // shallow copy to keep (most of) current internal lexer state intact:
+                        rv.yy = Object.assign({}, rv.yy);
                     }
+                    if (rv.loc) {
+                        rv.loc = Object.assign({}, rv.loc);
+                        rv.loc.range = rv.loc.range.slice();
+                    }
+
+                    rv.errorDiag = {
+                        inputPos: this._input ? this._input.length : -1,
+                        yytext: this.yytext,
+                        yyleng: this.yyleng,
+                        matches: this.matches,
+                        activeCondition: this.topState(),
+                        conditionStackDepth: this.conditionStack.length,
+                    };
+
+                    //if (hash.yyErrorInvoked) ... 
+                    
+                    // we dump yytext in the token stream, so we can use that to dump a little
+                    // more info for comparison & diagnostics:
+                    this.yytext = rv;
 
                     return -42; // this.ERROR;
                 }
