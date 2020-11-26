@@ -1,5 +1,5 @@
 
-                    
+
 const lexer = {
 /* JISON-LEX-ANALYTICS-REPORT */
 EOF: 1,
@@ -166,22 +166,20 @@ EOF: 1,
      * @public
      * @this {RegExpLexer}
      */
-    cleanupAfterLex: function lexer_cleanupAfterLex(do_not_nuke_errorinfos) {
+    cleanupAfterLex: function lexer_cleanupAfterLex() {
         // prevent lingering circular references from causing memory leaks:
         this.setInput('', {});
 
         // nuke the error hash info instances created during this run.
         // Userland code must COPY any data/references
         // in the error hash instance(s) it is more permanently interested in.
-        if (!do_not_nuke_errorinfos) {
-            for (let i = this.__error_infos.length - 1; i >= 0; i--) {
-                let el = this.__error_infos[i];
-                if (el && typeof el.destroy === 'function') {
-                    el.destroy();
-                }
+        for (let i = this.__error_infos.length - 1; i >= 0; i--) {
+            let el = this.__error_infos[i];
+            if (el && typeof el.destroy === 'function') {
+                el.destroy();
             }
-            this.__error_infos.length = 0;
         }
+        this.__error_infos.length = 0;
 
         return this;
     },
@@ -226,31 +224,31 @@ EOF: 1,
         // including expansion work to be done to go from a loaded
         // lexer to a usable lexer:
         if (!this.__decompressed) {
-          // step 1: decompress the regex list:
+            // step 1: decompress the regex list:
             let rules = this.rules;
-            for (var i = 0, len = rules.length; i < len; i++) {
-                var rule_re = rules[i];
+            for (let i = 0, len = rules.length; i < len; i++) {
+                let rule_re = rules[i];
 
-            // compression: is the RE an xref to another RE slot in the rules[] table?
+                // compression: is the RE an xref to another RE slot in the rules[] table?
                 if (typeof rule_re === 'number') {
                     rules[i] = rules[rule_re];
                 }
             }
 
-          // step 2: unfold the conditions[] set to make these ready for use:
+            // step 2: unfold the conditions[] set to make these ready for use:
             let conditions = this.conditions;
             for (let k in conditions) {
                 let spec = conditions[k];
 
                 let rule_ids = spec.rules;
 
-                var len = rule_ids.length;
+                let len = rule_ids.length;
                 let rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
                 let rule_new_ids = new Array(len + 1);
 
-                for (var i = 0; i < len; i++) {
+                for (let i = 0; i < len; i++) {
                     let idx = rule_ids[i];
-                    var rule_re = rules[idx];
+                    let rule_re = rules[idx];
                     rule_regexes[i + 1] = rule_re;
                     rule_new_ids[i + 1] = idx;
                 }
@@ -1133,7 +1131,13 @@ EOF: 1,
             let conditionStackDepth = this.conditionStack.length;
 
             let token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
-            if (token === this.ERROR) {
+            //if (token === this.ERROR) {
+            //    ^^^^^^^^^^^^^^^^^^^^ WARNING: no matter what token the error handler produced, 
+            //                         it MUST move the cursor forward or you'ld end up in 
+            //                         an infinite lex loop, unless one or more of the following 
+            //                         conditions was changed, so as to change the internal lexer 
+            //                         state and thus enable it to produce a different token:
+            //                         
                 // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
                 // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
                 // has not consumed/modified any pending input or changed state in the error handler:
@@ -1147,7 +1151,7 @@ EOF: 1,
                 ) {
                     this.input();
                 }
-            }
+            //}
             return token;
         }
     },
@@ -1391,14 +1395,14 @@ EOF: 1,
 },
     JisonLexerError: JisonLexerError,
     performAction: function lexer__performAction(yy, yyrulenumber, YY_START) {
-            var yy_ = this;
+            const yy_ = this;
 
             // Included by Jison: includes/with-includes.prelude1.js:
 
 // ................. include #1
 
 // End Of Include by Jison: includes/with-includes.prelude1.js
-var YYSTATE = YY_START;
+const YYSTATE = YY_START;
 switch(yyrulenumber) {
 case 0 : 
 /*! Conditions:: INITIAL */ 
@@ -1472,10 +1476,10 @@ default:
 };
 ;
 
-                    //=============================================================================
-                    //                     JISON-LEX OPTIONS:
+//=============================================================================
+//                     JISON-LEX OPTIONS:
 
-                    {
+const lexerSpecConglomerate = {
   lexerActionsUseYYLENG: '???',
   lexerActionsUseYYLINENO: '???',
   lexerActionsUseYYTEXT: '???',
@@ -1545,7 +1549,7 @@ return 'NAT'
 
 // Included by Jison: includes/with-includes.main.js:
 
-parser.main = function (args) {
+lexer.main = function (args) {
     if (!args[1]) {
       console.log('Usage: ' + args[0] + ' FILE');
       process.exit(1);
@@ -1563,11 +1567,11 @@ parser.main = function (args) {
 
     function process_one_line(source) {
       try {
-        var rv = parser.parse(source);
+        var rv = lexer.parse(source);
 
         process.stdout.write(JSON.stringify(rv, null, 2) + '\\n');
       } catch (ex) {
-        process.stdout.write("Parse error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input:\\n" + source + '\\n');
+        process.stdout.write("Lexing error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input:\\n" + source + '\\n');
       }
     }
 
@@ -1602,12 +1606,12 @@ parser.main = function (args) {
     } else {
       try {
         var source = require('fs').readFileSync(require('path').normalize(args[1]), 'utf8');
-        var rv = parser.parse(source);
+        var rv = lexer.parse(source);
 
         process.stdout.write(JSON.stringify(rv, null, 2));
         return +rv || 0;
       } catch (ex) {
-        process.stdout.write("Parse error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input file:\\n" + args[1]);
+        process.stdout.write("Lexing error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input file:\\n" + args[1]);
         return 66;
       }
     }
@@ -1650,13 +1654,37 @@ parser.main = function (args) {
 
 // End Of Include by Jison: includes/with-includes.prelude1.js`,
   },
+  codeSections: [
+    {
+      qualifier: 'required',
+      include: `// Included by Jison: includes/with-includes.prelude.top.js:
+
+// .................  include TOP
+
+// End Of Include by Jison: includes/with-includes.prelude.top.js`,
+    },
+    {
+      qualifier: 'init',
+      include: `// Included by Jison: includes/with-includes.prelude.init.js:
+
+// .................  include INIT
+
+// End Of Include by Jison: includes/with-includes.prelude.init.js`,
+    },
+  ],
+  importDecls: [],
+  unknownDecls: [],
   options: {
     moduleType: 'commonjs',
     debug: false,
     enableDebugLogs: false,
     json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
     dumpSourceCodeOnFailure: true,
     throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
     defaultModuleName: 'lexer',
     xregexp: false,
     lexerErrorsAreRecoverable: false,
@@ -1665,12 +1693,12 @@ parser.main = function (args) {
     ranges: true,
     trackPosition: true,
     caseInsensitive: false,
-    exportSourceCode: false,
+    exportSourceCode: {
+      enabled: false,
+    },
     exportAST: false,
     prettyCfg: true,
-    noMain: true,
   },
-  moduleType: 'commonjs',
   conditions: {
     INITIAL: {
       rules: [
@@ -1686,14 +1714,14 @@ parser.main = function (args) {
     },
   },
   performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
-            var yy_ = this;
+            const yy_ = this;
 
             // Included by Jison: includes/with-includes.prelude1.js:
 
 // ................. include #1
 
 // End Of Include by Jison: includes/with-includes.prelude1.js
-var YYSTATE = YY_START;
+const YYSTATE = YY_START;
 switch(yyrulenumber) {
 case 0 : 
 /*! Conditions:: INITIAL */ 
@@ -1865,7 +1893,7 @@ default:
 
 // Included by Jison: includes/with-includes.main.js:
 
-parser.main = function (args) {
+lexer.main = function (args) {
     if (!args[1]) {
       console.log('Usage: ' + args[0] + ' FILE');
       process.exit(1);
@@ -1883,11 +1911,11 @@ parser.main = function (args) {
 
     function process_one_line(source) {
       try {
-        var rv = parser.parse(source);
+        var rv = lexer.parse(source);
 
         process.stdout.write(JSON.stringify(rv, null, 2) + '\\n');
       } catch (ex) {
-        process.stdout.write("Parse error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input:\\n" + source + '\\n');
+        process.stdout.write("Lexing error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input:\\n" + source + '\\n');
       }
     }
 
@@ -1922,12 +1950,12 @@ parser.main = function (args) {
     } else {
       try {
         var source = require('fs').readFileSync(require('path').normalize(args[1]), 'utf8');
-        var rv = parser.parse(source);
+        var rv = lexer.parse(source);
 
         process.stdout.write(JSON.stringify(rv, null, 2));
         return +rv || 0;
       } catch (ex) {
-        process.stdout.write("Parse error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input file:\\n" + args[1]);
+        process.stdout.write("Lexing error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input file:\\n" + args[1]);
         return 66;
       }
     }
@@ -1938,4 +1966,3 @@ parser.main = function (args) {
   is_custom_lexer: false,
 }
 
-                

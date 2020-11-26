@@ -88,6 +88,7 @@ const lexerSpecConglomerate = {
     moduleMainImports: null,
     dumpSourceCodeOnFailure: true,
     throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
     defaultModuleName: 'lexer',
     xregexp: false,
     lexerErrorsAreRecoverable: false,

@@ -1,5 +1,5 @@
 
-                    
+
 // When you set up a custom lexer, this is the minimum example for one:
     // 
     // your lexer class/object must provide these interface methods and constants at least:
@@ -39,10 +39,10 @@
     };
 ;
 
-                    //=============================================================================
-                    //                     JISON-LEX OPTIONS:
+//=============================================================================
+//                     JISON-LEX OPTIONS:
 
-                    {
+const lexerSpecConglomerate = {
   lexerActionsUseYYLENG: '???',
   lexerActionsUseYYLINENO: '???',
   lexerActionsUseYYTEXT: '???',
@@ -60,7 +60,7 @@
     rules: [],
     moduleInclude: `// Included by Jison: includes/with-includes.main.js:
 
-parser.main = function (args) {
+lexer.main = function (args) {
     if (!args[1]) {
       console.log('Usage: ' + args[0] + ' FILE');
       process.exit(1);
@@ -78,11 +78,11 @@ parser.main = function (args) {
 
     function process_one_line(source) {
       try {
-        var rv = parser.parse(source);
+        var rv = lexer.parse(source);
 
         process.stdout.write(JSON.stringify(rv, null, 2) + '\\n');
       } catch (ex) {
-        process.stdout.write("Parse error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input:\\n" + source + '\\n');
+        process.stdout.write("Lexing error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input:\\n" + source + '\\n');
       }
     }
 
@@ -117,12 +117,12 @@ parser.main = function (args) {
     } else {
       try {
         var source = require('fs').readFileSync(require('path').normalize(args[1]), 'utf8');
-        var rv = parser.parse(source);
+        var rv = lexer.parse(source);
 
         process.stdout.write(JSON.stringify(rv, null, 2));
         return +rv || 0;
       } catch (ex) {
-        process.stdout.write("Parse error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input file:\\n" + args[1]);
+        process.stdout.write("Lexing error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input file:\\n" + args[1]);
         return 66;
       }
     }
@@ -175,13 +175,20 @@ parser.main = function (args) {
         } 
     }`,
   },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
   options: {
     moduleType: 'commonjs',
     debug: false,
     enableDebugLogs: false,
     json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
     dumpSourceCodeOnFailure: true,
     throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
     defaultModuleName: 'lexer',
     xregexp: false,
     lexerErrorsAreRecoverable: false,
@@ -190,12 +197,12 @@ parser.main = function (args) {
     ranges: true,
     trackPosition: true,
     caseInsensitive: false,
-    exportSourceCode: false,
+    exportSourceCode: {
+      enabled: false,
+    },
     exportAST: false,
     prettyCfg: true,
-    noMain: true,
   },
-  moduleType: 'commonjs',
   conditions: {
     INITIAL: {
       rules: [],
@@ -203,7 +210,7 @@ parser.main = function (args) {
     },
   },
   performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
-            var yy_ = this;
+            const yy_ = this;
 
             // When you set up a custom lexer, this is the minimum example for one:
     // 
@@ -242,7 +249,7 @@ parser.main = function (args) {
             input_offset = 0; 
         } 
     }
-var YYSTATE = YY_START;
+const YYSTATE = YY_START;
 /* no rules ==> no rule SWITCH! */
         }`,
   caseHelperInclude: `{
@@ -294,7 +301,7 @@ var YYSTATE = YY_START;
     }`,
   moduleInclude: `// Included by Jison: includes/with-includes.main.js:
 
-parser.main = function (args) {
+lexer.main = function (args) {
     if (!args[1]) {
       console.log('Usage: ' + args[0] + ' FILE');
       process.exit(1);
@@ -312,11 +319,11 @@ parser.main = function (args) {
 
     function process_one_line(source) {
       try {
-        var rv = parser.parse(source);
+        var rv = lexer.parse(source);
 
         process.stdout.write(JSON.stringify(rv, null, 2) + '\\n');
       } catch (ex) {
-        process.stdout.write("Parse error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input:\\n" + source + '\\n');
+        process.stdout.write("Lexing error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input:\\n" + source + '\\n');
       }
     }
 
@@ -351,12 +358,12 @@ parser.main = function (args) {
     } else {
       try {
         var source = require('fs').readFileSync(require('path').normalize(args[1]), 'utf8');
-        var rv = parser.parse(source);
+        var rv = lexer.parse(source);
 
         process.stdout.write(JSON.stringify(rv, null, 2));
         return +rv || 0;
       } catch (ex) {
-        process.stdout.write("Parse error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input file:\\n" + args[1]);
+        process.stdout.write("Lexing error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input file:\\n" + args[1]);
         return 66;
       }
     }
@@ -367,4 +374,3 @@ parser.main = function (args) {
   is_custom_lexer: true,
 }
 
-                

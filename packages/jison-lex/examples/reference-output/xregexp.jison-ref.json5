@@ -1,5 +1,4 @@
 [
-  8,
   {
     id: 'PI',
     token: 'PI',
@@ -133,6 +132,17 @@
         4,
         4,
       ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 9,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
     },
   },
 ]

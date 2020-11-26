@@ -64,11 +64,11 @@ done here.
 4: "B"   -> 'B'
 5: 
 
-    at Object.parseError (/lex-parser-cjs.js:7125:15)
-    at Object.yyError (/lex-parser-cjs.js:7315:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:4232:14)
-    at Object.parse (/lex-parser-cjs.js:8582:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12289:25)
+    at Object.parseError (/lex-parser-cjs.js:7138:15)
+    at Object.yyError (/lex-parser-cjs.js:7328:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4234:14)
+    at Object.parse (/lex-parser-cjs.js:8595:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12302:25)
     at Context.testEachParserExample (/all-tests.js:466:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)

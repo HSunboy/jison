@@ -5,64 +5,65 @@
   spec: `%%
 "["[^\\]]"]" %{{{{{
 return "%{..%}";
-}}}}}%
-a %{ return "A"; %}
+%}}}}}
+a %{ return "A"; %}}}}}
+b %{{{ return "A" + '%}'; %}}}
 
 `,
   err: {
     hash: {
-      errStr: `Lexical error on line 2: 
-Incorrectly terminated action code block. We're expecting the
-'%}}}}}' end marker to go with the given start marker.
-Regrettably, it does not exist in the remainder of the input.
+      errStr: `Lexical error on line 6: 
+unterminated string constant in lexer rule action block.
 
   Erroneous area:
-1: %%
-2: "["[^\\]]"]" %{{{{{
-^..............^^^^^^
 3: return "%{..%}";
-4: }}}}}%
+4: %}}}}}
+5: a %{ return "A"; %}}}}}
+6: b %{{{ return "A" + '%}'; %}}}
+^.........................^
+7: 
+8: 
 `,
       recoverable: false,
-      text: '%{{{{{',
+      text: "'",
       token: null,
-      line: 1,
+      line: 5,
     },
-    message: `Lexical error on line 2: 
-Incorrectly terminated action code block. We're expecting the
-'%}}}}}' end marker to go with the given start marker.
-Regrettably, it does not exist in the remainder of the input.
+    message: `Lexical error on line 6: 
+unterminated string constant in lexer rule action block.
 
   Erroneous area:
-1: %%
-2: "["[^\\]]"]" %{{{{{
-^..............^^^^^^
 3: return "%{..%}";
-4: }}}}}%
+4: %}}}}}
+5: a %{ return "A"; %}}}}}
+6: b %{{{ return "A" + '%}'; %}}}
+^.........................^
+7: 
+8: 
 `,
     name: 'JisonLexerError',
-    stack: `JisonLexerError: Lexical error on line 2: 
-Incorrectly terminated action code block. We're expecting the
-'%}}}}}' end marker to go with the given start marker.
-Regrettably, it does not exist in the remainder of the input.
+    stack: `JisonLexerError: Lexical error on line 6: 
+unterminated string constant in lexer rule action block.
 
   Erroneous area:
-1: %%
-2: "["[^\\]]"]" %{{{{{
-^..............^^^^^^
 3: return "%{..%}";
-4: }}}}}%
+4: %}}}}}
+5: a %{ return "A"; %}}}}}
+6: b %{{{ return "A" + '%}'; %}}}
+^.........................^
+7: 
+8: 
 
-    at Object.parseError (/lex-parser-cjs.js:7071:15)
-    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:9166:44)
-    at Object.yyError [as yyerror] (/lex-parser-cjs.js:9197:19)
-    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:10764:19)
-    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10102:38)
-    at Object.lexer_next [as next] (/lex-parser-cjs.js:10225:28)
-    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:10372:18)
-    at fastLex (/lex-parser-cjs.js:7666:27)
-    at Object.parse (/lex-parser-cjs.js:7840:30)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12235:25)
+    at Object.parseError (/lex-parser-cjs.js:7138:15)
+    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:9233:44)
+    at Object.yyError [as yyerror] (/lex-parser-cjs.js:9264:19)
+    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:11237:13)
+    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10169:38)
+    at Object.lexer_next [as next] (/lex-parser-cjs.js:10292:28)
+    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:10439:18)
+    at fastLex (/lex-parser-cjs.js:7733:27)
+    at Object.parse (/lex-parser-cjs.js:7907:30)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12302:25)
     at Context.testEachParserExample (/all-tests.js:466:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
@@ -103,34 +104,34 @@ Regrettably, it does not exist in the remainder of the input.
       hash: {
         errStr: null,
         exception: null,
-        text: '%{{{{{',
-        value: '%{{{{{',
+        text: "'",
+        value: "'",
         token: '"$accept"',
         token_id: 0,
-        line: 1,
+        line: 5,
         expected: null,
         recoverable: false,
-        state: 92,
+        state: 172,
         action: 2,
-        new_state: 92,
-        stack_pointer: 7,
+        new_state: 172,
+        stack_pointer: 8,
       },
       reentrant_call_depth: 1,
       error_infos_stack: [
         {
           errStr: null,
           exception: null,
-          text: '%{{{{{',
-          value: '%{{{{{',
+          text: "'",
+          value: "'",
           token: '"$accept"',
           token_id: 0,
-          line: 1,
+          line: 5,
           expected: null,
           recoverable: false,
-          state: 92,
+          state: 172,
           action: 2,
-          new_state: 92,
-          stack_pointer: 7,
+          new_state: 172,
+          stack_pointer: 8,
         },
       ],
       error_recovery_stack: [],
@@ -144,8 +145,9 @@ Regrettably, it does not exist in the remainder of the input.
   __original_input__: `%%
 "["[^\\]]"]" %{{{{{
 return "%{..%}";
-}}}}}%
-a %{ return "A"; %}
+%}}}}}
+a %{ return "A"; %}}}}}
+b %{{{ return "A" + '%}'; %}}}
 
 `,
 }

@@ -1,5 +1,4 @@
 [
-  6,
   {
     id: 'x',
     token: 'x',
@@ -103,6 +102,17 @@
         5,
         5,
       ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 7,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
     },
   },
 ]

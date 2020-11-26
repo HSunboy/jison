@@ -1,5 +1,4 @@
 [
-  8,
   {
     id: 'a',
     token: 'a',
@@ -35,5 +34,16 @@
   {
     id: 1,
     token: 'EOF',
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 9,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
+    },
   },
 ]

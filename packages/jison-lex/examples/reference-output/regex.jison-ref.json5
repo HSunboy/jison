@@ -1,5 +1,4 @@
 [
-  11,
   {
     id: '(',
     token: '(',
@@ -178,6 +177,17 @@
         7,
         7,
       ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 12,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
     },
   },
 ]
