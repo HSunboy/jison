@@ -824,10 +824,11 @@ id_list
 //     ;
 
 grammar
-    : optional_action_header_block production_list
+    : production_list
         {
-            $$ = $optional_action_header_block;
-            $$.grammar = $production_list;
+            $$ = {
+                grammar: $production_list
+            };
         }
     ;
 
@@ -835,19 +836,33 @@ production_list
     : production_list production
         {
             $$ = $production_list;
-            if ($production[0] in $$) {
-                $$[$production[0]] = $$[$production[0]].concat($production[1]);
-            } else {
-                $$[$production[0]] = $production[1];
+            if ($production) {
+                if ($production[0] in $$) {
+                    $$[$production[0]] = $$[$production[0]].concat($production[1]);
+                } else {
+                    $$[$production[0]] = $production[1];
+                }
             }
         }
     | production
-        { $$ = {}; $$[$production[0]] = $production[1]; }
+        { 
+            $$ = {}; 
+            if ($production) {
+                $$[$production[0]] = $production[1];
+            }
+        }
     ;
 
 production
     : production_id handle_list ';'
-        {$$ = [$production_id, $handle_list];}
+        {
+            if ($production_id) {
+                $$ = [$production_id, $handle_list];
+            } else {
+                // ignore tail of erroneous production
+                $$ = null;
+            }
+        }
     | production_id error ';'
         {
             // TODO ...
@@ -860,6 +875,7 @@ production
                   Technical error report:
                 ${$error.errStr}
             `);
+            $$ = null;
         }
     | production_id error
         {
@@ -873,6 +889,7 @@ production
                   Technical error report:
                 ${$error.errStr}
             `);
+            $$ = null;
         }
     //
     // may be a *parser action header code section*, e.g.
@@ -980,13 +997,13 @@ production
     ;
 
 production_id
-    : id optional_production_description ':'
+    : id production_description?[descr] ':'
         {
             $$ = $id;
 
             // TODO: carry rule description support into the parser generator...
         }
-    | id optional_production_description error
+    | id production_description?[descr] error
         {
             // TODO ...
             yyerror(rmCommonWS`
@@ -1001,8 +1018,9 @@ production_id
                   Technical error report:
                 ${$error.errStr}
             `);
+            $$ = null;
         }
-    | id optional_production_description ARROW_ACTION
+    | id production_description?[descr] ARROW_ACTION
         {
             // TODO ...
             yyerror(rmCommonWS`
@@ -1020,13 +1038,13 @@ production_id
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@ARROW_ACTION, @id)}
             `);
+            $$ = null;
         }
     ;
 
-optional_production_description
+production_description
     : STRING_LIT
         { $$ = $STRING_LIT; }
-    | %epsilon
     ;
 
 handle_list
@@ -1038,19 +1056,6 @@ handle_list
     | handle_action
         {
             $$ = [$handle_action];
-        }
-    | handle_list '|' error
-        {
-            // TODO ...
-            yyerror(rmCommonWS`
-                rule alternative production declaration error?
-
-                  Erroneous area:
-                ${yylexer.prettyPrintRange(@error, @handle_list)}
-
-                  Technical error report:
-                ${$error.errStr}
-            `);
         }
     //
     // Recognize a common mistake

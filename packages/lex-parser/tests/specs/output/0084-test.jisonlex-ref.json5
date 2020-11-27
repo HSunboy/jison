@@ -96,11 +96,11 @@ Parse error on line 8:
 -^
 Unexpected "ACTION_BODY"
 
-    at Object.parseError (/lex-parser-cjs.js:7138:15)
-    at Object.yyError (/lex-parser-cjs.js:7328:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:4187:18)
-    at Object.parse (/lex-parser-cjs.js:8392:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12302:25)
+    at Object.parseError (/lex-parser-cjs.js:7139:15)
+    at Object.yyError (/lex-parser-cjs.js:7329:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4188:18)
+    at Object.parse (/lex-parser-cjs.js:8393:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12303:25)
     at Context.testEachParserExample (/all-tests.js:483:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)

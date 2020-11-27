@@ -3,7 +3,7 @@
     "id": -1,
     "token": null,
     "fail": 1,
-    "err": "ERROR:ReferenceError::PROGRAM is not defined::ReferenceError: PROGRAM is not defined\n    at Object.lexer__performAction [as performAction] (pascal.js:2042:9)\n    at Object.lexer_test_match [as test_match] (pascal.js:1438:38)\n    at Object.lexer_next [as next] (pascal.js:1561:28)\n    at Object.lexer_lex [as lex] (pascal.js:1646:18)\n    at main_work_function (pascal.js:2594:27)\n    at Object.__jisonlexer_default_main__ [as main] (pascal.js:2688:22)\n    at Object.<anonymous> (pascal.js:2750:13)\n    at Module._compile (loader.js:1137:30)\n    at Object.Module._extensions..js (loader.js:1157:10)\n    at Module.load (loader.js:985:32)"
+    "err": "ERROR:ReferenceError::PROGRAM is not defined::ReferenceError: PROGRAM is not defined\n    at Object.lexer__performAction [as performAction] (pascal.js:2078:9)\n    at Object.lexer_test_match [as test_match] (pascal.js:1437:38)\n    at Object.lexer_next [as next] (pascal.js:1560:28)\n    at Object.lexer_lex [as lex] (pascal.js:1682:18)\n    at main_work_function (pascal.js:2630:27)\n    at Object.__jisonlexer_default_main__ [as main] (pascal.js:2724:22)\n    at Object.<anonymous> (pascal.js:2786:13)\n    at Module._compile (loader.js:1137:30)\n    at Object.Module._extensions..js (loader.js:1157:10)\n    at Module.load (loader.js:985:32)"
   },
   {
     "id": -2,

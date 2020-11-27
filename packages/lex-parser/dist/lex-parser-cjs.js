@@ -1194,6 +1194,7 @@ function prettyPrintAST(ast, options) {
 //
 // Return either the parsed AST (object) or an error message (string).
 function checkActionBlock(src, yylloc, options) {
+    options = options || {};
     if (options.doNotTestCompile) {
         return false;        // simply accept everything...
     }
@@ -1202,7 +1203,7 @@ function checkActionBlock(src, yylloc, options) {
     if (!src.trim()) {
         return false;
     }
-    
+
     // make sure reasonable line numbers, etc. are reported in any
     // potential parse errors by pushing the source code down:
     if (yylloc && yylloc.first_line > 0) {
@@ -3081,11 +3082,11 @@ case 9:
         // macro:
         if (yyvstack[yysp - 2].toUpperCase() !== yyvstack[yysp - 2]) {
             yyparser.yyError(rmCommonWS$2`
-              Cannot use name '${$MACRO_NAME}' as a macro name
+              Cannot use name "${$MACRO_NAME}" as a macro name
               as it clashes with the same XRegExp "\\p{..}" Unicode \'General Category\'
               Property name.
               Use all-uppercase macro names, e.g. name your macro
-              '${$MACRO_NAME.toUpperCase()}' to work around this issue
+              "${$MACRO_NAME.toUpperCase()}" to work around this issue
               or give your offending macro a different name.
     
                 Erroneous area:
