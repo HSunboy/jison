@@ -415,7 +415,7 @@ yyerror(rmCommonWS\`
         }
     `, options);
 
-        fs.writeFileSync(__dirname + "/parseCodeChunkAST-0001.json5", JSON5.stringify(ast, null, 2), 'utf8');
+        //fs.writeFileSync(__dirname + "/parseCodeChunkAST-0001.json5", JSON5.stringify(ast, null, 2), 'utf8');
 
         let rv = helpers.prettyPrintAST(ast, options);
         let sollwert_src = rmCommonWS`
@@ -457,7 +457,7 @@ yyerror(rmCommonWS\`
 
         let ast = helpers.parseCodeChunkToAST(src, options);
 
-        fs.writeFileSync(__dirname + "/parseCodeChunkAST-0002.json5", JSON5.stringify(ast, null, 2), 'utf8');
+        //fs.writeFileSync(__dirname + "/parseCodeChunkAST-0002.json5", JSON5.stringify(ast, null, 2), 'utf8');
 
         let rv = helpers.prettyPrintAST(ast, options);
         let sollwert_src = src;
@@ -496,7 +496,7 @@ yyerror(rmCommonWS\`
 
         let ast = helpers.parseCodeChunkToAST(src, options);
 
-        fs.writeFileSync(__dirname + "/parseCodeChunkAST-0003.json5", JSON5.stringify(ast, null, 2), 'utf8');
+        //fs.writeFileSync(__dirname + "/parseCodeChunkAST-0003.json5", JSON5.stringify(ast, null, 2), 'utf8');
 
         let rv = helpers.prettyPrintAST(ast, options);
         let sollwert_src = src;
