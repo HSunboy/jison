@@ -170,7 +170,12 @@ testset = testset.map(function (filepath) {
 .filter(function (info) {
     return !!info;
 });
-console.error({ testset });
+
+
+if (0) {
+    console.error({ testset });
+}
+
 
 function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key, err) {
     // and produce an alternative structure to JSON-ify:

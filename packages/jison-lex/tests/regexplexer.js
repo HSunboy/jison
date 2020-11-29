@@ -3585,21 +3585,26 @@ testset = testset.map(function (filepath) {
 .filter(function (info) {
     return !!info;
 });
-console.error(JSON5.stringify(testset, {
-    replacer: function (key, value) {
-        if (typeof value === 'string') {
-            let a = value.split('\n');
-            if (value.length > 500 || a.length > 5) {
-                return `[...string (length: ${value.length}, lines: ${a.length}) ...]`;
+
+
+if (0) {
+    console.error(JSON5.stringify(testset, {
+        replacer: function (key, value) {
+            if (typeof value === 'string') {
+                let a = value.split('\n');
+                if (value.length > 500 || a.length > 5) {
+                    return `[...string (length: ${value.length}, lines: ${a.length}) ...]`;
+                }
             }
-        }
-        if (/^(?:ref|spec|grammar)$/.test(key) && typeof value === 'object') {
-            return '[... JSON ...]';
-        }
-        return value;
-    },
-    space: 2,
-}));
+            if (/^(?:ref|spec|grammar)$/.test(key) && typeof value === 'object') {
+                return '[... JSON ...]';
+            }
+            return value;
+        },
+        space: 2,
+    }));
+}
+
 
 function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key, err) {
     // and produce an alternative structure to JSON-ify:
