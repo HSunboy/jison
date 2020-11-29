@@ -1102,7 +1102,34 @@ function generateMapper4JisonGrammarIdentifiers(input) {
 }
 
 
+// Reduce the RECAST AST in total size; the `loc` nodes contain a `tokens` set each,
+// which carries references to the parsed tokens that are contained within that `loc`
+// range. 
+// Tests have shown that the generated output is the samee when I nuke every `loc.tokens`
+// in the TREE.
+// It also turned out in the tests that the root object has a `tokens` array itself,
+// which is of course faster to traverse than the often rather deep AST (tree), 
+// so we've chosen to attack that one instead, as it seemed those tokens were just
+// more references to the same token objects as contained in `loc.tokens[]` for those
+// tree nodes of various names and types.
+// 
+// So now we just go through the root.tokens[] array and nuke all its members' 
+// `loc` attributes and everything is hunky-dory with the generated output. 
+// 
+function stripAST(ast) {
+    if (!ast) return;
 
+    let tokens = ast.tokens;
+    for (let i = 0, len = tokens.length; i < len; i++) {
+        let node = tokens[i];
+        // if (node.loc && node.loc.tokens) {
+        //     delete node.loc.tokens;
+        // }
+        if (node.loc) {
+            delete node.loc;
+        }
+    }
+}
 
 
 
@@ -1110,11 +1137,17 @@ function generateMapper4JisonGrammarIdentifiers(input) {
 
 
 function parseCodeChunkToAST(src, options) {
+    options = options || {};
+    if (options.doNotTestCompile) {
+        return false;        // simply accept everything...
+    }
+
     src = src
     .replace(/@/g, '\uFFDA')
     .replace(/#/g, '\uFFDB')
     ;
     const ast = recast.parse(src);
+    stripAST(ast);
     return ast;
 }
 
@@ -1202,7 +1235,7 @@ function checkActionBlock(src, yylloc, options) {
     }
 
     try {
-        let rv = parseCodeChunkToAST(src, options);
+        void parseCodeChunkToAST(src, options);
         return false;
     } catch (ex) {
         return ex.message || 'code snippet cannot be parsed';

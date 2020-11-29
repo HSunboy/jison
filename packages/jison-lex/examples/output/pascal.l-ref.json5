@@ -1,17 +1,17 @@
 [
-  0,
-  -1,
   {
+    id: -1,
+    token: null,
     fail: 1,
     err: {
-      name: 'ReferenceError',
       message: 'PROGRAM is not defined',
+      name: 'ReferenceError',
       stack: `ReferenceError: PROGRAM is not defined
-    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js:13819:31)
-    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js:13819:31)
-    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:13819:31)
-    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:13819:31)
-    at Context.testEachLexerExample (/regexplexer.js:3650:37)
+    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js:14565:31)
+    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js:14565:31)
+    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:14565:31)
+    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:14565:31)
+    at Context.testEachLexerExample (/regexplexer.js:3732:37)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -26,6 +26,17 @@
     at next (/runner.js:510:10)
     at Immediate._onImmediate (/runner.js:572:5)
     at processImmediate (/timers.js:456:21)`,
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 1,
+      EOFTokenCount: 0,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 1,
     },
   },
 ]

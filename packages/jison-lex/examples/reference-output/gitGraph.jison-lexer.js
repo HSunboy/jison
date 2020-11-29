@@ -150,6 +150,7 @@ EOF: 1,
         if (args.length) {
             p.extra_error_attributes = args;
         }
+        p.yyErrorInvoked = true;   // so parseError() user code can easily recognize it is invoked from any yyerror() in the spec action code chunks
 
         return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
     },
@@ -517,6 +518,7 @@ EOF: 1,
                 lineno_msg += ' on line ' + (this.yylineno + 1);
             }
             const p = this.constructLexErrorInfo(lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).', false);
+            p.isLexerBacktrackingNotSupportedError = true;            // when this is true, you 'know' the produced error token will be queued.
             this._signaled_error_token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
         }
         return this;
@@ -1130,7 +1132,27 @@ EOF: 1,
             let activeCondition = this.topState();
             let conditionStackDepth = this.conditionStack.length;
 
-            let token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
+            // when this flag is set in your parseError() `hash`, you 'know' you cannot manipute `yytext` to be anything but 
+            // a string value, unless
+            // - you either get to experience a lexer crash once it invokes .input() with your manipulated `yytext` object,
+            // - or you must forward the lex cursor yourself by invoking `yy.input()` or equivalent, *before* you go and
+            //   tweak that `yytext`.
+            p.lexerHasAlreadyForwardedCursorBy1 = (!this.matches);
+
+            // Simplify use of (advanced) custom parseError() handlers: every time we encounter an error,
+            // which HAS NOT consumed any input yet (thus causing an infinite lexer loop unless we take special action),
+            // we FIRST consume ONE character of input, BEFORE we call parseError().
+            // 
+            // This implies that the parseError() now can call `unput(this.yytext)` if it wants to only change lexer
+            // state via popState/pushState, but otherwise this would make for a cleaner parseError() implementation
+            // as there's no conditional check for `hash.lexerHasAlreadyForwardedCursorBy1` needed in there any more.
+            // 
+            // Since that flag is new as of jison-gho 0.7.0, as is this new consume1+parseError() behaviour, only
+            // sophisticated userland parseError() methods will need to be reviewed.
+            // Haven't found any of those in the (Open Source) wild today, so this should be safe to change...
+
+            // *** CONSUME 1 ***:
+                        
             //if (token === this.ERROR) {
             //    ^^^^^^^^^^^^^^^^^^^^ WARNING: no matter what token the error handler produced, 
             //                         it MUST move the cursor forward or you'ld end up in 
@@ -1152,7 +1174,18 @@ EOF: 1,
                     this.input();
                 }
             //}
-            return token;
+
+            // *** PARSE-ERROR ***:
+            // 
+            // Note:
+            // userland code in there may `unput()` what was done, after checking the `hash.lexerHasAlreadyForwardedCursorBy1` flag.
+            // Caveat emptor! :: When you simply `unput()` the `yytext` without at least changing the lexer condition state 
+            // via popState/pushState, you WILL end up with an infinite lexer loop. 
+            // 
+            // This kernel code has been coded to prevent this dangerous situation unless you specifically seek it out
+            // in your custom parseError handler.
+                        
+            return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
         }
     },
 

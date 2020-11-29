@@ -1,5 +1,4 @@
 [
-  9,
   {
     id: 'CONTENT',
     token: 'CONTENT',
@@ -148,6 +147,17 @@
         5,
         5,
       ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 10,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
     },
   },
 ]
