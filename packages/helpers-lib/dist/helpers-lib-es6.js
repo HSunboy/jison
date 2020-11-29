@@ -24,7 +24,7 @@ function startsWith(src, searchString) {
 // should also be removed from all subsequent lines in the same template string.
 //
 // See also: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Template_literals
-function rmCommonWS$1(strings, ...values) {
+function rmCommonWS(strings, ...values) {
     // As `strings[]` is an array of strings, each potentially consisting
     // of multiple lines, followed by one(1) value, we have to split each
     // individual string into lines to keep that bit of information intact.
@@ -1222,7 +1222,7 @@ function checkActionBlock(src, yylloc, options) {
     }
 
     // empty action code is A-okay all the time:
-    if (!src.trim()) {
+    if (!src || !src.trim()) {
         return false;
     }
 
@@ -2023,6 +2023,7 @@ function findSymbolTable(o, sectionName) {
 function extractSymbolTableFromFile(filepath, sectionName) {
     let source;
     let import_error;
+    let predefined_symbols;
 
     sectionName = sectionName || 'symbols_';
 
@@ -2056,9 +2057,9 @@ function extractSymbolTableFromFile(filepath, sectionName) {
 
             // attempt to read the file as a JISON-generated parser source instead:
             try {
-            	let re = new RegExp(`[\\r\\n]\\s*["']?${sectionName}["']?:\\s*(\\{[\\s\\S]*?\\}),?\\s*[\\r\\n]`);
+            	let re = new RegExp(`[\\r\\n](\\s*["']?${sectionName}["']?:\\s*\\{[\\s\\S]*?\\}),?\\s*[\\r\\n]`);
                 let m = re.exec(source);
-            	console.error("extractSymbolTableFromFile REGEX match:", {re, m});
+            	//console.error("extractSymbolTableFromFile REGEX match:", {re, m: m && m[1]});
                 if (m && m[1]) {
                     source = `
                         {
@@ -2114,7 +2115,7 @@ function extractSymbolTableFromFile(filepath, sectionName) {
 }
 
 var index = {
-    rmCommonWS: rmCommonWS$1,
+    rmCommonWS,
     camelCase,
     mkIdentifier,
     isLegalIdentifierInput,
