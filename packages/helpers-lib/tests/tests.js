@@ -6,6 +6,7 @@ const assert = require('chai').assert;
 // NodeJS doesn't support ES2015 import statements yet, so we must use the compiled/rollup-ed version instead:
 const helpers = require('../dist/helpers-lib-cjs');
 
+
 // TODO real tests
 
 describe('helpers API', function () {
@@ -761,6 +762,74 @@ yyerror(rmCommonWS\`
 
     it('checkActionBlock: **TBD**', function () {
         assert.ok(typeof helpers.checkActionBlock === 'function');
+
+        // argument robustness: can we deal with 'bad' args? 
+        // src=NULL should just say 'OK' to us.
+        assert.equal(helpers.checkActionBlock(null), false);
+        // src='' should be OK
+        assert.equal(helpers.checkActionBlock(''), false);
+        assert.equal(helpers.checkActionBlock('   '), false);
+        assert.equal(helpers.checkActionBlock('\n\n\n\n\n\n\n'), false);
+
+        // sample action code chunk to test-parse OK:
+        const src_ok = `
+            yyerror(rmCommonWS\`
+                Production for rule '\${$id}' is missing: arrows introduce action code in Jison.
+
+                Jison does not support rule production definition using arrows (->, =>, →) but expects
+                colons (:) instead, so maybe you intended this:
+
+                    \${$id} : \${$ARROW_ACTION}
+
+                while the user-defined action code block MAY be an arrow function, e.g.
+
+                    rule: id -> Math.min($id, 42);
+
+                  Erroneous area:
+                \${yylexer.prettyPrintRange(@ARROW_ACTION, @id)}
+            \`);
+
+            $$ = $handle_list;
+            $$.push([$handle_action, @handle_action, #handle_action, ##handle_action]);
+        `;
+        // API doesn't need anything but this attribute in `yylloc` so we don't provide anything else:
+        const yylloc = {
+            first_line: 50,
+        }
+        const options = {
+            doNotTestCompile: true,
+        }
+        assert.equal(helpers.checkActionBlock(src_ok), false);
+        assert.equal(helpers.checkActionBlock(src_ok, yylloc), false);
+        assert.equal(helpers.checkActionBlock(src_ok, yylloc, options), false);
+        assert.equal(helpers.checkActionBlock(src_ok, null, options), false);
+
+        const src_bad1 = `
+            yyerror(rmCommonWS\`
+                Production for rule '\${$id}' is missing: arrows introduce action code in Jison.
+
+                Jison does not support rule production definition using arrows (->, =>, →) but expects
+                colons (:) instead, so maybe you intended this:
+
+Missing } at end of next line:
+                    \${$id} : \${$ARROW_ACTION
+
+                while the user-defined action code block MAY be an arrow function, e.g.
+
+                    rule: id -> Math.min($id, 42);
+
+                  Erroneous area:
+                \${yylexer.prettyPrintRange(@ARROW_ACTION, @id)}
+            \`);
+
+            $$ = $handle_list;
+            $$.push([$handle_action, @handle_action, #handle_action, ##handle_action]);
+        `;
+
+        assert.equal(helpers.checkActionBlock(src_bad1), 'Line 9: Unexpected token ILLEGAL');
+        assert.equal(helpers.checkActionBlock(src_bad1, yylloc), 'Line 58: Unexpected token ILLEGAL');
+        assert.equal(helpers.checkActionBlock(src_bad1, yylloc, options), false);    // due to options.doNotTextCompile=true
+        assert.equal(helpers.checkActionBlock(src_bad1, null, options), false);      // due to options.doNotTextCompile=true
     });
 
     it('trimActionCode: **TBD**', function () {
@@ -790,6 +859,21 @@ yyerror(rmCommonWS\`
 
     it('extractSymbolTableFromFile: **TBD**', function () {
         assert.ok(typeof helpers.extractSymbolTableFromFile === 'function');
+
+        let table = helpers.extractSymbolTableFromFile(path.join(__dirname, '../../lex-parser/dist/lex-parser-cjs.js'));
+        assert.ok(table);
+        assert.equal(table.error, 2);
+        assert.equal(table.$end, 1);
+        assert.equal(table.$accept, 0);
+        assert.equal(typeof table.$, 'number');
+        assert.ok(table.$ > 2);
+        assert.ok(table.REGEX_SET_START > 2);
+
+        assert.throws(function () {
+            void helpers.extractSymbolTableFromFile('./lex-parser-cjs.js');
+        },
+        Error,
+        /\bENOENT\b/);
     });
 
     it('mkdirp: **TBD**', function () {

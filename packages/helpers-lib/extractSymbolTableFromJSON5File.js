@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import JSON5 from '@gerhobbelt/json5';
 import assert from 'assert';
+import rmCommonWS from './rmCommonWS';
 
 
 function findSymbolTable(o, sectionName) {
@@ -23,6 +24,7 @@ function findSymbolTable(o, sectionName) {
 export default function extractSymbolTableFromFile(filepath, sectionName) {
     let source;
     let import_error;
+    let predefined_symbols;
 
     sectionName = sectionName || 'symbols_';
 
@@ -56,9 +58,9 @@ export default function extractSymbolTableFromFile(filepath, sectionName) {
 
             // attempt to read the file as a JISON-generated parser source instead:
             try {
-            	let re = new RegExp(`[\\r\\n]\\s*["']?${sectionName}["']?:\\s*(\\{[\\s\\S]*?\\}),?\\s*[\\r\\n]`);
+            	let re = new RegExp(`[\\r\\n](\\s*["']?${sectionName}["']?:\\s*\\{[\\s\\S]*?\\}),?\\s*[\\r\\n]`);
                 let m = re.exec(source);
-            	console.error("extractSymbolTableFromFile REGEX match:", {re, m});
+            	//console.error("extractSymbolTableFromFile REGEX match:", {re, m: m && m[1]});
                 if (m && m[1]) {
                     source = `
                         {

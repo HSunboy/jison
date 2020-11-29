@@ -990,7 +990,7 @@ function checkActionBlock(src, yylloc, options) {
     }
 
     // empty action code is A-okay all the time:
-    if (!src.trim()) {
+    if (!src || !src.trim()) {
         return false;
     }
 
