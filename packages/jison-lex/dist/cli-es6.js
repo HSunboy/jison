@@ -1226,7 +1226,7 @@ function checkActionBlock(src, yylloc, options) {
     }
 
     // empty action code is A-okay all the time:
-    if (!src.trim()) {
+    if (!src || !src.trim()) {
         return false;
     }
 
@@ -2027,6 +2027,7 @@ function findSymbolTable(o, sectionName) {
 function extractSymbolTableFromFile(filepath, sectionName) {
     let source;
     let import_error;
+    let predefined_symbols;
 
     sectionName = sectionName || 'symbols_';
 
@@ -2060,9 +2061,9 @@ function extractSymbolTableFromFile(filepath, sectionName) {
 
             // attempt to read the file as a JISON-generated parser source instead:
             try {
-            	let re = new RegExp(`[\\r\\n]\\s*["']?${sectionName}["']?:\\s*(\\{[\\s\\S]*?\\}),?\\s*[\\r\\n]`);
+            	let re = new RegExp(`[\\r\\n](\\s*["']?${sectionName}["']?:\\s*\\{[\\s\\S]*?\\}),?\\s*[\\r\\n]`);
                 let m = re.exec(source);
-            	console.error("extractSymbolTableFromFile REGEX match:", {re, m});
+            	//console.error("extractSymbolTableFromFile REGEX match:", {re, m: m && m[1]});
                 if (m && m[1]) {
                     source = `
                         {
@@ -2094,7 +2095,7 @@ function extractSymbolTableFromFile(filepath, sectionName) {
 
     assert$1(predefined_symbols ? !import_error : import_error);
     if (import_error) {
-        throw new Error((rmCommonWS`
+        throw new Error((rmCommonWS$1`
             Error: '%import symbols <path>' must point to either a JSON file containing 
             a symbol table (hash table) or a previously generated JISON JavaScript file, 
             which contains such a symbol table.
@@ -3633,7 +3634,7 @@ case 29:
         when the mistake isn't immediately obvious from this error spot itself.
     
           Erroneous code:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 1])}
     
           Technical error report:
         ${yyvstack[yysp].errStr}
@@ -4396,7 +4397,7 @@ case 68:
         You may place the '%include' instruction only at the start/front of a line.
     
           Its use is not permitted at this position:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])}
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
     `);
     this.$ = yyvstack[yysp - 1];
     break;
@@ -4413,7 +4414,7 @@ case 69:
         Missing curly braces: seems you did not correctly bracket a lexer rule action block in curly braces: '{ ... }'.
     
           Offending action body:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])}
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
     `);
     this.$ = yyvstack[yysp - 1];
     break;
@@ -4430,7 +4431,7 @@ case 70:
         Too many curly braces: seems you did not correctly bracket a lexer rule action block in curly braces: '{ ... }'.
     
           Offending action body:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])}
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
     `);
     this.$ = yyvstack[yysp - 1];
     break;
@@ -4450,7 +4451,7 @@ case 71:
         your rule action block code in a '%{...%}' block.
     
           Offending action body:
-        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 3])}
+        ${yylexer.prettyPrintRange(yylstack[yysp], yylstack[yysp - 2])}
     `);
     this.$ = yyvstack[yysp - 1];
     break;
@@ -4990,7 +4991,7 @@ case 115:
             You may only specify one name/argument in a ${yy.__options_category_description__} statement.
     
               Erroneous area:
-            ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp - 1], yylstack[yysp]), yylstack[yysp - 4])}
+            ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp - 1], yylstack[yysp]), yylstack[yysp - 3])}
         `);
     }
     if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS) {
@@ -5006,7 +5007,7 @@ case 115:
                 ${yyvstack[yysp - 4]} ${optlist.join(' ')} ...
     
               Erroneous area:
-            ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp - 1], yylstack[yysp - 2]), yylstack[yysp - 4])}
+            ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp - 1], yylstack[yysp - 2]), yylstack[yysp - 3])}
         `);
     }
     this.$ = yyvstack[yysp - 2];
@@ -5030,7 +5031,7 @@ case 116:
             You may only specify one name/argument in a ${yy.__options_category_description__} statement.
     
               Erroneous area:
-            ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp]), yylstack[yysp - 3])}
+            ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(yylstack[yysp]), yylstack[yysp - 2])}
         `);
     }
     this.$ = yyvstack[yysp - 1];

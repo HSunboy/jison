@@ -1,5 +1,5 @@
 
-                    
+
 const lexer = {
 /* JISON-LEX-ANALYTICS-REPORT */
 EOF: 1,
@@ -150,6 +150,7 @@ EOF: 1,
         if (args.length) {
             p.extra_error_attributes = args;
         }
+        p.yyErrorInvoked = true;   // so parseError() user code can easily recognize it is invoked from any yyerror() in the spec action code chunks
 
         return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
     },
@@ -166,22 +167,20 @@ EOF: 1,
      * @public
      * @this {RegExpLexer}
      */
-    cleanupAfterLex: function lexer_cleanupAfterLex(do_not_nuke_errorinfos) {
+    cleanupAfterLex: function lexer_cleanupAfterLex() {
         // prevent lingering circular references from causing memory leaks:
         this.setInput('', {});
 
         // nuke the error hash info instances created during this run.
         // Userland code must COPY any data/references
         // in the error hash instance(s) it is more permanently interested in.
-        if (!do_not_nuke_errorinfos) {
-            for (let i = this.__error_infos.length - 1; i >= 0; i--) {
-                let el = this.__error_infos[i];
-                if (el && typeof el.destroy === 'function') {
-                    el.destroy();
-                }
+        for (let i = this.__error_infos.length - 1; i >= 0; i--) {
+            let el = this.__error_infos[i];
+            if (el && typeof el.destroy === 'function') {
+                el.destroy();
             }
-            this.__error_infos.length = 0;
         }
+        this.__error_infos.length = 0;
 
         return this;
     },
@@ -226,31 +225,31 @@ EOF: 1,
         // including expansion work to be done to go from a loaded
         // lexer to a usable lexer:
         if (!this.__decompressed) {
-          // step 1: decompress the regex list:
+            // step 1: decompress the regex list:
             let rules = this.rules;
-            for (var i = 0, len = rules.length; i < len; i++) {
-                var rule_re = rules[i];
+            for (let i = 0, len = rules.length; i < len; i++) {
+                let rule_re = rules[i];
 
-            // compression: is the RE an xref to another RE slot in the rules[] table?
+                // compression: is the RE an xref to another RE slot in the rules[] table?
                 if (typeof rule_re === 'number') {
                     rules[i] = rules[rule_re];
                 }
             }
 
-          // step 2: unfold the conditions[] set to make these ready for use:
+            // step 2: unfold the conditions[] set to make these ready for use:
             let conditions = this.conditions;
             for (let k in conditions) {
                 let spec = conditions[k];
 
                 let rule_ids = spec.rules;
 
-                var len = rule_ids.length;
+                let len = rule_ids.length;
                 let rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
                 let rule_new_ids = new Array(len + 1);
 
-                for (var i = 0; i < len; i++) {
+                for (let i = 0; i < len; i++) {
                     let idx = rule_ids[i];
-                    var rule_re = rules[idx];
+                    let rule_re = rules[idx];
                     rule_regexes[i + 1] = rule_re;
                     rule_new_ids[i + 1] = idx;
                 }
@@ -519,6 +518,7 @@ EOF: 1,
                 lineno_msg += ' on line ' + (this.yylineno + 1);
             }
             const p = this.constructLexErrorInfo(lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).', false);
+            p.isLexerBacktrackingNotSupportedError = true;            // when this is true, you 'know' the produced error token will be queued.
             this._signaled_error_token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
         }
         return this;
@@ -1132,8 +1132,34 @@ EOF: 1,
             let activeCondition = this.topState();
             let conditionStackDepth = this.conditionStack.length;
 
-            let token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
-            if (token === this.ERROR) {
+            // when this flag is set in your parseError() `hash`, you 'know' you cannot manipute `yytext` to be anything but 
+            // a string value, unless
+            // - you either get to experience a lexer crash once it invokes .input() with your manipulated `yytext` object,
+            // - or you must forward the lex cursor yourself by invoking `yy.input()` or equivalent, *before* you go and
+            //   tweak that `yytext`.
+            p.lexerHasAlreadyForwardedCursorBy1 = (!this.matches);
+
+            // Simplify use of (advanced) custom parseError() handlers: every time we encounter an error,
+            // which HAS NOT consumed any input yet (thus causing an infinite lexer loop unless we take special action),
+            // we FIRST consume ONE character of input, BEFORE we call parseError().
+            // 
+            // This implies that the parseError() now can call `unput(this.yytext)` if it wants to only change lexer
+            // state via popState/pushState, but otherwise this would make for a cleaner parseError() implementation
+            // as there's no conditional check for `hash.lexerHasAlreadyForwardedCursorBy1` needed in there any more.
+            // 
+            // Since that flag is new as of jison-gho 0.7.0, as is this new consume1+parseError() behaviour, only
+            // sophisticated userland parseError() methods will need to be reviewed.
+            // Haven't found any of those in the (Open Source) wild today, so this should be safe to change...
+
+            // *** CONSUME 1 ***:
+                        
+            //if (token === this.ERROR) {
+            //    ^^^^^^^^^^^^^^^^^^^^ WARNING: no matter what token the error handler produced, 
+            //                         it MUST move the cursor forward or you'ld end up in 
+            //                         an infinite lex loop, unless one or more of the following 
+            //                         conditions was changed, so as to change the internal lexer 
+            //                         state and thus enable it to produce a different token:
+            //                         
                 // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
                 // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
                 // has not consumed/modified any pending input or changed state in the error handler:
@@ -1147,8 +1173,19 @@ EOF: 1,
                 ) {
                     this.input();
                 }
-            }
-            return token;
+            //}
+
+            // *** PARSE-ERROR ***:
+            // 
+            // Note:
+            // userland code in there may `unput()` what was done, after checking the `hash.lexerHasAlreadyForwardedCursorBy1` flag.
+            // Caveat emptor! :: When you simply `unput()` the `yytext` without at least changing the lexer condition state 
+            // via popState/pushState, you WILL end up with an infinite lexer loop. 
+            // 
+            // This kernel code has been coded to prevent this dangerous situation unless you specifically seek it out
+            // in your custom parseError handler.
+                        
+            return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
         }
     },
 
@@ -1386,17 +1423,16 @@ EOF: 1,
         return this.conditionStack.length;
     },
     options: {
-  xregexp: true,
   backtrack_lexer: true,
   ranges: true,
   trackPosition: true
 },
     JisonLexerError: JisonLexerError,
     performAction: function lexer__performAction(yy, yyrulenumber, YY_START) {
-            var yy_ = this;
+            const yy_ = this;
 
             
-var YYSTATE = YY_START;
+const YYSTATE = YY_START;
 switch(yyrulenumber) {
 case 0 : 
 /*! Conditions:: INITIAL */ 
@@ -1949,7 +1985,7 @@ case 4 :
                         produce: function () {
                             // switch lexer modes RIGHT NOW: next up is the `json_filter_expression` rule!
                             assert(this.topState() !== 'JSON_FILTERING');
-                            //this.pushState('JSON_FILTERING');   -- Fixed #880 
+                            //this.pushState('JSON_FILTERING');
 
                             return '.';
                         }
@@ -1969,7 +2005,7 @@ case 4 :
 
             var s1 = false, s2 = false, s3 = false;
 
-            s = yy_.yytext;
+            var s = yy_.yytext;
             switch (s.length) {
             case 3:
                 s3 = s;
@@ -1991,7 +2027,7 @@ case 4 :
             s = yy_.yytext;
 
             // now find matches in the operator lookup table, largest match first:
-            rv = this.__operator_hash_table[3][s3] || this.__operator_hash_table[2][s2] || this.__operator_hash_table[1][s1];
+            var rv = this.__operator_hash_table[3][s3] || this.__operator_hash_table[2][s2] || this.__operator_hash_table[1][s1];
             if (rv) {
                 // push the remainder back into the buffer before we continue:
                 if (s.length > rv.name.length) {
@@ -1999,12 +2035,12 @@ case 4 :
                 }
 
                 if (rv.opcode) {
-                    yy_.yytext = (new Visyond.FormulaParser.ASTopcode(rv.opcode))
+                    yy_.yytext = (new ASTopcode(rv.opcode))
                         .setLocationInfo(yy_.yylloc)
                         .setCommentsIndex(parser.getNextCommentIndex())
                         .setLexedText(rv.name);
                 } else if (rv.lexer_opcode) {
-                    yy_.yytext = (new Visyond.FormulaParser.lexerToken(rv.lexer_opcode))
+                    yy_.yytext = (new lexerToken(rv.lexer_opcode))
                         .setLocationInfo(yy_.yylloc)
                         .setCommentsIndex(parser.getNextCommentIndex())
                         .setLexedText(rv.name);
@@ -2020,7 +2056,7 @@ case 4 :
 
             rv = parser.getSymbol4Currency(s);
             if (rv) {
-                yy_.yytext = (new Visyond.FormulaParser.ASTcurrency.ASTcurrency(rv))
+                yy_.yytext = (new ASTcurrency(rv))
                     .setLocationInfo(yy_.yylloc)
                     .setCommentsIndex(parser.getNextCommentIndex())
                     .setLexedText(s);
@@ -2030,7 +2066,7 @@ case 4 :
             // no dice, now see if this is a predefined constant
             rv = parser.getSymbol4DefinedConstant(s);
             if (rv) {
-                yy_.yytext = (new Visyond.FormulaParser.ASTvalue(rv.value, rv.attributes))
+                yy_.yytext = (new ASTvalue(rv.value, rv.attributes))
                     .setPredefinedConstantInfo(rv)
                     .setLocationInfo(yy_.yylloc)
                     .setCommentsIndex(parser.getNextCommentIndex())
@@ -2057,8 +2093,8 @@ case 5 :
 /*! Conditions:: INITIAL */ 
 /*! Rule::       ‹([^\u203a]*)› */ 
  /* ‹string› */
-            s = this.matches[1];
-            yy_.yytext = (new Visyond.FormulaParser.ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            yy_.yytext = (new ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_2039)
                 .setLocationInfo(yy_.yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -2068,8 +2104,8 @@ case 6 :
 /*! Conditions:: INITIAL */ 
 /*! Rule::       “([^\u201d]*)” */ 
  /* “string” */
-            s = this.matches[1];
-            yy_.yytext = (new Visyond.FormulaParser.ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            yy_.yytext = (new ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_201C)
                 .setLocationInfo(yy_.yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -2079,8 +2115,8 @@ case 7 :
 /*! Conditions:: INITIAL */ 
 /*! Rule::       «([^\u00bb]*)» */ 
  /* «string» */
-            s = this.matches[1];
-            yy_.yytext = (new Visyond.FormulaParser.ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            yy_.yytext = (new ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_00AB)
                 .setLocationInfo(yy_.yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -2088,12 +2124,12 @@ case 7 :
 break;
 case 8 : 
 /*! Conditions:: INITIAL */ 
-/*! Rule::       '([^']*(?:''[^']*)*)'(?={DUALIC_OPERATOR_MUST_FOLLOW}) */ 
+/*! Rule::       '([^']*(?:''[^']*)*)' */ 
  // this.unput(this.matches[2]);
 
-            s = this.matches[1];
-            s2 = parser.dedupQuotedString(s, "'");
-            yy_.yytext = (new Visyond.FormulaParser.ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            var s2 = parser.dedupQuotedString(s, "'");
+            yy_.yytext = (new ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_SINGLEQUOTE)
                 .setLocationInfo(yy_.yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -2101,12 +2137,12 @@ case 8 :
 break;
 case 9 : 
 /*! Conditions:: INITIAL */ 
-/*! Rule::       "([^"]*(?:""[^"]*)*)"(?={DUALIC_OPERATOR_MUST_FOLLOW}) */ 
+/*! Rule::       "([^"]*(?:""[^"]*)*)" */ 
  // this.unput(this.matches[2]);
 
-            s = this.matches[1];
-            s2 = parser.dedupQuotedString(s, '"');
-            yy_.yytext = (new Visyond.FormulaParser.ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            var s2 = parser.dedupQuotedString(s, '"');
+            yy_.yytext = (new ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_DOUBLEQUOTE)
                 .setLocationInfo(yy_.yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -2123,8 +2159,8 @@ case 11 :
 /*! Conditions:: INLINE_COMMENT */ 
 /*! Rule::       . */ 
  {
-for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
-                s2 = this.inline_comment_end_markers[rv];
+for (var rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
+                var s2 = this.inline_comment_end_markers[rv];
                 if (s2[0] === this.matches[0]) {
                     // we got a POTENTIAL MATCH; let's see if we need more:
                     if (s2.length > 1) {
@@ -2176,8 +2212,8 @@ case 12 :
              * comments like `{***}` and we have a hit on `**}` so we may only
              * consume one character here in that case.
              */
-            for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
-                s2 = this.inline_comment_end_markers[rv];
+            for (var rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
+                var s2 = this.inline_comment_end_markers[rv];
                 if (s2 === this.matches[0]) {
                     /*
                      * Full match! end of comment reached.
@@ -2207,8 +2243,8 @@ case 13 :
 /*! Conditions:: INLINE_COMMENT */ 
 /*! Rule::       $ */ 
  // Check if this is a comment type which does not have to be 'terminated':
-            for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
-                s2 = this.inline_comment_end_markers[rv];
+            for (var rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
+                var s2 = this.inline_comment_end_markers[rv];
                 if (s2 === "") {
                     /*
                     * Full match! end of comment reached.
@@ -2234,7 +2270,7 @@ case 13 :
             // Otherwise, flag this as an unterminated and thus illegal comment chunk.
             parser.pushComment();
 
-            yy_.yytext = (new Visyond.FormulaParser.ASTerror(FERR_UNTERMINATED_INLINE_COMMENT, "Unterminated inline comment."))
+            yy_.yytext = (new ASTerror(FERR_UNTERMINATED_INLINE_COMMENT, "Unterminated inline comment."))
                 .setErrorArguments(this.inline_comment_end_markers)
                 .setLocationInfo(yy_.yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex())
@@ -2316,8 +2352,8 @@ default:
 /*  5: */  /^(?:‹([^›]*)›)/,
 /*  6: */  /^(?:“([^”]*)”)/,
 /*  7: */  /^(?:«([^»]*)»)/,
-/*  8: */  /^(?:'([^']*(?:''[^']*)*)'(?={DUALIC_OPERATOR_MUST_FOLLOW}))/,
-/*  9: */  /^(?:"([^"]*(?:""[^"]*)*)"(?={DUALIC_OPERATOR_MUST_FOLLOW}))/,
+/*  8: */  /^(?:'([^']*(?:''[^']*)*)')/,
+/*  9: */  /^(?:"([^"]*(?:""[^"]*)*)")/,
 /* 10: */  /^(?:[^!#)*/}‼▌▐]+)/,
 /* 11: */  /^(?:.)/,
 /* 12: */  /^(?:..)/,
@@ -2386,10 +2422,10 @@ default:
 };
 ;
 
-                    //=============================================================================
-                    //                     JISON-LEX OPTIONS:
+//=============================================================================
+//                     JISON-LEX OPTIONS:
 
-                    {
+const lexerSpecConglomerate = {
   lexerActionsUseYYLENG: '???',
   lexerActionsUseYYLINENO: '???',
   lexerActionsUseYYTEXT: '???',
@@ -2948,7 +2984,7 @@ default:
                         produce: function () {
                             // switch lexer modes RIGHT NOW: next up is the \`json_filter_expression\` rule!
                             assert(this.topState() !== 'JSON_FILTERING');
-                            //this.pushState('JSON_FILTERING');   -- Fixed #880 
+                            //this.pushState('JSON_FILTERING');
 
                             return '.';
                         }
@@ -2968,7 +3004,7 @@ default:
 
             var s1 = false, s2 = false, s3 = false;
 
-            s = yytext;
+            var s = yytext;
             switch (s.length) {
             case 3:
                 s3 = s;
@@ -2990,7 +3026,7 @@ default:
             s = yytext;
 
             // now find matches in the operator lookup table, largest match first:
-            rv = this.__operator_hash_table[3][s3] || this.__operator_hash_table[2][s2] || this.__operator_hash_table[1][s1];
+            var rv = this.__operator_hash_table[3][s3] || this.__operator_hash_table[2][s2] || this.__operator_hash_table[1][s1];
             if (rv) {
                 // push the remainder back into the buffer before we continue:
                 if (s.length > rv.name.length) {
@@ -2998,12 +3034,12 @@ default:
                 }
 
                 if (rv.opcode) {
-                    yytext = (new Visyond.FormulaParser.ASTopcode(rv.opcode))
+                    yytext = (new ASTopcode(rv.opcode))
                         .setLocationInfo(yylloc)
                         .setCommentsIndex(parser.getNextCommentIndex())
                         .setLexedText(rv.name);
                 } else if (rv.lexer_opcode) {
-                    yytext = (new Visyond.FormulaParser.lexerToken(rv.lexer_opcode))
+                    yytext = (new lexerToken(rv.lexer_opcode))
                         .setLocationInfo(yylloc)
                         .setCommentsIndex(parser.getNextCommentIndex())
                         .setLexedText(rv.name);
@@ -3019,7 +3055,7 @@ default:
 
             rv = parser.getSymbol4Currency(s);
             if (rv) {
-                yytext = (new Visyond.FormulaParser.ASTcurrency.ASTcurrency(rv))
+                yytext = (new ASTcurrency(rv))
                     .setLocationInfo(yylloc)
                     .setCommentsIndex(parser.getNextCommentIndex())
                     .setLexedText(s);
@@ -3029,7 +3065,7 @@ default:
             // no dice, now see if this is a predefined constant
             rv = parser.getSymbol4DefinedConstant(s);
             if (rv) {
-                yytext = (new Visyond.FormulaParser.ASTvalue(rv.value, rv.attributes))
+                yytext = (new ASTvalue(rv.value, rv.attributes))
                     .setPredefinedConstantInfo(rv)
                     .setLocationInfo(yylloc)
                     .setCommentsIndex(parser.getNextCommentIndex())
@@ -3055,8 +3091,8 @@ default:
       [
         '‹([^\\u203a]*)›',
         `/* ‹string› */
-            s = this.matches[1];
-            yytext = (new Visyond.FormulaParser.ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            yytext = (new ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_2039)
                 .setLocationInfo(yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -3065,8 +3101,8 @@ default:
       [
         '“([^\\u201d]*)”',
         `/* “string” */
-            s = this.matches[1];
-            yytext = (new Visyond.FormulaParser.ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            yytext = (new ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_201C)
                 .setLocationInfo(yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -3075,32 +3111,32 @@ default:
       [
         '«([^\\u00bb]*)»',
         `/* «string» */
-            s = this.matches[1];
-            yytext = (new Visyond.FormulaParser.ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            yytext = (new ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_00AB)
                 .setLocationInfo(yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
             return 'STRING'`,
       ],
       [
-        `'([^']*(?:''[^']*)*)'(?={DUALIC_OPERATOR_MUST_FOLLOW})`,
+        `'([^']*(?:''[^']*)*)'`,
         `// this.unput(this.matches[2]);
 
-            s = this.matches[1];
-            s2 = parser.dedupQuotedString(s, "'");
-            yytext = (new Visyond.FormulaParser.ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            var s2 = parser.dedupQuotedString(s, "'");
+            yytext = (new ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_SINGLEQUOTE)
                 .setLocationInfo(yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
             return 'STRING'`,
       ],
       [
-        `"([^"]*(?:""[^"]*)*)"(?={DUALIC_OPERATOR_MUST_FOLLOW})`,
+        `"([^"]*(?:""[^"]*)*)"`,
         `// this.unput(this.matches[2]);
 
-            s = this.matches[1];
-            s2 = parser.dedupQuotedString(s, '"');
-            yytext = (new Visyond.FormulaParser.ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            var s2 = parser.dedupQuotedString(s, '"');
+            yytext = (new ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_DOUBLEQUOTE)
                 .setLocationInfo(yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -3120,8 +3156,8 @@ default:
           'INLINE_COMMENT',
         ],
         '.',
-        `for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
-                s2 = this.inline_comment_end_markers[rv];
+        `for (var rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
+                var s2 = this.inline_comment_end_markers[rv];
                 if (s2[0] === this.matches[0]) {
                     // we got a POTENTIAL MATCH; let's see if we need more:
                     if (s2.length > 1) {
@@ -3174,8 +3210,8 @@ default:
              * comments like \`{***}\` and we have a hit on \`**}\` so we may only
              * consume one character here in that case.
              */
-            for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
-                s2 = this.inline_comment_end_markers[rv];
+            for (var rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
+                var s2 = this.inline_comment_end_markers[rv];
                 if (s2 === this.matches[0]) {
                     /*
                      * Full match! end of comment reached.
@@ -3207,8 +3243,8 @@ default:
         ],
         '$',
         `// Check if this is a comment type which does not have to be 'terminated':
-            for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
-                s2 = this.inline_comment_end_markers[rv];
+            for (var rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
+                var s2 = this.inline_comment_end_markers[rv];
                 if (s2 === "") {
                     /*
                     * Full match! end of comment reached.
@@ -3234,7 +3270,7 @@ default:
             // Otherwise, flag this as an unterminated and thus illegal comment chunk.
             parser.pushComment();
 
-            yytext = (new Visyond.FormulaParser.ASTerror(FERR_UNTERMINATED_INLINE_COMMENT, "Unterminated inline comment."))
+            yytext = (new ASTerror(FERR_UNTERMINATED_INLINE_COMMENT, "Unterminated inline comment."))
                 .setErrorArguments(this.inline_comment_end_markers)
                 .setLocationInfo(yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex())
@@ -3329,36 +3365,394 @@ default:
     startConditions: {
       INLINE_COMMENT: 1,
     },
-    codeSections: [],
+    codeSections: [
+      {
+        qualifier: 'imports',
+        include: "const assert = require('assert')",
+      },
+      {
+        qualifier: 'init',
+        include: `// Included by Jison: includes/unicode.helpers.js:
+
+// helper APIs for testing the unicode*.jisonlex lexer specs
+
+// WARNING: this stuff is purely here so the example(s) will pass the default run test. You mileage will be NIL on these!
+
+let predictive_random_seed = 5;
+
+function getSemiRandomNumber() {
+	predictive_random_seed = (predictive_random_seed * 31 + 7) % 51;	
+	return predictive_random_seed;
+}
+
+// these are used in a three-way test in unicode2 spec:
+function is_constant(str) {
+	return getSemiRandomNumber() % 3 === 1;
+}
+function is_function(str) {
+	return getSemiRandomNumber() % 3 === 2;
+}
+
+
+
+const FERR_UNTERMINATED_INLINE_COMMENT = 0x0100;
+const FKA_COMMA = 0x0101;
+const FKA_FIXED_ROW_OR_COLUMN_MARKER = 0x0102;
+const FKA_RANGE_MARKER = 0x0103;
+const FKW_ADD = 0x0104;
+const FKW_ALMOST_EQUAL = 0x0105;
+const FKW_ARRAY_CONCATENATION_OPERATOR = 0x0106;
+const FKW_BOOLEAN_AND_OPERATOR = 0x0107;
+const FKW_BOOLEAN_NOT_OPERATOR = 0x0108;
+const FKW_BOOLEAN_OR_OPERATOR = 0x0109;
+const FKW_CUBE_OPERATOR = 0x010A;
+const FKW_DATA_MARKER = 0x010B;
+const FKW_DEGREES_OPERATOR = 0x010C;
+const FKW_DIVIDE = 0x010D;
+const FKW_DOT = 0x010E;
+const FKW_EQUAL = 0x010F;
+const FKW_GREATER_OR_EQUAL = 0x0110;
+const FKW_GREATER_THAN = 0x0111;
+const FKW_IS_IDENTICAL = 0x0112;
+const FKW_LESS_OR_EQUAL = 0x0113;
+const FKW_LESS_THAN = 0x0114;
+const FKW_MODULO_OPERATOR = 0x0115;
+const FKW_MULTIPLY = 0x0116;
+const FKW_NOT_EQUAL = 0x0117;
+const FKW_NOT_IDENTICAL = 0x0118;
+const FKW_POWER = 0x0119;
+const FKW_PROMILAGE_OPERATOR = 0x011A;
+const FKW_SQRT_OPERATOR = 0x011B;
+const FKW_SQUARE_OPERATOR = 0x011C;
+const FKW_STRING_CONCATENATION_OPERATOR = 0x011D;
+const FKW_SUBTRACT = 0x011E;
+const FKW_VALUE = 0x011F;
+
+const FT_BOOLEAN = 0x00100000;
+const FT_NUMBER = 0x00200000;
+const FT_STRING = 0x00400000;
+
+const FU_ANY = 0x00010000;
+const FU_DERIVED = 0x00020000;
+const FU_STRING = 0x00040000;
+
+
+
+class ASTnode {
+	constructor(n) {
+		this.id = n;
+	}
+
+	setLocationInfo(loc) {
+		this._yylloc = loc;
+		return this;
+	}
+	setCommentsIndex(n) {
+		this._commentIndex = n;
+		return this;
+	}
+    setLexedText(s) {
+    	this._lexedText = s;
+		return this;
+    }
+}
+
+class lexerToken extends ASTnode {
+	constructor(n) {
+		super(n);
+	}
+}
+
+class ASTcurrency extends ASTnode {
+	constructor(v) {
+		super('$');
+		this._currency = v;
+	}
+}
+
+class ASTerror extends ASTnode {
+	constructor(e, msg) {
+		super('E');
+		this._errorCode = e;
+		this._errorMessage = msg;
+	}
+}
+
+class ASTopcode extends ASTnode {
+	constructor(n) {
+		super('C');
+		this.opcode = n;
+	}
+}
+
+class ASTvalue extends ASTnode {
+	constructor(v, a) {
+		super('V');
+		this._value = v;
+		this._attributes = a;
+	}
+}
+
+
+const symbolHashTable = {};
+
+
+const parser = {
+	getNextCommentIndex() {
+		return getSemiRandomNumber();
+	}
+	dedupQuotedString(s, q) {
+		return s;
+	}
+	deepCopy(loc) {
+		// fake a deep clone with a shallow one:
+		return Object.assign({}, loc);
+	}
+	getSymbol4Currency(s) {
+		return '$$$' + s;		
+	}
+	getSymbol4DefinedConstant(s) {
+		if (!symbolHashTable[s]) {
+			let n = getSemiRandomNumber();
+			symbolHashTable[s] = 'S' + n;
+		}
+		return symbolHashTable[s];
+	}
+	pushComment() {
+		/**/
+	}
+}
+
+
+//----------------------------------------------------------------------
+//
+// ShEx
+// 
+
+const ShExUtil = {
+	unescapeText(s, delim) {
+	  return s;
+	}
+};
+
+const Parser = {
+
+}
+
+// End Of Include by Jison: includes/unicode.helpers.js`,
+      },
+    ],
     importDecls: [],
     unknownDecls: [],
     options: {
       ranges: true,
       backtrack_lexer: true,
-      xregexp: true,
     },
   },
+  codeSections: [
+    {
+      qualifier: 'imports',
+      include: "const assert = require('assert')",
+    },
+    {
+      qualifier: 'init',
+      include: `// Included by Jison: includes/unicode.helpers.js:
+
+// helper APIs for testing the unicode*.jisonlex lexer specs
+
+// WARNING: this stuff is purely here so the example(s) will pass the default run test. You mileage will be NIL on these!
+
+let predictive_random_seed = 5;
+
+function getSemiRandomNumber() {
+	predictive_random_seed = (predictive_random_seed * 31 + 7) % 51;	
+	return predictive_random_seed;
+}
+
+// these are used in a three-way test in unicode2 spec:
+function is_constant(str) {
+	return getSemiRandomNumber() % 3 === 1;
+}
+function is_function(str) {
+	return getSemiRandomNumber() % 3 === 2;
+}
+
+
+
+const FERR_UNTERMINATED_INLINE_COMMENT = 0x0100;
+const FKA_COMMA = 0x0101;
+const FKA_FIXED_ROW_OR_COLUMN_MARKER = 0x0102;
+const FKA_RANGE_MARKER = 0x0103;
+const FKW_ADD = 0x0104;
+const FKW_ALMOST_EQUAL = 0x0105;
+const FKW_ARRAY_CONCATENATION_OPERATOR = 0x0106;
+const FKW_BOOLEAN_AND_OPERATOR = 0x0107;
+const FKW_BOOLEAN_NOT_OPERATOR = 0x0108;
+const FKW_BOOLEAN_OR_OPERATOR = 0x0109;
+const FKW_CUBE_OPERATOR = 0x010A;
+const FKW_DATA_MARKER = 0x010B;
+const FKW_DEGREES_OPERATOR = 0x010C;
+const FKW_DIVIDE = 0x010D;
+const FKW_DOT = 0x010E;
+const FKW_EQUAL = 0x010F;
+const FKW_GREATER_OR_EQUAL = 0x0110;
+const FKW_GREATER_THAN = 0x0111;
+const FKW_IS_IDENTICAL = 0x0112;
+const FKW_LESS_OR_EQUAL = 0x0113;
+const FKW_LESS_THAN = 0x0114;
+const FKW_MODULO_OPERATOR = 0x0115;
+const FKW_MULTIPLY = 0x0116;
+const FKW_NOT_EQUAL = 0x0117;
+const FKW_NOT_IDENTICAL = 0x0118;
+const FKW_POWER = 0x0119;
+const FKW_PROMILAGE_OPERATOR = 0x011A;
+const FKW_SQRT_OPERATOR = 0x011B;
+const FKW_SQUARE_OPERATOR = 0x011C;
+const FKW_STRING_CONCATENATION_OPERATOR = 0x011D;
+const FKW_SUBTRACT = 0x011E;
+const FKW_VALUE = 0x011F;
+
+const FT_BOOLEAN = 0x00100000;
+const FT_NUMBER = 0x00200000;
+const FT_STRING = 0x00400000;
+
+const FU_ANY = 0x00010000;
+const FU_DERIVED = 0x00020000;
+const FU_STRING = 0x00040000;
+
+
+
+class ASTnode {
+	constructor(n) {
+		this.id = n;
+	}
+
+	setLocationInfo(loc) {
+		this._yylloc = loc;
+		return this;
+	}
+	setCommentsIndex(n) {
+		this._commentIndex = n;
+		return this;
+	}
+    setLexedText(s) {
+    	this._lexedText = s;
+		return this;
+    }
+}
+
+class lexerToken extends ASTnode {
+	constructor(n) {
+		super(n);
+	}
+}
+
+class ASTcurrency extends ASTnode {
+	constructor(v) {
+		super('$');
+		this._currency = v;
+	}
+}
+
+class ASTerror extends ASTnode {
+	constructor(e, msg) {
+		super('E');
+		this._errorCode = e;
+		this._errorMessage = msg;
+	}
+}
+
+class ASTopcode extends ASTnode {
+	constructor(n) {
+		super('C');
+		this.opcode = n;
+	}
+}
+
+class ASTvalue extends ASTnode {
+	constructor(v, a) {
+		super('V');
+		this._value = v;
+		this._attributes = a;
+	}
+}
+
+
+const symbolHashTable = {};
+
+
+const parser = {
+	getNextCommentIndex() {
+		return getSemiRandomNumber();
+	}
+	dedupQuotedString(s, q) {
+		return s;
+	}
+	deepCopy(loc) {
+		// fake a deep clone with a shallow one:
+		return Object.assign({}, loc);
+	}
+	getSymbol4Currency(s) {
+		return '$$$' + s;		
+	}
+	getSymbol4DefinedConstant(s) {
+		if (!symbolHashTable[s]) {
+			let n = getSemiRandomNumber();
+			symbolHashTable[s] = 'S' + n;
+		}
+		return symbolHashTable[s];
+	}
+	pushComment() {
+		/**/
+	}
+}
+
+
+//----------------------------------------------------------------------
+//
+// ShEx
+// 
+
+const ShExUtil = {
+	unescapeText(s, delim) {
+	  return s;
+	}
+};
+
+const Parser = {
+
+}
+
+// End Of Include by Jison: includes/unicode.helpers.js`,
+    },
+  ],
+  importDecls: [],
+  unknownDecls: [],
   options: {
     moduleType: 'commonjs',
     debug: false,
     enableDebugLogs: false,
     json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
     dumpSourceCodeOnFailure: true,
     throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
     defaultModuleName: 'lexer',
-    xregexp: true,
+    xregexp: false,
     lexerErrorsAreRecoverable: false,
     flex: false,
     backtrack_lexer: true,
     ranges: true,
     trackPosition: true,
     caseInsensitive: false,
-    exportSourceCode: false,
+    exportSourceCode: {
+      enabled: false,
+    },
     exportAST: false,
     prettyCfg: true,
-    noMain: true,
   },
-  moduleType: 'commonjs',
   conditions: {
     INLINE_COMMENT: {
       rules: [
@@ -3403,10 +3797,10 @@ default:
     },
   },
   performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
-            var yy_ = this;
+            const yy_ = this;
 
             
-var YYSTATE = YY_START;
+const YYSTATE = YY_START;
 switch(yyrulenumber) {
 case 0 : 
 /*! Conditions:: INITIAL */ 
@@ -3959,7 +4353,7 @@ case 4 :
                         produce: function () {
                             // switch lexer modes RIGHT NOW: next up is the \`json_filter_expression\` rule!
                             assert(this.topState() !== 'JSON_FILTERING');
-                            //this.pushState('JSON_FILTERING');   -- Fixed #880 
+                            //this.pushState('JSON_FILTERING');
 
                             return '.';
                         }
@@ -3979,7 +4373,7 @@ case 4 :
 
             var s1 = false, s2 = false, s3 = false;
 
-            s = yy_.yytext;
+            var s = yy_.yytext;
             switch (s.length) {
             case 3:
                 s3 = s;
@@ -4001,7 +4395,7 @@ case 4 :
             s = yy_.yytext;
 
             // now find matches in the operator lookup table, largest match first:
-            rv = this.__operator_hash_table[3][s3] || this.__operator_hash_table[2][s2] || this.__operator_hash_table[1][s1];
+            var rv = this.__operator_hash_table[3][s3] || this.__operator_hash_table[2][s2] || this.__operator_hash_table[1][s1];
             if (rv) {
                 // push the remainder back into the buffer before we continue:
                 if (s.length > rv.name.length) {
@@ -4009,12 +4403,12 @@ case 4 :
                 }
 
                 if (rv.opcode) {
-                    yy_.yytext = (new Visyond.FormulaParser.ASTopcode(rv.opcode))
+                    yy_.yytext = (new ASTopcode(rv.opcode))
                         .setLocationInfo(yy_.yylloc)
                         .setCommentsIndex(parser.getNextCommentIndex())
                         .setLexedText(rv.name);
                 } else if (rv.lexer_opcode) {
-                    yy_.yytext = (new Visyond.FormulaParser.lexerToken(rv.lexer_opcode))
+                    yy_.yytext = (new lexerToken(rv.lexer_opcode))
                         .setLocationInfo(yy_.yylloc)
                         .setCommentsIndex(parser.getNextCommentIndex())
                         .setLexedText(rv.name);
@@ -4030,7 +4424,7 @@ case 4 :
 
             rv = parser.getSymbol4Currency(s);
             if (rv) {
-                yy_.yytext = (new Visyond.FormulaParser.ASTcurrency.ASTcurrency(rv))
+                yy_.yytext = (new ASTcurrency(rv))
                     .setLocationInfo(yy_.yylloc)
                     .setCommentsIndex(parser.getNextCommentIndex())
                     .setLexedText(s);
@@ -4040,7 +4434,7 @@ case 4 :
             // no dice, now see if this is a predefined constant
             rv = parser.getSymbol4DefinedConstant(s);
             if (rv) {
-                yy_.yytext = (new Visyond.FormulaParser.ASTvalue(rv.value, rv.attributes))
+                yy_.yytext = (new ASTvalue(rv.value, rv.attributes))
                     .setPredefinedConstantInfo(rv)
                     .setLocationInfo(yy_.yylloc)
                     .setCommentsIndex(parser.getNextCommentIndex())
@@ -4067,8 +4461,8 @@ case 5 :
 /*! Conditions:: INITIAL */ 
 /*! Rule::       ‹([^\\u203a]*)› */ 
  /* ‹string› */
-            s = this.matches[1];
-            yy_.yytext = (new Visyond.FormulaParser.ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            yy_.yytext = (new ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_2039)
                 .setLocationInfo(yy_.yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -4078,8 +4472,8 @@ case 6 :
 /*! Conditions:: INITIAL */ 
 /*! Rule::       “([^\\u201d]*)” */ 
  /* “string” */
-            s = this.matches[1];
-            yy_.yytext = (new Visyond.FormulaParser.ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            yy_.yytext = (new ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_201C)
                 .setLocationInfo(yy_.yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -4089,8 +4483,8 @@ case 7 :
 /*! Conditions:: INITIAL */ 
 /*! Rule::       «([^\\u00bb]*)» */ 
  /* «string» */
-            s = this.matches[1];
-            yy_.yytext = (new Visyond.FormulaParser.ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            yy_.yytext = (new ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_00AB)
                 .setLocationInfo(yy_.yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -4098,12 +4492,12 @@ case 7 :
 break;
 case 8 : 
 /*! Conditions:: INITIAL */ 
-/*! Rule::       '([^']*(?:''[^']*)*)'(?={DUALIC_OPERATOR_MUST_FOLLOW}) */ 
+/*! Rule::       '([^']*(?:''[^']*)*)' */ 
  // this.unput(this.matches[2]);
 
-            s = this.matches[1];
-            s2 = parser.dedupQuotedString(s, "'");
-            yy_.yytext = (new Visyond.FormulaParser.ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            var s2 = parser.dedupQuotedString(s, "'");
+            yy_.yytext = (new ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_SINGLEQUOTE)
                 .setLocationInfo(yy_.yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -4111,12 +4505,12 @@ case 8 :
 break;
 case 9 : 
 /*! Conditions:: INITIAL */ 
-/*! Rule::       "([^"]*(?:""[^"]*)*)"(?={DUALIC_OPERATOR_MUST_FOLLOW}) */ 
+/*! Rule::       "([^"]*(?:""[^"]*)*)" */ 
  // this.unput(this.matches[2]);
 
-            s = this.matches[1];
-            s2 = parser.dedupQuotedString(s, '"');
-            yy_.yytext = (new Visyond.FormulaParser.ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            var s2 = parser.dedupQuotedString(s, '"');
+            yy_.yytext = (new ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_DOUBLEQUOTE)
                 .setLocationInfo(yy_.yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -4133,8 +4527,8 @@ case 11 :
 /*! Conditions:: INLINE_COMMENT */ 
 /*! Rule::       . */ 
  {
-for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
-                s2 = this.inline_comment_end_markers[rv];
+for (var rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
+                var s2 = this.inline_comment_end_markers[rv];
                 if (s2[0] === this.matches[0]) {
                     // we got a POTENTIAL MATCH; let's see if we need more:
                     if (s2.length > 1) {
@@ -4186,8 +4580,8 @@ case 12 :
              * comments like \`{***}\` and we have a hit on \`**}\` so we may only
              * consume one character here in that case.
              */
-            for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
-                s2 = this.inline_comment_end_markers[rv];
+            for (var rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
+                var s2 = this.inline_comment_end_markers[rv];
                 if (s2 === this.matches[0]) {
                     /*
                      * Full match! end of comment reached.
@@ -4217,8 +4611,8 @@ case 13 :
 /*! Conditions:: INLINE_COMMENT */ 
 /*! Rule::       $ */ 
  // Check if this is a comment type which does not have to be 'terminated':
-            for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
-                s2 = this.inline_comment_end_markers[rv];
+            for (var rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
+                var s2 = this.inline_comment_end_markers[rv];
                 if (s2 === "") {
                     /*
                     * Full match! end of comment reached.
@@ -4244,7 +4638,7 @@ case 13 :
             // Otherwise, flag this as an unterminated and thus illegal comment chunk.
             parser.pushComment();
 
-            yy_.yytext = (new Visyond.FormulaParser.ASTerror(FERR_UNTERMINATED_INLINE_COMMENT, "Unterminated inline comment."))
+            yy_.yytext = (new ASTerror(FERR_UNTERMINATED_INLINE_COMMENT, "Unterminated inline comment."))
                 .setErrorArguments(this.inline_comment_end_markers)
                 .setLocationInfo(yy_.yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex())
@@ -4407,23 +4801,23 @@ default:
       },
     },
     {
-      re: `/^(?:'([^']*(?:''[^']*)*)'(?={DUALIC_OPERATOR_MUST_FOLLOW}))/`,
-      source: `^(?:'([^']*(?:''[^']*)*)'(?={DUALIC_OPERATOR_MUST_FOLLOW}))`,
+      re: `/^(?:'([^']*(?:''[^']*)*)')/`,
+      source: `^(?:'([^']*(?:''[^']*)*)')`,
       flags: '',
       xregexp: {
         captureNames: null,
-        source: `^(?:'([^']*(?:''[^']*)*)'(?={DUALIC_OPERATOR_MUST_FOLLOW}))`,
+        source: `^(?:'([^']*(?:''[^']*)*)')`,
         flags: '',
         isNative: true,
       },
     },
     {
-      re: `/^(?:"([^"]*(?:""[^"]*)*)"(?={DUALIC_OPERATOR_MUST_FOLLOW}))/`,
-      source: `^(?:"([^"]*(?:""[^"]*)*)"(?={DUALIC_OPERATOR_MUST_FOLLOW}))`,
+      re: `/^(?:"([^"]*(?:""[^"]*)*)")/`,
+      source: `^(?:"([^"]*(?:""[^"]*)*)")`,
       flags: '',
       xregexp: {
         captureNames: null,
-        source: `^(?:"([^"]*(?:""[^"]*)*)"(?={DUALIC_OPERATOR_MUST_FOLLOW}))`,
+        source: `^(?:"([^"]*(?:""[^"]*)*)")`,
         flags: '',
         isNative: true,
       },
@@ -4764,4 +5158,3 @@ default:
   is_custom_lexer: false,
 }
 
-                

@@ -20,6 +20,13 @@
 
 
 
+%code imports %{
+    const assert = require('assert');
+%}
+
+%code init %include "includes/unicode.helpers.js"
+
+
 
 
 %options ranges
@@ -624,7 +631,7 @@ BASIC_FLOATING_POINT_NUMBER         (?:[0-9]+(?:"."[0-9]*)?|"."[0-9]+)
                         produce: function () {
                             // switch lexer modes RIGHT NOW: next up is the `json_filter_expression` rule!
                             assert(this.topState() !== 'JSON_FILTERING');
-                            //this.pushState('JSON_FILTERING');   -- Fixed #880 
+                            //this.pushState('JSON_FILTERING');
 
                             return '.';
                         }
@@ -644,7 +651,7 @@ BASIC_FLOATING_POINT_NUMBER         (?:[0-9]+(?:"."[0-9]*)?|"."[0-9]+)
 
             var s1 = false, s2 = false, s3 = false;
 
-            s = yytext;
+            var s = yytext;
             switch (s.length) {
             case 3:
                 s3 = s;
@@ -666,7 +673,7 @@ BASIC_FLOATING_POINT_NUMBER         (?:[0-9]+(?:"."[0-9]*)?|"."[0-9]+)
             s = yytext;
 
             // now find matches in the operator lookup table, largest match first:
-            rv = this.__operator_hash_table[3][s3] || this.__operator_hash_table[2][s2] || this.__operator_hash_table[1][s1];
+            var rv = this.__operator_hash_table[3][s3] || this.__operator_hash_table[2][s2] || this.__operator_hash_table[1][s1];
             if (rv) {
                 // push the remainder back into the buffer before we continue:
                 if (s.length > rv.name.length) {
@@ -674,12 +681,12 @@ BASIC_FLOATING_POINT_NUMBER         (?:[0-9]+(?:"."[0-9]*)?|"."[0-9]+)
                 }
 
                 if (rv.opcode) {
-                    yytext = (new Visyond.FormulaParser.ASTopcode(rv.opcode))
+                    yytext = (new ASTopcode(rv.opcode))
                         .setLocationInfo(yylloc)
                         .setCommentsIndex(parser.getNextCommentIndex())
                         .setLexedText(rv.name);
                 } else if (rv.lexer_opcode) {
-                    yytext = (new Visyond.FormulaParser.lexerToken(rv.lexer_opcode))
+                    yytext = (new lexerToken(rv.lexer_opcode))
                         .setLocationInfo(yylloc)
                         .setCommentsIndex(parser.getNextCommentIndex())
                         .setLexedText(rv.name);
@@ -695,7 +702,7 @@ BASIC_FLOATING_POINT_NUMBER         (?:[0-9]+(?:"."[0-9]*)?|"."[0-9]+)
 
             rv = parser.getSymbol4Currency(s);
             if (rv) {
-                yytext = (new Visyond.FormulaParser.ASTcurrency.ASTcurrency(rv))
+                yytext = (new ASTcurrency(rv))
                     .setLocationInfo(yylloc)
                     .setCommentsIndex(parser.getNextCommentIndex())
                     .setLexedText(s);
@@ -705,7 +712,7 @@ BASIC_FLOATING_POINT_NUMBER         (?:[0-9]+(?:"."[0-9]*)?|"."[0-9]+)
             // no dice, now see if this is a predefined constant
             rv = parser.getSymbol4DefinedConstant(s);
             if (rv) {
-                yytext = (new Visyond.FormulaParser.ASTvalue(rv.value, rv.attributes))
+                yytext = (new ASTvalue(rv.value, rv.attributes))
                     .setPredefinedConstantInfo(rv)
                     .setLocationInfo(yylloc)
                     .setCommentsIndex(parser.getNextCommentIndex())
@@ -742,8 +749,8 @@ BASIC_FLOATING_POINT_NUMBER         (?:[0-9]+(?:"."[0-9]*)?|"."[0-9]+)
 
 "\u2039"([^\u203a]*)"\u203a"
         %{                                                  /* ‹string› */
-            s = this.matches[1];
-            yytext = (new Visyond.FormulaParser.ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            yytext = (new ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_2039)
                 .setLocationInfo(yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -752,8 +759,8 @@ BASIC_FLOATING_POINT_NUMBER         (?:[0-9]+(?:"."[0-9]*)?|"."[0-9]+)
 
 "\u201c"([^\u201d]*)"\u201d"
         %{                                                  /* “string” */
-            s = this.matches[1];
-            yytext = (new Visyond.FormulaParser.ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            yytext = (new ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_201C)
                 .setLocationInfo(yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -762,8 +769,8 @@ BASIC_FLOATING_POINT_NUMBER         (?:[0-9]+(?:"."[0-9]*)?|"."[0-9]+)
 
 "\u00ab"([^\u00bb]*)"\u00bb"
         %{                                                  /* «string» */
-            s = this.matches[1];
-            yytext = (new Visyond.FormulaParser.ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            yytext = (new ASTvalue(s, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_00AB)
                 .setLocationInfo(yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -772,26 +779,26 @@ BASIC_FLOATING_POINT_NUMBER         (?:[0-9]+(?:"."[0-9]*)?|"."[0-9]+)
 
 
 
-"'"([^']*(?:"''"[^']*)*)"'"(?={DUALIC_OPERATOR_MUST_FOLLOW})
+"'"([^']*(?:"''"[^']*)*)"'"
         %{
             // this.unput(this.matches[2]);
 
-            s = this.matches[1];
-            s2 = parser.dedupQuotedString(s, "'");
-            yytext = (new Visyond.FormulaParser.ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            var s2 = parser.dedupQuotedString(s, "'");
+            yytext = (new ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_SINGLEQUOTE)
                 .setLocationInfo(yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
             return 'STRING';
         %}
 
-'"'([^"]*(?:'""'[^"]*)*)'"'(?={DUALIC_OPERATOR_MUST_FOLLOW})
+'"'([^"]*(?:'""'[^"]*)*)'"'
         %{
             // this.unput(this.matches[2]);
 
-            s = this.matches[1];
-            s2 = parser.dedupQuotedString(s, '"');
-            yytext = (new Visyond.FormulaParser.ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
+            var s = this.matches[1];
+            var s2 = parser.dedupQuotedString(s, '"');
+            yytext = (new ASTvalue(s2, FKW_VALUE | FT_STRING | FU_STRING))
                 .setNotationAttributes(FKA_DELIMITERS_DOUBLEQUOTE)
                 .setLocationInfo(yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex());
@@ -816,8 +823,8 @@ BASIC_FLOATING_POINT_NUMBER         (?:[0-9]+(?:"."[0-9]*)?|"."[0-9]+)
 
 <INLINE_COMMENT>.
         %{
-            for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
-                s2 = this.inline_comment_end_markers[rv];
+            for (var rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
+                var s2 = this.inline_comment_end_markers[rv];
                 if (s2[0] === this.matches[0]) {
                     // we got a POTENTIAL MATCH; let's see if we need more:
                     if (s2.length > 1) {
@@ -868,8 +875,8 @@ BASIC_FLOATING_POINT_NUMBER         (?:[0-9]+(?:"."[0-9]*)?|"."[0-9]+)
              * comments like `{***}` and we have a hit on `**}` so we may only
              * consume one character here in that case.
              */
-            for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
-                s2 = this.inline_comment_end_markers[rv];
+            for (var rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
+                var s2 = this.inline_comment_end_markers[rv];
                 if (s2 === this.matches[0]) {
                     /*
                      * Full match! end of comment reached.
@@ -899,8 +906,8 @@ BASIC_FLOATING_POINT_NUMBER         (?:[0-9]+(?:"."[0-9]*)?|"."[0-9]+)
 <INLINE_COMMENT><<EOF>>
         %{
             // Check if this is a comment type which does not have to be 'terminated':
-            for (rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
-                s2 = this.inline_comment_end_markers[rv];
+            for (var rv = 0, len = this.inline_comment_end_markers.length; rv < len; rv++) {
+                var s2 = this.inline_comment_end_markers[rv];
                 if (s2 === "") {
                     /*
                     * Full match! end of comment reached.
@@ -926,7 +933,7 @@ BASIC_FLOATING_POINT_NUMBER         (?:[0-9]+(?:"."[0-9]*)?|"."[0-9]+)
             // Otherwise, flag this as an unterminated and thus illegal comment chunk.
             parser.pushComment();
 
-            yytext = (new Visyond.FormulaParser.ASTerror(FERR_UNTERMINATED_INLINE_COMMENT, "Unterminated inline comment."))
+            yytext = (new ASTerror(FERR_UNTERMINATED_INLINE_COMMENT, "Unterminated inline comment."))
                 .setErrorArguments(this.inline_comment_end_markers)
                 .setLocationInfo(yylloc)
                 .setCommentsIndex(parser.getNextCommentIndex())

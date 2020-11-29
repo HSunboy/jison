@@ -225,6 +225,27 @@ const path = require('path');
 const lexer = function() {
   'use strict';
 
+  // START code section "init"
+  /*
+   * scan.l
+   *
+   * lex input file for pascal scanner
+   *
+   * extensions: to ways to spell "external" and "->" ok for "^".
+   */
+
+  let line_no = 1;
+
+  // ^^^^^^^^^
+  // NOTE: of course, with jison-gho, one could use the `yylloc` or `yylineno` standard attributes 
+  //       instead of tracking the line number of the input in userland code.
+  //
+  //       Incidentally, we showcase that one in the 'unterminated comment' error-throwing
+  //       function at the bottom.
+  // END code section "init"
+
+
+
   /**
    * See also:
    * http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508
@@ -1883,6 +1904,7 @@ const lexer = function() {
     },
 
     options: {
+      flex: true,
       trackPosition: true
     },
 
@@ -1890,433 +1912,30 @@ const lexer = function() {
 
     performAction: function lexer__performAction(yy, yyrulenumber, YY_START) {
       const yy_ = this;
-
-      /*
-       * scan.l
-       *
-       * lex input file for pascal scanner
-       *
-       * extensions: to ways to spell "external" and "->" ok for "^".
-       */
-
-      var line_no = 1;
-
       const YYSTATE = YY_START;
 
       switch (yyrulenumber) {
-      case 0:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {A}{N}{D} */
-        return AND;
-
-        break;
-      case 1:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {A}{R}{R}{A}{Y} */
-        return ARRAY;
-
-        break;
-      case 2:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {C}{A}{S}{E} */
-        return CASE;
-
-        break;
-      case 3:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {C}{O}{N}{S}{T} */
-        return CONST;
-
-        break;
-      case 4:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {D}{I}{V} */
-        return DIV;
-
-        break;
-      case 5:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {D}{O} */
-        return DO;
-
-        break;
-      case 6:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {D}{O}{W}{N}{T}{O} */
-        return DOWNTO;
-
-        break;
-      case 7:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {E}{L}{S}{E} */
-        return ELSE;
-
-        break;
-      case 8:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {E}{N}{D} */
-        return END;
-
-        break;
-      case 9:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {E}{X}{T}{E}{R}{N} */
-        return EXTERNAL;
-
-        break;
-      case 10:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {E}{X}{T}{E}{R}{N}{A}{L} */
-        return EXTERNAL;
-
-        break;
-      case 11:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {F}{O}{R} */
-        return FOR;
-
-        break;
-      case 12:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {F}{O}{R}{W}{A}{R}{D} */
-        return FORWARD;
-
-        break;
-      case 13:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {F}{U}{N}{C}{T}{I}{O}{N} */
-        return FUNCTION;
-
-        break;
-      case 14:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {G}{O}{T}{O} */
-        return GOTO;
-
-        break;
-      case 15:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {I}{F} */
-        return IF;
-
-        break;
-      case 16:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {I}{N} */
-        return IN;
-
-        break;
-      case 17:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {L}{A}{B}{E}{L} */
-        return LABEL;
-
-        break;
-      case 18:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {M}{O}{D} */
-        return MOD;
-
-        break;
-      case 19:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {N}{I}{L} */
-        return NIL;
-
-        break;
-      case 20:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {N}{O}{T} */
-        return NOT;
-
-        break;
-      case 21:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {O}{F} */
-        return OF;
-
-        break;
-      case 22:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {O}{R} */
-        return OR;
-
-        break;
-      case 23:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {O}{T}{H}{E}{R}{W}{I}{S}{E} */
-        return OTHERWISE;
-
-        break;
-      case 24:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {P}{A}{C}{K}{E}{D} */
-        return PACKED;
-
-        break;
-      case 25:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {B}{E}{G}{I}{N} */
-        return PBEGIN;
-
-        break;
-      case 26:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {F}{I}{L}{E} */
-        return PFILE;
-
-        break;
-      case 27:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {P}{R}{O}{C}{E}{D}{U}{R}{E} */
-        return PROCEDURE;
-
-        break;
-      case 28:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {P}{R}{O}{G}{R}{A}{M} */
-        return PROGRAM;
-
-        break;
-      case 29:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {R}{E}{C}{O}{R}{D} */
-        return RECORD;
-
-        break;
-      case 30:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {R}{E}{P}{E}{A}{T} */
-        return REPEAT;
-
-        break;
-      case 31:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {S}{E}{T} */
-        return SET;
-
-        break;
-      case 32:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {T}{H}{E}{N} */
-        return THEN;
-
-        break;
-      case 33:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {T}{O} */
-        return TO;
-
-        break;
-      case 34:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {T}{Y}{P}{E} */
-        return TYPE;
-
-        break;
-      case 35:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {U}{N}{T}{I}{L} */
-        return UNTIL;
-
-        break;
-      case 36:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {V}{A}{R} */
-        return VAR;
-
-        break;
-      case 37:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {W}{H}{I}{L}{E} */
-        return WHILE;
-
-        break;
-      case 38:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       {W}{I}{T}{H} */
-        return WITH;
-
-        break;
-      case 39:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       [a-zA-Z]([a-zA-Z0-9])+ */
-        return IDENTIFIER;
-
-        break;
-      case 40:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       := */
-        return ASSIGNMENT;
-
-        break;
-      case 41:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       \(\{NQUOTE\}\|\)\+ */
-        return CHARACTER_STRING;
-
-        break;
-      case 42:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       : */
-        return COLON;
-
-        break;
-      case 43:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       , */
-        return COMMA;
-
-        break;
-      case 44:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       [0-9]+ */
-        return DIGSEQ;
-
-        break;
-      case 45:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       \. */
-        return DOT;
-
-        break;
-      case 46:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       \.\. */
-        return DOTDOT;
-
-        break;
-      case 47:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       = */
-        return EQUAL;
-
-        break;
-      case 48:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       >= */
-        return GE;
-
-        break;
-      case 49:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       > */
-        return GT;
-
-        break;
-      case 50:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       \[ */
-        return LBRAC;
-
-        break;
-      case 51:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       <= */
-        return LE;
-
-        break;
-      case 52:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       \( */
-        return LPAREN;
-
-        break;
-      case 53:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       < */
-        return LT;
-
-        break;
-      case 54:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       - */
-        return MINUS;
-
-        break;
-      case 55:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       <> */
-        return NOTEQUAL;
-
-        break;
-      case 56:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       \+ */
-        return PLUS;
-
-        break;
-      case 57:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       \] */
-        return RBRAC;
-
-        break;
-      case 58:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       [0-9]+\.[0-9]+ */
-        return REALNUMBER;
-
-        break;
-      case 59:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       \) */
-        return RPAREN;
-
-        break;
-      case 60:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       ; */
-        return SEMICOLON;
-
-        break;
-      case 61:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       \/ */
-        return SLASH;
-
-        break;
-      case 62:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       \* */
-        return STAR;
-
-        break;
-      case 63:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       \*\* */
-        return STARSTAR;
-
-        break;
-      case 64:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       -> */
-        return UPARROW;
-
-        break;
-      case 65:
-        /*! Conditions:: INITIAL */
-        /*! Rule::       \^ */
-        return UPARROW;
-
-        break;
       case 66:
         /*! Conditions:: INITIAL */
         /*! Rule::       \(\*|\{ */
-        var c;
+        {
+          // NOTE: I did a most literal porting of the code here. Of course, there are better ways to do this in JS/jison-gho. (lexer scope for comments, String.indexOf, ...)
+          let c;
 
-        while (c = input()) {
-          if (c == '}')
-            break;
-          else if (c == '*') {
-            if ((c = input()) == ')')
+          while (c = this.input()) {
+            // console.error('comment scanner:', { c, inp: this._input, m: this.matched })    // <-- observe some internals for debugging this.
+            if (c === '}')
               break;
-            else
-              unput(c);
-          } else if (c == '\n')
-            line_no++;
-          else if (c == 0)
-            commenteof();
+            else if (c === '*') {
+              if ((c = this.input()) === ')')
+                break;
+              else
+                this.unput(c);
+            } else if (c === '\n')
+              line_no++;
+            else if (c === 0)
+              commenteof();
+          }
         }
 
         break;
@@ -2334,19 +1953,288 @@ const lexer = function() {
       case 69:
         /*! Conditions:: INITIAL */
         /*! Rule::       . */
-        fprintf(
-          stderr,
-          '\'%c\' (0%o): illegal charcter at line %d\n',
-          yy_.yytext[0],
-          yy_.yytext[0],
-          line_no
+        console.error(
+          `'${yy_.yytext[0]}' (${yy_.yytext.charCodeAt(0)}): illegal charcter at line ${line_no}. (BTW: jison-gho yylino says: ${yylineo})`
         );
 
         break;
+      case 70:
+        /*! Conditions:: INITIAL */
+        /*! Rule::       . */
+        console.log('', yy_.yytext);
+
+        /* `flex` lexing mode: the last resort rule! */
+        break;
+      default:
+        return this.simpleCaseActionClusters[yyrulenumber];
       }
     },
 
-    simpleCaseActionClusters: {},
+    simpleCaseActionClusters: {
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {A}{N}{D} */
+      0: 'AND',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {A}{R}{R}{A}{Y} */
+      1: 'ARRAY',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {C}{A}{S}{E} */
+      2: 'CASE',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {C}{O}{N}{S}{T} */
+      3: 'CONST',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {D}{I}{V} */
+      4: 'DIV',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {D}{O} */
+      5: 'DO',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {D}{O}{W}{N}{T}{O} */
+      6: 'DOWNTO',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {E}{L}{S}{E} */
+      7: 'ELSE',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {E}{N}{D} */
+      8: 'END',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {E}{X}{T}{E}{R}{N} */
+      9: 'EXTERNAL',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {E}{X}{T}{E}{R}{N}{A}{L} */
+      10: 'EXTERNAL',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {F}{O}{R} */
+      11: 'FOR',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {F}{O}{R}{W}{A}{R}{D} */
+      12: 'FORWARD',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {F}{U}{N}{C}{T}{I}{O}{N} */
+      13: 'FUNCTION',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {G}{O}{T}{O} */
+      14: 'GOTO',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {I}{F} */
+      15: 'IF',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {I}{N} */
+      16: 'IN',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {L}{A}{B}{E}{L} */
+      17: 'LABEL',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {M}{O}{D} */
+      18: 'MOD',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {N}{I}{L} */
+      19: 'NIL',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {N}{O}{T} */
+      20: 'NOT',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {O}{F} */
+      21: 'OF',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {O}{R} */
+      22: 'OR',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {O}{T}{H}{E}{R}{W}{I}{S}{E} */
+      23: 'OTHERWISE',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {P}{A}{C}{K}{E}{D} */
+      24: 'PACKED',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {B}{E}{G}{I}{N} */
+      25: 'PBEGIN',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {F}{I}{L}{E} */
+      26: 'PFILE',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {P}{R}{O}{C}{E}{D}{U}{R}{E} */
+      27: 'PROCEDURE',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {P}{R}{O}{G}{R}{A}{M} */
+      28: 'PROGRAM',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {R}{E}{C}{O}{R}{D} */
+      29: 'RECORD',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {R}{E}{P}{E}{A}{T} */
+      30: 'REPEAT',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {S}{E}{T} */
+      31: 'SET',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {T}{H}{E}{N} */
+      32: 'THEN',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {T}{O} */
+      33: 'TO',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {T}{Y}{P}{E} */
+      34: 'TYPE',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {U}{N}{T}{I}{L} */
+      35: 'UNTIL',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {V}{A}{R} */
+      36: 'VAR',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {W}{H}{I}{L}{E} */
+      37: 'WHILE',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       {W}{I}{T}{H} */
+      38: 'WITH',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       [a-zA-Z]([a-zA-Z0-9])+ */
+      39: 'IDENTIFIER',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       := */
+      40: 'ASSIGNMENT',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       \(\{NQUOTE\}\|\)\+ */
+      41: 'CHARACTER_STRING',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       : */
+      42: 'COLON',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       , */
+      43: 'COMMA',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       [0-9]+ */
+      44: 'DIGSEQ',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       \. */
+      45: 'DOT',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       \.\. */
+      46: 'DOTDOT',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       = */
+      47: 'EQUAL',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       >= */
+      48: 'GE',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       > */
+      49: 'GT',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       \[ */
+      50: 'LBRAC',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       <= */
+      51: 'LE',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       \( */
+      52: 'LPAREN',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       < */
+      53: 'LT',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       - */
+      54: 'MINUS',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       <> */
+      55: 'NOTEQUAL',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       \+ */
+      56: 'PLUS',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       \] */
+      57: 'RBRAC',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       [0-9]+\.[0-9]+ */
+      58: 'REALNUMBER',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       \) */
+      59: 'RPAREN',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       ; */
+      60: 'SEMICOLON',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       \/ */
+      61: 'SLASH',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       \* */
+      62: 'STAR',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       \*\* */
+      63: 'STARSTAR',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       -> */
+      64: 'UPARROW',
+
+      /*! Conditions:: INITIAL */
+      /*! Rule::       \^ */
+      65: 'UPARROW'
+    },
 
     rules: [
       /*  0: */  /^(?:([Aa])([Nn])([Dd]))/,
@@ -2418,7 +2306,8 @@ const lexer = function() {
       /* 66: */  /^(?:\(\*|\{)/,
       /* 67: */  /^(?:[ \t\f])/,
       /* 68: */  /^(?:\n)/,
-      /* 69: */  /^(?:.)/
+      /* 69: */  /^(?:.)/,
+      /* 70: */  /^(?:.)/
     ],
 
     conditions: {
@@ -2493,7 +2382,8 @@ const lexer = function() {
           66,
           67,
           68,
-          69
+          69,
+          70
         ],
 
         inclusive: true
@@ -2502,8 +2392,9 @@ const lexer = function() {
   };
 
   function commenteof() {
-    fprintf(stderr, 'unexpected EOF inside comment at line %d\n', line_no);
-    exit(1);
+    throw new Error(
+      `unexpected EOF inside comment at line ${line_no}. (BTW: jison-gho yylino says: ${yylineo})`
+    );
   }
 
   function yywrap() {

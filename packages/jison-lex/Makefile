@@ -42,8 +42,7 @@ examples:                                           \
 		examples_basic2_lex                         \
 		examples_basic_lex                          \
 		examples_c99                                \
-		examples_ccalc_lex                          \
-		examples_ccalc_jisonlex                     \
+		examples_ccalc                              \
 		examples_classy                             \
 		examples_codegen_feature_tester_base        \
 		examples_comments                           \
@@ -153,13 +152,12 @@ examples_c99:
 	$(LEX_XMPL_MAIN) examples/c99.l
 	node examples/output/c99.js    							examples/inputData/c99.input.txt                    			examples/output/$@.test-run.tokens.json
 
-examples_ccalc_lex:
+examples_ccalc:
+	# compile the (f)lex spec: the C code in its action blocks WILL NOT permit the generated output to run in NodeJS
 	$(LEX_XMPL_MAIN) examples/ccalc-lex.l
-	node examples/output/ccalc-lex.js    					examples/inputData/ccalc-lex.input.txt                    		examples/output/$@.test-run.tokens.json
-
-examples_ccalc_jisonlex:
-	$(LEX_XMPL_MAIN) examples/ccalc-lex.jisonlex   -o examples/output/ccalc-jisonlex.js
-	node examples/output/ccalc-jisonlex.js    				examples/inputData/ccalc-jisonlex.input.txt                    		examples/output/$@.test-run.tokens.json
+	# this 'port' of the above code, while absolutely *minimal*, WILL run in NodeJS:
+	$(LEX_XMPL_MAIN) examples/ccalc-lex.jisonlex
+	node examples/output/ccalc-lex.js    				examples/inputData/ccalc-lex.input.txt                    		examples/output/$@.test-run.tokens.json
 
 examples_classy:
 	$(LEX_XMPL_MAIN) examples/classy.jisonlex
@@ -210,7 +208,10 @@ examples_lexer_comm_debug:
 	node examples/output/parser-to-lexer-communication-test-w-debug.js    examples/inputData/parser-to-lexer-communication-test-w-debug.input.txt       examples/output/$@.test-run.tokens.json
 
 examples_pascal:
+	# compile the (f)lex spec: the C code in its action blocks WILL NOT permit the generated output to run in NodeJS
 	$(LEX_XMPL_MAIN) examples/pascal.l
+	# this 'port' of the above code, while absolutely *minimal*, WILL run in NodeJS:
+	$(LEX_XMPL_MAIN) examples/pascal.jisonlex
 	node examples/output/pascal.js    						examples/inputData/pascal.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_regex:
@@ -296,8 +297,7 @@ clean-dumpfiles:
 		examples_basic2_lex                         \
 		examples_basic_lex                          \
 		examples_c99                                \
-		examples_ccalc_lex                          \
-		examples_ccalc_jisonlex                     \
+		examples_ccalc                              \
 		examples_classy                             \
 		examples_codegen_feature_tester_base        \
 		examples_comments                           \

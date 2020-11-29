@@ -3,12 +3,20 @@
   http://www.w3.org/2005/01/yacker/uploads/ShapeMap
 */
 
+
+%code init %include "includes/unicode.helpers.js"
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// WARNING: brutal hack to make example compile and run in minimal jison-gho lexer CLI environment.
+
+
 %{
   /*
     ShapeMap parser in the Jison parser generator format.
   */
 
-  const ShapeMap = require("./ShapeMapSymbols");
+  //const ShapeMap = require("./ShapeMapSymbols");
+  // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  // WARNING: brutal hack to make example compile and run in minimal jison-gho lexer CLI environment.
 
   // Common namespaces and entities
   const XSD = 'http://www.w3.org/2001/XMLSchema#',

@@ -1,18 +1,850 @@
 [
   {
-    "id": -1,
-    "token": null,
-    "fail": 1,
-    "err": "ERROR:ReferenceError::FKA_FIXED_ROW_OR_COLUMN_MARKER is not defined::ReferenceError: FKA_FIXED_ROW_OR_COLUMN_MARKER is not defined\n    at Object.lexer__performAction [as performAction] (unicode.js:1943:27)\n    at Object.lexer_test_match [as test_match] (unicode.js:1437:38)\n    at Object.lexer_next [as next] (unicode.js:1542:32)\n    at Object.lexer_lex [as lex] (unicode.js:1682:18)\n    at main_work_function (unicode.js:3033:27)\n    at Object.__jisonlexer_default_main__ [as main] (unicode.js:3127:22)\n    at Object.<anonymous> (unicode.js:3189:13)\n    at Module._compile (loader.js:1137:30)\n    at Object.Module._extensions..js (loader.js:1157:10)\n    at Module.load (loader.js:985:32)"
+    "id": "*",
+    "token": "*",
+    "yytext": {
+      "id": "C",
+      "opcode": 2228502,
+      "_yylloc": {
+        "first_line": 1,
+        "first_column": 1,
+        "last_line": 1,
+        "last_column": 2,
+        "range": [
+          1,
+          2
+        ]
+      },
+      "_commentIndex": 9,
+      "_lexedText": "*"
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 1,
+      "last_line": 1,
+      "last_column": 2,
+      "range": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "id": "-",
+    "token": "-",
+    "yytext": {
+      "id": "C",
+      "opcode": 2228510,
+      "_yylloc": {
+        "first_line": 1,
+        "first_column": 3,
+        "last_line": 1,
+        "last_column": 4,
+        "range": [
+          3,
+          4
+        ]
+      },
+      "_commentIndex": 31,
+      "_lexedText": "-"
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 3,
+      "last_line": 1,
+      "last_column": 4,
+      "range": [
+        3,
+        4
+      ]
+    }
+  },
+  {
+    "id": "VAR",
+    "token": "VAR",
+    "yytext": "lexer",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 5,
+      "last_line": 1,
+      "last_column": 10,
+      "range": [
+        5,
+        10
+      ]
+    }
+  },
+  {
+    "id": "CONSTANT",
+    "token": "CONSTANT",
+    "yytext": "macro",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 11,
+      "last_line": 1,
+      "last_column": 16,
+      "range": [
+        11,
+        16
+      ]
+    }
+  },
+  {
+    "id": "VAR",
+    "token": "VAR",
+    "yytext": "expansion",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 17,
+      "last_line": 1,
+      "last_column": 26,
+      "range": [
+        17,
+        26
+      ]
+    }
+  },
+  {
+    "id": "CONSTANT",
+    "token": "CONSTANT",
+    "yytext": "inside",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 27,
+      "last_line": 1,
+      "last_column": 33,
+      "range": [
+        27,
+        33
+      ]
+    }
+  },
+  {
+    "id": "VAR",
+    "token": "VAR",
+    "yytext": "regex",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 34,
+      "last_line": 1,
+      "last_column": 39,
+      "range": [
+        34,
+        39
+      ]
+    }
+  },
+  {
+    "id": "CONSTANT",
+    "token": "CONSTANT",
+    "yytext": "sets",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 40,
+      "last_line": 1,
+      "last_column": 44,
+      "range": [
+        40,
+        44
+      ]
+    }
+  },
+  {
+    "id": ",",
+    "token": ",",
+    "yytext": {
+      "id": 257,
+      "_yylloc": {
+        "first_line": 1,
+        "first_column": 44,
+        "last_line": 1,
+        "last_column": 45,
+        "range": [
+          44,
+          45
+        ]
+      },
+      "_commentIndex": 2,
+      "_lexedText": ","
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 44,
+      "last_line": 1,
+      "last_column": 45,
+      "range": [
+        44,
+        45
+      ]
+    }
+  },
+  {
+    "id": "VAR",
+    "token": "VAR",
+    "yytext": "e",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 46,
+      "last_line": 1,
+      "last_column": 47,
+      "range": [
+        46,
+        47
+      ]
+    }
+  },
+  {
+    "id": ".",
+    "token": ".",
+    "yytext": {
+      "id": "C",
+      "opcode": 270,
+      "_yylloc": {
+        "first_line": 1,
+        "first_column": 47,
+        "last_line": 1,
+        "last_column": 48,
+        "range": [
+          47,
+          48
+        ]
+      },
+      "_commentIndex": 29,
+      "_lexedText": "."
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 47,
+      "last_line": 1,
+      "last_column": 48,
+      "range": [
+        47,
+        48
+      ]
+    }
+  },
+  {
+    "id": "VAR",
+    "token": "VAR",
+    "yytext": "g",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 48,
+      "last_line": 1,
+      "last_column": 49,
+      "range": [
+        48,
+        49
+      ]
+    }
+  },
+  {
+    "id": ".",
+    "token": ".",
+    "yytext": {
+      "id": "C",
+      "opcode": 270,
+      "_yylloc": {
+        "first_line": 1,
+        "first_column": 49,
+        "last_line": 1,
+        "last_column": 50,
+        "range": [
+          49,
+          50
+        ]
+      },
+      "_commentIndex": 14,
+      "_lexedText": "."
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 49,
+      "last_line": 1,
+      "last_column": 50,
+      "range": [
+        49,
+        50
+      ]
+    }
+  },
+  {
+    "id": "CURRENCY",
+    "token": "CURRENCY",
+    "yytext": {
+      "id": "$",
+      "_currency": "$$$`",
+      "_yylloc": {
+        "first_line": 1,
+        "first_column": 51,
+        "last_line": 1,
+        "last_column": 52,
+        "range": [
+          51,
+          52
+        ]
+      },
+      "_commentIndex": 33,
+      "_lexedText": "`"
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 51,
+      "last_line": 1,
+      "last_column": 52,
+      "range": [
+        51,
+        52
+      ]
+    }
+  },
+  {
+    "id": "CURRENCY",
+    "token": "CURRENCY",
+    "yytext": {
+      "id": "$",
+      "_currency": "$$$[",
+      "_yylloc": {
+        "first_line": 1,
+        "first_column": 52,
+        "last_line": 1,
+        "last_column": 53,
+        "range": [
+          52,
+          53
+        ]
+      },
+      "_commentIndex": 10,
+      "_lexedText": "["
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 52,
+      "last_line": 1,
+      "last_column": 53,
+      "range": [
+        52,
+        53
+      ]
+    }
+  },
+  {
+    "id": "CURRENCY",
+    "token": "CURRENCY",
+    "yytext": {
+      "id": "$",
+      "_currency": "$$${",
+      "_yylloc": {
+        "first_line": 1,
+        "first_column": 53,
+        "last_line": 1,
+        "last_column": 54,
+        "range": [
+          53,
+          54
+        ]
+      },
+      "_commentIndex": 11,
+      "_lexedText": "{"
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 53,
+      "last_line": 1,
+      "last_column": 54,
+      "range": [
+        53,
+        54
+      ]
+    }
+  },
+  {
+    "id": "VAR",
+    "token": "VAR",
+    "yytext": "NAME",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 54,
+      "last_line": 1,
+      "last_column": 58,
+      "range": [
+        54,
+        58
+      ]
+    }
+  },
+  {
+    "id": "CURRENCY",
+    "token": "CURRENCY",
+    "yytext": {
+      "id": "$",
+      "_currency": "$$$}",
+      "_yylloc": {
+        "first_line": 1,
+        "first_column": 58,
+        "last_line": 1,
+        "last_column": 59,
+        "range": [
+          58,
+          59
+        ]
+      },
+      "_commentIndex": 41,
+      "_lexedText": "}"
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 58,
+      "last_line": 1,
+      "last_column": 59,
+      "range": [
+        58,
+        59
+      ]
+    }
+  },
+  {
+    "id": ":",
+    "token": ":",
+    "yytext": {
+      "id": 259,
+      "_yylloc": {
+        "first_line": 1,
+        "first_column": 59,
+        "last_line": 1,
+        "last_column": 62,
+        "range": [
+          59,
+          62
+        ]
+      },
+      "_commentIndex": 3,
+      "_lexedText": "..."
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 59,
+      "last_line": 1,
+      "last_column": 62,
+      "range": [
+        59,
+        62
+      ]
+    }
+  },
+  {
+    "id": "CURRENCY",
+    "token": "CURRENCY",
+    "yytext": {
+      "id": "$",
+      "_currency": "$$$]",
+      "_yylloc": {
+        "first_line": 1,
+        "first_column": 62,
+        "last_line": 1,
+        "last_column": 63,
+        "range": [
+          62,
+          63
+        ]
+      },
+      "_commentIndex": 49,
+      "_lexedText": "]"
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 62,
+      "last_line": 1,
+      "last_column": 63,
+      "range": [
+        62,
+        63
+      ]
+    }
+  },
+  {
+    "id": "CURRENCY",
+    "token": "CURRENCY",
+    "yytext": {
+      "id": "$",
+      "_currency": "$$$`",
+      "_yylloc": {
+        "first_line": 1,
+        "first_column": 63,
+        "last_line": 1,
+        "last_column": 64,
+        "range": [
+          63,
+          64
+        ]
+      },
+      "_commentIndex": 47,
+      "_lexedText": "`"
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 63,
+      "last_line": 1,
+      "last_column": 64,
+      "range": [
+        63,
+        64
+      ]
+    }
+  },
+  {
+    "id": "NL",
+    "token": "NL",
+    "yytext": "\n",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 64,
+      "last_line": 2,
+      "last_column": 0,
+      "range": [
+        64,
+        65
+      ]
+    }
+  },
+  {
+    "id": "/",
+    "token": "/",
+    "yytext": "/",
+    "yylloc": {
+      "first_line": 2,
+      "last_line": 2,
+      "first_column": 0,
+      "last_column": 1,
+      "range": [
+        65,
+        66
+      ]
+    }
+  },
+  {
+    "id": "*",
+    "token": "*",
+    "yytext": {
+      "id": "C",
+      "opcode": 2228502,
+      "_yylloc": {
+        "first_line": 2,
+        "first_column": 1,
+        "last_line": 2,
+        "last_column": 2,
+        "range": [
+          66,
+          67
+        ]
+      },
+      "_commentIndex": 36,
+      "_lexedText": "*"
+    },
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 1,
+      "last_line": 2,
+      "last_column": 2,
+      "range": [
+        66,
+        67
+      ]
+    }
+  },
+  {
+    "id": "CONSTANT",
+    "token": "CONSTANT",
+    "yytext": "End",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 3,
+      "last_line": 2,
+      "last_column": 6,
+      "range": [
+        68,
+        71
+      ]
+    }
+  },
+  {
+    "id": "VAR",
+    "token": "VAR",
+    "yytext": "of",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 7,
+      "last_line": 2,
+      "last_column": 9,
+      "range": [
+        72,
+        74
+      ]
+    }
+  },
+  {
+    "id": "CONSTANT",
+    "token": "CONSTANT",
+    "yytext": "grammar",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 10,
+      "last_line": 2,
+      "last_column": 17,
+      "range": [
+        75,
+        82
+      ]
+    }
+  },
+  {
+    "id": "*",
+    "token": "*",
+    "yytext": {
+      "id": "C",
+      "opcode": 2228502,
+      "_yylloc": {
+        "first_line": 2,
+        "first_column": 18,
+        "last_line": 2,
+        "last_column": 19,
+        "range": [
+          83,
+          84
+        ]
+      },
+      "_commentIndex": 26,
+      "_lexedText": "*"
+    },
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 18,
+      "last_line": 2,
+      "last_column": 19,
+      "range": [
+        83,
+        84
+      ]
+    }
+  },
+  {
+    "id": "/",
+    "token": "/",
+    "yytext": {
+      "id": "C",
+      "opcode": 2228493,
+      "_yylloc": {
+        "first_line": 2,
+        "first_column": 19,
+        "last_line": 2,
+        "last_column": 20,
+        "range": [
+          84,
+          85
+        ]
+      },
+      "_commentIndex": 48,
+      "_lexedText": "/"
+    },
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 19,
+      "last_line": 2,
+      "last_column": 20,
+      "range": [
+        84,
+        85
+      ]
+    }
+  },
+  {
+    "id": "NL",
+    "token": "NL",
+    "yytext": "\n",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 20,
+      "last_line": 3,
+      "last_column": 0,
+      "range": [
+        85,
+        86
+      ]
+    }
+  },
+  {
+    "id": "MODULO_OPERATOR",
+    "token": "MODULO_OPERATOR",
+    "yytext": {
+      "id": "C",
+      "opcode": 277,
+      "_yylloc": {
+        "first_line": 3,
+        "first_column": 0,
+        "last_line": 3,
+        "last_column": 1,
+        "range": [
+          86,
+          87
+        ]
+      },
+      "_commentIndex": 16,
+      "_lexedText": "%"
+    },
+    "yylloc": {
+      "first_line": 3,
+      "first_column": 0,
+      "last_line": 3,
+      "last_column": 1,
+      "range": [
+        86,
+        87
+      ]
+    }
+  },
+  {
+    "id": "MODULO_OPERATOR",
+    "token": "MODULO_OPERATOR",
+    "yytext": {
+      "id": "C",
+      "opcode": 277,
+      "_yylloc": {
+        "first_line": 3,
+        "first_column": 1,
+        "last_line": 3,
+        "last_column": 2,
+        "range": [
+          87,
+          88
+        ]
+      },
+      "_commentIndex": 44,
+      "_lexedText": "%"
+    },
+    "yylloc": {
+      "first_line": 3,
+      "first_column": 1,
+      "last_line": 3,
+      "last_column": 2,
+      "range": [
+        87,
+        88
+      ]
+    }
+  },
+  {
+    "id": "NL",
+    "token": "NL",
+    "yytext": "\n",
+    "yylloc": {
+      "first_line": 3,
+      "first_column": 2,
+      "last_line": 4,
+      "last_column": 0,
+      "range": [
+        88,
+        89
+      ]
+    }
+  },
+  {
+    "id": "NUM",
+    "token": "NUM",
+    "yytext": 999,
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 0,
+      "last_line": 4,
+      "last_column": 3,
+      "range": [
+        89,
+        92
+      ]
+    }
+  },
+  {
+    "id": "EOF",
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 3,
+      "last_line": 4,
+      "last_column": 3,
+      "range": [
+        92,
+        92
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 3,
+      "last_line": 4,
+      "last_column": 3,
+      "range": [
+        92,
+        92
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 3,
+      "last_line": 4,
+      "last_column": 3,
+      "range": [
+        92,
+        92
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 3,
+      "last_line": 4,
+      "last_column": 3,
+      "range": [
+        92,
+        92
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 3,
+      "last_line": 4,
+      "last_column": 3,
+      "range": [
+        92,
+        92
+      ]
+    }
   },
   {
     "id": -2,
     "token": null,
     "summary": {
-      "totalTokenCount": 1,
-      "EOFTokenCount": 0,
+      "totalTokenCount": 39,
+      "EOFTokenCount": 4,
       "ERRORTokenCount": 0,
-      "fatalExceptionCount": 1
+      "fatalExceptionCount": 0
     }
   }
 ]

@@ -19,6 +19,12 @@
     wouldn't accept the next symbol.
 */
 
+
+%code init %include "includes/unicode.helpers.js"
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// WARNING: brutal hack to make example compile and run in minimal jison-gho lexer CLI environment.
+
+
 %{
   /*
     ShEx parser in the Jison parser generator format.
@@ -26,7 +32,9 @@
 
   const UNBOUNDED = -1;
 
-  const ShExUtil = require("@shexjs/util");
+  //const ShExUtil = require("@shexjs/util");
+  // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  // WARNING: brutal hack to make example compile and run in minimal jison-gho lexer CLI environment.
 
   // Common namespaces and entities
   const RDF = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',

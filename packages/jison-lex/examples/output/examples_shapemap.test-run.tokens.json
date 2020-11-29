@@ -1,18 +1,312 @@
 [
   {
-    "id": -1,
-    "token": null,
-    "fail": 1,
-    "err": "ERROR:Error::Cannot find module './ShapeMapSymbols'\nRequire stack:\n- W:\\Projects\\sites\\library.visyond.gov\\80\\lib\\tooling\\jison\\packages\\jison-lex\\examples\\output\\ShapeMapJison.js::Error: Cannot find module './ShapeMapSymbols'\nRequire stack:\n- W:\\Projects\\sites\\library.visyond.gov\\80\\lib\\tooling\\jison\\packages\\jison-lex\\examples\\output\\ShapeMapJison.js\n    at Function.Module._resolveFilename (loader.js:965:15)\n    at Function.Module._load (loader.js:841:27)\n    at Module.require (loader.js:1025:19)\n    at require (helpers.js:72:18)\n    at Object.lexer__performAction [as performAction] (ShapeMapJison.js:1898:24)\n    at Object.lexer_test_match [as test_match] (ShapeMapJison.js:1437:38)\n    at Object.lexer_next [as next] (ShapeMapJison.js:1560:28)\n    at Object.lexer_lex [as lex] (ShapeMapJison.js:1682:18)\n    at main_work_function (ShapeMapJison.js:2698:27)\n    at Object.__jisonlexer_default_main__ [as main] (ShapeMapJison.js:2792:22)"
+    "id": "GT_DIVIDE",
+    "token": "GT_DIVIDE",
+    "yytext": "/",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 4,
+      "last_line": 1,
+      "last_column": 5,
+      "range": [
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "id": "GT_DIVIDE",
+    "token": "GT_DIVIDE",
+    "yytext": "/",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 5,
+      "last_line": 1,
+      "last_column": 6,
+      "range": [
+        5,
+        6
+      ]
+    }
+  },
+  {
+    "id": "unexpected word \"Your\"",
+    "token": "unexpected word \"Your\"",
+    "yytext": "Your",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 7,
+      "last_line": 1,
+      "last_column": 11,
+      "range": [
+        7,
+        11
+      ]
+    }
+  },
+  {
+    "id": "unexpected word \"lexer\"",
+    "token": "unexpected word \"lexer\"",
+    "yytext": "lexer",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 12,
+      "last_line": 1,
+      "last_column": 17,
+      "range": [
+        12,
+        17
+      ]
+    }
+  },
+  {
+    "id": "unexpected word \"must\"",
+    "token": "unexpected word \"must\"",
+    "yytext": "must",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 18,
+      "last_line": 1,
+      "last_column": 22,
+      "range": [
+        18,
+        22
+      ]
+    }
+  },
+  {
+    "id": "unexpected word \"be\"",
+    "token": "unexpected word \"be\"",
+    "yytext": "be",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 23,
+      "last_line": 1,
+      "last_column": 25,
+      "range": [
+        23,
+        25
+      ]
+    }
+  },
+  {
+    "id": "unexpected word \"named\"",
+    "token": "unexpected word \"named\"",
+    "yytext": "named",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 26,
+      "last_line": 1,
+      "last_column": 31,
+      "range": [
+        26,
+        31
+      ]
+    }
+  },
+  {
+    "id": "invalid character `",
+    "token": "invalid character `",
+    "yytext": "`",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 32,
+      "last_line": 1,
+      "last_column": 33,
+      "range": [
+        32,
+        33
+      ]
+    }
+  },
+  {
+    "id": "unexpected word \"lexer\"",
+    "token": "unexpected word \"lexer\"",
+    "yytext": "lexer",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 33,
+      "last_line": 1,
+      "last_column": 38,
+      "range": [
+        33,
+        38
+      ]
+    }
+  },
+  {
+    "id": "invalid character `",
+    "token": "invalid character `",
+    "yytext": "`",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 38,
+      "last_line": 1,
+      "last_column": 39,
+      "range": [
+        38,
+        39
+      ]
+    }
+  },
+  {
+    "id": "IT_a",
+    "token": "IT_a",
+    "yytext": "a",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 40,
+      "last_line": 1,
+      "last_column": 41,
+      "range": [
+        40,
+        41
+      ]
+    }
+  },
+  {
+    "id": "unexpected word \"s\"",
+    "token": "unexpected word \"s\"",
+    "yytext": "s",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 41,
+      "last_line": 1,
+      "last_column": 42,
+      "range": [
+        41,
+        42
+      ]
+    }
+  },
+  {
+    "id": "unexpected word \"shown\"",
+    "token": "unexpected word \"shown\"",
+    "yytext": "shown",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 43,
+      "last_line": 1,
+      "last_column": 48,
+      "range": [
+        43,
+        48
+      ]
+    }
+  },
+  {
+    "id": "unexpected word \"below\"",
+    "token": "unexpected word \"below\"",
+    "yytext": "below",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 49,
+      "last_line": 1,
+      "last_column": 54,
+      "range": [
+        49,
+        54
+      ]
+    }
+  },
+  {
+    "id": "invalid character .",
+    "token": "invalid character .",
+    "yytext": ".",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 54,
+      "last_line": 1,
+      "last_column": 55,
+      "range": [
+        54,
+        55
+      ]
+    }
+  },
+  {
+    "id": "EOF",
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 0,
+      "last_line": 2,
+      "last_column": 0,
+      "range": [
+        56,
+        56
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 0,
+      "last_line": 2,
+      "last_column": 0,
+      "range": [
+        56,
+        56
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 0,
+      "last_line": 2,
+      "last_column": 0,
+      "range": [
+        56,
+        56
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 0,
+      "last_line": 2,
+      "last_column": 0,
+      "range": [
+        56,
+        56
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 2,
+      "first_column": 0,
+      "last_line": 2,
+      "last_column": 0,
+      "range": [
+        56,
+        56
+      ]
+    }
   },
   {
     "id": -2,
     "token": null,
     "summary": {
-      "totalTokenCount": 1,
-      "EOFTokenCount": 0,
+      "totalTokenCount": 20,
+      "EOFTokenCount": 4,
       "ERRORTokenCount": 0,
-      "fatalExceptionCount": 1
+      "fatalExceptionCount": 0
     }
   }
 ]
