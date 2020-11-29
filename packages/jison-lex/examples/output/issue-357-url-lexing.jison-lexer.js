@@ -1,5 +1,5 @@
 
-                    
+
 const lexer = {
 /* JISON-LEX-ANALYTICS-REPORT */
 EOF: 1,
@@ -150,6 +150,7 @@ EOF: 1,
         if (args.length) {
             p.extra_error_attributes = args;
         }
+        p.yyErrorInvoked = true;   // so parseError() user code can easily recognize it is invoked from any yyerror() in the spec action code chunks
 
         return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
     },
@@ -166,22 +167,20 @@ EOF: 1,
      * @public
      * @this {RegExpLexer}
      */
-    cleanupAfterLex: function lexer_cleanupAfterLex(do_not_nuke_errorinfos) {
+    cleanupAfterLex: function lexer_cleanupAfterLex() {
         // prevent lingering circular references from causing memory leaks:
         this.setInput('', {});
 
         // nuke the error hash info instances created during this run.
         // Userland code must COPY any data/references
         // in the error hash instance(s) it is more permanently interested in.
-        if (!do_not_nuke_errorinfos) {
-            for (let i = this.__error_infos.length - 1; i >= 0; i--) {
-                let el = this.__error_infos[i];
-                if (el && typeof el.destroy === 'function') {
-                    el.destroy();
-                }
+        for (let i = this.__error_infos.length - 1; i >= 0; i--) {
+            let el = this.__error_infos[i];
+            if (el && typeof el.destroy === 'function') {
+                el.destroy();
             }
-            this.__error_infos.length = 0;
         }
+        this.__error_infos.length = 0;
 
         return this;
     },
@@ -226,31 +225,31 @@ EOF: 1,
         // including expansion work to be done to go from a loaded
         // lexer to a usable lexer:
         if (!this.__decompressed) {
-          // step 1: decompress the regex list:
+            // step 1: decompress the regex list:
             let rules = this.rules;
-            for (var i = 0, len = rules.length; i < len; i++) {
-                var rule_re = rules[i];
+            for (let i = 0, len = rules.length; i < len; i++) {
+                let rule_re = rules[i];
 
-            // compression: is the RE an xref to another RE slot in the rules[] table?
+                // compression: is the RE an xref to another RE slot in the rules[] table?
                 if (typeof rule_re === 'number') {
                     rules[i] = rules[rule_re];
                 }
             }
 
-          // step 2: unfold the conditions[] set to make these ready for use:
+            // step 2: unfold the conditions[] set to make these ready for use:
             let conditions = this.conditions;
             for (let k in conditions) {
                 let spec = conditions[k];
 
                 let rule_ids = spec.rules;
 
-                var len = rule_ids.length;
+                let len = rule_ids.length;
                 let rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
                 let rule_new_ids = new Array(len + 1);
 
-                for (var i = 0; i < len; i++) {
+                for (let i = 0; i < len; i++) {
                     let idx = rule_ids[i];
-                    var rule_re = rules[idx];
+                    let rule_re = rules[idx];
                     rule_regexes[i + 1] = rule_re;
                     rule_new_ids[i + 1] = idx;
                 }
@@ -519,6 +518,7 @@ EOF: 1,
                 lineno_msg += ' on line ' + (this.yylineno + 1);
             }
             const p = this.constructLexErrorInfo(lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).', false);
+            p.isLexerBacktrackingNotSupportedError = true;            // when this is true, you 'know' the produced error token will be queued.
             this._signaled_error_token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
         }
         return this;
@@ -1132,8 +1132,34 @@ EOF: 1,
             let activeCondition = this.topState();
             let conditionStackDepth = this.conditionStack.length;
 
-            let token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
-            if (token === this.ERROR) {
+            // when this flag is set in your parseError() `hash`, you 'know' you cannot manipute `yytext` to be anything but 
+            // a string value, unless
+            // - you either get to experience a lexer crash once it invokes .input() with your manipulated `yytext` object,
+            // - or you must forward the lex cursor yourself by invoking `yy.input()` or equivalent, *before* you go and
+            //   tweak that `yytext`.
+            p.lexerHasAlreadyForwardedCursorBy1 = (!this.matches);
+
+            // Simplify use of (advanced) custom parseError() handlers: every time we encounter an error,
+            // which HAS NOT consumed any input yet (thus causing an infinite lexer loop unless we take special action),
+            // we FIRST consume ONE character of input, BEFORE we call parseError().
+            // 
+            // This implies that the parseError() now can call `unput(this.yytext)` if it wants to only change lexer
+            // state via popState/pushState, but otherwise this would make for a cleaner parseError() implementation
+            // as there's no conditional check for `hash.lexerHasAlreadyForwardedCursorBy1` needed in there any more.
+            // 
+            // Since that flag is new as of jison-gho 0.7.0, as is this new consume1+parseError() behaviour, only
+            // sophisticated userland parseError() methods will need to be reviewed.
+            // Haven't found any of those in the (Open Source) wild today, so this should be safe to change...
+
+            // *** CONSUME 1 ***:
+                        
+            //if (token === this.ERROR) {
+            //    ^^^^^^^^^^^^^^^^^^^^ WARNING: no matter what token the error handler produced, 
+            //                         it MUST move the cursor forward or you'ld end up in 
+            //                         an infinite lex loop, unless one or more of the following 
+            //                         conditions was changed, so as to change the internal lexer 
+            //                         state and thus enable it to produce a different token:
+            //                         
                 // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
                 // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
                 // has not consumed/modified any pending input or changed state in the error handler:
@@ -1147,8 +1173,19 @@ EOF: 1,
                 ) {
                     this.input();
                 }
-            }
-            return token;
+            //}
+
+            // *** PARSE-ERROR ***:
+            // 
+            // Note:
+            // userland code in there may `unput()` what was done, after checking the `hash.lexerHasAlreadyForwardedCursorBy1` flag.
+            // Caveat emptor! :: When you simply `unput()` the `yytext` without at least changing the lexer condition state 
+            // via popState/pushState, you WILL end up with an infinite lexer loop. 
+            // 
+            // This kernel code has been coded to prevent this dangerous situation unless you specifically seek it out
+            // in your custom parseError handler.
+                        
+            return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
         }
     },
 
@@ -1390,10 +1427,10 @@ EOF: 1,
 },
     JisonLexerError: JisonLexerError,
     performAction: function lexer__performAction(yy, yyrulenumber, YY_START) {
-            var yy_ = this;
+            const yy_ = this;
 
             
-var YYSTATE = YY_START;
+const YYSTATE = YY_START;
 switch(yyrulenumber) {
 case 1 : 
 /*! Conditions:: INITIAL */ 
@@ -1441,10 +1478,10 @@ default:
 };
 ;
 
-                    //=============================================================================
-                    //                     JISON-LEX OPTIONS:
+//=============================================================================
+//                     JISON-LEX OPTIONS:
 
-                    {
+const lexerSpecConglomerate = {
   lexerActionsUseYYLENG: '???',
   lexerActionsUseYYLINENO: '???',
   lexerActionsUseYYTEXT: '???',
@@ -1493,33 +1530,27 @@ default:
 //
 // to see the output.
 
-var assert = require("assert");
-
-parser.main = function () {
-    var rv = parser.parse('a+b');
-    console.log("test #1: 'a+b' ==> ", rv, parser.yy);
-    // assert.equal(rv, '+aDabX:a');
-
-    rv = parser.parse('a-b');
-    console.log("test #2: 'a-b' ==> ", rv);
-    // assert.equal(rv, 'XE');
-
-    // if you get past the assert(), you're good.
-    console.log("tested OK");
-}`,
+var assert = require("assert")`,
     macros: {},
     startConditions: {},
     codeSections: [],
     importDecls: [],
     unknownDecls: [],
   },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
   options: {
     moduleType: 'commonjs',
     debug: false,
     enableDebugLogs: false,
     json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
     dumpSourceCodeOnFailure: true,
     throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
     defaultModuleName: 'lexer',
     xregexp: false,
     lexerErrorsAreRecoverable: false,
@@ -1528,12 +1559,12 @@ parser.main = function () {
     ranges: false,
     trackPosition: true,
     caseInsensitive: false,
-    exportSourceCode: false,
+    exportSourceCode: {
+      enabled: false,
+    },
     exportAST: false,
     prettyCfg: true,
-    noMain: true,
   },
-  moduleType: 'commonjs',
   conditions: {
     INITIAL: {
       rules: [
@@ -1547,10 +1578,10 @@ parser.main = function () {
     },
   },
   performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
-            var yy_ = this;
+            const yy_ = this;
 
             
-var YYSTATE = YY_START;
+const YYSTATE = YY_START;
 switch(yyrulenumber) {
 case 1 : 
 /*! Conditions:: INITIAL */ 
@@ -1652,22 +1683,8 @@ default:
 //
 // to see the output.
 
-var assert = require("assert");
-
-parser.main = function () {
-    var rv = parser.parse('a+b');
-    console.log("test #1: 'a+b' ==> ", rv, parser.yy);
-    // assert.equal(rv, '+aDabX:a');
-
-    rv = parser.parse('a-b');
-    console.log("test #2: 'a-b' ==> ", rv);
-    // assert.equal(rv, 'XE');
-
-    // if you get past the assert(), you're good.
-    console.log("tested OK");
-}`,
+var assert = require("assert")`,
   __in_rules_failure_analysis_mode__: false,
   is_custom_lexer: false,
 }
 
-                

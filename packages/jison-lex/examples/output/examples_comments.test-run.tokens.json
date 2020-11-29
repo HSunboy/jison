@@ -15,19 +15,163 @@
     }
   },
   {
-    "id": -1,
-    "token": null,
-    "fail": 1,
-    "err": "ERROR:ReferenceError::getTypes is not defined::ReferenceError: getTypes is not defined\n    at Object.lexer__performAction [as performAction] (comments.js:1902:9)\n    at Object.lexer_test_match [as test_match] (comments.js:1438:38)\n    at Object.lexer_next [as next] (comments.js:1561:28)\n    at Object.lexer_lex [as lex] (comments.js:1646:18)\n    at main_work_function (comments.js:2126:27)\n    at Object.__jisonlexer_default_main__ [as main] (comments.js:2220:22)\n    at Object.<anonymous> (comments.js:2282:13)\n    at Module._compile (loader.js:1137:30)\n    at Object.Module._extensions..js (loader.js:1157:10)\n    at Module.load (loader.js:985:32)"
+    "id": "commentType",
+    "token": "commentType",
+    "yytext": "T:a",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 1,
+      "last_line": 1,
+      "last_column": 4,
+      "range": [
+        1,
+        4
+      ]
+    }
+  },
+  {
+    "id": "commentEnd",
+    "token": "commentEnd",
+    "yytext": "*/",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 4,
+      "last_line": 1,
+      "last_column": 6,
+      "range": [
+        4,
+        6
+      ]
+    }
+  },
+  {
+    "id": "commentType",
+    "token": "commentType",
+    "yytext": "T:b",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 6,
+      "last_line": 1,
+      "last_column": 9,
+      "range": [
+        6,
+        9
+      ]
+    }
+  },
+  {
+    "id": "commentEnd",
+    "token": "commentEnd",
+    "yytext": "*/",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 9,
+      "last_line": 1,
+      "last_column": 11,
+      "range": [
+        9,
+        11
+      ]
+    }
+  },
+  {
+    "id": "inlineCommentType",
+    "token": "inlineCommentType",
+    "yytext": "T:c",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 11,
+      "last_line": 1,
+      "last_column": 14,
+      "range": [
+        11,
+        14
+      ]
+    }
+  },
+  {
+    "id": "inlineCommentEnd",
+    "token": "inlineCommentEnd",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 14,
+      "last_line": 1,
+      "last_column": 14,
+      "range": [
+        14,
+        14
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 14,
+      "last_line": 1,
+      "last_column": 14,
+      "range": [
+        14,
+        14
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 14,
+      "last_line": 1,
+      "last_column": 14,
+      "range": [
+        14,
+        14
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 14,
+      "last_line": 1,
+      "last_column": 14,
+      "range": [
+        14,
+        14
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 14,
+      "last_line": 1,
+      "last_column": 14,
+      "range": [
+        14,
+        14
+      ]
+    }
   },
   {
     "id": -2,
     "token": null,
     "summary": {
-      "totalTokenCount": 2,
-      "EOFTokenCount": 0,
+      "totalTokenCount": 11,
+      "EOFTokenCount": 4,
       "ERRORTokenCount": 0,
-      "fatalExceptionCount": 1
+      "fatalExceptionCount": 0
     }
   }
 ]
