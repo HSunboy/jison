@@ -697,7 +697,7 @@ definition
                 when the mistake isn't immediately obvious from this error spot itself.
 
                   Erroneous code:
-                ${yylexer.prettyPrintRange(@error, @-1)}
+                ${yylexer.prettyPrintRange(@error, @0)}
 
                   Technical error report:
                 ${$error.errStr}
@@ -1280,7 +1280,7 @@ action
                 You may place the '%include' instruction only at the start/front of a line.
 
                   Its use is not permitted at this position:
-                ${yylexer.prettyPrintRange(@INCLUDE_PLACEMENT_ERROR, @-1)}
+                ${yylexer.prettyPrintRange(@INCLUDE_PLACEMENT_ERROR, @0)}
             `);
             $$ = $action;
         }
@@ -1290,7 +1290,7 @@ action
                 Missing curly braces: seems you did not correctly bracket a lexer rule action block in curly braces: '{ ... }'.
 
                   Offending action body:
-                ${yylexer.prettyPrintRange(@BRACKET_MISSING, @-1)}
+                ${yylexer.prettyPrintRange(@BRACKET_MISSING, @0)}
             `);
             $$ = $action;
         }
@@ -1300,7 +1300,7 @@ action
                 Too many curly braces: seems you did not correctly bracket a lexer rule action block in curly braces: '{ ... }'.
 
                   Offending action body:
-                ${yylexer.prettyPrintRange(@BRACKET_SURPLUS, @-1)}
+                ${yylexer.prettyPrintRange(@BRACKET_SURPLUS, @0)}
             `);
             $$ = $action;
         }
@@ -1313,7 +1313,7 @@ action
                 your rule action block code in a '%{...%}' block.
 
                   Offending action body:
-                ${yylexer.prettyPrintRange(@UNTERMINATED_STRING_ERROR, @-1)}
+                ${yylexer.prettyPrintRange(@UNTERMINATED_STRING_ERROR, @0)}
             `);
             $$ = $action;
         }
@@ -1639,7 +1639,7 @@ option_list
                     You may only specify one name/argument in a ${yy.__options_category_description__} statement.
 
                       Erroneous area:
-                    ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(@comma, @option), @-1)}
+                    ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(@comma, @option), @0)}
                 `);
             }
             if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS) {
@@ -1655,7 +1655,7 @@ option_list
                         ${$-1} ${optlist.join(' ')} ...
 
                       Erroneous area:
-                    ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(@comma, @option_list), @-1)}
+                    ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(@comma, @option_list), @0)}
                 `);
             }
             $$ = $option_list;
@@ -1671,7 +1671,7 @@ option_list
                     You may only specify one name/argument in a ${yy.__options_category_description__} statement.
 
                       Erroneous area:
-                    ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(@option), @-1)}
+                    ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(@option), @0)}
                 `);
             }
             $$ = $option_list;
