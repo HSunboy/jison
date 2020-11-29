@@ -81,7 +81,7 @@ spec
             }
             return $$;
         }
-    | init declaration_list start_productions_marker grammar error EOF
+    | init declaration_list start_productions_marker error /* start_epilogue_marker ... */ EOF
         {
             yyerror(rmCommonWS`
                 illegal input in the parser grammar productions definition section.
@@ -89,27 +89,12 @@ spec
                 Maybe you did not correctly separate trailing code from the grammar rule set with a '%%' marker on an otherwise empty line?
 
                   Erroneous area:
-                ${yylexer.prettyPrintRange(@error, @grammar)}
+                ${yylexer.prettyPrintRange(@error, @EOF)}
 
                   Technical error report:
                 ${$error.errStr}
             `);
-        }
-    | init declaration_list error start_productions_marker
-        {
-            yyerror(rmCommonWS`
-                illegal input in the parser header section.
 
-                Maybe you did not correctly separate the parse 'header section' (token definitions, options, lexer spec, etc.) from the grammar rule set with a '%%' on an otherwise empty line?
-                It can also be that the error is triggered by the last ${yy.__options_category_description__} statement
-                just above, so make sure to check the surroundings of the error location.
-
-                  Erroneous area:
-                ${yylexer.prettyPrintRange(@error, @declaration_list)}
-
-                  Technical error report:
-                ${$error.errStr}
-            `);
         }
     | init declaration_list error EOF
         {
@@ -346,7 +331,7 @@ declaration
             for (let i = 0, len = lst.length; i < len; i++) {
                 yy.options[lst[i][0]] = lst[i][1];
             }
-            yy.popContext('Line 349');
+            yy.popContext('Line 334');
             $$ = {options: lst};
         }
     //
@@ -364,7 +349,7 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 367');
+            yy.popContext('Line 352');
             $$ = null;
         }
     | option_keyword error
@@ -379,7 +364,7 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 382');
+            yy.popContext('Line 367');
             $$ = null;
         }
     | DEBUG
@@ -425,7 +410,7 @@ declaration
                 `);
             }
 
-            yy.popContext('Line 428');
+            yy.popContext('Line 413');
 
             $$ = {
                 imports: body
@@ -445,7 +430,7 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 448');
+            yy.popContext('Line 433');
             $$ = null;
         }
     | init_code_keyword option_list ACTION_START action ACTION_END OPTIONS_END
@@ -488,7 +473,7 @@ declaration
                 `);
             }
 
-            yy.popContext('Line 491');
+            yy.popContext('Line 476');
 
             $$ = {
                 initCode: {
@@ -515,7 +500,7 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 518');
+            yy.popContext('Line 503');
             $$ = null;
         }
     | init_code_keyword error ACTION_START /* ...action */ error OPTIONS_END
@@ -532,7 +517,7 @@ declaration
                   Technical error report:
                 ${$error1.errStr}
             `);
-            yy.popContext('Line 535');
+            yy.popContext('Line 520');
             $$ = null;
         }
     | init_code_keyword error OPTIONS_END
@@ -553,7 +538,7 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 556');
+            yy.popContext('Line 541');
             $$ = null;
         }
     | on_error_recovery_keyword ACTION_START action ACTION_END
@@ -600,11 +585,16 @@ declaration
                 illegal input in the parser spec declarations section.
 
                 This might be stuff incorrectly dangling off the previous
-                '${yy.__options_category_description__}' definition statement, so please do check above
-                when the mistake isn't immediately obvious from this error spot itself.
+                '${yy.__options_category_description__}' definition statement, 
+                so please do check above when the mistake isn't immediately 
+                obvious from this error spot itself.
+
+                Or maybe you did not correctly separate the parse 'header section' 
+                (token definitions, options, lexer spec, etc.) from the grammar rule set
+                with a '%%' on an otherwise empty line?
 
                   Erroneous code:
-                ${yylexer.prettyPrintRange(@error, @-1)}
+                ${yylexer.prettyPrintRange(@error, @0)}
 
                   Technical error report:
                 ${$error.errStr}
@@ -1033,7 +1023,7 @@ production_id
 
                 while the user-defined action code block MAY be an arrow function, e.g.
 
-                    rule: math_production -> Math.min($math_production, 42);
+                    rule: id -> Math.min($id, 42);
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@ARROW_ACTION, @id)}
@@ -1531,7 +1521,7 @@ option_list
                 $$.push($option);
             }
         }
-    | option_list ','[comma] error?[err] '=' option_value
+    | option_list ','[comma] error?[err] '=' any_option_value
         {
             let with_value_msg = ' (with optional value assignment)';
             if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
@@ -1556,18 +1546,18 @@ option
         {
             $$ = [$option_name, true];
         }
-    | option_name '=' option_value
+    | option_name '=' any_option_value
         {
             // validate that this is legal behaviour under the given circumstances, i.e. parser context:
             if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
                 yyerror(rmCommonWS`
-                    The entries in a ${yy.__options_category_description__} statement MUST NOT be assigned values, such as '${$option_name}=${$option_value}'.
+                    The entries in a ${yy.__options_category_description__} statement MUST NOT be assigned values, such as '${$option_name}=${$any_option_value}'.
 
                       Erroneous area:
-                    ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(@option_value, @option_name), @-1)}
+                    ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(@any_option_value, @option_name), @0)}
                 `);
             }
-            $$ = [$option_name, $option_value];
+            $$ = [$option_name, $any_option_value];
         }
     | option_name '=' error
         {
@@ -1584,13 +1574,13 @@ option
             $$ = null;
         }
 // WARNING: this production placed here will cause a LR(1) conflict, due to the options not necessarily being
-// separated by ',' comma's, so it is ambiguous if 'option_name = option_value' should then be interpreted
-// as a correct option *or* as a lone 'option_name' *plus* '%epsilon = option_value'.
+// separated by ',' comma's, so it is ambiguous if 'option_name = any_option_value' should then be interpreted
+// as a correct option *or* as a lone 'option_name' *plus* '%epsilon = any_option_value'.
 //
 // To resolve this conflict, we move this production to the 'option_list' where it MAY be applied when the
 // option_list is comma-separated.
 //
-//    | error?[err] '=' option_value
+//    | error?[err] '=' any_option_value
 //        {
 //            let with_value_msg = ' (with optional value assignment)';
 //            if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
@@ -1610,7 +1600,7 @@ option
     ;
 
 option_name
-    : option_value[name]
+    : nonnumeric_option_value[name]
         {
             // validate that this is legal input under the given circumstances, i.e. parser context:
             if (yy.__options_flags__ & OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES) {
@@ -1673,11 +1663,16 @@ option_name
         }
     ;
 
-option_value
+nonnumeric_option_value
     : OPTION_STRING
         { $$ = JSON5.parse($OPTION_STRING); }
     | OPTION_VALUE
         { $$ = parseValue($OPTION_VALUE); }
+    ;
+
+any_option_value
+    : nonnumeric_option_value
+    | INTEGER
     ;
 
 epilogue
@@ -1780,7 +1775,7 @@ epilogue_chunk
         %{
             // The issue has already been reported by the lexer. No need to repeat
             // ourselves with another error report from here.
-            $$ = null;
+            $$ = '';
         %}
     | TRAILING_CODE_CHUNK
         {
@@ -1794,7 +1789,7 @@ epilogue_chunk
                 There's an error in your lexer epilogue code block.
 
                   Erroneous code:
-                ${yylexer.prettyPrintRange(@error, @-1)}
+                ${yylexer.prettyPrintRange(@error)}
 
                   Technical error report:
                 ${$error.errStr}

@@ -42,7 +42,6 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 
 
 %x action code options
-%s token
 %s ebnf
 
 
@@ -57,9 +56,9 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 
 // Comments should be gobbled and discarded anywhere
 // *except* the code/action blocks:
-<INITIAL,ebnf,token,options>"//"[^\r\n]*
+<INITIAL,ebnf,options>"//"[^\r\n]*
                                         /* skip single-line comment */
-<INITIAL,ebnf,token,options>"/*"[^]*?"*/"
+<INITIAL,ebnf,options>"/*"[^]*?"*/"
                                         /* skip multi-line comment */
 
 
@@ -372,16 +371,6 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                         this.pushState('action');
                                         return 'ARROW_ACTION_START';
 
-
-
-
-
-
-
-<token>{BR}                             this.popState();
-<token>"%%"                             this.popState();
-<token>";"                              this.popState();
-
 <ebnf>"%%"                              this.popState();
                                         this.pushState('code');
                                         return '%%';
@@ -459,14 +448,22 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 // catch any abuse / incorrect input and report accordingly.
 ","                                     return ',';
 "*"                                     return '*';
+";"                                     this.popState();
+                                        return 'OPTIONS_END';
 
 // The 'options' mode also serves to lex extended `%token` specs a la bison:
 "<"{ID}">"                              yytext = this.matches[1];
                                         return 'TOKEN_TYPE';
 
+{HEX_NUMBER}                            yytext = parseInt(yytext, 16); 
+                                        return 'INTEGER';
+
+{DECIMAL_NUMBER}(?![xX0-9a-fA-F])       yytext = parseInt(yytext, 10); 
+                                        return 'INTEGER';
+
 {ANY_LITERAL_CHAR}+                     return 'OPTION_VALUE';
 
-/* skip leading whitespace on the next line of input, when followed by more options */
+/* skip leading whitespace on the next line of input, when followed by more option data */
 {BR}{WS}+(?=\S)                         /* ignore */
 /* otherwise the EOL marks the end of the options statement */
 {BR}                                    this.popState();
@@ -476,8 +473,6 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 
 }
 //===================== <options> section end =============================
-
-
 
 
 {BR}+                                   /* skip newlines */
@@ -497,7 +492,6 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 \'{QUOTED_STRING_CONTENT}\'             return 'STRING_LIT';
 \`{ES2017_STRING_CONTENT}\`             return 'STRING_LIT';
 
-<token>{ANY_LITERAL_CHAR}+              return 'TOKEN_WORD';
 ":"                                     return ':';
 ";"                                     return ';';
 "|"                                     return '|';
@@ -511,7 +505,8 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 "%left"                                 return 'LEFT';
 "%right"                                return 'RIGHT';
 "%nonassoc"                             return 'NONASSOC';
-"%token"                                this.pushState('token'); return 'TOKEN';
+"%token"                                this.pushState('options'); 
+                                        return 'TOKEN';
 "%on_error_recovery_shift"              return 'ON_ERROR_RECOVERY_SHIFT';
 "%on_error_recovery_reduce"             return 'ON_ERROR_RECOVERY_REDUCE';
 "%parse-param"[s]?                      return 'PARSE_PARAM';
@@ -569,10 +564,6 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                             };
                                             return 'UNKNOWN_DECL';
                                         %}
-"<"{ID}">"                              yytext = this.matches[1];
-                                        return 'TOKEN_TYPE';
-{HEX_NUMBER}                            yytext = parseInt(yytext, 16); return 'INTEGER';
-{DECIMAL_NUMBER}(?![xX0-9a-fA-F])       yytext = parseInt(yytext, 10); return 'INTEGER';
 
 
 // in the trailing CODE block, only accept these `%include` macros when
