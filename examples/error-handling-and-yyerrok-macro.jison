@@ -54,7 +54,7 @@ line  : error '\n'
 
 
 /*
- * In some situations, you may want yyerror() to be called
+ * In some situations, you may want yyerrok() to be called
  * even if the parser has not seen three correct tokens since the last
  * error.
  *
