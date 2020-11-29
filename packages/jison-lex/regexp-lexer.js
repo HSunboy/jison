@@ -3187,8 +3187,12 @@ function stripUnusedLexerCode(src, grammarSpec) {
 
     let new_src;
     try {
-        let ast = helpers.parseCodeChunkToAST(src, grammarSpec.options.prettyCfg);
-        new_src = helpers.prettyPrintAST(ast, grammarSpec.options.prettyCfg);
+        if (grammarSpec.options.doNotTestCompile) {
+            new_src = src;
+        } else {
+            let ast = helpers.parseCodeChunkToAST(src, grammarSpec.options);
+            new_src = helpers.prettyPrintAST(ast, grammarSpec.options.prettyCfg);
+        }
     } catch (ex) {
         let line = ex.lineNumber || 0;
         let a = src.split(/\r?\n/g);
@@ -3215,7 +3219,6 @@ function stripUnusedLexerCode(src, grammarSpec) {
         new_src = src;
     }
 
-
     if (0) {
         this.actionsUseYYLENG = analyzeFeatureUsage(this.performAction, /\byyleng\b/g, 1);
         this.actionsUseYYLINENO = analyzeFeatureUsage(this.performAction, /\byylineno\b/g, 1);
@@ -3232,7 +3235,6 @@ function stripUnusedLexerCode(src, grammarSpec) {
         this.actionsUseLocationAssignment = analyzeFeatureUsage(this.performAction, /\bthis\._\$[^\w]/g, 0);
         // Note that the `#name`, `#$` and `#n` constructs are expanded directly to their symbol number without
         // the need to use yystack! Hence yystack is only there for very special use action code.)
-
 
         if (this.DEBUG) {
             console.log('Optimization analysis: ', {
@@ -3258,7 +3260,6 @@ function stripUnusedLexerCode(src, grammarSpec) {
                 noTryCatch: this.options.noTryCatch
             });
         }
-
 
         function analyzeFeatureUsage(sourcecode, feature, threshold) {
             let found = sourcecode.match(feature);
