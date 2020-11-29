@@ -413,6 +413,9 @@ yyerror(rmCommonWS\`
             console.log(i);
         }
     `, options);
+
+        fs.writeFileSync(__dirname + "/parseCodeChunkAST-0001.json5", JSON5.stringify(ast, null, 2), 'utf8');
+
         let rv = helpers.prettyPrintAST(ast, options);
         let sollwert_src = rmCommonWS`
         for (var i = 0, len = 10; i < len; i++) {
@@ -452,6 +455,9 @@ yyerror(rmCommonWS\`
     `;
 
         let ast = helpers.parseCodeChunkToAST(src, options);
+
+        fs.writeFileSync(__dirname + "/parseCodeChunkAST-0002.json5", JSON5.stringify(ast, null, 2), 'utf8');
+
         let rv = helpers.prettyPrintAST(ast, options);
         let sollwert_src = src;
         assert.strictEqual(rv, sollwert_src.trim());
@@ -488,6 +494,9 @@ yyerror(rmCommonWS\`
     `;
 
         let ast = helpers.parseCodeChunkToAST(src, options);
+
+        fs.writeFileSync(__dirname + "/parseCodeChunkAST-0003.json5", JSON5.stringify(ast, null, 2), 'utf8');
+
         let rv = helpers.prettyPrintAST(ast, options);
         let sollwert_src = src;
         assert.strictEqual(rv.replace(/\s+/g, ' '), sollwert_src.trim().replace(/\s+/g, ' '));
