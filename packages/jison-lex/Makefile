@@ -57,6 +57,7 @@ examples:                                           \
 		examples_issue1								\
 		examples_issue51							\
 		examples_issue_url_lexing                   \
+		examples_issue_custom_parseError            \
 		examples_issue_x1                           \
 		examples_issue_x2                           \
 		examples_jslex								\
@@ -199,6 +200,14 @@ examples_issue_url_lexing:
 	$(LEX_XMPL_MAIN) examples/issue-357-url-lexing.jison
 	node examples/output/issue-357-url-lexing.js    		examples/inputData/issue-357-url-lexing.input.txt               examples/output/$@.test-run.tokens.json
 
+examples_issue_custom_parseError:
+	$(LEX_XMPL_MAIN) tests/specs/016-continue-on-yyerror.jison
+	node examples/output/016-continue-on-yyerror.js    		examples/inputData/issue-custom-parseError.input.txt            examples/output/$@.016.test-run.tokens.json
+	$(LEX_XMPL_MAIN) tests/specs/017-continue-on-yyerror.jison
+	node examples/output/017-continue-on-yyerror.js    		examples/inputData/issue-custom-parseError.input.txt            examples/output/$@.017.test-run.tokens.json
+	$(LEX_XMPL_MAIN) tests/specs/017A-continue-on-yyerror.jison
+	node examples/output/017A-continue-on-yyerror.js    	examples/inputData/issue-custom-parseError.input.txt            examples/output/$@.017A.test-run.tokens.json
+
 examples_lex_grammar:
 	$(LEX_XMPL_MAIN) examples/lex_grammar.jisonlex
 	node examples/output/lex_grammar.js    					examples/inputData/lex_grammar.input.txt                    	examples/output/$@.test-run.tokens.json
@@ -312,6 +321,7 @@ clean-dumpfiles:
 		examples_issue1								\
 		examples_issue51							\
 		examples_issue_url_lexing                   \
+		examples_issue_custom_parseError            \
 		examples_issue_x1                           \
 		examples_issue_x2                           \
 		examples_jslex								\
