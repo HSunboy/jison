@@ -712,6 +712,8 @@ option_keyword
             yy.pushContext();
             yy.__options_flags__ = OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES | OPTION_ACCEPTS_000_IDENTIFIER_NAMES;
             yy.__options_category_description__ = $OPTIONS;
+
+            $$ = $1;
         }
     ;
 
@@ -721,6 +723,8 @@ import_keyword
             yy.pushContext();
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;
             yy.__options_category_description__ = $IMPORT;
+
+            $$ = $1;
         }
     ;
 
@@ -730,6 +734,8 @@ init_code_keyword
             yy.pushContext();
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS | OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;
             yy.__options_category_description__ = $INIT_CODE;
+
+            $$ = $1;
         }
     ;
 
@@ -815,7 +821,7 @@ scoped_rules_collective
                 $rule.unshift($start_conditions);
             }
 
-            yy.popContext('Line 818');
+            yy.popContext('Line 824');
 
             $$ = [$rule];
         }
@@ -827,7 +833,7 @@ scoped_rules_collective
                 });
             }
 
-            yy.popContext('Line 830');
+            yy.popContext('Line 836');
 
             $$ = $rule_block;
         }
@@ -845,7 +851,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 848');
+            yy.popContext('Line 854');
             $$ = null;
         }
     | start_conditions '{' error
@@ -862,7 +868,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 865');
+            yy.popContext('Line 871');
             $$ = null;
         }
     | start_conditions error '}'
@@ -879,7 +885,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 882');
+            yy.popContext('Line 888');
             $$ = null;
         }
     ;
@@ -1195,7 +1201,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@start_inclusive_keyword)}
             `);
-            yy.popContext('Line 1198');
+            yy.popContext('Line 1204');
             $$ = null;
         }
     | start_exclusive_keyword
@@ -1209,7 +1215,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@start_exclusive_keyword)}
             `);
-            yy.popContext('Line 1212');
+            yy.popContext('Line 1218');
             $$ = null;
         }
     | option_keyword
@@ -1223,7 +1229,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@option_keyword)}
             `);
-            yy.popContext('Line 1226');
+            yy.popContext('Line 1232');
             $$ = null;
         }
     | UNKNOWN_DECL
@@ -1250,7 +1256,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@import_keyword)}
             `);
-            yy.popContext('Line 1253');
+            yy.popContext('Line 1259');
             $$ = null;
         }
     | init_code_keyword
@@ -1264,7 +1270,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@init_code_keyword)}
             `);
-            yy.popContext('Line 1267');
+            yy.popContext('Line 1273');
             $$ = null;
         }
     ;
@@ -1354,7 +1360,7 @@ start_conditions
 
             // Optimization: these two calls cancel one another out here:
             //
-            // yy.popContext('Line 1357');
+            // yy.popContext('Line 1363');
             // yy.pushContext();
 
             yy.__inside_scoped_ruleset__ = true;
@@ -1383,7 +1389,7 @@ start_conditions
 
             // Optimization: these two calls cancel one another out here:
             //
-            // yy.popContext('Line 1386');
+            // yy.popContext('Line 1392');
             // yy.pushContext();
 
             yy.__inside_scoped_ruleset__ = true;
@@ -1686,7 +1692,7 @@ option_list
                 $$.push($option);
             }
         }
-    | option_list ','[comma] error?[err] '=' option_value
+    | option_list ','[comma] error?[err] '=' any_option_value
         {
             let with_value_msg = ' (with optional value assignment)';
             if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
@@ -1711,18 +1717,18 @@ option
         {
             $$ = [$option_name, true];
         }
-    | option_name '=' option_value
+    | option_name '=' any_option_value
         {
             // validate that this is legal behaviour under the given circumstances, i.e. parser context:
             if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
                 yyerror(rmCommonWS`
-                    The entries in a ${yy.__options_category_description__} statement MUST NOT be assigned values, such as '${$option_name}=${$option_value}'.
+                    The entries in a ${yy.__options_category_description__} statement MUST NOT be assigned values, such as '${$option_name}=${$any_option_value}'.
 
                       Erroneous area:
-                    ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(@option_value, @option_name), @-1)}
+                    ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(@any_option_value, @option_name), @-1)}
                 `);
             }
-            $$ = [$option_name, $option_value];
+            $$ = [$option_name, $any_option_value];
         }
     | option_name '=' error
         {
@@ -1739,13 +1745,13 @@ option
             $$ = null;
         }
 // WARNING: this production placed here will cause a LR(1) conflict, due to the options not necessarily being
-// separated by ',' comma's, so it is ambiguous if 'option_name = option_value' should then be interpreted
-// as a correct option *or* as a lone 'option_name' *plus* '%epsilon = option_value'.
+// separated by ',' comma's, so it is ambiguous if 'option_name = any_option_value' should then be interpreted
+// as a correct option *or* as a lone 'option_name' *plus* '%epsilon = any_option_value'.
 //
 // To resolve this conflict, we move this production to the 'option_list' where it MAY be applied when the
 // option_list is comma-separated.
 //
-//    | error?[err] '=' option_value
+//    | error?[err] '=' any_option_value
 //        {
 //            let with_value_msg = ' (with optional value assignment)';
 //            if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
@@ -1765,7 +1771,7 @@ option
     ;
 
 option_name
-    : option_value[name]
+    : nonnumeric_option_value[name]
         {
             // validate that this is legal input under the given circumstances, i.e. parser context:
             if (yy.__options_flags__ & OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES) {
@@ -1828,11 +1834,16 @@ option_name
         }
     ;
 
-option_value
+nonnumeric_option_value
     : OPTION_STRING
         { $$ = JSON5.parse($OPTION_STRING); }
     | OPTION_VALUE
         { $$ = parseValue($OPTION_VALUE); }
+    ;
+
+any_option_value
+    : nonnumeric_option_value
+    | INTEGER
     ;
 
 epilogue
@@ -1842,7 +1853,7 @@ epilogue
         }
     | start_epilogue_marker
         {
-            yy.popContext('Line 1845');
+            yy.popContext('Line 1856');
 
             $$ = '';
         }
@@ -1853,7 +1864,7 @@ epilogue
                 let rv = checkActionBlock(srcCode, @epilogue_chunks, yy);
                 if (rv) {
                     yyerror(rmCommonWS`
-                        The '%%' lexer epilogue code does not compile: ${rv}
+                        The '%%' lexer epilogue code section does not compile: ${rv}
 
                           Erroneous area:
                         ${yylexer.prettyPrintRange(@epilogue_chunks, @1)}
@@ -1861,7 +1872,7 @@ epilogue
                 }
             }
 
-            yy.popContext('Line 1864');
+            yy.popContext('Line 1875');
 
             $$ = srcCode;
         }
@@ -1935,7 +1946,7 @@ epilogue_chunk
         %{
             // The issue has already been reported by the lexer. No need to repeat
             // ourselves with another error report from here.
-            $$ = null;
+            $$ = '';
         %}
     | TRAILING_CODE_CHUNK
         {
@@ -2020,11 +2031,11 @@ include_macro_code
                     }
                 }
 
-                yy.popContext('Line 2023');
-
                 // And no, we don't support nested '%include':
                 $$ = '\n// Included by Jison: ' + include_path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + include_path + '\n\n';
             }
+
+            yy.popContext('Line 2038');
         }
     | include_keyword error
         {
@@ -2037,7 +2048,7 @@ include_macro_code
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 2040');
+            yy.popContext('Line 2051');
             $$ = null;
         }
     ;

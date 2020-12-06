@@ -455,10 +455,12 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 "<"{ID}">"                              yytext = this.matches[1];
                                         return 'TOKEN_TYPE';
 
-{HEX_NUMBER}                            yytext = parseInt(yytext, 16); 
+{HEX_NUMBER}(?![{ANY_LITERAL_CHAR}])
+                                        yytext = parseInt(yytext, 16); 
                                         return 'INTEGER';
 
-{DECIMAL_NUMBER}(?![xX0-9a-fA-F])       yytext = parseInt(yytext, 10); 
+-?{DECIMAL_NUMBER}(?![{ANY_LITERAL_CHAR}])
+                                        yytext = parseInt(yytext, 10); 
                                         return 'INTEGER';
 
 {ANY_LITERAL_CHAR}+                     return 'OPTION_VALUE';
