@@ -45,9 +45,9 @@
     },
   },
   {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: '666',
+    id: 55,
+    token: '"INTEGER"',
+    yytext: 666,
     yylloc: {
       first_line: 1,
       first_column: 14,

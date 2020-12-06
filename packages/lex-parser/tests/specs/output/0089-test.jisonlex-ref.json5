@@ -7,6 +7,7 @@
 %option case-insensitive
 %option never-interactive
 %option prefix="pp"
+%option buzz = qqq
 
 %option stack
 
@@ -36,6 +37,7 @@
 %option 6445
 %option 42-42
 %option 8
+%option -5
 %option ''
 %option " "
 %option -
@@ -50,6 +52,20 @@
 %option ~a
 %option $a$
 %option a#b
+%option al.ka.selzer
+
+// We also recognize the alias %options (plural):
+%options foo
+%options bar, but, top 						// 3 options
+%options bar bi tu ra te 					// that would be 5 options
+%options fu=bar, neg=-45, pos=71, hex=0x1A6F, max=666
+%options Fu=bar Neg=-45 Pos=71 Hex=0x1A6F Max=666
+%options NotANum=42A, neither-a-number=0x1AF_Z
+
+%option xbar, xbut, xtop 						// 3 options
+%option xbar xbi xtu xra xte 					// that would be 5 options
+%option xfu=bar, xneg=-45, xpos=71, xhex=0x1A6F, xmax=666
+%option xFu=bar xNeg=-45 xPos=71 xHex=0x1A6F xMax=666
 
 %%
 
@@ -62,25 +78,66 @@
 `,
   err: {
     hash: {
-      errStr: 'Parsing aborted due to exception.',
-      text: '6445',
-      value: '6445',
+      errStr: `
+ill defined '%option line.
+    
+  Erroneous area:
+33: %option 6445
+^^..........^^^^
+34: %option 42-42
+    
+  Technical error report:
+Parse error on line 33:
+%option 6445
+--------^
+Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"
+`,
+      exception: null,
+      text: '',
+      value: '',
       token: '"$accept"',
       token_id: 0,
-      line: 31,
-      expected: null,
+      line: 32,
       recoverable: false,
-      state: 54,
+      state: 125,
       action: 2,
-      new_state: 122,
-      stack_pointer: 5,
+      new_state: 20,
+      stack_pointer: 6,
     },
-    message: 'name.replace is not a function',
+    message: `
+ill defined '%option line.
+    
+  Erroneous area:
+33: %option 6445
+^^..........^^^^
+34: %option 42-42
+    
+  Technical error report:
+Parse error on line 33:
+%option 6445
+--------^
+Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"
+`,
     name: 'JisonParserError',
-    stack: `TypeError: name.replace is not a function
-    at Object.parser__PerformAction (/lex-parser-cjs.js:5161:25)
-    at Object.parse (/lex-parser-cjs.js:8630:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12337:25)
+    stack: `JisonParserError: 
+ill defined '%option line.
+    
+  Erroneous area:
+33: %option 6445
+^^..........^^^^
+34: %option 42-42
+    
+  Technical error report:
+Parse error on line 33:
+%option 6445
+--------^
+Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"
+
+    at Object.parseError (/lex-parser-cjs.js:7220:15)
+    at Object.yyError (/lex-parser-cjs.js:7410:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:3371:14)
+    at Object.parse (/lex-parser-cjs.js:8474:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12400:25)
     at Context.testEachParserExample (/all-tests.js:483:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
@@ -108,6 +165,7 @@
           caseInsensitive: true,
           neverInteractive: true,
           prefix: 'pp',
+          buzz: 'qqq',
           stack: true,
           noyy_top_state: true,
           noyy_scan_buffer: true,
@@ -145,53 +203,137 @@
       hash: {
         errStr: null,
         exception: null,
-        text: '6445',
-        value: '6445',
+        text: '',
+        value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 31,
+        line: 32,
         expected: null,
         recoverable: false,
-        state: 54,
+        state: 125,
         action: 2,
-        new_state: 122,
-        stack_pointer: 5,
+        new_state: 20,
+        stack_pointer: 6,
       },
       reentrant_call_depth: 1,
       error_infos_stack: [
         {
-          errStr: 'Parsing aborted due to exception.',
+          errStr: `Parse error on line 33:
+%option 6445
+--------^
+Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"`,
+          exception: null,
           text: '6445',
-          value: '6445',
+          value: 6445,
+          token: '"INTEGER"',
+          token_id: 55,
+          line: 32,
+          recoverable: true,
+          state: 13,
+          action: 0,
+          new_state: 198,
+          stack_pointer: 4,
+        },
+        {
+          errStr: `
+ill defined '%option line.
+    
+  Erroneous area:
+33: %option 6445
+^^..........^^^^
+34: %option 42-42
+    
+  Technical error report:
+Parse error on line 33:
+%option 6445
+--------^
+Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"
+`,
+          exception: null,
+          text: '',
+          value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 31,
-          expected: null,
+          line: 32,
           recoverable: false,
-          state: 54,
+          state: 125,
           action: 2,
-          new_state: 122,
-          stack_pointer: 5,
+          new_state: 20,
+          stack_pointer: 6,
         },
         {
           errStr: null,
           exception: null,
-          text: '6445',
-          value: '6445',
+          text: '',
+          value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 31,
+          line: 32,
           expected: null,
           recoverable: false,
-          state: 54,
+          state: 125,
           action: 2,
-          new_state: 122,
-          stack_pointer: 5,
+          new_state: 20,
+          stack_pointer: 6,
         },
       ],
-      error_recovery_stack: [],
-      error_infos_stack_size: 2,
-      error_recovery_stack_size: 0,
+      error_recovery_stack: [
+        {
+          errStr: `Parse error on line 33:
+%option 6445
+--------^
+Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"`,
+          exception: null,
+          text: '6445',
+          value: 6445,
+          token: '"INTEGER"',
+          token_id: 55,
+          line: 32,
+          recoverable: true,
+          state: 13,
+          action: 0,
+          new_state: 198,
+          stack_pointer: 4,
+          base_pointer: 7,
+          info_stack_pointer: 10,
+          root_failure_pointer: 4,
+        },
+        {
+          errStr: `
+ill defined '%option line.
+    
+  Erroneous area:
+33: %option 6445
+^^..........^^^^
+34: %option 42-42
+    
+  Technical error report:
+Parse error on line 33:
+%option 6445
+--------^
+Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"
+`,
+          exception: null,
+          text: '',
+          value: '',
+          token: '"$accept"',
+          token_id: 0,
+          line: 32,
+          recoverable: false,
+          state: 125,
+          action: 2,
+          new_state: 20,
+          stack_pointer: 6,
+          base_pointer: 7,
+          info_stack_pointer: 7,
+          root_failure_pointer: 6,
+          yyError: true,
+          errorRuleDepth: -1,
+          recovering: 2,
+        },
+      ],
+      error_infos_stack_size: 3,
+      error_recovery_stack_size: 2,
     },
     reentrant_call_depth: 0,
     error_infos_stack_size: 0,
@@ -202,6 +344,7 @@
 %option case-insensitive
 %option never-interactive
 %option prefix="pp"
+%option buzz = qqq
 
 %option stack
 
@@ -231,6 +374,7 @@
 %option 6445
 %option 42-42
 %option 8
+%option -5
 %option ''
 %option " "
 %option -
@@ -245,6 +389,20 @@
 %option ~a
 %option $a$
 %option a#b
+%option al.ka.selzer
+
+// We also recognize the alias %options (plural):
+%options foo
+%options bar, but, top 						// 3 options
+%options bar bi tu ra te 					// that would be 5 options
+%options fu=bar, neg=-45, pos=71, hex=0x1A6F, max=666
+%options Fu=bar Neg=-45 Pos=71 Hex=0x1A6F Max=666
+%options NotANum=42A, neither-a-number=0x1AF_Z
+
+%option xbar, xbut, xtop 						// 3 options
+%option xbar xbi xtu xra xte 					// that would be 5 options
+%option xfu=bar, xneg=-45, xpos=71, xhex=0x1A6F, xmax=666
+%option xFu=bar xNeg=-45 xPos=71 xHex=0x1A6F xMax=666
 
 %%
 

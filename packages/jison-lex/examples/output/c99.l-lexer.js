@@ -2024,7 +2024,7 @@ default:
   }
 }
 };
-;
+
 
 //=============================================================================
 //                     JISON-LEX OPTIONS:
@@ -4388,7 +4388,11 @@ function sym_type(identifier) {
 // 
 // static void comment(void);
 // static int check_type(void)`,
-  moduleInclude: `// 
+  moduleInclude: `
+
+
+
+// 
 // int yywrap(void)        /* called at end of input */
 // {
 //     return 1;           /* terminate now */

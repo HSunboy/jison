@@ -1835,7 +1835,7 @@ default:
   }
 }
 };
-;
+
 
 //=============================================================================
 //                     JISON-LEX OPTIONS:
@@ -3525,7 +3525,11 @@ default:
     'INITIAL',
   ],
   actionInclude: '',
-  moduleInclude: `function commenteof() {
+  moduleInclude: `
+
+
+
+function commenteof() {
  throw new Error(\`unexpected EOF inside comment at line ${line_no}. (BTW: jison-gho yylino says: ${yylineo})\`);
 }
 

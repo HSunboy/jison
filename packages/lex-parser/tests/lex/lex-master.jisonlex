@@ -505,9 +505,17 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 "<"{ID}">"                              yytext = this.matches[1];
                                         return 'TOKEN_TYPE';
 
+{HEX_NUMBER}(?![{ANY_LITERAL_CHAR}])
+                                        yytext = parseInt(yytext, 16); 
+                                        return 'INTEGER';
+
+-?{DECIMAL_NUMBER}(?![{ANY_LITERAL_CHAR}])
+                                        yytext = parseInt(yytext, 10); 
+                                        return 'INTEGER';
+
 {ANY_LITERAL_CHAR}+                     return 'OPTION_VALUE';
 
-/* skip leading whitespace on the next line of input, when followed by more options */
+/* skip leading whitespace on the next line of input, when followed by more option data */
 {BR}{WS}+(?=\S)                         /* ignore */
 /* otherwise the EOL marks the end of the options statement */
 {BR}                                    this.popState();

@@ -1480,7 +1480,7 @@ default:
   }
 }
 };
-;
+
 
 //=============================================================================
 //                     JISON-LEX OPTIONS:
@@ -1712,7 +1712,11 @@ default:
     'INITIAL',
   ],
   actionInclude: '',
-  moduleInclude: `// feature of the GH fork: specify your own main.
+  moduleInclude: `
+
+
+
+// feature of the GH fork: specify your own main.
 //
 // compile with
 // 

@@ -2869,7 +2869,11 @@ default:
 
     
 
-    var rmCommonWS = helpers.rmCommonWS;
+    
+
+
+
+var rmCommonWS = helpers.rmCommonWS;
 var dquote     = helpers.dquote;
 var scanRegExp = helpers.scanRegExp;
 
@@ -2956,7 +2960,7 @@ lexer.log = function l_log() {
     } else {
         console.log.apply(console, arguments);
     }
-};
+}
 
     return lexer;
 })();
@@ -3053,15 +3057,19 @@ Limits
         process.exit(1);
     }
 
+    function customMainParseError(str, hash, ExceptionClass) {
+        console.error("parseError: ", str);
+        return this.ERROR;
+    }
+
     function main_work_function(input) {
         const lexer = exports.lexer;
 
         let yy = {
-            parseError: function customMainParseError(str, hash, ExceptionClass) {
-                console.error("parseError: ", str);
-                return this.ERROR;
-            }
+            // if a custom parseError has already been defined, we DO NOT override that one:
+            parseError: (lexer.yy && lexer.yy.parseError) || (lexer.yy && lexer.yy.parser && lexer.yy.parser.parseError) || customMainParseError
         };
+
         let tokens = [];
         
         let countEOFs = 0;

@@ -1961,7 +1961,7 @@ break;
   }
 }
 };
-;
+
 
 //=============================================================================
 //                     JISON-LEX OPTIONS:
@@ -3743,7 +3743,11 @@ break;
  */
 
 var line_no = 1`,
-  moduleInclude: `function commenteof() {
+  moduleInclude: `
+
+
+
+function commenteof() {
  fprintf (stderr, "unexpected EOF inside comment at line %d\\n", line_no);
  exit(1);
 }

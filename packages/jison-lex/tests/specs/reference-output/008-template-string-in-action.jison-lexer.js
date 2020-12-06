@@ -1465,7 +1465,7 @@ break;
   }
 }
 };
-;
+
 
 //=============================================================================
 //                     JISON-LEX OPTIONS:
@@ -1611,7 +1611,11 @@ break;
     'INITIAL',
   ],
   actionInclude: '',
-  moduleInclude: `var rmCommonWS = helpers.rmCommonWS;
+  moduleInclude: `
+
+
+
+var rmCommonWS = helpers.rmCommonWS;
 
 function log(msg) {}`,
   __in_rules_failure_analysis_mode__: false,

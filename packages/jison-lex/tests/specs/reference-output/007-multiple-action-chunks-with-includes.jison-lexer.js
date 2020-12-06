@@ -1499,7 +1499,7 @@ break;
   }
 }
 };
-;
+
 
 //=============================================================================
 //                     JISON-LEX OPTIONS:
@@ -1740,7 +1740,11 @@ block0B();   // init chunk 2
 dummy2()
 
 // End Of Include by Jison: includes/dummy002.include`,
-  moduleInclude: `// Included by Jison: includes/dummydecl.include:
+  moduleInclude: `
+
+
+
+// Included by Jison: includes/dummydecl.include:
 
 function block1() {}
 function block2() {}

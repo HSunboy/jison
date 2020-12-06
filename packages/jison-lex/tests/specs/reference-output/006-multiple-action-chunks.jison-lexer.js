@@ -1485,7 +1485,7 @@ break;
   }
 }
 };
-;
+
 
 //=============================================================================
 //                     JISON-LEX OPTIONS:
@@ -1680,7 +1680,11 @@ block0B();   // init chunk 2
 block0D();   // not indented, hence init chunk 3
 
 block0E();   // not indented, hence init chunk 4`,
-  moduleInclude: `function block1() { }
+  moduleInclude: `
+
+
+
+function block1() { }
 function block2() { }
 function block3() { }
 function block4() { }

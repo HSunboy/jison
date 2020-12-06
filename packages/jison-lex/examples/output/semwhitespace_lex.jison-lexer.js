@@ -1584,7 +1584,7 @@ default:
   }
 }
 };
-;
+
 
 //=============================================================================
 //                     JISON-LEX OPTIONS:
@@ -2086,7 +2086,12 @@ default:
     'INITIAL',
   ],
   actionInclude: '',
-  moduleInclude: '/* initialize the pseudo-token stack with 0 indents */\n_iemitstack = [0]',
+  moduleInclude: `
+
+
+
+/* initialize the pseudo-token stack with 0 indents */
+_iemitstack = [0]`,
   __in_rules_failure_analysis_mode__: false,
   is_custom_lexer: false,
 }

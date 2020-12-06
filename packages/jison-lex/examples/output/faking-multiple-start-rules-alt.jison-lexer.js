@@ -1701,7 +1701,7 @@ default:
   }
 }
 };
-;
+
 
 //=============================================================================
 //                     JISON-LEX OPTIONS:
@@ -2501,7 +2501,11 @@ default:
     'INITIAL',
   ],
   actionInclude: '',
-  moduleInclude: `/*
+  moduleInclude: `
+
+
+
+/*
  * This chunk is included in the parser object code,
  * following the 'init' code block that may be set in \`%{ ... %}\` at the top of this
  * grammar definition file.

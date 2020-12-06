@@ -1505,7 +1505,7 @@ default:
   }
 }
 };
-;
+
 
 //=============================================================================
 //                     JISON-LEX OPTIONS:
@@ -1796,7 +1796,11 @@ default:
 // ................. include #1
 
 // End Of Include by Jison: includes/with-includes.prelude1.js`,
-  moduleInclude: `// Included by Jison: includes/with-includes.prelude2.js:
+  moduleInclude: `
+
+
+
+// Included by Jison: includes/with-includes.prelude2.js:
 
 // ................. include #2
 

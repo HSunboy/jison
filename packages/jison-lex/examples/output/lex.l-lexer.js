@@ -2524,7 +2524,7 @@ default:
   }
 }
 };
-;
+
 
 //=============================================================================
 //                     JISON-LEX OPTIONS:
@@ -5806,7 +5806,11 @@ default:
     'INITIAL',
   ],
   actionInclude: '',
-  moduleInclude: `var rmCommonWS = helpers.rmCommonWS;
+  moduleInclude: `
+
+
+
+var rmCommonWS = helpers.rmCommonWS;
 var dquote     = helpers.dquote;
 var scanRegExp = helpers.scanRegExp;
 

@@ -37,7 +37,7 @@
             input_offset = 0; 
         } 
     };
-;
+
 
 //=============================================================================
 //                     JISON-LEX OPTIONS:
@@ -299,7 +299,11 @@ const YYSTATE = YY_START;
             input_offset = 0; 
         } 
     }`,
-  moduleInclude: `// Included by Jison: includes/with-includes.main.js:
+  moduleInclude: `
+
+
+
+// Included by Jison: includes/with-includes.main.js:
 
 lexer.main = function (args) {
     if (!args[1]) {

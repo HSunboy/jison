@@ -1485,7 +1485,7 @@ default:
   }
 }
 };
-;
+
 
 //=============================================================================
 //                     JISON-LEX OPTIONS:
@@ -2152,7 +2152,11 @@ default:
     'INITIAL',
   ],
   actionInclude: '',
-  moduleInclude: `// Included by Jison: includes/benchmark.js:
+  moduleInclude: `
+
+
+
+// Included by Jison: includes/benchmark.js:
 
 /**
  * Provide a generic performance timer, which strives to produce highest possible accuracy time measurements.

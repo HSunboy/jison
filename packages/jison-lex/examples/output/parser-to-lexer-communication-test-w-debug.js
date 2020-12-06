@@ -1947,9 +1947,6 @@ const lexer = function() {
     }
   };
 
-
-
-
   // Included by Jison: includes/benchmark.js:
 
   /**
@@ -2540,14 +2537,17 @@ Limits
       process.exit(1);
     }
 
+    function customMainParseError(str, hash, ExceptionClass) {
+      console.error('parseError: ', str);
+      return this.ERROR;
+    }
+
     function main_work_function(input) {
       const lexer = exports.lexer;
 
       let yy = {
-        parseError: function customMainParseError(str, hash, ExceptionClass) {
-          console.error('parseError: ', str);
-          return this.ERROR;
-        }
+        // if a custom parseError has already been defined, we DO NOT override that one:
+        parseError: lexer.yy && lexer.yy.parseError || lexer.yy && lexer.yy.parser && lexer.yy.parser.parseError || customMainParseError
       };
 
       let tokens = [];
