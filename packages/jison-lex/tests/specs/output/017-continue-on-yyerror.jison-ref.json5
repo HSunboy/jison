@@ -1,0 +1,594 @@
+[
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: 'a' (97): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^..^`,
+      recoverable: false,
+      text: 'a',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 0,
+        last_line: 1,
+        last_column: 1,
+        range: [
+          0,
+          1,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: [
+          {
+            errStr: `Lexical error on line 1: 'a' (97): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^..^`,
+            recoverable: false,
+            text: 'a',
+            token: null,
+            line: 0,
+            loc: {
+              first_line: 1,
+              first_column: 0,
+              last_line: 1,
+              last_column: 1,
+              range: [
+                0,
+                1,
+              ],
+            },
+            yy: {},
+            lexer: '[lexer]',
+            yyErrorInvoked: true,
+          },
+          {
+            errStr: `Lexical error on line 1: ' ' (32): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^...^`,
+            recoverable: false,
+            text: ' ',
+            token: null,
+            line: 0,
+            loc: {
+              first_line: 1,
+              first_column: 1,
+              last_line: 1,
+              last_column: 2,
+              range: [
+                1,
+                2,
+              ],
+            },
+            yy: '[reference to sibling --> *.[0].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            yyErrorInvoked: true,
+          },
+          {
+            errStr: `Lexical error on line 1: 'b' (98): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^....^`,
+            recoverable: false,
+            text: 'b',
+            token: null,
+            line: 0,
+            loc: {
+              first_line: 1,
+              first_column: 2,
+              last_line: 1,
+              last_column: 3,
+              range: [
+                2,
+                3,
+              ],
+            },
+            yy: '[reference to sibling --> *.[0].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            yyErrorInvoked: true,
+          },
+          {
+            errStr: `Lexical error on line 1: ' ' (32): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^.....^`,
+            recoverable: false,
+            text: ' ',
+            token: null,
+            line: 0,
+            loc: {
+              first_line: 1,
+              first_column: 3,
+              last_line: 1,
+              last_column: 4,
+              range: [
+                3,
+                4,
+              ],
+            },
+            yy: '[reference to sibling --> *.[0].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            yyErrorInvoked: true,
+          },
+          {
+            errStr: `Lexical error on line 1: 'c' (99): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^......^`,
+            recoverable: false,
+            text: 'c',
+            token: null,
+            line: 0,
+            loc: {
+              first_line: 1,
+              first_column: 4,
+              last_line: 1,
+              last_column: 5,
+              range: [
+                4,
+                5,
+              ],
+            },
+            yy: '[reference to sibling --> *.[0].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            yyErrorInvoked: true,
+          },
+        ],
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+        ],
+        match: '',
+        matched: 'a b c',
+        matches: false,
+        yytext: '',
+        offset: 5,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 0,
+        yylloc: {
+          first_line: 1,
+          first_column: 5,
+          last_line: 1,
+          last_column: 5,
+          range: [
+            5,
+            5,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          trackPosition: true,
+        },
+        yy: {},
+      },
+      yyErrorInvoked: true,
+      errorDiag: {
+        inputPos: 4,
+        yytext: 'a',
+        yyleng: 1,
+        matches: [
+          'a',
+        ],
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: '[reference to sibling --> *.[0].yytext.lexer.__error_infos.[0].loc]',
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: ' ' (32): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^...^`,
+      recoverable: false,
+      text: ' ',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 1,
+        last_line: 1,
+        last_column: 2,
+        range: [
+          1,
+          2,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[0].yytext.lexer.__error_infos, length = 5]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+        ],
+        match: '',
+        matched: 'a b c',
+        matches: false,
+        yytext: '',
+        offset: 5,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 0,
+        yylloc: {
+          first_line: 1,
+          first_column: 5,
+          last_line: 1,
+          last_column: 5,
+          range: [
+            5,
+            5,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          trackPosition: true,
+        },
+        yy: {},
+      },
+      yyErrorInvoked: true,
+      errorDiag: {
+        inputPos: 3,
+        yytext: ' ',
+        yyleng: 1,
+        matches: [
+          ' ',
+        ],
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: '[reference to sibling --> *.[0].yytext.lexer.__error_infos.[1].loc]',
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: 'b' (98): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^....^`,
+      recoverable: false,
+      text: 'b',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 2,
+        last_line: 1,
+        last_column: 3,
+        range: [
+          2,
+          3,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[0].yytext.lexer.__error_infos, length = 5]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+        ],
+        match: '',
+        matched: 'a b c',
+        matches: false,
+        yytext: '',
+        offset: 5,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 0,
+        yylloc: {
+          first_line: 1,
+          first_column: 5,
+          last_line: 1,
+          last_column: 5,
+          range: [
+            5,
+            5,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          trackPosition: true,
+        },
+        yy: {},
+      },
+      yyErrorInvoked: true,
+      errorDiag: {
+        inputPos: 2,
+        yytext: 'b',
+        yyleng: 1,
+        matches: [
+          'b',
+        ],
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: '[reference to sibling --> *.[0].yytext.lexer.__error_infos.[2].loc]',
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: ' ' (32): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^.....^`,
+      recoverable: false,
+      text: ' ',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 3,
+        last_line: 1,
+        last_column: 4,
+        range: [
+          3,
+          4,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[0].yytext.lexer.__error_infos, length = 5]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+        ],
+        match: '',
+        matched: 'a b c',
+        matches: false,
+        yytext: '',
+        offset: 5,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 0,
+        yylloc: {
+          first_line: 1,
+          first_column: 5,
+          last_line: 1,
+          last_column: 5,
+          range: [
+            5,
+            5,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          trackPosition: true,
+        },
+        yy: {},
+      },
+      yyErrorInvoked: true,
+      errorDiag: {
+        inputPos: 1,
+        yytext: ' ',
+        yyleng: 1,
+        matches: [
+          ' ',
+        ],
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: '[reference to sibling --> *.[0].yytext.lexer.__error_infos.[3].loc]',
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: 'c' (99): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^......^`,
+      recoverable: false,
+      text: 'c',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 4,
+        last_line: 1,
+        last_column: 5,
+        range: [
+          4,
+          5,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[0].yytext.lexer.__error_infos, length = 5]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+        ],
+        match: '',
+        matched: 'a b c',
+        matches: false,
+        yytext: '',
+        offset: 5,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 0,
+        yylloc: {
+          first_line: 1,
+          first_column: 5,
+          last_line: 1,
+          last_column: 5,
+          range: [
+            5,
+            5,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          trackPosition: true,
+        },
+        yy: {},
+      },
+      yyErrorInvoked: true,
+      errorDiag: {
+        inputPos: -1,
+        yytext: 'c',
+        yyleng: 1,
+        matches: [
+          'c',
+        ],
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: '[reference to sibling --> *.[0].yytext.lexer.__error_infos.[4].loc]',
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 5,
+      last_line: 1,
+      last_column: 5,
+      range: [
+        5,
+        5,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 5,
+      last_line: 1,
+      last_column: 5,
+      range: [
+        5,
+        5,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 5,
+      last_line: 1,
+      last_column: 5,
+      range: [
+        5,
+        5,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 5,
+      last_line: 1,
+      last_column: 5,
+      range: [
+        5,
+        5,
+      ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 9,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 5,
+      fatalExceptionCount: 0,
+    },
+  },
+]

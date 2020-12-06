@@ -1,0 +1,300 @@
+[
+  {
+    "id": 666,
+    "token": 666,
+    "yytext": {
+      "text": ":",
+      "message": "Lexical error on line 1: ':' (58): illegal character at line 0.\n\n  Erroneous area:\n1: :: A = B × C\n^..^",
+      "yyrulenumber": 0
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 0,
+      "last_line": 1,
+      "last_column": 1,
+      "range": [
+        0,
+        1
+      ]
+    }
+  },
+  {
+    "id": 666,
+    "token": 666,
+    "yytext": {
+      "text": ":",
+      "message": "Lexical error on line 1: ':' (58): illegal character at line 0.\n\n  Erroneous area:\n1: :: A = B × C\n^...^",
+      "yyrulenumber": 0
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 1,
+      "last_line": 1,
+      "last_column": 2,
+      "range": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "id": 666,
+    "token": 666,
+    "yytext": {
+      "text": " ",
+      "message": "Lexical error on line 1: ' ' (32): illegal character at line 0.\n\n  Erroneous area:\n1: :: A = B × C\n^....^",
+      "yyrulenumber": 0
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 2,
+      "last_line": 1,
+      "last_column": 3,
+      "range": [
+        2,
+        3
+      ]
+    }
+  },
+  {
+    "id": 666,
+    "token": 666,
+    "yytext": {
+      "text": "A",
+      "message": "Lexical error on line 1: 'A' (65): illegal character at line 0.\n\n  Erroneous area:\n1: :: A = B × C\n^.....^",
+      "yyrulenumber": 0
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 3,
+      "last_line": 1,
+      "last_column": 4,
+      "range": [
+        3,
+        4
+      ]
+    }
+  },
+  {
+    "id": 666,
+    "token": 666,
+    "yytext": {
+      "text": " ",
+      "message": "Lexical error on line 1: ' ' (32): illegal character at line 0.\n\n  Erroneous area:\n1: :: A = B × C\n^......^",
+      "yyrulenumber": 0
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 4,
+      "last_line": 1,
+      "last_column": 5,
+      "range": [
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "id": 666,
+    "token": 666,
+    "yytext": {
+      "text": "=",
+      "message": "Lexical error on line 1: '=' (61): illegal character at line 0.\n\n  Erroneous area:\n1: :: A = B × C\n^.......^",
+      "yyrulenumber": 0
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 5,
+      "last_line": 1,
+      "last_column": 6,
+      "range": [
+        5,
+        6
+      ]
+    }
+  },
+  {
+    "id": 666,
+    "token": 666,
+    "yytext": {
+      "text": " ",
+      "message": "Lexical error on line 1: ' ' (32): illegal character at line 0.\n\n  Erroneous area:\n1: :: A = B × C\n^........^",
+      "yyrulenumber": 0
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 6,
+      "last_line": 1,
+      "last_column": 7,
+      "range": [
+        6,
+        7
+      ]
+    }
+  },
+  {
+    "id": 666,
+    "token": 666,
+    "yytext": {
+      "text": "B",
+      "message": "Lexical error on line 1: 'B' (66): illegal character at line 0.\n\n  Erroneous area:\n1: :: A = B × C\n^.........^",
+      "yyrulenumber": 0
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 7,
+      "last_line": 1,
+      "last_column": 8,
+      "range": [
+        7,
+        8
+      ]
+    }
+  },
+  {
+    "id": 666,
+    "token": 666,
+    "yytext": {
+      "text": " ",
+      "message": "Lexical error on line 1: ' ' (32): illegal character at line 0.\n\n  Erroneous area:\n1: :: A = B × C\n^..........^",
+      "yyrulenumber": 0
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 8,
+      "last_line": 1,
+      "last_column": 9,
+      "range": [
+        8,
+        9
+      ]
+    }
+  },
+  {
+    "id": 666,
+    "token": 666,
+    "yytext": {
+      "text": "×",
+      "message": "Lexical error on line 1: '×' (215): illegal character at line 0.\n\n  Erroneous area:\n1: :: A = B × C\n^...........^",
+      "yyrulenumber": 0
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 9,
+      "last_line": 1,
+      "last_column": 10,
+      "range": [
+        9,
+        10
+      ]
+    }
+  },
+  {
+    "id": 666,
+    "token": 666,
+    "yytext": {
+      "text": " ",
+      "message": "Lexical error on line 1: ' ' (32): illegal character at line 0.\n\n  Erroneous area:\n1: :: A = B × C\n^............^",
+      "yyrulenumber": 0
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 10,
+      "last_line": 1,
+      "last_column": 11,
+      "range": [
+        10,
+        11
+      ]
+    }
+  },
+  {
+    "id": 666,
+    "token": 666,
+    "yytext": {
+      "text": "C",
+      "message": "Lexical error on line 1: 'C' (67): illegal character at line 0.\n\n  Erroneous area:\n1: :: A = B × C\n^.............^",
+      "yyrulenumber": 0
+    },
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 11,
+      "last_line": 1,
+      "last_column": 12,
+      "range": [
+        11,
+        12
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 12,
+      "last_line": 1,
+      "last_column": 12,
+      "range": [
+        12,
+        12
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 12,
+      "last_line": 1,
+      "last_column": 12,
+      "range": [
+        12,
+        12
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 12,
+      "last_line": 1,
+      "last_column": 12,
+      "range": [
+        12,
+        12
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "token": "EOF",
+    "yytext": "",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 12,
+      "last_line": 1,
+      "last_column": 12,
+      "range": [
+        12,
+        12
+      ]
+    }
+  },
+  {
+    "id": -2,
+    "token": null,
+    "summary": {
+      "totalTokenCount": 16,
+      "EOFTokenCount": 4,
+      "ERRORTokenCount": 0,
+      "fatalExceptionCount": 0
+    }
+  }
+]

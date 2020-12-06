@@ -1,0 +1,188 @@
+[
+  {
+    id: 666,
+    token: 666,
+    yytext: {
+      text: 'a',
+      message: `Lexical error on line 1: 'a' (97): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^..^`,
+      yyrulenumber: 0,
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 0,
+      last_line: 1,
+      last_column: 1,
+      range: [
+        0,
+        1,
+      ],
+    },
+  },
+  {
+    id: 666,
+    token: 666,
+    yytext: {
+      text: ' ',
+      message: `Lexical error on line 1: ' ' (32): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^...^`,
+      yyrulenumber: 0,
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 1,
+      last_line: 1,
+      last_column: 2,
+      range: [
+        1,
+        2,
+      ],
+    },
+  },
+  {
+    id: 666,
+    token: 666,
+    yytext: {
+      text: 'b',
+      message: `Lexical error on line 1: 'b' (98): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^....^`,
+      yyrulenumber: 0,
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 2,
+      last_line: 1,
+      last_column: 3,
+      range: [
+        2,
+        3,
+      ],
+    },
+  },
+  {
+    id: 666,
+    token: 666,
+    yytext: {
+      text: ' ',
+      message: `Lexical error on line 1: ' ' (32): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^.....^`,
+      yyrulenumber: 0,
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 3,
+      last_line: 1,
+      last_column: 4,
+      range: [
+        3,
+        4,
+      ],
+    },
+  },
+  {
+    id: 666,
+    token: 666,
+    yytext: {
+      text: 'c',
+      message: `Lexical error on line 1: 'c' (99): illegal character at line 0.
+
+  Erroneous area:
+1: a b c
+^......^`,
+      yyrulenumber: 0,
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 4,
+      last_line: 1,
+      last_column: 5,
+      range: [
+        4,
+        5,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 5,
+      last_line: 1,
+      last_column: 5,
+      range: [
+        5,
+        5,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 5,
+      last_line: 1,
+      last_column: 5,
+      range: [
+        5,
+        5,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 5,
+      last_line: 1,
+      last_column: 5,
+      range: [
+        5,
+        5,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 5,
+      last_line: 1,
+      last_column: 5,
+      range: [
+        5,
+        5,
+      ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 9,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
+    },
+  },
+]

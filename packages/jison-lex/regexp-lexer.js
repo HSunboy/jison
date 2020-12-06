@@ -2985,15 +2985,19 @@ Limits
         process.exit(1);
     }
 
+    function customMainParseError(str, hash, ExceptionClass) {
+        console.error("parseError: ", str);
+        return this.ERROR;
+    }
+
     function main_work_function(input) {
         const lexer = exports.lexer;
 
         let yy = {
-            parseError: function customMainParseError(str, hash, ExceptionClass) {
-                console.error("parseError: ", str);
-                return this.ERROR;
-            }
+            // if a custom parseError has already been defined, we DO NOT override that one:
+            parseError: (lexer.yy && lexer.yy.parseError) || (lexer.yy && lexer.yy.parser && lexer.yy.parser.parseError) || customMainParseError
         };
+
         let tokens = [];
         
         let countEOFs = 0;
@@ -3267,7 +3271,6 @@ function stripUnusedLexerCode(src, grammarSpec) {
         }
     }
 
-
     // inject analysis report now:
     new_src = new_src.replace(/\/\*\s*JISON-LEX-ANALYTICS-REPORT\s*\*\//g, rmCommonWS`
         // Code Generator Information Report
@@ -3408,7 +3411,8 @@ function processGrammar(dict, tokens, build_options) {
     grammarSpec.conditionStack = [ 'INITIAL' ];
 
     grammarSpec.actionInclude = (dict.actionInclude || '');
-    grammarSpec.moduleInclude = (grammarSpec.moduleInclude || '') + (dict.moduleInclude || '').trim();
+    let modIncSrc = (grammarSpec.moduleInclude || '') + '\n\n\n\n' + (dict.moduleInclude || '');
+    grammarSpec.moduleInclude = modIncSrc.trimEnd();
 
     return grammarSpec;
 }
@@ -3887,7 +3891,7 @@ function prepareOptions(grammarSpec) {
 
 function generateModule(grammarSpec) {
     grammarSpec = prepareOptions(grammarSpec);
-    let modIncSrc = (grammarSpec.moduleInclude ? grammarSpec.moduleInclude + ';' : '');
+    let modIncSrc = grammarSpec.moduleInclude || '';
 
     let src = rmCommonWS`
         ${generateGenericHeaderComment()}
@@ -3919,7 +3923,7 @@ function generateModule(grammarSpec) {
 
 function generateAMDModule(grammarSpec) {
     grammarSpec = prepareOptions(grammarSpec);
-    let modIncSrc = (grammarSpec.moduleInclude ? grammarSpec.moduleInclude + ';' : '');
+    let modIncSrc = grammarSpec.moduleInclude || '';
 
     let src = rmCommonWS`
         ${generateGenericHeaderComment()}
@@ -3951,7 +3955,7 @@ function generateAMDModule(grammarSpec) {
 
 function generateESModule(grammarSpec) {
     grammarSpec = prepareOptions(grammarSpec);
-    let modIncSrc = (grammarSpec.moduleInclude ? grammarSpec.moduleInclude + ';' : '');
+    let modIncSrc = grammarSpec.moduleInclude || '';
     let moduleNameAsCode = '';
     let moduleImportsAsCode = '';
     let exportMain = '';
@@ -4025,7 +4029,7 @@ function generateESModule(grammarSpec) {
 
 function generateCommonJSModule(grammarSpec) {
     grammarSpec = prepareOptions(grammarSpec);
-    let modIncSrc = (grammarSpec.moduleInclude ? grammarSpec.moduleInclude + ';' : '');
+    let modIncSrc = grammarSpec.moduleInclude || '';
     let moduleNameAsCode = '';
     let moduleImportsAsCode = '';
     let main = '';

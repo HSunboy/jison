@@ -3362,7 +3362,7 @@ describe('prettyPrintRange() API', function () {
             });
         },
         Error,
-        /Could not parse lexer spec\nError: \nThe '%%' lexer epilogue code does not compile: Line 4: Unexpected token/
+        /Could not parse lexer spec\nError: \nThe '%%' lexer epilogue code section does not compile: Line 4: Unexpected token/
         );
     });
 
@@ -3643,7 +3643,6 @@ function reduceWhitespace(src) {
 //
 describe('Test Lexer Grammars', function () {
 
-
     beforeEach(function beforeEachTest() {
         lexer_reset();
     });
@@ -3833,7 +3832,7 @@ describe('Test Lexer Grammars', function () {
             let refSrc, dumpStr;
             if (lexerSourceCode) {
                 dumpStr = rmCommonWS`
-                    ${lexerSourceCode.sourceCode.replace(/\r\n|\r/g, '\n')};
+                    ${lexerSourceCode.sourceCode.replace(/\r\n|\r/g, '\n')}
 
                     //=============================================================================
                     //                     JISON-LEX OPTIONS:
