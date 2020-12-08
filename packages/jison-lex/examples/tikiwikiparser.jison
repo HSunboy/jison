@@ -131,3 +131,41 @@ SMILE                           [a-z]+
 
 <<EOF>>                                     return 'EOF'
 
+
+
+
+
+
+
+
+%%
+
+// fake a `parserlib` instance to make the `make examples_tikiwikiparser` test run pass:
+// *** NOT PRODUCTION CODE ***
+const parserlib = {
+    inlinePlugin: (txt) => txt,
+
+    stackPlugin: (txt, stack) => {
+        stack = stack || [];
+        stack.push(txt);
+        return stack;
+    },
+
+    size: (stack) => Array.isArray(stack) ? stack.length : 0,
+
+    substring: (str, p, l) => str.substring(p, l),
+    smile: (txt) => `(-: ${txt} :-)`,
+    hr: () => '--==#####==--',
+    formatContent: (txt) => txt,
+
+    pop: (stack) => {
+        stack.pop();
+        return stack;
+    },
+    push: (stack, val) => {
+        stack.push(val);
+        return stack;
+    },
+
+    npState: (npOn, c, t) => t,
+};
