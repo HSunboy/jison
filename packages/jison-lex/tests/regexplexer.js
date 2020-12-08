@@ -567,9 +567,9 @@ describe('Lexer Kernel', function () {
         let t = new JisonLexerError('test', 42);
         assert(t instanceof Error);
         assert(t instanceof JisonLexerError);
-        assert(t.hash === 42);
-        assert(t.message === 'test');
-        assert(t.toString() === 'JisonLexerError: test');
+        assert.strictEqual(t.hash, 42);
+        assert.strictEqual(t.message, 'test');
+        assert.strictEqual(t.toString(), 'JisonLexerError: test');
 
         let t2 = new Error('a');
         let t3 = new JisonLexerError('test', { exception: t2 });
@@ -580,10 +580,10 @@ describe('Lexer Kernel', function () {
         assert(!t2.hash);
         assert(t3.hash);
         assert(t3.hash.exception);
-        assert(t2.message === 'a');
-        assert(t3.message === 'a');
-        assert(t2.toString() === 'Error: a');
-        assert(t3.toString() === 'JisonLexerError: a');
+        assert.strictEqual(t2.message, 'a');
+        assert.strictEqual(t3.message, 'test :: a');
+        assert.strictEqual(t2.toString(), 'Error: a');
+        assert.strictEqual(t3.toString(), 'JisonLexerError: test :: a');
     });
 
     it('lexer errors are thrown using its own JisonLexerError exception/error class', function () {
@@ -3676,7 +3676,7 @@ describe('Test Lexer Grammars', function () {
 
             let yy = {
                 parseError: function customMainParseError(str, hash, ExceptionClass) {
-                    console.error("parseError: ", str);
+                    if (0) console.error("parseError: ", str);
 
                     // augment the returned value when possible:
 
