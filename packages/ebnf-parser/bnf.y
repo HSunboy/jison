@@ -9,11 +9,9 @@
   import transform from './ebnf-transform';
 
   import { 
-    TOK_EXPRESSION,
     TOK_SUBEXPRESSION,
     TOK_SYMBOL,
     TOK_SYMBOLSTRING,
-    TOK_XALIAS
   } from './token_constants';
 
 %}
@@ -75,7 +73,13 @@ spec
             // transform ebnf to bnf if necessary
             if (yy.ebnf) {
                 $$.ebnf = $grammar.grammar;        // keep the original source EBNF around for possible pretty-printing & AST exports.
-                $$.bnf = ['...']; // transform($grammar.grammar);
+
+                $$.bnf = null;
+                try {
+                    $$.bnf = transform($grammar.grammar);
+                } catch (ex) {
+                    $$.bnfTransformError = ex;
+                }
             }
             else {
                 $$.bnf = $grammar.grammar;
@@ -851,19 +855,21 @@ production_list
     : production_list production
         {
             $$ = $production_list;
-            if ($production) {
-                if ($production[0] in $$) {
-                    $$[$production[0]] = $$[$production[0]].concat($production[1]);
+            let p = $production;
+            if (p) {
+                if (p.id in $$) {
+                    $$[p.id] = $$[p.id].concat(p);
                 } else {
-                    $$[$production[0]] = $production[1];
+                    $$[p.id] = p;
                 }
             }
         }
     | production
         { 
             $$ = {}; 
-            if ($production) {
-                $$[$production[0]] = $production[1];
+            let p = $production;
+            if (p) {
+                $$[p.id] = p;
             }
         }
     ;
@@ -871,8 +877,10 @@ production_list
 production
     : production_id handle_list ';'
         {
-            if ($production_id) {
-                $$ = [$production_id, $handle_list];
+            let node = $production_id;
+            if (node) {
+                node.productions = $handle_list;
+                $$ = node;
             } else {
                 // ignore tail of erroneous production
                 $$ = null;
@@ -1100,9 +1108,10 @@ pct_token_which_belongs_in_header_section
 production_id
     : id production_description?[descr] ':'
         {
-            $$ = $id;
-
-            // TODO: carry rule description support into the parser generator...
+            $$ = {
+                id: $id,
+                description: $descr
+            };
         }
     | id production_description?[descr] error
         {
@@ -1178,8 +1187,8 @@ handle_action
     : handle prec handle_action_start action ACTION_END
         {
             assert(Array.isArray($handle));
-            assert($handle.length >= 1);
-            let isEpsilonRule = ($handle[0] === null);
+            assert($handle.length >= 0);
+            let isEpsilonRule = ($handle.length === 0);
 			let isArrowAction = $handle_action_start.is_arrow;
             let srcCode = null;
 
@@ -1210,6 +1219,7 @@ handle_action
                     `);
                 }
             }
+ 
             if ($prec) {
                 if (isEpsilonRule) {
                     yyerror(rmCommonWS`
@@ -1220,61 +1230,19 @@ handle_action
                     `);
                 }
             }
+
             $$ = {
                 handle: $handle,
                 prec: $prec,
                 action: srcCode
             };
         }
-/*
-
-
-
-
-
-
-TODO
-
-
-
-okee, denk er aan:
-
-epsilon rules hieronder zijn weg want handle pakt de epsilon al op
-
-alles nog verder nalopen nu we een EBNF AST fabrieken. Alleen hierboven en op een paar plekken in deze file
-al gedaan, de rest zit nog vol met .join() shit.
-
-EBNF grammar (en lexer) kunnen compleet vervallen, want die deden toch niks anders dan de opnieuw 
-geconstrueerde grammar rules omzetten naar een AST en dat doen we nu hier en laten dat zo.
-
-Dit betekent dat ik heel de BNF parser code door moet EN JISON.JS ZELF voordat dit gaat werken: 
-de code generator zal de nieuwe AST moeten gaan snappen.
-
-Dit heeft ook gevolgen voor jison2json en json2jison, die nu allebei als stopper werken in het
-build proces zodat ik niet /dist/ verneuk zonder dat te willen.
-
-
-
-
-
-
-
-
-
-
-
-
-*/                    
     | handle prec /* no action code block */
         {
             assert(Array.isArray($handle));
-            assert($handle.length >= 1);
-            let isEpsilonRule = ($handle[0] === null);
+            assert($handle.length >= 0);
+            let isEpsilonRule = ($handle.length === 0);
 
-            $$ = {
-                handle: $handle,
-                prec: $prec,
-            };
             if ($prec) {
                 if (isEpsilonRule) {
                     yyerror(rmCommonWS`
@@ -1285,6 +1253,11 @@ build proces zodat ik niet /dist/ verneuk zonder dat te willen.
                     `);
                 }
             }
+
+            $$ = {
+                handle: $handle,
+                prec: $prec,
+            };
         }
     ;
 
@@ -1306,10 +1279,9 @@ handle_action_start
 	;	
 		
 handle
-    : handle suffixed_expression
+    : suffixed_expression+[se]
         {
-            $$ = $handle;
-            $$.push($suffixed_expression);
+            $$ = $se;
         }
     // empty rules, which are otherwise identical to %epsilon rules:
     // %epsilon may only be used to signal this is an empty rule alt;
@@ -1317,11 +1289,11 @@ handle
     // (with an optional action block, but no alias what-so-ever nor any precedence override).
     | %epsilon
         {
-            $$ = [ null ];
+            $$ = [];
         }
     | EPSILON
         {
-            $$ = [ null ];
+            $$ = [];
         }
     ;
 
@@ -1337,6 +1309,7 @@ handle_sublist
         }
     ;
 
+// This rule always produces an augmented AST object describing the expression:
 suffixed_expression
     : expression suffix ALIAS
         {
@@ -1348,12 +1321,13 @@ suffixed_expression
                     ${yylexer.prettyPrintRange(@suffix)}
                 `);
             }
-            $$ = {
-                type: TOK_XALIAS,
-                expression: $expression,
-                suffix: $suffix,
-                alias: $ALIAS
-            };
+            let node = $expression;
+            if ($suffix) {
+                node.suffix = $suffix;
+            }
+
+            node.alias = $ALIAS;
+            $$ = node;
         }
     | expression suffix
         {
@@ -1365,14 +1339,15 @@ suffixed_expression
                     ${yylexer.prettyPrintRange(@suffix)}
                 `);
             }
-            $$ = {
-                type: TOK_EXPRESSION,
-                expression: $expression,
-                suffix: $suffix,
-            };
+            let node = $expression;
+            if ($suffix) {
+                node.suffix = $suffix;
+            }
+            $$ = node;
         }
     ;
 
+// This rule always produces an AST object describing the expression:
 expression
     : ID
         {

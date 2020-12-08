@@ -2,10 +2,14 @@
 import XRegExp from '@gerhobbelt/xregexp';
 import assert from 'assert';
 
+import { 
+    TOK_SUBEXPRESSION,
+    TOK_SYMBOL,
+    TOK_SYMBOLSTRING,
+} from './token_constants';
 
-//import assert from 'assert';
 
-let devDebug = 0;
+const devDebug = 33;
 
 // WARNING: this regex MUST match the regex for `ID` in ebnf-parser::bnf.l jison language lexer spec! (`ID = [{ALPHA}]{ALNUM}*`)
 //
@@ -46,33 +50,24 @@ function generatePushAction(handle, offset) {
 }
 
 function transformExpression(e, opts, emit) {
-    let type = e[0];
-    let value = e[1];
-    let name = false;
+    let type = e.type;
+    let suffix = e.suffix;
+    let value = e.symbol;
+    let name = e.alias;
     let has_transformed = 0;
     let list, n;
 
-    if (type === 'xalias') {
-        type = e[1];
-        value = e[2];
-        name = e[3];
-        if (type) {
-            e = e.slice(1);
-        } else {
-            e = value;
-            type = e[0];
-            value = e[1];
-        }
-        if (devDebug > 3) console.log('xalias: ', e, type, value, name);
+    if (e.alias) {
+        if (devDebug > 3) console.log('xalias: ', JSON.stringify({ e, type, value, name, suffix }, null, 2));
     }
 
-    if (type === 'symbol') {
-        n = e[1];
+    if (!suffix && type !== TOK_SUBEXPRESSION) {
+        n = e.symbol;
         if (devDebug > 2) console.log('symbol EMIT: ', n + (name ? '[' + name + ']' : ''));
-        emit(n + (name ? '[' + name + ']' : ''));
-    } else if (type === '+') {
+        emit(e);
+    } else if (suffix === '+') {
         if (!name) {
-            name = generateUniqueSymbol(opts.production, '_repetition_plus', opts);
+            name = generateUniqueSymbol(opts.id, '_repetition_plus', opts);
         }
         if (devDebug > 2) console.log('+ EMIT name: ', name);
         emit(name);
@@ -82,18 +77,18 @@ function transformExpression(e, opts, emit) {
         opts = optsForProduction(name, opts.grammar);
         list = transformExpressionList([ value ], opts);
         opts.grammar[name] = [
-            [
-                list.fragment,
-                '$$ = [' + generatePushAction(list, 1) + '];'
-            ],
-            [
-                name + ' ' + list.fragment,
-                '$1.push(' + generatePushAction(list, 2) + ');\n$$ = $1;'
-            ]
+            {
+                handle: list.terms,
+                action: '$$ = [' + generatePushAction(list, 1) + '];',
+            },
+            {
+                handle: [ name ].concat(list.terms),
+                action: '$1.push(' + generatePushAction(list, 2) + ');\n$$ = $1;'
+            }
         ];
-    } else if (type === '*') {
+    } else if (suffix === '*') {
         if (!name) {
-            name = generateUniqueSymbol(opts.production, '_repetition', opts);
+            name = generateUniqueSymbol(opts.id, '_repetition', opts);
         }
         if (devDebug > 2) console.log('* EMIT name: ', name);
         emit(name);
@@ -103,18 +98,18 @@ function transformExpression(e, opts, emit) {
         opts = optsForProduction(name, opts.grammar);
         list = transformExpressionList([ value ], opts);
         opts.grammar[name] = [
-            [
-                '',
-                '$$ = [];'
-            ],
-            [
-                name + ' ' + list.fragment,
-                '$1.push(' + generatePushAction(list, 2) + ');\n$$ = $1;'
-            ]
+            {
+                handle: [ null ],
+                action: '$$ = [];',
+            },
+            {
+                handle: [ name ].concat(list.terms),
+                action: '$1.push(' + generatePushAction(list, 2) + ');\n$$ = $1;'
+            }
         ];
-    } else if (type === '?') {
+    } else if (suffix === '?') {
         if (!name) {
-            name = generateUniqueSymbol(opts.production, '_option', opts);
+            name = generateUniqueSymbol(opts.id, '_option', opts);
         }
         if (devDebug > 2) console.log('? EMIT name: ', name);
         emit(name);
@@ -132,26 +127,26 @@ function transformExpression(e, opts, emit) {
         // '1 occurrence' match CAN carry multiple terms, e.g. in constructs like
         // `(T T T)?`, which would otherwise be unrecognizable from the `T*` construct.
         opts.grammar[name] = [
-            [
-                '',
-                '$$ = undefined;'
-            ],
-            [
-                list.fragment,
-                '$$ = ' + generatePushAction(list, 1) + ';'
-            ]
+            {
+                handle: [ null ],
+                action: '$$ = undefined;',
+            },
+            {
+                handle: list.terms,
+                action: '$$ = ' + generatePushAction(list, 1) + ';',
+            }
         ];
-    } else if (type === '()') {
+    } else if (type === TOK_SUBEXPRESSION) {
         if (value.length === 1 && !name) {
             list = transformExpressionList(value[0], opts);
             if (list.first_transformed_term_index) {
                 has_transformed = list.first_transformed_term_index;
             }
-            if (devDebug > 2) console.log('group EMIT len=1: ', list);
+            if (devDebug > 2) console.log('group EMIT len=1: ', JSON.stringify(list, null, 2));
             emit(list);
         } else {
             if (!name) {
-                name = generateUniqueSymbol(opts.production, '_group', opts);
+                name = generateUniqueSymbol(opts.id, '_group', opts);
             }
             if (devDebug > 2) console.log('group EMIT name: ', name);
             emit(name);
@@ -161,10 +156,10 @@ function transformExpression(e, opts, emit) {
             opts = optsForProduction(name, opts.grammar);
             opts.grammar[name] = value.map(function (handle) {
                 let list = transformExpressionList(handle, opts);
-                return [
-                    list.fragment,
-                    '$$ = ' + generatePushAction(list, 1) + ';'
-                ];
+                return {
+                    handle: list.terms,
+                    action: '$$ = ' + generatePushAction(list, 1) + ';',
+                };
             });
         }
     }
@@ -179,7 +174,7 @@ function transformExpressionList(list, opts) {
 
         let has_transformed = transformExpression(e, opts, function (name) {
             if (name.terms) {
-                tot.push.apply(tot, name.terms);
+                tot = tot.concat(name.terms);
             } else {
                 tot.push(name);
             }
@@ -192,48 +187,50 @@ function transformExpressionList(list, opts) {
     }, []);
 
     return {
-        fragment: terms.join(' '),
-        terms: terms,
-        first_transformed_term_index: first_transformed_term_index              // 1-based index
+        terms,
+        first_transformed_term_index              // 1-based index
     };
 }
 
 function optsForProduction(id, grammar) {
     return {
-        production: id,
-        grammar: grammar
+        id,
+        grammar,
     };
 }
 
-function transformProduction(id, production, grammar) {
+function transformProduction(id, astNode, grammar) {
     let transform_opts = optsForProduction(id, grammar);
-    return production.map(function (handle) {
-        let action = null;
-        let opts = null;
+    let rv = Object.assign({}, astNode);
+    rv.productions = rv.productions.map(function (handle) {
         let i, len, n;
 
-        if (typeof handle !== 'string') {
-            action = handle[1];
-            opts = handle[2];
-            handle = handle[0];
-        }
-        let expressions = handle;
-        assert(typeof expressions !== 'string');    // EBNF structure should already have been produced by the (E)BNF parser
+        assert(typeof handle !== 'string');
+        assert(typeof handle === 'object');
 
-        if (devDebug > 1) console.log('\n================\nEBNF transform expressions:\n ', handle, opts, JSON.stringify(expressions, null, 2));
+        let action = handle.action;
+        let prec = handle.prec;
+        let expressions = handle.handle;
+
+        // EBNF structure should already have been produced by the (E)BNF parser
+        assert(typeof expressions !== 'string');
+        assert(Array.isArray(expressions));
+
+        if (devDebug > 1) console.log('\n================\nEBNF transform expressions:\n ', JSON.stringify({ handle, prec, expressions }, null, 2));
 
         let list = transformExpressionList(expressions, transform_opts);
 
-        let ret = [ list.fragment ];
+        let ret = Object.assign({}, handle);
+        ret.handle = list.terms;
+
         if (action) {
             // make sure the action doesn't address any inner items.
             if (list.first_transformed_term_index) {
-                let rhs = list.fragment;
                 // seek out all names and aliases; strip out literal tokens first as those cannot serve as $names:
-                let alist = list.terms; // rhs.replace(/'[^']+'/g, '~').replace(/"[^"]+"/g, '~').split(' ');
+                let alist = list.terms;
                 // we also know at which index the first transformation occurred:
                 let first_index = list.first_transformed_term_index - 1;
-                if (devDebug > 2) console.log('alist ~ rhs rule terms: ', alist, rhs);
+                if (devDebug > 2) console.log('alist ~ rhs rule terms: ', JSON.stringify(alist, null, 2));
 
                 let alias_re = new XRegExp(`\\[${ID_REGEX_BASE}\\]`);
                 let term_re = new XRegExp(`^${ID_REGEX_BASE}$`);
@@ -298,11 +295,11 @@ function transformProduction(id, production, grammar) {
                     }
                 }
                 if (devDebug > 2) {
-                    console.log('good_aliases: ', {
-                        donotalias: donotalias,
-                        good_aliases: good_aliases,
-                        alias_cnt: alias_cnt
-                    });
+                    console.log('good_aliases: ', JSON.stringify({
+                        donotalias,
+                        good_aliases,
+                        alias_cnt,
+                    }, null, 2));
                 }
 
                 // now scan the action for all named and numeric semantic values ($nonterminal / $1 / @1, ##1, ...)
@@ -356,19 +353,13 @@ function transformProduction(id, production, grammar) {
                     }
                 }
             }
-            ret.push(action);
+            ret.action = action;
         }
-        if (opts) {
-            ret.push(opts);
-        }
-        if (devDebug > 1) console.log('\n\nEBNF tx result:\n ', JSON.stringify(list, null, 2), JSON.stringify(ret, null, 2));
+        if (devDebug > 1) console.log('\n\nEBNF tx result:\n ', JSON.stringify({ list, ret }, null, 2));
 
-        if (ret.length === 1) {
-            return ret[0];
-        }
         return ret;
-
     });
+    return rv;
 }
 
 let ref_list;
@@ -414,6 +405,7 @@ function transformGrammar(grammar) {
     grammar = deepClone(grammar);
 
     Object.keys(grammar).forEach(function transformGrammarForKey(id) {
+        if (devDebug > 0) console.log('EBNF transform start for rule: ', JSON.stringify({ id, node: grammar[id] }, null, 2));
         grammar[id] = transformProduction(id, grammar[id], grammar);
     });
 

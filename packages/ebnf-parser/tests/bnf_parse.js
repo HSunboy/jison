@@ -167,7 +167,7 @@ testset = testset.map(function (filepath) {
     return false;
 })
 .filter(function (info) {
-    return !!info;
+    return /* 0 && */ !!info;
 });
 
 

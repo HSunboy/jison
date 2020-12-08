@@ -168,7 +168,7 @@ testset = testset.map(function (filepath) {
     return false;
 })
 .filter(function (info) {
-    return !!info;
+    return /* info.path.includes('1001') && */ !!info;
 });
 
 
