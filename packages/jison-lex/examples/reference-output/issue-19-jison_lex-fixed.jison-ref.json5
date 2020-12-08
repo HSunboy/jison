@@ -113,7 +113,16 @@
         conditionStackDepth: 4,
       },
     },
-    yylloc: '[reference to sibling --> *.[5].yytext.loc]',
+    yylloc: {
+      first_line: 1,
+      first_column: 5,
+      last_line: 1,
+      last_column: 6,
+      range: [
+        5,
+        6,
+      ],
+    },
   },
   {
     id: 'ID',
