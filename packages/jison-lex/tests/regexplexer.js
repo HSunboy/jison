@@ -3680,11 +3680,21 @@ describe('Test Lexer Grammars', function () {
 
                     // augment the returned value when possible:
 
-                    // WARNING: it may appear there is no need for shallow copy as a new hash 
-                    // is created for every parseError() call; HOWEVER, every hash instance is
-                    // tracked in an error queue, which will be cleaned up when the parser
-                    // (or userland code) invokes the `cleanupAfterLex()` API.
-                    const rv = Object.assign({}, hash);
+                    // NOTE: there is no need for shallow copy the hash as a new one
+                    // is created for every parseError() call. 
+                    // 
+                    // NOTE: before jison-gho 0.7.0 a shallow copy was required if you
+                    // desired to persist the `hash` error info past the lexer run itself.
+                    // 
+                    // WARNING: if you want to keep a SNAPSHOT of the `yy`, `loc`, etc. 
+                    // members of this moment in time, you MUST shallow-copy those anyway!
+                    // 
+                    // The lexer kernel provides these members as *references* to allow
+                    // userland `parseError` handlers to custom-tweak the kernel state,
+                    // if so desired. THIS IS NOT SHOWCASED HERE.
+                    // 
+                    //const rv = Object.assign({}, hash);
+                    const rv = hash;
                     if (rv.yy) {
                         // shallow copy to keep (most of) current internal lexer state intact:
                         rv.yy = Object.assign({}, rv.yy);

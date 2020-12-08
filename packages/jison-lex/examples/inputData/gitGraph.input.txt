@@ -1,1 +1,6 @@
-    // Your lexer must be named `lexer` as shown below.
+// bla
+
+gitGraph:
+  commit
+  commit
+  branch

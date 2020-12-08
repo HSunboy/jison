@@ -5,12 +5,12 @@
     "yytext": "/",
     "yylloc": {
       "first_line": 1,
-      "first_column": 4,
+      "first_column": 0,
       "last_line": 1,
-      "last_column": 5,
+      "last_column": 1,
       "range": [
-        4,
-        5
+        0,
+        1
       ]
     }
   },
@@ -20,192 +20,72 @@
     "yytext": "/",
     "yylloc": {
       "first_line": 1,
-      "first_column": 5,
+      "first_column": 1,
+      "last_line": 1,
+      "last_column": 2,
+      "range": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "id": "ID",
+    "token": "ID",
+    "yytext": "bla",
+    "yylloc": {
+      "first_line": 1,
+      "first_column": 3,
       "last_line": 1,
       "last_column": 6,
       "range": [
-        5,
+        3,
         6
       ]
     }
   },
   {
-    "id": "ID",
-    "token": "ID",
-    "yytext": "Your",
+    "id": "NL",
+    "token": "NL",
+    "yytext": "\n\n",
     "yylloc": {
       "first_line": 1,
-      "first_column": 7,
-      "last_line": 1,
-      "last_column": 11,
+      "first_column": 6,
+      "last_line": 3,
+      "last_column": 0,
       "range": [
-        7,
-        11
+        6,
+        8
       ]
     }
   },
   {
-    "id": "ID",
-    "token": "ID",
-    "yytext": "lexer",
+    "id": "GG",
+    "token": "GG",
+    "yytext": "gitGraph",
     "yylloc": {
-      "first_line": 1,
-      "first_column": 12,
-      "last_line": 1,
-      "last_column": 17,
+      "first_line": 3,
+      "first_column": 0,
+      "last_line": 3,
+      "last_column": 8,
       "range": [
-        12,
+        8,
+        16
+      ]
+    }
+  },
+  {
+    "id": ":",
+    "token": ":",
+    "yytext": ":",
+    "yylloc": {
+      "first_line": 3,
+      "first_column": 8,
+      "last_line": 3,
+      "last_column": 9,
+      "range": [
+        16,
         17
-      ]
-    }
-  },
-  {
-    "id": "ID",
-    "token": "ID",
-    "yytext": "must",
-    "yylloc": {
-      "first_line": 1,
-      "first_column": 18,
-      "last_line": 1,
-      "last_column": 22,
-      "range": [
-        18,
-        22
-      ]
-    }
-  },
-  {
-    "id": "ID",
-    "token": "ID",
-    "yytext": "be",
-    "yylloc": {
-      "first_line": 1,
-      "first_column": 23,
-      "last_line": 1,
-      "last_column": 25,
-      "range": [
-        23,
-        25
-      ]
-    }
-  },
-  {
-    "id": "ID",
-    "token": "ID",
-    "yytext": "named",
-    "yylloc": {
-      "first_line": 1,
-      "first_column": 26,
-      "last_line": 1,
-      "last_column": 31,
-      "range": [
-        26,
-        31
-      ]
-    }
-  },
-  {
-    "id": 2,
-    "token": 2,
-    "yytext": "`",
-    "yylloc": {
-      "first_line": 1,
-      "first_column": 32,
-      "last_line": 1,
-      "last_column": 33,
-      "range": [
-        32,
-        33
-      ]
-    }
-  },
-  {
-    "id": "ID",
-    "token": "ID",
-    "yytext": "lexer",
-    "yylloc": {
-      "first_line": 1,
-      "first_column": 33,
-      "last_line": 1,
-      "last_column": 38,
-      "range": [
-        33,
-        38
-      ]
-    }
-  },
-  {
-    "id": 2,
-    "token": 2,
-    "yytext": "`",
-    "yylloc": {
-      "first_line": 1,
-      "first_column": 38,
-      "last_line": 1,
-      "last_column": 39,
-      "range": [
-        38,
-        39
-      ]
-    }
-  },
-  {
-    "id": "ID",
-    "token": "ID",
-    "yytext": "as",
-    "yylloc": {
-      "first_line": 1,
-      "first_column": 40,
-      "last_line": 1,
-      "last_column": 42,
-      "range": [
-        40,
-        42
-      ]
-    }
-  },
-  {
-    "id": "ID",
-    "token": "ID",
-    "yytext": "shown",
-    "yylloc": {
-      "first_line": 1,
-      "first_column": 43,
-      "last_line": 1,
-      "last_column": 48,
-      "range": [
-        43,
-        48
-      ]
-    }
-  },
-  {
-    "id": "ID",
-    "token": "ID",
-    "yytext": "below",
-    "yylloc": {
-      "first_line": 1,
-      "first_column": 49,
-      "last_line": 1,
-      "last_column": 54,
-      "range": [
-        49,
-        54
-      ]
-    }
-  },
-  {
-    "id": 2,
-    "token": 2,
-    "yytext": ".",
-    "yylloc": {
-      "first_line": 1,
-      "first_column": 54,
-      "last_line": 1,
-      "last_column": 55,
-      "range": [
-        54,
-        55
       ]
     }
   },
@@ -214,13 +94,88 @@
     "token": "NL",
     "yytext": "\n",
     "yylloc": {
-      "first_line": 1,
-      "first_column": 55,
-      "last_line": 2,
+      "first_line": 3,
+      "first_column": 9,
+      "last_line": 4,
       "last_column": 0,
       "range": [
-        55,
-        56
+        17,
+        18
+      ]
+    }
+  },
+  {
+    "id": "COMMIT",
+    "token": "COMMIT",
+    "yytext": "commit",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 2,
+      "last_line": 4,
+      "last_column": 8,
+      "range": [
+        20,
+        26
+      ]
+    }
+  },
+  {
+    "id": "NL",
+    "token": "NL",
+    "yytext": "\n",
+    "yylloc": {
+      "first_line": 4,
+      "first_column": 8,
+      "last_line": 5,
+      "last_column": 0,
+      "range": [
+        26,
+        27
+      ]
+    }
+  },
+  {
+    "id": "COMMIT",
+    "token": "COMMIT",
+    "yytext": "commit",
+    "yylloc": {
+      "first_line": 5,
+      "first_column": 2,
+      "last_line": 5,
+      "last_column": 8,
+      "range": [
+        29,
+        35
+      ]
+    }
+  },
+  {
+    "id": "NL",
+    "token": "NL",
+    "yytext": "\n",
+    "yylloc": {
+      "first_line": 5,
+      "first_column": 8,
+      "last_line": 6,
+      "last_column": 0,
+      "range": [
+        35,
+        36
+      ]
+    }
+  },
+  {
+    "id": "BRANCH",
+    "token": "BRANCH",
+    "yytext": "branch",
+    "yylloc": {
+      "first_line": 6,
+      "first_column": 2,
+      "last_line": 6,
+      "last_column": 8,
+      "range": [
+        38,
+        44
       ]
     }
   },
@@ -229,13 +184,13 @@
     "token": "EOF",
     "yytext": "",
     "yylloc": {
-      "first_line": 2,
-      "first_column": 0,
-      "last_line": 2,
-      "last_column": 0,
+      "first_line": 6,
+      "first_column": 8,
+      "last_line": 6,
+      "last_column": 8,
       "range": [
-        56,
-        56
+        44,
+        44
       ]
     }
   },
@@ -244,13 +199,13 @@
     "token": "EOF",
     "yytext": "",
     "yylloc": {
-      "first_line": 2,
-      "first_column": 0,
-      "last_line": 2,
-      "last_column": 0,
+      "first_line": 6,
+      "first_column": 8,
+      "last_line": 6,
+      "last_column": 8,
       "range": [
-        56,
-        56
+        44,
+        44
       ]
     }
   },
@@ -259,13 +214,13 @@
     "token": "EOF",
     "yytext": "",
     "yylloc": {
-      "first_line": 2,
-      "first_column": 0,
-      "last_line": 2,
-      "last_column": 0,
+      "first_line": 6,
+      "first_column": 8,
+      "last_line": 6,
+      "last_column": 8,
       "range": [
-        56,
-        56
+        44,
+        44
       ]
     }
   },
@@ -274,13 +229,13 @@
     "token": "EOF",
     "yytext": "",
     "yylloc": {
-      "first_line": 2,
-      "first_column": 0,
-      "last_line": 2,
-      "last_column": 0,
+      "first_line": 6,
+      "first_column": 8,
+      "last_line": 6,
+      "last_column": 8,
       "range": [
-        56,
-        56
+        44,
+        44
       ]
     }
   },
@@ -289,13 +244,13 @@
     "token": "EOF",
     "yytext": "",
     "yylloc": {
-      "first_line": 2,
-      "first_column": 0,
-      "last_line": 2,
-      "last_column": 0,
+      "first_line": 6,
+      "first_column": 8,
+      "last_line": 6,
+      "last_column": 8,
       "range": [
-        56,
-        56
+        44,
+        44
       ]
     }
   },
@@ -303,9 +258,9 @@
     "id": -2,
     "token": null,
     "summary": {
-      "totalTokenCount": 20,
+      "totalTokenCount": 17,
       "EOFTokenCount": 4,
-      "ERRORTokenCount": 5,
+      "ERRORTokenCount": 2,
       "fatalExceptionCount": 0
     }
   }
