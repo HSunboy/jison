@@ -24,6 +24,7 @@
 %ebnf
 
 %option default-action-mode=skip,merge
+// %options parser-errors-are-recoverable lexer-errors-are-recoverable
 
 
 %%
@@ -74,7 +75,7 @@ rules_and_epilogue
             } else {
                 $$ = { rules: $rules };
             }
-            yy.popContext('Line 77');
+            yy.popContext('Line 78');
         }
     | start_productions_marker error epilogue
         {
@@ -97,7 +98,7 @@ rules_and_epilogue
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 100');
+            yy.popContext('Line 101');
             $$ = { rules: [] };
         }
     | start_productions_marker DUMMY error
@@ -122,7 +123,7 @@ rules_and_epilogue
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 125');
+            yy.popContext('Line 126');
             $$ = { rules: [] };
         }
     | ε
@@ -185,6 +186,8 @@ init
                     yy.__context_cfg_stack__.length = depth;
                 }
             };
+            
+            $$ = null;
         }
     ;
 
@@ -323,7 +326,7 @@ definition
                 lst[i][1] = 0;     // flag as 'inclusive'
             }
 
-            yy.popContext('Line 326');
+            yy.popContext('Line 329');
 
             $$ = {
                 type: 'names',
@@ -345,7 +348,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 348');
+            yy.popContext('Line 351');
             $$ = null;
         }
     //
@@ -360,7 +363,7 @@ definition
                 lst[i][1] = 1;     // flag as 'exclusive'
             }
 
-            yy.popContext('Line 363');
+            yy.popContext('Line 366');
 
             $$ = {
                 type: 'names',
@@ -382,7 +385,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 385');
+            yy.popContext('Line 388');
             $$ = null;
         }
     //
@@ -482,7 +485,7 @@ definition
             for (let i = 0, len = lst.length; i < len; i++) {
                 yy.options[lst[i][0]] = lst[i][1];
             }
-            yy.popContext('Line 485');
+            yy.popContext('Line 488');
             $$ = null;
         }
     //
@@ -500,7 +503,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 503');
+            yy.popContext('Line 506');
             $$ = null;
         }
     | option_keyword error
@@ -515,7 +518,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 518');
+            yy.popContext('Line 521');
             $$ = null;
         }
     | UNKNOWN_DECL
@@ -555,7 +558,7 @@ definition
                 `);
             }
 
-            yy.popContext('Line 558');
+            yy.popContext('Line 561');
 
             $$ = {
                 type: 'imports',
@@ -576,7 +579,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 579');
+            yy.popContext('Line 582');
             $$ = null;
         }
     | init_code_keyword option_list ACTION_START action ACTION_END OPTIONS_END
@@ -619,7 +622,7 @@ definition
                 `);
             }
 
-            yy.popContext('Line 622');
+            yy.popContext('Line 625');
 
             $$ = {
                 type: 'codeSection',
@@ -647,7 +650,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 650');
+            yy.popContext('Line 653');
             $$ = null;
         }
     | init_code_keyword error ACTION_START /* ...action */ error OPTIONS_END
@@ -664,7 +667,7 @@ definition
                   Technical error report:
                 ${$error1.errStr}
             `);
-            yy.popContext('Line 667');
+            yy.popContext('Line 670');
             $$ = null;
         }
     | init_code_keyword error OPTIONS_END
@@ -685,7 +688,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 688');
+            yy.popContext('Line 691');
             $$ = null;
         }
     | error
@@ -725,7 +728,7 @@ import_keyword
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;
             yy.__options_category_description__ = $IMPORT;
 
-            $$ = $1;
+            $$ = null;
         }
     ;
 
@@ -736,7 +739,7 @@ init_code_keyword
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS | OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;
             yy.__options_category_description__ = $INIT_CODE;
 
-            $$ = $1;
+            $$ = null;
         }
     ;
 
@@ -747,7 +750,7 @@ include_keyword
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;
             yy.__options_category_description__ = $INCLUDE;
 
-            $$ = $1;
+            $$ = null;
         }
     ;
 
@@ -758,7 +761,7 @@ start_inclusive_keyword
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;
             yy.__options_category_description__ = 'the inclusive lexer start conditions set (%s)';
 
-            $$ = $1;
+            $$ = null;
         }
     ;
 
@@ -769,7 +772,7 @@ start_exclusive_keyword
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;
             yy.__options_category_description__ = 'the exclusive lexer start conditions set (%x)';
 
-            $$ = $1;
+            $$ = null;
         }
     ;
 
@@ -834,7 +837,7 @@ scoped_rules_collective
                 $rule.unshift($start_conditions);
             }
 
-            yy.popContext('Line 837');
+            yy.popContext('Line 840');
 
             $$ = [$rule];
         }
@@ -846,7 +849,7 @@ scoped_rules_collective
                 });
             }
 
-            yy.popContext('Line 849');
+            yy.popContext('Line 852');
 
             $$ = $rule_block;
         }
@@ -864,7 +867,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 867');
+            yy.popContext('Line 870');
             $$ = null;
         }
     | start_conditions '{' error
@@ -881,7 +884,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 884');
+            yy.popContext('Line 887');
             $$ = null;
         }
     | start_conditions error '}'
@@ -898,7 +901,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 901');
+            yy.popContext('Line 904');
             $$ = null;
         }
     ;
@@ -993,7 +996,6 @@ rule
         }
     | regex ARROW_ACTION_START error
         {
-            $$ = [$regex, $error];
             yyerror(rmCommonWS`
                 A lexer rule action arrow must be followed by a single JavaScript expression specifying the lexer token to produce, e.g.:
 
@@ -1009,11 +1011,11 @@ rule
                   Technical error report:
                 ${$error.errStr}
             `);
+            $$ = [$regex, $error];
         }
     | regex ACTION_START error /* ACTION_END */
         {
             // TODO: REWRITE
-            $$ = [$regex, $error];
             yyerror(rmCommonWS`
                 A lexer rule regex action code must be properly terminated and must contain a JavaScript statement block (or anything that does parse as such), e.g.:
 
@@ -1030,11 +1032,11 @@ rule
                   Technical error report:
                 ${$error.errStr}
             `);
+            $$ = [$regex, $error];
         }
     | regex ACTION_START_AT_SOL error /* ACTION_END */
         {
             // TODO: REWRITE
-            $$ = [$regex, $error];
             yyerror(rmCommonWS`
                 A lexer rule regex action code must be properly terminated and must contain a JavaScript statement block (or anything that does parse as such), e.g.:
 
@@ -1070,10 +1072,10 @@ rule
                   Technical error report:
                 ${$error.errStr}
             `);
+            $$ = [$regex, $error];
         }
     | regex error
         {
-            $$ = [$regex, $error];
             yyerror(rmCommonWS`
                 Lexer rule regex action code declaration error?
 
@@ -1083,6 +1085,7 @@ rule
                   Technical error report:
                 ${$error.errStr}
             `);
+            $$ = [$regex, $error];
         }
     // ---------------------------------------------------------------------------------
     // ---- additional chunks one MAY encounter *instead* of a regular lexer rule: -----
@@ -1214,7 +1217,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@start_inclusive_keyword)}
             `);
-            yy.popContext('Line 1217');
+            yy.popContext('Line 1220');
             $$ = null;
         }
     | start_exclusive_keyword
@@ -1228,7 +1231,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@start_exclusive_keyword)}
             `);
-            yy.popContext('Line 1231');
+            yy.popContext('Line 1234');
             $$ = null;
         }
     | option_keyword
@@ -1242,7 +1245,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@option_keyword)}
             `);
-            yy.popContext('Line 1245');
+            yy.popContext('Line 1248');
             $$ = null;
         }
     | UNKNOWN_DECL
@@ -1269,7 +1272,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@import_keyword)}
             `);
-            yy.popContext('Line 1272');
+            yy.popContext('Line 1275');
             $$ = null;
         }
     | init_code_keyword
@@ -1283,7 +1286,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@init_code_keyword)}
             `);
-            yy.popContext('Line 1286');
+            yy.popContext('Line 1289');
             $$ = null;
         }
     ;
@@ -1373,7 +1376,7 @@ start_conditions
 
             // Optimization: these two calls cancel one another out here:
             //
-            // yy.popContext('Line 1376');
+            // yy.popContext('Line 1379');
             // yy.pushContext();
 
             yy.__inside_scoped_ruleset__ = true;
@@ -1402,7 +1405,7 @@ start_conditions
 
             // Optimization: these two calls cancel one another out here:
             //
-            // yy.popContext('Line 1405');
+            // yy.popContext('Line 1408');
             // yy.pushContext();
 
             yy.__inside_scoped_ruleset__ = true;
@@ -1584,7 +1587,7 @@ any_group_regex
                   Erroneous regex set:
                 ${yylexer.prettyPrintRange(@REGEX_SET_END, @REGEX_SET_START)}
             `);
-            $ = null;
+            $$ = null;
         }
     | REGEX_SET_START regex_set? UNTERMINATED_REGEX_SET
         {
@@ -1594,7 +1597,7 @@ any_group_regex
                   Unterminated regex set:
                 ${yylexer.prettyPrintRange(@UNTERMINATED_REGEX_SET, @REGEX_SET_START)}
             `);
-            $ = null;
+            $$ = null;
         }
     | REGEX_SET_START error
         {
@@ -1607,6 +1610,7 @@ any_group_regex
                   Technical error report:
                 ${$error.errStr}
             `);
+            $$ = null;
         }
     ;
 
@@ -1848,6 +1852,7 @@ option_name
                       Erroneous area:
                     ${yylexer.prettyPrintRange(@star, @-1)}
                 `);
+                $$ = $star;
             }
         }
     ;
@@ -1873,7 +1878,7 @@ epilogue
         }
     | start_epilogue_marker
         {
-            yy.popContext('Line 1876');
+            yy.popContext('Line 1881');
 
             $$ = '';
         }
@@ -1892,7 +1897,7 @@ epilogue
                 }
             }
 
-            yy.popContext('Line 1895');
+            yy.popContext('Line 1900');
 
             $$ = srcCode;
         }
@@ -2055,7 +2060,7 @@ include_macro_code
                 $$ = '\n// Included by Jison: ' + include_path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + include_path + '\n\n';
             }
 
-            yy.popContext('Line 2058');
+            yy.popContext('Line 2063');
         }
     | include_keyword error
         {
@@ -2068,7 +2073,7 @@ include_macro_code
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 2071');
+            yy.popContext('Line 2076');
             $$ = null;
         }
     ;
