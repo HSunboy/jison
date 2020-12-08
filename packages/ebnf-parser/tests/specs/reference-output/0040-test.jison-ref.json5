@@ -1,0 +1,50 @@
+{
+  bnf: {
+    top: [
+      {
+        handle: [
+          null,
+          {
+            type: 5,
+            expression: {
+              type: 3,
+              symbol: 'word',
+            },
+            suffix: null,
+            alias: 'alpha',
+          },
+          {
+            type: 5,
+            expression: {
+              type: 4,
+              symbol: "' '",
+            },
+            suffix: null,
+            alias: 'bob',
+          },
+          {
+            type: 5,
+            expression: {
+              type: 3,
+              symbol: 'word',
+            },
+            suffix: null,
+            alias: 'carol',
+          },
+          {
+            type: 1,
+            expression: {
+              type: 3,
+              symbol: 'EOF',
+            },
+            suffix: null,
+          },
+        ],
+        prec: null,
+      },
+    ],
+  },
+  __original_input__: `%%
+top : word[alpha] ' '[bob] word[carol] EOF;
+`,
+}

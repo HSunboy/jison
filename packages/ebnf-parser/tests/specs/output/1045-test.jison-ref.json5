@@ -1,0 +1,89 @@
+{
+  fail: 1,
+  spec: `%ebnf
+%%
+top : word ',' word++;	   // bad dual wildcard at the end there
+
+`,
+  err: {
+    hash: {
+      errStr: `
+rule production declaration error?
+    
+  Erroneous area:
+3: top : word ',' word++;    // bad dual wildcard at the end there
+^......................^^
+4: 
+5: 
+    
+  Technical error report:
+Parse error on line 3:
+top : word ',' word++;    // b...
+--------------------^
+Expecting ";", ":", "|", "(", ")", "ACTION_START", "STRING_LIT", "ARROW_ACTION_START", "ALIAS", "ID", "EOF_ID", "PREC", got unexpected "+"
+`,
+      exception: null,
+      text: ';',
+      value: ';',
+      token: '"$accept"',
+      token_id: 0,
+      line: 2,
+      recoverable: false,
+      state: 159,
+      action: 2,
+      new_state: 70,
+      stack_pointer: 7,
+    },
+    message: `
+rule production declaration error?
+    
+  Erroneous area:
+3: top : word ',' word++;    // bad dual wildcard at the end there
+^......................^^
+4: 
+5: 
+    
+  Technical error report:
+Parse error on line 3:
+top : word ',' word++;    // b...
+--------------------^
+Expecting ";", ":", "|", "(", ")", "ACTION_START", "STRING_LIT", "ARROW_ACTION_START", "ALIAS", "ID", "EOF_ID", "PREC", got unexpected "+"
+`,
+    name: 'JisonParserError',
+    stack: `JisonParserError: 
+rule production declaration error?
+    
+  Erroneous area:
+3: top : word ',' word++;    // bad dual wildcard at the end there
+^......................^^
+4: 
+5: 
+    
+  Technical error report:
+Parse error on line 3:
+top : word ',' word++;    // b...
+--------------------^
+Expecting ";", ":", "|", "(", ")", "ACTION_START", "STRING_LIT", "ARROW_ACTION_START", "ALIAS", "ID", "EOF_ID", "PREC", got unexpected "+"
+
+    at Object.parseError (/ebnf-parser-cjs.js:7502:15)
+    at Object.yyError (/ebnf-parser-cjs.js:7692:25)
+    at Object.parser__PerformAction (/ebnf-parser-cjs.js:4491:14)
+    at Object.parse (/ebnf-parser-cjs.js:8756:24)
+    at Object.parse (/ebnf-parser-cjs.js:22503:23)
+    at Context.testEachParserExample (/ebnf_parse.js:350:27)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
+  },
+}

@@ -75,7 +75,7 @@ spec
             // transform ebnf to bnf if necessary
             if (yy.ebnf) {
                 $$.ebnf = $grammar.grammar;        // keep the original source EBNF around for possible pretty-printing & AST exports.
-                $$.bnf = transform($grammar.grammar);
+                $$.bnf = ['...']; // transform($grammar.grammar);
             }
             else {
                 $$.bnf = $grammar.grammar;

@@ -1,0 +1,119 @@
+{
+  options: {
+    ebnf: true,
+    defaultActionMode: 'skip',
+  },
+  ebnf: {
+    top: [
+      {
+        handle: [
+          null,
+          {
+            type: 5,
+            expression: {
+              type: 3,
+              symbol: 'word',
+            },
+            suffix: null,
+            alias: 'alpha',
+          },
+          {
+            type: 5,
+            expression: {
+              type: 2,
+              symbol: [
+                [
+                  null,
+                  {
+                    type: 5,
+                    expression: {
+                      type: 3,
+                      symbol: 'word',
+                    },
+                    suffix: null,
+                    alias: 'alex',
+                  },
+                  {
+                    type: 5,
+                    expression: {
+                      type: 2,
+                      symbol: [
+                        [
+                          null,
+                          {
+                            type: 5,
+                            expression: {
+                              type: 3,
+                              symbol: 'word',
+                            },
+                            suffix: null,
+                            alias: 'bob',
+                          },
+                          {
+                            type: 5,
+                            expression: {
+                              type: 3,
+                              symbol: 'word',
+                            },
+                            suffix: null,
+                            alias: 'carol',
+                          },
+                          {
+                            type: 1,
+                            expression: {
+                              type: 4,
+                              symbol: "','",
+                            },
+                            suffix: null,
+                          },
+                        ],
+                      ],
+                    },
+                    suffix: '+',
+                    alias: 'david',
+                  },
+                  {
+                    type: 1,
+                    expression: {
+                      type: 3,
+                      symbol: 'word',
+                    },
+                    suffix: null,
+                  },
+                  {
+                    type: 1,
+                    expression: {
+                      type: 4,
+                      symbol: "','",
+                    },
+                    suffix: null,
+                  },
+                ],
+              ],
+            },
+            suffix: '*',
+            alias: 'enoch',
+          },
+          {
+            type: 1,
+            expression: {
+              type: 3,
+              symbol: 'EOF',
+            },
+            suffix: null,
+          },
+        ],
+        prec: null,
+      },
+    ],
+  },
+  bnf: [
+    '...',
+  ],
+  __original_input__: `%ebnf
+%option default-action-mode=skip
+%%
+top : word[alpha] (word[alex] (word[bob] word[carol] ',')+[david] word ',')*[enoch] EOF;
+
+`,
+}
