@@ -128,6 +128,7 @@ specify those as character escapes '\\r' and '\\n'.
               include_command_allowed: false,
             },
             lexer: '[lexer]',
+            yyErrorInvoked: true,
           },
           {
             errStr: `Lexical error on line 3: 
@@ -165,6 +166,7 @@ rules (i.e. jison lex regexes) in "rules" state.
             },
             yy: '[reference to sibling --> *.[4].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
+            yyErrorInvoked: true,
           },
         ],
         __decompressed: true,
@@ -216,6 +218,7 @@ def]"]" -> 'BAD_REGEX'
           include_command_allowed: false,
         },
       },
+      yyErrorInvoked: true,
       errorDiag: {
         inputPos: 25,
         yytext: '',
@@ -228,7 +231,16 @@ def]"]" -> 'BAD_REGEX'
         conditionStackDepth: 2,
       },
     },
-    yylloc: '[reference to sibling --> *.[4].yytext.lexer.__error_infos.[0].loc]',
+    yylloc: {
+      first_line: 2,
+      first_column: 7,
+      last_line: 2,
+      last_column: 7,
+      range: [
+        10,
+        10,
+      ],
+    },
   },
   {
     id: 52,
@@ -336,6 +348,7 @@ def]"]" -> 'BAD_REGEX'
           include_command_allowed: false,
         },
       },
+      yyErrorInvoked: true,
       errorDiag: {
         inputPos: 20,
         yytext: ']',
@@ -347,7 +360,16 @@ def]"]" -> 'BAD_REGEX'
         conditionStackDepth: 2,
       },
     },
-    yylloc: '[reference to sibling --> *.[4].yytext.lexer.__error_infos.[1].loc]',
+    yylloc: {
+      first_line: 3,
+      first_column: 3,
+      last_line: 3,
+      last_column: 4,
+      range: [
+        14,
+        15,
+      ],
+    },
   },
   {
     id: 51,

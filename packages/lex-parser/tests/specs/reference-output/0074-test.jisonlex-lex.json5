@@ -153,6 +153,7 @@ rules (i.e. jison lex regexes) in "rules" state.
               include_command_allowed: false,
             },
             lexer: '[lexer]',
+            yyErrorInvoked: true,
           },
         ],
         __decompressed: true,
@@ -203,6 +204,7 @@ rules (i.e. jison lex regexes) in "rules" state.
           include_command_allowed: false,
         },
       },
+      yyErrorInvoked: true,
       errorDiag: {
         inputPos: 20,
         yytext: ']',
@@ -214,7 +216,16 @@ rules (i.e. jison lex regexes) in "rules" state.
         conditionStackDepth: 2,
       },
     },
-    yylloc: '[reference to sibling --> *.[5].yytext.lexer.__error_infos.[0].loc]',
+    yylloc: {
+      first_line: 2,
+      first_column: 8,
+      last_line: 2,
+      last_column: 9,
+      range: [
+        11,
+        12,
+      ],
+    },
   },
   {
     id: 51,

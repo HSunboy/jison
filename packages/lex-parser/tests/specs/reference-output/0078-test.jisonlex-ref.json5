@@ -5,6 +5,7 @@
   spec: `%%
 "["[abc -> 'BAD_REGEX' // unterminated regex set...`,
   err: {
+    name: 'JisonLexerError',
     hash: {
       errStr: `Lexical error on line 2: 
 The regex [...] set has not been properly terminated by ']'.
@@ -18,6 +19,7 @@ The regex [...] set has not been properly terminated by ']'.
       text: '',
       token: null,
       line: 1,
+      yyErrorInvoked: true,
     },
     message: `Lexical error on line 2: 
 The regex [...] set has not been properly terminated by ']'.
@@ -27,7 +29,6 @@ The regex [...] set has not been properly terminated by ']'.
 2: "["[abc -> 'BAD_REGEX' // unterminated regex set...
 ^.....................................................^
 `,
-    name: 'JisonLexerError',
     stack: `JisonLexerError: Lexical error on line 2: 
 The regex [...] set has not been properly terminated by ']'.
 
@@ -36,16 +37,16 @@ The regex [...] set has not been properly terminated by ']'.
 2: "["[abc -> 'BAD_REGEX' // unterminated regex set...
 ^.....................................................^
 
-    at Object.parseError (/lex-parser-cjs.js:7206:15)
-    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:9301:44)
-    at Object.yyError [as yyerror] (/lex-parser-cjs.js:9332:19)
-    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:11287:13)
-    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10237:38)
-    at Object.lexer_next [as next] (/lex-parser-cjs.js:10360:28)
-    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:10507:18)
-    at fastLex (/lex-parser-cjs.js:7801:27)
-    at Object.parse (/lex-parser-cjs.js:7975:30)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12386:25)
+    at Object.parseError (/lex-parser-cjs.js:7210:15)
+    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:9379:44)
+    at Object.yyError [as yyerror] (/lex-parser-cjs.js:9409:19)
+    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:11423:13)
+    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10334:38)
+    at Object.lexer_next [as next] (/lex-parser-cjs.js:10459:28)
+    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:10643:18)
+    at fastLex (/lex-parser-cjs.js:7805:27)
+    at Object.parse (/lex-parser-cjs.js:7979:30)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12522:25)
     at Context.testEachParserExample (/all-tests.js:483:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)

@@ -159,6 +159,7 @@ Regrettably, it does not exist in the remainder of the input.
               include_command_allowed: false,
             },
             lexer: '[lexer]',
+            yyErrorInvoked: true,
           },
         ],
         __decompressed: true,
@@ -211,6 +212,7 @@ return true;
           include_command_allowed: false,
         },
       },
+      yyErrorInvoked: true,
       errorDiag: {
         inputPos: 18,
         yytext: '%{',
@@ -222,7 +224,16 @@ return true;
         conditionStackDepth: 3,
       },
     },
-    yylloc: '[reference to sibling --> *.[6].yytext.lexer.__error_infos.[0].loc]',
+    yylloc: {
+      first_line: 2,
+      first_column: 12,
+      last_line: 2,
+      last_column: 14,
+      range: [
+        15,
+        17,
+      ],
+    },
   },
   {
     id: 24,

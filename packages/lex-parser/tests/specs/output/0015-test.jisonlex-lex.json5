@@ -159,6 +159,7 @@ Regrettably, it does not exist in the remainder of the input.
               include_command_allowed: false,
             },
             lexer: '[lexer]',
+            yyErrorInvoked: true,
           },
           {
             errStr: `Lexical error on line 4: 
@@ -197,6 +198,7 @@ rules (i.e. jison lex regexes) in "rules" state.
             },
             yy: '[reference to sibling --> *.[6].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
+            yyErrorInvoked: true,
           },
         ],
         __decompressed: true,
@@ -249,6 +251,7 @@ return true;
           include_command_allowed: false,
         },
       },
+      yyErrorInvoked: true,
       errorDiag: {
         inputPos: 19,
         yytext: '%{',
@@ -260,7 +263,16 @@ return true;
         conditionStackDepth: 3,
       },
     },
-    yylloc: '[reference to sibling --> *.[6].yytext.lexer.__error_infos.[0].loc]',
+    yylloc: {
+      first_line: 2,
+      first_column: 12,
+      last_line: 2,
+      last_column: 14,
+      range: [
+        15,
+        17,
+      ],
+    },
   },
   {
     id: 24,
@@ -433,6 +445,7 @@ return true;
           include_command_allowed: false,
         },
       },
+      yyErrorInvoked: true,
       errorDiag: {
         inputPos: 4,
         yytext: '%',
@@ -444,7 +457,16 @@ return true;
         conditionStackDepth: 2,
       },
     },
-    yylloc: '[reference to sibling --> *.[6].yytext.lexer.__error_infos.[1].loc]',
+    yylloc: {
+      first_line: 4,
+      first_column: 0,
+      last_line: 4,
+      last_column: 1,
+      range: [
+        31,
+        32,
+      ],
+    },
   },
   {
     id: 5,

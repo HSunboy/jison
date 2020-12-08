@@ -252,6 +252,7 @@ unterminated string constant in lexer rule action block.
               include_command_allowed: false,
             },
             lexer: '[lexer]',
+            yyErrorInvoked: true,
           },
           {
             errStr: `Lexical error on line 6: 
@@ -286,6 +287,7 @@ to help jison grok more or less complex action code chunks.
             },
             yy: '[reference to sibling --> *.[12].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
+            yyErrorInvoked: true,
           },
           {
             errStr: `Lexical error on line 6: 
@@ -320,6 +322,7 @@ to help jison grok more or less complex action code chunks.
             },
             yy: '[reference to sibling --> *.[12].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
+            yyErrorInvoked: true,
           },
           {
             errStr: `Lexical error on line 6: 
@@ -354,6 +357,7 @@ to help jison grok more or less complex action code chunks.
             },
             yy: '[reference to sibling --> *.[12].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
+            yyErrorInvoked: true,
           },
         ],
         __decompressed: true,
@@ -408,6 +412,7 @@ b %{{{ return "A" + '%}'; %}}}
           include_command_allowed: false,
         },
       },
+      yyErrorInvoked: true,
       errorDiag: {
         inputPos: 8,
         yytext: "'",
@@ -419,7 +424,16 @@ b %{{{ return "A" + '%}'; %}}}
         conditionStackDepth: 3,
       },
     },
-    yylloc: '[reference to sibling --> *.[12].yytext.lexer.__error_infos.[0].loc]',
+    yylloc: {
+      first_line: 6,
+      first_column: 23,
+      last_line: 6,
+      last_column: 24,
+      range: [
+        93,
+        94,
+      ],
+    },
   },
   {
     id: 36,
@@ -545,6 +559,7 @@ b %{{{ return "A" + '%}'; %}}}
           include_command_allowed: false,
         },
       },
+      yyErrorInvoked: true,
       errorDiag: {
         inputPos: 4,
         yytext: '}',
@@ -556,7 +571,16 @@ b %{{{ return "A" + '%}'; %}}}
         conditionStackDepth: 3,
       },
     },
-    yylloc: '[reference to sibling --> *.[12].yytext.lexer.__error_infos.[1].loc]',
+    yylloc: {
+      first_line: 6,
+      first_column: 27,
+      last_line: 6,
+      last_column: 28,
+      range: [
+        97,
+        98,
+      ],
+    },
   },
   {
     id: 39,
@@ -652,6 +676,7 @@ b %{{{ return "A" + '%}'; %}}}
           include_command_allowed: false,
         },
       },
+      yyErrorInvoked: true,
       errorDiag: {
         inputPos: 3,
         yytext: '}',
@@ -663,7 +688,16 @@ b %{{{ return "A" + '%}'; %}}}
         conditionStackDepth: 3,
       },
     },
-    yylloc: '[reference to sibling --> *.[12].yytext.lexer.__error_infos.[2].loc]',
+    yylloc: {
+      first_line: 6,
+      first_column: 28,
+      last_line: 6,
+      last_column: 29,
+      range: [
+        98,
+        99,
+      ],
+    },
   },
   {
     id: 39,
@@ -759,6 +793,7 @@ b %{{{ return "A" + '%}'; %}}}
           include_command_allowed: false,
         },
       },
+      yyErrorInvoked: true,
       errorDiag: {
         inputPos: 2,
         yytext: '}',
@@ -770,7 +805,16 @@ b %{{{ return "A" + '%}'; %}}}
         conditionStackDepth: 3,
       },
     },
-    yylloc: '[reference to sibling --> *.[12].yytext.lexer.__error_infos.[3].loc]',
+    yylloc: {
+      first_line: 6,
+      first_column: 29,
+      last_line: 6,
+      last_column: 30,
+      range: [
+        99,
+        100,
+      ],
+    },
   },
   {
     id: 24,

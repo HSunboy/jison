@@ -115,6 +115,7 @@ The regex [...] set has not been properly terminated by ']'.
             },
             yy: {},
             lexer: '[lexer]',
+            yyErrorInvoked: true,
           },
         ],
         __decompressed: true,
@@ -160,6 +161,7 @@ The regex [...] set has not been properly terminated by ']'.
         },
         yy: {},
       },
+      yyErrorInvoked: true,
       errorDiag: {
         inputPos: -1,
         yytext: '',
@@ -171,7 +173,16 @@ The regex [...] set has not been properly terminated by ']'.
         conditionStackDepth: 2,
       },
     },
-    yylloc: '[reference to sibling --> *.[4].yytext.lexer.__error_infos.[0].loc]',
+    yylloc: {
+      first_line: 2,
+      first_column: 51,
+      last_line: 2,
+      last_column: 51,
+      range: [
+        54,
+        54,
+      ],
+    },
   },
   {
     id: 1,

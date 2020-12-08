@@ -128,6 +128,7 @@ specify those as character escapes '\\r' and '\\n'.
               include_command_allowed: false,
             },
             lexer: '[lexer]',
+            yyErrorInvoked: true,
           },
         ],
         __decompressed: true,
@@ -181,6 +182,7 @@ specify those as character escapes '\\r' and '\\n'.
           include_command_allowed: false,
         },
       },
+      yyErrorInvoked: true,
       errorDiag: {
         inputPos: 133,
         yytext: '',
@@ -193,7 +195,16 @@ specify those as character escapes '\\r' and '\\n'.
         conditionStackDepth: 2,
       },
     },
-    yylloc: '[reference to sibling --> *.[4].yytext.lexer.__error_infos.[0].loc]',
+    yylloc: {
+      first_line: 2,
+      first_column: 51,
+      last_line: 2,
+      last_column: 51,
+      range: [
+        54,
+        54,
+      ],
+    },
   },
   {
     id: 51,

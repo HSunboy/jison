@@ -214,6 +214,7 @@ to help jison grok more or less complex action code chunks.
               include_command_allowed: false,
             },
             lexer: '[lexer]',
+            yyErrorInvoked: true,
           },
         ],
         __decompressed: true,
@@ -266,6 +267,7 @@ return true;
           include_command_allowed: false,
         },
       },
+      yyErrorInvoked: true,
       errorDiag: {
         inputPos: 2,
         yytext: '}',
@@ -277,7 +279,16 @@ return true;
         conditionStackDepth: 3,
       },
     },
-    yylloc: '[reference to sibling --> *.[9].yytext.lexer.__error_infos.[0].loc]',
+    yylloc: {
+      first_line: 4,
+      first_column: 3,
+      last_line: 4,
+      last_column: 4,
+      range: [
+        34,
+        35,
+      ],
+    },
   },
   {
     id: 24,
