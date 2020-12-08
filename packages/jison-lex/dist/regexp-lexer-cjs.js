@@ -13382,7 +13382,18 @@ function chkBugger$2(src) {
         console.error('### ISTANBUL COVERAGE CODE DETECTED ###\n', src);
     }
 }
-
+function reportWarning(grammarSpec, msg) {
+    if (typeof grammarSpec.warn_cb === 'function') {
+        grammarSpec.warn_cb(msg);
+    } else if (grammarSpec.warn_cb) {
+        console.error(msg);
+    } else {
+        console.error(msg);
+        // do not treat as warning; barf hairball instead so that this oddity gets noticed right away!
+        // 
+        //throw new Error(msg);
+    }
+}
 
 
 const XREGEXP_UNICODE_ESCAPE_RE$1 = setmgmt.XREGEXP_UNICODE_ESCAPE_RE;              // Matches the XRegExp Unicode escape braced part, e.g. `{Number}`
@@ -14428,14 +14439,7 @@ function getRemainingInitCodeSections(set, grammarSpec) {
                     Make sure this is as intended -- this also happens when '${m.qualifier}' is 
                     a MISTYPED %code section identifier!
                 `;
-                if (typeof grammarSpec.warn_cb === 'function') {
-                    grammarSpec.warn_cb(msg);
-                } else if (grammarSpec.warn_cb) {
-                    console.error(msg);
-                } else {
-                    // do not treat as warning; barf hairball instead so that this oddity gets noticed right away!
-                    throw new Error(msg.trim());
-                }
+                reportWarning(grammarSpec, msg);
             }
 
             rv.push(rmCommonWS$2`
@@ -16642,7 +16646,7 @@ function stripUnusedLexerCode(src, grammarSpec) {
         let b = a.slice(minl, line + 10);
         let c = b.splice(line - minl, 0, '', '^^^^^^^^^^^ source line above is reported as erroneous ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^', '');
         let offendingChunk = '        ' + b.join('\n        ');
-        console.error(rmCommonWS$2`
+        reportWarning(rmCommonWS$2`
             stripUnusedLexerCode WARNING: 
 
                 JISON failed to reformat the generated lexer.
@@ -17260,15 +17264,13 @@ function prepareOptions(grammarSpec) {
     let moduleName = grammarSpec.options.moduleName;
     if (!moduleName || !moduleName.match(/^[a-zA-Z_$][a-zA-Z0-9_$\.]*$/)) {
         if (moduleName) {
-            let msg = `WARNING: The specified moduleName "${moduleName}" is illegal (only characters [a-zA-Z0-9_$] and "." dot are accepted); using the default moduleName "lexer" instead.`;
-            if (typeof grammarSpec.warn_cb === 'function') {
-                grammarSpec.warn_cb(msg);
-            } else if (grammarSpec.warn_cb) {
-                console.error(msg);
-            } else {
-                // do not treat as warning; barf hairball instead so that this oddity gets noticed right away!
-                throw new Error(msg);
-            }
+            let msg = rmCommonWS$2`
+                WARNING: The specified moduleName "${moduleName}" is illegal 
+                (only characters [a-zA-Z0-9_$] and "." dot are accepted).
+
+                Using the default moduleName "lexer" instead.
+            `;
+            reportWarning(grammarSpec, msg);
         }
         grammarSpec.options.moduleName = 'lexer';
     }
