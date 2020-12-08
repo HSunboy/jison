@@ -1518,7 +1518,8 @@ const lexerSpecConglomerate = {
 
 lexer.yy = {
     parseError: function custom_parseError(str, hash, ExceptionClass) {
-        console.error("invoking custom parseError:", {str});
+        if (0) console.error("invoking custom parseError:", {str});
+        
         this.yytext = {
             text: this.yytext,
             message: str,
@@ -1626,7 +1627,8 @@ break;
 
 lexer.yy = {
     parseError: function custom_parseError(str, hash, ExceptionClass) {
-        console.error("invoking custom parseError:", {str});
+        if (0) console.error("invoking custom parseError:", {str});
+        
         this.yytext = {
             text: this.yytext,
             message: str,

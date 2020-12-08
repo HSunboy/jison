@@ -1447,7 +1447,7 @@ EOF: 1,
     // BUT the test rig DOES NOT include that part into the generated lexer used for testing.  :-(
 
     yy.parseError = function custom_parseError(str, hash, ExceptionClass) {
-        console.error("invoking custom parseError:", {str, yyrulenumber});
+        if (0) console.error("invoking custom parseError:", {str, yyrulenumber});
         
         // ,---- *none* of the three 'yy_.yytext' identifiers below should be exapanded!
         if (str === 'bogus-condition-to-prevent-runtime-crash') {
@@ -1539,7 +1539,7 @@ const lexerSpecConglomerate = {
     // BUT the test rig DOES NOT include that part into the generated lexer used for testing.  :-(
 
     yy.parseError = function custom_parseError(str, hash, ExceptionClass) {
-        console.error("invoking custom parseError:", {str, yyrulenumber});
+        if (0) console.error("invoking custom parseError:", {str, yyrulenumber});
         
         // ,---- *none* of the three 'yytext' identifiers below should be exapanded!
         if (str === 'bogus-condition-to-prevent-runtime-crash') {
@@ -1602,7 +1602,7 @@ const lexerSpecConglomerate = {
     // BUT the test rig DOES NOT include that part into the generated lexer used for testing.  :-(
 
     yy.parseError = function custom_parseError(str, hash, ExceptionClass) {
-        console.error("invoking custom parseError:", {str, yyrulenumber});
+        if (0) console.error("invoking custom parseError:", {str, yyrulenumber});
         
         // ,---- *none* of the three 'yy_.yytext' identifiers below should be exapanded!
         if (str === 'bogus-condition-to-prevent-runtime-crash') {
@@ -1663,7 +1663,7 @@ break;
     // BUT the test rig DOES NOT include that part into the generated lexer used for testing.  :-(
 
     yy.parseError = function custom_parseError(str, hash, ExceptionClass) {
-        console.error("invoking custom parseError:", {str, yyrulenumber});
+        if (0) console.error("invoking custom parseError:", {str, yyrulenumber});
         
         // ,---- *none* of the three 'yytext' identifiers below should be exapanded!
         if (str === 'bogus-condition-to-prevent-runtime-crash') {

@@ -7,11 +7,11 @@
       message: 'block0A is not defined',
       name: 'ReferenceError',
       stack: `ReferenceError: block0A is not defined
-    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js:14615:31)
-    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js:14615:31)
-    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:14615:31)
-    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:14615:31)
-    at Context.testEachLexerExample (/regexplexer.js:3740:37)
+    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js:14689:31)
+    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js:14689:31)
+    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:14689:31)
+    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:14689:31)
+    at Context.testEachLexerExample (/regexplexer.js:3750:37)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)

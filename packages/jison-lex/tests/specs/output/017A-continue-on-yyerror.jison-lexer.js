@@ -1519,7 +1519,8 @@ const lexerSpecConglomerate = {
 // set the \`yy\` instance for the lexer using the setInput() API:
 lexer.setInput('', {
     parseError: function custom_parseError(str, hash, ExceptionClass) {
-        console.error("invoking custom parseError:", {str});
+        if (0) console.error("invoking custom parseError:", {str});
+        
         this.yytext = {
             text: this.yytext,
             message: str,
@@ -1628,7 +1629,8 @@ break;
 // set the \`yy\` instance for the lexer using the setInput() API:
 lexer.setInput('', {
     parseError: function custom_parseError(str, hash, ExceptionClass) {
-        console.error("invoking custom parseError:", {str});
+        if (0) console.error("invoking custom parseError:", {str});
+        
         this.yytext = {
             text: this.yytext,
             message: str,

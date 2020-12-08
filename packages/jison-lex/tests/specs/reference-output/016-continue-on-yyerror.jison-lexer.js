@@ -1447,7 +1447,8 @@ EOF: 1,
     // BUT the test rig DOES NOT include that part into the generated lexer used for testing.  :-(
 
     yy.parseError = function custom_parseError(str, hash, ExceptionClass) {
-        console.error("invoking custom parseError:", {str, yyrulenumber});
+        if (0) console.error("invoking custom parseError:", {str, yyrulenumber});
+        
         yy_.yytext = {
             text: yy_.yytext,
             message: str,
@@ -1528,7 +1529,8 @@ const lexerSpecConglomerate = {
     // BUT the test rig DOES NOT include that part into the generated lexer used for testing.  :-(
 
     yy.parseError = function custom_parseError(str, hash, ExceptionClass) {
-        console.error("invoking custom parseError:", {str, yyrulenumber});
+        if (0) console.error("invoking custom parseError:", {str, yyrulenumber});
+        
         yytext = {
             text: yytext,
             message: str,
@@ -1580,7 +1582,8 @@ const lexerSpecConglomerate = {
     // BUT the test rig DOES NOT include that part into the generated lexer used for testing.  :-(
 
     yy.parseError = function custom_parseError(str, hash, ExceptionClass) {
-        console.error("invoking custom parseError:", {str, yyrulenumber});
+        if (0) console.error("invoking custom parseError:", {str, yyrulenumber});
+        
         yy_.yytext = {
             text: yy_.yytext,
             message: str,
@@ -1630,7 +1633,8 @@ break;
     // BUT the test rig DOES NOT include that part into the generated lexer used for testing.  :-(
 
     yy.parseError = function custom_parseError(str, hash, ExceptionClass) {
-        console.error("invoking custom parseError:", {str, yyrulenumber});
+        if (0) console.error("invoking custom parseError:", {str, yyrulenumber});
+        
         yytext = {
             text: yytext,
             message: str,

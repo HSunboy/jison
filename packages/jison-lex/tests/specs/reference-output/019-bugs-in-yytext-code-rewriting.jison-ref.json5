@@ -18,12 +18,12 @@
 
   assert__default['default'](Array.isArray(rule))
 
-    at /regexp-lexer-cjs.js:14733:59
-    at test_me (/regexp-lexer-cjs.js:14566:13)
-    at /regexp-lexer-cjs.js:14720:30
-    at test_me (/regexp-lexer-cjs.js:14670:17)
-    at new RegExpLexer (/regexp-lexer-cjs.js:14679:17)
-    at Context.testEachLexerExample (/regexplexer.js:3728:25)
+    at /regexp-lexer-cjs.js:14807:59
+    at test_me (/regexp-lexer-cjs.js:14640:13)
+    at /regexp-lexer-cjs.js:14794:30
+    at test_me (/regexp-lexer-cjs.js:14744:17)
+    at new RegExpLexer (/regexp-lexer-cjs.js:14753:17)
+    at Context.testEachLexerExample (/regexplexer.js:3738:25)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)

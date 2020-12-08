@@ -9,7 +9,8 @@
     // BUT the test rig DOES NOT include that part into the generated lexer used for testing.  :-(
 
     yy.parseError = function custom_parseError(str, hash, ExceptionClass) {
-        console.error("invoking custom parseError:", {str, yyrulenumber});
+        if (0) console.error("invoking custom parseError:", {str, yyrulenumber});
+        
         yytext = {
             text: yytext,
             message: str,
