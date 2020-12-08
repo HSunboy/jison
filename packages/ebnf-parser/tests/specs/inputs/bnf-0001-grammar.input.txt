@@ -1,0 +1,23 @@
+
+%start foo 
+%left "+" "-" 
+%right "*" "/" 
+%nonassoc "=" STUFF 
+%left UMINUS 
+
+%% 
+
+foo 
+    : bar baz blitz { stuff } %prec GEMINI 
+    | bar %prec UMINUS 
+    | 
+    ;
+
+bar
+    : { things }
+    ;
+
+baz
+    : 
+    | foo 
+    ;

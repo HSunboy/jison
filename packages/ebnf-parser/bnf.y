@@ -5,6 +5,7 @@
   import helpers from '../helpers-lib';
   import fs from 'fs';
   import path from 'path';
+  import assert from 'assert';
   import transform from './ebnf-transform';
 
   import { 
