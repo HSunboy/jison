@@ -23,6 +23,7 @@
 
 %ebnf
 
+%option default-action-mode=skip,merge
 
 
 %%
@@ -745,6 +746,8 @@ include_keyword
             yy.pushContext();
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS;
             yy.__options_category_description__ = $INCLUDE;
+
+            $$ = $1;
         }
     ;
 
@@ -754,6 +757,8 @@ start_inclusive_keyword
             yy.pushContext();
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;
             yy.__options_category_description__ = 'the inclusive lexer start conditions set (%s)';
+
+            $$ = $1;
         }
     ;
 
@@ -763,6 +768,8 @@ start_exclusive_keyword
             yy.pushContext();
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES;
             yy.__options_category_description__ = 'the exclusive lexer start conditions set (%x)';
+
+            $$ = $1;
         }
     ;
 
@@ -772,6 +779,8 @@ start_conditions_marker
             yy.pushContext();
             yy.__options_flags__ = OPTION_DOES_NOT_ACCEPT_VALUE | OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES | OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME;
             yy.__options_category_description__ = 'the <...> delimited set of lexer start conditions';
+
+            $$ = null;
         }
     ;
 
@@ -781,6 +790,8 @@ start_productions_marker
             yy.pushContext();
             yy.__options_flags__ = 0;
             yy.__options_category_description__ = 'the lexer rules definition section';
+
+            $$ = null;
         }
     ;
 
@@ -790,6 +801,8 @@ start_epilogue_marker
             yy.pushContext();
             yy.__options_flags__ = 0;
             yy.__options_category_description__ = 'the lexer epilogue section';
+
+            $$ = null;
         }
     ;
 
@@ -821,7 +834,7 @@ scoped_rules_collective
                 $rule.unshift($start_conditions);
             }
 
-            yy.popContext('Line 824');
+            yy.popContext('Line 836');
 
             $$ = [$rule];
         }
@@ -833,7 +846,7 @@ scoped_rules_collective
                 });
             }
 
-            yy.popContext('Line 836');
+            yy.popContext('Line 848');
 
             $$ = $rule_block;
         }
@@ -851,7 +864,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 854');
+            yy.popContext('Line 866');
             $$ = null;
         }
     | start_conditions '{' error
@@ -868,7 +881,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 871');
+            yy.popContext('Line 883');
             $$ = null;
         }
     | start_conditions error '}'
@@ -885,7 +898,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 888');
+            yy.popContext('Line 900');
             $$ = null;
         }
     ;
@@ -1201,7 +1214,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@start_inclusive_keyword)}
             `);
-            yy.popContext('Line 1204');
+            yy.popContext('Line 1216');
             $$ = null;
         }
     | start_exclusive_keyword
@@ -1215,7 +1228,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@start_exclusive_keyword)}
             `);
-            yy.popContext('Line 1218');
+            yy.popContext('Line 1230');
             $$ = null;
         }
     | option_keyword
@@ -1229,7 +1242,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@option_keyword)}
             `);
-            yy.popContext('Line 1232');
+            yy.popContext('Line 1244');
             $$ = null;
         }
     | UNKNOWN_DECL
@@ -1256,7 +1269,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@import_keyword)}
             `);
-            yy.popContext('Line 1259');
+            yy.popContext('Line 1271');
             $$ = null;
         }
     | init_code_keyword
@@ -1270,7 +1283,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@init_code_keyword)}
             `);
-            yy.popContext('Line 1273');
+            yy.popContext('Line 1285');
             $$ = null;
         }
     ;
@@ -1360,7 +1373,7 @@ start_conditions
 
             // Optimization: these two calls cancel one another out here:
             //
-            // yy.popContext('Line 1363');
+            // yy.popContext('Line 1375');
             // yy.pushContext();
 
             yy.__inside_scoped_ruleset__ = true;
@@ -1389,7 +1402,7 @@ start_conditions
 
             // Optimization: these two calls cancel one another out here:
             //
-            // yy.popContext('Line 1392');
+            // yy.popContext('Line 1404');
             // yy.pushContext();
 
             yy.__inside_scoped_ruleset__ = true;
@@ -1532,6 +1545,7 @@ regex_base
     | '/!' regex_base
         { $$ = '(?!' + $regex_base + ')'; }
     | name_expansion
+        { $$ = $1; }
     | regex_base range_regex
         { $$ = $1 + $2; }
     | any_group_regex
@@ -1542,7 +1556,9 @@ regex_base
     | '$'
         { $$ = '$'; }
     | REGEX_SPECIAL_CHAR
+        { $$ = $1; }
     | literal_string
+        { $$ = $1; }
     | ESCAPED_CHAR
         { $$ = encodeRegexLiteralStr(encodeUnicodeCodepoint($ESCAPED_CHAR)); }
     ;
@@ -1598,10 +1614,12 @@ regex_set
     : regex_set regex_set_atom
         { $$ = $regex_set + $regex_set_atom; }
     | regex_set_atom
+        { $$ = $1; }
     ;
 
 regex_set_atom
     : REGEX_SET
+        { $$ = $1; }
     | name_expansion
         {
             if (XRegExp._getUnicodeProperty($name_expansion.replace(/[{}]/g, ''))
@@ -1843,7 +1861,9 @@ nonnumeric_option_value
 
 any_option_value
     : nonnumeric_option_value
+        { $$ = $1; }
     | INTEGER
+        { $$ = $1; }
     ;
 
 epilogue
@@ -1853,7 +1873,7 @@ epilogue
         }
     | start_epilogue_marker
         {
-            yy.popContext('Line 1856');
+            yy.popContext('Line 1868');
 
             $$ = '';
         }
@@ -1872,7 +1892,7 @@ epilogue
                 }
             }
 
-            yy.popContext('Line 1875');
+            yy.popContext('Line 1887');
 
             $$ = srcCode;
         }
@@ -2035,7 +2055,7 @@ include_macro_code
                 $$ = '\n// Included by Jison: ' + include_path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + include_path + '\n\n';
             }
 
-            yy.popContext('Line 2038');
+            yy.popContext('Line 2050');
         }
     | include_keyword error
         {
@@ -2048,7 +2068,7 @@ include_macro_code
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 2051');
+            yy.popContext('Line 2063');
             $$ = null;
         }
     ;
