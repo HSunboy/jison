@@ -38,11 +38,7 @@ ifeq ($(wildcard ../../dist-known-good/cli-cjs.js),)
 	$(error "### FAILURE: Make sure you have run 'make prep' before as the jison compiler is unavailable! ###")
 endif
 
-	$(JISON) -m es bnf.y bnf.l
-	mv bnf.js parser.js
-
-	$(JISON) -m es ebnf.y
-	mv ebnf.js transform-parser.js
+	$(JISON) -m es bnf.y bnf.l -o parser.js
 
 	-mkdir -p dist
 	$(ROLLUP) -c
@@ -71,9 +67,6 @@ publish:
 
 clean:
 	-rm -f parser.js
-	-rm -f transform-parser.js
-	-rm -f bnf.js
-	-rm -f ebnf.js
 	-rm -rf dist/
 
 superclean: clean

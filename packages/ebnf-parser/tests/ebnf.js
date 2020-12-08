@@ -4,24 +4,27 @@ let ebnf = bnf.ebnf_parser;
 let Jison = require('../../../../jison/');  // jison-gho
 let Parser = Jison.Parser;
 
+const lexerSpec = `
+%lex
+%%
+\\s+                // ignore whitespace
+[A-Za-z]+           return 'word';
+','                 return ',';
+"\\"'"              return '"\\'';
+"'"                 return "'";
+'"'                 return '"';
+'$'                 return 'EOF';
+/lex`;
+
+
 function testParse(top, strings) {
     return function () {
-        let grammar = {
-            lex: {
-                rules: [
-                    [ '\\s+', '' ],
-                    [ '[A-Za-z]+', "return 'word';" ],
-                    [ ',', "return ',';" ],
-                    [ "\"'", "return \"\\\"'\";" ],
-                    [ "'", "return \"'\";" ],
-                    [ '"', "return '\"';" ],
-                    [ '$', "return 'EOF';" ]
-                ]
-            },
-            start: 'top',
-            ebnf: { top: [ top ] },
-            bnf: ebnf.transform({ top: [ top ] })
-        };
+        let grammar = `
+${lexerSpec}
+%start top
+%%
+top: ${top};
+        `;
         strings = (typeof (strings) === 'string' ? [ strings ] : strings);
         strings.forEach(function (string) {
             assert.ok(new Parser(grammar).parse(string));
@@ -31,18 +34,12 @@ function testParse(top, strings) {
 
 function testBadParse(top, strings) {
     return function () {
-        let grammar = {
-            lex: {
-                rules: [
-                    [ '\\s+', '' ],
-                    [ '[A-Za-z]+', "return 'word';" ],
-                    [ ',', "return ',';" ],
-                    [ '$', "return 'EOF';" ]
-                ]
-            },
-            start: 'top',
-            ebnf: { top: [ top ] }
-        };
+        let grammar = `
+${lexerSpec}
+%start top
+%%
+top: ${top};
+        `;
         strings = (typeof (strings) === 'string' ? [ strings ] : strings);
         strings.forEach(function (string) {
             assert.throws(function () {
@@ -54,19 +51,12 @@ function testBadParse(top, strings) {
 
 function testAlias(top, obj, str) {
     return function () {
-        let grammar = {
-            lex: {
-                rules: [
-                    [ '\\s+', '' ],
-                    [ '[A-Za-z]+', "return 'word';" ],
-                    [ ',', "return ',';" ],
-                    [ '$', "return 'EOF';" ]
-                ]
-            },
-            start: 'top',
-            ebnf: { top: [ top ] },
-            bnf: ebnf.transform({ top: [ top ] })
-        };
+        let grammar = `
+${lexerSpec}
+%start top
+%%
+top: ${top};
+        `;
         assert.deepEqual(grammar.bnf, obj);
         assert.ok(new Parser(grammar).parse(str));
     };
@@ -88,11 +78,11 @@ let tests = {
     'test repeat (+) on multiple words': testParse('word+ EOF', 'multiple words'),
     'test option (?) on empty string': testParse('word? EOF', ''),
     'test option (?) on single word': testParse('word? EOF', 'oneword'),
-//    "test single quote (') tokens": testParse("'\\'' EOF", "'"),
+    "test single quote (') tokens": testParse("'\\'' EOF", "'"),
     "test single quote (') tokens (alt.)": testParse("\"'\" EOF", "'"),
-//    "test double quote (\") tokens": testParse("\"\\\"\" EOF", "\""),
+    "test double quote (\") tokens": testParse("\"\\\"\" EOF", "\""),
     'test double quote (") tokens (alt.)': testParse("'\"' EOF", '"'),
-//    "test quoted tokens (edge case #1)": testParse("'\"\\'' EOF", "\"'"),       // a weird 'token' consisting of a single AND a double-quote: either way, one of them will end up being escaped!
+    "test quoted tokens (edge case #1)": testParse("'\"\\'' EOF", "\"'"),       // a weird 'token' consisting of a single AND a double-quote: either way, one of them will end up being escaped!
     'test quoted tokens (edge case #2)': testParse('"\\"\'" EOF', "\"'"),       // a weird 'token' consisting of a single AND a double-quote: either way, one of them will end up being escaped!
     'test group () on simple phrase': testParse('(word word) EOF', 'two words'),
     'test group () with multiple options on first option': testParse('((word word) | word) EOF', 'hi there'),

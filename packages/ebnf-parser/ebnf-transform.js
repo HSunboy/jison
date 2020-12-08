@@ -1,5 +1,7 @@
-import parser from './transform-parser.js';
+
 import XRegExp from '@gerhobbelt/xregexp';
+import assert from 'assert';
+
 
 //import assert from 'assert';
 
@@ -216,9 +218,7 @@ function transformProduction(id, production, grammar) {
             handle = handle[0];
         }
         let expressions = handle;
-        if (typeof expressions === 'string') {
-            expressions = parser.parse(handle);
-        }
+        assert(typeof expressions !== 'string');    // EBNF structure should already have been produced by the (E)BNF parser
 
         if (devDebug > 1) console.log('\n================\nEBNF transform expressions:\n ', handle, opts, JSON.stringify(expressions, null, 2));
 
