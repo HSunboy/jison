@@ -76,6 +76,7 @@ examples:                                           \
 		examples_unicode                            \
 		examples_unicode2                           \
 		examples_with_custom_lexer                  \
+		examples_custom_lexers 						\
 		examples_with_includes 						\
 		examples_with_includes_test					\
 		examples_xregexp
@@ -90,12 +91,18 @@ examples_gitgraph:
 	node examples/output/gitGraph.js    					examples/inputData/gitGraph.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_pplex:
-	#$(LEX_XMPL_MAIN) examples/gnucobol-pplex.l
-	#node examples/output/gnucobol-pplex.js    						examples/inputData/gnucobol-pplex.input.txt                    			examples/output/$@.test-run.tokens.json
+	# compile the (f)lex spec: the C code in its action blocks WILL NOT permit the generated output to run in NodeJS
+	$(LEX_XMPL_MAIN) examples/gnucobol-pplex.l
+	# this 'port' of the above code, while absolutely *minimal*, WILL run in NodeJS:
+	$(LEX_XMPL_MAIN) examples/gnucobol-pplex.jisonlex
+	node examples/output/gnucobol-pplex.js    						examples/inputData/gnucobol-pplex.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_gnucobol:
+	# compile the (f)lex spec: the C code in its action blocks WILL NOT permit the generated output to run in NodeJS
 	$(LEX_XMPL_MAIN) examples/gnucobol-scanner.l
-	#node examples/output/gnucobol-scanner.js    			examples/inputData/gnucobol-scanner.input.txt                    			examples/output/$@.test-run.tokens.json
+	# this 'port' of the above code, while absolutely *minimal*, WILL run in NodeJS:
+	$(LEX_XMPL_MAIN) examples/gnucobol-scanner.jisonlex
+	node examples/output/gnucobol-scanner.js    			examples/inputData/gnucobol-scanner.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_icl_grammar:
 	$(LEX_XMPL_MAIN) examples/icl-grammar.jisonlex
@@ -118,8 +125,8 @@ examples_mermaid:
 	node examples/output/mermaid.js    						examples/inputData/mermaid.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_seval:
-	#$(LEX_XMPL_MAIN) examples/seval.jisonlex
-	#node examples/output/seval.js    						examples/inputData/seval.input.txt                    			examples/output/$@.test-run.tokens.json
+	$(LEX_XMPL_MAIN) examples/seval.jisonlex
+	node examples/output/seval.js    						examples/inputData/seval.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_shapemap:
 	$(LEX_XMPL_MAIN) examples/ShapeMapJison.jison
@@ -255,6 +262,12 @@ examples_with_custom_lexer:
 	$(LEX_XMPL_MAIN) examples/with_custom_lexer.jison
 	node examples/output/with_custom_lexer.js    			examples/inputData/with_custom_lexer.input.txt                  examples/output/$@.test-run.tokens.json
 
+examples_custom_lexers:
+	$(LEX_XMPL_MAIN) tests/specs/001-custom-lexer-baseline.jison
+	node examples/output/001-custom-lexer-baseline.js    		examples/inputData/$@.input.txt            					examples/output/$@.001.test-run.tokens.json
+	$(LEX_XMPL_MAIN) tests/specs/002-custom-lexer-extra-code-chunks.jison
+	node examples/output/002-custom-lexer-extra-code-chunks.js    		examples/inputData/$@.input.txt            			examples/output/$@.002.test-run.tokens.json
+
 
 
 comparison:                                                                 \
@@ -340,6 +353,7 @@ clean-dumpfiles:
 		examples_unicode                            \
 		examples_unicode2                           \
 		examples_with_custom_lexer                  \
+		examples_custom_lexers 						\
 		examples_with_includes 						\
 		examples_with_includes_test					\
 		examples_xregexp
