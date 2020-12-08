@@ -21,7 +21,7 @@
 // we also use an (inclusive) lexical scope which turns this rule on only 
 // immediately after a number was lexed previously.
 //
-// As we only a percentage operator IMMEDIATELY FOLLOWING a NUMBER, we
+// As we only expect a percentage operator IMMEDIATELY FOLLOWING a NUMBER, we
 // merge the two into a single lex state and forego the cost of inclusive/exclusive 
 // lexer states:
 
