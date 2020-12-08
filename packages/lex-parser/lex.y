@@ -74,7 +74,7 @@ rules_and_epilogue
             } else {
                 $$ = { rules: $rules };
             }
-            yy.popContext('Line 76');
+            yy.popContext('Line 77');
         }
     | start_productions_marker error epilogue
         {
@@ -97,7 +97,7 @@ rules_and_epilogue
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 99');
+            yy.popContext('Line 100');
             $$ = { rules: [] };
         }
     | start_productions_marker DUMMY error
@@ -122,7 +122,7 @@ rules_and_epilogue
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 124');
+            yy.popContext('Line 125');
             $$ = { rules: [] };
         }
     | ε
@@ -323,7 +323,7 @@ definition
                 lst[i][1] = 0;     // flag as 'inclusive'
             }
 
-            yy.popContext('Line 325');
+            yy.popContext('Line 326');
 
             $$ = {
                 type: 'names',
@@ -345,7 +345,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 347');
+            yy.popContext('Line 348');
             $$ = null;
         }
     //
@@ -360,7 +360,7 @@ definition
                 lst[i][1] = 1;     // flag as 'exclusive'
             }
 
-            yy.popContext('Line 362');
+            yy.popContext('Line 363');
 
             $$ = {
                 type: 'names',
@@ -382,7 +382,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 384');
+            yy.popContext('Line 385');
             $$ = null;
         }
     //
@@ -482,7 +482,7 @@ definition
             for (let i = 0, len = lst.length; i < len; i++) {
                 yy.options[lst[i][0]] = lst[i][1];
             }
-            yy.popContext('Line 484');
+            yy.popContext('Line 485');
             $$ = null;
         }
     //
@@ -500,7 +500,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 502');
+            yy.popContext('Line 503');
             $$ = null;
         }
     | option_keyword error
@@ -515,7 +515,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 517');
+            yy.popContext('Line 518');
             $$ = null;
         }
     | UNKNOWN_DECL
@@ -555,7 +555,7 @@ definition
                 `);
             }
 
-            yy.popContext('Line 557');
+            yy.popContext('Line 558');
 
             $$ = {
                 type: 'imports',
@@ -576,7 +576,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 578');
+            yy.popContext('Line 579');
             $$ = null;
         }
     | init_code_keyword option_list ACTION_START action ACTION_END OPTIONS_END
@@ -619,7 +619,7 @@ definition
                 `);
             }
 
-            yy.popContext('Line 621');
+            yy.popContext('Line 622');
 
             $$ = {
                 type: 'codeSection',
@@ -647,7 +647,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 649');
+            yy.popContext('Line 650');
             $$ = null;
         }
     | init_code_keyword error ACTION_START /* ...action */ error OPTIONS_END
@@ -664,7 +664,7 @@ definition
                   Technical error report:
                 ${$error1.errStr}
             `);
-            yy.popContext('Line 666');
+            yy.popContext('Line 667');
             $$ = null;
         }
     | init_code_keyword error OPTIONS_END
@@ -685,7 +685,7 @@ definition
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 687');
+            yy.popContext('Line 688');
             $$ = null;
         }
     | error
@@ -834,7 +834,7 @@ scoped_rules_collective
                 $rule.unshift($start_conditions);
             }
 
-            yy.popContext('Line 836');
+            yy.popContext('Line 837');
 
             $$ = [$rule];
         }
@@ -846,7 +846,7 @@ scoped_rules_collective
                 });
             }
 
-            yy.popContext('Line 848');
+            yy.popContext('Line 849');
 
             $$ = $rule_block;
         }
@@ -864,7 +864,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 866');
+            yy.popContext('Line 867');
             $$ = null;
         }
     | start_conditions '{' error
@@ -881,7 +881,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 883');
+            yy.popContext('Line 884');
             $$ = null;
         }
     | start_conditions error '}'
@@ -898,7 +898,7 @@ scoped_rules_collective
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 900');
+            yy.popContext('Line 901');
             $$ = null;
         }
     ;
@@ -1214,7 +1214,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@start_inclusive_keyword)}
             `);
-            yy.popContext('Line 1216');
+            yy.popContext('Line 1217');
             $$ = null;
         }
     | start_exclusive_keyword
@@ -1228,7 +1228,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@start_exclusive_keyword)}
             `);
-            yy.popContext('Line 1230');
+            yy.popContext('Line 1231');
             $$ = null;
         }
     | option_keyword
@@ -1242,7 +1242,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@option_keyword)}
             `);
-            yy.popContext('Line 1244');
+            yy.popContext('Line 1245');
             $$ = null;
         }
     | UNKNOWN_DECL
@@ -1269,7 +1269,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@import_keyword)}
             `);
-            yy.popContext('Line 1271');
+            yy.popContext('Line 1272');
             $$ = null;
         }
     | init_code_keyword
@@ -1283,7 +1283,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@init_code_keyword)}
             `);
-            yy.popContext('Line 1285');
+            yy.popContext('Line 1286');
             $$ = null;
         }
     ;
@@ -1373,7 +1373,7 @@ start_conditions
 
             // Optimization: these two calls cancel one another out here:
             //
-            // yy.popContext('Line 1375');
+            // yy.popContext('Line 1376');
             // yy.pushContext();
 
             yy.__inside_scoped_ruleset__ = true;
@@ -1402,7 +1402,7 @@ start_conditions
 
             // Optimization: these two calls cancel one another out here:
             //
-            // yy.popContext('Line 1404');
+            // yy.popContext('Line 1405');
             // yy.pushContext();
 
             yy.__inside_scoped_ruleset__ = true;
@@ -1873,7 +1873,7 @@ epilogue
         }
     | start_epilogue_marker
         {
-            yy.popContext('Line 1868');
+            yy.popContext('Line 1876');
 
             $$ = '';
         }
@@ -1892,7 +1892,7 @@ epilogue
                 }
             }
 
-            yy.popContext('Line 1887');
+            yy.popContext('Line 1895');
 
             $$ = srcCode;
         }
@@ -2055,7 +2055,7 @@ include_macro_code
                 $$ = '\n// Included by Jison: ' + include_path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + include_path + '\n\n';
             }
 
-            yy.popContext('Line 2050');
+            yy.popContext('Line 2058');
         }
     | include_keyword error
         {
@@ -2068,7 +2068,7 @@ include_macro_code
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 2063');
+            yy.popContext('Line 2071');
             $$ = null;
         }
     ;

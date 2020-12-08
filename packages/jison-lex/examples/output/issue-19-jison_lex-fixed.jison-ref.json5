@@ -98,76 +98,11 @@
         ],
       },
       yy: {},
-      lexer: {
-        EOF: 1,
-        ERROR: 2,
-        __error_infos: [
-          {
-            errStr: `Lexical error on line 1: Unrecognized text.
-
-  Erroneous area:
-1: ;;a;aBaa
-^.......^`,
-            recoverable: false,
-            text: '',
-            token: null,
-            line: 0,
-            loc: {
-              first_line: 1,
-              first_column: 5,
-              last_line: 1,
-              last_column: 6,
-              range: [
-                5,
-                6,
-              ],
-            },
-            yy: {},
-            lexer: '[lexer]',
-            lexerHasAlreadyForwardedCursorBy1: true,
-          },
-        ],
-        __decompressed: true,
-        done: true,
-        _backtrack: false,
-        _input: '',
-        _more: false,
-        _signaled_error_token: false,
-        _clear_state: 0,
-        conditionStack: [
-          'INITIAL',
-          'MLC',
-          'MLC',
-          'MLC',
-        ],
-        match: '',
-        matched: ';;a;aBaa',
-        matches: false,
-        yytext: '',
-        offset: 8,
-        base_position: 0,
-        yyleng: 0,
-        yylineno: 0,
-        yylloc: {
-          first_line: 1,
-          first_column: 8,
-          last_line: 1,
-          last_column: 8,
-          range: [
-            8,
-            8,
-          ],
-        },
-        CRLF_Re: {
-          re: '/\\r\\n?|\\n/',
-          source: '\\r\\n?|\\n',
-          flags: '',
-        },
-        options: {
-          trackPosition: true,
-        },
-        yy: {},
-      },
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
       lexerHasAlreadyForwardedCursorBy1: true,
       errorDiag: {
         inputPos: 2,
@@ -178,7 +113,16 @@
         conditionStackDepth: 4,
       },
     },
-    yylloc: '[reference to sibling --> *.[5].yytext.lexer.__error_infos.[0].loc]',
+    yylloc: {
+      first_line: 1,
+      first_column: 5,
+      last_line: 1,
+      last_column: 6,
+      range: [
+        5,
+        6,
+      ],
+    },
   },
   {
     id: 'ID',

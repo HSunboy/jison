@@ -1104,7 +1104,7 @@ case 2:
     } else {
         this.$ = { rules: yyvstack[yysp - 1] };
     }
-    yy.popContext('Line 76')
+    yy.popContext('Line 77')
     break;
 
 case 3:
@@ -1134,7 +1134,7 @@ case 3:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 99');
+    yy.popContext('Line 100');
     this.$ = { rules: [] }
     break;
 
@@ -1166,7 +1166,7 @@ case 4:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 124');
+    yy.popContext('Line 125');
     this.$ = { rules: [] }
     break;
 
@@ -1395,7 +1395,7 @@ case 11:
         lst[i][1] = 0;     // flag as 'inclusive'
     }
     
-    yy.popContext('Line 325');
+    yy.popContext('Line 326');
     
     this.$ = {
         type: 'names',
@@ -1421,7 +1421,7 @@ case 12:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 347');
+    yy.popContext('Line 348');
     this.$ = null
     break;
 
@@ -1439,7 +1439,7 @@ case 13:
         lst[i][1] = 1;     // flag as 'exclusive'
     }
     
-    yy.popContext('Line 362');
+    yy.popContext('Line 363');
     
     this.$ = {
         type: 'names',
@@ -1465,7 +1465,7 @@ case 14:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 384');
+    yy.popContext('Line 385');
     this.$ = null
     break;
 
@@ -1575,7 +1575,7 @@ case 19:
     for (let i = 0, len = lst.length; i < len; i++) {
         yy.options[lst[i][0]] = lst[i][1];
     }
-    yy.popContext('Line 484');
+    yy.popContext('Line 485');
     this.$ = null
     }
     break;
@@ -1597,7 +1597,7 @@ case 20:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 502');
+    yy.popContext('Line 503');
     this.$ = null
     break;
 
@@ -1619,7 +1619,7 @@ case 21:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 517');
+    yy.popContext('Line 518');
     this.$ = null
     break;
 
@@ -1674,7 +1674,7 @@ case 23:
         `);
     }
     
-    yy.popContext('Line 557');
+    yy.popContext('Line 558');
     
     this.$ = {
         type: 'imports',
@@ -1703,7 +1703,7 @@ case 24:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 578');
+    yy.popContext('Line 579');
     this.$ = null
     break;
 
@@ -1754,7 +1754,7 @@ case 25:
         `);
     }
     
-    yy.popContext('Line 621');
+    yy.popContext('Line 622');
     
     this.$ = {
         type: 'codeSection',
@@ -1791,7 +1791,7 @@ case 26:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 649');
+    yy.popContext('Line 650');
     this.$ = null
     }
     break;
@@ -1816,7 +1816,7 @@ case 27:
           Technical error report:
         ${yyvstack[yysp - 3].errStr}
     `);
-    yy.popContext('Line 666');
+    yy.popContext('Line 667');
     this.$ = null
     break;
 
@@ -1844,7 +1844,7 @@ case 28:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 687');
+    yy.popContext('Line 688');
     this.$ = null
     break;
 
@@ -2049,7 +2049,7 @@ case 42:
         yyvstack[yysp].unshift(yyvstack[yysp - 1]);
     }
     
-    yy.popContext('Line 836');
+    yy.popContext('Line 837');
     
     this.$ = [yyvstack[yysp]]
     break;
@@ -2068,7 +2068,7 @@ case 43:
         });
     }
     
-    yy.popContext('Line 848');
+    yy.popContext('Line 849');
     
     this.$ = yyvstack[yysp - 1]
     break;
@@ -2093,7 +2093,7 @@ case 44:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 866');
+    yy.popContext('Line 867');
     this.$ = null
     break;
 
@@ -2117,7 +2117,7 @@ case 45:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 883');
+    yy.popContext('Line 884');
     this.$ = null
     break;
 
@@ -2141,7 +2141,7 @@ case 46:
           Technical error report:
         ${yyvstack[yysp - 1].errStr}
     `);
-    yy.popContext('Line 900');
+    yy.popContext('Line 901');
     this.$ = null
     break;
 
@@ -2486,7 +2486,7 @@ case 60:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1216');
+    yy.popContext('Line 1217');
     this.$ = null
     break;
 
@@ -2507,7 +2507,7 @@ case 61:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1230');
+    yy.popContext('Line 1231');
     this.$ = null
     break;
 
@@ -2528,7 +2528,7 @@ case 62:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1244');
+    yy.popContext('Line 1245');
     this.$ = null
     break;
 
@@ -2569,7 +2569,7 @@ case 64:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1271');
+    yy.popContext('Line 1272');
     this.$ = null
     break;
 
@@ -2590,7 +2590,7 @@ case 65:
           Erroneous code:
         ${yylexer.prettyPrintRange(yylstack[yysp])}
     `);
-    yy.popContext('Line 1285');
+    yy.popContext('Line 1286');
     this.$ = null
     break;
 
@@ -2749,7 +2749,7 @@ case 73:
     
     // Optimization: these two calls cancel one another out here:
     //
-    // yy.popContext('Line 1375');
+    // yy.popContext('Line 1376');
     // yy.pushContext();
     
     yy.__inside_scoped_ruleset__ = true;
@@ -2787,7 +2787,7 @@ case 74:
     
     // Optimization: these two calls cancel one another out here:
     //
-    // yy.popContext('Line 1404');
+    // yy.popContext('Line 1405');
     // yy.pushContext();
     
     yy.__inside_scoped_ruleset__ = true;
@@ -3480,7 +3480,7 @@ case 129:
     // END of default action (generated by JISON mode skip/merge :: 1/1,VT,VA,VU,-,LT,LA,-,-)
     
     
-    yy.popContext('Line 1868');
+    yy.popContext('Line 1876');
     
     this.$ = ''
     break;
@@ -3507,7 +3507,7 @@ case 130:
         }
     }
     
-    yy.popContext('Line 1887');
+    yy.popContext('Line 1895');
     
     this.$ = srcCode
     }
@@ -3685,7 +3685,7 @@ case 138:
         this.$ = '\n// Included by Jison: ' + include_path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + include_path + '\n\n';
     }
     
-    yy.popContext('Line 2050')
+    yy.popContext('Line 2058')
     }
     break;
 
@@ -3706,7 +3706,7 @@ case 139:
           Technical error report:
         ${yyvstack[yysp].errStr}
     `);
-    yy.popContext('Line 2063');
+    yy.popContext('Line 2071');
     this.$ = null
     break;
 

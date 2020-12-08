@@ -77,11 +77,11 @@ Parse error on line 11:
 -------------------------------------------------------------^
 Expecting "|", "(", ")", "+", "*", "?", "/", ".", "^", "$", "MACRO_END", "ACTION_START_AT_SOL", "ACTION_START", "ARROW_ACTION_START", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "RANGE_REGEX", "STRING_LIT", "CHARACTER_LIT", "range_regex", got unexpected ","
 
-    at Object.parseError (/lex-parser-cjs.js:7220:15)
-    at Object.yyError (/lex-parser-cjs.js:7410:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:4138:14)
-    at Object.parse (/lex-parser-cjs.js:8474:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12400:25)
+    at Object.parseError (/lex-parser-cjs.js:7206:15)
+    at Object.yyError (/lex-parser-cjs.js:7396:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4129:14)
+    at Object.parse (/lex-parser-cjs.js:8460:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12386:25)
     at Context.testEachParserExample (/all-tests.js:483:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)

@@ -103,11 +103,11 @@ Parse error on line 10:
 ^
 Expecting "}", "|", "(", "/", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
 
-    at Object.parseError (/lex-parser-cjs.js:7220:15)
-    at Object.yyError (/lex-parser-cjs.js:7410:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:3895:14)
-    at Object.parse (/lex-parser-cjs.js:8474:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12400:25)
+    at Object.parseError (/lex-parser-cjs.js:7206:15)
+    at Object.yyError (/lex-parser-cjs.js:7396:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:3886:14)
+    at Object.parse (/lex-parser-cjs.js:8460:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12386:25)
     at Context.testEachParserExample (/all-tests.js:483:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)

@@ -1,38 +1,58 @@
 {
   error: {
-    message: `Could not parse jison lexer spec in JSON AUTODETECT mode:
-in JISON Mode we get Error: 
-Expected a valid name/argument (with optional value assignment) in a %option statement.
-Entries (names) must look like regular programming language
-identifiers, with the addition that option names MAY contain
-'-' dashes, e.g. 'example-option-1'.
-    
-Suggested name:
-    _8bit
+    message: `
+The '%{...%}' lexer setup action code section does not compile: Line 50: Unexpected identifier
     
   Erroneous area:
-20: */
-21: 
-22: 
-23: %option 8bit
-^^..........^^^^
-24: %option case-insensitive
-25: %option never-interactive
+ 50: %{
+^^^..^^
+ 51: 
+^^^..^
+ 52: #undef YY_READ_BUF_SIZE
+^^^..^^^^^^^^^^^^^^^^^^^^^^^
+     (...continued...)
+---  (---------------)
+165: static void scan_options (const char *, const unsigned int);
+^^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+166: 
+^^^..^
+167: %}
+^^^..^^
+168: 
+169: %s DECIMAL_IS_PERIOD DECIMAL_IS_COMMA
+`,
+    type: 'JisonParserError',
+    stack: `JisonParserError: 
+The '%{...%}' lexer setup action code section does not compile: Line 50: Unexpected identifier
+    
+  Erroneous area:
+ 50: %{
+^^^..^^
+ 51: 
+^^^..^
+ 52: #undef YY_READ_BUF_SIZE
+^^^..^^^^^^^^^^^^^^^^^^^^^^^
+     (...continued...)
+---  (---------------)
+165: static void scan_options (const char *, const unsigned int);
+^^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+166: 
+^^^..^
+167: %}
+^^^..^^
+168: 
+169: %s DECIMAL_IS_PERIOD DECIMAL_IS_COMMA
 
-
-while JSON5 Mode produces Error: JSON5: invalid character '%' at 23:1`,
-    type: 'Error',
-    stack: `SyntaxError: JSON5: invalid character '%' at 23:1
-    at syntaxError (/index.js:1954:16)
-    at invalidChar (/index.js:1895:13)
-    at Object.value (/index.js:964:16)
-    at lex (/index.js:743:41)
-    at Object.parse (/index.js:689:18)
-    at autodetectAndConvertToJSONformat (/regexp-lexer-cjs.js:13272:51)
-    at processGrammar (/regexp-lexer-cjs.js:16345:12)
-    at test_me (/regexp-lexer-cjs.js:14269:23)
-    at new RegExpLexer (/regexp-lexer-cjs.js:14387:17)
-    at Context.testEachLexerExample (/regexplexer.js:3685:25)
+    at Object.parseError (/regexp-lexer-cjs.js:7206:15)
+    at Object.yyError (/regexp-lexer-cjs.js:7396:25)
+    at Object.parser__PerformAction (/regexp-lexer-cjs.js:3265:22)
+    at Object.parse (/regexp-lexer-cjs.js:8663:24)
+    at Object.yyparse [as parse] (/regexp-lexer-cjs.js:12386:25)
+    at autodetectAndConvertToJSONformat (/regexp-lexer-cjs.js:13580:35)
+    at processGrammar (/regexp-lexer-cjs.js:16695:12)
+    at test_me (/regexp-lexer-cjs.js:14561:23)
+    at new RegExpLexer (/regexp-lexer-cjs.js:14679:17)
+    at Context.testEachLexerExample (/regexplexer.js:3728:25)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
