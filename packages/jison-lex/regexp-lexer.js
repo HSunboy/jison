@@ -1542,6 +1542,7 @@ return `EOF: 1,
                 }
             }
         }
+        
         /** @constructor */
         const pei = {
             errStr: msg,
@@ -1551,33 +1552,46 @@ return `EOF: 1,
             line: this.yylineno,
             loc: this.yylloc,
             yy: this.yy,
-            lexer: this,
+            // lexer: this,             // OBSOLETED member since 0.7.0: will cause reference cycles if not treated very carefully, hence has memory leak risks!
 
-            /**
-             * and make sure the error info doesn't stay due to potential
-             * ref cycle via userland code manipulations.
-             * These would otherwise all be memory leak opportunities!
-             *
-             * Note that only array and object references are nuked as those
-             * constitute the set of elements which can produce a cyclic ref.
-             * The rest of the members is kept intact as they are harmless.
-             *
-             * @public
-             * @this {LexErrorInfo}
-             */
-            destroy: function destructLexErrorInfo() {
-                // remove cyclic references added to error info:
-                // info.yy = null;
-                // info.lexer = null;
-                // ...
-                const rec = !!this.recoverable;
-                for (let key in this) {
-                    if (this[key] && this.hasOwnProperty(key) && typeof this[key] === 'object') {
-                        this[key] = undefined;
-                    }
-                }
-                this.recoverable = rec;
-            }
+            // flags to help userland code to easily recognize what sort of error they're getting fed this time:
+            isLexerError: true,                // identifies this as a *lexer* error (contrasting with a *parser* error, which would have \`isParserError: true\`)
+
+            yyErrorInvoked: false,             // \`true\` when error is caused by call to \`yyerror()\`
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+
+            // additional attributes which will be set up in various error scenarios:
+            extra_error_attributes: null,      // array of extra arguments passed to parseError = args;
+            lexerHasAlreadyForwardedCursorBy1: false,
+
+            // OBSOLETED since 0.7.0: parser and lexer error \`hash\` and \`yy\` objects are no longer carrying cyclic references, hence no more memory leak risks here.
+            // 
+            // /**
+            //  * and make sure the error info doesn't stay due to potential
+            //  * ref cycle via userland code manipulations.
+            //  * These would otherwise all be memory leak opportunities!
+            //  *
+            //  * Note that only array and object references are nuked as those
+            //  * constitute the set of elements which can produce a cyclic ref.
+            //  * The rest of the members is kept intact as they are harmless.
+            //  *
+            //  * @public
+            //  * @this {LexErrorInfo}
+            //  */
+            // destroy: function destructLexErrorInfo() {
+            //     // remove cyclic references added to error info:
+            //     // info.yy = null;
+            //     // info.lexer = null;
+            //     // ...
+            //     const rec = !!this.recoverable;
+            //     for (let key in this) {
+            //         if (this[key] && this.hasOwnProperty(key) && typeof this[key] === 'object') {
+            //             this[key] = undefined;
+            //         }
+            //     }
+            //     this.recoverable = rec;
+            // }
         };
         // track this instance so we can \`destroy()\` it once we deem it superfluous and ready for garbage collection!
         this.__error_infos.push(pei);
@@ -1610,7 +1624,7 @@ return `EOF: 1,
      * @public
      * @this {RegExpLexer}
      */
-    yyerror: function yyError(str /*, ...args */) {
+    yyerror: function yyError(str, ...args) {
         let lineno_msg = 'Lexical error';
         if (this.yylloc) {
             lineno_msg += ' on line ' + (this.yylineno + 1);
@@ -1618,7 +1632,6 @@ return `EOF: 1,
         const p = this.constructLexErrorInfo(lineno_msg + ': ' + str, this.options.lexerErrorsAreRecoverable);
 
         // Add any extra args to the hash under the name \`extra_error_attributes\`:
-        let args = Array.prototype.slice.call(arguments, 1);
         if (args.length) {
             p.extra_error_attributes = args;
         }
@@ -2541,6 +2554,7 @@ return `EOF: 1,
                     lineno_msg = ' on line ' + (this.yylineno + 1);
                 }
                 const p = this.constructLexErrorInfo('Internal lexer engine error' + lineno_msg + ': The lex grammar programmer pushed a non-existing condition name "' + this.topState() + '"; this is a fatal error and should be reported to the application programmer team!', false);
+                p.isLexerInternalError = true;
                 // produce one 'error' token until this situation has been resolved, most probably by parse termination!
                 return (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
             }

@@ -2092,13 +2092,17 @@ describe('Lexer Kernel', function () {
         let lexer = new RegExpLexer(dict);
         lexer.setInput(input, {
             parser: {
-                parseError: function (str, hash) {
+                parseError: function (str, hash, exClass) {
                     counter++;
-                    assert.ok(hash.lexer);
+                    assert.ok(typeof hash.lexer === 'undefined');
+                    assert.ok(exClass);
+                    //assert.ok(exClass instanceof Error);        // JisonLexerException must be an identifiable derivative of the std Error class
+                    
                     // eat two more characters
                     c1 = hash.text;
+                    // lexer instance is available as `this`:
                     c2 = this.yytext;
-                    c3 = hash.lexer.input();
+                    c3 = this.input();
                     return 'alt';
                 }
             }
