@@ -3695,14 +3695,6 @@ describe('Test Lexer Grammars', function () {
                     // 
                     //const rv = Object.assign({}, hash);
                     const rv = hash;
-                    if (rv.yy) {
-                        // shallow copy to keep (most of) current internal lexer state intact:
-                        rv.yy = Object.assign({}, rv.yy);
-                    }
-                    if (rv.loc) {
-                        rv.loc = Object.assign({}, rv.loc);
-                        rv.loc.range = rv.loc.range.slice();
-                    }
 
                     rv.errorDiag = {
                         inputPos: this._input ? this._input.length : -1,
