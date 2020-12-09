@@ -760,16 +760,16 @@ yyerror(rmCommonWS\`
         assert.ok(typeof helpers.getRegExpInfo === 'function');
     });
 
-    it('checkActionBlock: **TBD**', function () {
+    it('checkActionBlock:', function () {
         assert.ok(typeof helpers.checkActionBlock === 'function');
 
         // argument robustness: can we deal with 'bad' args? 
         // src=NULL should just say 'OK' to us.
-        assert.equal(helpers.checkActionBlock(null), false);
+        assert.deepEqual(helpers.checkActionBlock(null), { source: '', fault: false });
         // src='' should be OK
-        assert.equal(helpers.checkActionBlock(''), false);
-        assert.equal(helpers.checkActionBlock('   '), false);
-        assert.equal(helpers.checkActionBlock('\n\n\n\n\n\n\n'), false);
+        assert.deepEqual(helpers.checkActionBlock(''), { source: '', fault: false });
+        assert.deepEqual(helpers.checkActionBlock('   '), { source: '', fault: false });
+        assert.deepEqual(helpers.checkActionBlock('\n\n\n\n\n\n\n'), { source: '', fault: false });
 
         // sample action code chunk to test-parse OK:
         const src_ok = `
@@ -799,10 +799,10 @@ yyerror(rmCommonWS\`
         const options = {
             doNotTestCompile: true,
         }
-        assert.equal(helpers.checkActionBlock(src_ok), false);
-        assert.equal(helpers.checkActionBlock(src_ok, yylloc), false);
-        assert.equal(helpers.checkActionBlock(src_ok, yylloc, options), false);
-        assert.equal(helpers.checkActionBlock(src_ok, null, options), false);
+        assert.deepEqual(helpers.checkActionBlock(src_ok).fault, false);
+        assert.deepEqual(helpers.checkActionBlock(src_ok, yylloc).fault, false);
+        assert.deepEqual(helpers.checkActionBlock(src_ok, yylloc, options).fault, false);
+        assert.deepEqual(helpers.checkActionBlock(src_ok, null, options).fault, false);
 
         const src_bad1 = `
             yyerror(rmCommonWS\`
@@ -826,10 +826,11 @@ Missing } at end of next line:
             $$.push([$handle_action, @handle_action, #handle_action, ##handle_action]);
         `;
 
-        assert.equal(helpers.checkActionBlock(src_bad1), 'Line 9: Unexpected token ILLEGAL');
-        assert.equal(helpers.checkActionBlock(src_bad1, yylloc), 'Line 58: Unexpected token ILLEGAL');
-        assert.equal(helpers.checkActionBlock(src_bad1, yylloc, options), false);    // due to options.doNotTextCompile=true
-        assert.equal(helpers.checkActionBlock(src_bad1, null, options), false);      // due to options.doNotTextCompile=true
+        assert.deepEqual(helpers.checkActionBlock(src_bad1).fault.message, 'Line 9: Unexpected token ILLEGAL');
+        assert.deepEqual(helpers.checkActionBlock(src_bad1, yylloc).fault.message, 'Line 58: Unexpected token ILLEGAL');
+        assert.deepEqual(helpers.checkActionBlock(src_bad1, yylloc, options).fault, false);    // due to options.doNotTextCompile=true
+        assert.deepEqual(helpers.checkActionBlock(src_bad1, null, options).fault, false);      // due to options.doNotTextCompile=true
+        assert.deepEqual(helpers.checkActionBlock(src_bad1, null, options).source, src_bad1);
     });
 
     it('trimActionCode: **TBD**', function () {

@@ -29,6 +29,7 @@
 
 
 
+//%options parser-errors-are-recoverable lexer-errors-are-recoverable
 
 %code error_recovery_reduction %{
     // Note:
@@ -259,9 +260,9 @@ declaration
             });
             if (srcCode) {
                 let rv = checkActionBlock(srcCode, @action, yy);
-                if (rv) {
+                if (rv.fault) {
                     yyerror(rmCommonWS`
-                        The '%{...%}' grammar setup action code section does not compile: ${rv}
+                        The '%{...%}' grammar setup action code section does not compile: ${rv.fault}
 
                           Erroneous area:
                         ${yylexer.prettyPrintRange(@action, @ACTION_START_AT_SOL)}
@@ -346,7 +347,7 @@ declaration
             for (let i = 0, len = lst.length; i < len; i++) {
                 yy.options[lst[i][0]] = lst[i][1];
             }
-            yy.popContext('Line 344');
+            yy.popContext('Line 350');
             $$ = {options: lst};
         }
     //
@@ -364,7 +365,7 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 362');
+            yy.popContext('Line 368');
             $$ = null;
         }
     | option_keyword error
@@ -379,7 +380,7 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 377');
+            yy.popContext('Line 383');
             $$ = null;
         }
     | DEBUG
@@ -425,7 +426,7 @@ declaration
                 `);
             }
 
-            yy.popContext('Line 423');
+            yy.popContext('Line 429');
 
             $$ = {
                 imports: body
@@ -445,7 +446,7 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 443');
+            yy.popContext('Line 449');
             $$ = null;
         }
     | init_code_keyword option_list ACTION_START action ACTION_END OPTIONS_END
@@ -479,16 +480,16 @@ declaration
                 startMarker: $ACTION_START
             });
             let rv = checkActionBlock(srcCode, @action, yy);
-            if (rv) {
+            if (rv.fault) {
                 yyerror(rmCommonWS`
-                    The '%code ${name}' initialization section's action code block does not compile: ${rv}
+                    The '%code ${name}' initialization section's action code block does not compile: ${rv.fault}
 
                       Erroneous area:
                     ${yylexer.prettyPrintRange(@action, @init_code_keyword)}
                 `);
             }
 
-            yy.popContext('Line 486');
+            yy.popContext('Line 492');
 
             $$ = {
                 initCode: {
@@ -515,7 +516,7 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 513');
+            yy.popContext('Line 519');
             $$ = null;
         }
     | init_code_keyword error ACTION_START /* ...action */ error OPTIONS_END
@@ -532,7 +533,7 @@ declaration
                   Technical error report:
                 ${$error1.errStr}
             `);
-            yy.popContext('Line 530');
+            yy.popContext('Line 536');
             $$ = null;
         }
     | init_code_keyword error OPTIONS_END
@@ -553,16 +554,16 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 551');
+            yy.popContext('Line 557');
             $$ = null;
         }
     | on_error_recovery_keyword ACTION_START action ACTION_END
         {
             var srcCode = trimActionCode($action + $ACTION_END, $ACTION_START);
             var rv = checkActionBlock(srcCode, @action, yy);
-            if (rv) {
+            if (rv.fault) {
                 yyerror(rmCommonWS`
-                    The '${$on_error_recovery_keyword}' action code section does not compile: ${rv}
+                    The '${$on_error_recovery_keyword}' action code section does not compile: ${rv.fault}
 
                       Erroneous area:
                     ${yylexer.prettyPrintRange(@action, @on_error_recovery_keyword)}
@@ -893,21 +894,21 @@ production
                 rule production declaration error?
 
                   Erroneous area:
-                ${yylexer.prettyPrintRange(@error, @production_id)}
+                ${yylexer.prettyPrintRange(@error, @$)}
 
                   Technical error report:
                 ${$error.errStr}
             `);
             $$ = null;
         }
-    | production_id error
+    | error ';'[comma]
         {
             // TODO ...
             yyerror(rmCommonWS`
-                rule production declaration error: did you terminate the rule production set with a semicolon?
+                rule production declaration error or other grievous bodily harm?
 
                   Erroneous area:
-                ${yylexer.prettyPrintRange(@error, @production_id)}
+                ${yylexer.prettyPrintRange(@error, @comma)}
 
                   Technical error report:
                 ${$error.errStr}
@@ -933,9 +934,9 @@ production
             });
             if (srcCode) {
                 let rv = checkActionBlock(srcCode, @action, yy);
-                if (rv) {
+                if (rv.fault) {
                     yyerror(rmCommonWS`
-                        The '%{...%}' grammar action header code section does not compile: ${rv}
+                        The '%{...%}' grammar action header code section does not compile: ${rv.fault}
 
                           Erroneous area:
                         ${yylexer.prettyPrintRange(@action, @ACTION_START_AT_SOL)}
@@ -1082,7 +1083,7 @@ pct_token_which_belongs_in_header_section
         {
             $$ = $1;
 
-            yy.popContext('Line 1076');
+            yy.popContext('Line 1086');
         }
     | DEBUG
     | EBNF
@@ -1091,13 +1092,13 @@ pct_token_which_belongs_in_header_section
         {
             $$ = $1;
 
-            yy.popContext('Line 1085');
+            yy.popContext('Line 1095');
         }
     | init_code_keyword error OPTIONS_END
         {
             $$ = $1;
 
-            yy.popContext('Line 1091');
+            yy.popContext('Line 1101');
         }
     | on_error_recovery_keyword error
         {
@@ -1196,8 +1197,8 @@ handle_action
                 srcCode = trimActionCode($action + $ACTION_END, {
                     startMarker: $handle_action_start.starter
                 });
-                let rv = checkActionBlock(srcCode, @action);
-                if (rv) {
+                let rv = checkActionBlock(srcCode, @action, yy);
+                if (rv.fault) {
                     let indentedSrc = rmCommonWS([srcCode]).split('\n').join('\n    ');
 
                     let arrowMsg = isArrowAction ? rmCommonWS`
@@ -1210,7 +1211,7 @@ handle_action
 					` : '';
 
                     yyerror(rmCommonWS`
-                        ${isEpsilonRule ? 'epsilon ' : ''}production rule ${isArrowAction ? 'arrow ' : ''}action code block does not compile: ${rv}
+                        ${isEpsilonRule ? 'epsilon ' : ''}production rule ${isArrowAction ? 'arrow ' : ''}action code block does not compile: ${rv.fault}
 
 						${arrowMsg.trim()}
 						
@@ -1746,7 +1747,7 @@ epilogue
         }
     | start_epilogue_marker
         {
-            yy.popContext('Line 1773');
+            yy.popContext('Line 1750');
 
             $$ = '';
         }
@@ -1754,18 +1755,18 @@ epilogue
         {
             let srcCode = trimActionCode($epilogue_chunks);
             if (srcCode) {
-                let rv = checkActionBlock(srcCode, @epilogue_chunks);
-                if (rv) {
+                let rv = checkActionBlock(srcCode, @epilogue_chunks, yy);
+                if (rv.fault) {
                     yyerror(rmCommonWS`
-                        The '%%' parser epilogue code section does not compile: ${rv}
+                        The '%%' parser epilogue code section does not compile: ${rv.fault}
 
                           Erroneous area:
-                        ${yylexer.prettyPrintRange(@epilogue_chunks, @1)}
+                        ${yylexer.prettyPrintRange(@epilogue_chunks, @start_epilogue_marker)}
                     `);
                 }
             }
 
-            yy.popContext('Line 1792');
+            yy.popContext('Line 1769');
 
             $$ = srcCode;
         }
@@ -1798,9 +1799,9 @@ epilogue_chunk
             });
             if (srcCode) {
                 let rv = checkActionBlock(srcCode, @action, yy);
-                if (rv) {
+                if (rv.fault) {
                     yyerror(rmCommonWS`
-                        The '%{...%}' lexer epilogue code chunk does not compile: ${rv}
+                        The '%{...%}' lexer epilogue code chunk does not compile: ${rv.fault}
 
                           Erroneous area:
                         ${yylexer.prettyPrintRange(@action, @ACTION_START_AT_SOL)}
@@ -1914,9 +1915,9 @@ include_macro_code
                 let srcCode = trimActionCode(fileContent);
                 if (srcCode) {
                     let rv = checkActionBlock(srcCode, @$, yy);
-                    if (rv) {
+                    if (rv.fault) {
                         yyerror(rmCommonWS`
-                            The source code included from file '${include_path}' does not compile: ${rv}
+                            The source code included from file '${include_path}' does not compile: ${rv.fault}
 
                               Erroneous area:
                             ${yylexer.prettyPrintRange(@$)}
@@ -1928,7 +1929,7 @@ include_macro_code
                 $$ = '\n// Included by Jison: ' + include_path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + include_path + '\n\n';
             }
 
-            yy.popContext('Line 1955');
+            yy.popContext('Line 1932');
         }
     | include_keyword error
         {
@@ -1941,7 +1942,7 @@ include_macro_code
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 1968');
+            yy.popContext('Line 1945');
             $$ = null;
         }
     ;

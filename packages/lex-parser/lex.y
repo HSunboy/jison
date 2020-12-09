@@ -407,9 +407,9 @@ definition
             });
             if (srcCode) {
                 let rv = checkActionBlock(srcCode, @action, yy);
-                if (rv) {
+                if (rv.fault) {
                     yyerror(rmCommonWS`
-                        The '%{...%}' lexer setup action code section does not compile: ${rv}
+                        The '%{...%}' lexer setup action code section does not compile: ${rv.fault}
 
                           Erroneous area:
                         ${yylexer.prettyPrintRange(@action, @ACTION_START_AT_SOL)}
@@ -613,9 +613,9 @@ definition
                 startMarker: $ACTION_START
             });
             let rv = checkActionBlock(srcCode, @action, yy);
-            if (rv) {
+            if (rv.fault) {
                 yyerror(rmCommonWS`
-                    The '%code ${name}' initialization section's action code block does not compile: ${rv}
+                    The '%code ${name}' initialization section's action code block does not compile: ${rv.fault}
 
                       Erroneous area:
                     ${yylexer.prettyPrintRange(@action, @init_code_keyword)}
@@ -925,9 +925,9 @@ rule
                 startMarker: $ACTION_START
             });
             let rv = checkActionBlock(srcCode, @action, yy);
-            if (rv) {
+            if (rv.fault) {
                 yyerror(rmCommonWS`
-                    The lexer rule's action code section does not compile: ${rv}
+                    The lexer rule's action code section does not compile: ${rv.fault}
 
                       Erroneous area:
                     ${yylexer.prettyPrintRange(@action, @regex)}
@@ -941,9 +941,9 @@ rule
                 startMarker: $ACTION_START_AT_SOL
             });
             let rv = checkActionBlock(srcCode, @action, yy);
-            if (rv) {
+            if (rv.fault) {
                 yyerror(rmCommonWS`
-                    The lexer rule's action code section does not compile: ${rv}
+                    The lexer rule's action code section does not compile: ${rv.fault}
 
                       Erroneous area:
                     ${yylexer.prettyPrintRange(@action, @regex)}
@@ -970,11 +970,11 @@ rule
             srcCode = 'return ' + braceArrowActionCode(srcCode);
 
             let rv = checkActionBlock(srcCode, @action, yy);
-            if (rv) {
+            if (rv.fault) {
                 let indentedSrc = rmCommonWS([srcCode]).split('\n').join('\n    ');
 
                 yyerror(rmCommonWS`
-                    The lexer rule's 'arrow' action code section does not compile: ${rv}
+                    The lexer rule's 'arrow' action code section does not compile: ${rv.fault}
 
                     # NOTE that the arrow action automatically wraps the action code
                     # in a \`return (...);\` statement to prevent hard-to-diagnose run-time
@@ -1119,9 +1119,9 @@ rule
                 });
                 if (srcCode) {
                     let rv = checkActionBlock(srcCode, @action, yy);
-                    if (rv) {
+                    if (rv.fault) {
                         yyerror(rmCommonWS`
-                            The '%{...%}' lexer setup action code section does not compile: ${rv}
+                            The '%{...%}' lexer setup action code section does not compile: ${rv.fault}
 
                               Erroneous area:
                             ${yylexer.prettyPrintRange(@action, @ACTION_START_AT_SOL)}
@@ -1887,9 +1887,9 @@ epilogue
             let srcCode = trimActionCode($epilogue_chunks);
             if (srcCode) {
                 let rv = checkActionBlock(srcCode, @epilogue_chunks, yy);
-                if (rv) {
+                if (rv.fault) {
                     yyerror(rmCommonWS`
-                        The '%%' lexer epilogue code section does not compile: ${rv}
+                        The '%%' lexer epilogue code section does not compile: ${rv.fault}
 
                           Erroneous area:
                         ${yylexer.prettyPrintRange(@epilogue_chunks, @1)}
@@ -1930,9 +1930,9 @@ epilogue_chunk
             });
             if (srcCode) {
                 let rv = checkActionBlock(srcCode, @action, yy);
-                if (rv) {
+                if (rv.fault) {
                     yyerror(rmCommonWS`
-                        The '%{...%}' lexer epilogue code chunk does not compile: ${rv}
+                        The '%{...%}' lexer epilogue code chunk does not compile: ${rv.fault}
 
                           Erroneous area:
                         ${yylexer.prettyPrintRange(@action, @ACTION_START_AT_SOL)}
@@ -2046,9 +2046,9 @@ include_macro_code
                 let srcCode = trimActionCode(fileContent);
                 if (srcCode) {
                     let rv = checkActionBlock(srcCode, @$, yy);
-                    if (rv) {
+                    if (rv.fault) {
                         yyerror(rmCommonWS`
-                            The source code included from file '${include_path}' does not compile: ${rv}
+                            The source code included from file '${include_path}' does not compile: ${rv.fault}
 
                               Erroneous area:
                             ${yylexer.prettyPrintRange(@$)}
