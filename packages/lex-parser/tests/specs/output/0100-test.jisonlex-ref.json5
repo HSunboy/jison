@@ -1,0 +1,386 @@
+{
+  id: -1,
+  token: null,
+  fail: 1,
+  spec: `%s    PICTURE_STATE    FUNCTION_STATE
+
+%%
+
+
+. {
+    let c;
+
+    yyerror(\`invalid symbol '${yytext}' - skipping word\`);
+    while ((c = this.input()) != this.EOF) {
+        if (c === '\\n' || c === ' ') {
+            break;
+        }
+    }
+    if (c !== this.EOF) {
+        this.unput(c);
+    }
+}
+
+
+<PICTURE_STATE>{
+  "IS" {
+    /* Ignore */
+  }
+  [^ \\n;]+ {
+    return 'PICTURE';
+  }
+}
+
+<FUNCTION_STATE>{
+  [A-Z0-9-]+ {
+    return 'FUNCTION_NAME';
+  }
+  . {
+    return yytext[0];
+  }
+}
+
+
+<<EOF>>                         return 'EOF';`,
+  err: {
+    hash: {
+      errStr: `
+There's probably an error in one or more of your lexer regex rules.
+    
+Did you perhaps indent the rule regex? 
+    
+Note that all rule regexes MUST start at the start of the line, 
+i.e. text column 1. 
+Indented text is perceived as JavaScript action code related to the last 
+lexer rule regex.
+    
+  Erroneous code:
+19: 
+20: 
+21: <PICTURE_STATE>{
+22:   "IS" {
+^^....^^^^
+23:     /* Ignore */
+24:   }
+    
+  Technical error report:
+Parse error on line 22:
+  "IS" {
+--^
+Unexpected "ACTION_BODY"
+`,
+      exception: null,
+      text: '"IS"',
+      value: '"IS"',
+      token: '"$accept"',
+      token_id: 0,
+      line: 21,
+      recoverable: false,
+      state: 148,
+      action: 2,
+      new_state: 59,
+      stack_pointer: 10,
+    },
+    message: `
+There's probably an error in one or more of your lexer regex rules.
+    
+Did you perhaps indent the rule regex? 
+    
+Note that all rule regexes MUST start at the start of the line, 
+i.e. text column 1. 
+Indented text is perceived as JavaScript action code related to the last 
+lexer rule regex.
+    
+  Erroneous code:
+19: 
+20: 
+21: <PICTURE_STATE>{
+22:   "IS" {
+^^....^^^^
+23:     /* Ignore */
+24:   }
+    
+  Technical error report:
+Parse error on line 22:
+  "IS" {
+--^
+Unexpected "ACTION_BODY"
+`,
+    name: 'JisonParserError',
+    stack: `JisonParserError: 
+There's probably an error in one or more of your lexer regex rules.
+    
+Did you perhaps indent the rule regex? 
+    
+Note that all rule regexes MUST start at the start of the line, 
+i.e. text column 1. 
+Indented text is perceived as JavaScript action code related to the last 
+lexer rule regex.
+    
+  Erroneous code:
+19: 
+20: 
+21: <PICTURE_STATE>{
+22:   "IS" {
+^^....^^^^
+23:     /* Ignore */
+24:   }
+    
+  Technical error report:
+Parse error on line 22:
+  "IS" {
+--^
+Unexpected "ACTION_BODY"
+
+    at Object.parseError (/lex-parser-cjs.js:7291:15)
+    at Object.yyError (/lex-parser-cjs.js:7481:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4275:18)
+    at Object.parse (/lex-parser-cjs.js:8545:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
+    at Context.testEachParserExample (/all-tests.js:483:27)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
+  },
+  __extra_diag_info__: {
+    pre_parse_callback_callCount: 1,
+    post_parse_callback_callCount: 1,
+    post_parse_diaginfo: {
+      sharedState_yy: {
+        actionInclude: [],
+        options: {},
+        startConditions: {
+          PICTURE_STATE: 0,
+          FUNCTION_STATE: 0,
+        },
+        __options_flags__: 11,
+        __options_category_description__: 'the <...> delimited set of lexer start conditions',
+        __inside_scoped_ruleset__: true,
+        __context_cfg_stack__: [
+          {
+            flags: 0,
+            descr: '???',
+            scoped: false,
+          },
+          {
+            flags: 0,
+            descr: 'the lexer rules definition section',
+            scoped: false,
+          },
+        ],
+        depth: 0,
+        include_command_allowed: false,
+      },
+      hash: {
+        errStr: null,
+        exception: null,
+        text: '"IS"',
+        value: '"IS"',
+        token: '"$accept"',
+        token_id: 0,
+        line: 21,
+        expected: null,
+        recoverable: false,
+        state: 148,
+        action: 2,
+        new_state: 59,
+        stack_pointer: 10,
+      },
+      reentrant_call_depth: 1,
+      error_infos_stack: [
+        {
+          errStr: `Parse error on line 22:
+  "IS" {
+--^
+Unexpected "ACTION_BODY"`,
+          exception: null,
+          text: '"IS"',
+          value: '"IS"',
+          token: '"ACTION_BODY"',
+          token_id: 36,
+          line: 21,
+          recoverable: true,
+          state: 79,
+          action: 0,
+          new_state: 200,
+          stack_pointer: 9,
+        },
+        {
+          errStr: `
+There's probably an error in one or more of your lexer regex rules.
+    
+Did you perhaps indent the rule regex? 
+    
+Note that all rule regexes MUST start at the start of the line, 
+i.e. text column 1. 
+Indented text is perceived as JavaScript action code related to the last 
+lexer rule regex.
+    
+  Erroneous code:
+19: 
+20: 
+21: <PICTURE_STATE>{
+22:   "IS" {
+^^....^^^^
+23:     /* Ignore */
+24:   }
+    
+  Technical error report:
+Parse error on line 22:
+  "IS" {
+--^
+Unexpected "ACTION_BODY"
+`,
+          exception: null,
+          text: '"IS"',
+          value: '"IS"',
+          token: '"$accept"',
+          token_id: 0,
+          line: 21,
+          recoverable: false,
+          state: 148,
+          action: 2,
+          new_state: 59,
+          stack_pointer: 10,
+        },
+        {
+          errStr: null,
+          exception: null,
+          text: '"IS"',
+          value: '"IS"',
+          token: '"$accept"',
+          token_id: 0,
+          line: 21,
+          expected: null,
+          recoverable: false,
+          state: 148,
+          action: 2,
+          new_state: 59,
+          stack_pointer: 10,
+        },
+      ],
+      error_recovery_stack: [
+        {
+          errStr: `Parse error on line 22:
+  "IS" {
+--^
+Unexpected "ACTION_BODY"`,
+          exception: null,
+          text: '"IS"',
+          value: '"IS"',
+          token: '"ACTION_BODY"',
+          token_id: 36,
+          line: 21,
+          recoverable: true,
+          state: 79,
+          action: 0,
+          new_state: 200,
+          stack_pointer: 9,
+          base_pointer: 9,
+          info_stack_pointer: 12,
+          root_failure_pointer: 9,
+        },
+        {
+          errStr: `
+There's probably an error in one or more of your lexer regex rules.
+    
+Did you perhaps indent the rule regex? 
+    
+Note that all rule regexes MUST start at the start of the line, 
+i.e. text column 1. 
+Indented text is perceived as JavaScript action code related to the last 
+lexer rule regex.
+    
+  Erroneous code:
+19: 
+20: 
+21: <PICTURE_STATE>{
+22:   "IS" {
+^^....^^^^
+23:     /* Ignore */
+24:   }
+    
+  Technical error report:
+Parse error on line 22:
+  "IS" {
+--^
+Unexpected "ACTION_BODY"
+`,
+          exception: null,
+          text: '"IS"',
+          value: '"IS"',
+          token: '"$accept"',
+          token_id: 0,
+          line: 21,
+          recoverable: false,
+          state: 148,
+          action: 2,
+          new_state: 59,
+          stack_pointer: 10,
+          base_pointer: 10,
+          info_stack_pointer: 10,
+          root_failure_pointer: 10,
+          yyError: true,
+          errorRuleDepth: -1,
+          recovering: 3,
+        },
+      ],
+      error_infos_stack_size: 3,
+      error_recovery_stack_size: 2,
+    },
+    reentrant_call_depth: 0,
+    error_infos_stack_size: 0,
+    error_recovery_stack_size: 0,
+  },
+  __original_input__: `%s    PICTURE_STATE    FUNCTION_STATE
+
+%%
+
+
+. {
+    let c;
+
+    yyerror(\`invalid symbol '${yytext}' - skipping word\`);
+    while ((c = this.input()) != this.EOF) {
+        if (c === '\\n' || c === ' ') {
+            break;
+        }
+    }
+    if (c !== this.EOF) {
+        this.unput(c);
+    }
+}
+
+
+<PICTURE_STATE>{
+  "IS" {
+    /* Ignore */
+  }
+  [^ \\n;]+ {
+    return 'PICTURE';
+  }
+}
+
+<FUNCTION_STATE>{
+  [A-Z0-9-]+ {
+    return 'FUNCTION_NAME';
+  }
+  . {
+    return yytext[0];
+  }
+}
+
+
+<<EOF>>                         return 'EOF';`,
+}

@@ -1,0 +1,314 @@
+{
+  id: -1,
+  token: null,
+  fail: 1,
+  spec: `// %s is 'active' as long as the lines following are indented *and* non-empty
+// (i.e. cannot have an empty, whitespace-only line in there)
+%s    
+    PICTURE_STATE    
+    FUNCTION_STATE
+    A
+    B
+    C
+
+%x    
+    D
+    E
+    FOOBAR
+    G7
+    8bit
+
+%%
+
+
+. {
+    return yytext.charCodeAt(0);
+}
+
+<<EOF>>                         yytext = {
+                                    conditionStack: this.conditionStack
+                                };
+                                return 'EOF';`,
+  err: {
+    hash: {
+      errStr: `
+Expected a valid name/argument in a the exclusive lexer start conditions set (%x) statement.
+Entries (names) must look like regular programming language
+identifiers, with the addition that option names MAY contain
+'-' dashes, e.g. 'example-option-1'.
+    
+You may also start an option identifier with a number, but 
+then it must not be *only* a number, so '%option 8bit' is okay,
+while '%option 42' is not okay.
+    
+Suggested name:
+    _8bit
+    
+  Erroneous area:
+10: %x    
+11:     D
+    (...continued...)
+13:     FOOBAR
+14:     G7
+15:     8bit
+^^......^^^^
+16: 
+17: %%
+`,
+      exception: null,
+      text: '8bit',
+      value: '8bit',
+      token: '"$accept"',
+      token_id: 0,
+      line: 14,
+      recoverable: false,
+      state: 56,
+      action: 2,
+      new_state: 124,
+      stack_pointer: 6,
+    },
+    message: `
+Expected a valid name/argument in a the exclusive lexer start conditions set (%x) statement.
+Entries (names) must look like regular programming language
+identifiers, with the addition that option names MAY contain
+'-' dashes, e.g. 'example-option-1'.
+    
+You may also start an option identifier with a number, but 
+then it must not be *only* a number, so '%option 8bit' is okay,
+while '%option 42' is not okay.
+    
+Suggested name:
+    _8bit
+    
+  Erroneous area:
+10: %x    
+11:     D
+    (...continued...)
+13:     FOOBAR
+14:     G7
+15:     8bit
+^^......^^^^
+16: 
+17: %%
+`,
+    name: 'JisonParserError',
+    stack: `JisonParserError: 
+Expected a valid name/argument in a the exclusive lexer start conditions set (%x) statement.
+Entries (names) must look like regular programming language
+identifiers, with the addition that option names MAY contain
+'-' dashes, e.g. 'example-option-1'.
+    
+You may also start an option identifier with a number, but 
+then it must not be *only* a number, so '%option 8bit' is okay,
+while '%option 42' is not okay.
+    
+Suggested name:
+    _8bit
+    
+  Erroneous area:
+10: %x    
+11:     D
+    (...continued...)
+13:     FOOBAR
+14:     G7
+15:     8bit
+^^......^^^^
+16: 
+17: %%
+
+    at Object.parseError (/lex-parser-cjs.js:7291:15)
+    at Object.yyError (/lex-parser-cjs.js:7481:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:5248:26)
+    at Object.parse (/lex-parser-cjs.js:8748:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
+    at Context.testEachParserExample (/all-tests.js:483:27)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
+  },
+  __extra_diag_info__: {
+    pre_parse_callback_callCount: 1,
+    post_parse_callback_callCount: 1,
+    post_parse_diaginfo: {
+      sharedState_yy: {
+        actionInclude: [],
+        options: {},
+        startConditions: {
+          PICTURE_STATE: 0,
+          FUNCTION_STATE: 0,
+          A: 0,
+          B: 0,
+          C: 0,
+        },
+        __options_flags__: 3,
+        __options_category_description__: 'the exclusive lexer start conditions set (%x)',
+        __inside_scoped_ruleset__: false,
+        __context_cfg_stack__: [
+          {
+            flags: 0,
+            descr: '???',
+            scoped: false,
+          },
+        ],
+      },
+      hash: {
+        errStr: null,
+        exception: null,
+        text: '8bit',
+        value: '8bit',
+        token: '"$accept"',
+        token_id: 0,
+        line: 14,
+        expected: null,
+        recoverable: false,
+        state: 56,
+        action: 2,
+        new_state: 124,
+        stack_pointer: 6,
+      },
+      reentrant_call_depth: 1,
+      error_infos_stack: [
+        {
+          errStr: `
+Expected a valid name/argument in a the exclusive lexer start conditions set (%x) statement.
+Entries (names) must look like regular programming language
+identifiers, with the addition that option names MAY contain
+'-' dashes, e.g. 'example-option-1'.
+    
+You may also start an option identifier with a number, but 
+then it must not be *only* a number, so '%option 8bit' is okay,
+while '%option 42' is not okay.
+    
+Suggested name:
+    _8bit
+    
+  Erroneous area:
+10: %x    
+11:     D
+    (...continued...)
+13:     FOOBAR
+14:     G7
+15:     8bit
+^^......^^^^
+16: 
+17: %%
+`,
+          exception: null,
+          text: '8bit',
+          value: '8bit',
+          token: '"$accept"',
+          token_id: 0,
+          line: 14,
+          recoverable: false,
+          state: 56,
+          action: 2,
+          new_state: 124,
+          stack_pointer: 6,
+        },
+        {
+          errStr: null,
+          exception: null,
+          text: '8bit',
+          value: '8bit',
+          token: '"$accept"',
+          token_id: 0,
+          line: 14,
+          expected: null,
+          recoverable: false,
+          state: 56,
+          action: 2,
+          new_state: 124,
+          stack_pointer: 6,
+        },
+      ],
+      error_recovery_stack: [
+        {
+          errStr: `
+Expected a valid name/argument in a the exclusive lexer start conditions set (%x) statement.
+Entries (names) must look like regular programming language
+identifiers, with the addition that option names MAY contain
+'-' dashes, e.g. 'example-option-1'.
+    
+You may also start an option identifier with a number, but 
+then it must not be *only* a number, so '%option 8bit' is okay,
+while '%option 42' is not okay.
+    
+Suggested name:
+    _8bit
+    
+  Erroneous area:
+10: %x    
+11:     D
+    (...continued...)
+13:     FOOBAR
+14:     G7
+15:     8bit
+^^......^^^^
+16: 
+17: %%
+`,
+          exception: null,
+          text: '8bit',
+          value: '8bit',
+          token: '"$accept"',
+          token_id: 0,
+          line: 14,
+          recoverable: false,
+          state: 56,
+          action: 2,
+          new_state: 124,
+          stack_pointer: 6,
+          base_pointer: 6,
+          info_stack_pointer: 6,
+          root_failure_pointer: 6,
+          yyError: true,
+          errorRuleDepth: -1,
+          recovering: 0,
+        },
+      ],
+      error_infos_stack_size: 2,
+      error_recovery_stack_size: 1,
+    },
+    reentrant_call_depth: 0,
+    error_infos_stack_size: 0,
+    error_recovery_stack_size: 0,
+  },
+  __original_input__: `// %s is 'active' as long as the lines following are indented *and* non-empty
+// (i.e. cannot have an empty, whitespace-only line in there)
+%s    
+    PICTURE_STATE    
+    FUNCTION_STATE
+    A
+    B
+    C
+
+%x    
+    D
+    E
+    FOOBAR
+    G7
+    8bit
+
+%%
+
+
+. {
+    return yytext.charCodeAt(0);
+}
+
+<<EOF>>                         yytext = {
+                                    conditionStack: this.conditionStack
+                                };
+                                return 'EOF';`,
+}
