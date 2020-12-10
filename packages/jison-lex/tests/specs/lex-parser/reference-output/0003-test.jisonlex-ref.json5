@@ -1,0 +1,216 @@
+[
+  {
+    id: -1,
+    token: null,
+    fail: 1,
+    err: {
+      offending_source_code: `// provide a local version for test purposes:
+/**
+ * See also:
+ * 
+ * - https://github.com/onury/custom-error-test
+ * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+ * 
+ * We now provide an ES6 derived Error class. An updated ES5-compatible class
+ * is available too, for those who might need it, as this is complex stuff to
+ * get right (see first link above).
+ *
+ * @public
+ * @constructor
+ * @nocollapse
+ */
+
+
+/*---ES5---
+
+//
+// JS CustomError implementation — The One (Adapted for JISON)
+// This is the closest we can get to ES2015 \`extends Error\` implementation.
+// @version 2017-01-05
+// @author
+//     Onur Yıldırım (https://github.com/onury)
+//     Matt Browne (https://github.com/mbrowne)
+// @see
+//     https://github.com/onury/custom-error-test
+//     http://stackoverflow.com/a/35881508/112731
+//     https://gist.github.com/mbrowne/4af54767dcb3d529648f5a8aa11d6348
+//     http://stackoverflow.com/a/41338601/112731
+//
+function JisonLexerError(message, hash) {
+    if (message == null) message = '???';
+
+    let stacktrace;
+    if (hash && hash.exception instanceof Error) {
+        const ex2 = hash.exception;
+        message = message + ' :: ' + ex2.message;
+        stacktrace = ex2.stack;
+    }
+
+    let err;
+    if (Object.setPrototypeOf) {
+        err = new Error(message);
+        Object.setPrototypeOf(err, CustomError.prototype);
+    } else {
+        err = this;
+    }
+
+    Object.defineProperty(err, 'name', {
+        enumerable: false,
+        writable: false,
+        value: 'JisonLexerError'
+    });
+
+    err.hash = hash;
+
+    if (!Object.setPrototypeOf) {
+        Object.defineProperty(err, 'message', {
+            enumerable: false,
+            writable: true,
+            value: message
+        });
+        if (!stacktrace) {
+            if (typeof Error.captureStackTrace === 'function') { // V8
+                Error.captureStackTrace(this, JisonLexerError);
+            } else {
+                stacktrace = (new Error(message)).stack;
+            }
+        }
+    }
+
+    if (stacktrace) {
+        Object.defineProperty(err, 'stack', {
+            enumerable: false,
+            writable: false,
+            value: stacktrace
+        });
+    }
+
+    return err;
+}
+if (Object.setPrototypeOf) {
+    Object.setPrototypeOf(JisonLexerError.prototype, Error.prototype);
+} else {
+    JisonLexerError.prototype = Object.create(Error.prototype, {
+        constructor: { value: JisonLexerError }
+    });
+}
+
+---ES5---*/
+
+//---ES6---//
+
+class JisonLexerError extends Error {
+  constructor(message, hash, ...params) {
+    if (message == null) message = '???';
+
+    let stacktrace;
+    if (hash && hash.exception instanceof Error) {
+        const ex2 = hash.exception;
+        message = message + ' :: ' + ex2.message;
+        stacktrace = ex2.stack;
+    }
+
+    // Pass remaining arguments (including vendor specific ones) to parent constructor
+    super(message, ...params);
+
+    if (!stacktrace) {
+        // Maintains proper stack trace for where our error was thrown (only available on V8)
+        if (typeof Error.captureStackTrace === 'function') { // V8
+            Error.captureStackTrace(this, JisonLexerError);
+        } else {
+            stacktrace = (new Error(message)).stack;
+        }
+    }
+    if (stacktrace) {
+        Object.defineProperty(this, 'stack', {
+            enumerable: false,
+            writable: false,
+            value: stacktrace
+        });
+    }
+
+    this.name = 'JisonLexerError';
+    this.hash = hash;
+  }
+}
+
+//---ES6---//
+
+
+var __hacky_counter__ = 0;
+
+/**
+ * @constructor
+ * @nocollapse
+ */
+function XRegExp(re, f) {
+    this.re = re;
+    this.flags = f;
+    this._getUnicodeProperty = function (k) {};
+    var fake = /./;    // WARNING: this exact 'fake' is also depended upon by the xregexp unit test!
+    __hacky_counter__++;
+    fake.__hacky_backy__ = __hacky_counter__;
+    return fake;
+}
+
+
+
+
+
+
+// JISON INJECTED VALIDATION CODE
+// which attempts to ascertain you have defined a minimal viable lexer at least:
+if (typeof lexer === "undefined") {
+    throw new SyntaxError("user-defined lexer does not define the required 'lexer' instance.");
+}
+if (!lexer) {
+    throw new SyntaxError("user-defined lexer does not define a non-NULL 'lexer' instance.");
+}
+if (typeof lexer.setInput !== 'function') {
+    throw new SyntaxError("user-defined lexer does not provide the mandatory 'lexer.setInput()' API function.");
+}
+if (typeof lexer.lex !== 'function') {
+    throw new SyntaxError("user-defined lexer does not provide the mandatory 'lexer.lex()' API function.");
+}
+// END OF JISON INJECTED VALIDATION CODE
+
+return lexer;`,
+      offending_source_title: 'lexer',
+      offending_source_dumpfile: 'W:\\Projects\\sites\\library.visyond.gov\\80\\lib\\tooling\\jison\\___P_L_T_S\\lexer.fatal_lexer_dump_2020_12_10T004221.571Z.js',
+      message: "user-defined lexer does not define the required 'lexer' instance.\n        (One or more of your lexer rules are possibly botched?)",
+      name: 'SyntaxError',
+      stack: `SyntaxError: user-defined lexer does not define the required 'lexer' instance.
+    at eval (/regexp-lexer-cjs.js:14916:31)
+    at generated_code_exec_wrapper_regexp_lexer (/regexp-lexer-cjs.js:14917:24)
+    at exec_and_diagnose_this_stuff (/regexp-lexer-cjs.js:528:32)
+    at test_me (/regexp-lexer-cjs.js:14913:25)
+    at new RegExpLexer (/regexp-lexer-cjs.js:14980:17)
+    at Context.testEachLexerExample (/regexplexer.js:3741:25)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 1,
+      EOFTokenCount: 0,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 1,
+    },
+  },
+]

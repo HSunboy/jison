@@ -1,0 +1,42 @@
+[
+  {
+    id: -1,
+    token: null,
+    fail: 1,
+    err: {
+      message: "Cannot read property 's2' of undefined",
+      name: 'TypeError',
+      stack: `TypeError: Cannot read property 's2' of undefined
+    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js:14916:31)
+    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js:14916:31)
+    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:14916:31)
+    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:14916:31)
+    at Context.testEachLexerExample (/regexplexer.js:3753:37)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 1,
+      EOFTokenCount: 0,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 1,
+    },
+  },
+]

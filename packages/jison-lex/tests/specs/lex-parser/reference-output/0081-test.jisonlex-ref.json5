@@ -1,0 +1,1013 @@
+[
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^..^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 0,
+        last_line: 1,
+        last_column: 0,
+        range: [
+          0,
+          0,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 32,
+        yytext: 'a',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 0,
+      last_line: 1,
+      last_column: 1,
+      range: [
+        0,
+        1,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^...^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 1,
+        last_line: 1,
+        last_column: 1,
+        range: [
+          1,
+          1,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 31,
+        yytext: ' ',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 1,
+      last_line: 1,
+      last_column: 2,
+      range: [
+        1,
+        2,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^....^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 2,
+        last_line: 1,
+        last_column: 2,
+        range: [
+          2,
+          2,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 30,
+        yytext: '[',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 2,
+      last_line: 1,
+      last_column: 3,
+      range: [
+        2,
+        3,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^.....^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 3,
+        last_line: 1,
+        last_column: 3,
+        range: [
+          3,
+          3,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 29,
+        yytext: '\\',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 3,
+      last_line: 1,
+      last_column: 4,
+      range: [
+        3,
+        4,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^......^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 4,
+        last_line: 1,
+        last_column: 4,
+        range: [
+          4,
+          4,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 28,
+        yytext: 'u',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 4,
+      last_line: 1,
+      last_column: 5,
+      range: [
+        4,
+        5,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^.......^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 5,
+        last_line: 1,
+        last_column: 5,
+        range: [
+          5,
+          5,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 27,
+        yytext: '1',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 5,
+      last_line: 1,
+      last_column: 6,
+      range: [
+        5,
+        6,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^........^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 6,
+        last_line: 1,
+        last_column: 6,
+        range: [
+          6,
+          6,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 26,
+        yytext: '4',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 6,
+      last_line: 1,
+      last_column: 7,
+      range: [
+        6,
+        7,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^.........^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 7,
+        last_line: 1,
+        last_column: 7,
+        range: [
+          7,
+          7,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 25,
+        yytext: 'a',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 7,
+      last_line: 1,
+      last_column: 8,
+      range: [
+        7,
+        8,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^..........^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 8,
+        last_line: 1,
+        last_column: 8,
+        range: [
+          8,
+          8,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 24,
+        yytext: '7',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 8,
+      last_line: 1,
+      last_column: 9,
+      range: [
+        8,
+        9,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^...........^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 9,
+        last_line: 1,
+        last_column: 9,
+        range: [
+          9,
+          9,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 23,
+        yytext: '"',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 9,
+      last_line: 1,
+      last_column: 10,
+      range: [
+        9,
+        10,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^............^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 10,
+        last_line: 1,
+        last_column: 10,
+        range: [
+          10,
+          10,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 22,
+        yytext: '\\',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 10,
+      last_line: 1,
+      last_column: 11,
+      range: [
+        10,
+        11,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^.............^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 11,
+        last_line: 1,
+        last_column: 11,
+        range: [
+          11,
+          11,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 21,
+        yytext: 'n',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 11,
+      last_line: 1,
+      last_column: 12,
+      range: [
+        11,
+        12,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^..............^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 12,
+        last_line: 1,
+        last_column: 12,
+        range: [
+          12,
+          12,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 20,
+        yytext: 'N',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 12,
+      last_line: 1,
+      last_column: 13,
+      range: [
+        12,
+        13,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^...............^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 13,
+        last_line: 1,
+        last_column: 13,
+        range: [
+          13,
+          13,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 19,
+        yytext: 'L',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 13,
+      last_line: 1,
+      last_column: 14,
+      range: [
+        13,
+        14,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^................^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 14,
+        last_line: 1,
+        last_column: 14,
+        range: [
+          14,
+          14,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 18,
+        yytext: '\\',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 14,
+      last_line: 1,
+      last_column: 15,
+      range: [
+        14,
+        15,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^.................^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 15,
+        last_line: 1,
+        last_column: 15,
+        range: [
+          15,
+          15,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 17,
+        yytext: 't',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 15,
+      last_line: 1,
+      last_column: 16,
+      range: [
+        15,
+        16,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^..................^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 16,
+        last_line: 1,
+        last_column: 16,
+        range: [
+          16,
+          16,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 16,
+        yytext: 'b',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 16,
+      last_line: 1,
+      last_column: 17,
+      range: [
+        16,
+        17,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^...................^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 17,
+        last_line: 1,
+        last_column: 17,
+        range: [
+          17,
+          17,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 15,
+        yytext: 'e',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 17,
+      last_line: 1,
+      last_column: 18,
+      range: [
+        17,
+        18,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^....................^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 18,
+        last_line: 1,
+        last_column: 18,
+        range: [
+          18,
+          18,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 14,
+        yytext: 'c',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 18,
+      last_line: 1,
+      last_column: 19,
+      range: [
+        18,
+        19,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a [\\u14a7"\\nNL\\tbecky foo[bar]] b
+^.....................^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 19,
+        last_line: 1,
+        last_column: 19,
+        range: [
+          19,
+          19,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 13,
+        yytext: 'k',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 19,
+      last_line: 1,
+      last_column: 20,
+      range: [
+        19,
+        20,
+      ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 20,
+      EOFTokenCount: 0,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 20,
+      fatalExceptionCount: 0,
+    },
+  },
+]

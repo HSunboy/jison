@@ -1,0 +1,723 @@
+[
+  {
+    id: 'IDENT',
+    token: 'IDENT',
+    yytext: 'a',
+    yylloc: {
+      first_line: 1,
+      first_column: 0,
+      last_line: 1,
+      last_column: 1,
+      range: [
+        0,
+        1,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a "\\a/b\\c/d\\u14a7"becky boo"\\\\"37
+^...^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 1,
+        last_line: 1,
+        last_column: 1,
+        range: [
+          1,
+          1,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 31,
+        yytext: ' ',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 1,
+      last_line: 1,
+      last_column: 2,
+      range: [
+        1,
+        2,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a "\\a/b\\c/d\\u14a7"becky boo"\\\\"37
+^....^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 2,
+        last_line: 1,
+        last_column: 2,
+        range: [
+          2,
+          2,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 30,
+        yytext: '"',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 2,
+      last_line: 1,
+      last_column: 3,
+      range: [
+        2,
+        3,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a "\\a/b\\c/d\\u14a7"becky boo"\\\\"37
+^.....^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 3,
+        last_line: 1,
+        last_column: 3,
+        range: [
+          3,
+          3,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 29,
+        yytext: '\\',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 3,
+      last_line: 1,
+      last_column: 4,
+      range: [
+        3,
+        4,
+      ],
+    },
+  },
+  {
+    id: 'IDENT',
+    token: 'IDENT',
+    yytext: 'a',
+    yylloc: {
+      first_line: 1,
+      first_column: 4,
+      last_line: 1,
+      last_column: 5,
+      range: [
+        4,
+        5,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a "\\a/b\\c/d\\u14a7"becky boo"\\\\"37
+^.......^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 5,
+        last_line: 1,
+        last_column: 5,
+        range: [
+          5,
+          5,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 27,
+        yytext: '/',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 5,
+      last_line: 1,
+      last_column: 6,
+      range: [
+        5,
+        6,
+      ],
+    },
+  },
+  {
+    id: 'IDENT',
+    token: 'IDENT',
+    yytext: 'b',
+    yylloc: {
+      first_line: 1,
+      first_column: 6,
+      last_line: 1,
+      last_column: 7,
+      range: [
+        6,
+        7,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a "\\a/b\\c/d\\u14a7"becky boo"\\\\"37
+^.........^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 7,
+        last_line: 1,
+        last_column: 7,
+        range: [
+          7,
+          7,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 25,
+        yytext: '\\',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 7,
+      last_line: 1,
+      last_column: 8,
+      range: [
+        7,
+        8,
+      ],
+    },
+  },
+  {
+    id: 'IDENT',
+    token: 'IDENT',
+    yytext: 'c',
+    yylloc: {
+      first_line: 1,
+      first_column: 8,
+      last_line: 1,
+      last_column: 9,
+      range: [
+        8,
+        9,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a "\\a/b\\c/d\\u14a7"becky boo"\\\\"37
+^...........^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 9,
+        last_line: 1,
+        last_column: 9,
+        range: [
+          9,
+          9,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 23,
+        yytext: '/',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 9,
+      last_line: 1,
+      last_column: 10,
+      range: [
+        9,
+        10,
+      ],
+    },
+  },
+  {
+    id: 'IDENT',
+    token: 'IDENT',
+    yytext: 'd',
+    yylloc: {
+      first_line: 1,
+      first_column: 10,
+      last_line: 1,
+      last_column: 11,
+      range: [
+        10,
+        11,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a "\\a/b\\c/d\\u14a7"becky boo"\\\\"37
+^.............^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 11,
+        last_line: 1,
+        last_column: 11,
+        range: [
+          11,
+          11,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 21,
+        yytext: '\\',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 11,
+      last_line: 1,
+      last_column: 12,
+      range: [
+        11,
+        12,
+      ],
+    },
+  },
+  {
+    id: 'IDENT',
+    token: 'IDENT',
+    yytext: 'u14a7',
+    yylloc: {
+      first_line: 1,
+      first_column: 12,
+      last_line: 1,
+      last_column: 17,
+      range: [
+        12,
+        17,
+      ],
+    },
+  },
+  {
+    id: 'STRING',
+    token: 'STRING',
+    yytext: 'becky boo',
+    yylloc: {
+      first_line: 1,
+      first_column: 17,
+      last_line: 1,
+      last_column: 28,
+      range: [
+        17,
+        28,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a "\\a/b\\c/d\\u14a7"becky boo"\\\\"37
+^..............................^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 28,
+        last_line: 1,
+        last_column: 28,
+        range: [
+          28,
+          28,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 4,
+        yytext: '\\',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 28,
+      last_line: 1,
+      last_column: 29,
+      range: [
+        28,
+        29,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a "\\a/b\\c/d\\u14a7"becky boo"\\\\"37
+^...............................^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 29,
+        last_line: 1,
+        last_column: 29,
+        range: [
+          29,
+          29,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 3,
+        yytext: '\\',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 29,
+      last_line: 1,
+      last_column: 30,
+      range: [
+        29,
+        30,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: a "\\a/b\\c/d\\u14a7"becky boo"\\\\"37
+^................................^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 30,
+        last_line: 1,
+        last_column: 30,
+        range: [
+          30,
+          30,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 2,
+        yytext: '"',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 30,
+      last_line: 1,
+      last_column: 31,
+      range: [
+        30,
+        31,
+      ],
+    },
+  },
+  {
+    id: 'NUMBER',
+    token: 'NUMBER',
+    yytext: '3',
+    yylloc: {
+      first_line: 1,
+      first_column: 31,
+      last_line: 1,
+      last_column: 32,
+      range: [
+        31,
+        32,
+      ],
+    },
+  },
+  {
+    id: 'NUMBER',
+    token: 'NUMBER',
+    yytext: '7',
+    yylloc: {
+      first_line: 1,
+      first_column: 32,
+      last_line: 1,
+      last_column: 33,
+      range: [
+        32,
+        33,
+      ],
+    },
+  },
+  {
+    id: 'EOF',
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 33,
+      last_line: 1,
+      last_column: 33,
+      range: [
+        33,
+        33,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 33,
+      last_line: 1,
+      last_column: 33,
+      range: [
+        33,
+        33,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 33,
+      last_line: 1,
+      last_column: 33,
+      range: [
+        33,
+        33,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 33,
+      last_line: 1,
+      last_column: 33,
+      range: [
+        33,
+        33,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 33,
+      last_line: 1,
+      last_column: 33,
+      range: [
+        33,
+        33,
+      ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 24,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 10,
+      fatalExceptionCount: 0,
+    },
+  },
+]

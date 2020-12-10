@@ -1,0 +1,193 @@
+[
+  {
+    id: true,
+    token: true,
+    yytext: 'a',
+    yylloc: {
+      first_line: 1,
+      first_column: 0,
+      last_line: 1,
+      last_column: 1,
+      range: [
+        0,
+        1,
+      ],
+    },
+  },
+  {
+    id: 11,
+    token: 11,
+    yytext: 'b',
+    yylloc: {
+      first_line: 1,
+      first_column: 1,
+      last_line: 1,
+      last_column: 2,
+      range: [
+        1,
+        2,
+      ],
+    },
+  },
+  {
+    id: true,
+    token: true,
+    yytext: 'a',
+    yylloc: {
+      first_line: 1,
+      first_column: 2,
+      last_line: 1,
+      last_column: 3,
+      range: [
+        2,
+        3,
+      ],
+    },
+  },
+  {
+    id: 11,
+    token: 11,
+    yytext: 'b',
+    yylloc: {
+      first_line: 1,
+      first_column: 3,
+      last_line: 1,
+      last_column: 4,
+      range: [
+        3,
+        4,
+      ],
+    },
+  },
+  {
+    id: 11,
+    token: 11,
+    yytext: 'b',
+    yylloc: {
+      first_line: 1,
+      first_column: 4,
+      last_line: 1,
+      last_column: 5,
+      range: [
+        4,
+        5,
+      ],
+    },
+  },
+  {
+    id: true,
+    token: true,
+    yytext: 'a',
+    yylloc: {
+      first_line: 1,
+      first_column: 5,
+      last_line: 1,
+      last_column: 6,
+      range: [
+        5,
+        6,
+      ],
+    },
+  },
+  {
+    id: true,
+    token: true,
+    yytext: 'a',
+    yylloc: {
+      first_line: 1,
+      first_column: 6,
+      last_line: 1,
+      last_column: 7,
+      range: [
+        6,
+        7,
+      ],
+    },
+  },
+  {
+    id: 11,
+    token: 11,
+    yytext: 'b',
+    yylloc: {
+      first_line: 1,
+      first_column: 7,
+      last_line: 1,
+      last_column: 8,
+      range: [
+        7,
+        8,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 8,
+      last_line: 1,
+      last_column: 8,
+      range: [
+        8,
+        8,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 8,
+      last_line: 1,
+      last_column: 8,
+      range: [
+        8,
+        8,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 8,
+      last_line: 1,
+      last_column: 8,
+      range: [
+        8,
+        8,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 8,
+      last_line: 1,
+      last_column: 8,
+      range: [
+        8,
+        8,
+      ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 12,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
+    },
+  },
+]

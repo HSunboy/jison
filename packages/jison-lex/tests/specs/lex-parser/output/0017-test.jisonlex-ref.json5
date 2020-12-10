@@ -1,0 +1,152 @@
+[
+  {
+    id: -1,
+    token: null,
+    fail: 1,
+    err: {
+      secondary_exception: {
+        name: 'JisonLexerError',
+        hash: {
+          errStr: `Lexical error on line 6: 
+too many closing curly braces in lexer rule action block.
+
+Note: the action code chunk may be too complex for jison to parse
+easily; we suggest you wrap the action code chunk in '%{...%}'
+to help jison grok more or less complex action code chunks.
+
+  Erroneous area:
+3: "["[^\\]]"]" %{
+4: return true;
+5: %}
+6:  }
+^...^
+7: 
+8: 
+`,
+          recoverable: false,
+          text: '}',
+          token: null,
+          line: 5,
+          yyErrorInvoked: true,
+        },
+        message: `Lexical error on line 6: 
+too many closing curly braces in lexer rule action block.
+
+Note: the action code chunk may be too complex for jison to parse
+easily; we suggest you wrap the action code chunk in '%{...%}'
+to help jison grok more or less complex action code chunks.
+
+  Erroneous area:
+3: "["[^\\]]"]" %{
+4: return true;
+5: %}
+6:  }
+^...^
+7: 
+8: 
+`,
+        stack: `JisonLexerError: Lexical error on line 6: 
+too many closing curly braces in lexer rule action block.
+
+Note: the action code chunk may be too complex for jison to parse
+easily; we suggest you wrap the action code chunk in '%{...%}'
+to help jison grok more or less complex action code chunks.
+
+  Erroneous area:
+3: "["[^\\]]"]" %{
+4: return true;
+5: %}
+6:  }
+^...^
+7: 
+8: 
+
+    at Object.parseError (/regexp-lexer-cjs.js:7291:15)
+    at Object.lexer_parseError [as parseError] (/regexp-lexer-cjs.js:9460:44)
+    at Object.yyError [as yyerror] (/regexp-lexer-cjs.js:9490:19)
+    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js:11004:15)
+    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js:10415:38)
+    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:10540:28)
+    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:10662:18)
+    at stdLex (/regexp-lexer-cjs.js:7863:27)
+    at Object.parse (/regexp-lexer-cjs.js:8060:30)
+    at Object.yyparse [as parse] (/regexp-lexer-cjs.js:12609:25)
+    at autodetectAndConvertToJSONformat (/regexp-lexer-cjs.js:13814:35)
+    at processGrammar (/regexp-lexer-cjs.js:17013:12)
+    at test_me (/regexp-lexer-cjs.js:14862:23)
+    at new RegExpLexer (/regexp-lexer-cjs.js:14980:17)
+    at Context.testEachLexerExample (/regexplexer.js:3741:25)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
+      },
+      message: `Could not parse jison lexer spec in JSON AUTODETECT mode:
+in JISON Mode we get Error: Lexical error on line 6: 
+too many closing curly braces in lexer rule action block.
+
+Note: the action code chunk may be too complex for jison to parse
+easily; we suggest you wrap the action code chunk in '%{...%}'
+to help jison grok more or less complex action code chunks.
+
+  Erroneous area:
+3: "["[^\\]]"]" %{
+4: return true;
+5: %}
+6:  }
+^...^
+7: 
+8: 
+
+
+while JSON5 Mode produces Error: JSON5: invalid character '%' at 2:1`,
+      name: 'Error',
+      stack: `SyntaxError: JSON5: invalid character '%' at 2:1
+    at syntaxError (/index.js:1954:16)
+    at invalidChar (/index.js:1895:13)
+    at Object.value (/index.js:964:16)
+    at lex (/index.js:743:41)
+    at Object.parse (/index.js:689:18)
+    at autodetectAndConvertToJSONformat (/regexp-lexer-cjs.js:13798:51)
+    at processGrammar (/regexp-lexer-cjs.js:17013:12)
+    at test_me (/regexp-lexer-cjs.js:14862:23)
+    at new RegExpLexer (/regexp-lexer-cjs.js:14980:17)
+    at Context.testEachLexerExample (/regexplexer.js:3741:25)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 1,
+      EOFTokenCount: 0,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 1,
+    },
+  },
+]

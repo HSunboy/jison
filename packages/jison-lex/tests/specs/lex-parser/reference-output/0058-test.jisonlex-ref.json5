@@ -1,0 +1,173 @@
+[
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: ab
+^..^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 0,
+        last_line: 1,
+        last_column: 0,
+        range: [
+          0,
+          0,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 1,
+        yytext: 'a',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 0,
+      last_line: 1,
+      last_column: 1,
+      range: [
+        0,
+        1,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: ab
+^...^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 1,
+        last_line: 1,
+        last_column: 1,
+        range: [
+          1,
+          1,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: -1,
+        yytext: 'b',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 1,
+      last_line: 1,
+      last_column: 2,
+      range: [
+        1,
+        2,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 2,
+      last_line: 1,
+      last_column: 2,
+      range: [
+        2,
+        2,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 2,
+      last_line: 1,
+      last_column: 2,
+      range: [
+        2,
+        2,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 2,
+      last_line: 1,
+      last_column: 2,
+      range: [
+        2,
+        2,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 2,
+      last_line: 1,
+      last_column: 2,
+      range: [
+        2,
+        2,
+      ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 6,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 2,
+      fatalExceptionCount: 0,
+    },
+  },
+]

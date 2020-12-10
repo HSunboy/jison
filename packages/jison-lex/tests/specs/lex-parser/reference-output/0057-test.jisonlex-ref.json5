@@ -1,0 +1,353 @@
+[
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: [xy]f"oo'barfo"obarx
+^..^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 0,
+        last_line: 1,
+        last_column: 0,
+        range: [
+          0,
+          0,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 19,
+        yytext: '[',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 0,
+      last_line: 1,
+      last_column: 1,
+      range: [
+        0,
+        1,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: [xy]f"oo'barfo"obarx
+^...^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 1,
+        last_line: 1,
+        last_column: 1,
+        range: [
+          1,
+          1,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 18,
+        yytext: 'x',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 1,
+      last_line: 1,
+      last_column: 2,
+      range: [
+        1,
+        2,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: [xy]f"oo'barfo"obarx
+^....^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 2,
+        last_line: 1,
+        last_column: 2,
+        range: [
+          2,
+          2,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 17,
+        yytext: 'y',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 2,
+      last_line: 1,
+      last_column: 3,
+      range: [
+        2,
+        3,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: [xy]f"oo'barfo"obarx
+^.....^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 3,
+        last_line: 1,
+        last_column: 3,
+        range: [
+          3,
+          3,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: 16,
+        yytext: ']',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 3,
+      last_line: 1,
+      last_column: 4,
+      range: [
+        3,
+        4,
+      ],
+    },
+  },
+  {
+    id: 'baz2',
+    token: 'baz2',
+    yytext: 'f"oo\'bar',
+    yylloc: {
+      first_line: 1,
+      first_column: 4,
+      last_line: 1,
+      last_column: 12,
+      range: [
+        4,
+        12,
+      ],
+    },
+  },
+  {
+    id: 'baz',
+    token: 'baz',
+    yytext: 'fo"obar',
+    yylloc: {
+      first_line: 1,
+      first_column: 12,
+      last_line: 1,
+      last_column: 19,
+      range: [
+        12,
+        19,
+      ],
+    },
+  },
+  {
+    id: -42,
+    token: -42,
+    yytext: {
+      errStr: `Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: [xy]f"oo'barfo"obarx
+^.....................^`,
+      recoverable: false,
+      text: '',
+      token: null,
+      line: 0,
+      loc: {
+        first_line: 1,
+        first_column: 19,
+        last_line: 1,
+        last_column: 19,
+        range: [
+          19,
+          19,
+        ],
+      },
+      yy: {},
+      isLexerError: true,
+      yyErrorInvoked: false,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: true,
+      errorDiag: {
+        inputPos: -1,
+        yytext: 'x',
+        yyleng: 1,
+        matches: false,
+        activeCondition: 'INITIAL',
+        conditionStackDepth: 1,
+      },
+    },
+    yylloc: {
+      first_line: 1,
+      first_column: 19,
+      last_line: 1,
+      last_column: 20,
+      range: [
+        19,
+        20,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 20,
+      last_line: 1,
+      last_column: 20,
+      range: [
+        20,
+        20,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 20,
+      last_line: 1,
+      last_column: 20,
+      range: [
+        20,
+        20,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 20,
+      last_line: 1,
+      last_column: 20,
+      range: [
+        20,
+        20,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'EOF',
+    yytext: '',
+    yylloc: {
+      first_line: 1,
+      first_column: 20,
+      last_line: 1,
+      last_column: 20,
+      range: [
+        20,
+        20,
+      ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 11,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 5,
+      fatalExceptionCount: 0,
+    },
+  },
+]
