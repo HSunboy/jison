@@ -29,6 +29,8 @@
 %option nodefault
 
 %option do-not-test-compile
+%option lexer-errors-are-recoverable   	// <-- tell jison-gho any yyerror() or lex unidentified input error is continuable: lexer must move forward and proceed.
+
 %{
 /* Local variables */
 let last_token_is_dot = 0;
@@ -76,25 +78,10 @@ let inside_bracket = 0;
 }
 
 <*>\n {
-	cb_source_line++;
 }
 
 ^"#LINE"[ ]?[0-9]+" ".* {
 	/* Line directive */
-	char		*p1;
-	char		*p2;
-
-	p1 = strchr (yytext, '"');
-	if (p1) {
-		p2 = cobc_strdup (p1 + 1);
-		p1 = strrchr (p2, '"');
-		if (p1) {
-			*p1 = 0;
-			cb_source_file = cobc_parse_strdup (p2);
-			cb_source_line = (int)strtol (yytext + 5, NULL, 10) - 1;
-		}
-		cobc_free (p2);
-	}
 }
 
 ^"#".* {
@@ -212,7 +199,7 @@ H#[0-9A-Za-z]* {
 	/* Ignore */
 }
 
-<*>;+ {
+<*>";"+ {
 	if (inside_bracket) {
 		return 'SEMI_COLON';
 	}
@@ -507,7 +494,7 @@ H#[0-9A-Za-z]* {
 }
 
 "."([ \n]*".")* {
-	if (last_token_is_dot || strlen (yytext) > 1) {
+	if (last_token_is_dot || strlen(yytext) > 1) {
 		cb_warning (COBC_WARN_FILLER, _("ignoring redundant ."));
 	}
 
@@ -556,7 +543,8 @@ H#[0-9A-Za-z]* {
 . {
 	let	c;
 
-	yyerror(`invalid symbol '${yytext}' - skipping word`);
+	let rv = yyerror(`invalid symbol '${yytext}' - skipping word`);
+	
 	while ((c = this.input()) != this.EOF) {
 		if (c === '\n' || c === ' ') {
 			break;
@@ -565,26 +553,32 @@ H#[0-9A-Za-z]* {
 	if (c !== this.EOF) {
 		this.unput(c);
 	}
+
+	return 'INVALID_SYMBOL';
 }
 
 
 <PICTURE_STATE>{
-  "IS" {
-	/* Ignore */
-  }
-  [^ \n;]+ {
-	BEGIN INITIAL;
-	return 'PICTURE';
-  }
+
+"IS" {
+/* Ignore */
+}
+[^ \n;]+ {
+this.begin('INITIAL');
+return 'PICTURE';
+}
+
 }
 
 <FUNCTION_STATE>{
-  [A-Z0-9-]+ {
-	return 'FUNCTION_NAME';
-  }
-  . {
-	return yytext[0];
-  }
+
+[A-Z0-9-]+ {
+return 'FUNCTION_NAME';
+}
+. {
+return yytext[0];
+}
+
 }
 
 <<EOF>> {
@@ -592,10 +586,14 @@ H#[0-9A-Za-z]* {
 	last_token_is_dot = 0;
 	integer_is_label = 0;
 	inside_bracket = 0;
-	yyterminate();
+	//yyterminate();
 }
 
 %%
+
+function strlen(s) {
+	return s.length;
+}
 
 function scan_options (text, optype)
 {
