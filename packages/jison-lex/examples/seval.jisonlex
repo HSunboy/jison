@@ -5,15 +5,18 @@ ExponentPart                        [eE][+-]?{DecimalDigits}
 DecimalLiteral                      ({DecimalIntegerLiteral}"."{DecimalDigits}?{ExponentPart}?)|("."{DecimalDigits}{ExponentPart}?)|({DecimalIntegerLiteral}{ExponentPart}?)
 OctalDigit                          [0-7]
 OctalIntegerLiteral                 "0"{OctalDigit}+
-HexDigit                            [0-9a-fA-F]
-HexIntegerLiteral                   "0"[xX]{HexDigit}+
+// jison-gho reports error for this one as it clashes with Unicode regex \p{HexDigit} and thus would cause ambiguity/confusion:
+//HexDigit                            [0-9a-fA-F]
+// --> renamed to HexadecimalDigit
+HexadecimalDigit                    [0-9a-fA-F]
+HexIntegerLiteral                   "0"[xX]{HexadecimalDigit}+
 NumericLiteral                      {HexIntegerLiteral}|{OctalIntegerLiteral}|{DecimalLiteral}
 
 /* Patterns: String Literal */
 LineContinuation                    \\(\r\n|\r|\n)
 OctalEscapeSequence                 (?:[1-7][0-7]{0,2}|[0-7]{2,3})
-HexEscapeSequence                   [x]{HexDigit}{2}
-UnicodeEscapeSequence               [u]{HexDigit}{4}
+HexEscapeSequence                   [x]{HexadecimalDigit}{2}
+UnicodeEscapeSequence               [u]{HexadecimalDigit}{4}
 CharacterEscapeSequence             [^0-9xu]
 EscapeSequence                      {CharacterEscapeSequence}|{OctalEscapeSequence}|{HexEscapeSequence}|{UnicodeEscapeSequence}
 DoubleStringCharacter               ([^\"\\\n\r]+)|(\\{EscapeSequence})|{LineContinuation}
