@@ -1,0 +1,1340 @@
+[
+  {
+    id: 33,
+    token: '"%%"',
+    yytext: '%%',
+    yylloc: {
+      first_line: 1,
+      first_column: 0,
+      last_line: 1,
+      last_column: 2,
+      range: [
+        0,
+        2,
+      ],
+    },
+  },
+  {
+    id: 54,
+    token: '"CHARACTER_LIT"',
+    yytext: 'a',
+    yylloc: {
+      first_line: 3,
+      first_column: 0,
+      last_line: 3,
+      last_column: 1,
+      range: [
+        4,
+        5,
+      ],
+    },
+  },
+  {
+    id: 23,
+    token: '"UNTERMINATED_ACTION_BLOCK"',
+    yytext: {
+      errStr: `Lexical error on line 10: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                 1: %%
+ 2: 
+ 3: a {{
+^^....^^
+ 4:     {{
+^^..^^^^^^
+    (...continued...)
+--  (---------------)
+ 9:         // This MUST be considered as legal input.
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+10:     }} }}
+^^..^^^^^^
+11: 
+12: b {{{
+`,
+      recoverable: false,
+      text: `{{
+    {{
+        yytext += '+1';
+        return 'A';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }}`,
+      token: null,
+      line: 9,
+      loc: {
+        first_line: 3,
+        first_column: 2,
+        last_line: 10,
+        last_column: 6,
+        range: [
+          6,
+          254,
+        ],
+      },
+      yy: {
+        depth: 0,
+        include_command_allowed: false,
+      },
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: [
+          {
+            errStr: `Lexical error on line 10: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                 1: %%
+ 2: 
+ 3: a {{
+^^....^^
+ 4:     {{
+^^..^^^^^^
+    (...continued...)
+--  (---------------)
+ 9:         // This MUST be considered as legal input.
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+10:     }} }}
+^^..^^^^^^
+11: 
+12: b {{{
+`,
+            recoverable: false,
+            text: `{{
+    {{
+        yytext += '+1';
+        return 'A';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }}`,
+            token: null,
+            line: 9,
+            loc: {
+              first_line: 3,
+              first_column: 2,
+              last_line: 10,
+              last_column: 6,
+              range: [
+                6,
+                254,
+              ],
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+          {
+            errStr: `Lexical error on line 10: 
+too many closing curly braces in lexer rule action block.
+
+Note: the action code chunk may be too complex for jison to parse
+easily; we suggest you wrap the action code chunk in '%{...%}'
+to help jison grok more or less complex action code chunks.
+
+  Erroneous area:
+ 7:         // note the terminating 'action code block marker' just below:
+ 8:         // it's a matching set of braces, yet looks a tad... off.
+ 9:         // This MUST be considered as legal input.
+10:     }} }}
+^^.........^
+11: 
+12: b {{{
+`,
+            recoverable: false,
+            text: '}',
+            token: null,
+            line: 9,
+            loc: {
+              first_line: 10,
+              first_column: 7,
+              last_line: 10,
+              last_column: 8,
+              range: [
+                255,
+                256,
+              ],
+            },
+            yy: '[reference to sibling --> *.[2].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+          {
+            errStr: `Lexical error on line 10: 
+too many closing curly braces in lexer rule action block.
+
+Note: the action code chunk may be too complex for jison to parse
+easily; we suggest you wrap the action code chunk in '%{...%}'
+to help jison grok more or less complex action code chunks.
+
+  Erroneous area:
+ 7:         // note the terminating 'action code block marker' just below:
+ 8:         // it's a matching set of braces, yet looks a tad... off.
+ 9:         // This MUST be considered as legal input.
+10:     }} }}
+^^..........^
+11: 
+12: b {{{
+`,
+            recoverable: false,
+            text: '}',
+            token: null,
+            line: 9,
+            loc: {
+              first_line: 10,
+              first_column: 8,
+              last_line: 10,
+              last_column: 9,
+              range: [
+                256,
+                257,
+              ],
+            },
+            yy: '[reference to sibling --> *.[2].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+          {
+            errStr: `Lexical error on line 19: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                 9:         // This MUST be considered as legal input.
+10:     }} }}
+11: 
+12: b {{{
+^^....^^^
+13:     {
+^^..^^^^^
+    (...continued...)
+--  (---------------)
+18:         // This MUST be considered as legal input.
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+19:     } }}}
+^^..^^^^^^^^^
+20: 
+21: c {{{{
+`,
+            recoverable: false,
+            text: `{{{
+    {
+        yytext += '+1';
+        return 'B';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    } }}}`,
+            token: null,
+            line: 18,
+            loc: {
+              first_line: 12,
+              first_column: 2,
+              last_line: 19,
+              last_column: 9,
+              range: [
+                261,
+                512,
+              ],
+            },
+            yy: '[reference to sibling --> *.[2].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+          {
+            errStr: `Lexical error on line 28: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                18:         // This MUST be considered as legal input.
+19:     } }}}
+20: 
+21: c {{{{
+^^....^^^^
+22:     {{
+^^..^^^^^^
+    (...continued...)
+--  (---------------)
+27:         // This MUST be considered as legal input.
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+28:     }} }}}}
+^^..^^^^^^^^^^^
+29: 
+30: <<EOF>>                         return 'EOF';
+`,
+            recoverable: false,
+            text: `{{{{
+    {{
+        yytext += '+1';
+        return 'C';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }} }}}}`,
+            token: null,
+            line: 27,
+            loc: {
+              first_line: 21,
+              first_column: 2,
+              last_line: 28,
+              last_column: 11,
+              range: [
+                516,
+                771,
+              ],
+            },
+            yy: '[reference to sibling --> *.[2].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+        ],
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'rules',
+        ],
+        match: '',
+        matched: `%%
+
+a {{
+    {{
+        yytext += '+1';
+        return 'A';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }} }}
+
+b {{{
+    {
+        yytext += '+1';
+        return 'B';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    } }}}
+
+c {{{{
+    {{
+        yytext += '+1';
+        return 'C';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }} }}}}
+
+<<EOF>>                         return 'EOF';`,
+        matches: false,
+        yytext: '',
+        offset: 818,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 29,
+        yylloc: {
+          first_line: 30,
+          first_column: 45,
+          last_line: 30,
+          last_column: 45,
+          range: [
+            818,
+            818,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+        __entire_action_block_matchers__: {},
+      },
+      isLexerError: true,
+      yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
+      errorDiag: {
+        inputPos: 564,
+        yytext: {
+          fault: `
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+`,
+          srcCode: `
+    {{
+        yytext += '+1';
+        return 'A';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    `,
+          shiftCount: 246,
+          action_start_marker: '{{',
+          action_end_marker: '}}',
+        },
+        yyleng: 248,
+        matches: [
+          '{{',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+      },
+    },
+    yylloc: {
+      first_line: 3,
+      first_column: 2,
+      last_line: 10,
+      last_column: 6,
+      range: [
+        6,
+        254,
+      ],
+    },
+  },
+  {
+    id: 25,
+    token: '"ACTION_START"',
+    yytext: ' ',
+    yylloc: {
+      first_line: 10,
+      first_column: 6,
+      last_line: 10,
+      last_column: 7,
+      range: [
+        254,
+        255,
+      ],
+    },
+  },
+  {
+    id: 41,
+    token: '"BRACKET_SURPLUS"',
+    yytext: {
+      errStr: `Lexical error on line 10: 
+too many closing curly braces in lexer rule action block.
+
+Note: the action code chunk may be too complex for jison to parse
+easily; we suggest you wrap the action code chunk in '%{...%}'
+to help jison grok more or less complex action code chunks.
+
+  Erroneous area:
+ 7:         // note the terminating 'action code block marker' just below:
+ 8:         // it's a matching set of braces, yet looks a tad... off.
+ 9:         // This MUST be considered as legal input.
+10:     }} }}
+^^.........^
+11: 
+12: b {{{
+`,
+      recoverable: false,
+      text: '}',
+      token: null,
+      line: 9,
+      loc: {
+        first_line: 10,
+        first_column: 7,
+        last_line: 10,
+        last_column: 8,
+        range: [
+          255,
+          256,
+        ],
+      },
+      yy: {
+        depth: 0,
+        include_command_allowed: false,
+      },
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[2].yytext.lexer.__error_infos, length = 5]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'rules',
+        ],
+        match: '',
+        matched: `%%
+
+a {{
+    {{
+        yytext += '+1';
+        return 'A';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }} }}
+
+b {{{
+    {
+        yytext += '+1';
+        return 'B';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    } }}}
+
+c {{{{
+    {{
+        yytext += '+1';
+        return 'C';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }} }}}}
+
+<<EOF>>                         return 'EOF';`,
+        matches: false,
+        yytext: '',
+        offset: 818,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 29,
+        yylloc: {
+          first_line: 30,
+          first_column: 45,
+          last_line: 30,
+          last_column: 45,
+          range: [
+            818,
+            818,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+        __entire_action_block_matchers__: {},
+      },
+      isLexerError: true,
+      yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
+      errorDiag: {
+        inputPos: 562,
+        yytext: '}',
+        yyleng: 1,
+        matches: [
+          '}',
+        ],
+        activeCondition: 'action',
+        conditionStackDepth: 3,
+      },
+    },
+    yylloc: {
+      first_line: 10,
+      first_column: 7,
+      last_line: 10,
+      last_column: 8,
+      range: [
+        255,
+        256,
+      ],
+    },
+  },
+  {
+    id: 41,
+    token: '"BRACKET_SURPLUS"',
+    yytext: {
+      errStr: `Lexical error on line 10: 
+too many closing curly braces in lexer rule action block.
+
+Note: the action code chunk may be too complex for jison to parse
+easily; we suggest you wrap the action code chunk in '%{...%}'
+to help jison grok more or less complex action code chunks.
+
+  Erroneous area:
+ 7:         // note the terminating 'action code block marker' just below:
+ 8:         // it's a matching set of braces, yet looks a tad... off.
+ 9:         // This MUST be considered as legal input.
+10:     }} }}
+^^..........^
+11: 
+12: b {{{
+`,
+      recoverable: false,
+      text: '}',
+      token: null,
+      line: 9,
+      loc: {
+        first_line: 10,
+        first_column: 8,
+        last_line: 10,
+        last_column: 9,
+        range: [
+          256,
+          257,
+        ],
+      },
+      yy: {
+        depth: 0,
+        include_command_allowed: false,
+      },
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[2].yytext.lexer.__error_infos, length = 5]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'rules',
+        ],
+        match: '',
+        matched: `%%
+
+a {{
+    {{
+        yytext += '+1';
+        return 'A';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }} }}
+
+b {{{
+    {
+        yytext += '+1';
+        return 'B';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    } }}}
+
+c {{{{
+    {{
+        yytext += '+1';
+        return 'C';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }} }}}}
+
+<<EOF>>                         return 'EOF';`,
+        matches: false,
+        yytext: '',
+        offset: 818,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 29,
+        yylloc: {
+          first_line: 30,
+          first_column: 45,
+          last_line: 30,
+          last_column: 45,
+          range: [
+            818,
+            818,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+        __entire_action_block_matchers__: {},
+      },
+      isLexerError: true,
+      yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
+      errorDiag: {
+        inputPos: 561,
+        yytext: '}',
+        yyleng: 1,
+        matches: [
+          '}',
+        ],
+        activeCondition: 'action',
+        conditionStackDepth: 3,
+      },
+    },
+    yylloc: {
+      first_line: 10,
+      first_column: 8,
+      last_line: 10,
+      last_column: 9,
+      range: [
+        256,
+        257,
+      ],
+    },
+  },
+  {
+    id: 35,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 10,
+      first_column: 9,
+      last_line: 10,
+      last_column: 9,
+      range: [
+        257,
+        257,
+      ],
+    },
+  },
+  {
+    id: 54,
+    token: '"CHARACTER_LIT"',
+    yytext: 'b',
+    yylloc: {
+      first_line: 12,
+      first_column: 0,
+      last_line: 12,
+      last_column: 1,
+      range: [
+        259,
+        260,
+      ],
+    },
+  },
+  {
+    id: 23,
+    token: '"UNTERMINATED_ACTION_BLOCK"',
+    yytext: {
+      errStr: `Lexical error on line 19: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                 9:         // This MUST be considered as legal input.
+10:     }} }}
+11: 
+12: b {{{
+^^....^^^
+13:     {
+^^..^^^^^
+    (...continued...)
+--  (---------------)
+18:         // This MUST be considered as legal input.
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+19:     } }}}
+^^..^^^^^^^^^
+20: 
+21: c {{{{
+`,
+      recoverable: false,
+      text: `{{{
+    {
+        yytext += '+1';
+        return 'B';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    } }}}`,
+      token: null,
+      line: 18,
+      loc: {
+        first_line: 12,
+        first_column: 2,
+        last_line: 19,
+        last_column: 9,
+        range: [
+          261,
+          512,
+        ],
+      },
+      yy: {
+        depth: 0,
+        include_command_allowed: false,
+      },
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[2].yytext.lexer.__error_infos, length = 5]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'rules',
+        ],
+        match: '',
+        matched: `%%
+
+a {{
+    {{
+        yytext += '+1';
+        return 'A';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }} }}
+
+b {{{
+    {
+        yytext += '+1';
+        return 'B';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    } }}}
+
+c {{{{
+    {{
+        yytext += '+1';
+        return 'C';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }} }}}}
+
+<<EOF>>                         return 'EOF';`,
+        matches: false,
+        yytext: '',
+        offset: 818,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 29,
+        yylloc: {
+          first_line: 30,
+          first_column: 45,
+          last_line: 30,
+          last_column: 45,
+          range: [
+            818,
+            818,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+        __entire_action_block_matchers__: {},
+      },
+      isLexerError: true,
+      yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
+      errorDiag: {
+        inputPos: 306,
+        yytext: {
+          fault: `
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+`,
+          srcCode: `
+    {
+        yytext += '+1';
+        return 'B';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    } `,
+          shiftCount: 248,
+          action_start_marker: '{{{',
+          action_end_marker: '}}}',
+        },
+        yyleng: 251,
+        matches: [
+          '{{{',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+      },
+    },
+    yylloc: {
+      first_line: 12,
+      first_column: 2,
+      last_line: 19,
+      last_column: 9,
+      range: [
+        261,
+        512,
+      ],
+    },
+  },
+  {
+    id: 54,
+    token: '"CHARACTER_LIT"',
+    yytext: 'c',
+    yylloc: {
+      first_line: 21,
+      first_column: 0,
+      last_line: 21,
+      last_column: 1,
+      range: [
+        514,
+        515,
+      ],
+    },
+  },
+  {
+    id: 23,
+    token: '"UNTERMINATED_ACTION_BLOCK"',
+    yytext: {
+      errStr: `Lexical error on line 28: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                18:         // This MUST be considered as legal input.
+19:     } }}}
+20: 
+21: c {{{{
+^^....^^^^
+22:     {{
+^^..^^^^^^
+    (...continued...)
+--  (---------------)
+27:         // This MUST be considered as legal input.
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+28:     }} }}}}
+^^..^^^^^^^^^^^
+29: 
+30: <<EOF>>                         return 'EOF';
+`,
+      recoverable: false,
+      text: `{{{{
+    {{
+        yytext += '+1';
+        return 'C';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }} }}}}`,
+      token: null,
+      line: 27,
+      loc: {
+        first_line: 21,
+        first_column: 2,
+        last_line: 28,
+        last_column: 11,
+        range: [
+          516,
+          771,
+        ],
+      },
+      yy: {
+        depth: 0,
+        include_command_allowed: false,
+      },
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[2].yytext.lexer.__error_infos, length = 5]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'rules',
+        ],
+        match: '',
+        matched: `%%
+
+a {{
+    {{
+        yytext += '+1';
+        return 'A';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }} }}
+
+b {{{
+    {
+        yytext += '+1';
+        return 'B';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    } }}}
+
+c {{{{
+    {{
+        yytext += '+1';
+        return 'C';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }} }}}}
+
+<<EOF>>                         return 'EOF';`,
+        matches: false,
+        yytext: '',
+        offset: 818,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 29,
+        yylloc: {
+          first_line: 30,
+          first_column: 45,
+          last_line: 30,
+          last_column: 45,
+          range: [
+            818,
+            818,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+        __entire_action_block_matchers__: {},
+      },
+      isLexerError: true,
+      yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
+      errorDiag: {
+        inputPos: 47,
+        yytext: {
+          fault: `
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+`,
+          srcCode: `
+    {{
+        yytext += '+1';
+        return 'C';
+        // note the terminating 'action code block marker' just below:
+        // it's a matching set of braces, yet looks a tad... off.
+        // This MUST be considered as legal input.
+    }} `,
+          shiftCount: 251,
+          action_start_marker: '{{{{',
+          action_end_marker: '}}}}',
+        },
+        yyleng: 255,
+        matches: [
+          '{{{{',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+      },
+    },
+    yylloc: {
+      first_line: 21,
+      first_column: 2,
+      last_line: 28,
+      last_column: 11,
+      range: [
+        516,
+        771,
+      ],
+    },
+  },
+  {
+    id: 17,
+    token: '"$"',
+    yytext: '<<EOF>>',
+    yylloc: {
+      first_line: 30,
+      first_column: 0,
+      last_line: 30,
+      last_column: 7,
+      range: [
+        773,
+        780,
+      ],
+    },
+  },
+  {
+    id: 25,
+    token: '"ACTION_START"',
+    yytext: '                         ',
+    yylloc: {
+      first_line: 30,
+      first_column: 7,
+      last_line: 30,
+      last_column: 32,
+      range: [
+        780,
+        805,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: 'return ',
+    yylloc: {
+      first_line: 30,
+      first_column: 32,
+      last_line: 30,
+      last_column: 39,
+      range: [
+        805,
+        812,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: "'EOF'",
+    yylloc: {
+      first_line: 30,
+      first_column: 39,
+      last_line: 30,
+      last_column: 44,
+      range: [
+        812,
+        817,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: ';',
+    yylloc: {
+      first_line: 30,
+      first_column: 44,
+      last_line: 30,
+      last_column: 45,
+      range: [
+        817,
+        818,
+      ],
+    },
+  },
+  {
+    id: 35,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 30,
+      first_column: 45,
+      last_line: 30,
+      last_column: 45,
+      range: [
+        818,
+        818,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 30,
+      first_column: 45,
+      last_line: 30,
+      last_column: 45,
+      range: [
+        818,
+        818,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 30,
+      first_column: 45,
+      last_line: 30,
+      last_column: 45,
+      range: [
+        818,
+        818,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 30,
+      first_column: 45,
+      last_line: 30,
+      last_column: 45,
+      range: [
+        818,
+        818,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 30,
+      first_column: 45,
+      last_line: 30,
+      last_column: 45,
+      range: [
+        818,
+        818,
+      ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 21,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 5,
+      DetectedParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
+    },
+  },
+]
