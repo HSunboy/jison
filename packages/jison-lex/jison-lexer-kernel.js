@@ -81,7 +81,7 @@ const lexer_kernel =
             text: this.match,           // This one MAY be empty; userland code should use the `upcomingInput` API to obtain more text which follows the 'lexer cursor position'...
             token: null,
             line: this.yylineno,
-            loc: this.yylloc,
+            loc: this.copy_yylloc(this.yylloc),
             yy: this.yy,
             // lexer: this,             // OBSOLETED member since 0.7.0: will cause reference cycles if not treated very carefully, hence has memory leak risks!
 
@@ -942,6 +942,23 @@ const lexer_kernel =
             }
         }
         return rv;
+    },
+
+    /**
+     * Take a snapshot of the given `loc` location tracking object, e.g. `this.yylloc`.
+     * 
+     * Technically, this means this function returns a cloned instance of the given `loc`.
+     * @param  {YYlloc} loc     location tracking object
+     * @return {YYlloc}     
+     */
+    copy_yylloc: function leexer_copy_yylloc(loc) {
+        if (loc) {
+            let rv = Object.assign({}, loc);
+            // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
+            rv.range = rv.range.slice();
+            return rv;
+        }
+        return null;
     },
 
     /**
