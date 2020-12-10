@@ -255,6 +255,7 @@ function treat_hash(h) {
 function treat_error_report_info(e) {
     // shallow copy object:
     e = shallow_copy(e);
+    delete e.offending_source_dumpfile;
 
     if (e.hash) {
         breadcrumbs.push('hash');
