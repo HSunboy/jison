@@ -324,10 +324,19 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                         let endMarkerIndex;
                                         for (;;) {
                                             endMarkerIndex = remaining.indexOf(endMarker, prevEnd);
-                                            // check for both simple non-existence *and* non-match due to trailing braces,
+
+                                            // Check for both simple non-existence *and* non-match due to trailing braces,
                                             // e.g. in this input: `%{{...%}}}` -- note the 3rd curly closing brace.
+                                            //
+                                            // Also note that we must cope with pathologic cases wwhere the marker does
+                                            // not include a '%', e.g. `{{ ... { ... }}}`: note the last set of '}}}' which
+                                            // has a different count than the starting marker '{{' yet somehow looks
+                                            // *legal* due to the braces all matching up. Fringy, but legal. Hence we 
+                                            // must only advance the cursor by ONE(1) instead of skipping the entire
+                                            // false end marker (--> `prevEnd = endMarkerIndex + endMarker.length`).
+                                            //
                                             if (endMarkerIndex >= 0 && remaining[endMarkerIndex + endMarker.length] === '}') {
-                                                prevEnd = endMarkerIndex + endMarker.length;
+                                                prevEnd = endMarkerIndex + 1;
                                                 continue;
                                             }
                                             if (endMarkerIndex < 0) {

@@ -259,7 +259,7 @@ declaration
                 startMarker: $ACTION_START_AT_SOL
             });
             if (srcCode) {
-                let rv = checkActionBlock(srcCode, @action, yy);
+                let rv = checkActionBlock(srcCode, @action, yy.options);
                 if (rv.fault) {
                     yyerror(rmCommonWS`
                         The '%{...%}' grammar setup action code section does not compile: ${rv.fault}
@@ -479,7 +479,7 @@ declaration
             let srcCode = trimActionCode($action + $ACTION_END, {
                 startMarker: $ACTION_START
             });
-            let rv = checkActionBlock(srcCode, @action, yy);
+            let rv = checkActionBlock(srcCode, @action, yy.options);
             if (rv.fault) {
                 yyerror(rmCommonWS`
                     The '%code ${name}' initialization section's action code block does not compile: ${rv.fault}
@@ -560,7 +560,7 @@ declaration
     | on_error_recovery_keyword ACTION_START action ACTION_END
         {
             var srcCode = trimActionCode($action + $ACTION_END, $ACTION_START);
-            var rv = checkActionBlock(srcCode, @action, yy);
+            var rv = checkActionBlock(srcCode, @action, yy.options);
             if (rv.fault) {
                 yyerror(rmCommonWS`
                     The '${$on_error_recovery_keyword}' action code section does not compile: ${rv.fault}
@@ -933,7 +933,7 @@ production
                 startMarker: $ACTION_START_AT_SOL
             });
             if (srcCode) {
-                let rv = checkActionBlock(srcCode, @action, yy);
+                let rv = checkActionBlock(srcCode, @action, yy.options);
                 if (rv.fault) {
                     yyerror(rmCommonWS`
                         The '%{...%}' grammar action header code section does not compile: ${rv.fault}
@@ -1197,7 +1197,7 @@ handle_action
                 srcCode = trimActionCode($action + $ACTION_END, {
                     startMarker: $handle_action_start.starter
                 });
-                let rv = checkActionBlock(srcCode, @action, yy);
+                let rv = checkActionBlock(srcCode, @action, yy.options);
                 if (rv.fault) {
                     let indentedSrc = rmCommonWS([srcCode]).split('\n').join('\n    ');
 
@@ -1755,7 +1755,7 @@ epilogue
         {
             let srcCode = trimActionCode($epilogue_chunks);
             if (srcCode) {
-                let rv = checkActionBlock(srcCode, @epilogue_chunks, yy);
+                let rv = checkActionBlock(srcCode, @epilogue_chunks, yy.options);
                 if (rv.fault) {
                     yyerror(rmCommonWS`
                         The '%%' parser epilogue code section does not compile: ${rv.fault}
@@ -1798,7 +1798,7 @@ epilogue_chunk
                 startMarker: $ACTION_START_AT_SOL
             });
             if (srcCode) {
-                let rv = checkActionBlock(srcCode, @action, yy);
+                let rv = checkActionBlock(srcCode, @action, yy.options);
                 if (rv.fault) {
                     yyerror(rmCommonWS`
                         The '%{...%}' lexer epilogue code chunk does not compile: ${rv.fault}
@@ -1914,7 +1914,7 @@ include_macro_code
 
                 let srcCode = trimActionCode(fileContent);
                 if (srcCode) {
-                    let rv = checkActionBlock(srcCode, @$, yy);
+                    let rv = checkActionBlock(srcCode, @$, yy.options);
                     if (rv.fault) {
                         yyerror(rmCommonWS`
                             The source code included from file '${include_path}' does not compile: ${rv.fault}

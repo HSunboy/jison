@@ -13,6 +13,7 @@ import detectIstanbulGlobal from './detect-istanbul';
 import reHelpers from './validate-regex';
 import { trimErrorForTestReporting, stripErrorStackPaths, cleanStackTrace4Comparison } from './trimErrorForTestReporting';
 import extractSymbolTableFromFile from './extractSymbolTableFromJSON5File';
+import setupDelimitedActionChunkMatcher from './setupDelimitedActionChunkMatcher';
 
 
 
@@ -27,6 +28,7 @@ export default {
     stripErrorStackPaths,
     cleanStackTrace4Comparison,
     extractSymbolTableFromFile,
+    setupDelimitedActionChunkMatcher,
 
     checkRegExp: reHelpers.checkRegExp,
     getRegExpInfo: reHelpers.getRegExpInfo,
