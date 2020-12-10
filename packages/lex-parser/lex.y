@@ -1192,10 +1192,13 @@ rule
             } else {
                 yyerror(rmCommonWS`
                     There's probably an error in one or more of your lexer regex rules.
-                    Did you perhaps indent the rule regex? Note that all rule regexes
-                    MUST start at the start of the line, i.e. text column 1. Indented text
-                    is perceived as JavaScript action code related to the last lexer
-                    rule regex.
+
+                    Did you perhaps indent the rule regex? 
+
+                    Note that all rule regexes MUST start at the start of the line, 
+                    i.e. text column 1. 
+                    Indented text is perceived as JavaScript action code related to the last 
+                    lexer rule regex.
 
                       Erroneous code:
                     ${yylexer.prettyPrintRange(@error)}
@@ -1217,7 +1220,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@start_inclusive_keyword)}
             `);
-            yy.popContext('Line 1220');
+            yy.popContext('Line 1223');
             $$ = null;
         }
     | start_exclusive_keyword
@@ -1231,7 +1234,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@start_exclusive_keyword)}
             `);
-            yy.popContext('Line 1234');
+            yy.popContext('Line 1237');
             $$ = null;
         }
     | option_keyword
@@ -1245,7 +1248,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@option_keyword)}
             `);
-            yy.popContext('Line 1248');
+            yy.popContext('Line 1251');
             $$ = null;
         }
     | UNKNOWN_DECL
@@ -1272,7 +1275,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@import_keyword)}
             `);
-            yy.popContext('Line 1275');
+            yy.popContext('Line 1278');
             $$ = null;
         }
     | init_code_keyword
@@ -1286,7 +1289,7 @@ rule
                   Erroneous code:
                 ${yylexer.prettyPrintRange(@init_code_keyword)}
             `);
-            yy.popContext('Line 1289');
+            yy.popContext('Line 1292');
             $$ = null;
         }
     ;
@@ -1376,7 +1379,7 @@ start_conditions
 
             // Optimization: these two calls cancel one another out here:
             //
-            // yy.popContext('Line 1379');
+            // yy.popContext('Line 1382');
             // yy.pushContext();
 
             yy.__inside_scoped_ruleset__ = true;
@@ -1405,7 +1408,7 @@ start_conditions
 
             // Optimization: these two calls cancel one another out here:
             //
-            // yy.popContext('Line 1408');
+            // yy.popContext('Line 1411');
             // yy.pushContext();
 
             yy.__inside_scoped_ruleset__ = true;
@@ -1552,6 +1555,12 @@ regex_base
     | regex_base range_regex
         { $$ = $1 + $2; }
     | any_group_regex
+    //| '<'                     <-- this one will be delivered as CHARACTER_LIT by the lexer.
+    //    { $$ = '<'; }
+    | '>'
+        { $$ = '>'; }
+    | ','
+        { $$ = ','; }
     | '.'
         { $$ = '.'; }
     | '^'
@@ -1626,15 +1635,18 @@ regex_set_atom
         { $$ = $1; }
     | name_expansion
         {
-            if (XRegExp._getUnicodeProperty($name_expansion.replace(/[{}]/g, ''))
-                && $name_expansion.toUpperCase() !== $name_expansion
-            ) {
-                // treat this as part of an XRegExp `\p{...}` Unicode 'General Category' Property cf. http://unicode.org/reports/tr18/#Categories
-                $$ = $name_expansion;
-            } else {
-                $$ = $name_expansion;
-            }
+            //if (XRegExp._getUnicodeProperty($name_expansion.replace(/[{}]/g, ''))
+            //    && $name_expansion.toUpperCase() !== $name_expansion
+            //) {
+            //    // treat this as part of an XRegExp `\p{...}` Unicode 'General Category' Property cf. http://unicode.org/reports/tr18/#Categories
+            //    $$ = $name_expansion;
+            //} else {
+            //    $$ = $name_expansion;
+            //}
             //yyparser.log("name expansion for: ", { name: $name_expansion, redux: $name_expansion.replace(/[{}]/g, ''), output: $$ });
+
+            // simplified above code -- as the checks done above don't make a difference in the actual `$$` value produced by this rule; it's always:
+            $$ = $name_expansion;
         }
     ;
 
@@ -1878,7 +1890,7 @@ epilogue
         }
     | start_epilogue_marker
         {
-            yy.popContext('Line 1881');
+            yy.popContext('Line 1893');
 
             $$ = '';
         }
@@ -1897,7 +1909,7 @@ epilogue
                 }
             }
 
-            yy.popContext('Line 1900');
+            yy.popContext('Line 1912');
 
             $$ = srcCode;
         }
@@ -2060,7 +2072,7 @@ include_macro_code
                 $$ = '\n// Included by Jison: ' + include_path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + include_path + '\n\n';
             }
 
-            yy.popContext('Line 2063');
+            yy.popContext('Line 2075');
         }
     | include_keyword error
         {
@@ -2073,7 +2085,7 @@ include_macro_code
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 2076');
+            yy.popContext('Line 2088');
             $$ = null;
         }
     ;

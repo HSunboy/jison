@@ -566,8 +566,17 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 "^"                                     return '^';
 ","                                     return ',';
 "<<EOF>>"                               return '$';
-"<"                                     this.pushState('options');
-                                        return '<';
+"<"                                     %{
+                                            // '<' can only start a condition when it's at the very start of a regex rule or {...} regex rule set.
+                                            // Either way, '<' must be at the start of the line, or it cannot be a condition starter but only
+                                            // serve as a literal character in a regex.
+                                            if (yylloc.first_column === 0) {
+                                                this.pushState('options');
+                                                return '<';
+                                            }
+                                            return 'CHARACTER_LIT';
+                                        %}
+
 ">"                                     return '>';
 "/!"                                    return '/!';                    // treated as `(?!atom)`
 "/"                                     return '/';                     // treated as `(?=atom)`
