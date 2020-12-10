@@ -1,0 +1,164 @@
+{
+  rules: [
+    [
+      [
+        'CALL_DIRECTIVE_STATE',
+      ],
+      '\\n',
+      `this.begin('INITIAL');
+    this.unput('\\n');
+    return 'TERMINATOR'`,
+    ],
+    [
+      [
+        'CALL_DIRECTIVE_STATE',
+      ],
+      '[ ,;]+',
+      '/* ignore */',
+    ],
+    [
+      [
+        'CALL_DIRECTIVE_STATE',
+      ],
+      '\\.',
+      'return DOT',
+    ],
+    [
+      [
+        'CALL_DIRECTIVE_STATE',
+      ],
+      '.',
+      "return '#' + yytext[0].charCodeAt(0).toString(16)",
+    ],
+    [
+      '\\$',
+      `this.begin('CALL_DIRECTIVE_STATE');
+                                return 'MARKER'`,
+    ],
+    [
+      '.',
+      'return yytext.charCodeAt(0)',
+    ],
+    [
+      '$',
+      `yytext = {
+                                    conditionStack: this.conditionStack,
+                                    conditionsSet: Object.keys(this.conditions),
+                                };
+                                return 'EOF'`,
+    ],
+  ],
+  macros: {},
+  startConditions: {
+    CALL_DIRECTIVE_STATE: 0,
+    SOURCE_DIRECTIVE_STATE: 0,
+    DEFINE_DIRECTIVE_STATE: 0,
+    ON_OFF_DIRECTIVE_STATE: 0,
+    SET_DIRECTIVE_STATE: 0,
+    TURN_DIRECTIVE_STATE: 0,
+    IF_DIRECTIVE_STATE: 0,
+    ELSE_DIRECTIVE_STATE: 0,
+    ENDIF_DIRECTIVE_STATE: 0,
+    ALNUM_LITERAL_STATE: 0,
+    CONTROL_STATEMENT_STATE: 0,
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  __extra_diag_info__: {
+    pre_parse_callback_callCount: 1,
+    post_parse_callback_callCount: 1,
+    post_parse_diaginfo: {
+      sharedState_yy: {
+        startConditions: '[reference to sibling --> *.startConditions]',
+        __options_flags__: 0,
+        __options_category_description__: '???',
+        __inside_scoped_ruleset__: false,
+        __context_cfg_stack__: [],
+        depth: 0,
+        include_command_allowed: false,
+      },
+      hash: {
+        errStr: null,
+        exception: null,
+        text: '',
+        value: '',
+        token: '"$accept"',
+        token_id: 0,
+        line: 41,
+        expected: null,
+        recoverable: false,
+        state: 24,
+        action: 2,
+        new_state: 1,
+        stack_pointer: 5,
+      },
+      reentrant_call_depth: 1,
+      error_infos_stack: [
+        {
+          errStr: null,
+          exception: null,
+          text: '',
+          value: '',
+          token: '"$accept"',
+          token_id: 0,
+          line: 41,
+          expected: null,
+          recoverable: false,
+          state: 24,
+          action: 2,
+          new_state: 1,
+          stack_pointer: 5,
+        },
+      ],
+      error_recovery_stack: [],
+      error_infos_stack_size: 1,
+      error_recovery_stack_size: 0,
+    },
+    reentrant_call_depth: 0,
+    error_infos_stack_size: 0,
+    error_recovery_stack_size: 0,
+  },
+  __original_input__: `%s    
+    CALL_DIRECTIVE_STATE,
+    SOURCE_DIRECTIVE_STATE,
+    DEFINE_DIRECTIVE_STATE,
+    ON_OFF_DIRECTIVE_STATE,
+    SET_DIRECTIVE_STATE,
+    TURN_DIRECTIVE_STATE,
+    IF_DIRECTIVE_STATE,
+    ELSE_DIRECTIVE_STATE,
+    ENDIF_DIRECTIVE_STATE,
+    ALNUM_LITERAL_STATE,
+    CONTROL_STATEMENT_STATE
+
+%%
+
+<CALL_DIRECTIVE_STATE>{
+\\n            {
+    this.begin('INITIAL');
+    this.unput('\\n');
+    return 'TERMINATOR';
+}
+[ ,;]+        { /* ignore */ }
+"."           {
+    return DOT;
+}
+.             {
+    return '#' + yytext[0].charCodeAt(0).toString(16);
+}
+}
+
+'$'                             
+                                this.begin('CALL_DIRECTIVE_STATE');
+                                return 'MARKER';
+
+. 
+                                return yytext.charCodeAt(0);
+
+<<EOF>>                         yytext = {
+                                    conditionStack: this.conditionStack,
+                                    conditionsSet: Object.keys(this.conditions),
+                                };
+                                return 'EOF';`,
+}

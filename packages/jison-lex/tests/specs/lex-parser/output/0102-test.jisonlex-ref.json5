@@ -1,0 +1,72 @@
+[
+  {
+    id: 'MARKER',
+    token: 'MARKER',
+    yytext: '$',
+    yylloc: {
+      first_line: 1,
+      first_column: 0,
+      last_line: 1,
+      last_column: 1,
+      range: [
+        0,
+        1,
+      ],
+    },
+  },
+  {
+    id: '#41',
+    token: '#41',
+    yytext: 'A',
+    yylloc: {
+      first_line: 1,
+      first_column: 1,
+      last_line: 1,
+      last_column: 2,
+      range: [
+        1,
+        2,
+      ],
+    },
+  },
+  {
+    id: -1,
+    token: null,
+    fail: 1,
+    err: {
+      message: 'DOT is not defined',
+      name: 'ReferenceError',
+      stack: `ReferenceError: DOT is not defined
+    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js:14917:31)
+    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js:14917:31)
+    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:14917:31)
+    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:14917:31)
+    at Context.testEachLexerExample (/regexplexer.js:3753:37)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 3,
+      EOFTokenCount: 0,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      fatalExceptionCount: 1,
+    },
+  },
+]
