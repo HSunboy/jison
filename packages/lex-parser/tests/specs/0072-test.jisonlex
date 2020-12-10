@@ -1,5 +1,6 @@
 //
 // title: test braced action with surplus whitespace between rules
+// test_input: 'ababbaab'
 //
 // ...
 //
@@ -9,7 +10,7 @@
 return true;
 %}  //
   //
-"b" %{    return 1;
+"b" %{    return 11;
 %}  //
   //
 

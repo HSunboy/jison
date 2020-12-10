@@ -2,7 +2,7 @@
   rules: [
     [
       'foo',
-      'return 1',
+      'return 11',
     ],
   ],
   macros: {},
@@ -71,7 +71,7 @@
   },
   __original_input__: `%options s1="s1\\"val'ue" s2='s2\\\\x\\'val"ue' s3=\`s3\\\\x\\\\'val"ue\`
 %%
-"foo" return 1
+"foo" return 11
 
 `,
 }

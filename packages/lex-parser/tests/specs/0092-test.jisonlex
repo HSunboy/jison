@@ -1,5 +1,6 @@
 //
 // title: "erroneous lexer rule coding"
+// test_input: 'a "\u14a7" becky'
 //
 // ...
 //

@@ -2,6 +2,7 @@
 // title: test bnf lex grammar
 // specfile: lex/bnf.jisonlex
 // reffile: lex/bnf.lex.json
+// ...
 // 
 
 %%

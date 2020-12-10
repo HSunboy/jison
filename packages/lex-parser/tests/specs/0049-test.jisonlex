@@ -1,5 +1,6 @@
 //
 // title: test trailing code include
+// test_input: 'foofoofoo'
 //
 // ...
 //

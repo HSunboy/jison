@@ -69,7 +69,7 @@
 
 %%
 
-\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  return 'date';
+\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  	return 'date';
 ":"                         return ':';
 [\\s\\r\\n]					return 'WS';
 <<EOF>>                     return 'EOF';
@@ -99,7 +99,7 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
       token_id: 0,
       line: 32,
       recoverable: false,
-      state: 125,
+      state: 127,
       action: 2,
       new_state: 20,
       stack_pointer: 6,
@@ -133,11 +133,11 @@ Parse error on line 33:
 --------^
 Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"
 
-    at Object.parseError (/lex-parser-cjs.js:7210:15)
-    at Object.yyError (/lex-parser-cjs.js:7400:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:3371:14)
-    at Object.parse (/lex-parser-cjs.js:8464:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12522:25)
+    at Object.parseError (/lex-parser-cjs.js:7291:15)
+    at Object.yyError (/lex-parser-cjs.js:7481:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:3413:14)
+    at Object.parse (/lex-parser-cjs.js:8545:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
     at Context.testEachParserExample (/all-tests.js:483:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
@@ -210,7 +210,7 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
         line: 32,
         expected: null,
         recoverable: false,
-        state: 125,
+        state: 127,
         action: 2,
         new_state: 20,
         stack_pointer: 6,
@@ -231,7 +231,7 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
           recoverable: true,
           state: 13,
           action: 0,
-          new_state: 198,
+          new_state: 200,
           stack_pointer: 4,
         },
         {
@@ -256,7 +256,7 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
           token_id: 0,
           line: 32,
           recoverable: false,
-          state: 125,
+          state: 127,
           action: 2,
           new_state: 20,
           stack_pointer: 6,
@@ -271,7 +271,7 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
           line: 32,
           expected: null,
           recoverable: false,
-          state: 125,
+          state: 127,
           action: 2,
           new_state: 20,
           stack_pointer: 6,
@@ -292,7 +292,7 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
           recoverable: true,
           state: 13,
           action: 0,
-          new_state: 198,
+          new_state: 200,
           stack_pointer: 4,
           base_pointer: 7,
           info_stack_pointer: 10,
@@ -320,7 +320,7 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
           token_id: 0,
           line: 32,
           recoverable: false,
-          state: 125,
+          state: 127,
           action: 2,
           new_state: 20,
           stack_pointer: 6,
@@ -406,7 +406,7 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
 
 %%
 
-\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  return 'date';
+\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  	return 'date';
 ":"                         return ':';
 [\\s\\r\\n]					return 'WS';
 <<EOF>>                     return 'EOF';

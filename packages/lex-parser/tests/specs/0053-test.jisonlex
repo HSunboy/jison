@@ -1,5 +1,6 @@
 //
 // title: test options with values
+// test_input: 'foofoofoo'
 //
 // ...
 //
@@ -8,5 +9,5 @@
 
 %options ping=666 bla=blub bool1 s1="s1value" s2='s2value' s3=false s4="false" a-b-c="d"
 %%
-"foo" return 1;
+"foo" 				yytext += `:${yy.options.s2}:${yy.options.aBC}:${yy.options.bool1}:${yy.options.bla}:${yy.options.s1}`; return 11;
 

@@ -6,7 +6,7 @@
     ],
     [
       'b',
-      'return 1;\n  //',
+      'return 11;\n  //',
     ],
   ],
   macros: {},
@@ -71,7 +71,7 @@
   __original_input__: `%%
 "a" return a |b;
   //
-"b" return 1;
+"b" return 11;
   //
 `,
 }

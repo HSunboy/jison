@@ -6,5 +6,5 @@
 
 %%
 "["[^\]]"]" return true;
-"x" return 1;
+"x" return 11;
 

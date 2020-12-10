@@ -750,7 +750,7 @@
     },
   },
   {
-    id: 17,
+    id: 14,
     token: '","',
     yytext: ',',
     yylloc: {
@@ -840,7 +840,7 @@
     },
   },
   {
-    id: 16,
+    id: 17,
     token: '"$"',
     yytext: '<<EOF>>',
     yylloc: {

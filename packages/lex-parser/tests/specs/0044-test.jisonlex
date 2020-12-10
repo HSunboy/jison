@@ -5,5 +5,5 @@
 //
 
 %%
-"\u03c0" return 1;
+"\u03c0" return 11;
 

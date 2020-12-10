@@ -1,5 +1,6 @@
 //
 // title: "should support multiple '%code imports' chunks"
+// test_input: 'becky 7?'
 //
 // ...
 //

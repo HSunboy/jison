@@ -2,11 +2,11 @@
   rules: [
     [
       'π',
-      'return 1',
+      'return 11',
     ],
     [
       '-abc',
-      'return 2',
+      'return 12',
     ],
   ],
   macros: {},
@@ -69,8 +69,8 @@
     error_recovery_stack_size: 0,
   },
   __original_input__: `%%
-π return 1;
--abc return 2;
+π return 11;
+-abc return 12;
 
 `,
 }

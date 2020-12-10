@@ -30,7 +30,7 @@ done here.
       token_id: 0,
       line: 2,
       recoverable: false,
-      state: 79,
+      state: 81,
       action: 2,
       new_state: 61,
       stack_pointer: 6,
@@ -64,11 +64,11 @@ done here.
 4: "B"   -> 'B'
 5: 
 
-    at Object.parseError (/lex-parser-cjs.js:7210:15)
-    at Object.yyError (/lex-parser-cjs.js:7400:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:4280:14)
-    at Object.parse (/lex-parser-cjs.js:8667:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12522:25)
+    at Object.parseError (/lex-parser-cjs.js:7291:15)
+    at Object.yyError (/lex-parser-cjs.js:7481:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4325:14)
+    at Object.parse (/lex-parser-cjs.js:8748:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
     at Context.testEachParserExample (/all-tests.js:483:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
@@ -121,7 +121,7 @@ done here.
         line: 2,
         expected: null,
         recoverable: false,
-        state: 79,
+        state: 81,
         action: 2,
         new_state: 61,
         stack_pointer: 6,
@@ -150,7 +150,7 @@ done here.
           token_id: 0,
           line: 2,
           recoverable: false,
-          state: 79,
+          state: 81,
           action: 2,
           new_state: 61,
           stack_pointer: 6,
@@ -165,7 +165,7 @@ done here.
           line: 2,
           expected: null,
           recoverable: false,
-          state: 79,
+          state: 81,
           action: 2,
           new_state: 61,
           stack_pointer: 6,
@@ -194,7 +194,7 @@ done here.
           token_id: 0,
           line: 2,
           recoverable: false,
-          state: 79,
+          state: 81,
           action: 2,
           new_state: 61,
           stack_pointer: 6,

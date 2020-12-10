@@ -2,6 +2,7 @@
 // title: test ANSI C lexical grammar
 // specfile: lex/ansic.jisonlex
 // reffile: .
+// ...
 //
 
 

@@ -21,7 +21,7 @@
   err: {
     hash: {
       errStr: `
-The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpected token ILLEGAL
+The '%{...%}' lexer setup action code section does not compile: Error: Line 3: Unexpected token ILLEGAL
     
   Erroneous area:
 3: %{
@@ -40,13 +40,13 @@ The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpect
       token_id: 0,
       line: 4,
       recoverable: false,
-      state: 115,
+      state: 117,
       action: 2,
       new_state: 15,
       stack_pointer: 6,
     },
     message: `
-The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpected token ILLEGAL
+The '%{...%}' lexer setup action code section does not compile: Error: Line 3: Unexpected token ILLEGAL
     
   Erroneous area:
 3: %{
@@ -60,7 +60,7 @@ The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpect
 `,
     name: 'JisonParserError',
     stack: `JisonParserError: 
-The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpected token ILLEGAL
+The '%{...%}' lexer setup action code section does not compile: Error: Line 3: Unexpected token ILLEGAL
     
   Erroneous area:
 3: %{
@@ -72,11 +72,11 @@ The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpect
 6: 
 7: %%
 
-    at Object.parseError (/lex-parser-cjs.js:7210:15)
-    at Object.yyError (/lex-parser-cjs.js:7400:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:3267:22)
-    at Object.parse (/lex-parser-cjs.js:8667:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12522:25)
+    at Object.parseError (/lex-parser-cjs.js:7291:15)
+    at Object.yyError (/lex-parser-cjs.js:7481:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:3309:22)
+    at Object.parse (/lex-parser-cjs.js:8748:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
     at Context.testEachParserExample (/all-tests.js:483:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
@@ -120,7 +120,7 @@ The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpect
         line: 4,
         expected: null,
         recoverable: false,
-        state: 115,
+        state: 117,
         action: 2,
         new_state: 15,
         stack_pointer: 6,
@@ -129,7 +129,7 @@ The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpect
       error_infos_stack: [
         {
           errStr: `
-The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpected token ILLEGAL
+The '%{...%}' lexer setup action code section does not compile: Error: Line 3: Unexpected token ILLEGAL
     
   Erroneous area:
 3: %{
@@ -148,7 +148,7 @@ The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpect
           token_id: 0,
           line: 4,
           recoverable: false,
-          state: 115,
+          state: 117,
           action: 2,
           new_state: 15,
           stack_pointer: 6,
@@ -163,7 +163,7 @@ The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpect
           line: 4,
           expected: null,
           recoverable: false,
-          state: 115,
+          state: 117,
           action: 2,
           new_state: 15,
           stack_pointer: 6,
@@ -172,7 +172,7 @@ The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpect
       error_recovery_stack: [
         {
           errStr: `
-The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpected token ILLEGAL
+The '%{...%}' lexer setup action code section does not compile: Error: Line 3: Unexpected token ILLEGAL
     
   Erroneous area:
 3: %{
@@ -191,7 +191,7 @@ The '%{...%}' lexer setup action code section does not compile: Line 3: Unexpect
           token_id: 0,
           line: 4,
           recoverable: false,
-          state: 115,
+          state: 117,
           action: 2,
           new_state: 15,
           stack_pointer: 6,

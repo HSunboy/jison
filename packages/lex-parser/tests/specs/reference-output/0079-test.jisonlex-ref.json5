@@ -23,9 +23,9 @@ write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
       token_id: 0,
       line: 1,
       recoverable: false,
-      state: 104,
+      state: 106,
       action: 2,
-      new_state: 105,
+      new_state: 107,
       stack_pointer: 8,
     },
     message: `
@@ -49,11 +49,11 @@ write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
 2: "["[]"]" -> 'BAD_REGEX' // empty regex set...
 ^......^
 
-    at Object.parseError (/lex-parser-cjs.js:7210:15)
-    at Object.yyError (/lex-parser-cjs.js:7400:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:4899:14)
-    at Object.parse (/lex-parser-cjs.js:8667:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12522:25)
+    at Object.parseError (/lex-parser-cjs.js:7291:15)
+    at Object.yyError (/lex-parser-cjs.js:7481:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4966:14)
+    at Object.parse (/lex-parser-cjs.js:8748:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
     at Context.testEachParserExample (/all-tests.js:483:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
@@ -99,9 +99,9 @@ write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
         line: 1,
         expected: null,
         recoverable: false,
-        state: 104,
+        state: 106,
         action: 2,
-        new_state: 105,
+        new_state: 107,
         stack_pointer: 8,
       },
       reentrant_call_depth: 1,
@@ -124,9 +124,9 @@ write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
           token_id: 0,
           line: 1,
           recoverable: false,
-          state: 104,
+          state: 106,
           action: 2,
-          new_state: 105,
+          new_state: 107,
           stack_pointer: 8,
         },
         {
@@ -139,9 +139,9 @@ write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
           line: 1,
           expected: null,
           recoverable: false,
-          state: 104,
+          state: 106,
           action: 2,
-          new_state: 105,
+          new_state: 107,
           stack_pointer: 8,
         },
       ],
@@ -164,9 +164,9 @@ write '[^]' or '[sS]', which are standard idioms for this in JavaScript.
           token_id: 0,
           line: 1,
           recoverable: false,
-          state: 104,
+          state: 106,
           action: 2,
-          new_state: 105,
+          new_state: 107,
           stack_pointer: 8,
           base_pointer: 8,
           info_stack_pointer: 8,

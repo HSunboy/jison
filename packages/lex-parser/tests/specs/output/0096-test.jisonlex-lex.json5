@@ -60,44 +60,915 @@
     },
   },
   {
-    id: -1,
-    token: null,
-    fail: 1,
-    err: {
-      message: "Cannot read property 'yylloc' of undefined",
-      name: 'TypeError',
-      stack: `TypeError: Cannot read property 'yylloc' of undefined
-    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:11338:22)
-    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10412:38)
-    at Object.lexer_next [as next] (/lex-parser-cjs.js:10537:28)
-    at Object.lexer_lex [as lex] (/lex-parser-cjs.js:10659:18)
-    at Context.testEachParserExample (/all-tests.js:310:37)
-    at callFn (/runnable.js:364:21)
-    at Test.Runnable.run (/runnable.js:352:5)
-    at Runner.runTest (/runner.js:677:10)
-    at /runner.js:801:12
-    at next (/runner.js:594:14)
-    at /runner.js:604:7
-    at next (/runner.js:486:14)
-    at cbHookRun (/runner.js:551:7)
-    at done (/runnable.js:308:5)
-    at callFn (/runnable.js:387:7)
-    at Hook.Runnable.run (/runnable.js:352:5)
-    at next (/runner.js:510:10)
-    at Immediate._onImmediate (/runner.js:572:5)
-    at processImmediate (/timers.js:456:21)`,
+    id: 3,
+    token: '"<"',
+    yytext: '<',
+    yylloc: {
+      first_line: 6,
+      first_column: 0,
+      last_line: 6,
+      last_column: 1,
+      range: [
+        85,
+        86,
+      ],
+    },
+  },
+  {
+    id: 54,
+    token: '"OPTION_VALUE"',
+    yytext: 'ALT',
+    yylloc: {
+      first_line: 6,
+      first_column: 1,
+      last_line: 6,
+      last_column: 4,
+      range: [
+        86,
+        89,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 6,
+      first_column: 4,
+      last_line: 6,
+      last_column: 4,
+      range: [
+        89,
+        89,
+      ],
+    },
+  },
+  {
+    id: 6,
+    token: '">"',
+    yytext: '>',
+    yylloc: {
+      first_line: 6,
+      first_column: 4,
+      last_line: 6,
+      last_column: 5,
+      range: [
+        89,
+        90,
+      ],
+    },
+  },
+  {
+    id: 52,
+    token: '"CHARACTER_LIT"',
+    yytext: '<',
+    yylloc: {
+      first_line: 6,
+      first_column: 5,
+      last_line: 6,
+      last_column: 6,
+      range: [
+        90,
+        91,
+      ],
+    },
+  },
+  {
+    id: 52,
+    token: '"CHARACTER_LIT"',
+    yytext: 'x',
+    yylloc: {
+      first_line: 6,
+      first_column: 6,
+      last_line: 6,
+      last_column: 7,
+      range: [
+        91,
+        92,
+      ],
+    },
+  },
+  {
+    id: 6,
+    token: '">"',
+    yytext: '>',
+    yylloc: {
+      first_line: 6,
+      first_column: 7,
+      last_line: 6,
+      last_column: 8,
+      range: [
+        92,
+        93,
+      ],
+    },
+  },
+  {
+    id: 26,
+    token: '"ACTION_START"',
+    yytext: ' \t\t\t\t\t\t',
+    yylloc: {
+      first_line: 6,
+      first_column: 8,
+      last_line: 6,
+      last_column: 15,
+      range: [
+        93,
+        100,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: 'return ',
+    yylloc: {
+      first_line: 6,
+      first_column: 15,
+      last_line: 6,
+      last_column: 22,
+      range: [
+        100,
+        107,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: "'PATHOLOGICAL_CASE_HIT'",
+    yylloc: {
+      first_line: 6,
+      first_column: 22,
+      last_line: 6,
+      last_column: 45,
+      range: [
+        107,
+        130,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: ';',
+    yylloc: {
+      first_line: 6,
+      first_column: 45,
+      last_line: 6,
+      last_column: 46,
+      range: [
+        130,
+        131,
+      ],
+    },
+  },
+  {
+    id: 24,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 6,
+      first_column: 46,
+      last_line: 6,
+      last_column: 46,
+      range: [
+        131,
+        131,
+      ],
+    },
+  },
+  {
+    id: 3,
+    token: '"<"',
+    yytext: '<',
+    yylloc: {
+      first_line: 8,
+      first_column: 0,
+      last_line: 8,
+      last_column: 1,
+      range: [
+        133,
+        134,
+      ],
+    },
+  },
+  {
+    id: 54,
+    token: '"OPTION_VALUE"',
+    yytext: 'ALT',
+    yylloc: {
+      first_line: 8,
+      first_column: 1,
+      last_line: 8,
+      last_column: 4,
+      range: [
+        134,
+        137,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 8,
+      first_column: 4,
+      last_line: 8,
+      last_column: 4,
+      range: [
+        137,
+        137,
+      ],
+    },
+  },
+  {
+    id: 6,
+    token: '">"',
+    yytext: '>',
+    yylloc: {
+      first_line: 8,
+      first_column: 4,
+      last_line: 8,
+      last_column: 5,
+      range: [
+        137,
+        138,
+      ],
+    },
+  },
+  {
+    id: 52,
+    token: '"CHARACTER_LIT"',
+    yytext: 'a',
+    yylloc: {
+      first_line: 8,
+      first_column: 5,
+      last_line: 8,
+      last_column: 6,
+      range: [
+        138,
+        139,
+      ],
+    },
+  },
+  {
+    id: 26,
+    token: '"ACTION_START"',
+    yytext: ' \t\t\t\t\t\t\t',
+    yylloc: {
+      first_line: 8,
+      first_column: 6,
+      last_line: 8,
+      last_column: 14,
+      range: [
+        139,
+        147,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: 'popState();',
+    yylloc: {
+      first_line: 8,
+      first_column: 14,
+      last_line: 8,
+      last_column: 25,
+      range: [
+        147,
+        158,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: '\n\t\t\t\t\t\t\t\t',
+    yylloc: {
+      first_line: 8,
+      first_column: 25,
+      last_line: 9,
+      last_column: 8,
+      range: [
+        158,
+        167,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: 'return ',
+    yylloc: {
+      first_line: 9,
+      first_column: 8,
+      last_line: 9,
+      last_column: 15,
+      range: [
+        167,
+        174,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: "'SWITCHING_TO_INITIAL_CONTEXT'",
+    yylloc: {
+      first_line: 9,
+      first_column: 15,
+      last_line: 9,
+      last_column: 45,
+      range: [
+        174,
+        204,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: ';',
+    yylloc: {
+      first_line: 9,
+      first_column: 45,
+      last_line: 9,
+      last_column: 46,
+      range: [
+        204,
+        205,
+      ],
+    },
+  },
+  {
+    id: 24,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 9,
+      first_column: 46,
+      last_line: 9,
+      last_column: 46,
+      range: [
+        205,
+        205,
+      ],
+    },
+  },
+  {
+    id: 3,
+    token: '"<"',
+    yytext: '<',
+    yylloc: {
+      first_line: 11,
+      first_column: 0,
+      last_line: 11,
+      last_column: 1,
+      range: [
+        207,
+        208,
+      ],
+    },
+  },
+  {
+    id: 54,
+    token: '"OPTION_VALUE"',
+    yytext: 'INITIAL',
+    yylloc: {
+      first_line: 11,
+      first_column: 1,
+      last_line: 11,
+      last_column: 8,
+      range: [
+        208,
+        215,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 11,
+      first_column: 8,
+      last_line: 11,
+      last_column: 8,
+      range: [
+        215,
+        215,
+      ],
+    },
+  },
+  {
+    id: 6,
+    token: '">"',
+    yytext: '>',
+    yylloc: {
+      first_line: 11,
+      first_column: 8,
+      last_line: 11,
+      last_column: 9,
+      range: [
+        215,
+        216,
+      ],
+    },
+  },
+  {
+    id: 52,
+    token: '"CHARACTER_LIT"',
+    yytext: 'a',
+    yylloc: {
+      first_line: 11,
+      first_column: 9,
+      last_line: 11,
+      last_column: 10,
+      range: [
+        216,
+        217,
+      ],
+    },
+  },
+  {
+    id: 26,
+    token: '"ACTION_START"',
+    yytext: '\t\t\t\t\t\t',
+    yylloc: {
+      first_line: 11,
+      first_column: 10,
+      last_line: 11,
+      last_column: 16,
+      range: [
+        217,
+        223,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: 'pushState(',
+    yylloc: {
+      first_line: 11,
+      first_column: 16,
+      last_line: 11,
+      last_column: 26,
+      range: [
+        223,
+        233,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: "'ALT'",
+    yylloc: {
+      first_line: 11,
+      first_column: 26,
+      last_line: 11,
+      last_column: 31,
+      range: [
+        233,
+        238,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: ');',
+    yylloc: {
+      first_line: 11,
+      first_column: 31,
+      last_line: 11,
+      last_column: 33,
+      range: [
+        238,
+        240,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: '\n\t\t\t\t\t\t\t\t',
+    yylloc: {
+      first_line: 11,
+      first_column: 33,
+      last_line: 12,
+      last_column: 8,
+      range: [
+        240,
+        249,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: 'return ',
+    yylloc: {
+      first_line: 12,
+      first_column: 8,
+      last_line: 12,
+      last_column: 15,
+      range: [
+        249,
+        256,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: "'SWITCHING_TO_ALT_CONTEXT'",
+    yylloc: {
+      first_line: 12,
+      first_column: 15,
+      last_line: 12,
+      last_column: 41,
+      range: [
+        256,
+        282,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: ';',
+    yylloc: {
+      first_line: 12,
+      first_column: 41,
+      last_line: 12,
+      last_column: 42,
+      range: [
+        282,
+        283,
+      ],
+    },
+  },
+  {
+    id: 24,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 12,
+      first_column: 42,
+      last_line: 12,
+      last_column: 42,
+      range: [
+        283,
+        283,
+      ],
+    },
+  },
+  {
+    id: 43,
+    token: '"REGEX_SPECIAL_CHAR"',
+    yytext: '\\s',
+    yylloc: {
+      first_line: 14,
+      first_column: 0,
+      last_line: 14,
+      last_column: 2,
+      range: [
+        285,
+        287,
+      ],
+    },
+  },
+  {
+    id: 26,
+    token: '"ACTION_START"',
+    yytext: ' \t\t\t\t\t\t\t\t',
+    yylloc: {
+      first_line: 14,
+      first_column: 2,
+      last_line: 14,
+      last_column: 11,
+      range: [
+        287,
+        296,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: 'return ',
+    yylloc: {
+      first_line: 14,
+      first_column: 11,
+      last_line: 14,
+      last_column: 18,
+      range: [
+        296,
+        303,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: "'SPACE'",
+    yylloc: {
+      first_line: 14,
+      first_column: 18,
+      last_line: 14,
+      last_column: 25,
+      range: [
+        303,
+        310,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: ';',
+    yylloc: {
+      first_line: 14,
+      first_column: 25,
+      last_line: 14,
+      last_column: 26,
+      range: [
+        310,
+        311,
+      ],
+    },
+  },
+  {
+    id: 24,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 14,
+      first_column: 26,
+      last_line: 14,
+      last_column: 26,
+      range: [
+        311,
+        311,
+      ],
+    },
+  },
+  {
+    id: 15,
+    token: '"."',
+    yytext: '.',
+    yylloc: {
+      first_line: 15,
+      first_column: 0,
+      last_line: 15,
+      last_column: 1,
+      range: [
+        312,
+        313,
+      ],
+    },
+  },
+  {
+    id: 26,
+    token: '"ACTION_START"',
+    yytext: ' \t\t\t\t\t\t\t\t',
+    yylloc: {
+      first_line: 15,
+      first_column: 1,
+      last_line: 15,
+      last_column: 10,
+      range: [
+        313,
+        322,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: 'return ',
+    yylloc: {
+      first_line: 15,
+      first_column: 10,
+      last_line: 15,
+      last_column: 17,
+      range: [
+        322,
+        329,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: "'CHAR'",
+    yylloc: {
+      first_line: 15,
+      first_column: 17,
+      last_line: 15,
+      last_column: 23,
+      range: [
+        329,
+        335,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: ';',
+    yylloc: {
+      first_line: 15,
+      first_column: 23,
+      last_line: 15,
+      last_column: 24,
+      range: [
+        335,
+        336,
+      ],
+    },
+  },
+  {
+    id: 24,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 15,
+      first_column: 24,
+      last_line: 15,
+      last_column: 24,
+      range: [
+        336,
+        336,
+      ],
+    },
+  },
+  {
+    id: 17,
+    token: '"$"',
+    yytext: '<<EOF>>',
+    yylloc: {
+      first_line: 17,
+      first_column: 0,
+      last_line: 17,
+      last_column: 7,
+      range: [
+        338,
+        345,
+      ],
+    },
+  },
+  {
+    id: 26,
+    token: '"ACTION_START"',
+    yytext: '                         ',
+    yylloc: {
+      first_line: 17,
+      first_column: 7,
+      last_line: 17,
+      last_column: 32,
+      range: [
+        345,
+        370,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: 'return ',
+    yylloc: {
+      first_line: 17,
+      first_column: 32,
+      last_line: 17,
+      last_column: 39,
+      range: [
+        370,
+        377,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: "'EOF'",
+    yylloc: {
+      first_line: 17,
+      first_column: 39,
+      last_line: 17,
+      last_column: 44,
+      range: [
+        377,
+        382,
+      ],
+    },
+  },
+  {
+    id: 36,
+    token: '"ACTION_BODY"',
+    yytext: ';',
+    yylloc: {
+      first_line: 17,
+      first_column: 44,
+      last_line: 17,
+      last_column: 45,
+      range: [
+        382,
+        383,
+      ],
+    },
+  },
+  {
+    id: 24,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 17,
+      first_column: 45,
+      last_line: 17,
+      last_column: 45,
+      range: [
+        383,
+        383,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 17,
+      first_column: 45,
+      last_line: 17,
+      last_column: 45,
+      range: [
+        383,
+        383,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 17,
+      first_column: 45,
+      last_line: 17,
+      last_column: 45,
+      range: [
+        383,
+        383,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 17,
+      first_column: 45,
+      last_line: 17,
+      last_column: 45,
+      range: [
+        383,
+        383,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 17,
+      first_column: 45,
+      last_line: 17,
+      last_column: 45,
+      range: [
+        383,
+        383,
+      ],
     },
   },
   {
     id: -2,
     token: null,
     summary: {
-      totalTokenCount: 5,
-      EOFTokenCount: 0,
+      totalTokenCount: 64,
+      EOFTokenCount: 4,
       ERRORTokenCount: 0,
       ParseErrorCallCount: 0,
       DetectedParseErrorCallCount: 0,
-      fatalExceptionCount: 1,
+      fatalExceptionCount: 0,
     },
   },
 ]

@@ -1,5 +1,6 @@
 //
 // title: "lexer regex/rule [...] set may legally include whitespace"
+// test_input: 'a[abc\u1234]b'
 //
 // ...
 //

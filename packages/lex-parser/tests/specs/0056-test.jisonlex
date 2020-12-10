@@ -1,9 +1,10 @@
 //
 // title: test unquoted string rules
+// test_input: 'fooooooffofo'
 // 
 // ...
 // 
 
 %%
-foo* return 1
+foo* return 11
 

@@ -1,5 +1,6 @@
 //
 // title: test no brace action with surplus whitespace between rules
+// test_input: 'abaabb'
 //
 // ...
 //

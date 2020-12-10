@@ -2,7 +2,7 @@
   rules: [
     [
       '{D}ohhai',
-      'print(9)',
+      "return '{D}ohhai'",
     ],
     [
       '\\{',
@@ -76,7 +76,7 @@ ID [a-zA-Z_][a-zA-Z0-9_]+
 
 %%
 
-{D}"ohhai" {print(9);}
+{D}"ohhai" {return '{D}ohhai';}
 "{" return '{';
 
 `,

@@ -71,7 +71,7 @@
 
 %%
 
-\d\d\d\d"-"\d\d"-"\d\d  return 'date';
+\d\d\d\d"-"\d\d"-"\d\d  	return 'date';
 ":"                         return ':';
 [\s\r\n]					return 'WS';
 <<EOF>>                     return 'EOF';

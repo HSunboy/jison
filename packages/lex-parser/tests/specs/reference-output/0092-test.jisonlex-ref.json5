@@ -1,259 +1,80 @@
 {
-  id: -1,
-  token: null,
-  fail: 1,
-  spec: `digit [0-9]
-id [a-zA-Z_\\$][a-zA-Z0-9_\\$]*
-esc \\\\
-
-%%
-
-
-{id}                            return 'IDENT'
-{digit}                         return 'NUMBER'
-// next line should barf:
-"\\"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*\\"", "yytext = yytext.substr(1,yyleng-2); return 'STRING';"
-
-
-<<EOF>>                         return 'EOF';`,
-  err: {
-    hash: {
-      errStr: `
-Lexer rule regex action code declaration error?
-    
-  Erroneous code:
-11: "\\"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*\\"", "yytext = yytext.substr(1,yyleng-2); return 'STRING';"
-^^.................................................................^
-12: 
-13: 
-    
-  Technical error report:
-Parse error on line 11:
-"\\"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*\\"", "yytext ...
----------------------------------------------------------------^
-Expecting "|", "(", ")", "+", "*", "?", "/", ".", "^", "$", "MACRO_END", "ACTION_START_AT_SOL", "ACTION_START", "ARROW_ACTION_START", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "RANGE_REGEX", "STRING_LIT", "CHARACTER_LIT", "range_regex", got unexpected ","
-`,
-      exception: null,
-      text: ',',
-      value: ',',
-      token: '"$accept"',
-      token_id: 0,
-      line: 10,
-      recoverable: false,
-      state: 143,
-      action: 2,
-      new_state: 55,
-      stack_pointer: 7,
-    },
-    message: `
-Lexer rule regex action code declaration error?
-    
-  Erroneous code:
-11: "\\"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*\\"", "yytext = yytext.substr(1,yyleng-2); return 'STRING';"
-^^.................................................................^
-12: 
-13: 
-    
-  Technical error report:
-Parse error on line 11:
-"\\"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*\\"", "yytext ...
----------------------------------------------------------------^
-Expecting "|", "(", ")", "+", "*", "?", "/", ".", "^", "$", "MACRO_END", "ACTION_START_AT_SOL", "ACTION_START", "ARROW_ACTION_START", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "RANGE_REGEX", "STRING_LIT", "CHARACTER_LIT", "range_regex", got unexpected ","
-`,
-    name: 'JisonParserError',
-    stack: `JisonParserError: 
-Lexer rule regex action code declaration error?
-    
-  Erroneous code:
-11: "\\"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*\\"", "yytext = yytext.substr(1,yyleng-2); return 'STRING';"
-^^.................................................................^
-12: 
-13: 
-    
-  Technical error report:
-Parse error on line 11:
-"\\"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*\\"", "yytext ...
----------------------------------------------------------------^
-Expecting "|", "(", ")", "+", "*", "?", "/", ".", "^", "$", "MACRO_END", "ACTION_START_AT_SOL", "ACTION_START", "ARROW_ACTION_START", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "RANGE_REGEX", "STRING_LIT", "CHARACTER_LIT", "range_regex", got unexpected ","
-
-    at Object.parseError (/lex-parser-cjs.js:7210:15)
-    at Object.yyError (/lex-parser-cjs.js:7400:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:4130:14)
-    at Object.parse (/lex-parser-cjs.js:8464:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12522:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
-    at callFn (/runnable.js:364:21)
-    at Test.Runnable.run (/runnable.js:352:5)
-    at Runner.runTest (/runner.js:677:10)
-    at /runner.js:801:12
-    at next (/runner.js:594:14)
-    at /runner.js:604:7
-    at next (/runner.js:486:14)
-    at cbHookRun (/runner.js:551:7)
-    at done (/runnable.js:308:5)
-    at callFn (/runnable.js:387:7)
-    at Hook.Runnable.run (/runnable.js:352:5)
-    at next (/runner.js:510:10)
-    at Immediate._onImmediate (/runner.js:572:5)
-    at processImmediate (/timers.js:456:21)`,
+  rules: [
+    [
+      '{id}',
+      "return 'IDENT'",
+    ],
+    [
+      '{digit}',
+      "return 'NUMBER'",
+    ],
+    [
+      `"\\(\\?:\\{esc\\}\\["bfnrt\\/\\{esc\\}\\]\\|\\{esc\\}u\\[a-fA-F0-9\\]\\{4\\}\\|\\[\\^"\\{esc\\}\\]\\)\\*",`,
+      `"yytext = yytext.substr(1,yyleng-2); return 'STRING';"`,
+    ],
+    [
+      '$',
+      "return 'EOF'",
+    ],
+  ],
+  macros: {
+    digit: '[0-9]',
+    id: '[a-zA-Z_\\$][a-zA-Z0-9_\\$]*',
+    esc: '\\\\',
   },
+  startConditions: {},
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
   __extra_diag_info__: {
     pre_parse_callback_callCount: 1,
     post_parse_callback_callCount: 1,
     post_parse_diaginfo: {
       sharedState_yy: {
-        actionInclude: [],
-        options: {},
         startConditions: {},
         __options_flags__: 0,
-        __options_category_description__: 'the lexer rules definition section',
+        __options_category_description__: '???',
         __inside_scoped_ruleset__: false,
-        __context_cfg_stack__: [
-          {
-            flags: 0,
-            descr: '???',
-            scoped: false,
-          },
-        ],
+        __context_cfg_stack__: [],
         depth: 0,
         include_command_allowed: false,
       },
       hash: {
         errStr: null,
         exception: null,
-        text: ',',
-        value: ',',
+        text: '',
+        value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 10,
+        line: 13,
         expected: null,
         recoverable: false,
-        state: 143,
+        state: 24,
         action: 2,
-        new_state: 55,
-        stack_pointer: 7,
+        new_state: 1,
+        stack_pointer: 5,
       },
       reentrant_call_depth: 1,
       error_infos_stack: [
         {
-          errStr: `Parse error on line 11:
-"\\"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*\\"", "yytext ...
----------------------------------------------------------------^
-Expecting "|", "(", ")", "+", "*", "?", "/", ".", "^", "$", "MACRO_END", "ACTION_START_AT_SOL", "ACTION_START", "ARROW_ACTION_START", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "RANGE_REGEX", "STRING_LIT", "CHARACTER_LIT", "range_regex", got unexpected ","`,
-          exception: null,
-          text: ',',
-          value: ',',
-          token: '","',
-          token_id: 17,
-          line: 10,
-          recoverable: true,
-          state: 33,
-          action: 0,
-          new_state: 198,
-          stack_pointer: 6,
-        },
-        {
-          errStr: `
-Lexer rule regex action code declaration error?
-    
-  Erroneous code:
-11: "\\"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*\\"", "yytext = yytext.substr(1,yyleng-2); return 'STRING';"
-^^.................................................................^
-12: 
-13: 
-    
-  Technical error report:
-Parse error on line 11:
-"\\"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*\\"", "yytext ...
----------------------------------------------------------------^
-Expecting "|", "(", ")", "+", "*", "?", "/", ".", "^", "$", "MACRO_END", "ACTION_START_AT_SOL", "ACTION_START", "ARROW_ACTION_START", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "RANGE_REGEX", "STRING_LIT", "CHARACTER_LIT", "range_regex", got unexpected ","
-`,
-          exception: null,
-          text: ',',
-          value: ',',
-          token: '"$accept"',
-          token_id: 0,
-          line: 10,
-          recoverable: false,
-          state: 143,
-          action: 2,
-          new_state: 55,
-          stack_pointer: 7,
-        },
-        {
           errStr: null,
           exception: null,
-          text: ',',
-          value: ',',
+          text: '',
+          value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 10,
+          line: 13,
           expected: null,
           recoverable: false,
-          state: 143,
+          state: 24,
           action: 2,
-          new_state: 55,
-          stack_pointer: 7,
+          new_state: 1,
+          stack_pointer: 5,
         },
       ],
-      error_recovery_stack: [
-        {
-          errStr: `Parse error on line 11:
-"\\"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*\\"", "yytext ...
----------------------------------------------------------------^
-Expecting "|", "(", ")", "+", "*", "?", "/", ".", "^", "$", "MACRO_END", "ACTION_START_AT_SOL", "ACTION_START", "ARROW_ACTION_START", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "RANGE_REGEX", "STRING_LIT", "CHARACTER_LIT", "range_regex", got unexpected ","`,
-          exception: null,
-          text: ',',
-          value: ',',
-          token: '","',
-          token_id: 17,
-          line: 10,
-          recoverable: true,
-          state: 33,
-          action: 0,
-          new_state: 198,
-          stack_pointer: 6,
-          base_pointer: 9,
-          info_stack_pointer: 12,
-          root_failure_pointer: 6,
-        },
-        {
-          errStr: `
-Lexer rule regex action code declaration error?
-    
-  Erroneous code:
-11: "\\"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*\\"", "yytext = yytext.substr(1,yyleng-2); return 'STRING';"
-^^.................................................................^
-12: 
-13: 
-    
-  Technical error report:
-Parse error on line 11:
-"\\"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*\\"", "yytext ...
----------------------------------------------------------------^
-Expecting "|", "(", ")", "+", "*", "?", "/", ".", "^", "$", "MACRO_END", "ACTION_START_AT_SOL", "ACTION_START", "ARROW_ACTION_START", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "RANGE_REGEX", "STRING_LIT", "CHARACTER_LIT", "range_regex", got unexpected ","
-`,
-          exception: null,
-          text: ',',
-          value: ',',
-          token: '"$accept"',
-          token_id: 0,
-          line: 10,
-          recoverable: false,
-          state: 143,
-          action: 2,
-          new_state: 55,
-          stack_pointer: 7,
-          base_pointer: 9,
-          info_stack_pointer: 9,
-          root_failure_pointer: 7,
-          yyError: true,
-          errorRuleDepth: -1,
-          recovering: 3,
-        },
-      ],
-      error_infos_stack_size: 3,
-      error_recovery_stack_size: 2,
+      error_recovery_stack: [],
+      error_infos_stack_size: 1,
+      error_recovery_stack_size: 0,
     },
     reentrant_call_depth: 0,
     error_infos_stack_size: 0,

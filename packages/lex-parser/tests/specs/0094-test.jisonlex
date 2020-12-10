@@ -1,5 +1,6 @@
 //
 // title: "erroneous lexer rule coding: corrected"
+// test_input: 'a "\a/b\c/d\u14a7"becky boo"\\"37'
 //
 // ...
 //

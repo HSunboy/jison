@@ -1,6 +1,7 @@
 
 //
 // title: test lex grammar with macros
+// test_input: "{9ohhai}{D}ohhai"
 //
 // ...
 //
@@ -10,6 +11,6 @@ ID [a-zA-Z_][a-zA-Z0-9_]+
 
 %%
 
-{D}"ohhai" {print(9);}
+{D}"ohhai" {return '{D}ohhai';}
 "{" return '{';
 

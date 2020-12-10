@@ -1,5 +1,6 @@
 //
 // title: "regex pipe symbol in JS action code: a | b"
+// test_input: 'axbxabxxaabb'
 // 
 // ...
 // 
@@ -13,7 +14,7 @@
 
 %%
 a |
-b return 2;
+b return 12;
   //
-"x" return 1;
+"x" return 11;
   //

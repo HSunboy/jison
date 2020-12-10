@@ -1,5 +1,6 @@
 //
 // title: "%code chunks with other labels than init/required/imports should be appended at the end"
+// test_input: 'becky 7!'
 //
 // ...
 //

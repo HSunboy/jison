@@ -1,5 +1,6 @@
 //
 // title: "it's an error to indent rules inside scopes"
+// test_run_lexer_output: false
 //
 // ...
 //

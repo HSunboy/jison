@@ -1,5 +1,6 @@
 //
 // title: "%option do-not-test-compile"
+// test_run_generated_lexer: false
 //
 // ...
 //

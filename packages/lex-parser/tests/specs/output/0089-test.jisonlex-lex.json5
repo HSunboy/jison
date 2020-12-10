@@ -2003,7 +2003,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
 
 %%
 
-\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  return 'date';
+\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  	return 'date';
 ":"                         return ':';
 [\\s\\r\\n]					return 'WS';
 <<EOF>>                     return 'EOF';
@@ -2012,7 +2012,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
 `,
         matches: false,
         yytext: '',
-        offset: 1578,
+        offset: 1579,
         base_position: 0,
         yyleng: 0,
         yylineno: 73,
@@ -2022,8 +2022,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
           last_line: 74,
           last_column: 0,
           range: [
-            1578,
-            1578,
+            1579,
+            1579,
           ],
         },
         CRLF_Re: {
@@ -2044,7 +2044,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
       },
       yyErrorInvoked: true,
       errorDiag: {
-        inputPos: 870,
+        inputPos: 871,
         yytext: '!',
         yyleng: 1,
         matches: [
@@ -2364,7 +2364,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
 
 %%
 
-\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  return 'date';
+\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  	return 'date';
 ":"                         return ':';
 [\\s\\r\\n]					return 'WS';
 <<EOF>>                     return 'EOF';
@@ -2373,7 +2373,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
 `,
         matches: false,
         yytext: '',
-        offset: 1578,
+        offset: 1579,
         base_position: 0,
         yyleng: 0,
         yylineno: 73,
@@ -2383,8 +2383,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
           last_line: 74,
           last_column: 0,
           range: [
-            1578,
-            1578,
+            1579,
+            1579,
           ],
         },
         CRLF_Re: {
@@ -2405,7 +2405,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
       },
       yyErrorInvoked: true,
       errorDiag: {
-        inputPos: 805,
+        inputPos: 806,
         yytext: ':',
         yyleng: 1,
         matches: [
@@ -2680,7 +2680,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
 
 %%
 
-\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  return 'date';
+\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  	return 'date';
 ":"                         return ':';
 [\\s\\r\\n]					return 'WS';
 <<EOF>>                     return 'EOF';
@@ -2689,7 +2689,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
 `,
         matches: false,
         yytext: '',
-        offset: 1578,
+        offset: 1579,
         base_position: 0,
         yyleng: 0,
         yylineno: 73,
@@ -2699,8 +2699,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
           last_line: 74,
           last_column: 0,
           range: [
-            1578,
-            1578,
+            1579,
+            1579,
           ],
         },
         CRLF_Re: {
@@ -2721,7 +2721,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
       },
       yyErrorInvoked: true,
       errorDiag: {
-        inputPos: 767,
+        inputPos: 768,
         yytext: '$',
         yyleng: 1,
         matches: [
@@ -2876,7 +2876,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
 
 %%
 
-\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  return 'date';
+\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  	return 'date';
 ":"                         return ':';
 [\\s\\r\\n]					return 'WS';
 <<EOF>>                     return 'EOF';
@@ -2885,7 +2885,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
 `,
         matches: false,
         yytext: '',
-        offset: 1578,
+        offset: 1579,
         base_position: 0,
         yyleng: 0,
         yylineno: 73,
@@ -2895,8 +2895,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
           last_line: 74,
           last_column: 0,
           range: [
-            1578,
-            1578,
+            1579,
+            1579,
           ],
         },
         CRLF_Re: {
@@ -2917,7 +2917,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
       },
       yyErrorInvoked: true,
       errorDiag: {
-        inputPos: 765,
+        inputPos: 766,
         yytext: '$',
         yyleng: 1,
         matches: [
@@ -3147,7 +3147,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
 
 %%
 
-\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  return 'date';
+\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  	return 'date';
 ":"                         return ':';
 [\\s\\r\\n]					return 'WS';
 <<EOF>>                     return 'EOF';
@@ -3156,7 +3156,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
 `,
         matches: false,
         yytext: '',
-        offset: 1578,
+        offset: 1579,
         base_position: 0,
         yyleng: 0,
         yylineno: 73,
@@ -3166,8 +3166,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
           last_line: 74,
           last_column: 0,
           range: [
-            1578,
-            1578,
+            1579,
+            1579,
           ],
         },
         CRLF_Re: {
@@ -3188,7 +3188,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
       },
       yyErrorInvoked: true,
       errorDiag: {
-        inputPos: 741,
+        inputPos: 742,
         yytext: '.',
         yyleng: 1,
         matches: [
@@ -3343,7 +3343,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
 
 %%
 
-\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  return 'date';
+\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  	return 'date';
 ":"                         return ':';
 [\\s\\r\\n]					return 'WS';
 <<EOF>>                     return 'EOF';
@@ -3352,7 +3352,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
 `,
         matches: false,
         yytext: '',
-        offset: 1578,
+        offset: 1579,
         base_position: 0,
         yyleng: 0,
         yylineno: 73,
@@ -3362,8 +3362,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
           last_line: 74,
           last_column: 0,
           range: [
-            1578,
-            1578,
+            1579,
+            1579,
           ],
         },
         CRLF_Re: {
@@ -3384,7 +3384,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
       },
       yyErrorInvoked: true,
       errorDiag: {
-        inputPos: 738,
+        inputPos: 739,
         yytext: '.',
         yyleng: 1,
         matches: [
@@ -3511,7 +3511,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 17,
+    id: 14,
     token: '","',
     yytext: ',',
     yylloc: {
@@ -3541,7 +3541,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 17,
+    id: 14,
     token: '","',
     yytext: ',',
     yylloc: {
@@ -3751,7 +3751,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 17,
+    id: 14,
     token: '","',
     yytext: ',',
     yylloc: {
@@ -3811,7 +3811,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 17,
+    id: 14,
     token: '","',
     yytext: ',',
     yylloc: {
@@ -3871,7 +3871,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 17,
+    id: 14,
     token: '","',
     yytext: ',',
     yylloc: {
@@ -3931,7 +3931,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 17,
+    id: 14,
     token: '","',
     yytext: ',',
     yylloc: {
@@ -4321,7 +4321,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 17,
+    id: 14,
     token: '","',
     yytext: ',',
     yylloc: {
@@ -4426,7 +4426,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 17,
+    id: 14,
     token: '","',
     yytext: ',',
     yylloc: {
@@ -4456,7 +4456,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 17,
+    id: 14,
     token: '","',
     yytext: ',',
     yylloc: {
@@ -4666,7 +4666,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 17,
+    id: 14,
     token: '","',
     yytext: ',',
     yylloc: {
@@ -4726,7 +4726,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 17,
+    id: 14,
     token: '","',
     yytext: ',',
     yylloc: {
@@ -4786,7 +4786,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 17,
+    id: 14,
     token: '","',
     yytext: ',',
     yylloc: {
@@ -4846,7 +4846,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 17,
+    id: 14,
     token: '","',
     yytext: ',',
     yylloc: {
@@ -5343,15 +5343,15 @@ double quotes *or* backtick quotes a la ES6 string templates).
   {
     id: 26,
     token: '"ACTION_START"',
-    yytext: '  ',
+    yytext: '  \t',
     yylloc: {
       first_line: 68,
       first_column: 22,
       last_line: 68,
-      last_column: 24,
+      last_column: 25,
       range: [
         1406,
-        1408,
+        1409,
       ],
     },
   },
@@ -5361,12 +5361,12 @@ double quotes *or* backtick quotes a la ES6 string templates).
     yytext: 'return ',
     yylloc: {
       first_line: 68,
-      first_column: 24,
+      first_column: 25,
       last_line: 68,
-      last_column: 31,
+      last_column: 32,
       range: [
-        1408,
-        1415,
+        1409,
+        1416,
       ],
     },
   },
@@ -5376,12 +5376,12 @@ double quotes *or* backtick quotes a la ES6 string templates).
     yytext: "'date'",
     yylloc: {
       first_line: 68,
-      first_column: 31,
+      first_column: 32,
       last_line: 68,
-      last_column: 37,
+      last_column: 38,
       range: [
-        1415,
-        1421,
+        1416,
+        1422,
       ],
     },
   },
@@ -5391,12 +5391,12 @@ double quotes *or* backtick quotes a la ES6 string templates).
     yytext: ';',
     yylloc: {
       first_line: 68,
-      first_column: 37,
+      first_column: 38,
       last_line: 68,
-      last_column: 38,
+      last_column: 39,
       range: [
-        1421,
         1422,
+        1423,
       ],
     },
   },
@@ -5406,12 +5406,12 @@ double quotes *or* backtick quotes a la ES6 string templates).
     yytext: '',
     yylloc: {
       first_line: 68,
-      first_column: 38,
+      first_column: 39,
       last_line: 68,
-      last_column: 38,
+      last_column: 39,
       range: [
-        1422,
-        1422,
+        1423,
+        1423,
       ],
     },
   },
@@ -5425,8 +5425,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 69,
       last_column: 3,
       range: [
-        1423,
-        1426,
+        1424,
+        1427,
       ],
     },
   },
@@ -5440,8 +5440,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 69,
       last_column: 28,
       range: [
-        1426,
-        1451,
+        1427,
+        1452,
       ],
     },
   },
@@ -5455,8 +5455,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 69,
       last_column: 35,
       range: [
-        1451,
-        1458,
+        1452,
+        1459,
       ],
     },
   },
@@ -5470,8 +5470,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 69,
       last_column: 38,
       range: [
-        1458,
-        1461,
+        1459,
+        1462,
       ],
     },
   },
@@ -5485,8 +5485,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 69,
       last_column: 39,
       range: [
-        1461,
         1462,
+        1463,
       ],
     },
   },
@@ -5500,8 +5500,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 69,
       last_column: 39,
       range: [
-        1462,
-        1462,
+        1463,
+        1463,
       ],
     },
   },
@@ -5515,8 +5515,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 70,
       last_column: 1,
       range: [
-        1463,
         1464,
+        1465,
       ],
     },
   },
@@ -5530,8 +5530,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 70,
       last_column: 7,
       range: [
-        1464,
-        1470,
+        1465,
+        1471,
       ],
     },
   },
@@ -5545,8 +5545,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 70,
       last_column: 8,
       range: [
-        1470,
         1471,
+        1472,
       ],
     },
   },
@@ -5560,8 +5560,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 70,
       last_column: 13,
       range: [
-        1471,
-        1476,
+        1472,
+        1477,
       ],
     },
   },
@@ -5575,8 +5575,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 70,
       last_column: 20,
       range: [
-        1476,
-        1483,
+        1477,
+        1484,
       ],
     },
   },
@@ -5590,8 +5590,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 70,
       last_column: 24,
       range: [
-        1483,
-        1487,
+        1484,
+        1488,
       ],
     },
   },
@@ -5605,8 +5605,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 70,
       last_column: 25,
       range: [
-        1487,
         1488,
+        1489,
       ],
     },
   },
@@ -5620,13 +5620,13 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 70,
       last_column: 25,
       range: [
-        1488,
-        1488,
+        1489,
+        1489,
       ],
     },
   },
   {
-    id: 16,
+    id: 17,
     token: '"$"',
     yytext: '<<EOF>>',
     yylloc: {
@@ -5635,8 +5635,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 71,
       last_column: 7,
       range: [
-        1489,
-        1496,
+        1490,
+        1497,
       ],
     },
   },
@@ -5650,8 +5650,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 71,
       last_column: 28,
       range: [
-        1496,
-        1517,
+        1497,
+        1518,
       ],
     },
   },
@@ -5665,8 +5665,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 71,
       last_column: 35,
       range: [
-        1517,
-        1524,
+        1518,
+        1525,
       ],
     },
   },
@@ -5680,8 +5680,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 71,
       last_column: 40,
       range: [
-        1524,
-        1529,
+        1525,
+        1530,
       ],
     },
   },
@@ -5695,8 +5695,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 71,
       last_column: 41,
       range: [
-        1529,
         1530,
+        1531,
       ],
     },
   },
@@ -5710,13 +5710,13 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 71,
       last_column: 41,
       range: [
-        1530,
-        1530,
+        1531,
+        1531,
       ],
     },
   },
   {
-    id: 14,
+    id: 15,
     token: '"."',
     yytext: '.',
     yylloc: {
@@ -5725,8 +5725,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 72,
       last_column: 1,
       range: [
-        1531,
         1532,
+        1533,
       ],
     },
   },
@@ -5740,8 +5740,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 72,
       last_column: 28,
       range: [
-        1532,
-        1559,
+        1533,
+        1560,
       ],
     },
   },
@@ -5755,8 +5755,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 72,
       last_column: 35,
       range: [
-        1559,
-        1566,
+        1560,
+        1567,
       ],
     },
   },
@@ -5770,8 +5770,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 72,
       last_column: 44,
       range: [
-        1566,
-        1575,
+        1567,
+        1576,
       ],
     },
   },
@@ -5785,8 +5785,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 72,
       last_column: 45,
       range: [
-        1575,
         1576,
+        1577,
       ],
     },
   },
@@ -5800,8 +5800,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 72,
       last_column: 45,
       range: [
-        1576,
-        1576,
+        1577,
+        1577,
       ],
     },
   },
@@ -5815,8 +5815,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 74,
       last_column: 0,
       range: [
-        1578,
-        1578,
+        1579,
+        1579,
       ],
     },
   },
@@ -5830,8 +5830,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 74,
       last_column: 0,
       range: [
-        1578,
-        1578,
+        1579,
+        1579,
       ],
     },
   },
@@ -5845,8 +5845,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 74,
       last_column: 0,
       range: [
-        1578,
-        1578,
+        1579,
+        1579,
       ],
     },
   },
@@ -5860,8 +5860,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 74,
       last_column: 0,
       range: [
-        1578,
-        1578,
+        1579,
+        1579,
       ],
     },
   },
@@ -5875,8 +5875,8 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 74,
       last_column: 0,
       range: [
-        1578,
-        1578,
+        1579,
+        1579,
       ],
     },
   },

@@ -1,5 +1,6 @@
 //
 // title: test options spread across multiple lines
+// test_input: 'foofoofoo'
 //
 // ...
 //
@@ -14,5 +15,5 @@
  s4="false"
  a-b-c="d"
 %%
-"foo" return 1;
+"foo" 				yytext += `:${yy.options.s2}:${yy.options.aBC}:${yy.options.bool1}:${yy.options.bla}:${yy.options.s1}`; return 11;
 

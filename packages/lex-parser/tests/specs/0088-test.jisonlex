@@ -7,8 +7,8 @@
 
 %%
 
-\%%[^\n]*               /* erroneous escape: MUST escape both % */
-\d\d\d\d"-"\d\d"-"\d\d  return 'date';
+\%%[^\n]*               	/* erroneous escape: MUST escape both % */
+\d\d\d\d"-"\d\d"-"\d\d  	return 'date';
 ":"                         return ':';
 [\s\r\n]					return 'WS';
 <<EOF>>                     return 'EOF';

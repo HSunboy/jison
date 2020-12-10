@@ -2,11 +2,11 @@
   rules: [
     [
       'a|b',
-      'return 2;\n  //',
+      'return 12;\n  //',
     ],
     [
       'x',
-      'return 1;\n  //',
+      'return 11;\n  //',
     ],
   ],
   macros: {},
@@ -70,9 +70,9 @@
   },
   __original_input__: `%%
 a |
-b return 2;
+b return 12;
   //
-"x" return 1;
+"x" return 11;
   //
 `,
 }

@@ -19,10 +19,13 @@
     hash: {
       errStr: `
 There's probably an error in one or more of your lexer regex rules.
-Did you perhaps indent the rule regex? Note that all rule regexes
-MUST start at the start of the line, i.e. text column 1. Indented text
-is perceived as JavaScript action code related to the last lexer
-rule regex.
+    
+Did you perhaps indent the rule regex? 
+    
+Note that all rule regexes MUST start at the start of the line, 
+i.e. text column 1. 
+Indented text is perceived as JavaScript action code related to the last 
+lexer rule regex.
     
   Erroneous code:
 5: 
@@ -46,17 +49,20 @@ Unexpected "ACTION_BODY"
       token_id: 0,
       line: 7,
       recoverable: false,
-      state: 146,
+      state: 148,
       action: 2,
       new_state: 59,
       stack_pointer: 10,
     },
     message: `
 There's probably an error in one or more of your lexer regex rules.
-Did you perhaps indent the rule regex? Note that all rule regexes
-MUST start at the start of the line, i.e. text column 1. Indented text
-is perceived as JavaScript action code related to the last lexer
-rule regex.
+    
+Did you perhaps indent the rule regex? 
+    
+Note that all rule regexes MUST start at the start of the line, 
+i.e. text column 1. 
+Indented text is perceived as JavaScript action code related to the last 
+lexer rule regex.
     
   Erroneous code:
 5: 
@@ -76,10 +82,13 @@ Unexpected "ACTION_BODY"
     name: 'JisonParserError',
     stack: `JisonParserError: 
 There's probably an error in one or more of your lexer regex rules.
-Did you perhaps indent the rule regex? Note that all rule regexes
-MUST start at the start of the line, i.e. text column 1. Indented text
-is perceived as JavaScript action code related to the last lexer
-rule regex.
+    
+Did you perhaps indent the rule regex? 
+    
+Note that all rule regexes MUST start at the start of the line, 
+i.e. text column 1. 
+Indented text is perceived as JavaScript action code related to the last 
+lexer rule regex.
     
   Erroneous code:
 5: 
@@ -96,11 +105,11 @@ Parse error on line 8:
 -^
 Unexpected "ACTION_BODY"
 
-    at Object.parseError (/lex-parser-cjs.js:7210:15)
-    at Object.yyError (/lex-parser-cjs.js:7400:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:4233:18)
-    at Object.parse (/lex-parser-cjs.js:8464:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12522:25)
+    at Object.parseError (/lex-parser-cjs.js:7291:15)
+    at Object.yyError (/lex-parser-cjs.js:7481:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4275:18)
+    at Object.parse (/lex-parser-cjs.js:8545:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
     at Context.testEachParserExample (/all-tests.js:483:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
@@ -155,7 +164,7 @@ Unexpected "ACTION_BODY"
         line: 7,
         expected: null,
         recoverable: false,
-        state: 146,
+        state: 148,
         action: 2,
         new_state: 59,
         stack_pointer: 10,
@@ -174,18 +183,21 @@ Unexpected "ACTION_BODY"`,
           token_id: 36,
           line: 7,
           recoverable: true,
-          state: 77,
+          state: 79,
           action: 0,
-          new_state: 198,
+          new_state: 200,
           stack_pointer: 9,
         },
         {
           errStr: `
 There's probably an error in one or more of your lexer regex rules.
-Did you perhaps indent the rule regex? Note that all rule regexes
-MUST start at the start of the line, i.e. text column 1. Indented text
-is perceived as JavaScript action code related to the last lexer
-rule regex.
+    
+Did you perhaps indent the rule regex? 
+    
+Note that all rule regexes MUST start at the start of the line, 
+i.e. text column 1. 
+Indented text is perceived as JavaScript action code related to the last 
+lexer rule regex.
     
   Erroneous code:
 5: 
@@ -209,7 +221,7 @@ Unexpected "ACTION_BODY"
           token_id: 0,
           line: 7,
           recoverable: false,
-          state: 146,
+          state: 148,
           action: 2,
           new_state: 59,
           stack_pointer: 10,
@@ -224,7 +236,7 @@ Unexpected "ACTION_BODY"
           line: 7,
           expected: null,
           recoverable: false,
-          state: 146,
+          state: 148,
           action: 2,
           new_state: 59,
           stack_pointer: 10,
@@ -243,9 +255,9 @@ Unexpected "ACTION_BODY"`,
           token_id: 36,
           line: 7,
           recoverable: true,
-          state: 77,
+          state: 79,
           action: 0,
-          new_state: 198,
+          new_state: 200,
           stack_pointer: 9,
           base_pointer: 9,
           info_stack_pointer: 12,
@@ -254,10 +266,13 @@ Unexpected "ACTION_BODY"`,
         {
           errStr: `
 There's probably an error in one or more of your lexer regex rules.
-Did you perhaps indent the rule regex? Note that all rule regexes
-MUST start at the start of the line, i.e. text column 1. Indented text
-is perceived as JavaScript action code related to the last lexer
-rule regex.
+    
+Did you perhaps indent the rule regex? 
+    
+Note that all rule regexes MUST start at the start of the line, 
+i.e. text column 1. 
+Indented text is perceived as JavaScript action code related to the last 
+lexer rule regex.
     
   Erroneous code:
 5: 
@@ -281,7 +296,7 @@ Unexpected "ACTION_BODY"
           token_id: 0,
           line: 7,
           recoverable: false,
-          state: 146,
+          state: 148,
           action: 2,
           new_state: 59,
           stack_pointer: 10,

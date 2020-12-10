@@ -1,5 +1,6 @@
 //
-// title: test [^\\\\]
+// title: "test [^\\\\]"
+// test_input: "[xy]f\"oo'barfo\"obarx"
 //
 // ...
 //

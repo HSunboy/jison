@@ -6,7 +6,7 @@
     ],
     [
       'x',
-      'return 1',
+      'return 11',
     ],
   ],
   macros: {},
@@ -70,7 +70,7 @@
   },
   __original_input__: `%%
 "["[^\\]]"]" return true;
-"x" return 1;
+"x" return 11;
 
 `,
 }

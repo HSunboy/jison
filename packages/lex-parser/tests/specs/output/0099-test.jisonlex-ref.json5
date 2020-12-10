@@ -1,137 +1,100 @@
 {
-  id: -1,
-  token: null,
-  fail: 1,
-  spec: `%s ALT
-
-%%
-
-// '<' as literal '<' when it cannot be a condition starter:
-b<c 							return 'PATHOLOGICAL_CASE_HIT_1';
-b>c 							return 'PATHOLOGICAL_CASE_HIT_2';
-b<c> 							return 'PATHOLOGICAL_CASE_HIT_3';
-
-<ALT>a 							popState();
-								return 'SWITCHING_TO_INITIAL_CONTEXT';
-
-<INITIAL>a						pushState('ALT');
-								return 'SWITCHING_TO_ALT_CONTEXT';
-
-\\s 								return 'SPACE';
-.                               return 'CHAR';
-
-<<EOF>>                         return 'EOF';`,
-  err: {
-    hash: {
-      errStr: 'Parsing aborted due to exception.',
-      text: '<',
-      value: '<',
-      token: '"$accept"',
-      token_id: 0,
-      line: 5,
-      expected: null,
-      recoverable: false,
-      state: 33,
-      action: 2,
-      new_state: 33,
-      stack_pointer: 6,
-    },
-    message: "Cannot read property 'yylloc' of undefined",
-    name: 'JisonParserError',
-    stack: `TypeError: Cannot read property 'yylloc' of undefined
-    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:11338:22)
-    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10412:38)
-    at Object.lexer_next [as next] (/lex-parser-cjs.js:10537:28)
-    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:10721:18)
-    at fastLex (/lex-parser-cjs.js:7883:27)
-    at Object.parse (/lex-parser-cjs.js:8057:30)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12606:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
-    at callFn (/runnable.js:364:21)
-    at Test.Runnable.run (/runnable.js:352:5)
-    at Runner.runTest (/runner.js:677:10)
-    at /runner.js:801:12
-    at next (/runner.js:594:14)
-    at /runner.js:604:7
-    at next (/runner.js:486:14)
-    at cbHookRun (/runner.js:551:7)
-    at done (/runnable.js:308:5)
-    at callFn (/runnable.js:387:7)
-    at Hook.Runnable.run (/runnable.js:352:5)
-    at next (/runner.js:510:10)
-    at Immediate._onImmediate (/runner.js:572:5)
-    at processImmediate (/timers.js:456:21)`,
+  rules: [
+    [
+      'b<c',
+      "return 'PATHOLOGICAL_CASE_HIT_1'",
+    ],
+    [
+      'b>c',
+      "return 'PATHOLOGICAL_CASE_HIT_2'",
+    ],
+    [
+      'b<c>',
+      "return 'PATHOLOGICAL_CASE_HIT_3'",
+    ],
+    [
+      [
+        'ALT',
+      ],
+      'a',
+      "popState();\n\t\t\t\t\t\t\t\treturn 'SWITCHING_TO_INITIAL_CONTEXT'",
+    ],
+    [
+      [
+        'INITIAL',
+      ],
+      'a',
+      `pushState('ALT');
+								return 'SWITCHING_TO_ALT_CONTEXT'`,
+    ],
+    [
+      '\\s',
+      "return 'SPACE'",
+    ],
+    [
+      '.',
+      "return 'CHAR'",
+    ],
+    [
+      '$',
+      "return 'EOF'",
+    ],
+  ],
+  macros: {},
+  startConditions: {
+    ALT: 0,
   },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
   __extra_diag_info__: {
     pre_parse_callback_callCount: 1,
     post_parse_callback_callCount: 1,
     post_parse_diaginfo: {
       sharedState_yy: {
-        actionInclude: [],
-        options: {},
-        startConditions: {
-          ALT: 0,
-        },
+        startConditions: '[reference to sibling --> *.startConditions]',
         __options_flags__: 0,
-        __options_category_description__: 'the lexer rules definition section',
+        __options_category_description__: '???',
         __inside_scoped_ruleset__: false,
-        __context_cfg_stack__: [
-          {
-            flags: 0,
-            descr: '???',
-            scoped: false,
-          },
-        ],
+        __context_cfg_stack__: [],
+        depth: 0,
+        include_command_allowed: false,
       },
       hash: {
         errStr: null,
         exception: null,
-        text: '<',
-        value: '<',
+        text: '',
+        value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 5,
+        line: 18,
         expected: null,
         recoverable: false,
-        state: 33,
+        state: 24,
         action: 2,
-        new_state: 33,
-        stack_pointer: 6,
+        new_state: 1,
+        stack_pointer: 5,
       },
       reentrant_call_depth: 1,
       error_infos_stack: [
         {
-          errStr: 'Parsing aborted due to exception.',
-          text: '<',
-          value: '<',
-          token: '"$accept"',
-          token_id: 0,
-          line: 5,
-          expected: null,
-          recoverable: false,
-          state: 33,
-          action: 2,
-          new_state: 33,
-          stack_pointer: 6,
-        },
-        {
           errStr: null,
           exception: null,
-          text: '<',
-          value: '<',
+          text: '',
+          value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 5,
+          line: 18,
           expected: null,
           recoverable: false,
-          state: 33,
+          state: 24,
           action: 2,
-          new_state: 33,
-          stack_pointer: 6,
+          new_state: 1,
+          stack_pointer: 5,
         },
       ],
       error_recovery_stack: [],
-      error_infos_stack_size: 2,
+      error_infos_stack_size: 1,
       error_recovery_stack_size: 0,
     },
     reentrant_call_depth: 0,

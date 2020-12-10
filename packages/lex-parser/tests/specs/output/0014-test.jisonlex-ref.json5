@@ -53,16 +53,16 @@ Regrettably, it does not exist in the remainder of the input.
 3: return true;
 4: }}
 
-    at Object.parseError (/lex-parser-cjs.js:7210:15)
-    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:9379:44)
-    at Object.yyError [as yyerror] (/lex-parser-cjs.js:9409:19)
-    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:11035:19)
-    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10334:38)
-    at Object.lexer_next [as next] (/lex-parser-cjs.js:10459:28)
-    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:10643:18)
-    at fastLex (/lex-parser-cjs.js:7805:27)
-    at Object.parse (/lex-parser-cjs.js:7979:30)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12522:25)
+    at Object.parseError (/lex-parser-cjs.js:7291:15)
+    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:9460:44)
+    at Object.yyError [as yyerror] (/lex-parser-cjs.js:9490:19)
+    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:11116:19)
+    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10415:38)
+    at Object.lexer_next [as next] (/lex-parser-cjs.js:10540:28)
+    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:10724:18)
+    at fastLex (/lex-parser-cjs.js:7886:27)
+    at Object.parse (/lex-parser-cjs.js:8060:30)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
     at Context.testEachParserExample (/all-tests.js:483:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
@@ -110,9 +110,9 @@ Regrettably, it does not exist in the remainder of the input.
         line: 1,
         expected: null,
         recoverable: false,
-        state: 92,
+        state: 94,
         action: 2,
-        new_state: 92,
+        new_state: 94,
         stack_pointer: 7,
       },
       reentrant_call_depth: 1,
@@ -127,9 +127,9 @@ Regrettably, it does not exist in the remainder of the input.
           line: 1,
           expected: null,
           recoverable: false,
-          state: 92,
+          state: 94,
           action: 2,
-          new_state: 92,
+          new_state: 94,
           stack_pointer: 7,
         },
       ],

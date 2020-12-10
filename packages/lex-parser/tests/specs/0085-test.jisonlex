@@ -1,5 +1,6 @@
 //
 // title: "cannot nest rule scopes"
+// test_run_lexer_output: false
 //
 // ...
 //

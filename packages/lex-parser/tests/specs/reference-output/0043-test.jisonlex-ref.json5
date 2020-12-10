@@ -2,11 +2,11 @@
   rules: [
     [
       '"\'\\\\\\\\\\\\*i',
-      'return 1',
+      'return 11',
     ],
     [
       'a\\b',
-      'return 2',
+      'return 12',
     ],
     [
       '\\u0001',
@@ -81,8 +81,8 @@
     error_recovery_stack_size: 0,
   },
   __original_input__: `%%
-\\"\\'\\\\\\\\\\\\*\\i return 1;
-"a"\\b return 2;
+\\"\\'\\\\\\\\\\\\*\\i return 11;
+"a"\\b return 12;
 \\cA {}
 \\012 {}
 \\xFF ;

@@ -2,6 +2,7 @@
 // title: test lex grammar bootstrap
 // specfile: lex/lex_grammar.jisonlex
 // reffile: lex/lex_grammar.lex.json
+// ...
 // 
 
 

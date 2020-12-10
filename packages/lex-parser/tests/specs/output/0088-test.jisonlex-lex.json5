@@ -48,9 +48,9 @@ rules (i.e. jison lex regexes) in "rules" state.
 1: 
 2: %%
 3: 
-4: \\%%[^\\n]*               /* erroneous escape: MUST escape both % */
+4: \\%%[^\\n]*                /* erroneous escape: MUST escape both % */
 ^....^
-5: \\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  return 'date';
+5: \\d\\d\\d\\d"-"\\d\\d"-"\\d\\d   return 'date';
 6: ":"                         return ':';
 `,
       recoverable: false,
@@ -88,9 +88,9 @@ rules (i.e. jison lex regexes) in "rules" state.
 1: 
 2: %%
 3: 
-4: \\%%[^\\n]*               /* erroneous escape: MUST escape both % */
+4: \\%%[^\\n]*                /* erroneous escape: MUST escape both % */
 ^....^
-5: \\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  return 'date';
+5: \\d\\d\\d\\d"-"\\d\\d"-"\\d\\d   return 'date';
 6: ":"                         return ':';
 `,
             recoverable: false,
@@ -130,8 +130,8 @@ rules (i.e. jison lex regexes) in "rules" state.
         matched: `
 %%
 
-\\%%[^\\n]*               /* erroneous escape: MUST escape both % */
-\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  return 'date';
+\\%%[^\\n]*               	/* erroneous escape: MUST escape both % */
+\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  	return 'date';
 ":"                         return ':';
 [\\s\\r\\n]					return 'WS';
 <<EOF>>                     return 'EOF';
@@ -140,7 +140,7 @@ rules (i.e. jison lex regexes) in "rules" state.
 `,
         matches: false,
         yytext: '',
-        offset: 266,
+        offset: 268,
         base_position: 0,
         yyleng: 0,
         yylineno: 10,
@@ -150,8 +150,8 @@ rules (i.e. jison lex regexes) in "rules" state.
           last_line: 11,
           last_column: 0,
           range: [
-            266,
-            266,
+            268,
+            268,
           ],
         },
         CRLF_Re: {
@@ -172,7 +172,7 @@ rules (i.e. jison lex regexes) in "rules" state.
       },
       yyErrorInvoked: true,
       errorDiag: {
-        inputPos: 258,
+        inputPos: 260,
         yytext: '%',
         yyleng: 1,
         matches: [
@@ -256,15 +256,15 @@ rules (i.e. jison lex regexes) in "rules" state.
   {
     id: 26,
     token: '"ACTION_START"',
-    yytext: '               ',
+    yytext: '               \t',
     yylloc: {
       first_line: 4,
       first_column: 9,
       last_line: 4,
-      last_column: 24,
+      last_column: 25,
       range: [
         14,
-        29,
+        30,
       ],
     },
   },
@@ -274,12 +274,12 @@ rules (i.e. jison lex regexes) in "rules" state.
     yytext: '/* erroneous escape: MUST escape both % */',
     yylloc: {
       first_line: 4,
-      first_column: 24,
+      first_column: 25,
       last_line: 4,
-      last_column: 66,
+      last_column: 67,
       range: [
-        29,
-        71,
+        30,
+        72,
       ],
     },
   },
@@ -289,12 +289,12 @@ rules (i.e. jison lex regexes) in "rules" state.
     yytext: '',
     yylloc: {
       first_line: 4,
-      first_column: 66,
+      first_column: 67,
       last_line: 4,
-      last_column: 66,
+      last_column: 67,
       range: [
-        71,
-        71,
+        72,
+        72,
       ],
     },
   },
@@ -308,8 +308,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 5,
       last_column: 2,
       range: [
-        72,
-        74,
+        73,
+        75,
       ],
     },
   },
@@ -323,8 +323,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 5,
       last_column: 4,
       range: [
-        74,
-        76,
+        75,
+        77,
       ],
     },
   },
@@ -338,8 +338,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 5,
       last_column: 6,
       range: [
-        76,
-        78,
+        77,
+        79,
       ],
     },
   },
@@ -353,8 +353,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 5,
       last_column: 8,
       range: [
-        78,
-        80,
+        79,
+        81,
       ],
     },
   },
@@ -368,8 +368,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 5,
       last_column: 11,
       range: [
-        80,
-        83,
+        81,
+        84,
       ],
     },
   },
@@ -383,8 +383,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 5,
       last_column: 13,
       range: [
-        83,
-        85,
+        84,
+        86,
       ],
     },
   },
@@ -398,8 +398,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 5,
       last_column: 15,
       range: [
-        85,
-        87,
+        86,
+        88,
       ],
     },
   },
@@ -413,8 +413,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 5,
       last_column: 18,
       range: [
-        87,
-        90,
+        88,
+        91,
       ],
     },
   },
@@ -428,8 +428,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 5,
       last_column: 20,
       range: [
-        90,
-        92,
+        91,
+        93,
       ],
     },
   },
@@ -443,23 +443,23 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 5,
       last_column: 22,
       range: [
-        92,
-        94,
+        93,
+        95,
       ],
     },
   },
   {
     id: 26,
     token: '"ACTION_START"',
-    yytext: '  ',
+    yytext: '  \t',
     yylloc: {
       first_line: 5,
       first_column: 22,
       last_line: 5,
-      last_column: 24,
+      last_column: 25,
       range: [
-        94,
-        96,
+        95,
+        98,
       ],
     },
   },
@@ -469,12 +469,12 @@ rules (i.e. jison lex regexes) in "rules" state.
     yytext: 'return ',
     yylloc: {
       first_line: 5,
-      first_column: 24,
+      first_column: 25,
       last_line: 5,
-      last_column: 31,
+      last_column: 32,
       range: [
-        96,
-        103,
+        98,
+        105,
       ],
     },
   },
@@ -484,12 +484,12 @@ rules (i.e. jison lex regexes) in "rules" state.
     yytext: "'date'",
     yylloc: {
       first_line: 5,
-      first_column: 31,
+      first_column: 32,
       last_line: 5,
-      last_column: 37,
+      last_column: 38,
       range: [
-        103,
-        109,
+        105,
+        111,
       ],
     },
   },
@@ -499,12 +499,12 @@ rules (i.e. jison lex regexes) in "rules" state.
     yytext: ';',
     yylloc: {
       first_line: 5,
-      first_column: 37,
+      first_column: 38,
       last_line: 5,
-      last_column: 38,
+      last_column: 39,
       range: [
-        109,
-        110,
+        111,
+        112,
       ],
     },
   },
@@ -514,12 +514,12 @@ rules (i.e. jison lex regexes) in "rules" state.
     yytext: '',
     yylloc: {
       first_line: 5,
-      first_column: 38,
+      first_column: 39,
       last_line: 5,
-      last_column: 38,
+      last_column: 39,
       range: [
-        110,
-        110,
+        112,
+        112,
       ],
     },
   },
@@ -533,8 +533,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 6,
       last_column: 3,
       range: [
-        111,
-        114,
+        113,
+        116,
       ],
     },
   },
@@ -548,8 +548,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 6,
       last_column: 28,
       range: [
-        114,
-        139,
+        116,
+        141,
       ],
     },
   },
@@ -563,8 +563,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 6,
       last_column: 35,
       range: [
-        139,
-        146,
+        141,
+        148,
       ],
     },
   },
@@ -578,8 +578,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 6,
       last_column: 38,
       range: [
-        146,
-        149,
+        148,
+        151,
       ],
     },
   },
@@ -593,8 +593,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 6,
       last_column: 39,
       range: [
-        149,
-        150,
+        151,
+        152,
       ],
     },
   },
@@ -608,8 +608,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 6,
       last_column: 39,
       range: [
-        150,
-        150,
+        152,
+        152,
       ],
     },
   },
@@ -623,8 +623,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 7,
       last_column: 1,
       range: [
-        151,
-        152,
+        153,
+        154,
       ],
     },
   },
@@ -638,8 +638,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 7,
       last_column: 7,
       range: [
-        152,
-        158,
+        154,
+        160,
       ],
     },
   },
@@ -653,8 +653,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 7,
       last_column: 8,
       range: [
-        158,
-        159,
+        160,
+        161,
       ],
     },
   },
@@ -668,8 +668,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 7,
       last_column: 13,
       range: [
-        159,
-        164,
+        161,
+        166,
       ],
     },
   },
@@ -683,8 +683,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 7,
       last_column: 20,
       range: [
-        164,
-        171,
+        166,
+        173,
       ],
     },
   },
@@ -698,8 +698,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 7,
       last_column: 24,
       range: [
-        171,
-        175,
+        173,
+        177,
       ],
     },
   },
@@ -713,8 +713,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 7,
       last_column: 25,
       range: [
-        175,
-        176,
+        177,
+        178,
       ],
     },
   },
@@ -728,13 +728,13 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 7,
       last_column: 25,
       range: [
-        176,
-        176,
+        178,
+        178,
       ],
     },
   },
   {
-    id: 16,
+    id: 17,
     token: '"$"',
     yytext: '<<EOF>>',
     yylloc: {
@@ -743,8 +743,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 8,
       last_column: 7,
       range: [
-        177,
-        184,
+        179,
+        186,
       ],
     },
   },
@@ -758,8 +758,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 8,
       last_column: 28,
       range: [
-        184,
-        205,
+        186,
+        207,
       ],
     },
   },
@@ -773,8 +773,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 8,
       last_column: 35,
       range: [
-        205,
-        212,
+        207,
+        214,
       ],
     },
   },
@@ -788,8 +788,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 8,
       last_column: 40,
       range: [
-        212,
-        217,
+        214,
+        219,
       ],
     },
   },
@@ -803,8 +803,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 8,
       last_column: 41,
       range: [
-        217,
-        218,
+        219,
+        220,
       ],
     },
   },
@@ -818,13 +818,13 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 8,
       last_column: 41,
       range: [
-        218,
-        218,
+        220,
+        220,
       ],
     },
   },
   {
-    id: 14,
+    id: 15,
     token: '"."',
     yytext: '.',
     yylloc: {
@@ -833,8 +833,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 9,
       last_column: 1,
       range: [
-        219,
-        220,
+        221,
+        222,
       ],
     },
   },
@@ -848,8 +848,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 9,
       last_column: 28,
       range: [
-        220,
-        247,
+        222,
+        249,
       ],
     },
   },
@@ -863,8 +863,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 9,
       last_column: 35,
       range: [
-        247,
-        254,
+        249,
+        256,
       ],
     },
   },
@@ -878,8 +878,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 9,
       last_column: 44,
       range: [
-        254,
-        263,
+        256,
+        265,
       ],
     },
   },
@@ -893,8 +893,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 9,
       last_column: 45,
       range: [
-        263,
-        264,
+        265,
+        266,
       ],
     },
   },
@@ -908,8 +908,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 9,
       last_column: 45,
       range: [
-        264,
-        264,
+        266,
+        266,
       ],
     },
   },
@@ -923,8 +923,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 11,
       last_column: 0,
       range: [
-        266,
-        266,
+        268,
+        268,
       ],
     },
   },
@@ -938,8 +938,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 11,
       last_column: 0,
       range: [
-        266,
-        266,
+        268,
+        268,
       ],
     },
   },
@@ -953,8 +953,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 11,
       last_column: 0,
       range: [
-        266,
-        266,
+        268,
+        268,
       ],
     },
   },
@@ -968,8 +968,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 11,
       last_column: 0,
       range: [
-        266,
-        266,
+        268,
+        268,
       ],
     },
   },
@@ -983,8 +983,8 @@ rules (i.e. jison lex regexes) in "rules" state.
       last_line: 11,
       last_column: 0,
       range: [
-        266,
-        266,
+        268,
+        268,
       ],
     },
   },
