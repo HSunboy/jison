@@ -3327,7 +3327,7 @@ describe('prettyPrintRange() API', function () {
             });
         },
         Error,
-        /The lexer rule's action code section does not compile: Line 3: Unexpected number/
+        /The lexer rule's action code section does not compile: Error: Line 3: Unexpected number/
         );
     });
 
@@ -3366,7 +3366,7 @@ describe('prettyPrintRange() API', function () {
             });
         },
         Error,
-        /Could not parse lexer spec\nError: \nThe '%%' lexer epilogue code section does not compile: Line 4: Unexpected token/
+        /Could not parse lexer spec\nError: \nThe '%%' lexer epilogue code section does not compile: Error: Line 4: Unexpected token/
         );
     });
 
@@ -3479,6 +3479,8 @@ let testset = globby.sync([
     './specs/*.json5',
     '!'+ './specs/*-ref.json5',
     './specs/*.js',
+
+    '../../lex-parser/tests/specs/*.jisonlex',
 ]);
 // also compile and run the lexers in the /examples/ directory:
 let testset2 = globby.sync([
@@ -3538,10 +3540,11 @@ testset = testset.map(function (filepath) {
             grammar = grammar.replace(/\n/g, '\r\n');
         }
 
-        let refOutFilePath = cleanPath(path.join(path.dirname(filepath), 'reference-output', path.basename(filepath) + '-ref.json5'));
-        let testOutFilePath = cleanPath(path.join(path.dirname(filepath), 'output', path.basename(filepath) + '-ref.json5'));
-        let lexerRefFilePath = cleanPath(path.join(path.dirname(filepath), 'reference-output', path.basename(filepath) + '-lexer.js'));
-        let lexerOutFilePath = cleanPath(path.join(path.dirname(filepath), 'output', path.basename(filepath) + '-lexer.js'));
+        let outbase = path.dirname(filepath).replace(/^.*[\\\/]lex-parser[\\\/]tests[\\\/]specs/, cleanPath('specs/lex-parser'));
+        let refOutFilePath = cleanPath(path.join(outbase, 'reference-output', path.basename(filepath) + '-ref.json5'));
+        let testOutFilePath = cleanPath(path.join(outbase, 'output', path.basename(filepath) + '-ref.json5'));
+        let lexerRefFilePath = cleanPath(path.join(outbase, 'reference-output', path.basename(filepath) + '-lexer.js'));
+        let lexerOutFilePath = cleanPath(path.join(outbase, 'output', path.basename(filepath) + '-lexer.js'));
         mkdirp(path.dirname(refOutFilePath));
         mkdirp(path.dirname(testOutFilePath));
 
