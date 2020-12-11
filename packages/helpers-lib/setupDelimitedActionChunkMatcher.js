@@ -13,7 +13,7 @@ function setupDelimitedActionChunkMatcher(marker, lexer) {
 
         // regex must match content + endMarker, as startMarker has already been consumed before this function got a call:
         const escaped_end_marker = action_end_marker.replace(/\}/g, '\\}');
-        const re = new RegExp('^(?:([^]*?)' + escaped_end_marker + '(?!\\}))');
+        const re = new RegExp('^([^]*?)' + escaped_end_marker + '(?!\\})');
         const is_complex_marker = (action_end_marker[0] === '}' && action_end_marker.length > 1);
 
         const match = function matchDelimitedActionChunk(input) {
@@ -52,7 +52,7 @@ function setupDelimitedActionChunkMatcher(marker, lexer) {
             // Hence we check for an 'independent' end marker for all multi-brace markers:
             // 
             if (is_complex_marker && srcCode) {
-                let m2 = /[^}]$/.exec(srcCode);    // no '}' allowed at the very end or you'ld have the fringe scenario above!
+                let m2 = /[^}]$/.test(srcCode);    // no '}' allowed at the very end or you'ld have the fringe scenario above!
                 if (m2) {
                     return {
                         fault: rmCommonWS`

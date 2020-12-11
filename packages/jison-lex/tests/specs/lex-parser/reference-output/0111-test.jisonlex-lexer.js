@@ -1,11 +1,8 @@
-// Full-featured Lexer Run-Time Class core (to be included in every generated lexer)
-// Zachary Carter <zach@carter.name>
-// MIT Licensed
 
-// top & bottom lines are only here for eslint to properly process this file along with the others: these bits have to be STRIPPED OFF before actual use!
-const lexer_kernel =
-{
-    EOF: 1,
+
+const lexer = {
+/* JISON-LEX-ANALYTICS-REPORT */
+EOF: 1,
     ERROR: 2,
 
     // JisonLexerError: JisonLexerError,        /// <-- injected by the code generator
@@ -1515,5 +1512,143 @@ const lexer_kernel =
      */
     stateStackSize: function lexer_stateStackSize() {
         return this.conditionStack.length;
-    }
+    },
+    options: {
+  trackPosition: true,
+  easy_keyword_rules: true
+},
+    JisonLexerError: JisonLexerError,
+    performAction: function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \/\/.* */ 
+ /* ignore comment */ 
+break;
+case 16 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \s+ */ 
+ /* skip whitespace */ 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        },
+    simpleCaseActionClusters: {
+
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       main\b */ 
+   1 : 'MAIN',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       class\b */ 
+   2 : 'CLASS',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       extends\b */ 
+   3 : 'EXTENDS',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       nat\b */ 
+   4 : 'NATTYPE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       if\b */ 
+   5 : 'IF',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       else\b */ 
+   6 : 'ELSE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       for\b */ 
+   7 : 'FOR',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       printNat\b */ 
+   8 : 'PRINTNAT',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       readNat\b */ 
+   9 : 'READNAT',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       this\b */ 
+   10 : 'THIS',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       new\b */ 
+   11 : 'NEW',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       var\b */ 
+   12 : 'VAR',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       null\b */ 
+   13 : 'NUL',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       {digit}+ */ 
+   14 : 'NATLITERAL',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       {id} */ 
+   15 : 'ID',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       . */ 
+   17 : 'Illegal character',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       $ */ 
+   18 : 'ENDOFFILE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       $ */ 
+   19 : 'EOF'
+},
+    rules: [
+        /*  0: */  /^(?:\/\/.*)/,
+/*  1: */  /^(?:main\b)/,
+/*  2: */  /^(?:class\b)/,
+/*  3: */  /^(?:extends\b)/,
+/*  4: */  /^(?:nat\b)/,
+/*  5: */  /^(?:if\b)/,
+/*  6: */  /^(?:else\b)/,
+/*  7: */  /^(?:for\b)/,
+/*  8: */  /^(?:printNat\b)/,
+/*  9: */  /^(?:readNat\b)/,
+/* 10: */  /^(?:this\b)/,
+/* 11: */  /^(?:new\b)/,
+/* 12: */  /^(?:var\b)/,
+/* 13: */  /^(?:null\b)/,
+/* 14: */  /^(?:([0-9])+)/,
+/* 15: */  /^(?:([a-zA-Z_][a-zA-Z0-9_]*))/,
+/* 16: */  /^(?:\s+)/,
+/* 17: */  /^(?:.)/,
+/* 18: */  /^(?:$)/,
+/* 19: */  /^(?:$)/
+    ],
+    conditions: {
+  "INITIAL": {
+    rules: [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    inclusive: true
+  }
+}
 };
+
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+const lexerSpecConglomerate = false
+

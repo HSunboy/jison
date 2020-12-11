@@ -74,7 +74,7 @@ const defaultJisonLexOptions = {
     noMain: true,                   // CLI: not:(--main option)
     moduleMain: null,               // `main()` function source code if `!noMain` is true
     moduleMainImports: null,        // require()/import statements required by the `moduleMain` function source code if `!noMain` is true
-    dumpSourceCodeOnFailure: true,
+    dumpSourceCodeOnFailure: false,
     throwErrorOnCompileFailure: true,
     doNotTestCompile: false,
 
@@ -166,7 +166,7 @@ function mkStdOptions(/*...args*/) {
             }
         }
 
-        // now clean them options up:export
+        // now clean them options up:
         if (typeof o2.main !== 'undefined') {
             o2.noMain = !o2.main;
         }
@@ -301,7 +301,7 @@ function autodetectAndConvertToJSONformat(lexerSpec, options) {
 
 // expand macros and convert matchers to RegExp's
 function prepareRules(dict, actions, caseHelper, tokens, startConditions, grammarSpec) {
-    let m, i, k, rule, action, conditions;
+    let action;
     let active_conditions;
     assert(Array.isArray(dict.rules));
     let rules = dict.rules.slice(0);    // shallow copy of the rules array as we MAY modify it in here!
@@ -311,14 +311,17 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, gramma
     let simple_rule_count = 0;
 
     // Assure all options are camelCased:
-    assert(typeof grammarSpec.options['case-insensitive'] === 'undefined');
+    assert.equal(typeof grammarSpec.options['case-insensitive'], 'undefined');
 
     if (!tokens) {
         tokens = {};
     }
 
     if (grammarSpec.options.flex && rules.length > 0) {
-        rules.push([ '.', 'console.log("", yytext); /* `flex` lexing mode: the last resort rule! */' ]);
+        rules.push({
+            rule: '.', 
+            srcCode: 'console.log("", yytext); /* `flex` lexing mode: the last resort rule! */' 
+        });
     }
 
     // Depending on the location within the regex we need different expansions of the macros:
@@ -344,33 +347,32 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, gramma
 
     let routingCode = [ 'switch(yyrulenumber) {' ];
 
-    for (i = 0; i < rules.length; i++) {
-        rule = rules[i].slice(0);           // shallow copy: do not modify input rules
-        m = rule[0];
+    for (let i = 0; i < rules.length; i++) {
+        const rule = rules[i];
+        let m = rule.start_condition;
+        assert(!m || Array.isArray(m));
 
         active_conditions = [];
-        if (!Array.isArray(m)) {
+        if (!m) {
             // implicit add to all inclusive start conditions
-            for (k in startConditions) {
+            for (let k in startConditions) {
                 if (startConditions[k].inclusive) {
                     active_conditions.push(k);
                     startConditions[k].rules.push(i);
                 }
             }
-        } else if (m[0] === '*') {
-            // Add to ALL start conditions
-            active_conditions.push('*');
-            for (k in startConditions) {
-                startConditions[k].rules.push(i);
-            }
-            rule.shift();
-            m = rule[0];
         } else {
             // Add to explicit start conditions
-            conditions = rule.shift();
-            m = rule[0];
-            for (k = 0; k < conditions.length; k++) {
-                if (!startConditions.hasOwnProperty(conditions[k])) {
+            let conditions = rule.start_condition;
+            for (let k = 0; k < conditions.length; k++) {
+                if (conditions[k] === '*') {
+                    // Add to ALL start conditions
+                    active_conditions.push('*');
+                    for (let j in startConditions) {
+                        startConditions[j].rules.push(i);
+                    }
+                    continue;
+                } else if (!startConditions.hasOwnProperty(conditions[k])) {
                     startConditions[conditions[k]] = {
                         rules: [],
                         inclusive: false
@@ -382,24 +384,41 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, gramma
             }
         }
 
-        if (typeof m === 'string') {
-            m = expandMacros(m, macros, grammarSpec);
-            m = new XRegExp('^(?:' + m + ')', grammarSpec.options.caseInsensitive ? 'i' : '');
+        let r = rule.rule;
+        let re = r;
+        if (typeof r === 'string') {
+            r = expandMacros(r, macros, grammarSpec);
+            re = new XRegExp('^(?:' + r + ')', grammarSpec.options.caseInsensitive ? 'i' : '');
         }
-        newRules.push(m);
-        action = rule[1];
+
+        newRules.push(re);
+
+        // rule object has fields:
+        // - srcCode
+        // - rules
+        // - ast
+        //   + source
+        //   + augmentedSource
+        //   + ast
+        //   + fault
+        // - fault
+        // 
+        assert('srcCode' in rule);
+        let action = rule.srcCode;
         if (typeof action === 'function') {
             // Also cope with Arrow Functions (and inline those as well?).
             // See also https://github.com/zaach/jison-lex/issues/23
             action = helpers.printFunctionSourceCodeContainer(action).code;
         }
+
+        assert.equal(typeof action, 'string');
         action = action.replace(/return\s*\(?'((?:\\'|[^']+)+)'\)?/g, tokenNumberReplacement);
         action = action.replace(/return\s*\(?"((?:\\"|[^"]+)+)"\)?/g, tokenNumberReplacement);
 
         let code = [ '\n/*! Conditions::' ];
         code.push(postprocessComment(active_conditions));
         code.push('*/', '\n/*! Rule::      ');
-        code.push(postprocessComment(rule[0]));
+        code.push(postprocessComment(rule.rule));
         code.push('*/', '\n');
 
         // When the action is *only* a simple `return TOKEN` statement, then add it to the caseHelpers;
@@ -440,7 +459,7 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, gramma
 
     // only inject the big switch/case chunk when there's any `switch` or `default` branch to switch to:
     if (simple_rule_count + regular_rule_count > 0) {
-        actions.push.apply(actions, routingCode);
+        actions.push.apply(actions, routingCode);        // append to the caller's `actions[]` array
     } else {
         actions.push('/* no rules ==> no rule SWITCH! */');
     }
@@ -462,7 +481,7 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, gramma
 
 // expand all macros (with maybe one exception) in the given regex: the macros may exist inside `[...]` regex sets or
 // elsewhere, which requires two different treatments to expand these macros.
-function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElsewhere_cb) {
+function reduceRegex(s, name, grammarSpec, expandAllMacrosInSet_cb, expandAllMacrosElsewhere_cb) {
     let orig = s;
 
     function errinfo() {
@@ -477,13 +496,10 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
         return s;
     }
 
-    let c1, c2;
     let rv = [];
-    let derr;
-    let se;
 
     while (s.length) {
-        c1 = s.match(CHR_RE);
+        let c1 = s.match(CHR_RE);
         if (!c1) {
             // cope with illegal escape sequences too!
             return new Error(errinfo() + ': illegal escape sequence at start of regex part: ' + s);
@@ -493,6 +509,7 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
 
         switch (c1) {
         case '[':
+        {
             // this is starting a set within the regex: scan until end of set!
             let set_content = [];
             let l = new Array(UNICODE_BASE_PLANE_MAX_CP + 1);
@@ -515,7 +532,7 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
             }
 
             // ensure that we hit the terminating ']':
-            c2 = s.match(CHR_RE);
+            let c2 = s.match(CHR_RE);
             if (!c2) {
                 // cope with illegal escape sequences too!
                 return new Error(errinfo() + ': regex set expression is broken: "' + s + '"');
@@ -526,7 +543,7 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
             }
             s = s.substr(c2.length);
 
-            se = set_content.join('');
+            let se = set_content.join('');
 
             // expand any macros in here:
             if (expandAllMacrosInSet_cb) {
@@ -537,30 +554,39 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
                 }
             }
 
-            derr = setmgmt.set2bitarray(l, se, opts);
-            if (derr instanceof Error) {
-                return new Error(errinfo() + ': ' + derr.message);
+            if (grammarSpec.options.optimizeLexerRegexes) {
+                let derr = setmgmt.set2bitarray(l, se, grammarSpec);
+                if (derr instanceof Error) {
+                    return new Error(errinfo() + ': ' + derr.message);
+                }
+
+                // find out which set expression is optimal in size:
+                let s1 = setmgmt.produceOptimizedRegex4Set(l);
+
+                // check if the source regex set potentially has any expansions (guestimate!)
+                //
+                // The indexOf('{') picks both XRegExp Unicode escapes and JISON lexer macros, which is perfect for us here.
+                let has_expansions = (se.indexOf('{') >= 0);
+
+                se = '[' + se + ']';
+
+                if (!has_expansions && se.length < s1.length) {
+                    s1 = se;
+                }
+
+                rv.push(s1);
+            } else {
+                se = '[' + se + ']';
+
+                rv.push(se);
             }
-
-            // find out which set expression is optimal in size:
-            let s1 = setmgmt.produceOptimizedRegex4Set(l);
-
-            // check if the source regex set potentially has any expansions (guestimate!)
-            //
-            // The indexOf('{') picks both XRegExp Unicode escapes and JISON lexer macros, which is perfect for us here.
-            let has_expansions = (se.indexOf('{') >= 0);
-
-            se = '[' + se + ']';
-
-            if (!has_expansions && se.length < s1.length) {
-                s1 = se;
-            }
-            rv.push(s1);
+        }
             break;
 
         // XRegExp Unicode escape, e.g. `\\p{Number}`:
         case '\\p':
-            c2 = s.match(XREGEXP_UNICODE_ESCAPE_RE);
+        {
+            let c2 = s.match(XREGEXP_UNICODE_ESCAPE_RE);
             if (c2) {
                 c2 = c2[0];
                 s = s.substr(c2.length);
@@ -571,12 +597,14 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
                 // nothing to stretch this match, hence nothing to expand.
                 rv.push(c1);
             }
+        }
             break;
 
         // Either a range expression or the start of a macro reference: `.{1,3}` or `{NAME}`.
         // Treat it as a macro reference and see if it will expand to anything:
         case '{':
-            c2 = s.match(NOTHING_SPECIAL_RE);
+        {
+            let c2 = s.match(NOTHING_SPECIAL_RE);
             if (c2) {
                 c2 = c2[0];
                 s = s.substr(c2.length);
@@ -604,6 +632,7 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
                 // nothing to stretch this match, hence nothing to expand.
                 rv.push(c1);
             }
+        }
             break;
 
         // Recognize some other regex elements, but there's no need to understand them all.
@@ -611,9 +640,10 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
         // We are merely interested in any chunks now which do *not* include yet another regex set `[...]`
         // nor any `{MACRO}` reference:
         default:
+        {
             // non-set character or word: see how much of this there is for us and then see if there
             // are any macros still lurking inside there:
-            c2 = s.match(NOTHING_SPECIAL_RE);
+            let c2 = s.match(NOTHING_SPECIAL_RE);
             if (c2) {
                 c2 = c2[0];
                 s = s.substr(c2.length);
@@ -624,6 +654,7 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
                 // nothing to stretch this match, hence nothing to expand.
                 rv.push(c1);
             }
+        }
             break;
         }
     }
@@ -838,7 +869,7 @@ function prepareMacros(dict_macros, grammarSpec) {
 
     let m, i;
 
-    if (grammarSpec.debug) console.log('\n############## RAW macros: ', dict_macros);
+    if (grammarSpec.options.debug) console.error('\n############## RAW macros: ', dict_macros);
 
     // first we create the part of the dictionary which is targeting the use of macros
     // *inside* `[...]` sets; once we have completed that half of the expansions work,
@@ -858,7 +889,7 @@ function prepareMacros(dict_macros, grammarSpec) {
         }
     }
 
-    if (grammarSpec.debug) console.log('\n############### expanded macros: ', macros);
+    if (grammarSpec.options.debug) console.error('\n############### expanded macros: ', macros);
 
     return macros;
 }
@@ -1004,7 +1035,7 @@ function prepareStartConditions(conditions) {
 }
 
 function buildActions(dict, tokens, grammarSpec) {
-    let actions = [ dict.actionInclude || '', 'const YYSTATE = YY_START;' ];
+    const actions = [ dict.actionInclude || '', 'const YYSTATE = YY_START;' ];
     let toks = {};
     let caseHelper = [];
 
@@ -1284,7 +1315,6 @@ function generateFakeXRegExpClassSrcCode() {
 /** @constructor */
 function RegExpLexer(dict, input, tokens, build_options, yy) {
     let grammarSpec;
-    let dump = false;
 
     function test_me(tweak_cb, description, src_exception, ex_callback) {
         grammarSpec = processGrammar(dict, tokens, build_options);
@@ -1338,8 +1368,15 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
                 `,
                 'return lexer;'
             ].join('\n');
-            let lexer = code_exec(testcode, function generated_code_exec_wrapper_regexp_lexer(sourcecode) {
-                //console.log("===============================LEXER TEST CODE\n", sourcecode, "\n=====================END====================\n");
+            let lexer = code_exec(testcode, function generated_code_exec_wrapper_regexp_lexer(sourcecode, options, errname, debug) {
+                if (debug > 3) {
+                    console.error((rmCommonWS`
+                        =============================== LEXER TEST CODE ======================
+                        @@@
+                        =============================== END ==================================`)
+                        .replace(/@@@/, sourcecode)
+                    );
+                }
                 chkBugger(sourcecode);
                 let lexer_f = new Function('', sourcecode);
                 return lexer_f();
@@ -1362,9 +1399,11 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
 
             // When we do NOT crash, we found/killed the problem area just before this call!
             if (src_exception && description) {
-                let msg = description;
+                let msg;
                 if (typeof description === 'function') {
                     msg = description();
+                } else {
+                    msg = description;
                 }
                 src_exception.message += '\n        (' + msg + ')';
             }
@@ -1386,7 +1425,14 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
                 if (typeof grammarSpec.options.showSource === 'function') {
                     grammarSpec.options.showSource(lexer, source, grammarSpec, RegExpLexer);
                 } else {
-                    console.log('\nGenerated lexer sourcecode:\n----------------------------------------\n', source, '\n----------------------------------------\n');
+                    console.log((rmCommonWS`
+                            ======================================================================
+                            Generated lexer sourcecode:
+                            ----------------------------------------------------------------------
+                            @@@
+                            ======================================================================
+                        `).replace(/@@@/, source)
+                    );
                 }
             }
             return lexer;
@@ -1397,45 +1443,48 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
 
             if (ex_callback) {
                 ex_callback(ex);
-            } else if (dump) {
-                console.log('source code:\n', source);
+            } else if (grammarSpec.options.dumpSourceCodeOnFailure) {
+                console.log((rmCommonWS`
+                        ======================================================================
+                        Generated lexer sourcecode on error:
+                        ----------------------------------------------------------------------
+                        @@@
+                        ======================================================================
+                    `).replace(/@@@/, source), ex
+                );
             }
             return false;
         }
     }
 
     /** @constructor */
-    let lexer = test_me(null, null, null, function (ex) {
+    let lexer = test_me(null, null, null, function onTestFailure_1(ex) {
         // When we get an exception here, it means some part of the user-specified lexer is botched.
         //
         // Now we go and try to narrow down the problem area/category:
         assert(grammarSpec.options);
         assert(grammarSpec.options.xregexp !== undefined);
         let orig_xregexp_opt = !!grammarSpec.options.xregexp;
-        if (!test_me(function () {
+        if (!test_me(function tweakResult_1() {
             assert(grammarSpec.options.xregexp !== undefined);
             grammarSpec.options.xregexp = false;
             grammarSpec.showSource = false;
         }, 'When you have specified %option xregexp, you must also properly IMPORT the XRegExp library in the generated lexer.', ex, null)) {
-            if (!test_me(function () {
+            if (!test_me(function tweakResult_2() {
                 // restore xregexp option setting: the trouble wasn't caused by the xregexp flag i.c.w. incorrect XRegExp library importing!
                 grammarSpec.options.xregexp = orig_xregexp_opt;
 
                 grammarSpec.conditions = [];
                 grammarSpec.showSource = false;
-            }, function () {
+            }, function description_2() {
                 assert(Array.isArray(grammarSpec.rules));
                 return (grammarSpec.rules.length > 0 ?
                     'One or more of your lexer state names are possibly botched?' :
                     'Your custom lexer is somehow botched.'
                 );
             }, ex, null)) {
-                let rulesSpecSize;
-                if (!test_me(function () {
-                    // store the parsed rule set size so we can use that info in case
-                    // this attempt also fails:
+                if (!test_me(function tweakResult_3() {
                     assert(Array.isArray(grammarSpec.rules));
-                    rulesSpecSize = grammarSpec.rules.length;
 
                     // grammarSpec.conditions = [];
                     grammarSpec.rules = [];
@@ -1444,36 +1493,50 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
                 }, 'One or more of your lexer rules are possibly botched?', ex, null)) {
                     // kill each rule action block, one at a time and test again after each 'edit':
                     let rv = false;
-                    for (let i = 0, len = rulesSpecSize; i < len; i++) {
-                        let lastEditedRuleSpec;
-                        rv = test_me(function () {
-                            assert(Array.isArray(grammarSpec.rules));
-                            assert(grammarSpec.rules.length === rulesSpecSize);
+                    let original_rules = dict.rules;
 
-                            // grammarSpec.conditions = [];
-                            // grammarSpec.rules = [];
-                            // grammarSpec.__in_rules_failure_analysis_mode__ = true;
-
-                            // nuke all rules' actions up to and including rule numero `i`:
-                            for (let j = 0; j <= i; j++) {
-                                // rules, when parsed, have 2 or 3 elements: [conditions, handle, action];
-                                // now we want to edit the *action* part:
-                                let rule = grammarSpec.rules[j];
-                                assert(Array.isArray(rule));
-                                assert(rule.length === 2 || rule.length === 3);
-                                rule.pop();
-                                rule.push('{ /* nada */ }');
-                                lastEditedRuleSpec = rule;
-                            }
-                        }, function () {
-                            return 'Your lexer rule "' + lastEditedRuleSpec[0] + '" action code block is botched?';
-                        }, ex, null);
-                        if (rv) {
-                            break;
+                    try {
+                        // medium-deep clone the dict.rules set, as we are going to manipulate it now...
+                        let rules = original_rules.slice();
+                        for (let i = 0, len = rules.length; i < len; i++) {
+                            rules[i] = Object.assign({}, rules[i]);
                         }
+
+                        dict.rules = rules;
+
+                        // nuke all rules' actions from the bottom up to find the first faulty action chunk:
+                        let lastEditedRuleSpec;
+                        for (let i = rules.length - 1; i >= 0; i--) {
+                            // nuke all rules' actions up to and including rule numero `i`:
+                            // the previous round has already nuked all rules' actions below this
+                            // one, so we only need to nuke one more:
+                            let rule = rules[i];
+                            assert(rule != null);
+                            assert.equal(typeof rule, 'object');
+                            assert('rule' in rule);
+                            assert('srcCode' in rule);
+                            rule.srcCode = '{ /* nada */ }';
+                            lastEditedRuleSpec = rule;
+
+                            rv = test_me(function tweakResult_3() {
+                                assert(Array.isArray(grammarSpec.rules));
+
+                                // grammarSpec.conditions = [];
+                                grammarSpec.showSource = false;
+                                grammarSpec.__in_rules_failure_analysis_mode__ = true;
+                            }, function desciption_4() {
+                                return 'Your lexer rule "' + lastEditedRuleSpec.rule + '" action code block is botched?';
+                            }, ex, null);
+                            if (rv) {
+                                break;
+                            }
+                        }
+                    } finally {
+                        dict.rules = original_rules;
                     }
+
                     if (!rv) {
-                        test_me(function () {
+                        test_me(function tweakResult_5() {
                             grammarSpec.conditions = [];
                             grammarSpec.rules = [];
                             grammarSpec.performAction = 'null';
@@ -1481,9 +1544,7 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
                             // grammarSpec.caseHelperInclude = '{}';
                             grammarSpec.showSource = false;
                             grammarSpec.__in_rules_failure_analysis_mode__ = true;
-
-                            dump = false;
-                        }, 'One or more of your lexer rule action code block(s) are possibly botched?', ex, null);
+                        }, 'One or more of your lexer action setup code block(s) are possibly botched?', ex, null);
                     }
                 }
             }
@@ -1628,7 +1689,7 @@ return `EOF: 1,
             text: this.match,           // This one MAY be empty; userland code should use the \`upcomingInput\` API to obtain more text which follows the 'lexer cursor position'...
             token: null,
             line: this.yylineno,
-            loc: this.yylloc,
+            loc: this.copy_yylloc(this.yylloc),
             yy: this.yy,
             // lexer: this,             // OBSOLETED member since 0.7.0: will cause reference cycles if not treated very carefully, hence has memory leak risks!
 
@@ -1969,6 +2030,66 @@ return `EOF: 1,
 
         this._input = this._input.slice(slice_len);
         return ch;
+    },
+
+    /**
+     * consumes and returns N chars from the input
+     *
+     * @public
+     * @this {RegExpLexer}
+     */
+    consume: function lexer_consume(n) {
+        if (!this._input) {
+            //this.done = true;    -- don't set \`done\` as we want the lex()/next() API to be able to produce one custom EOF token match after this anyhow. (lexer can match special <<EOF>> tokens and perform user action code for a <<EOF>> match, but only does so *once*)
+            return null;
+        }
+        if (!this._clear_state && !this._more) {
+            this._clear_state = -1;
+            this.clear();
+        }
+        let str = this._input.substring(0, n);
+        let len = str.length;
+        this.yytext += str;
+        this.yyleng += len;
+        this.offset += len;
+        this.match += str;
+        this.matched += str;
+        // Count the linenumber up when we hit the LF (or a stand-alone CR).
+        // On CRLF, the linenumber is incremented when you fetch the CR or the CRLF combo
+        // and we advance immediately past the LF as well, returning both together as if
+        // it was all a single 'character' only.
+        let slice_len = len;
+        let lines_arr = str.split(this.CRLF_Re);
+        let line_count = lines_arr.length - 1;
+        let lines = false;
+        const ch = this._input[n - 1];
+        if (ch === '\\n') {
+            lines = true;
+        } else if (ch === '\\r') {
+            lines = true;
+            const ch2 = this._input[n];
+            if (ch2 === '\\n') {
+                slice_len++;
+                str += ch2;
+                this.yytext += ch2;
+                this.yyleng++;
+                this.offset++;
+                this.match += ch2;
+                this.matched += ch2;
+                this.yylloc.range[1]++;
+            }
+        }
+        this.yylineno += line_count;
+        this.yylloc.last_line += line_count;
+        if (lines) {
+            this.yylloc.last_column = 0;
+        } else {
+            this.yylloc.last_column = lines_arr[line_count].length;
+        }
+        this.yylloc.range[1] += len;
+
+        this._input = this._input.slice(slice_len);
+        return str;
     },
 
     /**
@@ -2489,6 +2610,23 @@ return `EOF: 1,
             }
         }
         return rv;
+    },
+
+    /**
+     * Take a snapshot of the given \`loc\` location tracking object, e.g. \`this.yylloc\`.
+     * 
+     * Technically, this means this function returns a cloned instance of the given \`loc\`.
+     * @param  {YYlloc} loc     location tracking object
+     * @return {YYlloc}     
+     */
+    copy_yylloc: function leexer_copy_yylloc(loc) {
+        if (loc) {
+            let rv = Object.assign({}, loc);
+            // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
+            rv.range = rv.range.slice();
+            return rv;
+        }
+        return null;
     },
 
     /**
@@ -3332,8 +3470,8 @@ function stripUnusedLexerCode(src, grammarSpec) {
         // Note that the `#name`, `#$` and `#n` constructs are expanded directly to their symbol number without
         // the need to use yystack! Hence yystack is only there for very special use action code.)
 
-        if (this.DEBUG) {
-            console.log('Optimization analysis: ', {
+        if (grammarSpec.options.debug) {
+            console.error('Optimization analysis: ', {
                 actionsUseYYLENG: this.actionsUseYYLENG,
                 actionsUseYYLINENO: this.actionsUseYYLINENO,
                 actionsUseYYTEXT: this.actionsUseYYTEXT,
@@ -3497,8 +3635,8 @@ function processGrammar(dict, tokens, build_options) {
     grammarSpec.rules = code.rules || [];
     grammarSpec.macros = code.macros;
 
-    grammarSpec.regular_rule_count = code.regular_rule_count;
-    grammarSpec.simple_rule_count = code.simple_rule_count;
+    grammarSpec.regular_rule_count = code.regular_rule_count || 0;
+    grammarSpec.simple_rule_count = code.simple_rule_count || 0;
 
     grammarSpec.conditionStack = [ 'INITIAL' ];
 
@@ -3570,7 +3708,7 @@ function generateModuleBody(grammarSpec) {
     function produceOptions(opts) {
         let obj = {};
         const do_not_pass = {
-            debug: !opts.debug,     // do not include this item when it is FALSE as there's no debug tracing built into the generated grammar anyway!
+            debug: 0,             // userland action code chunks may need this one -- as there's no debug tracing built into the generated grammar kernel itself.
             enableDebugLogs: 1,
             json: 1,
             _: 1,
@@ -3682,7 +3820,7 @@ function generateModuleBody(grammarSpec) {
 
         assert(grammarSpec.options);
         // Assure all options are camelCased:
-        assert(typeof grammarSpec.options['case-insensitive'] === 'undefined');
+        assert.equal(typeof grammarSpec.options['case-insensitive'], 'undefined');
 
         code.push('    options: ' + produceOptions(grammarSpec.options));
 
@@ -3713,8 +3851,8 @@ function generateModuleBody(grammarSpec) {
         // what crazy stuff (or lack thereof) the userland code is pulling in the `actionInclude` chunk.
         out = '\n';
 
-        assert(grammarSpec.regular_rule_count === 0);
-        assert(grammarSpec.simple_rule_count === 0);
+        assert.strictEqual(grammarSpec.regular_rule_count, 0);
+        assert.strictEqual(grammarSpec.simple_rule_count, 0);
         grammarSpec.is_custom_lexer = true;
 
         if (grammarSpec.actionInclude) {

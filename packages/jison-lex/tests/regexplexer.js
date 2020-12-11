@@ -16,6 +16,10 @@ const mkdirp = helpers.mkdirp;
 
 
 
+const buildConfig = RegExpLexer.mkStdOptions({
+    // optimizeLexerRegexes: true
+});
+
 function re2set(re) {
     let xr = new XRegExp(re);
     let xs = '' +  xr;
@@ -271,9 +275,9 @@ describe('Lexer Kernel', function () {
     it('test basic matchers', function () {
         let dict = {
             rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" }
             ]
         };
 
@@ -291,20 +295,20 @@ describe('Lexer Kernel', function () {
     // the used lex grammar parser delivers as expected:
     describe('Parsed Lexer Grammar', function () {
         it('parses special character escapes correctly', function () {
-            let dict = [
-                '%%',
-                "'x'     {return 'X';}",
-                "\\n     {return 'NL';}",
-                "\\r     {return 'R';}",
-                "\\v     {return 'V';}",
-                "\\a     {return 'A';}",
-                "\\f     {return 'F';}",
-                "\\b     {return 'B';}",
-                "\\x42     {return 'C';}",
-                "\\u0043     {return 'D';}",
-                "\\      {return 'E';}",
-                '[^]     {return this.ERROR;}'
-            ].join('\n');
+            let dict = rmCommonWS`
+                %%
+                'x'     {return 'X';}
+                \\n     {return 'NL';}
+                \\r     {return 'R';}
+                \\v     {return 'V';}
+                \\a     {return 'A';}
+                \\f     {return 'F';}
+                \\b     {return 'B';}
+                \\x42     {return 'C';}
+                \\u0043     {return 'D';}
+                \\      {return 'E';}
+                [^]     {return this.ERROR;}
+            `;
 
             let lexer = new RegExpLexer(dict);
             let JisonLexerError = lexer.JisonLexerError;
@@ -727,9 +731,9 @@ describe('Lexer Kernel', function () {
     it('test set yy', function () {
         let dict = {
             rules: [
-                [ 'x', 'return yy.x;' ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: 'return yy.x;' },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -747,9 +751,9 @@ describe('Lexer Kernel', function () {
     it('test set input after', function () {
         let dict = {
             rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -768,9 +772,9 @@ describe('Lexer Kernel', function () {
     it('test unrecognized char', function () {
         let dict = {
             rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -792,9 +796,9 @@ describe('Lexer Kernel', function () {
     it('test if lexer continues correctly after having encountered an unrecognized char', function () {
         let dict = {
             rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -818,10 +822,10 @@ describe('Lexer Kernel', function () {
                 digit: '[0-9]'
             },
             rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '{digit}+', "return 'NAT';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '{digit}+', srcCode: "return 'NAT';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -841,9 +845,9 @@ describe('Lexer Kernel', function () {
                 hex: '[0-9]|[a-f]'
             },
             rules: [
-                [ '-', "return '-';" ],
-                [ '{hex}+', "return 'HEX';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: '-', srcCode: "return '-';" },
+                { rule: '{hex}+', srcCode: "return 'HEX';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -861,21 +865,21 @@ describe('Lexer Kernel', function () {
     });
 
     it('test nested macros', function () {
-        let dict = {
-            macros: {
-                digit: '[0-9]',
-                '2digit': '{digit}{digit}',
-                '3digit': '{2digit}{digit}'
-            },
-            rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '{3digit}', "return 'NNN';" ],
-                [ '{2digit}', "return 'NN';" ],
-                [ '{digit}', "return 'N';" ],
-                [ '$', "return 'EOF';" ]
-            ]
-        };
+        let dict = rmCommonWS`
+            
+            digit     [0-9]
+            _2digit    {digit}{digit}
+            _3digit    {_2digit}{digit}
+            
+            %%
+
+            x          return 'X';
+            y          return 'Y';
+            {_3digit}  return 'NNN';
+            {_2digit}  return 'NN';
+            {digit}    return 'N';
+            $          return 'EOF';
+        `;
 
         let input = 'x1y42y123';
 
@@ -896,9 +900,9 @@ describe('Lexer Kernel', function () {
                 col: '#{hex}+'
             },
             rules: [
-                [ '-', "return '-';" ],
-                [ '{col}', "return 'HEX';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: '-', srcCode: "return '-';" },
+                { rule: '{col}', srcCode: "return 'HEX';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -918,8 +922,8 @@ describe('Lexer Kernel', function () {
     it('test action include', function () {
         let dict = {
             rules: [
-                [ 'x', "return included ? 'Y' : 'N';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return included ? 'Y' : 'N';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ],
             actionInclude: 'var included = true;'
         };
@@ -934,10 +938,10 @@ describe('Lexer Kernel', function () {
     it('test ignored', function () {
         let dict = {
             rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '\\s+', '/* skip whitespace */' ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '\\s+', srcCode: '/* skip whitespace */' },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -952,15 +956,15 @@ describe('Lexer Kernel', function () {
     });
 
     it('test disambiguate', function () {
-        let dict = {
-            rules: [
-                [ 'for\\b', "return 'FOR';" ],
-                [ 'if\\b', "return 'IF';" ],
-                [ '[a-z]+', "return 'IDENTIFIER';" ],
-                [ '\\s+', '/* skip whitespace */' ],
-                [ '$', "return 'EOF';" ]
-            ]
-        };
+        let dict = rmCommonWS`
+            %%
+
+            for\\b         return 'FOR';
+            if\\b          return 'IF';
+            [a-z]+         return 'IDENTIFIER';
+            \\s+           /* skip whitespace */
+            $              return 'EOF';
+        `;
 
         let input = 'if forever for for';
 
@@ -975,7 +979,7 @@ describe('Lexer Kernel', function () {
     it('test yytext overwrite', function () {
         let dict = {
             rules: [
-                [ 'x', "yytext = 'hi der'; return 'X';" ]
+                { rule: 'x', srcCode: "yytext = 'hi der'; return 'X';" },
             ]
         };
 
@@ -987,18 +991,19 @@ describe('Lexer Kernel', function () {
     });
 
     it('test yylineno with test_match', function () {
-        let dict = {
-            rules: [
-                [ '\\s+', '/* skip whitespace */' ],
-                [ 'x', "return 'x';" ],
-                [ 'y', "return 'y';" ]
-            ]
-        };
+        let dict = rmCommonWS`
+            %%
+
+            \\s+          /* skip whitespace */
+            x             return 'x';
+            y             return 'y';
+        `;
 
         let input = 'x\nxy\n\n\nx';
         let lexer = new RegExpLexer(dict, input);
         assert.equal(lexer.yylineno, 0);
         assert.equal(lexer.lex(), 'x');
+        assert.equal(lexer.yylineno, 0);
         assert.equal(lexer.lex(), 'x');
         assert.equal(lexer.yylineno, 1);
         assert.equal(lexer.lex(), 'y');
@@ -1010,9 +1015,9 @@ describe('Lexer Kernel', function () {
     it('test yylineno with input', function () {
         let dict = {
             rules: [
-                [ '\\s+', '/* skip whitespace */' ],
-                [ 'x', "return 'x';" ],
-                [ 'y', "return 'y';" ]
+                { rule: '\\s+', srcCode: '/* skip whitespace */' },
+                { rule: 'x', srcCode: "return 'x';" },
+                { rule: 'y', srcCode: "return 'y';" },
             ]
         };
 
@@ -1051,9 +1056,9 @@ describe('Lexer Kernel', function () {
     it('test yylloc, yyleng, and other lexer token parameters', function () {
         let dict = {
             rules: [
-                [ '\\s+', '/* skip whitespace */' ],
-                [ 'x+', "return 'x';" ],
-                [ 'y+', "return 'y';" ]
+                { rule: '\\s+', srcCode: '/* skip whitespace */' },
+                { rule: 'x+', srcCode: "return 'x';" },
+                { rule: 'y+', srcCode: "return 'y';" },
             ]
         };
 
@@ -1070,7 +1075,7 @@ describe('Lexer Kernel', function () {
         assert.equal(lexer.yylloc.last_line, 1);
         assert.equal(lexer.yylloc.first_column, 0);
         assert.equal(lexer.yylloc.last_column, 1);
-    //assert.ok(lexer.yylloc.range === undefined);
+        //assert.ok(lexer.yylloc.range === undefined);
         assert.equal(lexer.lex(), 'x');
         assert.equal(lexer.yytext, 'x', 'yytext');
         assert.equal(lexer.yyleng, 1, 'yyleng');
@@ -1119,9 +1124,9 @@ describe('Lexer Kernel', function () {
                 ranges: true
             },
             rules: [
-                [ '\\s+', '/* skip whitespace */' ],
-                [ 'x+', "return 'x';" ],
-                [ 'y+', "return 'y';" ]
+                { rule: '\\s+', srcCode: '/* skip whitespace */' },
+                { rule: 'x+', srcCode: "return 'x';" },
+                { rule: 'y+', srcCode: "return 'y';" },
             ]
         };
 
@@ -1192,29 +1197,27 @@ describe('Lexer Kernel', function () {
     });
 
     it('test more()', function () {
-        let dict = {
-            rules: [
-                [ 'x', "return 'X';" ],
-                [ '"[^"]*',
-                    /* istanbul ignore next: action code is injected and then crashes the generated parser due to unreachable coverage global */
-                    function () {
-                        if (yytext.charAt(yyleng - 1) === '\\') {
-                            this.more();
-                        } else {
-                            yytext += this.input(); // swallow end quote
-                            return 'STRING';
-                        }
-                    }
-                ],
-                [ '$', "return 'EOF';" ]
-            ]
-        };
+        let dict = rmCommonWS`
+            %%
+
+            x               return 'X';
+            \\"[^"]* 
+                            if (yytext.charAt(yyleng - 1) === '\\\\') {
+                                this.more();
+                            } else {
+                                yytext += this.input(); // swallow end quote
+                                return 'STRING';
+                            }
+            $               return 'EOF';
+        `;
 
         let input = 'x"fgjdrtj\\"sdfsdf"x';
 
         let lexer = new RegExpLexer(dict, input);
         assert.equal(lexer.lex(), 'X');
         assert.equal(lexer.lex(), 'STRING');
+        assert.equal(lexer.yytext, '"fgjdrtj\\"sdfsdf"', 'yytext');
+        assert.equal(lexer.match, '"fgjdrtj\\"sdfsdf"', 'match');
         assert.equal(lexer.lex(), 'X');
         assert.equal(lexer.lex(), 'EOF');
     });
@@ -1223,9 +1226,9 @@ describe('Lexer Kernel', function () {
         let tokens = { 2:'X', 3:'Y', 4:'EOF' };
         let dict = {
             rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -1243,9 +1246,9 @@ describe('Lexer Kernel', function () {
     it('test module generator from constructor', function () {
         let dict = {
             rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ],
             options: {
                 moduleType: 'js'
@@ -1273,9 +1276,9 @@ describe('Lexer Kernel', function () {
     it('test module generator', function () {
         let dict = {
             rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -1298,20 +1301,20 @@ describe('Lexer Kernel', function () {
     });
 
     it('test generator with more complex lexer', function () {
-        let dict = {
-            rules: [
-                [ 'x', "return 'X';" ],
-                [ '"[^"]*', function () {
-                    if (yytext.charAt(yyleng - 1) === '\\') {
-                        this.more();
-                    } else {
-                        yytext += this.input(); // swallow end quote
-                        return 'STRING';
-                    }
-                } ],
-                [ '$', "return 'EOF';" ]
-            ]
-        };
+        let dict = rmCommonWS`
+            %%
+
+            x           return 'X';
+
+            \\"[^"]*    
+                        if (yytext.charAt(yyleng - 1) === '\\\\') {
+                            this.more();
+                        } else {
+                            yytext += this.input(); // swallow end quote
+                            return 'STRING';
+                        }
+            $           return 'EOF';
+        `;
 
         let input = 'x"fgjdrtj\\"sdfsdf"x';
 
@@ -1326,6 +1329,8 @@ describe('Lexer Kernel', function () {
 
         assert.equal(lexer.lex(), 'X');
         assert.equal(lexer.lex(), 'STRING');
+        assert.equal(lexer.yytext, '"fgjdrtj\\"sdfsdf"', 'yytext');
+        assert.equal(lexer.match, '"fgjdrtj\\"sdfsdf"', 'match');
         assert.equal(lexer.lex(), 'X');
         assert.equal(lexer.lex(), 'EOF');
     });
@@ -1333,9 +1338,9 @@ describe('Lexer Kernel', function () {
     it('test commonjs module generator', function () {
         let dict = {
             rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -1363,9 +1368,9 @@ describe('Lexer Kernel', function () {
     it('test amd module generator', function () {
         let dict = {
             rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -1396,9 +1401,9 @@ describe('Lexer Kernel', function () {
     it('test ES2017 module generator', function () {
         let dict = {
             rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -1422,50 +1427,46 @@ describe('Lexer Kernel', function () {
     });
 
     it('test DJ lexer', function () {
-        let dict = {
-            lex: {
-                macros: {
-                    digit: '[0-9]',
-                    id: '[a-zA-Z_][a-zA-Z0-9_]*'
-                },
+        let dict = rmCommonWS`
+            digit      [0-9]
+            id         [a-zA-Z_][a-zA-Z0-9_]*
 
-                rules: [
-                    [ '\\/\\/.*',       '/* ignore comment */' ],
-                    [ 'main\\b',     "return 'MAIN';" ],
-                    [ 'class\\b',    "return 'CLASS';" ],
-                    [ 'extends\\b',  "return 'EXTENDS';" ],
-                    [ 'nat\\b',      "return 'NATTYPE';" ],
-                    [ 'if\\b',       "return 'IF';" ],
-                    [ 'else\\b',     "return 'ELSE';" ],
-                    [ 'for\\b',      "return 'FOR';" ],
-                    [ 'printNat\\b', "return 'PRINTNAT';" ],
-                    [ 'readNat\\b',  "return 'READNAT';" ],
-                    [ 'this\\b',     "return 'THIS';" ],
-                    [ 'new\\b',      "return 'NEW';" ],
-                    [ 'var\\b',      "return 'VAR';" ],
-                    [ 'null\\b',     "return 'NUL';" ],
-                    [ '{digit}+',   "return 'NATLITERAL';" ],
-                    [ '{id}',       "return 'ID';" ],
-                    [ '==',         "return 'EQUALITY';" ],
-                    [ '=',          "return 'ASSIGN';" ],
-                    [ '\\+',        "return 'PLUS';" ],
-                    [ '-',          "return 'MINUS';" ],
-                    [ '\\*',        "return 'TIMES';" ],
-                    [ '>',          "return 'GREATER';" ],
-                    [ '\\|\\|',     "return 'OR';" ],
-                    [ '!',          "return 'NOT';" ],
-                    [ '\\.',        "return 'DOT';" ],
-                    [ '\\{',        "return 'LBRACE';" ],
-                    [ '\\}',        "return 'RBRACE';" ],
-                    [ '\\(',        "return 'LPAREN';" ],
-                    [ '\\)',        "return 'RPAREN';" ],
-                    [ ';',          "return 'SEMICOLON';" ],
-                    [ '\\s+',       '/* skip whitespace */' ],
-                    [ '.',          "print('Illegal character'); throw 'Illegal character';" ],
-                    [ '$',          "return 'ENDOFFILE';" ]
-                ]
-            }
-        };
+            %%
+
+            \\/\\/.*         /* ignore comment */
+            main\\b          return 'MAIN';
+            class\\b         return 'CLASS';
+            extends\\b       return 'EXTENDS';
+            nat\\b           return 'NATTYPE';
+            if\\b            return 'IF';
+            else\\b          return 'ELSE';
+            for\\b           return 'FOR';
+            printNat\\b      return 'PRINTNAT';
+            readNat\\b       return 'READNAT';
+            this\\b          return 'THIS';
+            new\\b           return 'NEW';
+            var\\b           return 'VAR';
+            null\\b          return 'NUL';
+            {digit}+         return 'NATLITERAL';
+            {id}             return 'ID';
+            "=="             return 'EQUALITY';
+            "="              return 'ASSIGN';
+            \\+              return 'PLUS';
+            -                return 'MINUS';
+            \\*              return 'TIMES';
+            >                return 'GREATER';
+            \\|\\|           return 'OR';
+            "!"              return 'NOT';
+            \\.              return 'DOT';
+            \\{              return 'LBRACE';
+            \\}              return 'RBRACE';
+            \\(              return 'LPAREN';
+            \\)              return 'RPAREN';
+            ";"              return 'SEMICOLON';
+            \\s+             /* skip whitespace */
+            .                print('Illegal character'); throw 'Illegal character';
+            $                return 'ENDOFFILE';
+        `;
 
         let input = 'class Node extends Object { \
                       var nat value    var nat value;\
@@ -1521,7 +1522,7 @@ describe('Lexer Kernel', function () {
                       };\
                     }';
 
-        let lexer = new RegExpLexer(dict.lex);
+        let lexer = new RegExpLexer(dict);
         lexer.setInput(input);
         let tok;
         while (tok = lexer.lex(), tok !== 1) {
@@ -1530,7 +1531,12 @@ describe('Lexer Kernel', function () {
     });
 
     it('test instantiation from string', function () {
-        let dict = "%%\n'x' {return 'X';}\n'y' {return 'Y';}\n<<EOF>> {return 'EOF';}";
+        let dict = rmCommonWS`
+            %%
+            'x' {return 'X';}
+            'y' {return 'Y';}
+            <<EOF>> {return 'EOF';}
+        `;
 
         let input = 'x';
 
@@ -1547,12 +1553,12 @@ describe('Lexer Kernel', function () {
                 TEST: 0
             },
             rules: [
-                [ 'enter-test', "this.begin('TEST');" ],
-                [ [ 'TEST' ], 'x', "return 'T';" ],
-                [ [ 'TEST' ], 'y', "this.begin('INITIAL'); return 'TY';" ],
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'enter-test', srcCode: "this.begin('TEST');" },
+                { start_condition: [ 'TEST' ], rule: 'x', srcCode: "return 'T';" },
+                { start_condition: [ 'TEST' ], rule: 'y', srcCode: "this.begin('INITIAL'); return 'TY';" },
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
         let input = 'xenter-testxyy';
@@ -1573,12 +1579,12 @@ describe('Lexer Kernel', function () {
                 EAT: 1
             },
             rules: [
-                [ '\\/\\/', "this.begin('EAT');" ],
-                [ [ 'EAT' ], '.', '' ],
-                [ [ 'EAT' ], '\\n', "this.begin('INITIAL');" ],
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: '\\/\\/', srcCode: "this.begin('EAT');" },
+                { start_condition: [ 'EAT' ], rule: '.', srcCode: '' },
+                { start_condition: [ 'EAT' ], rule: '\\n', srcCode: "this.begin('INITIAL');" },
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
         let input = 'xy//yxteadh//ste\ny';
@@ -1598,12 +1604,12 @@ describe('Lexer Kernel', function () {
                 EAT: 1
             },
             rules: [
-                [ '\\/\\/', "this.begin('EAT');" ],
-                [ [ 'EAT' ], '.', '' ],
-                [ [ 'EAT' ], '\\n', 'this.popState();' ],
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: '\\/\\/', srcCode: "this.begin('EAT');" },
+                { start_condition: [ 'EAT' ], rule: '.', srcCode: '' },
+                { start_condition: [ 'EAT' ], rule: '\\n', srcCode: 'this.popState();' },
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
         let input = 'xy//yxteadh//ste\ny';
@@ -1624,11 +1630,11 @@ describe('Lexer Kernel', function () {
                 EAT: 1
             },
             rules: [
-                [ '\\/\\/', "this.begin('EAT');" ],
-                [ [ 'EAT' ], '.', '' ],
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ [ '*' ], '$', "return 'EOF';" ]
+                { rule: '\\/\\/', srcCode: "this.begin('EAT');" },
+                { start_condition: [ 'EAT' ], rule: '.', srcCode: '' },
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { start_condition: [ '*' ], rule: '$', srcCode: "return 'EOF';" },
             ]
         };
         let input = 'xy//yxteadh//stey';
@@ -1647,11 +1653,11 @@ describe('Lexer Kernel', function () {
                 EAT: 1
             },
             rules: [
-                [ '\\/\\/', "this.begin('EAT');" ],
-                [ [ 'EAT' ], '.', "if (YYSTATE === 'EAT') return 'E';" ],
-                [ 'x', "if (YY_START === 'INITIAL') return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ [ '*' ], '$', "return 'EOF';" ]
+                { rule: '\\/\\/', srcCode: "this.begin('EAT');" },
+                { start_condition: [ 'EAT' ], rule: '.', srcCode: "if (YYSTATE === 'EAT') return 'E';" },
+                { rule: 'x', srcCode: "if (YY_START === 'INITIAL') return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { start_condition: [ '*' ], rule: '$', srcCode: "return 'EOF';" },
             ]
         };
         let input = 'xy//y';
@@ -1671,11 +1677,11 @@ describe('Lexer Kernel', function () {
                 INITIAL: 0
             },
             rules: [
-                [ '\\/\\/', "this.begin('EAT');" ],
-                [ [ 'EAT' ], '.', "if (YYSTATE === 'EAT') return 'E';" ],
-                [ 'x', "if (YY_START === 'INITIAL') return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ [ '*' ], '$', "return 'EOF';" ]
+                { rule: '\\/\\/', srcCode: "this.begin('EAT');" },
+                { start_condition: [ 'EAT' ], rule: '.', srcCode: "if (YYSTATE === 'EAT') return 'E';" },
+                { rule: 'x', srcCode: "if (YY_START === 'INITIAL') return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { start_condition: [ '*' ], rule: '$', srcCode: "return 'EOF';" },
             ]
         };
         let input = 'xy//y';
@@ -1692,9 +1698,9 @@ describe('Lexer Kernel', function () {
     it('test unicode encoding', function () {
         let dict = {
             rules: [
-                [ '\\u2713', "return 'CHECK';" ],
-                [ '\\u03c0', "return 'PI';" ],
-                [ 'y', "return 'Y';" ]
+                { rule: '\\u2713', srcCode: "return 'CHECK';" },
+                { rule: '\\u03c0', srcCode: "return 'PI';" },
+                { rule: 'y', srcCode: "return 'Y';" },
             ]
         };
         let input = '\u2713\u03c0y';
@@ -1710,8 +1716,8 @@ describe('Lexer Kernel', function () {
     it('test unicode', function () {
         let dict = {
             rules: [
-                [ 'π', "return 'PI';" ],
-                [ 'y', "return 'Y';" ]
+                { rule: 'π', srcCode: "return 'PI';" },
+                { rule: 'y', srcCode: "return 'Y';" },
             ]
         };
         let input = 'πy';
@@ -1726,8 +1732,8 @@ describe('Lexer Kernel', function () {
     it('test longest match returns', function () {
         let dict = {
             rules: [
-                [ '.', "return 'DOT';" ],
-                [ 'cat', "return 'CAT';" ]
+                { rule: '.', srcCode: "return 'DOT';" },
+                { rule: 'cat', srcCode: "return 'CAT';" },
             ],
             options: { flex: true }
         };
@@ -1743,7 +1749,7 @@ describe('Lexer Kernel', function () {
     it('test case insensitivity', function () {
         let dict = {
             rules: [
-                [ 'cat', "return 'CAT';" ]
+                { rule: 'cat', srcCode: "return 'CAT';" },
             ],
             options: { 'case-insensitive': true }
         };
@@ -1758,7 +1764,7 @@ describe('Lexer Kernel', function () {
     it('test camelCased json options', function () {
         let dict = {
             rules: [
-                [ 'cat', "return 'CAT';" ]
+                { rule: 'cat', srcCode: "return 'CAT';" },
             ],
             options: {
                 caseInsensitive: true
@@ -1775,8 +1781,8 @@ describe('Lexer Kernel', function () {
     it('test less', function () {
         let dict = {
             rules: [
-                [ 'cat', "this.less(2); return 'CAT';" ],
-                [ 't', "return 'T';" ]
+                { rule: 'cat', srcCode: "this.less(2); return 'CAT';" },
+                { rule: 't', srcCode: "return 'T';" },
             ]
         };
         let input = 'cat';
@@ -1794,10 +1800,10 @@ describe('Lexer Kernel', function () {
                 UN: 1
             },
             rules: [
-                [ 'U', "this.begin('UN');return 'U';" ],
-                [ [ 'UN' ], '$', "this.unput('X')" ],
-                [ [ 'UN' ], 'X', "this.popState();return 'X';" ],
-                [ '$', "return 'EOF'" ]
+                { rule: 'U', srcCode: "this.begin('UN');return 'U';" },
+                { start_condition: [ 'UN' ], rule: '$', srcCode: "this.unput('X')" },
+                { start_condition: [ 'UN' ], rule: 'X', srcCode: "this.popState();return 'X';" },
+                { rule: '$', srcCode: "return 'EOF'" },
             ]
         };
         let input = 'U';
@@ -1813,7 +1819,7 @@ describe('Lexer Kernel', function () {
     it('test flex mode default rule', function () {
         let dict = {
             rules: [
-                [ 'x', "return 'X';" ]
+                { rule: 'x', srcCode: "return 'X';" },
             ],
             options: { flex: true }
         };
@@ -1829,8 +1835,8 @@ describe('Lexer Kernel', function () {
     it('test pipe precedence', function () {
         let dict = {
             rules: [
-                [ 'x|y', "return 'X_Y';" ],
-                [ '.',   "return 'N';" ]
+                { rule: 'x|y', srcCode: "return 'X_Y';" },
+                { rule: '.', srcCode: "return 'N';" },
             ]
         };
         let input = 'xny';
@@ -1846,8 +1852,8 @@ describe('Lexer Kernel', function () {
     it('test ranges', function () {
         let dict = {
             rules: [
-                [ 'x+', "return 'X';" ],
-                [ '.',   "return 'N';" ]
+                { rule: 'x+', srcCode: "return 'X';" },
+                { rule: '.', srcCode: "return 'N';" },
             ],
             options: { ranges: true }
         };
@@ -1863,11 +1869,11 @@ describe('Lexer Kernel', function () {
     it('test unput location', function () {
         let dict = {
             rules: [
-                [ 'x+', "return 'X';" ],
-                [ 'y\\n', "this.unput('\\n'); return 'Y';" ],
-                [ '\\ny', "this.unput('y'); return 'BR';" ],
-                [ 'y', "return 'Y';" ],
-                [ '.',   "return 'N';" ]
+                { rule: 'x+', srcCode: "return 'X';" },
+                { rule: 'y\\n', srcCode: "this.unput('\\n'); return 'Y';" },
+                { rule: '\\ny', srcCode: "this.unput('y'); return 'BR';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '.', srcCode: "return 'N';" },
             ],
             options: { ranges: true }
         };
@@ -1906,11 +1912,11 @@ describe('Lexer Kernel', function () {
     it('test unput location again', function () {
         let dict = {
             rules: [
-                [ 'x+', "return 'X';" ],
-                [ 'y\\ny\\n', "this.unput('\\n'); return 'YY';" ],
-                [ '\\ny', "this.unput('y'); return 'BR';" ],
-                [ 'y', "return 'Y';" ],
-                [ '.',   "return 'N';" ]
+                { rule: 'x+', srcCode: "return 'X';" },
+                { rule: 'y\\ny\\n', srcCode: "this.unput('\\n'); return 'YY';" },
+                { rule: '\\ny', srcCode: "this.unput('y'); return 'BR';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '.', srcCode: "return 'N';" },
             ],
             options: { ranges: true }
         };
@@ -1949,9 +1955,9 @@ describe('Lexer Kernel', function () {
     it('test backtracking lexer reject() method', function () {
         let dict = {
             rules: [
-                [ '[A-Z]+([0-9]+)', "if (this.matches[1].length) this.reject(); else return 'ID';" ],
-                [ '[A-Z]+', "return 'WORD';" ],
-                [ '[0-9]+', "return 'NUM';" ]
+                { rule: '[A-Z]+([0-9]+)', srcCode: "if (this.matches[1].length) this.reject(); else return 'ID';" },
+                { rule: '[A-Z]+', srcCode: "return 'WORD';" },
+                { rule: '[0-9]+', srcCode: "return 'NUM';" },
             ],
             options: { backtrack_lexer: true }
         };
@@ -1967,9 +1973,9 @@ describe('Lexer Kernel', function () {
     it('test lexer reject() exception when not in backtracking mode', function () {
         let dict = {
             rules: [
-                [ '[A-Z]+([0-9]+)', "if (this.matches[1].length) this.reject(); else return 'ID';" ],
-                [ '[A-Z]+', "return 'WORD';" ],
-                [ '[0-9]+', "return 'NUM';" ]
+                { rule: '[A-Z]+([0-9]+)', srcCode: "if (this.matches[1].length) this.reject(); else return 'ID';" },
+                { rule: '[A-Z]+', srcCode: "return 'WORD';" },
+                { rule: '[0-9]+', srcCode: "return 'NUM';" },
             ],
             options: { backtrack_lexer: false }
         };
@@ -1992,9 +1998,9 @@ describe('Lexer Kernel', function () {
     it('test yytext state after unput', function () {
         let dict = {
             rules: [
-                [ 'cat4', "this.unput('4'); return 'CAT';" ],
-                [ '4', "return 'NUMBER';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'cat4', srcCode: "this.unput('4'); return 'CAT';" },
+                { rule: '4', srcCode: "return 'NUMBER';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -2012,8 +2018,8 @@ describe('Lexer Kernel', function () {
     it('test not blowing up on a sequence of ignored tokens the size of the maximum callstack size', function () {
         let dict = {
             rules: [
-                [ '#', '// ignored' ],
-                [ '$', "return 'EOF';" ]
+                { rule: '#', srcCode: '// ignored' },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -2038,7 +2044,7 @@ describe('Lexer Kernel', function () {
     it('test custom parseError handler', function () {
         let dict = {
             rules: [
-                [ 'x', "return 't';" ]
+                { rule: 'x', srcCode: "return 't';" },
             ]
         };
 
@@ -2080,7 +2086,7 @@ describe('Lexer Kernel', function () {
     it('test custom parseError handler which produces a replacement token', function () {
         let dict = {
             rules: [
-                [ 'x', "return 't';" ]
+                { rule: 'x', srcCode: "return 't';" },
             ]
         };
 
@@ -2145,7 +2151,7 @@ describe('Lexer Kernel', function () {
                 }
             },
             rules: [
-                [ '[a-z]', "return 't';" ]
+                { rule: '[a-z]', srcCode: "return 't';" },
             ]
         };
 
@@ -2213,7 +2219,7 @@ describe('Lexer Kernel', function () {
                 }
             },
             rules: [
-                [ '[a-z]', "return 't';" ]
+                { rule: '[a-z]', srcCode: "return 't';" },
             ]
         };
 
@@ -2270,9 +2276,9 @@ describe('Lexer Kernel', function () {
     it('test edge case which could break documentation comments in the generated lexer', function () {
         let dict = {
             rules: [
-                [ '\\*\\/', "return 'X';" ],
-                [ '"*/"', "return 'Y';" ],
-                [ "'*/'", "return 'Z';" ]
+                { rule: '\\*\\/', srcCode: "return 'X';" },
+                { rule: '"*/"', srcCode: "return 'Y';" },
+                { rule: "'*/'", srcCode: "return 'Z';" },
             ]
         };
 
@@ -2293,7 +2299,7 @@ describe('Lexer Kernel', function () {
 
         let dict = {
             rules: [
-                [ '[a-z]', "return 'X';" ]
+                { rule: '[a-z]', srcCode: "return 'X';" },
             ],
             options: { ranges: true }
         };
@@ -2347,7 +2353,7 @@ describe('Lexer Kernel', function () {
 
         let dict = {
             rules: [
-                [ '[a-z]', "return 'X';" ]
+                { rule: '[a-z]', srcCode: "return 'X';" },
             ],
             options: { ranges: true }
         };
@@ -2416,7 +2422,7 @@ describe('Lexer Kernel', function () {
 
         let dict = {
             rules: [
-                [ '[a-z]', "return 'X';" ]
+                { rule: '[a-z]', srcCode: "return 'X';" },
             ],
             options: { ranges: true }
         };
@@ -2655,9 +2661,9 @@ describe('Lexer Kernel', function () {
                 }
             ],
             rules: [
-                [ 'π', "return 'PI';" ],
-                [ '\\p{Alphabetic}', "return 'Y';" ],
-                [ '[\\p{Number}]', "return 'N';" ]
+                { rule: 'π', srcCode: "return 'PI';" },
+                { rule: '\\p{Alphabetic}', srcCode: "return 'Y';" },
+                { rule: '[\\p{Number}]', srcCode: "return 'N';" },
             ]
         };
         let input = 'πyαε';
@@ -2707,9 +2713,9 @@ describe('Lexer Kernel', function () {
                 xregexp: false    // !!!
             },
             rules: [
-                [ 'π', "return 'PI';" ],
-                [ '\\p{Alphabetic}', "return 'Y';" ],
-                [ '[\\p{Number}]', "return 'N';" ]
+                { rule: 'π', srcCode: "return 'PI';" },
+                { rule: '\\p{Alphabetic}', srcCode: "return 'Y';" },
+                { rule: '[\\p{Number}]', srcCode: "return 'N';" },
             ]
         };
         let input = 'πyα1ε';
@@ -2749,9 +2755,9 @@ describe('Lexer Kernel', function () {
                 DIGIT: '[\\p{Number}]'
             },
             rules: [
-                [ 'π', "return 'PI';" ],
-                [ '\\p{Alphabetic}', "return 'Y';" ],
-                [ '{DIGIT}+', "return 'N';" ]
+                { rule: 'π', srcCode: "return 'PI';" },
+                { rule: '\\p{Alphabetic}', srcCode: "return 'Y';" },
+                { rule: '{DIGIT}+', srcCode: "return 'N';" },
             ]
         };
         let input = 'πyα123ε';
@@ -2779,9 +2785,9 @@ describe('Lexer Kernel', function () {
                 DIGIT: '[\\p{Number}]'
             },
             rules: [
-                [ 'π', "return 'PI';" ],
-                [ '\\p{Alphabetic}', "return 'Y';" ],
-                [ '{DIGIT}+', "return 'N';" ]
+                { rule: 'π', srcCode: "return 'PI';" },
+                { rule: '\\p{Alphabetic}', srcCode: "return 'Y';" },
+                { rule: '{DIGIT}+', srcCode: "return 'N';" },
             ]
         };
         let input = 'πyα123ε';
@@ -2811,9 +2817,9 @@ describe('Lexer Kernel', function () {
                 ALNUM: '[{DIGIT}{ALPHA}]'
             },
             rules: [
-                [ 'π', "return 'PI';" ],
-                [ '[{ALNUM}]+', "return 'Y';" ],
-                [ '{DIGIT}+', "return 'N';" ]
+                { rule: 'π', srcCode: "return 'PI';" },
+                { rule: '[{ALNUM}]+', srcCode: "return 'Y';" },
+                { rule: '{DIGIT}+', srcCode: "return 'N';" },
             ]
         };
         let input = 'πyα123ε';
@@ -2879,10 +2885,10 @@ describe('Lexer Kernel', function () {
                 ALNUM: '[{DIGIT}{ALPHA}]'
             },
             rules: [
-                [ 'π', "return 'PI';" ],
-                [ '[{ALNUM}]+', "return 'Y';" ],
-                [ '{DIGIT}+', "return 'N';" ],
-                [ '.', "return '?';" ]
+                { rule: 'π', srcCode: "return 'PI';" },
+                { rule: '[{ALNUM}]+', srcCode: "return 'Y';" },
+                { rule: '{DIGIT}+', srcCode: "return 'N';" },
+                { rule: '.', srcCode: "return '?';" },
             ]
         };
         let input = 'πyα123εE';
@@ -2894,7 +2900,11 @@ describe('Lexer Kernel', function () {
         assert.equal(expandedMacros.DIGIT.in_set, '\\d');
         assert.equal(expandedMacros.ALPHA.in_set, 'A-Za-z');
         assert.equal(expandedMacros.ALNUM.in_set, '0-9A-Za-z');
-        assert.equal(expandedMacros.ALNUM.elsewhere, '[^\\W_]');   /* [0-9A-Za-z] */
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.ALNUM.elsewhere, '[^\\W_]');   /* [\dA-Za-z] */
+        } else {
+            assert.equal(expandedMacros.ALNUM.elsewhere, '[\\dA-Za-z]');
+        }
 
         lexer.setInput(input);
 
@@ -2919,11 +2929,11 @@ describe('Lexer Kernel', function () {
                 CTRL:  '[^{ALNUM}]'
             },
             rules: [
-                [ 'π', "return 'PI';" ],
-                [ '{CTRL}+', "return 'C';" ],
-                [ '[{ALNUM}]+', "return 'Y';" ],
-                [ '{DIGIT}+', "return 'N';" ],
-                [ '.', "return '?';" ]
+                { rule: 'π', srcCode: "return 'PI';" },
+                { rule: '{CTRL}+', srcCode: "return 'C';" },
+                { rule: '[{ALNUM}]+', srcCode: "return 'Y';" },
+                { rule: '{DIGIT}+', srcCode: "return 'N';" },
+                { rule: '.', srcCode: "return '?';" },
             ]
         };
         let input = 'πyα * +123.@_[]εE';
@@ -2935,9 +2945,17 @@ describe('Lexer Kernel', function () {
         assert.equal(expandedMacros.DIGIT.in_set, '\\d');
         assert.equal(expandedMacros.ALPHA.in_set, 'A-Za-z');
         assert.equal(expandedMacros.ALNUM.in_set, '0-9A-Za-z');
-        assert.equal(expandedMacros.ALNUM.elsewhere, '[^\\W_]');   /* [0-9A-Za-z] */
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.ALNUM.elsewhere, '[^\\W_]');   /* [0-9A-Za-z] */
+        } else {
+            assert.equal(expandedMacros.ALNUM.elsewhere, '[\\dA-Za-z]');
+        }
         // assert.equal(expandedMacros.CTRL.in_inv_set, '0-9A-Za-z');
-        assert.equal(expandedMacros.CTRL.elsewhere, '[\\W_]');   /* [^0-9A-Za-z] */
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.CTRL.elsewhere, '[\\W_]');   /* [^0-9A-Za-z] */
+        } else {
+            assert.equal(expandedMacros.CTRL.elsewhere, '[^0-9A-Za-z]');   /* [^0-9A-Za-z] */
+        }
 
         lexer.setInput(input);
 
@@ -2968,11 +2986,11 @@ describe('Lexer Kernel', function () {
                 ANY:   '[\\W\\w]'
             },
             rules: [
-                [ 'π', "return 'PI';" ],
-                [ '{CTRL}+', "return 'C';" ],
-                [ '[{WORD}]+', "return 'Y';" ],
-                [ '[{DIGIT}]+', "return 'N';" ],
-                [ '.', "return '?';" ]
+                { rule: 'π', srcCode: "return 'PI';" },
+                { rule: '{CTRL}+', srcCode: "return 'C';" },
+                { rule: '[{WORD}]+', srcCode: "return 'Y';" },
+                { rule: '[{DIGIT}]+', srcCode: "return 'N';" },
+                { rule: '.', srcCode: "return '?';" },
             ]
         };
         let input = 'πyα * +123.@_[]εE';
@@ -2984,24 +3002,57 @@ describe('Lexer Kernel', function () {
         assert.equal(expandedMacros.DIGIT.in_set, '\\d');
         assert.equal(expandedMacros.ALPHA.in_set, 'A-Za-z');
         assert.equal(expandedMacros.ALNUM.in_set, '0-9A-Za-z');
-        assert.equal(expandedMacros.ALNUM.elsewhere, '[^\\W_]|\\d');   /* [0-9A-Za-z]|[0-9] */
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.ALNUM.elsewhere, '[^\\W_]|\\d');   /* [0-9A-Za-z]|[0-9] */
+        } else {
+            assert.equal(expandedMacros.ALNUM.elsewhere, '[\\dA-Za-z]|[\\d]');   /* [0-9A-Za-z]|[0-9] */
+        }
         assert.equal(expandedMacros.CTRL.in_set, '\\u0000-/:-@\\[-`{-\\uffff' /* '^0-9a-zA-Z' */);
-        assert.equal(expandedMacros.CTRL.elsewhere, '[\\W_]');  /* [^0-9A-Za-z] */
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.CTRL.elsewhere, '[\\W_]');  /* [^0-9A-Za-z] */
+        } else {
+            assert.equal(expandedMacros.CTRL.elsewhere, '[^0-9A-Za-z]');  /* [^0-9A-Za-z] */
+        }
         assert.equal(expandedMacros.WORD.in_set, '0-:A-Za-z');
-        assert.equal(expandedMacros.WORD.elsewhere, '[:BLU]|[^\\W_]');
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.WORD.elsewhere, '[:BLU]|[^\\W_]');
+        } else {
+            assert.equal(expandedMacros.WORD.elsewhere, '[BLUB:]|[^\\u0000-/:-@\\[-`{-\\uffff]');
+        }
+
         // Unicode Character 'LINE SEPARATOR' (U+2028) and Unicode Character 'PARAGRAPH SEPARATOR' (U+2029) must be explicitly encoded in \uNNNN
         // syntax to prevent crashes when the generated is compiled via `new Function()` as that one doesn't like it when you feed it
         // regexes with these two characters embedded as is!
         assert.equal(expandedMacros.WS.in_set, '\\t\\v\\f \u00a0\u1680\u180e\u2000-\u200a\\u2028\\u2029\u202f\u205f\u3000\ufeff');
-        assert.equal(expandedMacros.WS.elsewhere, '[^\\S\\n\\r]');
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.WS.elsewhere, '[^\\S\\n\\r]');
+        } else {
+            assert.equal(expandedMacros.WS.elsewhere, '[^\\S\\r\\n]');
+        }
         assert.equal(expandedMacros.ANY.in_set, '\\S\\s');
-        assert.equal(expandedMacros.ANY.elsewhere, '[\\S\\s]');
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.ANY.elsewhere, '[\\S\\s]');
+        } else {
+            assert.equal(expandedMacros.ANY.elsewhere, '[\\W\\w]');
+        }
         assert.equal(expandedMacros.NONE.in_set, '^\\S\\s');
-        assert.equal(expandedMacros.NONE.elsewhere, '[^\\S\\s]');
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.NONE.elsewhere, '[^\\S\\s]');
+        } else {
+            assert.equal(expandedMacros.NONE.elsewhere, '[^\\W\\w]');
+        }
         assert.ok(expandedMacros.DIGITS.in_set instanceof Error);
-        assert.equal(expandedMacros.DIGITS.elsewhere, '\\d+');
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.DIGITS.elsewhere, '\\d+');
+        } else {
+            assert.equal(expandedMacros.DIGITS.elsewhere, '[\\d]+');
+        }
         assert.ok(expandedMacros.WORDS.in_set instanceof Error);
-        assert.equal(expandedMacros.WORDS.elsewhere, '[\\d:A-Za-z]+');
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.WORDS.elsewhere, '[\\d:A-Za-z]+');
+        } else {
+            assert.equal(expandedMacros.WORDS.elsewhere, '[0-:A-Za-z]+');
+        }
 
         lexer.setInput(input);
 
@@ -3026,15 +3077,15 @@ describe('Lexer Kernel', function () {
                 NOTNOTISSUE: '[^{NOTISSUE}]'            // while negating the *negated set* once again *excludes* the U.S.P. in NOTNOTISSUE!
             },
             rules: [
-                [ '{ISSUE_A}+', "return 'A';" ],
-                [ '{ISSUE_B}+', "return 'B';" ],
-//                ["{NOTISSUE}+", "return 'N';" ],
-                [ '{NOTNOTISSUE}+', "return 'C';" ],
-                [ '[{ISSUE_A}]+', "return 'X';" ],
-                [ '[{ISSUE_B}]+', "return 'Y';" ],
-//                ["[{NOTISSUE}]+", "return 'W';" ],
-                [ '[{NOTNOTISSUE}]+', "return 'Z';" ],
-                [ '.', "return '?';" ]
+                { rule: '{ISSUE_A}+', srcCode: "return 'A';" },
+                { rule: '{ISSUE_B}+', srcCode: "return 'B';" },
+//                { rule: "{NOTISSUE}+", srcCode: "return 'N';" },
+                { rule: '{NOTNOTISSUE}+', srcCode: "return 'C';" },
+                { rule: '[{ISSUE_A}]+', srcCode: "return 'X';" },
+                { rule: '[{ISSUE_B}]+', srcCode: "return 'Y';" },
+//                { rule: "[{NOTISSUE}]+", srcCode: "return 'W';" },
+                { rule: '[{NOTNOTISSUE}]+', srcCode: "return 'Z';" },
+                { rule: '.', srcCode: "return '?';" },
             ]
         };
         let input = 'πXYZxyzα\u10000\u{0023}\u{1023}\u{10230}ε';
@@ -3046,13 +3097,29 @@ describe('Lexer Kernel', function () {
 
         // test the calculated regexes -- the 'sollwert' for the test takes `i2c()` encoding particulars into account:
         assert.equal(expandedMacros.ISSUE_A.in_set, '\\t\\n\\r\u0120-\uD7FF\uE000\\ufffd');
-        assert.equal(expandedMacros.ISSUE_A.elsewhere, '[\\t\\n\\r\u0120-\uD7FF\uE000\\ufffd]');
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.ISSUE_A.elsewhere, '[\\t\\n\\r\u0120-\uD7FF\uE000\\ufffd]');
+        } else {
+            assert.equal(expandedMacros.ISSUE_A.elsewhere, '[\\t\\n\\r\\u0120-\\uD7FF\\uE000\\uFFFD]');
+        }
         assert.equal(expandedMacros.ISSUE_B.in_set, '\\u001f-\u002F');
-        assert.equal(expandedMacros.ISSUE_B.elsewhere, '[\\u001f-\u002F]');
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.ISSUE_B.elsewhere, '[\\u001f-\u002F]');
+        } else {
+            assert.equal(expandedMacros.ISSUE_B.elsewhere, '[\\u001F-\\u002F]');
+        }
         assert.equal(expandedMacros.NOTISSUE.in_set, '\\u0000-\\b\\v\\f\\u000e-\\u001e0-W\\[-\u011f\\ud800-\\udfff\ue001-\\ufffc\\ufffe\\uffff');
-        assert.equal(expandedMacros.NOTISSUE.elsewhere, '[^\\t\\n\\r\\u001f-\u002FX-Z\u0120-\uD7FF\uE000\\ufffd]');
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.NOTISSUE.elsewhere, '[^\\t\\n\\r\\u001f-\u002FX-Z\u0120-\uD7FF\uE000\\ufffd]');
+        } else {
+            assert.equal(expandedMacros.NOTISSUE.elsewhere, '[^\\t\\n\\r\u0120-\uD7FF\uE000\\ufffd\\u001f-/XYZ]');
+        }
         assert.equal(expandedMacros.NOTNOTISSUE.in_set, '\\t\\n\\r\\u001f-\u002FX-Z\u0120-\uD7FF\uE000\\ufffd');
-        assert.equal(expandedMacros.NOTNOTISSUE.elsewhere, '[\\t\\n\\r\\u001f-\u002FX-Z\u0120-\uD7FF\uE000\\ufffd]');
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.NOTNOTISSUE.elsewhere, '[\\t\\n\\r\\u001f-\u002FX-Z\u0120-\uD7FF\uE000\\ufffd]');
+        } else {
+            assert.equal(expandedMacros.NOTNOTISSUE.elsewhere, '[^\\u0000-\\b\\v\\f\\u000e-\\u001e0-W\\[-\u011F\\ud800-\\udfff\uE001-\\ufffc\\ufffe\\uffff]');
+        }
 
         lexer.setInput(input);
 
@@ -3093,15 +3160,15 @@ describe('Lexer Kernel', function () {
                 NOTNOTISSUE: '[^{NOTISSUE}]'            // while negating the *negated set* once again *excludes* the U.S.P. in NOTNOTISSUE!
             },
             rules: [
-                [ '{ISSUE_A}+', "return 'A';" ],
-                [ '{ISSUE_B}+', "return 'B';" ],
-//                ["{NOTISSUE}+", "return 'N';" ],
-                [ '{NOTNOTISSUE}+', "return 'C';" ],
-                [ '[{ISSUE_A}]+', "return 'X';" ],
-                [ '[{ISSUE_B}]+', "return 'Y';" ],
-//                ["[{NOTISSUE}]+", "return 'W';" ],
-                [ '[{NOTNOTISSUE}]+', "return 'Z';" ],
-                [ '.', "return '?';" ]
+                { rule: '{ISSUE_A}+', srcCode: "return 'A';" },
+                { rule: '{ISSUE_B}+', srcCode: "return 'B';" },
+//                { rule: "{NOTISSUE}+", srcCode: "return 'N';" },
+                { rule: '{NOTNOTISSUE}+', srcCode: "return 'C';" },
+                { rule: '[{ISSUE_A}]+', srcCode: "return 'X';" },
+                { rule: '[{ISSUE_B}]+', srcCode: "return 'Y';" },
+//                { rule: "[{NOTISSUE}]+", srcCode: "return 'W';" },
+                { rule: '[{NOTNOTISSUE}]+', srcCode: "return 'Z';" },
+                { rule: '.', srcCode: "return '?';" },
             ]
         };
         let input = 'πXYZxyzα\u10000\u{0023}\u{1023}\u{10230}ε';
@@ -3113,13 +3180,29 @@ describe('Lexer Kernel', function () {
 
         // test the calculated regexes -- the 'sollwert' for the test takes `i2c()` encoding particulars into account:
         assert.equal(expandedMacros.ISSUE_A.in_set, '\\t\\n\\r\u0120-\uD7FF\uE000\\ufffd');
-        assert.equal(expandedMacros.ISSUE_A.elsewhere, '[\\t\\n\\r\u0120-\uD7FF\uE000\\ufffd]');
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.ISSUE_A.elsewhere, '[\\t\\n\\r\u0120-\uD7FF\uE000\\ufffd]');
+        } else {
+            assert.equal(expandedMacros.ISSUE_A.elsewhere, '[\\t\\n\\r\\u0120-\\uD7FF\\uE000\\uFFFD]');
+        }
         assert.equal(expandedMacros.ISSUE_B.in_set, '\\u001f-\u002F');
-        assert.equal(expandedMacros.ISSUE_B.elsewhere, '[\\u001f-\u002F]');
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.ISSUE_B.elsewhere, '[\\u001f-\u002F]');
+        } else {
+            assert.equal(expandedMacros.ISSUE_B.elsewhere, '[\\u001F-\\u002F]');
+        }
         assert.equal(expandedMacros.NOTISSUE.in_set, '\\u0000-\\b\\v\\f\\u000e-\\u001e0-W\\[-\u011f\\ud800-\\udfff\ue001-\\ufffc\\ufffe\\uffff');
-        assert.equal(expandedMacros.NOTISSUE.elsewhere, '[^\\t\\n\\r\\u001f-\u002FX-Z\u0120-\uD7FF\uE000\\ufffd]');
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.NOTISSUE.elsewhere, '[^\\t\\n\\r\\u001f-\u002FX-Z\u0120-\uD7FF\uE000\\ufffd]');
+        } else {
+            assert.equal(expandedMacros.NOTISSUE.elsewhere, '[^\\t\\n\\r\u0120-\uD7FF\uE000\\ufffd\\u001f-/XYZ]');
+        }
         assert.equal(expandedMacros.NOTNOTISSUE.in_set, '\\t\\n\\r\\u001f-\u002FX-Z\u0120-\uD7FF\uE000\\ufffd');
-        assert.equal(expandedMacros.NOTNOTISSUE.elsewhere, '[\\t\\n\\r\\u001f-\u002FX-Z\u0120-\uD7FF\uE000\\ufffd]');
+        if (buildConfig.optimizeLexerRegexes) {
+            assert.equal(expandedMacros.NOTNOTISSUE.elsewhere, '[\\t\\n\\r\\u001f-\u002FX-Z\u0120-\uD7FF\uE000\\ufffd]');
+        } else {
+            assert.equal(expandedMacros.NOTNOTISSUE.elsewhere, '[^\\u0000-\\b\\v\\f\\u000e-\\u001e0-W\\[-\u011F\\ud800-\\udfff\uE001-\\ufffc\\ufffe\\uffff]');
+        }
 
         lexer.setInput(input);
 
@@ -3186,17 +3269,17 @@ describe('Lexer Kernel', function () {
     it('test multiple independent lexer instances', function () {
         let dict1 = {
             rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
         let dict2 = {
             rules: [
-                [ 'a', "return 'A';" ],
-                [ 'b', "return 'B';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'a', srcCode: "return 'A';" },
+                { rule: 'b', srcCode: "return 'B';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -3221,9 +3304,9 @@ describe('Lexer Kernel', function () {
     it('test cloned yet independent lexer instances', function () {
         let dict = {
             rules: [
-                [ 'x', "return 'X';" ],
-                [ 'y', "return 'Y';" ],
-                [ '$', "return 'EOF';" ]
+                { rule: 'x', srcCode: "return 'X';" },
+                { rule: 'y', srcCode: "return 'Y';" },
+                { rule: '$', srcCode: "return 'EOF';" },
             ]
         };
 
@@ -3273,14 +3356,26 @@ describe('Lexer Kernel', function () {
 // prettyPrintRange() API
 describe('prettyPrintRange() API', function () {
 
+    function hookPrettyPrintRange(lexer, cb) {
+        let f = lexer.prettyPrintRange;
+        lexer.prettyPrintRange = function hook(...args) {
+            cb(args);
+            return f.apply(this, args);
+        };
+        return lexer;
+    }
 
-    it('baseline - not invoking the API via ny error report', function () {
-        let dict = [
-            '%%',
-            '"a" %{ return true; %}',
-            '"b" %{ return 1; %}'
-        ].join('\n');
+    it('baseline - not invoking the API via any error report', function () {
+        let dict = rmCommonWS`
+            %%
+            "a" %{ return true; %}
+            "b" %{ return 1; %}
+        `;
         let lexer = new RegExpLexer(dict);
+
+        let counter = 0;
+        hookPrettyPrintRange(lexer, () => { counter++; });
+
         let JisonLexerError = lexer.JisonLexerError;
         assert(JisonLexerError);
 
@@ -3293,15 +3388,16 @@ describe('prettyPrintRange() API', function () {
         assert.strictEqual(lexer.lex(), 1);
 
         assert.strictEqual(lexer.lex(), lexer.EOF);
+        assert.strictEqual(counter, 0);
     });
 
     it('is invoked when lexer cannot parse the spec due to faulty indentation', function () {
-        let dict = [
-            '%%',
+        let dict = rmCommonWS`
+            %%
             // rule regex MUST start the line; indentation (incorrectly) indicates this is all 'action code':
-            ' "a" %{ return true; %}',
-            ' "b" %{ return 1; %}'
-        ].join('\n');
+             "a" %{ return true; %}
+             "b" %{ return 1; %}
+        `;
 
         assert.throws(function () {
             let lexer = new RegExpLexer(dict);
@@ -3309,6 +3405,39 @@ describe('prettyPrintRange() API', function () {
         Error,
         /an error in one or more of your lexer regex rules/
         );
+    });
+
+    it('is invoked when lexer cannot parse the spec due to faulty indentation inside condition rule set', function () {
+        let dict = rmCommonWS`
+            %s C
+            %%
+            <C,INITIAL>{
+                // rule regex MAY be indented, but only "a single level" (@ 4 spaces): 
+                // a heuristic decides 8 spaces or more indentation is action code no matter what,
+                // while TAB characters are rated at 4 characters each for this heuristic.
+
+                "a" %{ return true; %}
+                "b" let x = 'foo';
+                    let y =  'bar';
+                    return x + y;
+            }
+        `;
+
+        let lexer = new RegExpLexer(dict);
+
+        let counter = 0;
+        hookPrettyPrintRange(lexer, () => { counter++; });
+
+        let input = 'abab';
+
+        lexer.setInput(input);
+        assert.strictEqual(lexer.lex(), true);
+        assert.strictEqual(lexer.lex(), 'foobar');
+        assert.strictEqual(lexer.lex(), true);
+        assert.strictEqual(lexer.lex(), 'foobar');
+
+        assert.strictEqual(lexer.lex(), lexer.EOF);
+        assert.strictEqual(counter, 0);
     });
 
     it("is invoked when lexer cannot find the end of a rule's action code block (alt 1)", function () {
@@ -3334,9 +3463,6 @@ describe('prettyPrintRange() API', function () {
     it("is invoked when lexer cannot find the end of a rule's action code block (alt 2)", function () {
         let dict = [
             '%%',
-            // %{...%} action code blocks can contain ANYTHING.
-            // Hence we won't find this error until we validate-parse-as-JS
-            // the entire generated lexer source code.
             '"a" %{ return true; %}',
             '"b" %{ return 1; '
         ].join('\n');
@@ -3347,7 +3473,7 @@ describe('prettyPrintRange() API', function () {
             });
         },
         Error,
-        /Could not parse lexer spec\nError: Lexical error on line 3: \nIncorrectly terminated action code block/
+        /Could not parse lexer spec\nError: Lexical error on line 3:/
         );
     });
 
@@ -3636,6 +3762,56 @@ function reduceWhitespace(src) {
       .replace(/ +$/gm, '');
 }
 
+// WARNING:
+// This function will fatally destroy some parts of the object you feed it!
+// DO NOT expect good behaviour from it for its original purposes, once we're done in here!
+// 
+// This function was introduced as the JSON5.stringify() calls in the test rig used to
+// write output/reference files were taking forever and for larger test files were even
+// causing stack overflow in Node. 
+// Further investigation uncovered the culprit: stack run-away in deep esprima ASTs which
+// are stored as part of checked action code chunks in the options.lex_rule_dictionary.rules[], etc.
+function stripForSerialization(obj, depth) {
+    if (!obj) return false;
+
+    if (typeof obj !== 'object') {
+        return false;
+    }
+
+    depth = depth || 0;
+    if (Array.isArray(obj)) {
+        for (let i in obj) {
+            stripForSerialization(obj[i], depth + 1);
+        }
+        return false;
+    } else {
+        if (depth > 8) return true;
+
+        for (let key in obj) {
+            let el = obj[key];
+
+            if (key === 'ast') {
+                // if attribute is itself an object, which contains an AST member,
+                // PLUS a `source` attribute alongside, nuke the AST sub attribute.
+                if (el && el.ast && el.source) {
+                    el.ast = '[recast AST]';
+                    if (el.augmentedSource) {
+                        el.augmentedSource = '[LINE-SHIFTED SOURCE]';
+                    }
+                    if (el.source === obj.srcCode) {
+                        el.source = '[IDEM: srcCode]';
+                    }
+                }
+            }
+
+            if (stripForSerialization(el, depth + 1)) {
+                obj[key] = '[OBJECT @ DEPTH LIMIT]';
+            }
+        }
+        return false;
+    }
+}
+
 
 
 
@@ -3854,7 +4030,7 @@ describe('Test Lexer Grammars', function () {
                     //=============================================================================
                     //                     JISON-LEX OPTIONS:
 
-                    const lexerSpecConglomerate = ${JSON5.stringify(lexerSourceCode.options, { space: 2 })}
+                    const lexerSpecConglomerate = ${JSON5.stringify(stripForSerialization(lexerSourceCode.options), { space: 2 })}
 
                 `;
             } else {

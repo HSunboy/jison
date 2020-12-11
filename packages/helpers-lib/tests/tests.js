@@ -880,5 +880,9 @@ Missing } at end of next line:
     it('mkdirp: **TBD**', function () {
         assert.ok(typeof helpers.mkdirp === 'function');
     });
+
+    it('setupDelimitedActionChunkMatcher: **TBD**', function () {
+        assert.ok(typeof helpers.setupDelimitedActionChunkMatcher === 'function');
+    });
 });
 

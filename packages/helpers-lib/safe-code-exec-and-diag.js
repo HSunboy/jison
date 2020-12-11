@@ -197,7 +197,7 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
     if (err_id.length === 0) {
         err_id = 'exec_crash';
     }
-    const debug = options.debug || 0;
+    const debug = options.debug | 0;
 
     if (debug) console.warn('generated ' + errname + ' code under EXEC TEST.');
     if (debug > 1) {

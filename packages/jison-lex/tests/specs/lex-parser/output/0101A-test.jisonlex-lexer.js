@@ -1,11 +1,8 @@
-// Full-featured Lexer Run-Time Class core (to be included in every generated lexer)
-// Zachary Carter <zach@carter.name>
-// MIT Licensed
 
-// top & bottom lines are only here for eslint to properly process this file along with the others: these bits have to be STRIPPED OFF before actual use!
-const lexer_kernel =
-{
-    EOF: 1,
+
+const lexer = {
+/* JISON-LEX-ANALYTICS-REPORT */
+EOF: 1,
     ERROR: 2,
 
     // JisonLexerError: JisonLexerError,        /// <-- injected by the code generator
@@ -1515,5 +1512,110 @@ const lexer_kernel =
      */
     stateStackSize: function lexer_stateStackSize() {
         return this.conditionStack.length;
-    }
+    },
+    options: {
+  trackPosition: true
+},
+    JisonLexerError: JisonLexerError,
+    performAction: function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: PICTURE_STATE FUNCTION_STATE A B C INITIAL */ 
+/*! Rule::       . */ 
+ this.begin('FUNCTION_STATE');
+    return yy_.yytext.charCodeAt(0) 
+break;
+case 1 : 
+/*! Conditions:: PICTURE_STATE FUNCTION_STATE A B C INITIAL */ 
+/*! Rule::       $ */ 
+ yy_.yytext = {
+                                    conditionStack: this.conditionStack,
+                                    conditionsSet: Object.keys(this.conditions),
+                                };
+                                return 'EOF' 
+break;
+}
+        },
+    simpleCaseActionClusters: {
+
+},
+    rules: [
+        /* 0: */  /^(?:.)/,
+/* 1: */  /^(?:$)/
+    ],
+    conditions: {
+  "PICTURE_STATE": {
+    rules: [
+      0,
+      1
+    ],
+    inclusive: true
+  },
+  "FUNCTION_STATE": {
+    rules: [
+      0,
+      1
+    ],
+    inclusive: true
+  },
+  "A": {
+    rules: [
+      0,
+      1
+    ],
+    inclusive: true
+  },
+  "B": {
+    rules: [
+      0,
+      1
+    ],
+    inclusive: true
+  },
+  "C": {
+    rules: [
+      0,
+      1
+    ],
+    inclusive: true
+  },
+  "D": {
+    rules: [],
+    inclusive: false
+  },
+  "E": {
+    rules: [],
+    inclusive: false
+  },
+  "FOOBAR": {
+    rules: [],
+    inclusive: false
+  },
+  "G7": {
+    rules: [],
+    inclusive: false
+  },
+  "_8bit": {
+    rules: [],
+    inclusive: false
+  },
+  "INITIAL": {
+    rules: [
+      0,
+      1
+    ],
+    inclusive: true
+  }
+}
 };
+
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+const lexerSpecConglomerate = false
+

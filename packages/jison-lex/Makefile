@@ -6,6 +6,7 @@ MOCHA = ../../node_modules/.bin/mocha
 NYC = ../../node_modules/.bin/nyc      --clean=false --temp-directory ../../.nyc_output
 
 ifndef FULL_CODE_COVERAGE
+	# `node --inspect-brk` for debugging with ChromeDev
 	LEX = node ./dist/cli-cjs.js
 else
 	LEX = $(NYC) --reporter=lcov -- node ./dist/cli-cjs.js
@@ -312,7 +313,7 @@ superclean: clean
 
 
 clean-dumpfiles:
-	bash -c "find . -type f \( -iname '*fatal_*_dump*' -o -ipath '*reference-output*' -o -ipath '*/lex/output/*' -o -ipath '*/specs/output/*' -o -ipath '*/examples/output/*' \) -print -delete"
+	bash -c "find . -type f \( -iname '*fatal_*_dump*' -o -ipath '*reference-output*' -o -ipath '*/lex/output/*' -o -ipath '*/lex-parser/output/*' -o -ipath '*/specs/output/*' -o -ipath '*/examples/output/*' \) -print -delete"
 
 
 .PHONY: all prep npm-install build test examples clean_comparison clean superclean clean-dumpfiles bump git-tag publish comparison npm-update test-nyc \

@@ -186,10 +186,10 @@ function init_EscCode_lookup_table() {
     updatePcodesBitarrayCacheTestOrder();
 }
 
-function updatePcodesBitarrayCacheTestOrder(opts) {
+function updatePcodesBitarrayCacheTestOrder(grammarSpec) {
     let t = new Array(UNICODE_BASE_PLANE_MAX_CP + 1);
     let l = {};
-    let user_has_xregexp = opts && opts.options && opts.options.xregexp;
+    let user_has_xregexp = grammarSpec && grammarSpec.options && grammarSpec.options.xregexp;
     let i, j, k, ba;
 
     // mark every character with which regex pcodes they are part of:
@@ -298,7 +298,7 @@ function updatePcodesBitarrayCacheTestOrder(opts) {
 
 
 // 'Join' a regex set `[...]` into a Unicode range spanning logic array, flagging every character in the given set.
-function set2bitarray(bitarr, s, opts) {
+function set2bitarray(bitarr, s, grammarSpec) {
     let orig = s;
     let set_is_inverted = false;
     let bitarr_orig;
@@ -425,10 +425,10 @@ function set2bitarray(bitarr, s, opts) {
                             // remove the wrapping `/.../` to get at the (possibly *combined* series of) `[...]` sets inside:
                             xs = xs.substr(1, xs.length - 2);
 
-                            ba4p = reduceRegexToSetBitArray(xs, pex, opts);
+                            ba4p = reduceRegexToSetBitArray(xs, pex, grammarSpec);
 
                             Pcodes_bitarray_cache[pex] = ba4p;
-                            updatePcodesBitarrayCacheTestOrder(opts);
+                            updatePcodesBitarrayCacheTestOrder(grammarSpec);
                         }
                         // merge bitarrays:
                         add2bitarray(bitarr, ba4p);
@@ -522,14 +522,11 @@ function bitarray2set(l, output_inverted_variant, output_minimized) {
     l[UNICODE_BASE_PLANE_MAX_CP + 1] = 1;
     // now reconstruct the regex set:
     let rv = [];
-    let i, j, cnt, lut, tn, tspec, match, pcode, ba4pcode, l2;
-    let bitarr_is_cloned = false;
-    let l_orig = l;
 
     if (output_inverted_variant) {
         // generate the inverted set, hence all unmarked slots are part of the output range:
-        cnt = 0;
-        for (i = 0; i <= UNICODE_BASE_PLANE_MAX_CP; i++) {
+        let cnt = 0;
+        for (let i = 0; i <= UNICODE_BASE_PLANE_MAX_CP; i++) {
             if (!l[i]) {
                 cnt++;
             }
@@ -545,83 +542,12 @@ function bitarray2set(l, output_inverted_variant, output_minimized) {
             return '^\\S\\s';
         }
 
-        // Now see if we can replace several bits by an escape / pcode:
-        if (output_minimized) {
-            lut = Pcodes_bitarray_cache_test_order;
-            for (tn = 0; lut[tn]; tn++) {
-                tspec = lut[tn];
-                // check if the uniquely identifying char is in the inverted set:
-                if (!l[tspec[0]]) {
-                    // check if the pcode is covered by the inverted set:
-                    pcode = tspec[1];
-                    ba4pcode = Pcodes_bitarray_cache[pcode];
-                    match = 0;
-                    for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
-                        if (ba4pcode[j]) {
-                            if (!l[j]) {
-                                // match in current inverted bitset, i.e. there's at
-                                // least one 'new' bit covered by this pcode/escape:
-                                match++;
-                            } else if (l_orig[j]) {
-                                // mismatch!
-                                match = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    // We're only interested in matches which actually cover some
-                    // yet uncovered bits: `match !== 0 && match !== false`.
-                    //
-                    // Apply the heuristic that the pcode/escape is only going to be used
-                    // when it covers *more* characters than its own identifier's length:
-                    if (match && match > pcode.length) {
-                        rv.push(pcode);
-
-                        // and nuke the bits in the array which match the given pcode:
-                        // make sure these edits are visible outside this function as
-                        // `l` is an INPUT parameter (~ not modified)!
-                        if (!bitarr_is_cloned) {
-                            l2 = new Array(UNICODE_BASE_PLANE_MAX_CP + 1);
-                            for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
-                                l2[j] = l[j] || ba4pcode[j];    // `!(!l[j] && !ba4pcode[j])`
-                            }
-                            // recreate sentinel
-                            l2[UNICODE_BASE_PLANE_MAX_CP + 1] = 1;
-                            l = l2;
-                            bitarr_is_cloned = true;
-                        } else {
-                            for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
-                                l[j] = l[j] || ba4pcode[j];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        i = 0;
-        while (i <= UNICODE_BASE_PLANE_MAX_CP) {
-            // find first character not in original set:
-            while (l[i]) {
-                i++;
-            }
-            if (i >= UNICODE_BASE_PLANE_MAX_CP + 1) {
-                break;
-            }
-            // find next character not in original set:
-            for (j = i + 1; !l[j]; j++) {} /* empty loop */
-            // generate subset:
-            rv.push(i2c(i));
-            if (j - 1 > i) {
-                rv.push((j - 2 > i ? '-' : '') + i2c(j - 1));
-            }
-            i = j;
-        }
+        // generate the inverted set, hence all unmarked slots are part of the output range:
+        rv = bitarray2setA(l, rv, output_minimized);
     } else {
         // generate the non-inverted set, hence all logic checks are inverted here...
-        cnt = 0;
-        for (i = 0; i <= UNICODE_BASE_PLANE_MAX_CP; i++) {
+        let cnt = 0;
+        for (let i = 0; i <= UNICODE_BASE_PLANE_MAX_CP; i++) {
             if (l[i]) {
                 cnt++;
             }
@@ -635,82 +561,7 @@ function bitarray2set(l, output_inverted_variant, output_minimized) {
             return '^\\S\\s';
         }
 
-        // Now see if we can replace several bits by an escape / pcode:
-        if (output_minimized) {
-            lut = Pcodes_bitarray_cache_test_order;
-            for (tn = 0; lut[tn]; tn++) {
-                tspec = lut[tn];
-                // check if the uniquely identifying char is in the set:
-                if (l[tspec[0]]) {
-                    // check if the pcode is covered by the set:
-                    pcode = tspec[1];
-                    ba4pcode = Pcodes_bitarray_cache[pcode];
-                    match = 0;
-                    for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
-                        if (ba4pcode[j]) {
-                            if (l[j]) {
-                                // match in current bitset, i.e. there's at
-                                // least one 'new' bit covered by this pcode/escape:
-                                match++;
-                            } else if (!l_orig[j]) {
-                                // mismatch!
-                                match = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    // We're only interested in matches which actually cover some
-                    // yet uncovered bits: `match !== 0 && match !== false`.
-                    //
-                    // Apply the heuristic that the pcode/escape is only going to be used
-                    // when it covers *more* characters than its own identifier's length:
-                    if (match && match > pcode.length) {
-                        rv.push(pcode);
-
-                        // and nuke the bits in the array which match the given pcode:
-                        // make sure these edits are visible outside this function as
-                        // `l` is an INPUT parameter (~ not modified)!
-                        if (!bitarr_is_cloned) {
-                            l2 = new Array(UNICODE_BASE_PLANE_MAX_CP + 1);
-                            for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
-                                l2[j] = l[j] && !ba4pcode[j];
-                            }
-                            // recreate sentinel
-                            l2[UNICODE_BASE_PLANE_MAX_CP + 1] = 1;
-                            l = l2;
-                            bitarr_is_cloned = true;
-                        } else {
-                            for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
-                                l[j] = l[j] && !ba4pcode[j];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        i = 0;
-        while (i <= UNICODE_BASE_PLANE_MAX_CP) {
-            // find first character not in original set:
-            while (!l[i]) {
-                i++;
-            }
-            if (i >= UNICODE_BASE_PLANE_MAX_CP + 1) {
-                break;
-            }
-            // find next character not in original set:
-            for (j = i + 1; l[j]; j++) {} /* empty loop */
-            if (j > UNICODE_BASE_PLANE_MAX_CP + 1) {
-                j = UNICODE_BASE_PLANE_MAX_CP + 1;
-            }
-            // generate subset:
-            rv.push(i2c(i));
-            if (j - 1 > i) {
-                rv.push((j - 2 > i ? '-' : '') + i2c(j - 1));
-            }
-            i = j;
-        }
+        rv = bitarray2setB(l, rv, output_minimized);
     }
 
     assert(rv.length);
@@ -729,10 +580,194 @@ function bitarray2set(l, output_inverted_variant, output_minimized) {
 
 
 
+// convert a simple bitarray back into a regex set `[...]` content:
+function bitarray2setA(l, rv, output_minimized) {
+    let i, j, cnt, lut, tn, tspec, match, pcode, ba4pcode, l2;
+    let bitarr_is_cloned = false;
+    let l_orig = l;
+
+    // Now see if we can replace several bits by an escape / pcode:
+    if (output_minimized) {
+        lut = Pcodes_bitarray_cache_test_order;
+        for (tn = 0; lut[tn]; tn++) {
+            tspec = lut[tn];
+            // check if the uniquely identifying char is in the inverted set:
+            if (!l[tspec[0]]) {
+                // check if the pcode is covered by the inverted set:
+                pcode = tspec[1];
+                ba4pcode = Pcodes_bitarray_cache[pcode];
+                match = 0;
+                for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
+                    if (ba4pcode[j]) {
+                        if (!l[j]) {
+                            // match in current inverted bitset, i.e. there's at
+                            // least one 'new' bit covered by this pcode/escape:
+                            match++;
+                        } else if (l_orig[j]) {
+                            // mismatch!
+                            match = false;
+                            break;
+                        }
+                    }
+                }
+
+                // We're only interested in matches which actually cover some
+                // yet uncovered bits: `match !== 0 && match !== false`.
+                //
+                // Apply the heuristic that the pcode/escape is only going to be used
+                // when it covers *more* characters than its own identifier's length:
+                if (match && match > pcode.length) {
+                    rv.push(pcode);
+
+                    // and nuke the bits in the array which match the given pcode:
+                    // make sure these edits are visible outside this function as
+                    // `l` is an INPUT parameter (~ not modified)!
+                    if (!bitarr_is_cloned) {
+                        l2 = new Array(UNICODE_BASE_PLANE_MAX_CP + 1);
+                        for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
+                            l2[j] = l[j] || ba4pcode[j];    // `!(!l[j] && !ba4pcode[j])`
+                        }
+                        // recreate sentinel
+                        l2[UNICODE_BASE_PLANE_MAX_CP + 1] = 1;
+                        l = l2;
+                        bitarr_is_cloned = true;
+                    } else {
+                        for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
+                            l[j] = l[j] || ba4pcode[j];
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    i = 0;
+    while (i <= UNICODE_BASE_PLANE_MAX_CP) {
+        // find first character not in original set:
+        while (l[i]) {
+            i++;
+        }
+        if (i >= UNICODE_BASE_PLANE_MAX_CP + 1) {
+            break;
+        }
+        // find next character not in original set:
+        for (j = i + 1; !l[j]; j++) {} /* empty loop */
+        // generate subset:
+        rv.push(i2c(i));
+        if (j - 1 > i) {
+            rv.push((j - 2 > i ? '-' : '') + i2c(j - 1));
+        }
+        i = j;
+    }
+
+    return rv;
+}
+
+
+
+
+
+
+
+
+
+
+
+// convert a simple bitarray back into a regex set `[...]` content:
+function bitarray2setB(l, rv, output_minimized) {
+    let i, j, cnt, lut, tn, tspec, match, pcode, ba4pcode, l2;
+    let bitarr_is_cloned = false;
+    let l_orig = l;
+
+    // generate the non-inverted set, hence all logic checks are inverted here...
+
+    // Now see if we can replace several bits by an escape / pcode:
+    if (output_minimized) {
+        lut = Pcodes_bitarray_cache_test_order;
+        for (tn = 0; lut[tn]; tn++) {
+            tspec = lut[tn];
+            // check if the uniquely identifying char is in the set:
+            if (l[tspec[0]]) {
+                // check if the pcode is covered by the set:
+                pcode = tspec[1];
+                ba4pcode = Pcodes_bitarray_cache[pcode];
+                match = 0;
+                for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
+                    if (ba4pcode[j]) {
+                        if (l[j]) {
+                            // match in current bitset, i.e. there's at
+                            // least one 'new' bit covered by this pcode/escape:
+                            match++;
+                        } else if (!l_orig[j]) {
+                            // mismatch!
+                            match = false;
+                            break;
+                        }
+                    }
+                }
+
+                // We're only interested in matches which actually cover some
+                // yet uncovered bits: `match !== 0 && match !== false`.
+                //
+                // Apply the heuristic that the pcode/escape is only going to be used
+                // when it covers *more* characters than its own identifier's length:
+                if (match && match > pcode.length) {
+                    rv.push(pcode);
+
+                    // and nuke the bits in the array which match the given pcode:
+                    // make sure these edits are visible outside this function as
+                    // `l` is an INPUT parameter (~ not modified)!
+                    if (!bitarr_is_cloned) {
+                        l2 = new Array(UNICODE_BASE_PLANE_MAX_CP + 1);
+                        for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
+                            l2[j] = l[j] && !ba4pcode[j];
+                        }
+                        // recreate sentinel
+                        l2[UNICODE_BASE_PLANE_MAX_CP + 1] = 1;
+                        l = l2;
+                        bitarr_is_cloned = true;
+                    } else {
+                        for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
+                            l[j] = l[j] && !ba4pcode[j];
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    i = 0;
+    while (i <= UNICODE_BASE_PLANE_MAX_CP) {
+        // find first character not in original set:
+        while (!l[i]) {
+            i++;
+        }
+        if (i >= UNICODE_BASE_PLANE_MAX_CP + 1) {
+            break;
+        }
+        // find next character not in original set:
+        for (j = i + 1; l[j]; j++) {} /* empty loop */
+        if (j > UNICODE_BASE_PLANE_MAX_CP + 1) {
+            j = UNICODE_BASE_PLANE_MAX_CP + 1;
+        }
+        // generate subset:
+        rv.push(i2c(i));
+        if (j - 1 > i) {
+            rv.push((j - 2 > i ? '-' : '') + i2c(j - 1));
+        }
+        i = j;
+    }
+
+    return rv;
+}
+
+
+
+
 
 // Pretty brutal conversion of 'regex' `s` back to raw regex set content: strip outer [...] when they're there;
 // ditto for inner combos of sets, i.e. `]|[` as in `[0-9]|[a-z]`.
-function reduceRegexToSetBitArray(s, name, opts) {
+function reduceRegexToSetBitArray(s, name, grammarSpec) {
     let orig = s;
 
     // propagate deferred exceptions = error reports.
@@ -788,7 +823,7 @@ function reduceRegexToSetBitArray(s, name, opts) {
 
             var se = set_content.join('');
             if (!internal_state) {
-                derr = set2bitarray(l, se, opts);
+                derr = set2bitarray(l, se, grammarSpec);
                 // propagate deferred exceptions = error reports.
                 if (derr instanceof Error) {
                     return derr;
@@ -846,7 +881,7 @@ function reduceRegexToSetBitArray(s, name, opts) {
             // literal character or word: take the first character only and ignore the rest, so that
             // the constructed set for `word|noun` would be `[wb]`:
             if (!internal_state) {
-                derr = set2bitarray(l, c1, opts);
+                derr = set2bitarray(l, c1, grammarSpec);
                 // propagate deferred exceptions = error reports.
                 if (derr instanceof Error) {
                     return derr;

@@ -129,17 +129,6 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 "//".*                                  yy.include_command_allowed = false;
                                         return 'ACTION_BODY';
 
-// make sure to terminate before the next rule alternative,
-// which is announced by `|`:
-"|"                                     if (yy.depth === 0) {
-                                            this.popState();
-                                            this.unput(yytext);
-                                            // yytext = '';    --- ommitted as this is the side-effect of .unput(yytext) already!
-                                            return 'ACTION_END';
-                                        } else {
-                                            return 'ACTION_BODY';
-                                        }
-
 // make sure to terminate before the rule section ends,
 // which is announced by `%%`:
 "%%"                                    if (yy.depth === 0) {
@@ -174,17 +163,18 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
                                         }
                                         return 'ACTION_BODY';
 
-\"{DOUBLEQUOTED_STRING_CONTENT}\"|\'{QUOTED_STRING_CONTENT}\'|\`{ES2017_STRING_CONTENT}\`
+\"{DOUBLEQUOTED_STRING_CONTENT}\"   |
+\'{QUOTED_STRING_CONTENT}\'         |
+\`{ES2017_STRING_CONTENT}\`
                                         yy.include_command_allowed = false;
                                         return 'ACTION_BODY';
+
 // Gobble an entire line of code unless there's chance there's
 // a regex, string, comment, {...} block start or end brace or sentinel
 // in it: then only gobble everything up to that particular
 // character and let the lexer handle that one, and what follows,
 // in the round. Meanwhile we have us some action code pass on.
-[^/"'`%\{\}|{BR}]+                      yy.include_command_allowed = false;
-                                        return 'ACTION_BODY';
-"%"                                     yy.include_command_allowed = false;
+[^/"'`\{\}{BR}]+                        yy.include_command_allowed = false;
                                         return 'ACTION_BODY';
 
 "{"                                     yy.depth++;
@@ -212,10 +202,19 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 // without leading whitespace. The only lexer command which we do accept
 // here after the last indent is `%include`, which is considered (part
 // of) the rule's action code block.
-(?:[\s\r\n]*?){BR}+{WS}+
+//
+// Note that this rule is constructed to detect "some content follows on the next line":
+// as long as this condition applies, we assume the action code block is continuing.
+// Hence an *empty* line would signal the end of the action code block via the later {BR}
+// rule below! 
+// That 'empty' separating line which ends the action block MAY contain (trailing) whitespace.
+//
+{BR}{WS}+/!(?:{WS}|{BR})
                                         yy.include_command_allowed = true;
                                         return 'ACTION_BODY';           // keep empty lines as-is inside action code blocks.
+
 {WS}+                                   return 'ACTION_BODY';
+
 {BR}                                    if (yy.depth > 0) {
                                             yy.include_command_allowed = true;
                                             return 'ACTION_BODY';       // keep empty lines as-is inside action code blocks.
@@ -341,7 +340,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
                                         let atSOL = (!precedingStr /* @ Start Of File */ || precedingStr === '\n');
 
                                         // Construct the proper lexer regex for any possible `%{...%}`, `{{...}}` or what have we here?
-                                        let match = helpers.setupDelimitedActionChunkMatcher(marker, this);
+                                        const match = helpers.setupDelimitedActionChunkMatcher(marker, this);
 
                                         // Writing the wrong end marker is a common user mistake, we can
                                         // easily look ahead and check for it now and report a proper hint
@@ -349,13 +348,16 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
                                         let remaining = this.lookAhead();
                                         let m = match(remaining);
 
+                                        // move the lexer position forward as well:
+                                        //
+                                        // WARNING: this will modity yytext, hence we must set our own `yytext`
+                                        // *afterwards*: see the statement after next!
+                                        this.consume(m.shiftCount);
+
                                         // pick up the extraced action block itself:
                                         yytext = m;
 
-                                        // move the lexer position forward as well:
-                                        this.consume(m.shiftCount);
-
-                                        if (m.fault)
+                                        if (m.fault) {
                                             yyerror(rmCommonWS`
                                                 ${m.fault}
 
@@ -427,42 +429,77 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 // action code which calls `upcomingInput()`, `unput()` and `reject()` lexer kernel APIs,
 // but we have decided to do it this way for educational purposes: this is the classic
 // way to write non-trivial lexer specs and sometimes it's bloody tough. [GHo]
+//
+// ---
+// 
+// Update: when we're inside a *scoped rule block*, then lexer rules MAY be indented!
+
 <rules>{WS}+/!(?:"{{"|"|"|"%"|"->"|"=>"|"→"|{WS}|{BR})
                                         {{
-                                            yy.depth = 0;
-                                            yy.include_command_allowed = true;
-                                            this.pushState('action');
+                                            // look back beyond match: if this is an *indentation* from the
+                                            // start of the line, then we won't consider this a action code block start
+                                            // but rather the start of an *indented* lexer rule regex.
+                                            //
+                                            // The quickest way to find out if a NL (NewLine) went just before is to
+                                            // check our start column in `yylloc`.
+                                            //
+                                            // ## EXTRA ##:
+                                            //
+                                            // We only permit rule indentation inside a "start condition" scope block.
+                                            // 
+                                            // > Dev Notes:
+                                            // >
+                                            // > Allowing it anywhere would permit a lex spec file to look like a total
+                                            // > mess. The 0110, etc. tests in /lex-parser/ allow indentation anywhere
+                                            // > because we don't have an active parser there, hence the classic yacc/bison
+                                            // > style "lexer hack" via the `yy` shared instance (`yy.__inside_scoped_ruleset__`)
+                                            // > will not work in those tests YET.
+                                            // > HOWEVER, when you inspect the same tests' results as run in /jison-lex/
+                                            // > you'll notice the `lex.y` grammar kicking in and rejecting several of 
+                                            // > those tests as they contain indented lexer rules WITHOUT an encompassing
+                                            // > start condition scope.
+                                            // 
+                                            // PLUS we apply this HEURISTIC: when the 'indentation level' is TWO TABS or
+                                            // 8 SPACES (1 TAB counts for 4 spaces) or more, it's considered as 
+                                            // 'double indented' and automatically treated as action block source code.
 
-                                            // Do a bit of magic that's useful for the parser when we
-                                            // call `trimActionCode()` in there to perform a bit of
-                                            // rough initial action code chunk cleanup:
-                                            // when we start the action block -- hence *delimit* the
-                                            // action block -- with a plain old '{' brace, we can
-                                            // throw that one and its counterpart out safely without
-                                            // damaging the action code in any way.
-                                            //
-                                            // In order to be able to detect that, we look ahead
-                                            // now and see whether or rule's regex with the fancy
-                                            // '/!' postcondition check actually hit a '{', which
-                                            // is the only action code block starter we cannot
-                                            // detect explicitly using any of the '%{.*?%}' lexer
-                                            // rules you've seen further above.
-                                            //
-                                            // Thanks to this rule's regex, we DO know that the
-                                            // first look-ahead character will be a non-whitespace
-                                            // character, which would either be an action code block
-                                            // delimiter *or* a comment starter. In the latter case
-                                            // we just throw up our hands and leave code trimming
-                                            // and analysis to the more advanced systems which
-                                            // follow after `trimActionCode()` has passed once we
-                                            // get to the parser productions which process this
-                                            // upcoming action code block.
-                                            let la = this.lookAhead();
-                                            if (la[0] === '{') {
-                                                yytext = '{';           // hint the parser
+                                            if (yy.__inside_scoped_ruleset__ === false || yylloc.first_column > 0 || /^ {8}/.test(yytext.replace(/\t/g, '    '))) {
+                                                yy.depth = 0;
+                                                yy.include_command_allowed = true;
+                                                this.pushState('action');
+
+                                                // Do a bit of magic that's useful for the parser when we
+                                                // call `trimActionCode()` in there to perform a bit of
+                                                // rough initial action code chunk cleanup:
+                                                // when we start the action block -- hence *delimit* the
+                                                // action block -- with a plain old '{' brace, we can
+                                                // throw that one and its counterpart out safely without
+                                                // damaging the action code in any way.
+                                                //
+                                                // In order to be able to detect that, we look ahead
+                                                // now and see whether or not the rule's regex with the fancy
+                                                // '/!' postcondition check actually hit a '{', which
+                                                // is the only action code block starter we cannot
+                                                // detect explicitly using any of the '%{.*?%}' lexer
+                                                // rules you've seen further above.
+                                                //
+                                                // Thanks to this rule's regex, we DO know that the
+                                                // first look-ahead character will be a non-whitespace
+                                                // character, which would either be an action code block
+                                                // delimiter *or* a comment starter. In the latter case
+                                                // we just throw up our hands and leave code trimming
+                                                // and analysis to the more advanced systems which
+                                                // follow after `trimActionCode()` has passed once we
+                                                // get to the parser productions which process this
+                                                // upcoming action code block.
+                                                let la = this.lookAhead();
+                                                if (la[0] === '{') {
+                                                    yytext = '{';           // hint the parser
+                                                }
+
+                                                return 'ACTION_START';
                                             }
-
-                                            return 'ACTION_START';
+                                            // else: ignore whitespace before a rule regex: *indentation* in a scope block.
                                         }}
 
 <rules>"%%"                             this.popState();
@@ -550,9 +587,15 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 /* skip leading whitespace on the next line of input, when followed by more option data */
 {BR}{WS}+(?=\S)                         /* ignore */
 /* otherwise the EOL marks the end of the options statement */
-{BR}                                    this.popState();
-                                        this.unput(yytext);
-                                        return 'OPTIONS_END';
+{BR}                                    %{
+                                            // lexer rule condition sets can only be terminated by a '>':
+                                            if (!yy.__inside_condition_set__) {
+                                                this.popState();
+                                                this.unput(yytext);
+                                                return 'OPTIONS_END';
+                                            } 
+                                            /* else: ignore */
+                                        %}
 {WS}+                                   /* skip whitespace */
 
 }
@@ -605,18 +648,26 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 "^"                                     return '^';
 ","                                     return ',';
 "<<EOF>>"                               return '$';
+
 "<"                                     %{
                                             // '<' can only start a condition when it's at the very start of a regex rule or {...} regex rule set.
                                             // Either way, '<' must be at the start of the line, or it cannot be a condition starter but only
                                             // serve as a literal character in a regex.
                                             if (yylloc.first_column === 0) {
+                                                yy.__inside_condition_set__ = true;
                                                 this.pushState('options');
                                                 return '<';
                                             }
                                             return 'CHARACTER_LIT';
                                         %}
+">"                                     %{
+                                            if (yy.__inside_condition_set__) {
+                                                yy.__inside_condition_set__ = false;
+                                                return '>';
+                                            }
+                                            return 'CHARACTER_LIT';
+                                        %}
 
-">"                                     return '>';
 "/!"                                    return '/!';                    // treated as `(?!atom)`
 "/"                                     return '/';                     // treated as `(?=atom)`
 "\\"(?:[sSbBwWdDpP]|[rfntv\\*+()${}|[\]\/.^?])
@@ -850,12 +901,12 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
                                             unsupported lexer input encountered while lexing
                                             ${rules} (i.e. jison lex regexes) in ${dquote(this.topState())} state.
 
-                                                NOTE: When you want this input to be interpreted as a LITERAL part
-                                                      of a lex rule regex, you MUST enclose it in double or
-                                                      single quotes.
+                                            NOTE: When you want this input to be interpreted as a LITERAL part
+                                                  of a lex rule regex, you MUST enclose it in double or
+                                                  single quotes.
 
-                                                      If not, then know that this input is not accepted as a valid
-                                                      regex expression here in jison-lex ${rules}.
+                                                  If not, then know that this input is not accepted as a valid
+                                                  regex expression here in jison-lex ${rules}.
 
                                               Erroneous area:
                                             ${this.prettyPrintRange(yylloc)}
