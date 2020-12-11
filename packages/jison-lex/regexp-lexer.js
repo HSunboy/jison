@@ -403,7 +403,9 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, gramma
         //   + fault
         // - fault
         // 
-        assert('srcCode' in rule);
+        assert(('srcCode' in rule) || rule.fault);
+        assert(!rule.fault || rule.fault instanceof Error);  // when there's a 'fault' reported for this rule, it must be an Error object.
+
         let action = rule.srcCode;
         if (typeof action === 'function') {
             // Also cope with Arrow Functions (and inline those as well?).
@@ -411,9 +413,19 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, gramma
             action = helpers.printFunctionSourceCodeContainer(action).code;
         }
 
-        assert.equal(typeof action, 'string');
-        action = action.replace(/return\s*\(?'((?:\\'|[^']+)+)'\)?/g, tokenNumberReplacement);
-        action = action.replace(/return\s*\(?"((?:\\"|[^"]+)+)"\)?/g, tokenNumberReplacement);
+        // We MAY continue-on-error in parsing the lexer spec before, but we sure SHOULD signal any errors
+        // in the generated output, if any will be produced.
+        if (typeof action !== 'string') {
+            action = rmCommonWS`
+                return yyerror(\`The lexer spec had an error in this lexer rule.   @developer: please inspect your lexer source file.
+
+                ${ rule.fault.message.replace(/`/g, '\\`') }
+                \`);
+            `;
+        } else {
+            action = action.replace(/return\s*\(?'((?:\\'|[^']+)+)'\)?/g, tokenNumberReplacement);
+            action = action.replace(/return\s*\(?"((?:\\"|[^"]+)+)"\)?/g, tokenNumberReplacement);
+        }
 
         let code = [ '\n/*! Conditions::' ];
         code.push(postprocessComment(active_conditions));

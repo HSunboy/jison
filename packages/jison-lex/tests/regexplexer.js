@@ -1262,7 +1262,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `, "Line 1262");
+        `, "Line 1265");
         console.error('lexer:', typeof lexer);
         lexer.setInput(input);
 
@@ -1290,7 +1290,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `, "Line 1290");
+        `, "Line 1293");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1324,7 +1324,7 @@ describe('Lexer Kernel', function () {
             ${lexerSource}
 
             return lexer;
-        `, "Line 1324");
+        `, "Line 1327");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1355,7 +1355,7 @@ describe('Lexer Kernel', function () {
           ${lexerSource}
 
           return exports;
-        `, "Line 1353");
+        `, "Line 1358");
         exported.lexer.setInput(input);
 
         assert.equal(exported.lex(), 'X');
@@ -1388,7 +1388,7 @@ describe('Lexer Kernel', function () {
           ${lexerSource}
 
           return lexer;
-        `, "Line 1386");
+        `, "Line 1391");
         lexer.setInput(input);
 
         assert.equal(lexer.lex(), 'X');
@@ -1415,7 +1415,7 @@ describe('Lexer Kernel', function () {
               lexer, 
               yylex
             };`);
-        let lexer = exec(lexerSource, "Line 1413");
+        let lexer = exec(lexerSource, "Line 1418");
         lexer.lexer.setInput(input);
 
         // two ways to access `lex()`:
