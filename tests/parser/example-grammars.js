@@ -221,7 +221,7 @@ testset = testset.map(function (filepath) {
 
         filepath = cleanPath(filepath);
 
-        let filepath4display = mkFilePath4Display(filepath, 'jison-lex');
+        let filepath4display = mkFilePath4Display(filepath, 'jison-gho');
         console.log('Lexer Grammar file:', filepath4display);
 
         if (filepath.match(/\.js$/)) {

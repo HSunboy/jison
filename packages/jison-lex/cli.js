@@ -293,7 +293,7 @@ function cliMain(opts) {
             fs.writeFileSync(opts.outfile, lexer, 'utf8');
             console.log('JISON-LEX output for module [' + opts.moduleName + '] has been written to file:', opts.outfile);
 
-            if (opts.exportAllTables.enabled) {
+            if (opts.exportAllTables && opts.exportAllTables.enabled) {
                 // Determine the output file path 'template' for use by the exportAllTables
                 // functionality:
                 let out_base_fname = path.join(path.dirname(opts.outfile), path.basename(opts.outfile, path.extname(opts.outfile)));

@@ -81,7 +81,7 @@ testset = testset.map(function (filepath) {
 
         filepath = cleanPath(filepath);
 
-        let filepath4display = mkFilePath4Display(filepath, 'jison2json');
+        let filepath4display = mkFilePath4Display(filepath, 'json2jison');
         console.log('Lexer Grammar file:', filepath4display);
 
         if (filepath.match(/\.js$/)) {
