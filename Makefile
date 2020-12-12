@@ -14,7 +14,7 @@ endif
 
 
 
-all: clean-nyc fix-linenumbers sync subpackages build test examples-test
+all: clean-nyc sync fix-linenumbers subpackages build-all test examples-test
 
 everything:                         \
 		clean                       \
@@ -28,7 +28,7 @@ prep: subpackages-prep npm-install
 
 # `make site` will perform an extensive (re)build of the jison tool, all examples and the web pages.
 # Use `make compile-site` for a faster, if less complete, site rebuild action.
-site: build test examples-test web-examples web/content/assets/js/jison.js compile-site
+site: build-all test examples-test web-examples web/content/assets/js/jison.js compile-site
 
 clean-site:
 	-@rm -rf web/tmp/
@@ -447,7 +447,15 @@ examples/yacc-error-recovery: build
 
 
 
+build-all:                                                              \
+		fix-linenumbers 												\
+		sync 															\
+		subpackages-build                                               \
+		build
+
 build:                                                                  \
+		fix-linenumbers 												\
+		sync 															\
 		subpackages-build                                               \
 		prep_util_dir                                                   \
 		dist/cli-cjs.js                                                 \
@@ -614,7 +622,7 @@ clean-dumpfiles:
 		site preview deploy test web-examples examples examples-test                \
 		examples_directory comparison lexer-comparison                              \
 		error-handling-tests basic-tests github-issue-tests misc-tests              \
-		build npm-install                                                           \
+		build build-all npm-install                                                 \
 		subpackages                                                                 \
 		clean superclean git prep_util_dir                                          \
 		bump lint lintfix todo fix-linenumbers clean-dumpfiles                      \
