@@ -958,7 +958,7 @@ rule
                 let indentedSrc = rmCommonWS([srcCode]).split('\n').join('\n    ');
 
                 yyerror(rmCommonWS`
-                    The lexer rule's 'arrow' action code section does not compile: ${rv.fault}
+                    The lexer rule's 'arrow' action code section does not compile: ${ast.fault}
 
                     # NOTE that the arrow action automatically wraps the action code
                     # in a \`return (...);\` statement to prevent hard-to-diagnose run-time

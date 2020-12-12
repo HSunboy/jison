@@ -70,11 +70,28 @@ function cleanPath(filepath) {
     return path.normalize(filepath).replace(/\\/g, '/');  // UNIXify the path
 }
 
+function extractYAMLheader(src) {
+    // extract the top comment (possibly empty), which carries the title, etc. metadata:
+    let header = src.substr(0, src.indexOf('\n\n') + 1);
+
+    // check if this chunk is indeed a YAML header: we ASSUME it contains at least
+    // one line looking like this:
+    let is_yaml_chunk = header.split('\n').filter((l) => l.replace(/^\/\/ ?/gm, '').trim() === '...').length > 0;
+    if (!is_yaml_chunk) {
+        return '';
+    }
+    return header;
+}
+
+
 
 console.log('exec glob....', __dirname);
 const original_cwd = process.cwd();
 process.chdir(__dirname);
-var testset = globby.sync(['./specs/*.jisonlex', './lex/*.jisonlex']);
+var testset = globby.sync([
+    './specs/*.jisonlex', 
+    './lex/*.jisonlex',
+]);
 
 testset = testset.sort((a, b) => {
     let rv;
@@ -93,6 +110,7 @@ testset = testset.map(function (filepath) {
         let spec;
         let header;
         let extra;
+        let grammar;
 
         filepath = cleanPath(filepath);
 
@@ -101,13 +119,17 @@ testset = testset.map(function (filepath) {
 
             let hdrspec = fs.readFileSync(filepath, 'utf8').replace(/\r\n|\r/g, '\n');
 
-            // extract the top comment, which carries the title, etc. metadata:
-            header = hdrspec.substr(0, hdrspec.indexOf('\n\n') + 1);
+            // extract the top comment (possibly empty), which carries the title, etc. metadata:
+            header = extractYAMLheader(hdrspec);
+
+            grammar = spec;
         } else {
             spec = fs.readFileSync(filepath, 'utf8').replace(/\r\n|\r/g, '\n');
 
-            // extract the top comment, which carries the title, etc. metadata:
-            header = spec.substr(0, spec.indexOf('\n\n') + 1);
+            // extract the top comment (possibly empty), which carries the title, etc. metadata:
+            header = extractYAMLheader(spec);
+
+            grammar = spec;
         }
 
         // then strip off the comment prefix for every line:
@@ -116,12 +138,10 @@ testset = testset.map(function (filepath) {
             return '';
         });
 
+        //console.error("YAML safeload:", { header, filepath });
         let doc = yaml.safeLoad(header, {
             filename: filepath
         }) || {};
-
-        // extract the grammar to test:
-        let grammar = spec.substr(spec.indexOf('\n\n') + 2);
 
         let refOutFilePath = cleanPath(path.join(path.dirname(filepath), 'reference-output', path.basename(filepath) + '-ref.json5'));
         let testOutFilePath = cleanPath(path.join(path.dirname(filepath), 'output', path.basename(filepath) + '-ref.json5'));
@@ -207,6 +227,55 @@ function reduceWhitespace(src) {
       .replace(/ +$/gm, '');
 }
 
+// WARNING:
+// This function will fatally destroy some parts of the object you feed it!
+// DO NOT expect good behaviour from it for its original purposes, once we're done in here!
+// 
+// This function was introduced as the JSON5.stringify() calls in the test rig used to
+// write output/reference files were taking forever and for larger test files were even
+// causing stack overflow in Node. 
+// Further investigation uncovered the culprit: stack run-away in deep esprima ASTs which
+// are stored as part of checked action code chunks in the options.lex_rule_dictionary.rules[], etc.
+function stripForSerialization(obj, depth) {
+    if (!obj) return false;
+
+    if (typeof obj !== 'object') {
+        return false;
+    }
+
+    depth = depth || 0;
+    if (Array.isArray(obj)) {
+        for (let i in obj) {
+            stripForSerialization(obj[i], depth + 1);
+        }
+        return false;
+    } else {
+        if (depth > 8) return true;
+
+        for (let key in obj) {
+            let el = obj[key];
+
+            if (key === 'ast') {
+                // if attribute is itself an object, which contains an AST member,
+                // PLUS a `source` attribute alongside, nuke the AST sub attribute.
+                if (el && el.ast && el.source) {
+                    el.ast = '[recast AST]';
+                    if (el.augmentedSource) {
+                        el.augmentedSource = '[LINE-SHIFTED SOURCE]';
+                    }
+                    if (el.source === obj.srcCode) {
+                        el.source = '[IDEM: srcCode]';
+                    }
+                }
+            }
+
+            if (stripForSerialization(el, depth + 1)) {
+                obj[key] = '[OBJECT @ DEPTH LIMIT]';
+            }
+        }
+        return false;
+    }
+}
 
 
 
@@ -216,7 +285,12 @@ function reduceWhitespace(src) {
 
 
 
-describe('LEX spec lexer', function () {
+
+//
+// compile these lexer specs and run a sample input through them
+//
+describe('Test Lexer Grammars', function () {
+
     beforeEach(function beforeEachTest() {
         lexer_reset();
     });
@@ -512,6 +586,7 @@ describe('LEX parser', function () {
             }
 
             ast = trimErrorForTestReporting(ast);
+            stripForSerialization(ast);
 
             // either we check/test the correctness of the collected input, iff there's
             // a reference provided, OR we create the reference file for future use:

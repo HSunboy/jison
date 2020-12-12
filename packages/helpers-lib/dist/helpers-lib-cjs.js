@@ -507,7 +507,7 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
     if (err_id.length === 0) {
         err_id = 'exec_crash';
     }
-    const debug = options.debug || 0;
+    const debug = options.debug | 0;
 
     if (debug) console.warn('generated ' + errname + ' code under EXEC TEST.');
     if (debug > 1) {
@@ -1226,30 +1226,72 @@ function prettyPrintAST(ast, options) {
 // validate the given JISON+JavaScript snippet: does it compile?
 //
 // Return either the parsed AST (object) or an error message (string).
+// These are returned using the structure:
+// 
+// - `source`: contains the raw source code string `src`. 
+// 
+//   Note: the source code string `src` MAY be whitespace trimmed.
+//   
+// - `augmentedSource`: contains the adjusted source code string, iff available. 
+// 
+//   Note: 'adjusted' meaning the source code string MAY be trimmed
+//    or extended with leading newlines (NL) and spaces (WS) to make 
+//    the source code adhere to the `yylloc` location info which was 
+//    passed to this function.
+//    
+// - `ast`: the parsed source code AST, iff available.
+// 
+//   Note: this attribute will be *undefined* when `options.doNotTestCompile`
+//   has been set, for example. 
+//   
+// - `fault`: `false` when the input is legal JavaScript or 
+//   the parse exception error object (i.e. a 'truthy' value) when the input 
+//   source code cannot be parsed successfully (by `esprima`).
+//   
+// The only guarantee that you have is that when an error is returned
+// (`.fault !== false)`), then both `source` and `augmentedSource` attributes
+// WILL be available and `source` will be *non-empty*, as *empty* inputs are
+// always accepted as 'legal', hence OK.
 function checkActionBlock(src, yylloc, options) {
-    options = options || {};
-    if (options.doNotTestCompile) {
-        return false;        // simply accept everything...
-    }
-
     // empty action code is A-okay all the time:
     if (!src || !src.trim()) {
-        return false;
+        return {
+            source: '',
+            fault: false,
+        };
+    }
+
+    options = options || {};
+    if (options.doNotTestCompile) {
+        // simply accept everything...
+        return {
+            source: src,
+            fault: false,
+        };
     }
 
     // make sure reasonable line numbers, etc. are reported in any
     // potential parse errors by pushing the source code down:
-    if (yylloc && yylloc.first_line > 0) {
-        let cnt = yylloc.first_line;
-        let lines = new Array(cnt);
-        src = lines.join('\n') + src;
+    let augSrc = src;
+    if (yylloc) {
+        let lines = new Array(yylloc.first_line | 0);
+        let cols = new Array(yylloc.first_column | 0);
+        augSrc = lines.join('\n') + cols.join(' ') + augSrc;
     }
 
     try {
-        void parseCodeChunkToAST(src, options);
-        return false;
+        return {
+            source: src,
+            augmentedSource: augSrc,
+            ast: parseCodeChunkToAST(augSrc, options),
+            fault: false,
+        };
     } catch (ex) {
-        return ex.message || 'code snippet cannot be parsed';
+        return {
+            source: src,
+            augmentedSource: augSrc,
+            fault: ex,
+        };
     }
 }
 
@@ -1889,6 +1931,7 @@ function treat_hash(h) {
 function treat_error_report_info(e) {
     // shallow copy object:
     e = shallow_copy(e);
+    delete e.offending_source_dumpfile;
 
     if (e.hash) {
         breadcrumbs.push('hash');
@@ -2125,6 +2168,91 @@ function extractSymbolTableFromFile(filepath, sectionName) {
     return predefined_symbols;
 }
 
+// Calculate the end marker to match and produce a
+// matcher function to match the entire chunk:
+function setupDelimitedActionChunkMatcher(marker, lexer) {
+    // check the cache first:
+    let cache = lexer.__entire_action_block_matchers__ || {};
+    let rv = cache[marker];
+    if (!rv) {
+        const action_end_marker = marker.replace(/\{/g, '}');
+
+        // regex must match content + endMarker, as startMarker has already been consumed before this function got a call:
+        const escaped_end_marker = action_end_marker.replace(/\}/g, '\\}');
+        const re = new RegExp('^([^]*?)' + escaped_end_marker + '(?!\\})');
+        const is_complex_marker = (action_end_marker[0] === '}' && action_end_marker.length > 1);
+
+        const match = function matchDelimitedActionChunk(input) {
+            const m = re.exec(input);
+            if (!m) {
+                return {
+                    fault: rmCommonWS`
+                        Incorrectly terminated action code block. We're expecting the
+                        '${action_end_marker}' end marker to go with the given start marker.
+                        Regrettably, it does not exist in the remainder of the input.
+                    `,
+                    srcCode: '',
+                    shiftCount: 0,
+                    action_start_marker: marker,
+                    action_end_marker,
+                };
+            }
+
+            let srcCode = m[1];
+            let shiftCount = m[0].length;
+
+            // When we have a match, we're not home yet!
+            //
+            // It MAY be that the marker is a 'complex one', i.e. consisting of multiple '}' closing braces
+            // BUT not '%'-delimited, which would allow such fringe cases such as these to pass:
+            //
+            //     {{{ ... { ... }}}} }}}
+            //
+            // Note the '}}}}' near the end there, which would be the one matched -- and humanly sensibly so,
+            // since we tracked the matching braces with our programmer's eyes -- but in practice this kind
+            // of mess should be strongly discouraged as it results in a very confusing *code read*.
+            //
+            // See also lexer test cases 0105 and onwards for a couple of examples. And then consider that
+            // those are simple test examples, so be mindful about what this would allow to pass in daily practice.
+            //
+            // Hence we check for an 'independent' end marker for all multi-brace markers:
+            // 
+            if (is_complex_marker && srcCode) {
+                let m2 = /[^}]$/.test(srcCode);    // no '}' allowed at the very end or you'ld have the fringe scenario above!
+                if (m2) {
+                    return {
+                        fault: rmCommonWS`
+                            TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+                            Confusingly terminated action code block. We're expecting the
+                            '${action_end_marker}' end marker to go with the given start marker.
+                            Regrettably, it does not exist in the remainder of the input.
+                        `,
+                        srcCode,
+                        shiftCount,
+                        action_start_marker: marker,
+                        action_end_marker,
+                    };
+                }
+            }
+
+            return {
+                srcCode,
+                shiftCount,
+                action_start_marker: marker,
+                action_end_marker,
+            };
+        };
+
+        // cache the generated function, as it'll be useful again for the next occurrence of the same start marker:
+        cache[marker] = match;
+        lexer.__entire_action_block_matchers__ = cache;
+
+        rv = match;
+    }
+    return rv;
+}
+
 var index = {
     rmCommonWS,
     camelCase,
@@ -2136,6 +2264,7 @@ var index = {
     stripErrorStackPaths,
     cleanStackTrace4Comparison,
     extractSymbolTableFromFile,
+    setupDelimitedActionChunkMatcher,
 
     checkRegExp: reHelpers.checkRegExp,
     getRegExpInfo: reHelpers.getRegExpInfo,

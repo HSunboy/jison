@@ -3647,8 +3647,7 @@ testset = testset.map(function (filepath) {
             // extract the top comment (possibly empty), which carries the title, etc. metadata:
             header = extractYAMLheader(spec);
 
-            // extract the grammar to test:
-            grammar = spec.substr(header.length);
+            grammar = spec;
         }
 
         // then strip off the comment prefix for every line:
@@ -3729,7 +3728,7 @@ if (0) {
                     return `[...string (length: ${value.length}, lines: ${a.length}) ...]`;
                 }
             }
-            if (/^(?:ref|spec|grammar)$/.test(key) && typeof value === 'object') {
+            if (/^(?:ref|lexerRef|spec|grammar)$/.test(key) && typeof value === 'object') {
                 return '[... JSON ...]';
             }
             return value;
@@ -3847,15 +3846,28 @@ describe('Test Lexer Grammars', function () {
 
         // and create a test for it:
         it(testname, function testEachLexerExample() {
-            let err, grammar;
-            let tokens = [];
+            let err;
             let i = 0;
+            let tokens = [];
+            let grammar = filespec.grammar;
+
             let lexer;
             let lexerSourceCode;
 
+
+            let countEOFs = 0;
+            let countERRORs = 0;
+            let countParseErrorCalls = 0;
+            let countDetectedParseErrorCalls = 0;
+            let countFATALs = 0;
+
             let yy = {
                 parseError: function customMainParseError(str, hash, ExceptionClass) {
-                    if (0) console.error("parseError: ", str);
+                    countParseErrorCalls++;
+
+                    if (0) {
+                        console.error("parseError: ", str, (new Error('')).stack);
+                    }
 
                     // augment the returned value when possible:
 
@@ -3902,17 +3914,10 @@ describe('Test Lexer Grammars', function () {
                 }
             };
         
-            let countEOFs = 0;
-            let countERRORs = 0;
-            let countParseErrorCalls = 0;
-            let countFATALs = 0;
-
             try {
                 // Change CWD to the directory where the source grammar resides: this helps us properly
                 // %include any files mentioned in the grammar with relative paths:
                 process.chdir(path.dirname(filespec.path));
-
-                grammar = filespec.grammar; // "%% test: foo bar | baz ; hello: world ;";
 
                 lexer = new RegExpLexer(grammar, (filespec.meta.test_input || 'a b c'), null, {
                     json: true,           // input MAY be JSON/JSON5 format OR JISON LEX format!
@@ -3948,8 +3953,8 @@ describe('Test Lexer Grammars', function () {
                         }
                     }
                     else if (tok === -42) {
-                        countParseErrorCalls++;
-                        if (countParseErrorCalls >= maxERRORTokenCount) {
+                        countDetectedParseErrorCalls++;
+                        if (countDetectedParseErrorCalls >= maxERRORTokenCount) {
                             break;
                         }
                     }
@@ -3983,6 +3988,7 @@ describe('Test Lexer Grammars', function () {
                     EOFTokenCount: countEOFs,
                     ERRORTokenCount: countERRORs,
                     ParseErrorCallCount: countParseErrorCalls,
+                    DetectedParseErrorCallCount: countDetectedParseErrorCalls,
                     fatalExceptionCount: countFATALs
                 }
             });
@@ -4024,13 +4030,14 @@ describe('Test Lexer Grammars', function () {
 
             let refSrc, dumpStr;
             if (lexerSourceCode) {
+                stripForSerialization(lexerSourceCode.options);                
                 dumpStr = rmCommonWS`
                     ${lexerSourceCode.sourceCode.replace(/\r\n|\r/g, '\n')}
 
                     //=============================================================================
                     //                     JISON-LEX OPTIONS:
 
-                    const lexerSpecConglomerate = ${JSON5.stringify(stripForSerialization(lexerSourceCode.options), { space: 2 })}
+                    const lexerSpecConglomerate = ${JSON5.stringify(lexerSourceCode.options, { space: 2 })}
 
                 `;
             } else {
