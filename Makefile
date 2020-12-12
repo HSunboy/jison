@@ -451,7 +451,6 @@ build:                                                                  \
 		subpackages-build                                               \
 		prep_util_dir                                                   \
 		dist/cli-cjs.js                                                 \
-		packages/ebnf-parser/ebnf.y                                     \
 		packages/ebnf-parser/bnf.y                                      \
 		packages/ebnf-parser/bnf.l                                      \
 		packages/lex-parser/lex.y                                       \
