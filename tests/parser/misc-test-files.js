@@ -1,15 +1,17 @@
 const assert = require('chai').assert;
+const Jison = require('../setup').Jison;
+const Lexer = require('../setup').Lexer;
 const fs = require('fs');
 const path = require('path');
 const yaml = require('@gerhobbelt/js-yaml');
 const JSON5 = require('@gerhobbelt/json5');
 const globby = require('globby');
-const helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
+const helpers = require('../../packages/helpers-lib');
 const trimErrorForTestReporting = helpers.trimErrorForTestReporting;
 const stripErrorStackPaths = helpers.stripErrorStackPaths;
 const cleanStackTrace4Comparison = helpers.cleanStackTrace4Comparison;
+const rmCommonWS = helpers.rmCommonWS;
 const mkdirp = helpers.mkdirp;
-const Jison = require('../../dist/jison-cjs');
 
 
 
@@ -46,14 +48,40 @@ function cleanPath(filepath) {
     if (!filepath.includes(':')) {
         filepath = path.join(__dirname, filepath);
     }
-    return path.normalize(filepath).replace(/\\/g, '/');  // UNIXify the path
+    return path.resolve(filepath).replace(/\\/g, '/');  // UNIXify the path
+}
+
+const PATHROOT = cleanPath('../../..');
+const PATHBASE = cleanPath('.');
+
+function extractYAMLheader(src) {
+    // extract the top comment (possibly empty), which carries the title, etc. metadata:
+    let header = src.substr(0, src.indexOf('\n\n') + 1);
+
+    // check if this chunk is indeed a YAML header: we ASSUME it contains at least
+    // one line looking like this:
+    let is_yaml_chunk = header.split('\n').filter((l) => l.replace(/^\/\/ ?/gm, '').trim() === '...').length > 0;
+    if (!is_yaml_chunk) {
+        return '';
+    }
+    return header;
+}
+
+function mkFilePath4Display(filepath, our_name) {
+    return filepath.replace(PATHROOT, '')
+    .replace(new RegExp(`^\\/packages\\/${our_name}\\/`), ':/')
+    .replace(/\/tests\/specs\//, '/tests/')
+    .replace(/\/tests\/lex\//, '/lex/')
+    .replace(/\/packages\//, '/')
+    .replace(/\/reference-output\//, '/')
+    .replace(/:\/tests\//, ':/')
 }
 
 
 console.log('exec glob....', __dirname);
 const original_cwd = process.cwd();
 process.chdir(__dirname);
-var testset = globby.sync([
+let testset = globby.sync([
     '../specs/*.jison',
 ]);
 
@@ -62,7 +90,6 @@ testset = testset.sort();
 testset = testset.map(function (filepath) {
     // Get document, or throw exception on error
     try {
-        console.log('Parser Spec file:', filepath.replace(/^.*?\/specs\//, ''));
         let spec;
         let header;
         let extra;
@@ -70,13 +97,26 @@ testset = testset.map(function (filepath) {
 
         filepath = cleanPath(filepath);
 
-        spec = fs.readFileSync(filepath, 'utf8').replace(/\r\n|\r/g, '\n');
+        let filepath4display = mkFilePath4Display(filepath, 'jison-lex');
+        console.log('Lexer Grammar file:', filepath4display);
 
-        // extract the top comment, which carries the title, etc. metadata:
-        header = spec.substr(0, spec.indexOf('\n\n') + 1);
+        if (filepath.match(/\.js$/)) {
+            spec = require(filepath);
 
-        // extract the grammar to test:
-        grammar = spec.substr(spec.indexOf('\n\n') + 2);
+            let hdrspec = fs.readFileSync(filepath, 'utf8').replace(/\r\n|\r/g, '\n');
+
+            // extract the top comment (possibly empty), which carries the title, etc. metadata:
+            header = extractYAMLheader(hdrspec);
+
+            grammar = spec;
+        } else {
+            spec = fs.readFileSync(filepath, 'utf8').replace(/\r\n|\r/g, '\n');
+
+            // extract the top comment (possibly empty), which carries the title, etc. metadata:
+            header = extractYAMLheader(spec);
+
+            grammar = spec;
+        }
 
         // then strip off the comment prefix for every line:
         header = header.replace(/^\/\/ ?/gm, '').replace(/\n...\n[^]*$/, function (m) {
@@ -84,18 +124,24 @@ testset = testset.map(function (filepath) {
             return '';
         });
 
+        //console.error("YAML safeload:", { header, filepath });
         let doc = yaml.safeLoad(header, {
             filename: filepath
-        });
+        }) || {};
 
         if (doc.crlf && typeof grammar === 'string') {
             grammar = grammar.replace(/\n/g, '\r\n');
         }
 
-        let refOutFilePath = cleanPath(path.join(path.dirname(filepath), 'reference-output', path.basename(filepath) + '-ref.json5'));
-        let testOutFilePath = cleanPath(path.join(path.dirname(filepath), 'output', path.basename(filepath) + '-ref.json5'));
-        let generatorRefFilePath = cleanPath(path.join(path.dirname(filepath), 'reference-output', path.basename(filepath) + '-lex.json5'));
-        let generatorOutFilePath = cleanPath(path.join(path.dirname(filepath), 'output', path.basename(filepath) + '-lex.json5'));
+        let outbase = path.dirname(filepath);
+        if (!outbase.includes(PATHBASE)) {
+            // mapping test files from other sub-packages to their own specs/output.../ directories in here to prevent collisions
+            outbase = cleanPath(path.join('specs', path.dirname(filepath4display.replace(/^\/examples\//, '/jison/examples/').replace(/^[:\/]+/, '').replace('/tests/', '/'))));
+        }
+        let refOutFilePath = cleanPath(path.join(outbase, 'reference-output', path.basename(filepath) + '-ref.json5'));
+        let testOutFilePath = cleanPath(path.join(outbase, 'output', path.basename(filepath) + '-ref.json5'));
+        let lexerRefFilePath = cleanPath(path.join(outbase, 'reference-output', path.basename(filepath) + '-lex.json5'));
+        let lexerOutFilePath = cleanPath(path.join(outbase, 'output', path.basename(filepath) + '-lex.json5'));
         mkdirp(path.dirname(refOutFilePath));
         mkdirp(path.dirname(testOutFilePath));
 
@@ -122,13 +168,15 @@ testset = testset.map(function (filepath) {
         }
 
         return {
+            type: path.extname(filepath).toLowerCase(),
+            filepath4display,
             path: filepath,
             outputRefPath: refOutFilePath,
             outputOutPath: testOutFilePath,
             generatorRefPath: generatorRefFilePath,
             generatorOutPath: generatorOutFilePath,
-            spec: spec,
-            grammar: grammar,
+            spec,
+            grammar,
             meta: doc,
             metaExtra: extra,
             generatorRef: generatorRefOut,
@@ -143,7 +191,26 @@ testset = testset.map(function (filepath) {
 .filter(function (info) {
     return !!info;
 });
-console.error({ testset });
+
+
+if (0) {
+    console.error(JSON5.stringify(testset, {
+        replacer: function (key, value) {
+            if (typeof value === 'string') {
+                let a = value.split('\n');
+                if (value.length > 500 || a.length > 5) {
+                    return `[...string (length: ${value.length}, lines: ${a.length}) ...]`;
+                }
+            }
+            if (/^(?:ref|lexerRef|spec|grammar)$/.test(key) && typeof value === 'object') {
+                return '[... JSON ...]';
+            }
+            return value;
+        },
+        space: 2,
+    }));
+}
+
 
 function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key, err) {
     // and produce an alternative structure to JSON-ify:
@@ -168,6 +235,55 @@ function reduceWhitespace(src) {
       .replace(/ +$/gm, '');
 }
 
+// WARNING:
+// This function will fatally destroy some parts of the object you feed it!
+// DO NOT expect good behaviour from it for its original purposes, once we're done in here!
+// 
+// This function was introduced as the JSON5.stringify() calls in the test rig used to
+// write output/reference files were taking forever and for larger test files were even
+// causing stack overflow in Node. 
+// Further investigation uncovered the culprit: stack run-away in deep esprima ASTs which
+// are stored as part of checked action code chunks in the options.lex_rule_dictionary.rules[], etc.
+function stripForSerialization(obj, depth) {
+    if (!obj) return false;
+
+    if (typeof obj !== 'object') {
+        return false;
+    }
+
+    depth = depth || 0;
+    if (Array.isArray(obj)) {
+        for (let i in obj) {
+            stripForSerialization(obj[i], depth + 1);
+        }
+        return false;
+    } else {
+        if (depth > 8) return true;
+
+        for (let key in obj) {
+            let el = obj[key];
+
+            if (key === 'ast') {
+                // if attribute is itself an object, which contains an AST member,
+                // PLUS a `source` attribute alongside, nuke the AST sub attribute.
+                if (el && el.ast && el.source) {
+                    el.ast = '[recast AST]';
+                    if (el.augmentedSource) {
+                        el.augmentedSource = '[LINE-SHIFTED SOURCE]';
+                    }
+                    if (el.source === obj.srcCode) {
+                        el.source = '[IDEM: srcCode]';
+                    }
+                }
+            }
+
+            if (stripForSerialization(el, depth + 1)) {
+                obj[key] = '[OBJECT @ DEPTH LIMIT]';
+            }
+        }
+        return false;
+    }
+}
 
 
 
@@ -177,6 +293,10 @@ function reduceWhitespace(src) {
 
 
 
+
+//
+// compile these grammars and run a sample input through them
+//
 describe('JISON code generator', function () {
     beforeEach(function beforeEachTest() {
         generator_reset();
@@ -186,29 +306,94 @@ describe('JISON code generator', function () {
         // process this file:
         let title = (filespec.meta ? filespec.meta.title : null);
 
-        let testname = 'test: ' + filespec.path.replace(/^.*?\/specs\//, '') + (title ? ' :: ' + title : '');
+        let testname = 'test: ' + filespec.filepath4display + (title ? ' :: ' + title : '');
+
+        // don't dump more than 4 EOF tokens at the end of the stream:
+        const maxEOFTokenCount = 4;
+        // don't dump more than 20 error tokens in the output stream:
+        const maxERRORTokenCount = 20;
+        // maximum number of tokens in the output stream:
+        const maxTokenCount = 10000;
 
         console.error('generate test: ', testname);
 
         // and create a test for it:
         it(testname, function testEachParserExample() {
-            let err, ast, grammar;
+            let err, ast;
+            let i = 0;
             let tokens = [];
             let lexer = bnf.bnf_parser.parser.lexer;
-            let i = 0;
 
+            let grammar = filespec.grammar;
+
+            let countEOFs = 0;
+            let countERRORs = 0;
+            let countParseErrorCalls = 0;
+            let countDetectedParseErrorCalls = 0;
+            let countFATALs = 0;
+
+            let yy = {
+                parseError: function customMainParseError(str, hash, ExceptionClass) {
+                    countParseErrorCalls++;
+
+                    if (0) {
+                        console.error("parseError: ", str, (new Error('')).stack);
+                    }
+
+                    // augment the returned value when possible:
+
+                    // NOTE: there is no need for shallow copy the hash as a new one
+                    // is created for every parseError() call. 
+                    // 
+                    // NOTE: before jison-gho 0.7.0 a shallow copy was required if you
+                    // desired to persist the `hash` error info past the lexer run itself.
+                    // 
+                    // WARNING: if you want to keep a SNAPSHOT of the `yy`, `loc`, etc. 
+                    // members of this moment in time, you MUST shallow-copy those anyway!
+                    // 
+                    // The lexer kernel provides these members as *references* to allow
+                    // userland `parseError` handlers to custom-tweak the kernel state,
+                    // if so desired. THIS IS NOT SHOWCASED HERE.
+                    // 
+                    //const rv = Object.assign({}, hash);
+                    const rv = hash;
+                    if (rv.yy) {
+                        // shallow copy to keep (most of) current internal lexer state intact:
+                        rv.yy = Object.assign({}, rv.yy);
+                    }
+                    if (rv.loc) {
+                        rv.loc = Object.assign({}, rv.loc);
+                        rv.loc.range = rv.loc.range.slice();
+                    }
+
+                    rv.errorDiag = {
+                        inputPos: this._input ? this._input.length : -1,
+                        yytext: this.yytext,
+                        yyleng: this.yyleng,
+                        matches: this.matches,
+                        activeCondition: this.topState(),
+                        conditionStackDepth: this.conditionStack.length,
+                    };
+
+                    //if (hash.yyErrorInvoked) ... 
+                    
+                    // we dump yytext in the token stream, so we can use that to dump a little
+                    // more info for comparison & diagnostics:
+                    this.yytext = rv;
+
+                    return -42; // this.ERROR;
+                }
+            };
+        
             try {
                 // Change CWD to the directory where the source grammar resides: this helps us properly
                 // %include any files mentioned in the grammar with relative paths:
                 process.chdir(path.dirname(filespec.path));
 
-                grammar = filespec.grammar; // "%% test: foo bar | baz ; hello: world ;";
-
-                ast = lexer.setInput(grammar);
+                ast = lexer.setInput(grammar, yy);
                 ast.__original_input__ = grammar;
 
-                let countDown = 4;
-                for (i = 0; i < 1000; i++) {
+                for (i = 0; i < maxTokenCount; i++) {
                     let tok = lexer.lex();
                     tokens.push({
                         id: tok,
@@ -219,20 +404,35 @@ describe('JISON code generator', function () {
                     if (tok === lexer.EOF) {
                         // and make sure EOF stays EOF, i.e. continued invocation of `lex()` will only
                         // produce more EOF tokens at the same location:
-                        countDown--;
-                        if (countDown <= 0) {
+                        countEOFs++;
+                        if (countEOFs >= maxEOFTokenCount) {
+                            break;
+                        }
+                    }
+                    else if (tok === lexer.ERROR) {
+                        countERRORs++;
+                        if (countERRORs >= maxERRORTokenCount) {
+                            break;
+                        }
+                    }
+                    else if (tok === -42) {
+                        countDetectedParseErrorCalls++;
+                        if (countDetectedParseErrorCalls >= maxERRORTokenCount) {
                             break;
                         }
                     }
                 }
             } catch (ex) {
+                countFATALs++;
+                
                 // save the error:
-                tokens.push(-1);
                 err = ex;
                 tokens.push({
+                    id: -1,
+                    token: null,
                     fail: 1,
                     meta: filespec.spec.meta,
-                    err: trimErrorForTestReporting(ex)
+                    err: ex
                 });
                 // and make sure ast !== undefined:
                 if (!ast) {
@@ -242,11 +442,23 @@ describe('JISON code generator', function () {
                 process.chdir(original_cwd);
             }
 
-            // also store the number of tokens we received:
-            tokens.unshift(i);
+            // write a summary node at the end of the stream:
+            tokens.push({
+                id: -2,
+                token: null,
+                summary: {
+                    totalTokenCount: tokens.length,
+                    EOFTokenCount: countEOFs,
+                    ERRORTokenCount: countERRORs,
+                    ParseErrorCallCount: countParseErrorCalls,
+                    DetectedParseErrorCallCount: countDetectedParseErrorCalls,
+                    fatalExceptionCount: countFATALs
+                }
+            });
             // if (lexerSourceCode) {
             //   tokens.push(lexerSourceCode);
             // }
+            tokens = trimErrorForTestReporting(tokens);
 
             // either we check/test the correctness of the collected input, iff there's
             // a reference provided, OR we create the reference file for future use:
@@ -263,6 +475,14 @@ describe('JISON code generator', function () {
 
             // strip away devbox-specific paths in error stack traces in the output:
             refOut = stripErrorStackPaths(refOut);
+
+            refOut = rmCommonWS`
+                /* 
+                 * grammar spec generated by jison-gho for input file:
+                 *     ${filespec.filepath4display}
+                 */
+
+            `.trimStart() + refOut;
 
             // and convert it back so we have a `tokens` set that's cleaned up
             // and potentially matching the stored reference set:
