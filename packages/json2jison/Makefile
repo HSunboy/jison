@@ -47,7 +47,7 @@ superclean: clean
 	-find . -type d -name 'node_modules' -exec rm -rf "{}" \;
 
 clean-dumpfiles:
-	bash -c "find . -type f \( -iname '*fatal_*_dump*' -o -ipath '*reference-output*' -o -ipath '*/lex/output/*' -o -ipath '*/lex-parser/output/*' -o -ipath '*/specs/output/*' -o -ipath '*/examples/output/*' \) -print -delete"
+	bash -c "find . -type f \( -iname '*fatal_*_dump*' -o -ipath '*reference-output*' -o -ipath '*/examples/output/*' -o -ipath '*/lex/output/*' -o -ipath '*/specs/output/*' -o -ipath '*/specs/**/output/*' \) -print -delete"
 
 
 
