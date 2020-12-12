@@ -14,7 +14,9 @@ import reHelpers from './validate-regex';
 import { trimErrorForTestReporting, stripErrorStackPaths, cleanStackTrace4Comparison } from './trimErrorForTestReporting';
 import extractSymbolTableFromFile from './extractSymbolTableFromJSON5File';
 import setupDelimitedActionChunkMatcher from './setupDelimitedActionChunkMatcher';
+import setupFileBasedTestRig from './setupFileBasedTestRig';
 
+if (typeof setupFileBasedTestRig !== 'function') throw new Error('x')
 
 
 export default {
@@ -29,6 +31,7 @@ export default {
     cleanStackTrace4Comparison,
     extractSymbolTableFromFile,
     setupDelimitedActionChunkMatcher,
+    setupFileBasedTestRig,
 
     checkRegExp: reHelpers.checkRegExp,
     getRegExpInfo: reHelpers.getRegExpInfo,

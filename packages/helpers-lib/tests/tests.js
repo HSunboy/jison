@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const XRegExp = require('@gerhobbelt/xregexp');
 const JSON5 = require('@gerhobbelt/json5');
+const globby = require('globby');
 const assert = require('chai').assert;
 // NodeJS doesn't support ES2015 import statements yet, so we must use the compiled/rollup-ed version instead:
 const helpers = require('../dist/helpers-lib-cjs');
@@ -892,5 +893,37 @@ Missing } at end of next line:
     it('generateSourcePrelude: **TBD**', function () {
         assert.ok(typeof helpers.generateSourcePrelude === 'function');
     });
+
+    it('setupFileBasedTestRig:', function () {
+        assert.ok(typeof helpers.setupFileBasedTestRig === 'function');
+
+        const original_cwd = process.cwd();
+        let testset;
+        try {
+            process.chdir(__dirname);
+            testset = globby.sync([
+                './fixtures/**/*.txt', 
+            ]);
+
+            testset = testset.sort();
+        } finally {
+            process.chdir(original_cwd);
+        }
+        assert(Array.isArray(testset));
+        const len = testset.length;
+
+        let spec = helpers.setupFileBasedTestRig(__dirname, testset, 'foo', null);
+        assert(spec);
+        assert(Array.isArray(spec.filespecList));
+        assert.strictEqual(spec.filespecList.length, len);
+
+        assert.strictEqual(typeof spec.testrig_JSON5circularRefHandler, 'function');
+        assert.strictEqual(typeof spec.stripForSerialization, 'function');
+        assert.strictEqual(typeof spec.reduceWhitespace, 'function');
+        assert.strictEqual(typeof spec.trimErrorForTestReporting,  'function');
+        assert.strictEqual(typeof spec.stripErrorStackPaths,  'function');
+        assert.strictEqual(typeof spec.cleanStackTrace4Comparison, 'function');
+    });
+
 });
 
