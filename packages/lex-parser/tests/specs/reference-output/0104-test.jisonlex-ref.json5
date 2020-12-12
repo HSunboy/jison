@@ -2,7 +2,19 @@
   id: -1,
   token: null,
   fail: 1,
-  spec: `%s    
+  spec: `//
+// title: "indented multi-line <A,B,...> condition block"
+// test_input: |-
+//   $A.8
+//   B1
+//   $$55Z...
+//   $
+//   ~
+//
+// ...
+//
+
+%s    
     CALL_DIRECTIVE_STATE,
     SOURCE_DIRECTIVE_STATE,
     DEFINE_DIRECTIVE_STATE,
@@ -61,93 +73,75 @@ CONTROL_STATEMENT_STATE>{
   err: {
     hash: {
       errStr: `
-Seems you did not correctly terminate the start condition set
-    <CALL_DIRECTIVE_STATE,???>
-with a terminating '>'
+The lexer rule's action code section does not compile: Error: Line 42: Unexpected token }
     
-  Erroneous code:
-16: <CALL_DIRECTIVE_STATE,
-^^........................^
-17: SOURCE_DIRECTIVE_STATE,
-^^..^^^^^^^^^^^^^^^^^^^^^^^
+  Erroneous area:
+39:   \\n            {
+^^......^^^^^^^^^^^^^
+40:     this.popState();
+^^..^^^^^^^^^^^^^^^^^^^^
     (...continued...)
 --  (---------------)
-55:                                 };
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-56:                                 return 'EOF';
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    
-  Technical error report:
-Parse error on line 16:
-<CALL_DIRECTIVE_STATE,
-----------------------^
-Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "nonnumeric_option_value", "err", got unexpected "OPTIONS_END"
+49:     return '#' + yytext[0].charCodeAt(0).toString(16);
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+50:   }
+^^..^^^
+51: }
+52: 
 `,
       exception: null,
       text: '',
       value: '',
       token: '"$accept"',
       token_id: 0,
-      line: 55,
+      line: 49,
       recoverable: false,
-      state: 184,
+      state: 149,
       action: 2,
-      new_state: 74,
-      stack_pointer: 8,
+      new_state: 49,
+      stack_pointer: 10,
     },
     message: `
-Seems you did not correctly terminate the start condition set
-    <CALL_DIRECTIVE_STATE,???>
-with a terminating '>'
+The lexer rule's action code section does not compile: Error: Line 42: Unexpected token }
     
-  Erroneous code:
-16: <CALL_DIRECTIVE_STATE,
-^^........................^
-17: SOURCE_DIRECTIVE_STATE,
-^^..^^^^^^^^^^^^^^^^^^^^^^^
+  Erroneous area:
+39:   \\n            {
+^^......^^^^^^^^^^^^^
+40:     this.popState();
+^^..^^^^^^^^^^^^^^^^^^^^
     (...continued...)
 --  (---------------)
-55:                                 };
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-56:                                 return 'EOF';
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    
-  Technical error report:
-Parse error on line 16:
-<CALL_DIRECTIVE_STATE,
-----------------------^
-Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "nonnumeric_option_value", "err", got unexpected "OPTIONS_END"
+49:     return '#' + yytext[0].charCodeAt(0).toString(16);
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+50:   }
+^^..^^^
+51: }
+52: 
 `,
     name: 'JisonParserError',
     stack: `JisonParserError: 
-Seems you did not correctly terminate the start condition set
-    <CALL_DIRECTIVE_STATE,???>
-with a terminating '>'
+The lexer rule's action code section does not compile: Error: Line 42: Unexpected token }
     
-  Erroneous code:
-16: <CALL_DIRECTIVE_STATE,
-^^........................^
-17: SOURCE_DIRECTIVE_STATE,
-^^..^^^^^^^^^^^^^^^^^^^^^^^
+  Erroneous area:
+39:   \\n            {
+^^......^^^^^^^^^^^^^
+40:     this.popState();
+^^..^^^^^^^^^^^^^^^^^^^^
     (...continued...)
 --  (---------------)
-55:                                 };
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-56:                                 return 'EOF';
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    
-  Technical error report:
-Parse error on line 16:
-<CALL_DIRECTIVE_STATE,
-----------------------^
-Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "nonnumeric_option_value", "err", got unexpected "OPTIONS_END"
+49:     return '#' + yytext[0].charCodeAt(0).toString(16);
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+50:   }
+^^..^^^
+51: }
+52: 
 
-    at Object.parseError (/lex-parser-cjs.js:7292:15)
-    at Object.yyError (/lex-parser-cjs.js:7482:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:4601:14)
-    at Object.parse (/lex-parser-cjs.js:8546:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12610:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
+    at Object.parseError (/lex-parser-cjs.js:7520:15)
+    at Object.yyError (/lex-parser-cjs.js:7710:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4087:18)
+    at Object.parse (/lex-parser-cjs.js:8977:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12820:25)
+    at Context.testEachParserExample (/all-tests.js:557:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -185,7 +179,7 @@ Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "n
         },
         __options_flags__: 11,
         __options_category_description__: 'the <...> delimited set of lexer start conditions',
-        __inside_scoped_ruleset__: false,
+        __inside_scoped_ruleset__: true,
         __context_cfg_stack__: [
           {
             flags: 0,
@@ -198,6 +192,7 @@ Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "n
             scoped: false,
           },
         ],
+        __inside_condition_set__: false,
         depth: 0,
         include_command_allowed: false,
       },
@@ -208,68 +203,45 @@ Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "n
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 55,
+        line: 49,
         expected: null,
         recoverable: false,
-        state: 184,
+        state: 149,
         action: 2,
-        new_state: 74,
-        stack_pointer: 8,
+        new_state: 49,
+        stack_pointer: 10,
       },
       reentrant_call_depth: 1,
       error_infos_stack: [
         {
-          errStr: `Parse error on line 16:
-<CALL_DIRECTIVE_STATE,
-----------------------^
-Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "nonnumeric_option_value", "err", got unexpected "OPTIONS_END"`,
-          exception: null,
-          text: '',
-          value: '',
-          token: '"OPTIONS_END"',
-          token_id: 22,
-          line: 15,
-          recoverable: true,
-          state: 113,
-          action: 0,
-          new_state: 200,
-          stack_pointer: 8,
-        },
-        {
           errStr: `
-Seems you did not correctly terminate the start condition set
-    <CALL_DIRECTIVE_STATE,???>
-with a terminating '>'
+The lexer rule's action code section does not compile: Error: Line 42: Unexpected token }
     
-  Erroneous code:
-16: <CALL_DIRECTIVE_STATE,
-^^........................^
-17: SOURCE_DIRECTIVE_STATE,
-^^..^^^^^^^^^^^^^^^^^^^^^^^
+  Erroneous area:
+39:   \\n            {
+^^......^^^^^^^^^^^^^
+40:     this.popState();
+^^..^^^^^^^^^^^^^^^^^^^^
     (...continued...)
 --  (---------------)
-55:                                 };
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-56:                                 return 'EOF';
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    
-  Technical error report:
-Parse error on line 16:
-<CALL_DIRECTIVE_STATE,
-----------------------^
-Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "nonnumeric_option_value", "err", got unexpected "OPTIONS_END"
+49:     return '#' + yytext[0].charCodeAt(0).toString(16);
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+50:   }
+^^..^^^
+51: }
+52: 
 `,
           exception: null,
           text: '',
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 55,
+          line: 49,
           recoverable: false,
-          state: 184,
+          state: 149,
           action: 2,
-          new_state: 74,
-          stack_pointer: 8,
+          new_state: 49,
+          stack_pointer: 10,
         },
         {
           errStr: null,
@@ -278,87 +250,73 @@ Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "n
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 55,
+          line: 49,
           expected: null,
           recoverable: false,
-          state: 184,
+          state: 149,
           action: 2,
-          new_state: 74,
-          stack_pointer: 8,
+          new_state: 49,
+          stack_pointer: 10,
         },
       ],
       error_recovery_stack: [
         {
-          errStr: `Parse error on line 16:
-<CALL_DIRECTIVE_STATE,
-----------------------^
-Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "nonnumeric_option_value", "err", got unexpected "OPTIONS_END"`,
-          exception: null,
-          text: '',
-          value: '',
-          token: '"OPTIONS_END"',
-          token_id: 22,
-          line: 15,
-          recoverable: true,
-          state: 113,
-          action: 0,
-          new_state: 200,
-          stack_pointer: 8,
-          base_pointer: 8,
-          info_stack_pointer: 220,
-          root_failure_pointer: 8,
-        },
-        {
           errStr: `
-Seems you did not correctly terminate the start condition set
-    <CALL_DIRECTIVE_STATE,???>
-with a terminating '>'
+The lexer rule's action code section does not compile: Error: Line 42: Unexpected token }
     
-  Erroneous code:
-16: <CALL_DIRECTIVE_STATE,
-^^........................^
-17: SOURCE_DIRECTIVE_STATE,
-^^..^^^^^^^^^^^^^^^^^^^^^^^
+  Erroneous area:
+39:   \\n            {
+^^......^^^^^^^^^^^^^
+40:     this.popState();
+^^..^^^^^^^^^^^^^^^^^^^^
     (...continued...)
 --  (---------------)
-55:                                 };
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-56:                                 return 'EOF';
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    
-  Technical error report:
-Parse error on line 16:
-<CALL_DIRECTIVE_STATE,
-----------------------^
-Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "nonnumeric_option_value", "err", got unexpected "OPTIONS_END"
+49:     return '#' + yytext[0].charCodeAt(0).toString(16);
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+50:   }
+^^..^^^
+51: }
+52: 
 `,
           exception: null,
           text: '',
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 55,
+          line: 49,
           recoverable: false,
-          state: 184,
+          state: 149,
           action: 2,
-          new_state: 74,
-          stack_pointer: 8,
-          base_pointer: 9,
-          info_stack_pointer: 9,
-          root_failure_pointer: 8,
+          new_state: 49,
+          stack_pointer: 10,
+          base_pointer: 12,
+          info_stack_pointer: 12,
+          root_failure_pointer: 10,
           yyError: true,
           errorRuleDepth: -1,
-          recovering: 3,
+          recovering: 0,
         },
       ],
-      error_infos_stack_size: 3,
-      error_recovery_stack_size: 2,
+      error_infos_stack_size: 2,
+      error_recovery_stack_size: 1,
     },
     reentrant_call_depth: 0,
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%s    
+  __original_input__: `//
+// title: "indented multi-line <A,B,...> condition block"
+// test_input: |-
+//   $A.8
+//   B1
+//   $$55Z...
+//   $
+//   ~
+//
+// ...
+//
+
+%s    
     CALL_DIRECTIVE_STATE,
     SOURCE_DIRECTIVE_STATE,
     DEFINE_DIRECTIVE_STATE,

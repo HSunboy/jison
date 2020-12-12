@@ -1,17 +1,38 @@
 {
   rules: [
-    [
-      '{ASCII_LETTER}',
-      "return 'A'",
-    ],
-    [
-      '\\s',
-      "return ' '",
-    ],
-    [
-      '.',
-      "return '?'",
-    ],
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return 'A'",
+      rule: '{ASCII_LETTER}',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return ' '",
+      rule: '\\s',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return '?'",
+      rule: '.',
+    },
   ],
   macros: {
     ASCII_LETTER: '[a-zA-z]',
@@ -49,10 +70,10 @@
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 15,
+        line: 22,
         expected: null,
         recoverable: false,
-        state: 24,
+        state: 26,
         action: 2,
         new_state: 1,
         stack_pointer: 5,
@@ -66,10 +87,10 @@
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 15,
+          line: 22,
           expected: null,
           recoverable: false,
-          state: 24,
+          state: 26,
           action: 2,
           new_state: 1,
           stack_pointer: 5,
@@ -83,7 +104,14 @@
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%code imports %{
+  __original_input__: `//
+// title: "should support multiple '%code imports' chunks"
+// test_input: 'becky 7?'
+//
+// ...
+//
+
+%code imports %{
   const XRegExp = require('@gerhobbelt/xregexp');
 %}
 

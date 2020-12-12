@@ -1,11 +1,18 @@
 {
   rules: [
-    [
-      '\\[[^]\\]',
-      `return (
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: `return (
             'GOOD_REGEX' // [^] matches ANY char...
         )`,
-    ],
+      rule: '\\[[^]\\]',
+    },
   ],
   macros: {},
   startConditions: {},
@@ -32,10 +39,10 @@
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 1,
+        line: 8,
         expected: null,
         recoverable: false,
-        state: 24,
+        state: 26,
         action: 2,
         new_state: 1,
         stack_pointer: 5,
@@ -49,10 +56,10 @@
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 1,
+          line: 8,
           expected: null,
           recoverable: false,
-          state: 24,
+          state: 26,
           action: 2,
           new_state: 1,
           stack_pointer: 5,
@@ -66,6 +73,13 @@
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%%
+  __original_input__: `//
+// title: "one form of lexer regex [...] set which encompasses *all* characters, used often in JavaScript circles."
+// test_input: 'a [\\u14a7"\\nNL\\tbecky foo[bar]] b'
+//
+// ...
+//
+
+%%
 "["[^]"]" -> 'GOOD_REGEX' // [^] matches ANY char...`,
 }

@@ -4,13 +4,13 @@
     token: '"START_INC"',
     yytext: '%s',
     yylloc: {
-      first_line: 1,
+      first_line: 8,
       first_column: 0,
-      last_line: 1,
+      last_line: 8,
       last_column: 2,
       range: [
-        0,
-        2,
+        111,
+        113,
       ],
     },
   },
@@ -19,13 +19,13 @@
     token: '"OPTION_VALUE"',
     yytext: 'PERCENT_ALLOWED',
     yylloc: {
-      first_line: 1,
+      first_line: 8,
       first_column: 3,
-      last_line: 1,
+      last_line: 8,
       last_column: 18,
       range: [
-        3,
-        18,
+        114,
+        129,
       ],
     },
   },
@@ -34,13 +34,13 @@
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 1,
+      first_line: 8,
       first_column: 18,
-      last_line: 1,
+      last_line: 8,
       last_column: 18,
       range: [
-        18,
-        18,
+        129,
+        129,
       ],
     },
   },
@@ -49,13 +49,13 @@
     token: '"%%"',
     yytext: '%%',
     yylloc: {
-      first_line: 3,
+      first_line: 10,
       first_column: 0,
-      last_line: 3,
+      last_line: 10,
       last_column: 2,
       range: [
-        20,
-        22,
+        131,
+        133,
       ],
     },
   },
@@ -64,13 +64,13 @@
     token: '"<"',
     yytext: '<',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 0,
-      last_line: 14,
+      last_line: 21,
       last_column: 1,
       range: [
-        523,
-        524,
+        634,
+        635,
       ],
     },
   },
@@ -79,13 +79,13 @@
     token: '"OPTION_VALUE"',
     yytext: 'PERCENT_ALLOWED',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 1,
-      last_line: 14,
+      last_line: 21,
       last_column: 16,
       range: [
-        524,
-        539,
+        635,
+        650,
       ],
     },
   },
@@ -94,13 +94,13 @@
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 16,
-      last_line: 14,
+      last_line: 21,
       last_column: 16,
       range: [
-        539,
-        539,
+        650,
+        650,
       ],
     },
   },
@@ -109,13 +109,13 @@
     token: '">"',
     yytext: '>',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 16,
-      last_line: 14,
+      last_line: 21,
       last_column: 17,
       range: [
-        539,
-        540,
+        650,
+        651,
       ],
     },
   },
@@ -124,13 +124,13 @@
     token: '"STRING_LIT"',
     yytext: '"%"',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 17,
-      last_line: 14,
+      last_line: 21,
       last_column: 20,
       range: [
-        540,
-        543,
+        651,
+        654,
       ],
     },
   },
@@ -139,13 +139,13 @@
     token: '"SPECIAL_GROUP"',
     yytext: '(?=',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 20,
-      last_line: 14,
+      last_line: 21,
       last_column: 23,
       range: [
-        543,
-        546,
+        654,
+        657,
       ],
     },
   },
@@ -154,13 +154,13 @@
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\s',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 23,
-      last_line: 14,
+      last_line: 21,
       last_column: 25,
       range: [
-        546,
-        548,
+        657,
+        659,
       ],
     },
   },
@@ -169,13 +169,13 @@
     token: '"*"',
     yytext: '*',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 25,
-      last_line: 14,
+      last_line: 21,
       last_column: 26,
       range: [
-        548,
-        549,
+        659,
+        660,
       ],
     },
   },
@@ -184,13 +184,13 @@
     token: '"SPECIAL_GROUP"',
     yytext: '(?:',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 26,
-      last_line: 14,
+      last_line: 21,
       last_column: 29,
       range: [
-        549,
-        552,
+        660,
+        663,
       ],
     },
   },
@@ -199,13 +199,13 @@
     token: '"REGEX_SET_START"',
     yytext: '[',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 29,
-      last_line: 14,
+      last_line: 21,
       last_column: 30,
       range: [
-        552,
-        553,
+        663,
+        664,
       ],
     },
   },
@@ -214,13 +214,13 @@
     token: '"REGEX_SET"',
     yytext: '^0-9)',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 30,
-      last_line: 14,
+      last_line: 21,
       last_column: 35,
       range: [
-        553,
-        558,
+        664,
+        669,
       ],
     },
   },
@@ -229,13 +229,13 @@
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 35,
-      last_line: 14,
+      last_line: 21,
       last_column: 36,
       range: [
-        558,
-        559,
+        669,
+        670,
       ],
     },
   },
@@ -244,13 +244,13 @@
     token: '"|"',
     yytext: '|',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 36,
-      last_line: 14,
+      last_line: 21,
       last_column: 37,
       range: [
-        559,
-        560,
+        670,
+        671,
       ],
     },
   },
@@ -259,13 +259,13 @@
     token: '"CHARACTER_LIT"',
     yytext: 'E',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 37,
-      last_line: 14,
+      last_line: 21,
       last_column: 38,
       range: [
-        560,
-        561,
+        671,
+        672,
       ],
     },
   },
@@ -274,13 +274,13 @@
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\b',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 38,
-      last_line: 14,
+      last_line: 21,
       last_column: 40,
       range: [
-        561,
-        563,
+        672,
+        674,
       ],
     },
   },
@@ -289,13 +289,13 @@
     token: '"|"',
     yytext: '|',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 40,
-      last_line: 14,
+      last_line: 21,
       last_column: 41,
       range: [
-        563,
-        564,
+        674,
+        675,
       ],
     },
   },
@@ -304,13 +304,13 @@
     token: '"CHARACTER_LIT"',
     yytext: 'PI',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 41,
-      last_line: 14,
+      last_line: 21,
       last_column: 43,
       range: [
-        564,
-        566,
+        675,
+        677,
       ],
     },
   },
@@ -319,13 +319,13 @@
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\b',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 43,
-      last_line: 14,
+      last_line: 21,
       last_column: 45,
       range: [
-        566,
-        568,
+        677,
+        679,
       ],
     },
   },
@@ -334,13 +334,13 @@
     token: '"|"',
     yytext: '|',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 45,
-      last_line: 14,
+      last_line: 21,
       last_column: 46,
       range: [
-        568,
-        569,
+        679,
+        680,
       ],
     },
   },
@@ -349,13 +349,13 @@
     token: '"$"',
     yytext: '$',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 46,
-      last_line: 14,
+      last_line: 21,
       last_column: 47,
       range: [
-        569,
-        570,
+        680,
+        681,
       ],
     },
   },
@@ -364,13 +364,13 @@
     token: '")"',
     yytext: ')',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 47,
-      last_line: 14,
+      last_line: 21,
       last_column: 48,
       range: [
-        570,
-        571,
+        681,
+        682,
       ],
     },
   },
@@ -379,133 +379,823 @@
     token: '")"',
     yytext: ')',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 48,
-      last_line: 14,
+      last_line: 21,
       last_column: 49,
       range: [
-        571,
-        572,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"CHARACTER_LIT"',
-    yytext: 'console',
-    yylloc: {
-      first_line: 48,
-      first_column: 22,
-      last_line: 48,
-      last_column: 29,
-      range: [
-        2709,
-        2716,
-      ],
-    },
-  },
-  {
-    id: 15,
-    token: '"."',
-    yytext: '.',
-    yylloc: {
-      first_line: 48,
-      first_column: 29,
-      last_line: 48,
-      last_column: 30,
-      range: [
-        2716,
-        2717,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"CHARACTER_LIT"',
-    yytext: 'log',
-    yylloc: {
-      first_line: 48,
-      first_column: 30,
-      last_line: 48,
-      last_column: 33,
-      range: [
-        2717,
-        2720,
-      ],
-    },
-  },
-  {
-    id: 8,
-    token: '"("',
-    yytext: '(',
-    yylloc: {
-      first_line: 48,
-      first_column: 33,
-      last_line: 48,
-      last_column: 34,
-      range: [
-        2720,
-        2721,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"STRING_LIT"',
-    yytext: "'percent: '",
-    yylloc: {
-      first_line: 48,
-      first_column: 34,
-      last_line: 48,
-      last_column: 45,
-      range: [
-        2721,
-        2732,
-      ],
-    },
-  },
-  {
-    id: 14,
-    token: '","',
-    yytext: ',',
-    yylloc: {
-      first_line: 48,
-      first_column: 45,
-      last_line: 48,
-      last_column: 46,
-      range: [
-        2732,
-        2733,
+        682,
+        683,
       ],
     },
   },
   {
     id: 25,
     token: '"ACTION_START"',
-    yytext: ' ',
+    yytext: '                      ',
     yylloc: {
-      first_line: 48,
-      first_column: 46,
-      last_line: 48,
-      last_column: 47,
+      first_line: 22,
+      first_column: 0,
+      last_line: 22,
+      last_column: 22,
       range: [
-        2733,
-        2734,
+        684,
+        706,
       ],
     },
   },
   {
     id: 38,
     token: '"ACTION_BODY"',
-    yytext: 'yytext);',
+    yytext: "// followed by another operator, i.e. anything that's ",
+    yylloc: {
+      first_line: 22,
+      first_column: 22,
+      last_line: 22,
+      last_column: 76,
+      range: [
+        706,
+        760,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 22,
+      first_column: 76,
+      last_line: 23,
+      last_column: 22,
+      range: [
+        760,
+        783,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// not a number, or The End: then this is a unary ',
+    yylloc: {
+      first_line: 23,
+      first_column: 22,
+      last_line: 23,
+      last_column: 72,
+      range: [
+        783,
+        833,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 23,
+      first_column: 72,
+      last_line: 24,
+      last_column: 22,
+      range: [
+        833,
+        856,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// `percent` operator.',
+    yylloc: {
+      first_line: 24,
+      first_column: 22,
+      last_line: 24,
+      last_column: 44,
+      range: [
+        856,
+        878,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 24,
+      first_column: 44,
+      last_line: 25,
+      last_column: 22,
+      range: [
+        878,
+        901,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '//',
+    yylloc: {
+      first_line: 25,
+      first_column: 22,
+      last_line: 25,
+      last_column: 24,
+      range: [
+        901,
+        903,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 25,
+      first_column: 24,
+      last_line: 26,
+      last_column: 22,
+      range: [
+        903,
+        926,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: "// `1%-2` would be ambiguous but isn't: the `-` is ",
+    yylloc: {
+      first_line: 26,
+      first_column: 22,
+      last_line: 26,
+      last_column: 73,
+      range: [
+        926,
+        977,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 26,
+      first_column: 73,
+      last_line: 27,
+      last_column: 22,
+      range: [
+        977,
+        1000,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// considered as a unary minus and thus `%` is a ',
+    yylloc: {
+      first_line: 27,
+      first_column: 22,
+      last_line: 27,
+      last_column: 71,
+      range: [
+        1000,
+        1049,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 27,
+      first_column: 71,
+      last_line: 28,
+      last_column: 22,
+      range: [
+        1049,
+        1072,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// `modulo` operator.',
+    yylloc: {
+      first_line: 28,
+      first_column: 22,
+      last_line: 28,
+      last_column: 43,
+      range: [
+        1072,
+        1093,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 28,
+      first_column: 43,
+      last_line: 29,
+      last_column: 22,
+      range: [
+        1093,
+        1116,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '//',
+    yylloc: {
+      first_line: 29,
+      first_column: 22,
+      last_line: 29,
+      last_column: 24,
+      range: [
+        1116,
+        1118,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 29,
+      first_column: 24,
+      last_line: 30,
+      last_column: 22,
+      range: [
+        1118,
+        1141,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// `1%*5` thus is treated the same: any operator ',
+    yylloc: {
+      first_line: 30,
+      first_column: 22,
+      last_line: 30,
+      last_column: 71,
+      range: [
+        1141,
+        1190,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 30,
+      first_column: 71,
+      last_line: 31,
+      last_column: 22,
+      range: [
+        1190,
+        1213,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// following the `%` is assumed to be a *binary* ',
+    yylloc: {
+      first_line: 31,
+      first_column: 22,
+      last_line: 31,
+      last_column: 71,
+      range: [
+        1213,
+        1262,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 31,
+      first_column: 71,
+      last_line: 32,
+      last_column: 22,
+      range: [
+        1262,
+        1285,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// operator. Hence `1% times 5` which brings us to ',
+    yylloc: {
+      first_line: 32,
+      first_column: 22,
+      last_line: 32,
+      last_column: 73,
+      range: [
+        1285,
+        1336,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 32,
+      first_column: 73,
+      last_line: 33,
+      last_column: 22,
+      range: [
+        1336,
+        1359,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// operators which only exist in unary form: `!`, and ',
+    yylloc: {
+      first_line: 33,
+      first_column: 22,
+      last_line: 33,
+      last_column: 76,
+      range: [
+        1359,
+        1413,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 33,
+      first_column: 76,
+      last_line: 34,
+      last_column: 22,
+      range: [
+        1413,
+        1436,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// values which are not numbers, e.g. `PI` and `E`:',
+    yylloc: {
+      first_line: 34,
+      first_column: 22,
+      last_line: 34,
+      last_column: 73,
+      range: [
+        1436,
+        1487,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 34,
+      first_column: 73,
+      last_line: 35,
+      last_column: 22,
+      range: [
+        1487,
+        1510,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// how about',
+    yylloc: {
+      first_line: 35,
+      first_column: 22,
+      last_line: 35,
+      last_column: 34,
+      range: [
+        1510,
+        1522,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 35,
+      first_column: 34,
+      last_line: 36,
+      last_column: 22,
+      range: [
+        1522,
+        1545,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// - `1%E` -> modulo E,',
+    yylloc: {
+      first_line: 36,
+      first_column: 22,
+      last_line: 36,
+      last_column: 45,
+      range: [
+        1545,
+        1568,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 36,
+      first_column: 45,
+      last_line: 37,
+      last_column: 22,
+      range: [
+        1568,
+        1591,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// - `1%!0` -> modulo 1 (as !0 -> 1)',
+    yylloc: {
+      first_line: 37,
+      first_column: 22,
+      last_line: 37,
+      last_column: 58,
+      range: [
+        1591,
+        1627,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 37,
+      first_column: 58,
+      last_line: 38,
+      last_column: 22,
+      range: [
+        1627,
+        1650,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '//',
+    yylloc: {
+      first_line: 38,
+      first_column: 22,
+      last_line: 38,
+      last_column: 24,
+      range: [
+        1650,
+        1652,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 38,
+      first_column: 24,
+      last_line: 39,
+      last_column: 22,
+      range: [
+        1652,
+        1675,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// Of course, the easier way to handle this would be to ',
+    yylloc: {
+      first_line: 39,
+      first_column: 22,
+      last_line: 39,
+      last_column: 78,
+      range: [
+        1675,
+        1731,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 39,
+      first_column: 78,
+      last_line: 40,
+      last_column: 22,
+      range: [
+        1731,
+        1754,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// keep the lexer itself dumb and put this additional ',
+    yylloc: {
+      first_line: 40,
+      first_column: 22,
+      last_line: 40,
+      last_column: 76,
+      range: [
+        1754,
+        1808,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 40,
+      first_column: 76,
+      last_line: 41,
+      last_column: 22,
+      range: [
+        1808,
+        1831,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// logic inside a post_lex handler which should then be ',
+    yylloc: {
+      first_line: 41,
+      first_column: 22,
+      last_line: 41,
+      last_column: 78,
+      range: [
+        1831,
+        1887,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 41,
+      first_column: 78,
+      last_line: 42,
+      last_column: 22,
+      range: [
+        1887,
+        1910,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// able to obtain additional look-ahead tokens and queue ',
+    yylloc: {
+      first_line: 42,
+      first_column: 22,
+      last_line: 42,
+      last_column: 79,
+      range: [
+        1910,
+        1967,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 42,
+      first_column: 79,
+      last_line: 43,
+      last_column: 22,
+      range: [
+        1967,
+        1990,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// them for later, while using those to inspect and ',
+    yylloc: {
+      first_line: 43,
+      first_column: 22,
+      last_line: 43,
+      last_column: 74,
+      range: [
+        1990,
+        2042,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 43,
+      first_column: 74,
+      last_line: 44,
+      last_column: 22,
+      range: [
+        2042,
+        2065,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// adjust the lexer output now -- a trick which is used ',
+    yylloc: {
+      first_line: 44,
+      first_column: 22,
+      last_line: 44,
+      last_column: 78,
+      range: [
+        2065,
+        2121,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 44,
+      first_column: 78,
+      last_line: 45,
+      last_column: 22,
+      range: [
+        2121,
+        2144,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// in the cockroachDB SQL parser code, for example.',
+    yylloc: {
+      first_line: 45,
+      first_column: 22,
+      last_line: 45,
+      last_column: 73,
+      range: [
+        2144,
+        2195,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 45,
+      first_column: 73,
+      last_line: 46,
+      last_column: 22,
+      range: [
+        2195,
+        2218,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '//',
+    yylloc: {
+      first_line: 46,
+      first_column: 22,
+      last_line: 46,
+      last_column: 24,
+      range: [
+        2218,
+        2220,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 46,
+      first_column: 24,
+      last_line: 47,
+      last_column: 22,
+      range: [
+        2220,
+        2243,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// The above regex solution however is a more local ',
+    yylloc: {
+      first_line: 47,
+      first_column: 22,
+      last_line: 47,
+      last_column: 74,
+      range: [
+        2243,
+        2295,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 47,
+      first_column: 74,
+      last_line: 48,
+      last_column: 22,
+      range: [
+        2295,
+        2318,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// extra-lookahead solution and thus should cost us less ',
     yylloc: {
       first_line: 48,
-      first_column: 47,
+      first_column: 22,
       last_line: 48,
-      last_column: 55,
+      last_column: 79,
       range: [
-        2734,
-        2742,
+        2318,
+        2375,
       ],
     },
   },
@@ -515,12 +1205,252 @@
     yytext: '\n                      ',
     yylloc: {
       first_line: 48,
-      first_column: 55,
+      first_column: 79,
       last_line: 49,
       last_column: 22,
       range: [
-        2742,
-        2765,
+        2375,
+        2398,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// overhead than the suggested post_lex alternative, but ',
+    yylloc: {
+      first_line: 49,
+      first_column: 22,
+      last_line: 49,
+      last_column: 79,
+      range: [
+        2398,
+        2455,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 49,
+      first_column: 79,
+      last_line: 50,
+      last_column: 22,
+      range: [
+        2455,
+        2478,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// it comes at a cost itself: complex regex and ',
+    yylloc: {
+      first_line: 50,
+      first_column: 22,
+      last_line: 50,
+      last_column: 70,
+      range: [
+        2478,
+        2526,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 50,
+      first_column: 70,
+      last_line: 51,
+      last_column: 22,
+      range: [
+        2526,
+        2549,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// duplication of language knowledge in the lexer itself, ',
+    yylloc: {
+      first_line: 51,
+      first_column: 22,
+      last_line: 51,
+      last_column: 80,
+      range: [
+        2549,
+        2607,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 51,
+      first_column: 80,
+      last_line: 52,
+      last_column: 22,
+      range: [
+        2607,
+        2630,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// plus inclusion of *grammar* (syntactic) knowledge in ',
+    yylloc: {
+      first_line: 52,
+      first_column: 22,
+      last_line: 52,
+      last_column: 78,
+      range: [
+        2630,
+        2686,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 52,
+      first_column: 78,
+      last_line: 53,
+      last_column: 22,
+      range: [
+        2686,
+        2709,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: "// the lexer too, where it doesn't belong in an ideal ",
+    yylloc: {
+      first_line: 53,
+      first_column: 22,
+      last_line: 53,
+      last_column: 76,
+      range: [
+        2709,
+        2763,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 53,
+      first_column: 76,
+      last_line: 54,
+      last_column: 22,
+      range: [
+        2763,
+        2786,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// world...',
+    yylloc: {
+      first_line: 54,
+      first_column: 22,
+      last_line: 54,
+      last_column: 33,
+      range: [
+        2786,
+        2797,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 54,
+      first_column: 33,
+      last_line: 55,
+      last_column: 22,
+      range: [
+        2797,
+        2820,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: 'console.log(',
+    yylloc: {
+      first_line: 55,
+      first_column: 22,
+      last_line: 55,
+      last_column: 34,
+      range: [
+        2820,
+        2832,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: "'percent: '",
+    yylloc: {
+      first_line: 55,
+      first_column: 34,
+      last_line: 55,
+      last_column: 45,
+      range: [
+        2832,
+        2843,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: ', yytext);',
+    yylloc: {
+      first_line: 55,
+      first_column: 45,
+      last_line: 55,
+      last_column: 55,
+      range: [
+        2843,
+        2853,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 55,
+      first_column: 55,
+      last_line: 56,
+      last_column: 22,
+      range: [
+        2853,
+        2876,
       ],
     },
   },
@@ -529,13 +1459,13 @@
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
-      first_line: 49,
+      first_line: 56,
       first_column: 22,
-      last_line: 49,
+      last_line: 56,
       last_column: 29,
       range: [
-        2765,
-        2772,
+        2876,
+        2883,
       ],
     },
   },
@@ -544,13 +1474,13 @@
     token: '"ACTION_BODY"',
     yytext: "'%'",
     yylloc: {
-      first_line: 49,
+      first_line: 56,
       first_column: 29,
-      last_line: 49,
+      last_line: 56,
       last_column: 32,
       range: [
-        2772,
-        2775,
+        2883,
+        2886,
       ],
     },
   },
@@ -559,13 +1489,13 @@
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
-      first_line: 49,
+      first_line: 56,
       first_column: 32,
-      last_line: 49,
+      last_line: 56,
       last_column: 33,
       range: [
-        2775,
-        2776,
+        2886,
+        2887,
       ],
     },
   },
@@ -574,13 +1504,13 @@
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
-      first_line: 49,
+      first_line: 56,
       first_column: 33,
-      last_line: 49,
+      last_line: 56,
       last_column: 33,
       range: [
-        2776,
-        2776,
+        2887,
+        2887,
       ],
     },
   },
@@ -589,13 +1519,13 @@
     token: '"<"',
     yytext: '<',
     yylloc: {
-      first_line: 51,
+      first_line: 58,
       first_column: 0,
-      last_line: 51,
+      last_line: 58,
       last_column: 1,
       range: [
-        2778,
-        2779,
+        2889,
+        2890,
       ],
     },
   },
@@ -604,13 +1534,13 @@
     token: '"OPTION_VALUE"',
     yytext: 'PERCENT_ALLOWED',
     yylloc: {
-      first_line: 51,
+      first_line: 58,
       first_column: 1,
-      last_line: 51,
+      last_line: 58,
       last_column: 16,
       range: [
-        2779,
-        2794,
+        2890,
+        2905,
       ],
     },
   },
@@ -619,13 +1549,13 @@
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 51,
+      first_line: 58,
       first_column: 16,
-      last_line: 51,
+      last_line: 58,
       last_column: 16,
       range: [
-        2794,
-        2794,
+        2905,
+        2905,
       ],
     },
   },
@@ -634,13 +1564,13 @@
     token: '">"',
     yytext: '>',
     yylloc: {
-      first_line: 51,
+      first_line: 58,
       first_column: 16,
-      last_line: 51,
+      last_line: 58,
       last_column: 17,
       range: [
-        2794,
-        2795,
+        2905,
+        2906,
       ],
     },
   },
@@ -649,693 +1579,178 @@
     token: '"."',
     yytext: '.',
     yylloc: {
-      first_line: 51,
+      first_line: 58,
       first_column: 17,
-      last_line: 51,
+      last_line: 58,
       last_column: 18,
       range: [
-        2795,
-        2796,
+        2906,
+        2907,
       ],
     },
   },
   {
-    id: 54,
-    token: '"CHARACTER_LIT"',
-    yytext: 'this',
+    id: 25,
+    token: '"ACTION_START"',
+    yytext: '                      ',
     yylloc: {
-      first_line: 52,
+      first_line: 59,
+      first_column: 0,
+      last_line: 59,
+      last_column: 22,
+      range: [
+        2929,
+        2951,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: 'this.popState(); ',
+    yylloc: {
+      first_line: 59,
       first_column: 22,
-      last_line: 52,
-      last_column: 26,
-      range: [
-        2840,
-        2844,
-      ],
-    },
-  },
-  {
-    id: 15,
-    token: '"."',
-    yytext: '.',
-    yylloc: {
-      first_line: 52,
-      first_column: 26,
-      last_line: 52,
-      last_column: 27,
-      range: [
-        2844,
-        2845,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"CHARACTER_LIT"',
-    yytext: 'popState',
-    yylloc: {
-      first_line: 52,
-      first_column: 27,
-      last_line: 52,
-      last_column: 35,
-      range: [
-        2845,
-        2853,
-      ],
-    },
-  },
-  {
-    id: 8,
-    token: '"("',
-    yytext: '(',
-    yylloc: {
-      first_line: 52,
-      first_column: 35,
-      last_line: 52,
-      last_column: 36,
-      range: [
-        2853,
-        2854,
-      ],
-    },
-  },
-  {
-    id: 9,
-    token: '")"',
-    yytext: ')',
-    yylloc: {
-      first_line: 52,
-      first_column: 36,
-      last_line: 52,
-      last_column: 37,
-      range: [
-        2854,
-        2855,
-      ],
-    },
-  },
-  {
-    id: 2,
-    token: '"error"',
-    yytext: {
-      errStr: `Lexical error on line 52: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-NOTE: When you want this input to be interpreted as a LITERAL part
-      of a lex rule regex, you MUST enclose it in double or
-      single quotes.
-
-      If not, then know that this input is not accepted as a valid
-      regex expression here in jison-lex rules.
-
-  Erroneous area:
-49:                       return '%';
-50: 
-51: <PERCENT_ALLOWED>.                     
-52:                       this.popState(); 
-^^.......................................^
-53:                       this.unput(yytext); 
-54:                       // this.unput(yytext); can be used here instead of 
-`,
-      recoverable: false,
-      text: ';',
-      token: null,
-      line: 51,
-      loc: {
-        first_line: 52,
-        first_column: 37,
-        last_line: 52,
-        last_column: 38,
-        range: [
-          2855,
-          2856,
-        ],
-      },
-      yy: {
-        __inside_condition_set__: false,
-        depth: 0,
-        include_command_allowed: false,
-      },
-      lexer: {
-        EOF: 1,
-        ERROR: 2,
-        __error_infos: [
-          {
-            errStr: `Lexical error on line 52: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-NOTE: When you want this input to be interpreted as a LITERAL part
-      of a lex rule regex, you MUST enclose it in double or
-      single quotes.
-
-      If not, then know that this input is not accepted as a valid
-      regex expression here in jison-lex rules.
-
-  Erroneous area:
-49:                       return '%';
-50: 
-51: <PERCENT_ALLOWED>.                     
-52:                       this.popState(); 
-^^.......................................^
-53:                       this.unput(yytext); 
-54:                       // this.unput(yytext); can be used here instead of 
-`,
-            recoverable: false,
-            text: ';',
-            token: null,
-            line: 51,
-            loc: {
-              first_line: 52,
-              first_column: 37,
-              last_line: 52,
-              last_column: 38,
-              range: [
-                2855,
-                2856,
-              ],
-            },
-            yy: {
-              __inside_condition_set__: false,
-              depth: 0,
-              include_command_allowed: false,
-            },
-            lexer: '[lexer]',
-            isLexerError: true,
-            yyErrorInvoked: true,
-            isLexerBacktrackingNotSupportedError: false,
-            isLexerInternalError: false,
-            extra_error_attributes: null,
-            lexerHasAlreadyForwardedCursorBy1: false,
-          },
-          {
-            errStr: `Lexical error on line 53: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-NOTE: When you want this input to be interpreted as a LITERAL part
-      of a lex rule regex, you MUST enclose it in double or
-      single quotes.
-
-      If not, then know that this input is not accepted as a valid
-      regex expression here in jison-lex rules.
-
-  Erroneous area:
-50: 
-51: <PERCENT_ALLOWED>.                     
-52:                       this.popState(); 
-53:                       this.unput(yytext); 
-^^..........................................^
-54:                       // this.unput(yytext); can be used here instead of 
-55:                       // this.reject(); which would only work when we set the 
-`,
-            recoverable: false,
-            text: ';',
-            token: null,
-            line: 52,
-            loc: {
-              first_line: 53,
-              first_column: 40,
-              last_line: 53,
-              last_column: 41,
-              range: [
-                2898,
-                2899,
-              ],
-            },
-            yy: '[reference to sibling --> *.[49].yytext.lexer.__error_infos.[0].yy]',
-            lexer: '[lexer]',
-            isLexerError: true,
-            yyErrorInvoked: true,
-            isLexerBacktrackingNotSupportedError: false,
-            isLexerInternalError: false,
-            extra_error_attributes: null,
-            lexerHasAlreadyForwardedCursorBy1: false,
-          },
-          {
-            errStr: `Lexical error on line 64: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-NOTE: When you want this input to be interpreted as a LITERAL part
-      of a lex rule regex, you MUST enclose it in double or
-      single quotes.
-
-      If not, then know that this input is not accepted as a valid
-      regex expression here in jison-lex rules.
-
-  Erroneous area:
-61: \\s+                   /* skip whitespace */
-62: 
-63: [0-9]+("."[0-9]+)?\\b  
-64:                       this.pushState('PERCENT_ALLOWED'); 
-^^.........................................................^
-65:                       return 'NUMBER';
-66: 
-`,
-            recoverable: false,
-            text: ';',
-            token: null,
-            line: 63,
-            loc: {
-              first_line: 64,
-              first_column: 55,
-              last_line: 64,
-              last_column: 56,
-              range: [
-                3231,
-                3232,
-              ],
-            },
-            yy: '[reference to sibling --> *.[49].yytext.lexer.__error_infos.[0].yy]',
-            lexer: '[lexer]',
-            isLexerError: true,
-            yyErrorInvoked: true,
-            isLexerBacktrackingNotSupportedError: false,
-            isLexerInternalError: false,
-            extra_error_attributes: null,
-            lexerHasAlreadyForwardedCursorBy1: false,
-          },
-        ],
-        __decompressed: true,
-        done: true,
-        _backtrack: false,
-        _input: '',
-        _more: false,
-        _signaled_error_token: false,
-        _clear_state: 0,
-        conditionStack: [
-          'INITIAL',
-          'rules',
-        ],
-        match: '',
-        matched: `%s PERCENT_ALLOWED
-
-%%
-
-// \`%\`: the grammar is not LALR(1) unless we make the lexer smarter and have 
-// it disambiguate the \`%\` between \`percent\` and \`modulo\` functionality by 
-// additional look-ahead:
-// we introduce a lexical predicate here to disambiguate the \`%\` and thus 
-// keep the grammar LALR(1)!
-//      https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions
-// we also use an (inclusive) lexical scope which turns this rule on only 
-// immediately after a number was lexed previously.
-
-<PERCENT_ALLOWED>"%"(?=\\s*(?:[^0-9)]|E\\b|PI\\b|$))
-                      // followed by another operator, i.e. anything that's 
-                      // not a number, or The End: then this is a unary 
-                      // \`percent\` operator.
-                      //
-                      // \`1%-2\` would be ambiguous but isn't: the \`-\` is 
-                      // considered as a unary minus and thus \`%\` is a 
-                      // \`modulo\` operator.
-                      //
-                      // \`1%*5\` thus is treated the same: any operator 
-                      // following the \`%\` is assumed to be a *binary* 
-                      // operator. Hence \`1% times 5\` which brings us to 
-                      // operators which only exist in unary form: \`!\`, and 
-                      // values which are not numbers, e.g. \`PI\` and \`E\`:
-                      // how about
-                      // - \`1%E\` -> modulo E,
-                      // - \`1%!0\` -> modulo 1 (as !0 -> 1)
-                      //
-                      // Of course, the easier way to handle this would be to 
-                      // keep the lexer itself dumb and put this additional 
-                      // logic inside a post_lex handler which should then be 
-                      // able to obtain additional look-ahead tokens and queue 
-                      // them for later, while using those to inspect and 
-                      // adjust the lexer output now -- a trick which is used 
-                      // in the cockroachDB SQL parser code, for example.
-                      //
-                      // The above regex solution however is a more local 
-                      // extra-lookahead solution and thus should cost us less 
-                      // overhead than the suggested post_lex alternative, but 
-                      // it comes at a cost itself: complex regex and 
-                      // duplication of language knowledge in the lexer itself, 
-                      // plus inclusion of *grammar* (syntactic) knowledge in 
-                      // the lexer too, where it doesn't belong in an ideal 
-                      // world...
-                      console.log('percent: ', yytext);
-                      return '%';
-
-<PERCENT_ALLOWED>.                     
-                      this.popState(); 
-                      this.unput(yytext); 
-                      // this.unput(yytext); can be used here instead of 
-                      // this.reject(); which would only work when we set the 
-                      // \`backtrack_lexer\` option
-
-
-
-
-\\s+                   /* skip whitespace */
-
-[0-9]+("."[0-9]+)?\\b  
-                      this.pushState('PERCENT_ALLOWED'); 
-                      return 'NUMBER';
-
-<<EOF>>               return 'EOF';
-.                     return 'CHAR';`,
-        matches: false,
-        yytext: '',
-        offset: 3346,
-        base_position: 0,
-        yyleng: 0,
-        yylineno: 67,
-        yylloc: {
-          first_line: 68,
-          first_column: 36,
-          last_line: 68,
-          last_column: 36,
-          range: [
-            3346,
-            3346,
-          ],
-        },
-        CRLF_Re: {
-          re: '/\\r\\n?|\\n/',
-          source: '\\r\\n?|\\n',
-          flags: '',
-        },
-        options: {
-          xregexp: true,
-          ranges: true,
-          trackPosition: true,
-          easy_keyword_rules: true,
-        },
-        yy: {
-          __inside_condition_set__: false,
-          depth: 0,
-          include_command_allowed: false,
-        },
-        __entire_action_block_matchers__: {},
-      },
-      isLexerError: true,
-      yyErrorInvoked: true,
-      isLexerBacktrackingNotSupportedError: false,
-      isLexerInternalError: false,
-      extra_error_attributes: null,
-      lexerHasAlreadyForwardedCursorBy1: false,
-      errorDiag: {
-        inputPos: 490,
-        yytext: ';',
-        yyleng: 1,
-        matches: [
-          ';',
-        ],
-        activeCondition: 'rules',
-        conditionStackDepth: 2,
-      },
-    },
-    yylloc: {
-      first_line: 52,
-      first_column: 37,
-      last_line: 52,
-      last_column: 38,
-      range: [
-        2855,
-        2856,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"CHARACTER_LIT"',
-    yytext: 'this',
-    yylloc: {
-      first_line: 53,
-      first_column: 22,
-      last_line: 53,
-      last_column: 26,
-      range: [
-        2880,
-        2884,
-      ],
-    },
-  },
-  {
-    id: 15,
-    token: '"."',
-    yytext: '.',
-    yylloc: {
-      first_line: 53,
-      first_column: 26,
-      last_line: 53,
-      last_column: 27,
-      range: [
-        2884,
-        2885,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"CHARACTER_LIT"',
-    yytext: 'unput',
-    yylloc: {
-      first_line: 53,
-      first_column: 27,
-      last_line: 53,
-      last_column: 32,
-      range: [
-        2885,
-        2890,
-      ],
-    },
-  },
-  {
-    id: 8,
-    token: '"("',
-    yytext: '(',
-    yylloc: {
-      first_line: 53,
-      first_column: 32,
-      last_line: 53,
-      last_column: 33,
-      range: [
-        2890,
-        2891,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"CHARACTER_LIT"',
-    yytext: 'yytext',
-    yylloc: {
-      first_line: 53,
-      first_column: 33,
-      last_line: 53,
+      last_line: 59,
       last_column: 39,
       range: [
-        2891,
-        2897,
+        2951,
+        2968,
       ],
     },
   },
   {
-    id: 9,
-    token: '")"',
-    yytext: ')',
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
     yylloc: {
-      first_line: 53,
+      first_line: 59,
       first_column: 39,
-      last_line: 53,
-      last_column: 40,
+      last_line: 60,
+      last_column: 22,
       range: [
-        2897,
-        2898,
+        2968,
+        2991,
       ],
     },
   },
   {
-    id: 2,
-    token: '"error"',
-    yytext: {
-      errStr: `Lexical error on line 53: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-NOTE: When you want this input to be interpreted as a LITERAL part
-      of a lex rule regex, you MUST enclose it in double or
-      single quotes.
-
-      If not, then know that this input is not accepted as a valid
-      regex expression here in jison-lex rules.
-
-  Erroneous area:
-50: 
-51: <PERCENT_ALLOWED>.                     
-52:                       this.popState(); 
-53:                       this.unput(yytext); 
-^^..........................................^
-54:                       // this.unput(yytext); can be used here instead of 
-55:                       // this.reject(); which would only work when we set the 
-`,
-      recoverable: false,
-      text: ';',
-      token: null,
-      line: 52,
-      loc: {
-        first_line: 53,
-        first_column: 40,
-        last_line: 53,
-        last_column: 41,
-        range: [
-          2898,
-          2899,
-        ],
-      },
-      yy: {
-        __inside_condition_set__: false,
-        depth: 0,
-        include_command_allowed: false,
-      },
-      lexer: {
-        EOF: 1,
-        ERROR: 2,
-        __error_infos: '[reference to sibling array --> *.[49].yytext.lexer.__error_infos, length = 3]',
-        __decompressed: true,
-        done: true,
-        _backtrack: false,
-        _input: '',
-        _more: false,
-        _signaled_error_token: false,
-        _clear_state: 0,
-        conditionStack: [
-          'INITIAL',
-          'rules',
-        ],
-        match: '',
-        matched: `%s PERCENT_ALLOWED
-
-%%
-
-// \`%\`: the grammar is not LALR(1) unless we make the lexer smarter and have 
-// it disambiguate the \`%\` between \`percent\` and \`modulo\` functionality by 
-// additional look-ahead:
-// we introduce a lexical predicate here to disambiguate the \`%\` and thus 
-// keep the grammar LALR(1)!
-//      https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions
-// we also use an (inclusive) lexical scope which turns this rule on only 
-// immediately after a number was lexed previously.
-
-<PERCENT_ALLOWED>"%"(?=\\s*(?:[^0-9)]|E\\b|PI\\b|$))
-                      // followed by another operator, i.e. anything that's 
-                      // not a number, or The End: then this is a unary 
-                      // \`percent\` operator.
-                      //
-                      // \`1%-2\` would be ambiguous but isn't: the \`-\` is 
-                      // considered as a unary minus and thus \`%\` is a 
-                      // \`modulo\` operator.
-                      //
-                      // \`1%*5\` thus is treated the same: any operator 
-                      // following the \`%\` is assumed to be a *binary* 
-                      // operator. Hence \`1% times 5\` which brings us to 
-                      // operators which only exist in unary form: \`!\`, and 
-                      // values which are not numbers, e.g. \`PI\` and \`E\`:
-                      // how about
-                      // - \`1%E\` -> modulo E,
-                      // - \`1%!0\` -> modulo 1 (as !0 -> 1)
-                      //
-                      // Of course, the easier way to handle this would be to 
-                      // keep the lexer itself dumb and put this additional 
-                      // logic inside a post_lex handler which should then be 
-                      // able to obtain additional look-ahead tokens and queue 
-                      // them for later, while using those to inspect and 
-                      // adjust the lexer output now -- a trick which is used 
-                      // in the cockroachDB SQL parser code, for example.
-                      //
-                      // The above regex solution however is a more local 
-                      // extra-lookahead solution and thus should cost us less 
-                      // overhead than the suggested post_lex alternative, but 
-                      // it comes at a cost itself: complex regex and 
-                      // duplication of language knowledge in the lexer itself, 
-                      // plus inclusion of *grammar* (syntactic) knowledge in 
-                      // the lexer too, where it doesn't belong in an ideal 
-                      // world...
-                      console.log('percent: ', yytext);
-                      return '%';
-
-<PERCENT_ALLOWED>.                     
-                      this.popState(); 
-                      this.unput(yytext); 
-                      // this.unput(yytext); can be used here instead of 
-                      // this.reject(); which would only work when we set the 
-                      // \`backtrack_lexer\` option
-
-
-
-
-\\s+                   /* skip whitespace */
-
-[0-9]+("."[0-9]+)?\\b  
-                      this.pushState('PERCENT_ALLOWED'); 
-                      return 'NUMBER';
-
-<<EOF>>               return 'EOF';
-.                     return 'CHAR';`,
-        matches: false,
-        yytext: '',
-        offset: 3346,
-        base_position: 0,
-        yyleng: 0,
-        yylineno: 67,
-        yylloc: {
-          first_line: 68,
-          first_column: 36,
-          last_line: 68,
-          last_column: 36,
-          range: [
-            3346,
-            3346,
-          ],
-        },
-        CRLF_Re: {
-          re: '/\\r\\n?|\\n/',
-          source: '\\r\\n?|\\n',
-          flags: '',
-        },
-        options: {
-          xregexp: true,
-          ranges: true,
-          trackPosition: true,
-          easy_keyword_rules: true,
-        },
-        yy: {
-          __inside_condition_set__: false,
-          depth: 0,
-          include_command_allowed: false,
-        },
-        __entire_action_block_matchers__: {},
-      },
-      isLexerError: true,
-      yyErrorInvoked: true,
-      isLexerBacktrackingNotSupportedError: false,
-      isLexerInternalError: false,
-      extra_error_attributes: null,
-      lexerHasAlreadyForwardedCursorBy1: false,
-      errorDiag: {
-        inputPos: 447,
-        yytext: ';',
-        yyleng: 1,
-        matches: [
-          ';',
-        ],
-        activeCondition: 'rules',
-        conditionStackDepth: 2,
-      },
-    },
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: 'this.unput(yytext); ',
     yylloc: {
-      first_line: 53,
-      first_column: 40,
-      last_line: 53,
-      last_column: 41,
+      first_line: 60,
+      first_column: 22,
+      last_line: 60,
+      last_column: 42,
       range: [
-        2898,
-        2899,
+        2991,
+        3011,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 60,
+      first_column: 42,
+      last_line: 61,
+      last_column: 22,
+      range: [
+        3011,
+        3034,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// this.unput(yytext); can be used here instead of ',
+    yylloc: {
+      first_line: 61,
+      first_column: 22,
+      last_line: 61,
+      last_column: 73,
+      range: [
+        3034,
+        3085,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 61,
+      first_column: 73,
+      last_line: 62,
+      last_column: 22,
+      range: [
+        3085,
+        3108,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// this.reject(); which would only work when we set the ',
+    yylloc: {
+      first_line: 62,
+      first_column: 22,
+      last_line: 62,
+      last_column: 78,
+      range: [
+        3108,
+        3164,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 62,
+      first_column: 78,
+      last_line: 63,
+      last_column: 22,
+      range: [
+        3164,
+        3187,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// `backtrack_lexer` option',
+    yylloc: {
+      first_line: 63,
+      first_column: 22,
+      last_line: 63,
+      last_column: 49,
+      range: [
+        3187,
+        3214,
+      ],
+    },
+  },
+  {
+    id: 35,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 63,
+      first_column: 49,
+      last_line: 63,
+      last_column: 49,
+      range: [
+        3214,
+        3214,
       ],
     },
   },
@@ -1344,13 +1759,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\s',
     yylloc: {
-      first_line: 61,
+      first_line: 68,
       first_column: 0,
-      last_line: 61,
+      last_line: 68,
       last_column: 2,
       range: [
-        3108,
-        3110,
+        3219,
+        3221,
       ],
     },
   },
@@ -1359,13 +1774,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"+"',
     yytext: '+',
     yylloc: {
-      first_line: 61,
+      first_line: 68,
       first_column: 2,
-      last_line: 61,
+      last_line: 68,
       last_column: 3,
       range: [
-        3110,
-        3111,
+        3221,
+        3222,
       ],
     },
   },
@@ -1374,13 +1789,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_START"',
     yytext: '                   ',
     yylloc: {
-      first_line: 61,
+      first_line: 68,
       first_column: 3,
-      last_line: 61,
+      last_line: 68,
       last_column: 22,
       range: [
-        3111,
-        3130,
+        3222,
+        3241,
       ],
     },
   },
@@ -1389,13 +1804,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_BODY"',
     yytext: '/* skip whitespace */',
     yylloc: {
-      first_line: 61,
+      first_line: 68,
       first_column: 22,
-      last_line: 61,
+      last_line: 68,
       last_column: 43,
       range: [
-        3130,
-        3151,
+        3241,
+        3262,
       ],
     },
   },
@@ -1404,13 +1819,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
-      first_line: 61,
+      first_line: 68,
       first_column: 43,
-      last_line: 61,
+      last_line: 68,
       last_column: 43,
       range: [
-        3151,
-        3151,
+        3262,
+        3262,
       ],
     },
   },
@@ -1419,13 +1834,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"REGEX_SET_START"',
     yytext: '[',
     yylloc: {
-      first_line: 63,
+      first_line: 70,
       first_column: 0,
-      last_line: 63,
+      last_line: 70,
       last_column: 1,
       range: [
-        3153,
-        3154,
+        3264,
+        3265,
       ],
     },
   },
@@ -1434,13 +1849,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"REGEX_SET"',
     yytext: '0-9',
     yylloc: {
-      first_line: 63,
+      first_line: 70,
       first_column: 1,
-      last_line: 63,
+      last_line: 70,
       last_column: 4,
       range: [
-        3154,
-        3157,
+        3265,
+        3268,
       ],
     },
   },
@@ -1449,13 +1864,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
-      first_line: 63,
+      first_line: 70,
       first_column: 4,
-      last_line: 63,
+      last_line: 70,
       last_column: 5,
       range: [
-        3157,
-        3158,
+        3268,
+        3269,
       ],
     },
   },
@@ -1464,13 +1879,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"+"',
     yytext: '+',
     yylloc: {
-      first_line: 63,
+      first_line: 70,
       first_column: 5,
-      last_line: 63,
+      last_line: 70,
       last_column: 6,
       range: [
-        3158,
-        3159,
+        3269,
+        3270,
       ],
     },
   },
@@ -1479,13 +1894,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"("',
     yytext: '(',
     yylloc: {
-      first_line: 63,
+      first_line: 70,
       first_column: 6,
-      last_line: 63,
+      last_line: 70,
       last_column: 7,
       range: [
-        3159,
-        3160,
+        3270,
+        3271,
       ],
     },
   },
@@ -1494,13 +1909,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"STRING_LIT"',
     yytext: '"."',
     yylloc: {
-      first_line: 63,
+      first_line: 70,
       first_column: 7,
-      last_line: 63,
+      last_line: 70,
       last_column: 10,
       range: [
-        3160,
-        3163,
+        3271,
+        3274,
       ],
     },
   },
@@ -1509,13 +1924,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"REGEX_SET_START"',
     yytext: '[',
     yylloc: {
-      first_line: 63,
+      first_line: 70,
       first_column: 10,
-      last_line: 63,
+      last_line: 70,
       last_column: 11,
       range: [
-        3163,
-        3164,
+        3274,
+        3275,
       ],
     },
   },
@@ -1524,13 +1939,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"REGEX_SET"',
     yytext: '0-9',
     yylloc: {
-      first_line: 63,
+      first_line: 70,
       first_column: 11,
-      last_line: 63,
+      last_line: 70,
       last_column: 14,
       range: [
-        3164,
-        3167,
+        3275,
+        3278,
       ],
     },
   },
@@ -1539,13 +1954,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
-      first_line: 63,
+      first_line: 70,
       first_column: 14,
-      last_line: 63,
+      last_line: 70,
       last_column: 15,
       range: [
-        3167,
-        3168,
+        3278,
+        3279,
       ],
     },
   },
@@ -1554,13 +1969,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"+"',
     yytext: '+',
     yylloc: {
-      first_line: 63,
+      first_line: 70,
       first_column: 15,
-      last_line: 63,
+      last_line: 70,
       last_column: 16,
       range: [
-        3168,
-        3169,
+        3279,
+        3280,
       ],
     },
   },
@@ -1569,13 +1984,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '")"',
     yytext: ')',
     yylloc: {
-      first_line: 63,
+      first_line: 70,
       first_column: 16,
-      last_line: 63,
+      last_line: 70,
       last_column: 17,
       range: [
-        3169,
-        3170,
+        3280,
+        3281,
       ],
     },
   },
@@ -1584,13 +1999,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"?"',
     yytext: '?',
     yylloc: {
-      first_line: 63,
+      first_line: 70,
       first_column: 17,
-      last_line: 63,
+      last_line: 70,
       last_column: 18,
       range: [
-        3170,
-        3171,
+        3281,
+        3282,
       ],
     },
   },
@@ -1599,322 +2014,103 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"REGEX_SPECIAL_CHAR"',
     yytext: '\\b',
     yylloc: {
-      first_line: 63,
+      first_line: 70,
       first_column: 18,
-      last_line: 63,
+      last_line: 70,
       last_column: 20,
       range: [
-        3171,
-        3173,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"CHARACTER_LIT"',
-    yytext: 'this',
-    yylloc: {
-      first_line: 64,
-      first_column: 22,
-      last_line: 64,
-      last_column: 26,
-      range: [
-        3198,
-        3202,
-      ],
-    },
-  },
-  {
-    id: 15,
-    token: '"."',
-    yytext: '.',
-    yylloc: {
-      first_line: 64,
-      first_column: 26,
-      last_line: 64,
-      last_column: 27,
-      range: [
-        3202,
-        3203,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"CHARACTER_LIT"',
-    yytext: 'pushState',
-    yylloc: {
-      first_line: 64,
-      first_column: 27,
-      last_line: 64,
-      last_column: 36,
-      range: [
-        3203,
-        3212,
-      ],
-    },
-  },
-  {
-    id: 8,
-    token: '"("',
-    yytext: '(',
-    yylloc: {
-      first_line: 64,
-      first_column: 36,
-      last_line: 64,
-      last_column: 37,
-      range: [
-        3212,
-        3213,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"STRING_LIT"',
-    yytext: "'PERCENT_ALLOWED'",
-    yylloc: {
-      first_line: 64,
-      first_column: 37,
-      last_line: 64,
-      last_column: 54,
-      range: [
-        3213,
-        3230,
-      ],
-    },
-  },
-  {
-    id: 9,
-    token: '")"',
-    yytext: ')',
-    yylloc: {
-      first_line: 64,
-      first_column: 54,
-      last_line: 64,
-      last_column: 55,
-      range: [
-        3230,
-        3231,
-      ],
-    },
-  },
-  {
-    id: 2,
-    token: '"error"',
-    yytext: {
-      errStr: `Lexical error on line 64: 
-unsupported lexer input encountered while lexing
-rules (i.e. jison lex regexes) in "rules" state.
-
-NOTE: When you want this input to be interpreted as a LITERAL part
-      of a lex rule regex, you MUST enclose it in double or
-      single quotes.
-
-      If not, then know that this input is not accepted as a valid
-      regex expression here in jison-lex rules.
-
-  Erroneous area:
-61: \\s+                   /* skip whitespace */
-62: 
-63: [0-9]+("."[0-9]+)?\\b  
-64:                       this.pushState('PERCENT_ALLOWED'); 
-^^.........................................................^
-65:                       return 'NUMBER';
-66: 
-`,
-      recoverable: false,
-      text: ';',
-      token: null,
-      line: 63,
-      loc: {
-        first_line: 64,
-        first_column: 55,
-        last_line: 64,
-        last_column: 56,
-        range: [
-          3231,
-          3232,
-        ],
-      },
-      yy: {
-        __inside_condition_set__: false,
-        depth: 0,
-        include_command_allowed: true,
-      },
-      lexer: {
-        EOF: 1,
-        ERROR: 2,
-        __error_infos: '[reference to sibling array --> *.[49].yytext.lexer.__error_infos, length = 3]',
-        __decompressed: true,
-        done: true,
-        _backtrack: false,
-        _input: '',
-        _more: false,
-        _signaled_error_token: false,
-        _clear_state: 0,
-        conditionStack: [
-          'INITIAL',
-          'rules',
-        ],
-        match: '',
-        matched: `%s PERCENT_ALLOWED
-
-%%
-
-// \`%\`: the grammar is not LALR(1) unless we make the lexer smarter and have 
-// it disambiguate the \`%\` between \`percent\` and \`modulo\` functionality by 
-// additional look-ahead:
-// we introduce a lexical predicate here to disambiguate the \`%\` and thus 
-// keep the grammar LALR(1)!
-//      https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions
-// we also use an (inclusive) lexical scope which turns this rule on only 
-// immediately after a number was lexed previously.
-
-<PERCENT_ALLOWED>"%"(?=\\s*(?:[^0-9)]|E\\b|PI\\b|$))
-                      // followed by another operator, i.e. anything that's 
-                      // not a number, or The End: then this is a unary 
-                      // \`percent\` operator.
-                      //
-                      // \`1%-2\` would be ambiguous but isn't: the \`-\` is 
-                      // considered as a unary minus and thus \`%\` is a 
-                      // \`modulo\` operator.
-                      //
-                      // \`1%*5\` thus is treated the same: any operator 
-                      // following the \`%\` is assumed to be a *binary* 
-                      // operator. Hence \`1% times 5\` which brings us to 
-                      // operators which only exist in unary form: \`!\`, and 
-                      // values which are not numbers, e.g. \`PI\` and \`E\`:
-                      // how about
-                      // - \`1%E\` -> modulo E,
-                      // - \`1%!0\` -> modulo 1 (as !0 -> 1)
-                      //
-                      // Of course, the easier way to handle this would be to 
-                      // keep the lexer itself dumb and put this additional 
-                      // logic inside a post_lex handler which should then be 
-                      // able to obtain additional look-ahead tokens and queue 
-                      // them for later, while using those to inspect and 
-                      // adjust the lexer output now -- a trick which is used 
-                      // in the cockroachDB SQL parser code, for example.
-                      //
-                      // The above regex solution however is a more local 
-                      // extra-lookahead solution and thus should cost us less 
-                      // overhead than the suggested post_lex alternative, but 
-                      // it comes at a cost itself: complex regex and 
-                      // duplication of language knowledge in the lexer itself, 
-                      // plus inclusion of *grammar* (syntactic) knowledge in 
-                      // the lexer too, where it doesn't belong in an ideal 
-                      // world...
-                      console.log('percent: ', yytext);
-                      return '%';
-
-<PERCENT_ALLOWED>.                     
-                      this.popState(); 
-                      this.unput(yytext); 
-                      // this.unput(yytext); can be used here instead of 
-                      // this.reject(); which would only work when we set the 
-                      // \`backtrack_lexer\` option
-
-
-
-
-\\s+                   /* skip whitespace */
-
-[0-9]+("."[0-9]+)?\\b  
-                      this.pushState('PERCENT_ALLOWED'); 
-                      return 'NUMBER';
-
-<<EOF>>               return 'EOF';
-.                     return 'CHAR';`,
-        matches: false,
-        yytext: '',
-        offset: 3346,
-        base_position: 0,
-        yyleng: 0,
-        yylineno: 67,
-        yylloc: {
-          first_line: 68,
-          first_column: 36,
-          last_line: 68,
-          last_column: 36,
-          range: [
-            3346,
-            3346,
-          ],
-        },
-        CRLF_Re: {
-          re: '/\\r\\n?|\\n/',
-          source: '\\r\\n?|\\n',
-          flags: '',
-        },
-        options: {
-          xregexp: true,
-          ranges: true,
-          trackPosition: true,
-          easy_keyword_rules: true,
-        },
-        yy: {
-          __inside_condition_set__: false,
-          depth: 0,
-          include_command_allowed: false,
-        },
-        __entire_action_block_matchers__: {},
-      },
-      isLexerError: true,
-      yyErrorInvoked: true,
-      isLexerBacktrackingNotSupportedError: false,
-      isLexerInternalError: false,
-      extra_error_attributes: null,
-      lexerHasAlreadyForwardedCursorBy1: false,
-      errorDiag: {
-        inputPos: 114,
-        yytext: ';',
-        yyleng: 1,
-        matches: [
-          ';',
-        ],
-        activeCondition: 'rules',
-        conditionStackDepth: 2,
-      },
-    },
-    yylloc: {
-      first_line: 64,
-      first_column: 55,
-      last_line: 64,
-      last_column: 56,
-      range: [
-        3231,
-        3232,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"CHARACTER_LIT"',
-    yytext: 'return',
-    yylloc: {
-      first_line: 65,
-      first_column: 22,
-      last_line: 65,
-      last_column: 28,
-      range: [
-        3256,
-        3262,
+        3282,
+        3284,
       ],
     },
   },
   {
     id: 25,
     token: '"ACTION_START"',
-    yytext: ' ',
+    yytext: '                      ',
     yylloc: {
-      first_line: 65,
-      first_column: 28,
-      last_line: 65,
+      first_line: 71,
+      first_column: 0,
+      last_line: 71,
+      last_column: 22,
+      range: [
+        3287,
+        3309,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: 'this.pushState(',
+    yylloc: {
+      first_line: 71,
+      first_column: 22,
+      last_line: 71,
+      last_column: 37,
+      range: [
+        3309,
+        3324,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: "'PERCENT_ALLOWED'",
+    yylloc: {
+      first_line: 71,
+      first_column: 37,
+      last_line: 71,
+      last_column: 54,
+      range: [
+        3324,
+        3341,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '); ',
+    yylloc: {
+      first_line: 71,
+      first_column: 54,
+      last_line: 71,
+      last_column: 57,
+      range: [
+        3341,
+        3344,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '\n                      ',
+    yylloc: {
+      first_line: 71,
+      first_column: 57,
+      last_line: 72,
+      last_column: 22,
+      range: [
+        3344,
+        3367,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: 'return ',
+    yylloc: {
+      first_line: 72,
+      first_column: 22,
+      last_line: 72,
       last_column: 29,
       range: [
-        3262,
-        3263,
+        3367,
+        3374,
       ],
     },
   },
@@ -1923,13 +2119,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_BODY"',
     yytext: "'NUMBER'",
     yylloc: {
-      first_line: 65,
+      first_line: 72,
       first_column: 29,
-      last_line: 65,
+      last_line: 72,
       last_column: 37,
       range: [
-        3263,
-        3271,
+        3374,
+        3382,
       ],
     },
   },
@@ -1938,13 +2134,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
-      first_line: 65,
+      first_line: 72,
       first_column: 37,
-      last_line: 65,
+      last_line: 72,
       last_column: 38,
       range: [
-        3271,
-        3272,
+        3382,
+        3383,
       ],
     },
   },
@@ -1953,13 +2149,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
-      first_line: 65,
+      first_line: 72,
       first_column: 38,
-      last_line: 65,
+      last_line: 72,
       last_column: 38,
       range: [
-        3272,
-        3272,
+        3383,
+        3383,
       ],
     },
   },
@@ -1968,13 +2164,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"$"',
     yytext: '<<EOF>>',
     yylloc: {
-      first_line: 67,
+      first_line: 74,
       first_column: 0,
-      last_line: 67,
+      last_line: 74,
       last_column: 7,
       range: [
-        3274,
-        3281,
+        3385,
+        3392,
       ],
     },
   },
@@ -1983,13 +2179,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_START"',
     yytext: '               ',
     yylloc: {
-      first_line: 67,
+      first_line: 74,
       first_column: 7,
-      last_line: 67,
+      last_line: 74,
       last_column: 22,
       range: [
-        3281,
-        3296,
+        3392,
+        3407,
       ],
     },
   },
@@ -1998,13 +2194,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
-      first_line: 67,
+      first_line: 74,
       first_column: 22,
-      last_line: 67,
+      last_line: 74,
       last_column: 29,
       range: [
-        3296,
-        3303,
+        3407,
+        3414,
       ],
     },
   },
@@ -2013,13 +2209,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_BODY"',
     yytext: "'EOF'",
     yylloc: {
-      first_line: 67,
+      first_line: 74,
       first_column: 29,
-      last_line: 67,
+      last_line: 74,
       last_column: 34,
       range: [
-        3303,
-        3308,
+        3414,
+        3419,
       ],
     },
   },
@@ -2028,13 +2224,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
-      first_line: 67,
+      first_line: 74,
       first_column: 34,
-      last_line: 67,
+      last_line: 74,
       last_column: 35,
       range: [
-        3308,
-        3309,
+        3419,
+        3420,
       ],
     },
   },
@@ -2043,13 +2239,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
-      first_line: 67,
+      first_line: 74,
       first_column: 35,
-      last_line: 67,
+      last_line: 74,
       last_column: 35,
       range: [
-        3309,
-        3309,
+        3420,
+        3420,
       ],
     },
   },
@@ -2058,13 +2254,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"."',
     yytext: '.',
     yylloc: {
-      first_line: 68,
+      first_line: 75,
       first_column: 0,
-      last_line: 68,
+      last_line: 75,
       last_column: 1,
       range: [
-        3310,
-        3311,
+        3421,
+        3422,
       ],
     },
   },
@@ -2073,13 +2269,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_START"',
     yytext: '                     ',
     yylloc: {
-      first_line: 68,
+      first_line: 75,
       first_column: 1,
-      last_line: 68,
+      last_line: 75,
       last_column: 22,
       range: [
-        3311,
-        3332,
+        3422,
+        3443,
       ],
     },
   },
@@ -2088,13 +2284,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
-      first_line: 68,
+      first_line: 75,
       first_column: 22,
-      last_line: 68,
+      last_line: 75,
       last_column: 29,
       range: [
-        3332,
-        3339,
+        3443,
+        3450,
       ],
     },
   },
@@ -2103,13 +2299,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_BODY"',
     yytext: "'CHAR'",
     yylloc: {
-      first_line: 68,
+      first_line: 75,
       first_column: 29,
-      last_line: 68,
+      last_line: 75,
       last_column: 35,
       range: [
-        3339,
-        3345,
+        3450,
+        3456,
       ],
     },
   },
@@ -2118,13 +2314,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
-      first_line: 68,
+      first_line: 75,
       first_column: 35,
-      last_line: 68,
+      last_line: 75,
       last_column: 36,
       range: [
-        3345,
-        3346,
+        3456,
+        3457,
       ],
     },
   },
@@ -2133,13 +2329,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
-      first_line: 68,
+      first_line: 75,
       first_column: 36,
-      last_line: 68,
+      last_line: 75,
       last_column: 36,
       range: [
-        3346,
-        3346,
+        3457,
+        3457,
       ],
     },
   },
@@ -2148,13 +2344,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 68,
+      first_line: 75,
       first_column: 36,
-      last_line: 68,
+      last_line: 75,
       last_column: 36,
       range: [
-        3346,
-        3346,
+        3457,
+        3457,
       ],
     },
   },
@@ -2163,13 +2359,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 68,
+      first_line: 75,
       first_column: 36,
-      last_line: 68,
+      last_line: 75,
       last_column: 36,
       range: [
-        3346,
-        3346,
+        3457,
+        3457,
       ],
     },
   },
@@ -2178,13 +2374,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 68,
+      first_line: 75,
       first_column: 36,
-      last_line: 68,
+      last_line: 75,
       last_column: 36,
       range: [
-        3346,
-        3346,
+        3457,
+        3457,
       ],
     },
   },
@@ -2193,13 +2389,13 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 68,
+      first_line: 75,
       first_column: 36,
-      last_line: 68,
+      last_line: 75,
       last_column: 36,
       range: [
-        3346,
-        3346,
+        3457,
+        3457,
       ],
     },
   },
@@ -2207,10 +2403,10 @@ NOTE: When you want this input to be interpreted as a LITERAL part
     id: -2,
     token: null,
     summary: {
-      totalTokenCount: 103,
+      totalTokenCount: 160,
       EOFTokenCount: 4,
-      ERRORTokenCount: 3,
-      ParseErrorCallCount: 3,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
       DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },

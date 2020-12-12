@@ -1,93 +1,95 @@
 [
   {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
-      first_line: 1,
+      first_line: 7,
       first_column: 0,
-      last_line: 1,
+      last_line: 7,
       last_column: 2,
       range: [
-        0,
-        2,
+        87,
+        89,
       ],
     },
   },
   {
-    id: 51,
+    id: 53,
     token: '"STRING_LIT"',
     yytext: '"["',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 0,
-      last_line: 2,
+      last_line: 8,
       last_column: 3,
       range: [
-        3,
-        6,
-      ],
-    },
-  },
-  {
-    id: 46,
-    token: '"REGEX_SET_START"',
-    yytext: '[',
-    yylloc: {
-      first_line: 2,
-      first_column: 3,
-      last_line: 2,
-      last_column: 4,
-      range: [
-        6,
-        7,
-      ],
-    },
-  },
-  {
-    id: 49,
-    token: '"REGEX_SET"',
-    yytext: "abc -> 'BAD_REGEX' // unterminated regex set...",
-    yylloc: {
-      first_line: 2,
-      first_column: 4,
-      last_line: 2,
-      last_column: 51,
-      range: [
-        7,
-        54,
+        90,
+        93,
       ],
     },
   },
   {
     id: 48,
+    token: '"REGEX_SET_START"',
+    yytext: '[',
+    yylloc: {
+      first_line: 8,
+      first_column: 3,
+      last_line: 8,
+      last_column: 4,
+      range: [
+        93,
+        94,
+      ],
+    },
+  },
+  {
+    id: 51,
+    token: '"REGEX_SET"',
+    yytext: "abc -> 'BAD_REGEX' // unterminated regex set...",
+    yylloc: {
+      first_line: 8,
+      first_column: 4,
+      last_line: 8,
+      last_column: 51,
+      range: [
+        94,
+        141,
+      ],
+    },
+  },
+  {
+    id: 50,
     token: '"UNTERMINATED_REGEX_SET"',
     yytext: {
-      errStr: `Lexical error on line 2: 
+      errStr: `Lexical error on line 8: 
 regex [...] sets cannot span multiple lines.
 
 If you want a CR/LF to be part of a regex set, you can simply
 specify those as character escapes '\\r' and '\\n'.
 
   Erroneous area:
-1: %%
-2: "["[abc -> 'BAD_REGEX' // unterminated regex set...
+5: //
+6: 
+7: %%
+8: "["[abc -> 'BAD_REGEX' // unterminated regex set...
 ^.....................................................^
-3: 
-4: // Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...
+9: 
+0: // Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...
 `,
       recoverable: false,
       text: '',
       token: null,
-      line: 1,
+      line: 7,
       loc: {
-        first_line: 2,
+        first_line: 8,
         first_column: 51,
-        last_line: 2,
+        last_line: 8,
         last_column: 51,
         range: [
-          54,
-          54,
+          141,
+          141,
         ],
       },
       yy: {},
@@ -96,31 +98,33 @@ specify those as character escapes '\\r' and '\\n'.
         ERROR: 2,
         __error_infos: [
           {
-            errStr: `Lexical error on line 2: 
+            errStr: `Lexical error on line 8: 
 regex [...] sets cannot span multiple lines.
 
 If you want a CR/LF to be part of a regex set, you can simply
 specify those as character escapes '\\r' and '\\n'.
 
   Erroneous area:
-1: %%
-2: "["[abc -> 'BAD_REGEX' // unterminated regex set...
+5: //
+6: 
+7: %%
+8: "["[abc -> 'BAD_REGEX' // unterminated regex set...
 ^.....................................................^
-3: 
-4: // Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...
+9: 
+0: // Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...
 `,
             recoverable: false,
             text: '',
             token: null,
-            line: 1,
+            line: 7,
             loc: {
-              first_line: 2,
+              first_line: 8,
               first_column: 51,
-              last_line: 2,
+              last_line: 8,
               last_column: 51,
               range: [
-                54,
-                54,
+                141,
+                141,
               ],
             },
             yy: {
@@ -128,7 +132,12 @@ specify those as character escapes '\\r' and '\\n'.
               include_command_allowed: false,
             },
             lexer: '[lexer]',
+            isLexerError: true,
             yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
           },
         ],
         __decompressed: true,
@@ -143,7 +152,13 @@ specify those as character escapes '\\r' and '\\n'.
           'code',
         ],
         match: '',
-        matched: `%%
+        matched: `//
+// title: "lexer regex/rule [...] set may legally include whitespace"
+//
+// ...
+//
+
+%%
 "["[abc -> 'BAD_REGEX' // unterminated regex set...
 
 // Let's have a look if the lexer correctly terminates that bad set on the first newline it encounters...
@@ -152,18 +167,18 @@ specify those as character escapes '\\r' and '\\n'.
 `,
         matches: false,
         yytext: '',
-        offset: 187,
+        offset: 274,
         base_position: 0,
         yyleng: 0,
-        yylineno: 6,
+        yylineno: 12,
         yylloc: {
-          first_line: 7,
+          first_line: 13,
           first_column: 0,
-          last_line: 7,
+          last_line: 13,
           last_column: 0,
           range: [
-            187,
-            187,
+            274,
+            274,
           ],
         },
         CRLF_Re: {
@@ -181,8 +196,14 @@ specify those as character escapes '\\r' and '\\n'.
           depth: 0,
           include_command_allowed: false,
         },
+        __entire_action_block_matchers__: {},
       },
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
       errorDiag: {
         inputPos: 133,
         yytext: '',
@@ -196,103 +217,103 @@ specify those as character escapes '\\r' and '\\n'.
       },
     },
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 51,
-      last_line: 2,
+      last_line: 8,
       last_column: 51,
       range: [
-        54,
-        54,
+        141,
+        141,
       ],
     },
   },
   {
-    id: 51,
+    id: 53,
     token: '"STRING_LIT"',
     yytext: '"dummy"',
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 0,
-      last_line: 6,
+      last_line: 12,
       last_column: 7,
       range: [
-        163,
-        170,
-      ],
-    },
-  },
-  {
-    id: 35,
-    token: '"ARROW_ACTION_START"',
-    yytext: '->',
-    yylloc: {
-      first_line: 6,
-      first_column: 8,
-      last_line: 6,
-      last_column: 10,
-      range: [
-        171,
-        173,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: ' ',
-    yylloc: {
-      first_line: 6,
-      first_column: 10,
-      last_line: 6,
-      last_column: 11,
-      range: [
-        173,
-        174,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: "'GOOD_DUMMY'",
-    yylloc: {
-      first_line: 6,
-      first_column: 11,
-      last_line: 6,
-      last_column: 23,
-      range: [
-        174,
-        186,
-      ],
-    },
-  },
-  {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 6,
-      first_column: 23,
-      last_line: 6,
-      last_column: 23,
-      range: [
-        186,
-        186,
+        250,
+        257,
       ],
     },
   },
   {
     id: 34,
+    token: '"ARROW_ACTION_START"',
+    yytext: '->',
+    yylloc: {
+      first_line: 12,
+      first_column: 8,
+      last_line: 12,
+      last_column: 10,
+      range: [
+        258,
+        260,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: ' ',
+    yylloc: {
+      first_line: 12,
+      first_column: 10,
+      last_line: 12,
+      last_column: 11,
+      range: [
+        260,
+        261,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: "'GOOD_DUMMY'",
+    yylloc: {
+      first_line: 12,
+      first_column: 11,
+      last_line: 12,
+      last_column: 23,
+      range: [
+        261,
+        273,
+      ],
+    },
+  },
+  {
+    id: 35,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 12,
+      first_column: 23,
+      last_line: 12,
+      last_column: 23,
+      range: [
+        273,
+        273,
+      ],
+    },
+  },
+  {
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {
-      first_line: 7,
+      first_line: 13,
       first_column: 0,
-      last_line: 7,
+      last_line: 13,
       last_column: 0,
       range: [
-        187,
-        187,
+        274,
+        274,
       ],
     },
   },
@@ -301,13 +322,13 @@ specify those as character escapes '\\r' and '\\n'.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 7,
+      first_line: 13,
       first_column: 0,
-      last_line: 7,
+      last_line: 13,
       last_column: 0,
       range: [
-        187,
-        187,
+        274,
+        274,
       ],
     },
   },
@@ -316,13 +337,13 @@ specify those as character escapes '\\r' and '\\n'.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 7,
+      first_line: 13,
       first_column: 0,
-      last_line: 7,
+      last_line: 13,
       last_column: 0,
       range: [
-        187,
-        187,
+        274,
+        274,
       ],
     },
   },
@@ -331,13 +352,13 @@ specify those as character escapes '\\r' and '\\n'.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 7,
+      first_line: 13,
       first_column: 0,
-      last_line: 7,
+      last_line: 13,
       last_column: 0,
       range: [
-        187,
-        187,
+        274,
+        274,
       ],
     },
   },
@@ -346,13 +367,13 @@ specify those as character escapes '\\r' and '\\n'.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 7,
+      first_line: 13,
       first_column: 0,
-      last_line: 7,
+      last_line: 13,
       last_column: 0,
       range: [
-        187,
-        187,
+        274,
+        274,
       ],
     },
   },

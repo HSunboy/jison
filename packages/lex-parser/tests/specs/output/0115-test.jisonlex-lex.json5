@@ -1,0 +1,209 @@
+[
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%options',
+    yylloc: {
+      first_line: 5,
+      first_column: 0,
+      last_line: 5,
+      last_column: 8,
+      range: [
+        85,
+        93,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'parserErrorsAreRecoverable',
+    yylloc: {
+      first_line: 5,
+      first_column: 9,
+      last_line: 5,
+      last_column: 35,
+      range: [
+        94,
+        120,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 5,
+      first_column: 35,
+      last_line: 5,
+      last_column: 35,
+      range: [
+        120,
+        120,
+      ],
+    },
+  },
+  {
+    id: 33,
+    token: '"%%"',
+    yytext: '%%',
+    yylloc: {
+      first_line: 6,
+      first_column: 0,
+      last_line: 6,
+      last_column: 2,
+      range: [
+        121,
+        123,
+      ],
+    },
+  },
+  {
+    id: 53,
+    token: '"STRING_LIT"',
+    yytext: "'foo'",
+    yylloc: {
+      first_line: 7,
+      first_column: 0,
+      last_line: 7,
+      last_column: 5,
+      range: [
+        124,
+        129,
+      ],
+    },
+  },
+  {
+    id: 34,
+    token: '"ARROW_ACTION_START"',
+    yytext: '->',
+    yylloc: {
+      first_line: 7,
+      first_column: 9,
+      last_line: 7,
+      last_column: 11,
+      range: [
+        133,
+        135,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: ' ',
+    yylloc: {
+      first_line: 7,
+      first_column: 11,
+      last_line: 7,
+      last_column: 12,
+      range: [
+        135,
+        136,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: '// nada => error in arrow function!',
+    yylloc: {
+      first_line: 7,
+      first_column: 12,
+      last_line: 7,
+      last_column: 47,
+      range: [
+        136,
+        171,
+      ],
+    },
+  },
+  {
+    id: 35,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 7,
+      first_column: 47,
+      last_line: 7,
+      last_column: 47,
+      range: [
+        171,
+        171,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 7,
+      first_column: 47,
+      last_line: 7,
+      last_column: 47,
+      range: [
+        171,
+        171,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 7,
+      first_column: 47,
+      last_line: 7,
+      last_column: 47,
+      range: [
+        171,
+        171,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 7,
+      first_column: 47,
+      last_line: 7,
+      last_column: 47,
+      range: [
+        171,
+        171,
+      ],
+    },
+  },
+  {
+    id: 1,
+    token: 'end of input',
+    yytext: '',
+    yylloc: {
+      first_line: 7,
+      first_column: 47,
+      last_line: 7,
+      last_column: 47,
+      range: [
+        171,
+        171,
+      ],
+    },
+  },
+  {
+    id: -2,
+    token: null,
+    summary: {
+      totalTokenCount: 13,
+      EOFTokenCount: 4,
+      ERRORTokenCount: 0,
+      ParseErrorCallCount: 0,
+      DetectedParseErrorCallCount: 0,
+      fatalExceptionCount: 0,
+    },
+  },
+]

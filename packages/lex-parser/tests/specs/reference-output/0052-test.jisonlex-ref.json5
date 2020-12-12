@@ -1,9 +1,16 @@
 {
   rules: [
-    [
-      'foo',
-      'return 11',
-    ],
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: 'return 11',
+      rule: 'foo',
+    },
   ],
   macros: {},
   startConditions: {},
@@ -33,10 +40,10 @@
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 5,
+        line: 12,
         expected: null,
         recoverable: false,
-        state: 24,
+        state: 26,
         action: 2,
         new_state: 1,
         stack_pointer: 5,
@@ -50,10 +57,10 @@
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 5,
+          line: 12,
           expected: null,
           recoverable: false,
-          state: 24,
+          state: 26,
           action: 2,
           new_state: 1,
           stack_pointer: 5,
@@ -67,7 +74,14 @@
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%options token-stack        // option name camel-casing is done very early in the game: see lex.y source code.
+  __original_input__: `//
+// title: test if %options names with a hyphen are correctly recognized
+// test_input: 'foofoofoo'
+//
+// ...
+//
+
+%options token-stack        // option name camel-casing is done very early in the game: see lex.y source code.
 
 %%
 "foo" return 11;

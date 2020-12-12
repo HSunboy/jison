@@ -2,7 +2,13 @@
   id: -1,
   token: null,
   fail: 1,
-  spec: `%%
+  spec: `//
+// title: "wrong place for %XYZ options - expect the proper error message"
+//
+// ...
+//
+
+%%
 "A"		 -> 'A'
 %x  				// is not accepted here
 "B"		 -> 'B'
@@ -16,21 +22,22 @@ separator. You cannot specify any in the second section as has been
 done here.
     
   Erroneous code:
-1: %%
-2: "A"   -> 'A'
-3: %x      // is not accepted here
-^..^^
-4: "B"   -> 'B'
-5: 
+ 6: 
+ 7: %%
+ 8: "A"   -> 'A'
+ 9: %x      // is not accepted here
+^^..^^
+10: "B"   -> 'B'
+11: 
 `,
       exception: null,
       text: '%x',
       value: '%x',
       token: '"$accept"',
       token_id: 0,
-      line: 2,
+      line: 8,
       recoverable: false,
-      state: 81,
+      state: 84,
       action: 2,
       new_state: 61,
       stack_pointer: 6,
@@ -42,12 +49,13 @@ separator. You cannot specify any in the second section as has been
 done here.
     
   Erroneous code:
-1: %%
-2: "A"   -> 'A'
-3: %x      // is not accepted here
-^..^^
-4: "B"   -> 'B'
-5: 
+ 6: 
+ 7: %%
+ 8: "A"   -> 'A'
+ 9: %x      // is not accepted here
+^^..^^
+10: "B"   -> 'B'
+11: 
 `,
     name: 'JisonParserError',
     stack: `JisonParserError: 
@@ -57,19 +65,20 @@ separator. You cannot specify any in the second section as has been
 done here.
     
   Erroneous code:
-1: %%
-2: "A"   -> 'A'
-3: %x      // is not accepted here
-^..^^
-4: "B"   -> 'B'
-5: 
+ 6: 
+ 7: %%
+ 8: "A"   -> 'A'
+ 9: %x      // is not accepted here
+^^..^^
+10: "B"   -> 'B'
+11: 
 
-    at Object.parseError (/lex-parser-cjs.js:7291:15)
-    at Object.yyError (/lex-parser-cjs.js:7481:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:4325:14)
-    at Object.parse (/lex-parser-cjs.js:8748:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
+    at Object.parseError (/lex-parser-cjs.js:7520:15)
+    at Object.yyError (/lex-parser-cjs.js:7710:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4438:14)
+    at Object.parse (/lex-parser-cjs.js:8977:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12820:25)
+    at Context.testEachParserExample (/all-tests.js:557:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -118,10 +127,10 @@ done here.
         value: '%x',
         token: '"$accept"',
         token_id: 0,
-        line: 2,
+        line: 8,
         expected: null,
         recoverable: false,
-        state: 81,
+        state: 84,
         action: 2,
         new_state: 61,
         stack_pointer: 6,
@@ -136,21 +145,22 @@ separator. You cannot specify any in the second section as has been
 done here.
     
   Erroneous code:
-1: %%
-2: "A"   -> 'A'
-3: %x      // is not accepted here
-^..^^
-4: "B"   -> 'B'
-5: 
+ 6: 
+ 7: %%
+ 8: "A"   -> 'A'
+ 9: %x      // is not accepted here
+^^..^^
+10: "B"   -> 'B'
+11: 
 `,
           exception: null,
           text: '%x',
           value: '%x',
           token: '"$accept"',
           token_id: 0,
-          line: 2,
+          line: 8,
           recoverable: false,
-          state: 81,
+          state: 84,
           action: 2,
           new_state: 61,
           stack_pointer: 6,
@@ -162,10 +172,10 @@ done here.
           value: '%x',
           token: '"$accept"',
           token_id: 0,
-          line: 2,
+          line: 8,
           expected: null,
           recoverable: false,
-          state: 81,
+          state: 84,
           action: 2,
           new_state: 61,
           stack_pointer: 6,
@@ -180,21 +190,22 @@ separator. You cannot specify any in the second section as has been
 done here.
     
   Erroneous code:
-1: %%
-2: "A"   -> 'A'
-3: %x      // is not accepted here
-^..^^
-4: "B"   -> 'B'
-5: 
+ 6: 
+ 7: %%
+ 8: "A"   -> 'A'
+ 9: %x      // is not accepted here
+^^..^^
+10: "B"   -> 'B'
+11: 
 `,
           exception: null,
           text: '%x',
           value: '%x',
           token: '"$accept"',
           token_id: 0,
-          line: 2,
+          line: 8,
           recoverable: false,
-          state: 81,
+          state: 84,
           action: 2,
           new_state: 61,
           stack_pointer: 6,
@@ -213,7 +224,13 @@ done here.
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%%
+  __original_input__: `//
+// title: "wrong place for %XYZ options - expect the proper error message"
+//
+// ...
+//
+
+%%
 "A"		 -> 'A'
 %x  				// is not accepted here
 "B"		 -> 'B'

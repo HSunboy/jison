@@ -1,31 +1,31 @@
 [
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 1,
+      first_line: 8,
       first_column: 0,
-      last_line: 1,
+      last_line: 8,
       last_column: 7,
       range: [
-        0,
-        7,
+        92,
+        99,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'do-not-test-compile',
     yylloc: {
-      first_line: 1,
+      first_line: 8,
       first_column: 8,
-      last_line: 1,
+      last_line: 8,
       last_column: 27,
       range: [
-        8,
-        27,
+        100,
+        119,
       ],
     },
   },
@@ -34,244 +34,520 @@
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 1,
+      first_line: 8,
       first_column: 27,
-      last_line: 1,
+      last_line: 8,
       last_column: 27,
       range: [
-        27,
-        27,
-      ],
-    },
-  },
-  {
-    id: 23,
-    token: '"ACTION_START_AT_SOL"',
-    yytext: '%{',
-    yylloc: {
-      first_line: 3,
-      first_column: 0,
-      last_line: 3,
-      last_column: 0,
-      range: [
-        29,
-        29,
+        119,
+        119,
       ],
     },
   },
   {
     id: 36,
-    token: '"ACTION_BODY"',
-    yytext: `
+    token: '"ENTIRE_ACTION_AT_SOL"',
+    yytext: {
+      srcCode: `
 	Here's line A, which is not JavaScript.
 `,
+      shiftCount: 44,
+      action_start_marker: '%{',
+      action_end_marker: '%}',
+    },
     yylloc: {
-      first_line: 3,
+      first_line: 10,
       first_column: 0,
-      last_line: 5,
+      last_line: 12,
       last_column: 2,
       range: [
-        29,
-        75,
+        121,
+        167,
       ],
     },
   },
   {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 5,
-      first_column: 2,
-      last_line: 5,
-      last_column: 2,
-      range: [
-        75,
-        75,
-      ],
-    },
-  },
-  {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
-      first_line: 7,
+      first_line: 14,
       first_column: 0,
-      last_line: 7,
+      last_line: 14,
       last_column: 2,
       range: [
-        77,
-        79,
+        169,
+        171,
       ],
     },
   },
   {
     id: 23,
-    token: '"ACTION_START_AT_SOL"',
-    yytext: '{{',
-    yylloc: {
-      first_line: 8,
-      first_column: 0,
-      last_line: 8,
-      last_column: 0,
-      range: [
-        80,
-        80,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: `
+    token: '"UNTERMINATED_ACTION_BLOCK"',
+    yytext: {
+      errStr: `Lexical error on line 17: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                12: %}
+13: 
+14: %%
+15: {{
+^^..^^
+16:  Ditto for line B!
+^^..^^^^^^^^^^^^^^^^^^
+17: }}
+^^..^^
+18: "X" {{
+19:   Dit is X.
+`,
+      recoverable: false,
+      text: `{{
+	Ditto for line B!
+}}`,
+      token: null,
+      line: 16,
+      loc: {
+        first_line: 15,
+        first_column: 0,
+        last_line: 17,
+        last_column: 2,
+        range: [
+          172,
+          196,
+        ],
+      },
+      yy: {
+        depth: 0,
+        include_command_allowed: false,
+      },
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: [
+          {
+            errStr: `Lexical error on line 17: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                12: %}
+13: 
+14: %%
+15: {{
+^^..^^
+16:  Ditto for line B!
+^^..^^^^^^^^^^^^^^^^^^
+17: }}
+^^..^^
+18: "X" {{
+19:   Dit is X.
+`,
+            recoverable: false,
+            text: `{{
+	Ditto for line B!
+}}`,
+            token: null,
+            line: 16,
+            loc: {
+              first_line: 15,
+              first_column: 0,
+              last_line: 17,
+              last_column: 2,
+              range: [
+                172,
+                196,
+              ],
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+          {
+            errStr: `Lexical error on line 20: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                15: {{
+16:  Ditto for line B!
+17: }}
+18: "X" {{
+^^......^^
+19:   Dit is X.
+^^..^^^^^^^^^^^
+20:  }}
+^^..^^^
+21: "Y" %{ en dat is Y; %}
+22: .  %{{ zeg maar PUNT. %}}
+`,
+            recoverable: false,
+            text: `{{
+		Dit is X.
+	}}`,
+            token: null,
+            line: 19,
+            loc: {
+              first_line: 18,
+              first_column: 4,
+              last_line: 20,
+              last_column: 3,
+              range: [
+                201,
+                219,
+              ],
+            },
+            yy: '[reference to sibling --> *.[5].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+        ],
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `//
+// title: "%option do-not-test-compile"
+// test_run_generated_lexer: false
+//
+// ...
+//
+
+%option do-not-test-compile
+
+%{
+	Here's line A, which is not JavaScript.
+%}
+
+%%
+{{
+	Ditto for line B!
+}}
+"X" {{
+		Dit is X.
+	}}
+"Y" %{ en dat is Y; %}
+.  %{{ zeg maar PUNT. %}}
+`,
+        matches: false,
+        yytext: '',
+        offset: 269,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 22,
+        yylloc: {
+          first_line: 23,
+          first_column: 0,
+          last_line: 23,
+          last_column: 0,
+          range: [
+            269,
+            269,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+        __entire_action_block_matchers__: {},
+      },
+      isLexerError: true,
+      yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
+      errorDiag: {
+        inputPos: 73,
+        yytext: {
+          fault: `
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+`,
+          srcCode: `
 	Ditto for line B!
 `,
+          shiftCount: 22,
+          action_start_marker: '{{',
+          action_end_marker: '}}',
+        },
+        yyleng: 24,
+        matches: [
+          '{{',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+      },
+    },
     yylloc: {
-      first_line: 8,
+      first_line: 15,
       first_column: 0,
-      last_line: 10,
+      last_line: 17,
       last_column: 2,
       range: [
-        80,
-        104,
+        172,
+        196,
       ],
     },
   },
   {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 10,
-      first_column: 2,
-      last_line: 10,
-      last_column: 2,
-      range: [
-        104,
-        104,
-      ],
-    },
-  },
-  {
-    id: 51,
+    id: 53,
     token: '"STRING_LIT"',
     yytext: '"X"',
     yylloc: {
-      first_line: 11,
+      first_line: 18,
       first_column: 0,
-      last_line: 11,
+      last_line: 18,
       last_column: 3,
       range: [
-        105,
-        108,
+        197,
+        200,
       ],
     },
   },
   {
-    id: 26,
-    token: '"ACTION_START"',
-    yytext: '{{',
-    yylloc: {
-      first_line: 11,
-      first_column: 4,
-      last_line: 11,
-      last_column: 4,
-      range: [
-        109,
-        109,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: `
+    id: 23,
+    token: '"UNTERMINATED_ACTION_BLOCK"',
+    yytext: {
+      errStr: `Lexical error on line 20: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                15: {{
+16:  Ditto for line B!
+17: }}
+18: "X" {{
+^^......^^
+19:   Dit is X.
+^^..^^^^^^^^^^^
+20:  }}
+^^..^^^
+21: "Y" %{ en dat is Y; %}
+22: .  %{{ zeg maar PUNT. %}}
+`,
+      recoverable: false,
+      text: `{{
+		Dit is X.
+	}}`,
+      token: null,
+      line: 19,
+      loc: {
+        first_line: 18,
+        first_column: 4,
+        last_line: 20,
+        last_column: 3,
+        range: [
+          201,
+          219,
+        ],
+      },
+      yy: {
+        depth: 0,
+        include_command_allowed: false,
+      },
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[5].yytext.lexer.__error_infos, length = 2]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `//
+// title: "%option do-not-test-compile"
+// test_run_generated_lexer: false
+//
+// ...
+//
+
+%option do-not-test-compile
+
+%{
+	Here's line A, which is not JavaScript.
+%}
+
+%%
+{{
+	Ditto for line B!
+}}
+"X" {{
+		Dit is X.
+	}}
+"Y" %{ en dat is Y; %}
+.  %{{ zeg maar PUNT. %}}
+`,
+        matches: false,
+        yytext: '',
+        offset: 269,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 22,
+        yylloc: {
+          first_line: 23,
+          first_column: 0,
+          last_line: 23,
+          last_column: 0,
+          range: [
+            269,
+            269,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+        __entire_action_block_matchers__: {},
+      },
+      isLexerError: true,
+      yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
+      errorDiag: {
+        inputPos: 50,
+        yytext: {
+          fault: `
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+`,
+          srcCode: `
 		Dit is X.
 	`,
+          shiftCount: 16,
+          action_start_marker: '{{',
+          action_end_marker: '}}',
+        },
+        yyleng: 18,
+        matches: [
+          '{{',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+      },
+    },
     yylloc: {
-      first_line: 11,
+      first_line: 18,
       first_column: 4,
-      last_line: 13,
+      last_line: 20,
       last_column: 3,
       range: [
-        109,
-        127,
+        201,
+        219,
       ],
     },
   },
   {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 13,
-      first_column: 3,
-      last_line: 13,
-      last_column: 3,
-      range: [
-        127,
-        127,
-      ],
-    },
-  },
-  {
-    id: 51,
+    id: 53,
     token: '"STRING_LIT"',
     yytext: '"Y"',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 0,
-      last_line: 14,
+      last_line: 21,
       last_column: 3,
       range: [
-        128,
-        131,
+        220,
+        223,
       ],
     },
   },
   {
-    id: 26,
-    token: '"ACTION_START"',
-    yytext: '%{',
+    id: 37,
+    token: '"ENTIRE_ACTION"',
+    yytext: {
+      srcCode: ' en dat is Y; ',
+      shiftCount: 16,
+      action_start_marker: '%{',
+      action_end_marker: '%}',
+    },
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 4,
-      last_line: 14,
-      last_column: 4,
+      last_line: 21,
+      last_column: 16,
       range: [
-        132,
-        132,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: ' en dat is Y; ',
-    yylloc: {
-      first_line: 14,
-      first_column: 4,
-      last_line: 14,
-      last_column: 22,
-      range: [
-        132,
-        150,
-      ],
-    },
-  },
-  {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 14,
-      first_column: 22,
-      last_line: 14,
-      last_column: 22,
-      range: [
-        150,
-        150,
+        224,
+        242,
       ],
     },
   },
@@ -280,73 +556,48 @@
     token: '"."',
     yytext: '.',
     yylloc: {
-      first_line: 15,
+      first_line: 22,
       first_column: 0,
-      last_line: 15,
+      last_line: 22,
       last_column: 1,
       range: [
-        151,
-        152,
+        243,
+        244,
       ],
     },
   },
   {
-    id: 26,
-    token: '"ACTION_START"',
-    yytext: '%{{',
+    id: 37,
+    token: '"ENTIRE_ACTION"',
+    yytext: {
+      srcCode: ' zeg maar PUNT. ',
+      shiftCount: 19,
+      action_start_marker: '%{{',
+      action_end_marker: '%}}',
+    },
     yylloc: {
-      first_line: 15,
+      first_line: 22,
       first_column: 3,
-      last_line: 15,
-      last_column: 3,
+      last_line: 22,
+      last_column: 19,
       range: [
-        154,
-        154,
+        246,
+        268,
       ],
     },
   },
   {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: ' zeg maar PUNT. ',
-    yylloc: {
-      first_line: 15,
-      first_column: 3,
-      last_line: 15,
-      last_column: 25,
-      range: [
-        154,
-        176,
-      ],
-    },
-  },
-  {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 15,
-      first_column: 25,
-      last_line: 15,
-      last_column: 25,
-      range: [
-        176,
-        176,
-      ],
-    },
-  },
-  {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {
-      first_line: 16,
+      first_line: 23,
       first_column: 0,
-      last_line: 16,
+      last_line: 23,
       last_column: 0,
       range: [
-        177,
-        177,
+        269,
+        269,
       ],
     },
   },
@@ -355,13 +606,13 @@
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 16,
+      first_line: 23,
       first_column: 0,
-      last_line: 16,
+      last_line: 23,
       last_column: 0,
       range: [
-        177,
-        177,
+        269,
+        269,
       ],
     },
   },
@@ -370,13 +621,13 @@
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 16,
+      first_line: 23,
       first_column: 0,
-      last_line: 16,
+      last_line: 23,
       last_column: 0,
       range: [
-        177,
-        177,
+        269,
+        269,
       ],
     },
   },
@@ -385,13 +636,13 @@
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 16,
+      first_line: 23,
       first_column: 0,
-      last_line: 16,
+      last_line: 23,
       last_column: 0,
       range: [
-        177,
-        177,
+        269,
+        269,
       ],
     },
   },
@@ -400,13 +651,13 @@
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 16,
+      first_line: 23,
       first_column: 0,
-      last_line: 16,
+      last_line: 23,
       last_column: 0,
       range: [
-        177,
-        177,
+        269,
+        269,
       ],
     },
   },
@@ -414,10 +665,10 @@
     id: -2,
     token: null,
     summary: {
-      totalTokenCount: 27,
+      totalTokenCount: 17,
       EOFTokenCount: 4,
       ERRORTokenCount: 0,
-      ParseErrorCallCount: 0,
+      ParseErrorCallCount: 2,
       DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },

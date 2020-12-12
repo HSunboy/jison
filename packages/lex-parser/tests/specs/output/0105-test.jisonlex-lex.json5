@@ -4,13 +4,13 @@
     token: '"%%"',
     yytext: '%%',
     yylloc: {
-      first_line: 1,
+      first_line: 8,
       first_column: 0,
-      last_line: 1,
+      last_line: 8,
       last_column: 2,
       range: [
-        0,
-        2,
+        100,
+        102,
       ],
     },
   },
@@ -19,13 +19,13 @@
     token: '"CHARACTER_LIT"',
     yytext: 'a',
     yylloc: {
-      first_line: 3,
+      first_line: 10,
       first_column: 0,
-      last_line: 3,
+      last_line: 10,
       last_column: 1,
       range: [
-        4,
-        5,
+        104,
+        105,
       ],
     },
   },
@@ -33,7 +33,7 @@
     id: 23,
     token: '"UNTERMINATED_ACTION_BLOCK"',
     yytext: {
-      errStr: `Lexical error on line 10: 
+      errStr: `Lexical error on line 17: 
                                                 
 TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
 
@@ -43,20 +43,21 @@ Regrettably, it does not exist in the remainder of the input.
 
 
 Erroneous area:
-                                                 1: %%
- 2: 
- 3: a {{
+                                                 7: 
+ 8: %%
+ 9: 
+10: a {{
 ^^....^^
- 4:     {{
+11:     {{
 ^^..^^^^^^
     (...continued...)
 --  (---------------)
- 9:         // This MUST be considered as legal input.
+16:         // This MUST be considered as legal input.
 ^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-10:     }} }}
+17:     }} }}
 ^^..^^^^^^
-11: 
-12: b {{{
+18: 
+19: b {{{
 `,
       recoverable: false,
       text: `{{
@@ -68,15 +69,15 @@ Erroneous area:
         // This MUST be considered as legal input.
     }}`,
       token: null,
-      line: 9,
+      line: 16,
       loc: {
-        first_line: 3,
+        first_line: 10,
         first_column: 2,
-        last_line: 10,
+        last_line: 17,
         last_column: 6,
         range: [
-          6,
-          254,
+          106,
+          354,
         ],
       },
       yy: {
@@ -88,7 +89,7 @@ Erroneous area:
         ERROR: 2,
         __error_infos: [
           {
-            errStr: `Lexical error on line 10: 
+            errStr: `Lexical error on line 17: 
                                                 
 TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
 
@@ -98,20 +99,21 @@ Regrettably, it does not exist in the remainder of the input.
 
 
 Erroneous area:
-                                                 1: %%
- 2: 
- 3: a {{
+                                                 7: 
+ 8: %%
+ 9: 
+10: a {{
 ^^....^^
- 4:     {{
+11:     {{
 ^^..^^^^^^
     (...continued...)
 --  (---------------)
- 9:         // This MUST be considered as legal input.
+16:         // This MUST be considered as legal input.
 ^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-10:     }} }}
+17:     }} }}
 ^^..^^^^^^
-11: 
-12: b {{{
+18: 
+19: b {{{
 `,
             recoverable: false,
             text: `{{
@@ -123,15 +125,15 @@ Erroneous area:
         // This MUST be considered as legal input.
     }}`,
             token: null,
-            line: 9,
+            line: 16,
             loc: {
-              first_line: 3,
+              first_line: 10,
               first_column: 2,
-              last_line: 10,
+              last_line: 17,
               last_column: 6,
               range: [
-                6,
-                254,
+                106,
+                354,
               ],
             },
             yy: {
@@ -147,7 +149,7 @@ Erroneous area:
             lexerHasAlreadyForwardedCursorBy1: false,
           },
           {
-            errStr: `Lexical error on line 10: 
+            errStr: `Lexical error on line 17: 
 too many closing curly braces in lexer rule action block.
 
 Note: the action code chunk may be too complex for jison to parse
@@ -155,26 +157,26 @@ easily; we suggest you wrap the action code chunk in '%{...%}'
 to help jison grok more or less complex action code chunks.
 
   Erroneous area:
- 7:         // note the terminating 'action code block marker' just below:
- 8:         // it's a matching set of braces, yet looks a tad... off.
- 9:         // This MUST be considered as legal input.
-10:     }} }}
+14:         // note the terminating 'action code block marker' just below:
+15:         // it's a matching set of braces, yet looks a tad... off.
+16:         // This MUST be considered as legal input.
+17:     }} }}
 ^^.........^
-11: 
-12: b {{{
+18: 
+19: b {{{
 `,
             recoverable: false,
             text: '}',
             token: null,
-            line: 9,
+            line: 16,
             loc: {
-              first_line: 10,
+              first_line: 17,
               first_column: 7,
-              last_line: 10,
+              last_line: 17,
               last_column: 8,
               range: [
-                255,
-                256,
+                355,
+                356,
               ],
             },
             yy: '[reference to sibling --> *.[2].yytext.lexer.__error_infos.[0].yy]',
@@ -187,7 +189,7 @@ to help jison grok more or less complex action code chunks.
             lexerHasAlreadyForwardedCursorBy1: false,
           },
           {
-            errStr: `Lexical error on line 10: 
+            errStr: `Lexical error on line 17: 
 too many closing curly braces in lexer rule action block.
 
 Note: the action code chunk may be too complex for jison to parse
@@ -195,26 +197,26 @@ easily; we suggest you wrap the action code chunk in '%{...%}'
 to help jison grok more or less complex action code chunks.
 
   Erroneous area:
- 7:         // note the terminating 'action code block marker' just below:
- 8:         // it's a matching set of braces, yet looks a tad... off.
- 9:         // This MUST be considered as legal input.
-10:     }} }}
+14:         // note the terminating 'action code block marker' just below:
+15:         // it's a matching set of braces, yet looks a tad... off.
+16:         // This MUST be considered as legal input.
+17:     }} }}
 ^^..........^
-11: 
-12: b {{{
+18: 
+19: b {{{
 `,
             recoverable: false,
             text: '}',
             token: null,
-            line: 9,
+            line: 16,
             loc: {
-              first_line: 10,
+              first_line: 17,
               first_column: 8,
-              last_line: 10,
+              last_line: 17,
               last_column: 9,
               range: [
-                256,
-                257,
+                356,
+                357,
               ],
             },
             yy: '[reference to sibling --> *.[2].yytext.lexer.__error_infos.[0].yy]',
@@ -227,7 +229,7 @@ to help jison grok more or less complex action code chunks.
             lexerHasAlreadyForwardedCursorBy1: false,
           },
           {
-            errStr: `Lexical error on line 19: 
+            errStr: `Lexical error on line 26: 
                                                 
 TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
 
@@ -237,21 +239,21 @@ Regrettably, it does not exist in the remainder of the input.
 
 
 Erroneous area:
-                                                 9:         // This MUST be considered as legal input.
-10:     }} }}
-11: 
-12: b {{{
+                                                16:         // This MUST be considered as legal input.
+17:     }} }}
+18: 
+19: b {{{
 ^^....^^^
-13:     {
+20:     {
 ^^..^^^^^
     (...continued...)
 --  (---------------)
-18:         // This MUST be considered as legal input.
+25:         // This MUST be considered as legal input.
 ^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-19:     } }}}
+26:     } }}}
 ^^..^^^^^^^^^
-20: 
-21: c {{{{
+27: 
+28: c {{{{
 `,
             recoverable: false,
             text: `{{{
@@ -263,15 +265,15 @@ Erroneous area:
         // This MUST be considered as legal input.
     } }}}`,
             token: null,
-            line: 18,
+            line: 25,
             loc: {
-              first_line: 12,
+              first_line: 19,
               first_column: 2,
-              last_line: 19,
+              last_line: 26,
               last_column: 9,
               range: [
-                261,
-                512,
+                361,
+                612,
               ],
             },
             yy: '[reference to sibling --> *.[2].yytext.lexer.__error_infos.[0].yy]',
@@ -284,7 +286,7 @@ Erroneous area:
             lexerHasAlreadyForwardedCursorBy1: false,
           },
           {
-            errStr: `Lexical error on line 28: 
+            errStr: `Lexical error on line 35: 
                                                 
 TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
 
@@ -294,21 +296,21 @@ Regrettably, it does not exist in the remainder of the input.
 
 
 Erroneous area:
-                                                18:         // This MUST be considered as legal input.
-19:     } }}}
-20: 
-21: c {{{{
+                                                25:         // This MUST be considered as legal input.
+26:     } }}}
+27: 
+28: c {{{{
 ^^....^^^^
-22:     {{
+29:     {{
 ^^..^^^^^^
     (...continued...)
 --  (---------------)
-27:         // This MUST be considered as legal input.
+34:         // This MUST be considered as legal input.
 ^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-28:     }} }}}}
+35:     }} }}}}
 ^^..^^^^^^^^^^^
-29: 
-30: <<EOF>>                         return 'EOF';
+36: 
+37: <<EOF>>                         return 'EOF';
 `,
             recoverable: false,
             text: `{{{{
@@ -320,15 +322,15 @@ Erroneous area:
         // This MUST be considered as legal input.
     }} }}}}`,
             token: null,
-            line: 27,
+            line: 34,
             loc: {
-              first_line: 21,
+              first_line: 28,
               first_column: 2,
-              last_line: 28,
+              last_line: 35,
               last_column: 11,
               range: [
-                516,
-                771,
+                616,
+                871,
               ],
             },
             yy: '[reference to sibling --> *.[2].yytext.lexer.__error_infos.[0].yy]',
@@ -353,7 +355,14 @@ Erroneous area:
           'rules',
         ],
         match: '',
-        matched: `%%
+        matched: `//
+// title: "edge cases for {{...}}, etc. action markers usage"
+// test_input: a b c
+//
+// ...
+//
+
+%%
 
 a {{
     {{
@@ -385,18 +394,18 @@ c {{{{
 <<EOF>>                         return 'EOF';`,
         matches: false,
         yytext: '',
-        offset: 818,
+        offset: 918,
         base_position: 0,
         yyleng: 0,
-        yylineno: 29,
+        yylineno: 36,
         yylloc: {
-          first_line: 30,
+          first_line: 37,
           first_column: 45,
-          last_line: 30,
+          last_line: 37,
           last_column: 45,
           range: [
-            818,
-            818,
+            918,
+            918,
           ],
         },
         CRLF_Re: {
@@ -453,13 +462,13 @@ Regrettably, it does not exist in the remainder of the input.
       },
     },
     yylloc: {
-      first_line: 3,
+      first_line: 10,
       first_column: 2,
-      last_line: 10,
+      last_line: 17,
       last_column: 6,
       range: [
-        6,
-        254,
+        106,
+        354,
       ],
     },
   },
@@ -468,13 +477,13 @@ Regrettably, it does not exist in the remainder of the input.
     token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
-      first_line: 10,
+      first_line: 17,
       first_column: 6,
-      last_line: 10,
+      last_line: 17,
       last_column: 7,
       range: [
-        254,
-        255,
+        354,
+        355,
       ],
     },
   },
@@ -482,7 +491,7 @@ Regrettably, it does not exist in the remainder of the input.
     id: 41,
     token: '"BRACKET_SURPLUS"',
     yytext: {
-      errStr: `Lexical error on line 10: 
+      errStr: `Lexical error on line 17: 
 too many closing curly braces in lexer rule action block.
 
 Note: the action code chunk may be too complex for jison to parse
@@ -490,26 +499,26 @@ easily; we suggest you wrap the action code chunk in '%{...%}'
 to help jison grok more or less complex action code chunks.
 
   Erroneous area:
- 7:         // note the terminating 'action code block marker' just below:
- 8:         // it's a matching set of braces, yet looks a tad... off.
- 9:         // This MUST be considered as legal input.
-10:     }} }}
+14:         // note the terminating 'action code block marker' just below:
+15:         // it's a matching set of braces, yet looks a tad... off.
+16:         // This MUST be considered as legal input.
+17:     }} }}
 ^^.........^
-11: 
-12: b {{{
+18: 
+19: b {{{
 `,
       recoverable: false,
       text: '}',
       token: null,
-      line: 9,
+      line: 16,
       loc: {
-        first_line: 10,
+        first_line: 17,
         first_column: 7,
-        last_line: 10,
+        last_line: 17,
         last_column: 8,
         range: [
-          255,
-          256,
+          355,
+          356,
         ],
       },
       yy: {
@@ -532,7 +541,14 @@ to help jison grok more or less complex action code chunks.
           'rules',
         ],
         match: '',
-        matched: `%%
+        matched: `//
+// title: "edge cases for {{...}}, etc. action markers usage"
+// test_input: a b c
+//
+// ...
+//
+
+%%
 
 a {{
     {{
@@ -564,18 +580,18 @@ c {{{{
 <<EOF>>                         return 'EOF';`,
         matches: false,
         yytext: '',
-        offset: 818,
+        offset: 918,
         base_position: 0,
         yyleng: 0,
-        yylineno: 29,
+        yylineno: 36,
         yylloc: {
-          first_line: 30,
+          first_line: 37,
           first_column: 45,
-          last_line: 30,
+          last_line: 37,
           last_column: 45,
           range: [
-            818,
-            818,
+            918,
+            918,
           ],
         },
         CRLF_Re: {
@@ -613,13 +629,13 @@ c {{{{
       },
     },
     yylloc: {
-      first_line: 10,
+      first_line: 17,
       first_column: 7,
-      last_line: 10,
+      last_line: 17,
       last_column: 8,
       range: [
-        255,
-        256,
+        355,
+        356,
       ],
     },
   },
@@ -627,7 +643,7 @@ c {{{{
     id: 41,
     token: '"BRACKET_SURPLUS"',
     yytext: {
-      errStr: `Lexical error on line 10: 
+      errStr: `Lexical error on line 17: 
 too many closing curly braces in lexer rule action block.
 
 Note: the action code chunk may be too complex for jison to parse
@@ -635,26 +651,26 @@ easily; we suggest you wrap the action code chunk in '%{...%}'
 to help jison grok more or less complex action code chunks.
 
   Erroneous area:
- 7:         // note the terminating 'action code block marker' just below:
- 8:         // it's a matching set of braces, yet looks a tad... off.
- 9:         // This MUST be considered as legal input.
-10:     }} }}
+14:         // note the terminating 'action code block marker' just below:
+15:         // it's a matching set of braces, yet looks a tad... off.
+16:         // This MUST be considered as legal input.
+17:     }} }}
 ^^..........^
-11: 
-12: b {{{
+18: 
+19: b {{{
 `,
       recoverable: false,
       text: '}',
       token: null,
-      line: 9,
+      line: 16,
       loc: {
-        first_line: 10,
+        first_line: 17,
         first_column: 8,
-        last_line: 10,
+        last_line: 17,
         last_column: 9,
         range: [
-          256,
-          257,
+          356,
+          357,
         ],
       },
       yy: {
@@ -677,7 +693,14 @@ to help jison grok more or less complex action code chunks.
           'rules',
         ],
         match: '',
-        matched: `%%
+        matched: `//
+// title: "edge cases for {{...}}, etc. action markers usage"
+// test_input: a b c
+//
+// ...
+//
+
+%%
 
 a {{
     {{
@@ -709,18 +732,18 @@ c {{{{
 <<EOF>>                         return 'EOF';`,
         matches: false,
         yytext: '',
-        offset: 818,
+        offset: 918,
         base_position: 0,
         yyleng: 0,
-        yylineno: 29,
+        yylineno: 36,
         yylloc: {
-          first_line: 30,
+          first_line: 37,
           first_column: 45,
-          last_line: 30,
+          last_line: 37,
           last_column: 45,
           range: [
-            818,
-            818,
+            918,
+            918,
           ],
         },
         CRLF_Re: {
@@ -758,13 +781,13 @@ c {{{{
       },
     },
     yylloc: {
-      first_line: 10,
+      first_line: 17,
       first_column: 8,
-      last_line: 10,
+      last_line: 17,
       last_column: 9,
       range: [
-        256,
-        257,
+        356,
+        357,
       ],
     },
   },
@@ -773,13 +796,13 @@ c {{{{
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
-      first_line: 10,
+      first_line: 17,
       first_column: 9,
-      last_line: 10,
+      last_line: 17,
       last_column: 9,
       range: [
-        257,
-        257,
+        357,
+        357,
       ],
     },
   },
@@ -788,13 +811,13 @@ c {{{{
     token: '"CHARACTER_LIT"',
     yytext: 'b',
     yylloc: {
-      first_line: 12,
+      first_line: 19,
       first_column: 0,
-      last_line: 12,
+      last_line: 19,
       last_column: 1,
       range: [
-        259,
-        260,
+        359,
+        360,
       ],
     },
   },
@@ -802,7 +825,7 @@ c {{{{
     id: 23,
     token: '"UNTERMINATED_ACTION_BLOCK"',
     yytext: {
-      errStr: `Lexical error on line 19: 
+      errStr: `Lexical error on line 26: 
                                                 
 TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
 
@@ -812,21 +835,21 @@ Regrettably, it does not exist in the remainder of the input.
 
 
 Erroneous area:
-                                                 9:         // This MUST be considered as legal input.
-10:     }} }}
-11: 
-12: b {{{
+                                                16:         // This MUST be considered as legal input.
+17:     }} }}
+18: 
+19: b {{{
 ^^....^^^
-13:     {
+20:     {
 ^^..^^^^^
     (...continued...)
 --  (---------------)
-18:         // This MUST be considered as legal input.
+25:         // This MUST be considered as legal input.
 ^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-19:     } }}}
+26:     } }}}
 ^^..^^^^^^^^^
-20: 
-21: c {{{{
+27: 
+28: c {{{{
 `,
       recoverable: false,
       text: `{{{
@@ -838,15 +861,15 @@ Erroneous area:
         // This MUST be considered as legal input.
     } }}}`,
       token: null,
-      line: 18,
+      line: 25,
       loc: {
-        first_line: 12,
+        first_line: 19,
         first_column: 2,
-        last_line: 19,
+        last_line: 26,
         last_column: 9,
         range: [
-          261,
-          512,
+          361,
+          612,
         ],
       },
       yy: {
@@ -869,7 +892,14 @@ Erroneous area:
           'rules',
         ],
         match: '',
-        matched: `%%
+        matched: `//
+// title: "edge cases for {{...}}, etc. action markers usage"
+// test_input: a b c
+//
+// ...
+//
+
+%%
 
 a {{
     {{
@@ -901,18 +931,18 @@ c {{{{
 <<EOF>>                         return 'EOF';`,
         matches: false,
         yytext: '',
-        offset: 818,
+        offset: 918,
         base_position: 0,
         yyleng: 0,
-        yylineno: 29,
+        yylineno: 36,
         yylloc: {
-          first_line: 30,
+          first_line: 37,
           first_column: 45,
-          last_line: 30,
+          last_line: 37,
           last_column: 45,
           range: [
-            818,
-            818,
+            918,
+            918,
           ],
         },
         CRLF_Re: {
@@ -969,13 +999,13 @@ Regrettably, it does not exist in the remainder of the input.
       },
     },
     yylloc: {
-      first_line: 12,
+      first_line: 19,
       first_column: 2,
-      last_line: 19,
+      last_line: 26,
       last_column: 9,
       range: [
-        261,
-        512,
+        361,
+        612,
       ],
     },
   },
@@ -984,13 +1014,13 @@ Regrettably, it does not exist in the remainder of the input.
     token: '"CHARACTER_LIT"',
     yytext: 'c',
     yylloc: {
-      first_line: 21,
+      first_line: 28,
       first_column: 0,
-      last_line: 21,
+      last_line: 28,
       last_column: 1,
       range: [
-        514,
-        515,
+        614,
+        615,
       ],
     },
   },
@@ -998,7 +1028,7 @@ Regrettably, it does not exist in the remainder of the input.
     id: 23,
     token: '"UNTERMINATED_ACTION_BLOCK"',
     yytext: {
-      errStr: `Lexical error on line 28: 
+      errStr: `Lexical error on line 35: 
                                                 
 TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
 
@@ -1008,21 +1038,21 @@ Regrettably, it does not exist in the remainder of the input.
 
 
 Erroneous area:
-                                                18:         // This MUST be considered as legal input.
-19:     } }}}
-20: 
-21: c {{{{
+                                                25:         // This MUST be considered as legal input.
+26:     } }}}
+27: 
+28: c {{{{
 ^^....^^^^
-22:     {{
+29:     {{
 ^^..^^^^^^
     (...continued...)
 --  (---------------)
-27:         // This MUST be considered as legal input.
+34:         // This MUST be considered as legal input.
 ^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-28:     }} }}}}
+35:     }} }}}}
 ^^..^^^^^^^^^^^
-29: 
-30: <<EOF>>                         return 'EOF';
+36: 
+37: <<EOF>>                         return 'EOF';
 `,
       recoverable: false,
       text: `{{{{
@@ -1034,15 +1064,15 @@ Erroneous area:
         // This MUST be considered as legal input.
     }} }}}}`,
       token: null,
-      line: 27,
+      line: 34,
       loc: {
-        first_line: 21,
+        first_line: 28,
         first_column: 2,
-        last_line: 28,
+        last_line: 35,
         last_column: 11,
         range: [
-          516,
-          771,
+          616,
+          871,
         ],
       },
       yy: {
@@ -1065,7 +1095,14 @@ Erroneous area:
           'rules',
         ],
         match: '',
-        matched: `%%
+        matched: `//
+// title: "edge cases for {{...}}, etc. action markers usage"
+// test_input: a b c
+//
+// ...
+//
+
+%%
 
 a {{
     {{
@@ -1097,18 +1134,18 @@ c {{{{
 <<EOF>>                         return 'EOF';`,
         matches: false,
         yytext: '',
-        offset: 818,
+        offset: 918,
         base_position: 0,
         yyleng: 0,
-        yylineno: 29,
+        yylineno: 36,
         yylloc: {
-          first_line: 30,
+          first_line: 37,
           first_column: 45,
-          last_line: 30,
+          last_line: 37,
           last_column: 45,
           range: [
-            818,
-            818,
+            918,
+            918,
           ],
         },
         CRLF_Re: {
@@ -1165,13 +1202,13 @@ Regrettably, it does not exist in the remainder of the input.
       },
     },
     yylloc: {
-      first_line: 21,
+      first_line: 28,
       first_column: 2,
-      last_line: 28,
+      last_line: 35,
       last_column: 11,
       range: [
-        516,
-        771,
+        616,
+        871,
       ],
     },
   },
@@ -1180,13 +1217,13 @@ Regrettably, it does not exist in the remainder of the input.
     token: '"$"',
     yytext: '<<EOF>>',
     yylloc: {
-      first_line: 30,
+      first_line: 37,
       first_column: 0,
-      last_line: 30,
+      last_line: 37,
       last_column: 7,
       range: [
-        773,
-        780,
+        873,
+        880,
       ],
     },
   },
@@ -1195,13 +1232,13 @@ Regrettably, it does not exist in the remainder of the input.
     token: '"ACTION_START"',
     yytext: '                         ',
     yylloc: {
-      first_line: 30,
+      first_line: 37,
       first_column: 7,
-      last_line: 30,
+      last_line: 37,
       last_column: 32,
       range: [
-        780,
-        805,
+        880,
+        905,
       ],
     },
   },
@@ -1210,13 +1247,13 @@ Regrettably, it does not exist in the remainder of the input.
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
-      first_line: 30,
+      first_line: 37,
       first_column: 32,
-      last_line: 30,
+      last_line: 37,
       last_column: 39,
       range: [
-        805,
-        812,
+        905,
+        912,
       ],
     },
   },
@@ -1225,13 +1262,13 @@ Regrettably, it does not exist in the remainder of the input.
     token: '"ACTION_BODY"',
     yytext: "'EOF'",
     yylloc: {
-      first_line: 30,
+      first_line: 37,
       first_column: 39,
-      last_line: 30,
+      last_line: 37,
       last_column: 44,
       range: [
-        812,
-        817,
+        912,
+        917,
       ],
     },
   },
@@ -1240,13 +1277,13 @@ Regrettably, it does not exist in the remainder of the input.
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
-      first_line: 30,
+      first_line: 37,
       first_column: 44,
-      last_line: 30,
+      last_line: 37,
       last_column: 45,
       range: [
-        817,
-        818,
+        917,
+        918,
       ],
     },
   },
@@ -1255,13 +1292,13 @@ Regrettably, it does not exist in the remainder of the input.
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
-      first_line: 30,
+      first_line: 37,
       first_column: 45,
-      last_line: 30,
+      last_line: 37,
       last_column: 45,
       range: [
-        818,
-        818,
+        918,
+        918,
       ],
     },
   },
@@ -1270,13 +1307,13 @@ Regrettably, it does not exist in the remainder of the input.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 30,
+      first_line: 37,
       first_column: 45,
-      last_line: 30,
+      last_line: 37,
       last_column: 45,
       range: [
-        818,
-        818,
+        918,
+        918,
       ],
     },
   },
@@ -1285,13 +1322,13 @@ Regrettably, it does not exist in the remainder of the input.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 30,
+      first_line: 37,
       first_column: 45,
-      last_line: 30,
+      last_line: 37,
       last_column: 45,
       range: [
-        818,
-        818,
+        918,
+        918,
       ],
     },
   },
@@ -1300,13 +1337,13 @@ Regrettably, it does not exist in the remainder of the input.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 30,
+      first_line: 37,
       first_column: 45,
-      last_line: 30,
+      last_line: 37,
       last_column: 45,
       range: [
-        818,
-        818,
+        918,
+        918,
       ],
     },
   },
@@ -1315,13 +1352,13 @@ Regrettably, it does not exist in the remainder of the input.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 30,
+      first_line: 37,
       first_column: 45,
-      last_line: 30,
+      last_line: 37,
       last_column: 45,
       range: [
-        818,
-        818,
+        918,
+        918,
       ],
     },
   },

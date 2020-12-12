@@ -2,7 +2,14 @@
   id: -1,
   token: null,
   fail: 1,
-  spec: `%%
+  spec: `//
+// title: "edge cases for {{...}}, etc. action markers usage"
+// test_run_lexer_output: false
+//
+// ...
+//
+
+%%
 
 a {{
     {
@@ -39,7 +46,7 @@ c {{{{
   err: {
     name: 'JisonLexerError',
     hash: {
-      errStr: `Lexical error on line 21: 
+      errStr: `Lexical error on line 28: 
                                                 
 TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
 
@@ -49,21 +56,21 @@ Regrettably, it does not exist in the remainder of the input.
 
 
 Erroneous area:
-                                                12:         // Hence this MUST be considered as ILLEGAL input.
-13:     }}}
-14: 
-15: b {{{
+                                                19:         // Hence this MUST be considered as ILLEGAL input.
+20:     }}}
+21: 
+22: b {{{
 ^^....^^^
-16:     {
+23:     {
 ^^..^^^^^
     (...continued...)
 --  (---------------)
-20:         // from any other confusing closing braces.
+27:         // from any other confusing closing braces.
 ^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-21:     } }}}
+28:     } }}}
 ^^..^^^^^^^^^
-22: 
-23: c {{{{
+29: 
+30: c {{{{
 `,
       recoverable: false,
       text: `{{{
@@ -74,7 +81,7 @@ Erroneous area:
         // from any other confusing closing braces.
     } }}}`,
       token: null,
-      line: 20,
+      line: 27,
       isLexerError: true,
       yyErrorInvoked: true,
       isLexerBacktrackingNotSupportedError: false,
@@ -82,7 +89,7 @@ Erroneous area:
       extra_error_attributes: null,
       lexerHasAlreadyForwardedCursorBy1: false,
     },
-    message: `Lexical error on line 21: 
+    message: `Lexical error on line 28: 
                                                 
 TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
 
@@ -92,23 +99,23 @@ Regrettably, it does not exist in the remainder of the input.
 
 
 Erroneous area:
-                                                12:         // Hence this MUST be considered as ILLEGAL input.
-13:     }}}
-14: 
-15: b {{{
+                                                19:         // Hence this MUST be considered as ILLEGAL input.
+20:     }}}
+21: 
+22: b {{{
 ^^....^^^
-16:     {
+23:     {
 ^^..^^^^^
     (...continued...)
 --  (---------------)
-20:         // from any other confusing closing braces.
+27:         // from any other confusing closing braces.
 ^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-21:     } }}}
+28:     } }}}
 ^^..^^^^^^^^^
-22: 
-23: c {{{{
+29: 
+30: c {{{{
 `,
-    stack: `JisonLexerError: Lexical error on line 21: 
+    stack: `JisonLexerError: Lexical error on line 28: 
                                                 
 TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
 
@@ -118,33 +125,33 @@ Regrettably, it does not exist in the remainder of the input.
 
 
 Erroneous area:
-                                                12:         // Hence this MUST be considered as ILLEGAL input.
-13:     }}}
-14: 
-15: b {{{
+                                                19:         // Hence this MUST be considered as ILLEGAL input.
+20:     }}}
+21: 
+22: b {{{
 ^^....^^^
-16:     {
+23:     {
 ^^..^^^^^
     (...continued...)
 --  (---------------)
-20:         // from any other confusing closing braces.
+27:         // from any other confusing closing braces.
 ^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-21:     } }}}
+28:     } }}}
 ^^..^^^^^^^^^
-22: 
-23: c {{{{
+29: 
+30: c {{{{
 
-    at Object.parseError (/lex-parser-cjs.js:7477:15)
-    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:9666:44)
-    at Object.yyError [as yyerror] (/lex-parser-cjs.js:9696:19)
-    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:11356:17)
-    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10690:38)
-    at Object.lexer_next [as next] (/lex-parser-cjs.js:10815:28)
-    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:10999:18)
-    at fastLex (/lex-parser-cjs.js:8072:27)
-    at Object.parse (/lex-parser-cjs.js:8246:30)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12757:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
+    at Object.parseError (/lex-parser-cjs.js:7520:15)
+    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:9709:44)
+    at Object.yyError [as yyerror] (/lex-parser-cjs.js:9739:19)
+    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:11399:17)
+    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10733:38)
+    at Object.lexer_next [as next] (/lex-parser-cjs.js:10858:28)
+    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:11042:18)
+    at fastLex (/lex-parser-cjs.js:8115:27)
+    at Object.parse (/lex-parser-cjs.js:8289:30)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12820:25)
+    at Context.testEachParserExample (/all-tests.js:557:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -193,7 +200,7 @@ Erroneous area:
     } }}}`,
         token: '"$accept"',
         token_id: 0,
-        line: 20,
+        line: 27,
         expected: null,
         recoverable: false,
         state: 35,
@@ -215,7 +222,7 @@ Erroneous area:
     } }}}`,
           token: '"$accept"',
           token_id: 0,
-          line: 20,
+          line: 27,
           expected: null,
           recoverable: false,
           state: 35,
@@ -232,7 +239,14 @@ Erroneous area:
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%%
+  __original_input__: `//
+// title: "edge cases for {{...}}, etc. action markers usage"
+// test_run_lexer_output: false
+//
+// ...
+//
+
+%%
 
 a {{
     {

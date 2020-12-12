@@ -1,85 +1,225 @@
 {
   rules: [
-    [
-      '\\s+',
-      '/* skip whitespace */',
-    ],
-    [
-      '\\/\\*[^*]*\\*',
-      'return yy.lexComment(this)',
-    ],
-    [
-      '[a-zA-Z_][a-zA-Z0-9_]*',
-      "return 'ID'",
-    ],
-    [
-      `"[^"]+"`,
-      "yytext = yytext.substr(1, yyleng-2); return 'STRING'",
-    ],
-    [
-      `'[^']+'`,
-      "yytext = yytext.substr(1, yyleng-2); return 'STRING'",
-    ],
-    [
-      ':',
-      "return ':'",
-    ],
-    [
-      ';',
-      "return ';'",
-    ],
-    [
-      '\\|',
-      "return '|'",
-    ],
-    [
-      '%%',
-      "return '%%'",
-    ],
-    [
-      '%prec',
-      "return 'PREC'",
-    ],
-    [
-      '%start',
-      "return 'START'",
-    ],
-    [
-      '%left',
-      "return 'LEFT'",
-    ],
-    [
-      '%right',
-      "return 'RIGHT'",
-    ],
-    [
-      '%nonassoc',
-      "return 'NONASSOC'",
-    ],
-    [
-      '%[a-zA-Z]+[^\\n]*',
-      '/* ignore unrecognized decl */',
-    ],
-    [
-      '\\{\\{[^}]*\\}',
-      'return yy.lexAction(this)',
-    ],
-    [
-      '\\{[^}]*\\}',
-      "yytext = yytext.substr(1, yyleng-2); return 'ACTION'",
-    ],
-    [
-      '<[^>]*>',
-      "yytext = yytext.substr(1, yyleng-2); return 'ACTION'",
-    ],
-    [
-      '.',
-      '/* ignore bad characters */',
-    ],
-    [
-      '$',
-      "return 'EOF'",
-    ],
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: '/* skip whitespace */',
+      rule: '\\s+',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: 'return yy.lexComment(this)',
+      rule: '\\/\\*[^*]*\\*',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return 'ID'",
+      rule: '[a-zA-Z_][a-zA-Z0-9_]*',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "yytext = yytext.substr(1, yyleng-2); return 'STRING'",
+      rule: `"[^"]+"`,
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "yytext = yytext.substr(1, yyleng-2); return 'STRING'",
+      rule: `'[^']+'`,
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return ':'",
+      rule: ':',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return ';'",
+      rule: ';',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return '|'",
+      rule: '\\|',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return '%%'",
+      rule: '%%',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return 'PREC'",
+      rule: '%prec',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return 'START'",
+      rule: '%start',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return 'LEFT'",
+      rule: '%left',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return 'RIGHT'",
+      rule: '%right',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return 'NONASSOC'",
+      rule: '%nonassoc',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: '/* ignore unrecognized decl */',
+      rule: '%[a-zA-Z]+[^\\n]*',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: 'return yy.lexAction(this)',
+      rule: '\\{\\{[^}]*\\}',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "yytext = yytext.substr(1, yyleng-2); return 'ACTION'",
+      rule: '\\{[^}]*\\}',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "yytext = yytext.substr(1, yyleng-2); return 'ACTION'",
+      rule: '<[^>]*>',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: '/* ignore bad characters */',
+      rule: '.',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return 'EOF'",
+      rule: '$',
+    },
   ],
   macros: {},
   startConditions: {},
@@ -106,10 +246,10 @@
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 22,
+        line: 28,
         expected: null,
         recoverable: false,
-        state: 24,
+        state: 26,
         action: 2,
         new_state: 1,
         stack_pointer: 5,
@@ -123,10 +263,10 @@
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 22,
+          line: 28,
           expected: null,
           recoverable: false,
-          state: 24,
+          state: 26,
           action: 2,
           new_state: 1,
           stack_pointer: 5,
@@ -140,7 +280,13 @@
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%%
+  __original_input__: `//
+// title: test simple YACC BNF lexer spec
+// 
+// ...
+//
+
+%%
 \\s+		{/* skip whitespace */}
 "/*"[^*]*"*"		{return yy.lexComment(this);}
 [a-zA-Z_][a-zA-Z0-9_]*		{return 'ID';}

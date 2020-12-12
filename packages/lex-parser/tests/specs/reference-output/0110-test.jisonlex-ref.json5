@@ -1,138 +1,120 @@
 {
-  rules: [
-    {
-      ast: {
-        source: "return 'EOF'",
-        augmentedSource: `
+  id: -1,
+  token: null,
+  fail: 1,
+  spec: `//
+// title: "rule regexes may not be indented 8 spaces or more"
+// test_input: main class extends nat if else for printNat readNat this new var null
+//
+// ...
+//
 
-                               return 'EOF'`,
-        ast: {
-          program: {
-            type: 'Program',
-            body: [
-              {
-                type: 'ReturnStatement',
-                argument: {
-                  type: 'Literal',
-                  value: 'EOF',
-                  raw: "'EOF'",
-                  loc: {
-                    start: {
-                      line: 3,
-                      column: 38,
-                      token: 1,
-                    },
-                    end: {
-                      line: 3,
-                      column: 43,
-                      token: 2,
-                    },
-                    lines: {
-                      infos: [
-                        {
-                          line: '',
-                          indent: 0,
-                          locked: false,
-                          sliceStart: 0,
-                          sliceEnd: 0,
-                        },
-                        {
-                          line: '',
-                          indent: 0,
-                          locked: false,
-                          sliceStart: 0,
-                          sliceEnd: 0,
-                        },
-                        {
-                          line: "                               return 'EOF'",
-                          indent: 31,
-                          locked: false,
-                          sliceStart: 31,
-                          sliceEnd: 43,
-                        },
-                      ],
-                      mappings: [],
-                      cachedSourceMap: null,
-                      length: 3,
-                      name: null,
-                    },
-                    tokens: [
-                      {
-                        type: 'Keyword',
-                        value: 'return',
-                      },
-                      {
-                        type: 'String',
-                        value: "'EOF'",
-                      },
-                    ],
-                    indent: 31,
-                  },
-                },
-                loc: {
-                  start: {
-                    line: 3,
-                    column: 31,
-                    token: 0,
-                  },
-                  end: {
-                    line: 3,
-                    column: 43,
-                    token: 2,
-                  },
-                  lines: '[reference to sibling --> *.rules.[0].ast.ast.program.body.[0].argument.loc.lines]',
-                  tokens: [
-                    '[reference to sibling --> *.rules.[0].ast.ast.program.body.[0].argument.loc.tokens.[0]]',
-                    '[reference to sibling --> *.rules.[0].ast.ast.program.body.[0].argument.loc.tokens.[1]]',
-                  ],
-                  indent: 31,
-                },
-              },
-            ],
-            sourceType: 'script',
-            loc: {
-              start: {
-                line: 3,
-                column: 31,
-                token: 0,
-              },
-              end: {
-                line: 3,
-                column: 43,
-                token: 2,
-              },
-              lines: '[reference to sibling --> *.rules.[0].ast.ast.program.body.[0].argument.loc.lines]',
-              indent: 31,
-              tokens: [
-                '[reference to sibling --> *.rules.[0].ast.ast.program.body.[0].argument.loc.tokens.[0]]',
-                '[reference to sibling --> *.rules.[0].ast.ast.program.body.[0].argument.loc.tokens.[1]]',
-              ],
-            },
-            errors: [
-              {
-                index: 41,
-                lineNumber: 3,
-                description: 'Illegal return statement',
-                message: 'Line 3: Illegal return statement',
-                name: 'Error',
-                stack: `Error: Line 3: Illegal return statement
-    at ErrorHandler.constructError (/esprima.js:5012:22)
-    at ErrorHandler.createError (/esprima.js:5028:27)
-    at ErrorHandler.tolerateError (/esprima.js:5038:27)
-    at JSXParser.Parser.tolerateError (/esprima.js:1951:28)
-    at JSXParser.Parser.parseReturnStatement (/esprima.js:3911:19)
-    at JSXParser.Parser.parseStatement (/esprima.js:4148:43)
-    at JSXParser.Parser.parseStatementListItem (/esprima.js:3388:39)
-    at JSXParser.Parser.parseScript (/esprima.js:4723:29)
-    at Object.parse (/esprima.js:122:61)
-    at Object.parse (/esprima.js:14:34)
-    at Object.parse (/parser.js:23:30)
-    at parseCodeChunkToAST (/lex-parser-cjs.js:1160:44)
-    at checkActionBlock (/lex-parser-cjs.js:1286:18)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:4535:15)
-    at Object.parse (/lex-parser-cjs.js:8934:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12757:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
+digit      [0-9]
+id         [a-zA-Z_][a-zA-Z0-9_]*
+
+%%
+
+// current heuristic is 8 spaces or 2 tabs or more: action code. Less? rule regex if nothing comes before already.
+
+"//".*           /* ignore comment */
+\\s+ return 'WS';
+main return 'MAIN';
+ class return 'CLASS';
+  extends return 'EXTENDS';
+   nat return 'NATTYPE';
+    if return 'IF';
+     else return 'ELSE';
+      for return 'FOR';
+       printNat return 'PRINTNAT';
+        readNat return 'READNAT';
+         this return 'THIS';
+          new return 'NEW';
+  var            
+            return 'VAR';
+null             
+        return 'NUL';
+
+// when code is within a '{...}' scope, the scope holds it all together:        
+{id} {             
+
+return 'ID';
+
+}
+[^\\s]+ return 'ILLEGAL';
+
+<<EOF>>                         return 'EOF';`,
+  err: {
+    hash: {
+      errStr: `
+The lexer rule's action code section does not compile: Error: Line 18: Unexpected token return
+    
+  Erroneous area:
+17: main return 'MAIN';
+^^......^^^^^^^^^^^^^^^
+18:  class return 'CLASS';
+^^..^^^^^^^^^^^^^^^^^^^^^^
+    (...continued...)
+--  (---------------)
+28:   var            
+^^..^^^^^^^^^^^^^^^^^
+29:             return 'VAR';
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^
+30: null             
+31:         return 'NUL';
+`,
+      exception: null,
+      text: '',
+      value: '',
+      token: '"$accept"',
+      token_id: 0,
+      line: 28,
+      recoverable: false,
+      state: 149,
+      action: 2,
+      new_state: 49,
+      stack_pointer: 7,
+    },
+    message: `
+The lexer rule's action code section does not compile: Error: Line 18: Unexpected token return
+    
+  Erroneous area:
+17: main return 'MAIN';
+^^......^^^^^^^^^^^^^^^
+18:  class return 'CLASS';
+^^..^^^^^^^^^^^^^^^^^^^^^^
+    (...continued...)
+--  (---------------)
+28:   var            
+^^..^^^^^^^^^^^^^^^^^
+29:             return 'VAR';
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^
+30: null             
+31:         return 'NUL';
+`,
+    name: 'JisonParserError',
+    stack: `JisonParserError: 
+The lexer rule's action code section does not compile: Error: Line 18: Unexpected token return
+    
+  Erroneous area:
+17: main return 'MAIN';
+^^......^^^^^^^^^^^^^^^
+18:  class return 'CLASS';
+^^..^^^^^^^^^^^^^^^^^^^^^^
+    (...continued...)
+--  (---------------)
+28:   var            
+^^..^^^^^^^^^^^^^^^^^
+29:             return 'VAR';
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^
+30: null             
+31:         return 'NUL';
+
+    at Object.parseError (/lex-parser-cjs.js:7520:15)
+    at Object.yyError (/lex-parser-cjs.js:7710:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4087:18)
+    at Object.parse (/lex-parser-cjs.js:8977:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12820:25)
+    at Context.testEachParserExample (/all-tests.js:557:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -147,57 +129,25 @@
     at next (/runner.js:510:10)
     at Immediate._onImmediate (/runner.js:572:5)
     at processImmediate (/timers.js:456:21)`,
-              },
-            ],
-          },
-          name: null,
-          loc: {
-            start: {
-              line: 1,
-              column: 0,
-              token: 0,
-            },
-            end: {
-              line: 3,
-              column: 43,
-              token: 2,
-            },
-            lines: '[reference to sibling --> *.rules.[0].ast.ast.program.body.[0].argument.loc.lines]',
-            indent: 0,
-            tokens: [
-              '[reference to sibling --> *.rules.[0].ast.ast.program.body.[0].argument.loc.tokens.[0]]',
-              '[reference to sibling --> *.rules.[0].ast.ast.program.body.[0].argument.loc.tokens.[1]]',
-            ],
-          },
-          type: 'File',
-          comments: null,
-          tokens: [
-            '[reference to sibling --> *.rules.[0].ast.ast.program.body.[0].argument.loc.tokens.[0]]',
-            '[reference to sibling --> *.rules.[0].ast.ast.program.body.[0].argument.loc.tokens.[1]]',
-          ],
-        },
-        fault: false,
-      },
-      fault: false,
-      srcCode: "return 'EOF'",
-      rule: '$',
-    },
-  ],
-  macros: {},
-  startConditions: {},
-  codeSections: [],
-  importDecls: [],
-  unknownDecls: [],
+  },
   __extra_diag_info__: {
     pre_parse_callback_callCount: 1,
     post_parse_callback_callCount: 1,
     post_parse_diaginfo: {
       sharedState_yy: {
+        actionInclude: [],
+        options: {},
         startConditions: {},
         __options_flags__: 0,
-        __options_category_description__: '???',
+        __options_category_description__: 'the lexer rules definition section',
         __inside_scoped_ruleset__: false,
-        __context_cfg_stack__: [],
+        __context_cfg_stack__: [
+          {
+            flags: 0,
+            descr: '???',
+            scoped: false,
+          },
+        ],
         depth: 0,
         include_command_allowed: false,
       },
@@ -208,16 +158,46 @@
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 2,
+        line: 28,
         expected: null,
         recoverable: false,
-        state: 26,
+        state: 149,
         action: 2,
-        new_state: 1,
-        stack_pointer: 5,
+        new_state: 49,
+        stack_pointer: 7,
       },
       reentrant_call_depth: 1,
       error_infos_stack: [
+        {
+          errStr: `
+The lexer rule's action code section does not compile: Error: Line 18: Unexpected token return
+    
+  Erroneous area:
+17: main return 'MAIN';
+^^......^^^^^^^^^^^^^^^
+18:  class return 'CLASS';
+^^..^^^^^^^^^^^^^^^^^^^^^^
+    (...continued...)
+--  (---------------)
+28:   var            
+^^..^^^^^^^^^^^^^^^^^
+29:             return 'VAR';
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^
+30: null             
+31:         return 'NUL';
+`,
+          exception: null,
+          text: '',
+          value: '',
+          token: '"$accept"',
+          token_id: 0,
+          line: 28,
+          recoverable: false,
+          state: 149,
+          action: 2,
+          new_state: 49,
+          stack_pointer: 7,
+        },
         {
           errStr: null,
           exception: null,
@@ -225,24 +205,99 @@
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 2,
+          line: 28,
           expected: null,
           recoverable: false,
-          state: 26,
+          state: 149,
           action: 2,
-          new_state: 1,
-          stack_pointer: 5,
+          new_state: 49,
+          stack_pointer: 7,
         },
       ],
-      error_recovery_stack: [],
-      error_infos_stack_size: 1,
-      error_recovery_stack_size: 0,
+      error_recovery_stack: [
+        {
+          errStr: `
+The lexer rule's action code section does not compile: Error: Line 18: Unexpected token return
+    
+  Erroneous area:
+17: main return 'MAIN';
+^^......^^^^^^^^^^^^^^^
+18:  class return 'CLASS';
+^^..^^^^^^^^^^^^^^^^^^^^^^
+    (...continued...)
+--  (---------------)
+28:   var            
+^^..^^^^^^^^^^^^^^^^^
+29:             return 'VAR';
+^^..^^^^^^^^^^^^^^^^^^^^^^^^^
+30: null             
+31:         return 'NUL';
+`,
+          exception: null,
+          text: '',
+          value: '',
+          token: '"$accept"',
+          token_id: 0,
+          line: 28,
+          recoverable: false,
+          state: 149,
+          action: 2,
+          new_state: 49,
+          stack_pointer: 7,
+          base_pointer: 9,
+          info_stack_pointer: 9,
+          root_failure_pointer: 7,
+          yyError: true,
+          errorRuleDepth: -1,
+          recovering: 0,
+        },
+      ],
+      error_infos_stack_size: 2,
+      error_recovery_stack_size: 1,
     },
     reentrant_call_depth: 0,
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%%
+  __original_input__: `//
+// title: "rule regexes may not be indented 8 spaces or more"
+// test_input: main class extends nat if else for printNat readNat this new var null
+//
+// ...
+//
+
+digit      [0-9]
+id         [a-zA-Z_][a-zA-Z0-9_]*
+
+%%
+
+// current heuristic is 8 spaces or 2 tabs or more: action code. Less? rule regex if nothing comes before already.
+
+"//".*           /* ignore comment */
+\\s+ return 'WS';
+main return 'MAIN';
+ class return 'CLASS';
+  extends return 'EXTENDS';
+   nat return 'NATTYPE';
+    if return 'IF';
+     else return 'ELSE';
+      for return 'FOR';
+       printNat return 'PRINTNAT';
+        readNat return 'READNAT';
+         this return 'THIS';
+          new return 'NEW';
+  var            
+            return 'VAR';
+null             
+        return 'NUL';
+
+// when code is within a '{...}' scope, the scope holds it all together:        
+{id} {             
+
+return 'ID';
+
+}
+[^\\s]+ return 'ILLEGAL';
 
 <<EOF>>                         return 'EOF';`,
 }

@@ -2,7 +2,14 @@
   id: -1,
   token: null,
   fail: 1,
-  spec: `%option do-not-test-compile
+  spec: `//
+// title: "%option do-not-test-compile"
+// test_run_generated_lexer: false
+//
+// ...
+//
+
+%option do-not-test-compile
 
 %{
 	Here's line A, which is not JavaScript.
@@ -19,65 +26,98 @@
 .  %{{ zeg maar PUNT. %}}
 `,
   err: {
+    name: 'JisonLexerError',
     hash: {
-      errStr: `
-The '%{...%}' lexer setup action code section does not compile: Error: Line 3: Unexpected token ILLEGAL
-    
-  Erroneous area:
-3: %{
-^..^^
-4:  Here's line A, which is not JavaScript.
-^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5: %}
-^..^^
-6: 
-7: %%
-`,
-      exception: null,
-      text: '',
-      value: '',
-      token: '"$accept"',
-      token_id: 0,
-      line: 4,
-      recoverable: false,
-      state: 117,
-      action: 2,
-      new_state: 15,
-      stack_pointer: 6,
-    },
-    message: `
-The '%{...%}' lexer setup action code section does not compile: Error: Line 3: Unexpected token ILLEGAL
-    
-  Erroneous area:
-3: %{
-^..^^
-4:  Here's line A, which is not JavaScript.
-^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5: %}
-^..^^
-6: 
-7: %%
-`,
-    name: 'JisonParserError',
-    stack: `JisonParserError: 
-The '%{...%}' lexer setup action code section does not compile: Error: Line 3: Unexpected token ILLEGAL
-    
-  Erroneous area:
-3: %{
-^..^^
-4:  Here's line A, which is not JavaScript.
-^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5: %}
-^..^^
-6: 
-7: %%
+      errStr: `Lexical error on line 17: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
 
-    at Object.parseError (/lex-parser-cjs.js:7291:15)
-    at Object.yyError (/lex-parser-cjs.js:7481:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:3309:22)
-    at Object.parse (/lex-parser-cjs.js:8748:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                12: %}
+13: 
+14: %%
+15: {{
+^^..^^
+16:  Ditto for line B!
+^^..^^^^^^^^^^^^^^^^^^
+17: }}
+^^..^^
+18: "X" {{
+19:   Dit is X.
+`,
+      recoverable: false,
+      text: `{{
+	Ditto for line B!
+}}`,
+      token: null,
+      line: 16,
+      isLexerError: true,
+      yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
+    },
+    message: `Lexical error on line 17: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                12: %}
+13: 
+14: %%
+15: {{
+^^..^^
+16:  Ditto for line B!
+^^..^^^^^^^^^^^^^^^^^^
+17: }}
+^^..^^
+18: "X" {{
+19:   Dit is X.
+`,
+    stack: `JisonLexerError: Lexical error on line 17: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                12: %}
+13: 
+14: %%
+15: {{
+^^..^^
+16:  Ditto for line B!
+^^..^^^^^^^^^^^^^^^^^^
+17: }}
+^^..^^
+18: "X" {{
+19:   Dit is X.
+
+    at Object.parseError (/lex-parser-cjs.js:7520:15)
+    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:9709:44)
+    at Object.yyError [as yyerror] (/lex-parser-cjs.js:9739:19)
+    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:11399:17)
+    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10733:38)
+    at Object.lexer_next [as next] (/lex-parser-cjs.js:10858:28)
+    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:11042:18)
+    at fastLex (/lex-parser-cjs.js:8115:27)
+    at Object.parse (/lex-parser-cjs.js:8289:30)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12820:25)
+    at Context.testEachParserExample (/all-tests.js:557:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -98,119 +138,77 @@ The '%{...%}' lexer setup action code section does not compile: Error: Line 3: U
     post_parse_callback_callCount: 1,
     post_parse_diaginfo: {
       sharedState_yy: {
-        actionInclude: [],
+        actionInclude: [
+          "Here's line A, which is not JavaScript.",
+        ],
         options: {
           doNotTestCompile: true,
         },
         startConditions: {},
         __options_flags__: 0,
-        __options_category_description__: '???',
+        __options_category_description__: 'the lexer rules definition section',
         __inside_scoped_ruleset__: false,
-        __context_cfg_stack__: [],
+        __context_cfg_stack__: [
+          {
+            flags: 0,
+            descr: '???',
+            scoped: false,
+          },
+        ],
         depth: 0,
         include_command_allowed: false,
       },
       hash: {
         errStr: null,
         exception: null,
-        text: '',
-        value: '',
+        text: `{{
+	Ditto for line B!
+}}`,
         token: '"$accept"',
         token_id: 0,
-        line: 4,
+        line: 16,
         expected: null,
         recoverable: false,
-        state: 117,
+        state: 6,
         action: 2,
-        new_state: 15,
-        stack_pointer: 6,
+        new_state: 6,
+        stack_pointer: 4,
       },
       reentrant_call_depth: 1,
       error_infos_stack: [
         {
-          errStr: `
-The '%{...%}' lexer setup action code section does not compile: Error: Line 3: Unexpected token ILLEGAL
-    
-  Erroneous area:
-3: %{
-^..^^
-4:  Here's line A, which is not JavaScript.
-^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5: %}
-^..^^
-6: 
-7: %%
-`,
-          exception: null,
-          text: '',
-          value: '',
-          token: '"$accept"',
-          token_id: 0,
-          line: 4,
-          recoverable: false,
-          state: 117,
-          action: 2,
-          new_state: 15,
-          stack_pointer: 6,
-        },
-        {
           errStr: null,
           exception: null,
-          text: '',
-          value: '',
+          text: `{{
+	Ditto for line B!
+}}`,
           token: '"$accept"',
           token_id: 0,
-          line: 4,
+          line: 16,
           expected: null,
           recoverable: false,
-          state: 117,
+          state: 6,
           action: 2,
-          new_state: 15,
-          stack_pointer: 6,
+          new_state: 6,
+          stack_pointer: 4,
         },
       ],
-      error_recovery_stack: [
-        {
-          errStr: `
-The '%{...%}' lexer setup action code section does not compile: Error: Line 3: Unexpected token ILLEGAL
-    
-  Erroneous area:
-3: %{
-^..^^
-4:  Here's line A, which is not JavaScript.
-^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5: %}
-^..^^
-6: 
-7: %%
-`,
-          exception: null,
-          text: '',
-          value: '',
-          token: '"$accept"',
-          token_id: 0,
-          line: 4,
-          recoverable: false,
-          state: 117,
-          action: 2,
-          new_state: 15,
-          stack_pointer: 6,
-          base_pointer: 6,
-          info_stack_pointer: 6,
-          root_failure_pointer: 6,
-          yyError: true,
-          errorRuleDepth: -1,
-          recovering: 0,
-        },
-      ],
-      error_infos_stack_size: 2,
-      error_recovery_stack_size: 1,
+      error_recovery_stack: [],
+      error_infos_stack_size: 1,
+      error_recovery_stack_size: 0,
     },
     reentrant_call_depth: 0,
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%option do-not-test-compile
+  __original_input__: `//
+// title: "%option do-not-test-compile"
+// test_run_generated_lexer: false
+//
+// ...
+//
+
+%option do-not-test-compile
 
 %{
 	Here's line A, which is not JavaScript.

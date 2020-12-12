@@ -1,88 +1,90 @@
 [
   {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
-      first_line: 1,
+      first_line: 7,
       first_column: 0,
-      last_line: 1,
+      last_line: 7,
       last_column: 2,
       range: [
-        0,
-        2,
+        74,
+        76,
       ],
     },
   },
   {
-    id: 51,
+    id: 53,
     token: '"STRING_LIT"',
     yytext: '"["',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 0,
-      last_line: 2,
+      last_line: 8,
       last_column: 3,
       range: [
-        3,
-        6,
-      ],
-    },
-  },
-  {
-    id: 46,
-    token: '"REGEX_SET_START"',
-    yytext: '[',
-    yylloc: {
-      first_line: 2,
-      first_column: 3,
-      last_line: 2,
-      last_column: 4,
-      range: [
-        6,
-        7,
-      ],
-    },
-  },
-  {
-    id: 49,
-    token: '"REGEX_SET"',
-    yytext: "abc -> 'BAD_REGEX' // unterminated regex set...",
-    yylloc: {
-      first_line: 2,
-      first_column: 4,
-      last_line: 2,
-      last_column: 51,
-      range: [
-        7,
-        54,
+        77,
+        80,
       ],
     },
   },
   {
     id: 48,
+    token: '"REGEX_SET_START"',
+    yytext: '[',
+    yylloc: {
+      first_line: 8,
+      first_column: 3,
+      last_line: 8,
+      last_column: 4,
+      range: [
+        80,
+        81,
+      ],
+    },
+  },
+  {
+    id: 51,
+    token: '"REGEX_SET"',
+    yytext: "abc -> 'BAD_REGEX' // unterminated regex set...",
+    yylloc: {
+      first_line: 8,
+      first_column: 4,
+      last_line: 8,
+      last_column: 51,
+      range: [
+        81,
+        128,
+      ],
+    },
+  },
+  {
+    id: 50,
     token: '"UNTERMINATED_REGEX_SET"',
     yytext: {
-      errStr: `Lexical error on line 2: 
+      errStr: `Lexical error on line 8: 
 The regex [...] set has not been properly terminated by ']'.
 
   Erroneous area:
-1: %%
-2: "["[abc -> 'BAD_REGEX' // unterminated regex set...
+5: //
+6: 
+7: %%
+8: "["[abc -> 'BAD_REGEX' // unterminated regex set...
 ^.....................................................^
 `,
       recoverable: false,
       text: '',
       token: null,
-      line: 1,
+      line: 7,
       loc: {
-        first_line: 2,
+        first_line: 8,
         first_column: 51,
-        last_line: 2,
+        last_line: 8,
         last_column: 51,
         range: [
-          54,
-          54,
+          128,
+          128,
         ],
       },
       yy: {},
@@ -91,31 +93,38 @@ The regex [...] set has not been properly terminated by ']'.
         ERROR: 2,
         __error_infos: [
           {
-            errStr: `Lexical error on line 2: 
+            errStr: `Lexical error on line 8: 
 The regex [...] set has not been properly terminated by ']'.
 
   Erroneous area:
-1: %%
-2: "["[abc -> 'BAD_REGEX' // unterminated regex set...
+5: //
+6: 
+7: %%
+8: "["[abc -> 'BAD_REGEX' // unterminated regex set...
 ^.....................................................^
 `,
             recoverable: false,
             text: '',
             token: null,
-            line: 1,
+            line: 7,
             loc: {
-              first_line: 2,
+              first_line: 8,
               first_column: 51,
-              last_line: 2,
+              last_line: 8,
               last_column: 51,
               range: [
-                54,
-                54,
+                128,
+                128,
               ],
             },
             yy: {},
             lexer: '[lexer]',
+            isLexerError: true,
             yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
           },
         ],
         __decompressed: true,
@@ -130,22 +139,28 @@ The regex [...] set has not been properly terminated by ']'.
           'rules',
         ],
         match: '',
-        matched: `%%
+        matched: `//
+// title: "unterminated lexer regex/rule [...] near EOF"
+//
+// ...
+//
+
+%%
 "["[abc -> 'BAD_REGEX' // unterminated regex set...`,
         matches: false,
         yytext: '',
-        offset: 54,
+        offset: 128,
         base_position: 0,
         yyleng: 0,
-        yylineno: 1,
+        yylineno: 7,
         yylloc: {
-          first_line: 2,
+          first_line: 8,
           first_column: 51,
-          last_line: 2,
+          last_line: 8,
           last_column: 51,
           range: [
-            54,
-            54,
+            128,
+            128,
           ],
         },
         CRLF_Re: {
@@ -160,8 +175,14 @@ The regex [...] set has not been properly terminated by ']'.
           easy_keyword_rules: true,
         },
         yy: {},
+        __entire_action_block_matchers__: {},
       },
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
       errorDiag: {
         inputPos: -1,
         yytext: '',
@@ -174,13 +195,13 @@ The regex [...] set has not been properly terminated by ']'.
       },
     },
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 51,
-      last_line: 2,
+      last_line: 8,
       last_column: 51,
       range: [
-        54,
-        54,
+        128,
+        128,
       ],
     },
   },
@@ -189,13 +210,13 @@ The regex [...] set has not been properly terminated by ']'.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 51,
-      last_line: 2,
+      last_line: 8,
       last_column: 51,
       range: [
-        54,
-        54,
+        128,
+        128,
       ],
     },
   },
@@ -204,13 +225,13 @@ The regex [...] set has not been properly terminated by ']'.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 51,
-      last_line: 2,
+      last_line: 8,
       last_column: 51,
       range: [
-        54,
-        54,
+        128,
+        128,
       ],
     },
   },
@@ -219,13 +240,13 @@ The regex [...] set has not been properly terminated by ']'.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 51,
-      last_line: 2,
+      last_line: 8,
       last_column: 51,
       range: [
-        54,
-        54,
+        128,
+        128,
       ],
     },
   },
@@ -234,13 +255,13 @@ The regex [...] set has not been properly terminated by ']'.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 51,
-      last_line: 2,
+      last_line: 8,
       last_column: 51,
       range: [
-        54,
-        54,
+        128,
+        128,
       ],
     },
   },

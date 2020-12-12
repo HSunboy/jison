@@ -2,7 +2,15 @@
   id: -1,
   token: null,
   fail: 1,
-  spec: `%%
+  spec: `//
+// title: test multiline action with end marker plus illegal tail 4
+//
+// ...
+//
+// test three nasty situations where we have trailing curly brace beyond the end-of-scope for the action block:
+//
+
+%%
 "["[^\\]]"]" %{
 return true;
 %}
@@ -25,28 +33,28 @@ may be any (indented!) set of JS statements, optionally surrounded
 by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
     
   Erroneous code:
-2: "["[^\\]]"]" %{
-3: return true;
-4: %}
-5: }
-^..^
-6: 
-7: 
+10: "["[^\\]]"]" %{
+11: return true;
+12: %}
+13: }
+^^..^
+14: 
+15: 
     
   Technical error report:
-Parse error on line 5:
+Parse error on line 13:
 }
 ^
-Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "%%", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"
+Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "UNTERMINATED_ACTION_BLOCK", "ACTION_START_AT_SOL", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "%%", "ENTIRE_ACTION_AT_SOL", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "action_chunk_at_SOL", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"
 `,
       exception: null,
       text: '',
       value: '',
       token: 'end of input',
       token_id: 1,
-      line: 6,
+      line: 14,
       recoverable: false,
-      state: 89,
+      state: 92,
       action: 2,
       new_state: 3,
       stack_pointer: 6,
@@ -65,19 +73,19 @@ may be any (indented!) set of JS statements, optionally surrounded
 by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
     
   Erroneous code:
-2: "["[^\\]]"]" %{
-3: return true;
-4: %}
-5: }
-^..^
-6: 
-7: 
+10: "["[^\\]]"]" %{
+11: return true;
+12: %}
+13: }
+^^..^
+14: 
+15: 
     
   Technical error report:
-Parse error on line 5:
+Parse error on line 13:
 }
 ^
-Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "%%", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"
+Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "UNTERMINATED_ACTION_BLOCK", "ACTION_START_AT_SOL", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "%%", "ENTIRE_ACTION_AT_SOL", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "action_chunk_at_SOL", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"
 `,
     name: 'JisonParserError',
     stack: `JisonParserError: 
@@ -94,26 +102,26 @@ may be any (indented!) set of JS statements, optionally surrounded
 by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
     
   Erroneous code:
-2: "["[^\\]]"]" %{
-3: return true;
-4: %}
-5: }
-^..^
-6: 
-7: 
+10: "["[^\\]]"]" %{
+11: return true;
+12: %}
+13: }
+^^..^
+14: 
+15: 
     
   Technical error report:
-Parse error on line 5:
+Parse error on line 13:
 }
 ^
-Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "%%", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"
+Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "UNTERMINATED_ACTION_BLOCK", "ACTION_START_AT_SOL", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "%%", "ENTIRE_ACTION_AT_SOL", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "action_chunk_at_SOL", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"
 
-    at Object.parseError (/lex-parser-cjs.js:7291:15)
-    at Object.yyError (/lex-parser-cjs.js:7481:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:2938:14)
-    at Object.parse (/lex-parser-cjs.js:8545:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
+    at Object.parseError (/lex-parser-cjs.js:7520:15)
+    at Object.yyError (/lex-parser-cjs.js:7710:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:3041:14)
+    at Object.parse (/lex-parser-cjs.js:8774:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12820:25)
+    at Context.testEachParserExample (/all-tests.js:557:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -157,10 +165,10 @@ Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_STA
         value: '',
         token: 'end of input',
         token_id: 1,
-        line: 6,
+        line: 14,
         expected: null,
         recoverable: false,
-        state: 89,
+        state: 92,
         action: 2,
         new_state: 3,
         stack_pointer: 6,
@@ -168,20 +176,20 @@ Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_STA
       reentrant_call_depth: 1,
       error_infos_stack: [
         {
-          errStr: `Parse error on line 5:
+          errStr: `Parse error on line 13:
 }
 ^
-Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "%%", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"`,
+Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "UNTERMINATED_ACTION_BLOCK", "ACTION_START_AT_SOL", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "%%", "ENTIRE_ACTION_AT_SOL", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "action_chunk_at_SOL", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"`,
           exception: null,
           text: '}',
           value: '}',
           token: '"}"',
           token_id: 5,
-          line: 4,
+          line: 12,
           recoverable: true,
-          state: 25,
+          state: 27,
           action: 0,
-          new_state: 200,
+          new_state: 201,
           stack_pointer: 5,
         },
         {
@@ -199,28 +207,28 @@ may be any (indented!) set of JS statements, optionally surrounded
 by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
     
   Erroneous code:
-2: "["[^\\]]"]" %{
-3: return true;
-4: %}
-5: }
-^..^
-6: 
-7: 
+10: "["[^\\]]"]" %{
+11: return true;
+12: %}
+13: }
+^^..^
+14: 
+15: 
     
   Technical error report:
-Parse error on line 5:
+Parse error on line 13:
 }
 ^
-Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "%%", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"
+Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "UNTERMINATED_ACTION_BLOCK", "ACTION_START_AT_SOL", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "%%", "ENTIRE_ACTION_AT_SOL", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "action_chunk_at_SOL", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"
 `,
           exception: null,
           text: '',
           value: '',
           token: 'end of input',
           token_id: 1,
-          line: 6,
+          line: 14,
           recoverable: false,
-          state: 89,
+          state: 92,
           action: 2,
           new_state: 3,
           stack_pointer: 6,
@@ -232,10 +240,10 @@ Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_STA
           value: '',
           token: 'end of input',
           token_id: 1,
-          line: 6,
+          line: 14,
           expected: null,
           recoverable: false,
-          state: 89,
+          state: 92,
           action: 2,
           new_state: 3,
           stack_pointer: 6,
@@ -243,20 +251,20 @@ Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_STA
       ],
       error_recovery_stack: [
         {
-          errStr: `Parse error on line 5:
+          errStr: `Parse error on line 13:
 }
 ^
-Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "%%", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"`,
+Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "UNTERMINATED_ACTION_BLOCK", "ACTION_START_AT_SOL", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "%%", "ENTIRE_ACTION_AT_SOL", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "action_chunk_at_SOL", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"`,
           exception: null,
           text: '}',
           value: '}',
           token: '"}"',
           token_id: 5,
-          line: 4,
+          line: 12,
           recoverable: true,
-          state: 25,
+          state: 27,
           action: 0,
-          new_state: 200,
+          new_state: 201,
           stack_pointer: 5,
           base_pointer: 9,
           info_stack_pointer: 13,
@@ -277,28 +285,28 @@ may be any (indented!) set of JS statements, optionally surrounded
 by '{...}' curly braces or otherwise enclosed in a '%{...%}' block.
     
   Erroneous code:
-2: "["[^\\]]"]" %{
-3: return true;
-4: %}
-5: }
-^..^
-6: 
-7: 
+10: "["[^\\]]"]" %{
+11: return true;
+12: %}
+13: }
+^^..^
+14: 
+15: 
     
   Technical error report:
-Parse error on line 5:
+Parse error on line 13:
 }
 ^
-Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "%%", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"
+Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "UNTERMINATED_ACTION_BLOCK", "ACTION_START_AT_SOL", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "%%", "ENTIRE_ACTION_AT_SOL", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "start_conditions_marker", "start_epilogue_marker", "scoped_rules_collective", "rule", "action_chunk_at_SOL", "start_conditions", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", "epilogue", got unexpected "}"
 `,
           exception: null,
           text: '',
           value: '',
           token: 'end of input',
           token_id: 1,
-          line: 6,
+          line: 14,
           recoverable: false,
-          state: 89,
+          state: 92,
           action: 2,
           new_state: 3,
           stack_pointer: 6,
@@ -317,7 +325,15 @@ Expecting end of input, "<", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_STA
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%%
+  __original_input__: `//
+// title: test multiline action with end marker plus illegal tail 4
+//
+// ...
+//
+// test three nasty situations where we have trailing curly brace beyond the end-of-scope for the action block:
+//
+
+%%
 "["[^\\]]"]" %{
 return true;
 %}

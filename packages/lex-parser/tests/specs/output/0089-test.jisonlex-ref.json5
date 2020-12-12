@@ -2,7 +2,13 @@
   id: -1,
   token: null,
   fail: 1,
-  spec: `
+  spec: `//
+// title: "options may have identifiers which start with a number, e.g. '8bit'"
+// test_input: "2020-11-12 % X"
+// ...
+//
+
+
 %option 8bit
 %option case-insensitive
 %option never-interactive
@@ -82,12 +88,12 @@
 ill defined '%option line.
     
   Erroneous area:
-33: %option 6445
+39: %option 6445
 ^^..........^^^^
-34: %option 42-42
+40: %option 42-42
     
   Technical error report:
-Parse error on line 33:
+Parse error on line 39:
 %option 6445
 --------^
 Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"
@@ -97,9 +103,9 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
       value: '',
       token: '"$accept"',
       token_id: 0,
-      line: 32,
+      line: 38,
       recoverable: false,
-      state: 127,
+      state: 131,
       action: 2,
       new_state: 20,
       stack_pointer: 6,
@@ -108,12 +114,12 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
 ill defined '%option line.
     
   Erroneous area:
-33: %option 6445
+39: %option 6445
 ^^..........^^^^
-34: %option 42-42
+40: %option 42-42
     
   Technical error report:
-Parse error on line 33:
+Parse error on line 39:
 %option 6445
 --------^
 Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"
@@ -123,22 +129,22 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
 ill defined '%option line.
     
   Erroneous area:
-33: %option 6445
+39: %option 6445
 ^^..........^^^^
-34: %option 42-42
+40: %option 42-42
     
   Technical error report:
-Parse error on line 33:
+Parse error on line 39:
 %option 6445
 --------^
 Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"
 
-    at Object.parseError (/lex-parser-cjs.js:7291:15)
-    at Object.yyError (/lex-parser-cjs.js:7481:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:3413:14)
-    at Object.parse (/lex-parser-cjs.js:8545:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
+    at Object.parseError (/lex-parser-cjs.js:7520:15)
+    at Object.yyError (/lex-parser-cjs.js:7710:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:3511:14)
+    at Object.parse (/lex-parser-cjs.js:8774:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12820:25)
+    at Context.testEachParserExample (/all-tests.js:557:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -207,10 +213,10 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 32,
+        line: 38,
         expected: null,
         recoverable: false,
-        state: 127,
+        state: 131,
         action: 2,
         new_state: 20,
         stack_pointer: 6,
@@ -218,7 +224,7 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
       reentrant_call_depth: 1,
       error_infos_stack: [
         {
-          errStr: `Parse error on line 33:
+          errStr: `Parse error on line 39:
 %option 6445
 --------^
 Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"`,
@@ -226,12 +232,12 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
           text: '6445',
           value: 6445,
           token: '"INTEGER"',
-          token_id: 55,
-          line: 32,
+          token_id: 57,
+          line: 38,
           recoverable: true,
-          state: 13,
+          state: 14,
           action: 0,
-          new_state: 200,
+          new_state: 201,
           stack_pointer: 4,
         },
         {
@@ -239,12 +245,12 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
 ill defined '%option line.
     
   Erroneous area:
-33: %option 6445
+39: %option 6445
 ^^..........^^^^
-34: %option 42-42
+40: %option 42-42
     
   Technical error report:
-Parse error on line 33:
+Parse error on line 39:
 %option 6445
 --------^
 Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"
@@ -254,9 +260,9 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 32,
+          line: 38,
           recoverable: false,
-          state: 127,
+          state: 131,
           action: 2,
           new_state: 20,
           stack_pointer: 6,
@@ -268,10 +274,10 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 32,
+          line: 38,
           expected: null,
           recoverable: false,
-          state: 127,
+          state: 131,
           action: 2,
           new_state: 20,
           stack_pointer: 6,
@@ -279,7 +285,7 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
       ],
       error_recovery_stack: [
         {
-          errStr: `Parse error on line 33:
+          errStr: `Parse error on line 39:
 %option 6445
 --------^
 Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"`,
@@ -287,12 +293,12 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
           text: '6445',
           value: 6445,
           token: '"INTEGER"',
-          token_id: 55,
-          line: 32,
+          token_id: 57,
+          line: 38,
           recoverable: true,
-          state: 13,
+          state: 14,
           action: 0,
-          new_state: 200,
+          new_state: 201,
           stack_pointer: 4,
           base_pointer: 7,
           info_stack_pointer: 10,
@@ -303,12 +309,12 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
 ill defined '%option line.
     
   Erroneous area:
-33: %option 6445
+39: %option 6445
 ^^..........^^^^
-34: %option 42-42
+40: %option 42-42
     
   Technical error report:
-Parse error on line 33:
+Parse error on line 39:
 %option 6445
 --------^
 Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option_name", "nonnumeric_option_value", got unexpected "INTEGER"
@@ -318,9 +324,9 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 32,
+          line: 38,
           recoverable: false,
-          state: 127,
+          state: 131,
           action: 2,
           new_state: 20,
           stack_pointer: 6,
@@ -339,7 +345,13 @@ Expecting "*", "OPTION_STRING", "OPTION_VALUE", "option_list", "option", "option
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `
+  __original_input__: `//
+// title: "options may have identifiers which start with a number, e.g. '8bit'"
+// test_input: "2020-11-12 % X"
+// ...
+//
+
+
 %option 8bit
 %option case-insensitive
 %option never-interactive

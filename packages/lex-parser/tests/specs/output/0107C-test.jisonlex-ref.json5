@@ -2,7 +2,14 @@
   id: -1,
   token: null,
   fail: 1,
-  spec: `%s THWART
+  spec: `//
+// title: "regression for bare action chunks containing | pipe symbol"
+// test_input: a b c d 0; a
+//
+// ...
+//
+
+%s THWART
 
 %%
 
@@ -28,28 +35,28 @@
   err: {
     hash: {
       errStr: `
-The lexer rule's action code section does not compile: Error: Line 17: Unexpected token return
+The lexer rule's action code section does not compile: Error: Line 24: Unexpected token return
     
   Erroneous area:
-12:     a   {       yytext += '7'         
+19:     a   {       yytext += '7'         
 ^^.......^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-13:             |
+20:             |
 ^^..^^^^^^^^^^^^^
     (...continued...)
 --  (---------------)
-16:         }
+23:         }
 ^^..^^^^^^^^^
-17:     b       return 7 | 40;
+24:     b       return 7 | 40;
 ^^..^^^^^^^^^^^^^^^^^^^^^^^^^^
-18: 
-19:     c 
+25: 
+26:     c 
 `,
       exception: null,
       text: '',
       value: '',
       token: '"$accept"',
       token_id: 0,
-      line: 16,
+      line: 23,
       recoverable: false,
       state: 149,
       action: 2,
@@ -57,46 +64,46 @@ The lexer rule's action code section does not compile: Error: Line 17: Unexpecte
       stack_pointer: 10,
     },
     message: `
-The lexer rule's action code section does not compile: Error: Line 17: Unexpected token return
+The lexer rule's action code section does not compile: Error: Line 24: Unexpected token return
     
   Erroneous area:
-12:     a   {       yytext += '7'         
+19:     a   {       yytext += '7'         
 ^^.......^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-13:             |
+20:             |
 ^^..^^^^^^^^^^^^^
     (...continued...)
 --  (---------------)
-16:         }
+23:         }
 ^^..^^^^^^^^^
-17:     b       return 7 | 40;
+24:     b       return 7 | 40;
 ^^..^^^^^^^^^^^^^^^^^^^^^^^^^^
-18: 
-19:     c 
+25: 
+26:     c 
 `,
     name: 'JisonParserError',
     stack: `JisonParserError: 
-The lexer rule's action code section does not compile: Error: Line 17: Unexpected token return
+The lexer rule's action code section does not compile: Error: Line 24: Unexpected token return
     
   Erroneous area:
-12:     a   {       yytext += '7'         
+19:     a   {       yytext += '7'         
 ^^.......^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-13:             |
+20:             |
 ^^..^^^^^^^^^^^^^
     (...continued...)
 --  (---------------)
-16:         }
+23:         }
 ^^..^^^^^^^^^
-17:     b       return 7 | 40;
+24:     b       return 7 | 40;
 ^^..^^^^^^^^^^^^^^^^^^^^^^^^^^
-18: 
-19:     c 
+25: 
+26:     c 
 
-    at Object.parseError (/lex-parser-cjs.js:7477:15)
-    at Object.yyError (/lex-parser-cjs.js:7667:25)
+    at Object.parseError (/lex-parser-cjs.js:7520:15)
+    at Object.yyError (/lex-parser-cjs.js:7710:25)
     at Object.parser__PerformAction (/lex-parser-cjs.js:4087:18)
-    at Object.parse (/lex-parser-cjs.js:8934:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12757:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
+    at Object.parse (/lex-parser-cjs.js:8977:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12820:25)
+    at Context.testEachParserExample (/all-tests.js:557:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -148,7 +155,7 @@ The lexer rule's action code section does not compile: Error: Line 17: Unexpecte
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 16,
+        line: 23,
         expected: null,
         recoverable: false,
         state: 149,
@@ -160,28 +167,28 @@ The lexer rule's action code section does not compile: Error: Line 17: Unexpecte
       error_infos_stack: [
         {
           errStr: `
-The lexer rule's action code section does not compile: Error: Line 17: Unexpected token return
+The lexer rule's action code section does not compile: Error: Line 24: Unexpected token return
     
   Erroneous area:
-12:     a   {       yytext += '7'         
+19:     a   {       yytext += '7'         
 ^^.......^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-13:             |
+20:             |
 ^^..^^^^^^^^^^^^^
     (...continued...)
 --  (---------------)
-16:         }
+23:         }
 ^^..^^^^^^^^^
-17:     b       return 7 | 40;
+24:     b       return 7 | 40;
 ^^..^^^^^^^^^^^^^^^^^^^^^^^^^^
-18: 
-19:     c 
+25: 
+26:     c 
 `,
           exception: null,
           text: '',
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 16,
+          line: 23,
           recoverable: false,
           state: 149,
           action: 2,
@@ -195,7 +202,7 @@ The lexer rule's action code section does not compile: Error: Line 17: Unexpecte
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 16,
+          line: 23,
           expected: null,
           recoverable: false,
           state: 149,
@@ -207,28 +214,28 @@ The lexer rule's action code section does not compile: Error: Line 17: Unexpecte
       error_recovery_stack: [
         {
           errStr: `
-The lexer rule's action code section does not compile: Error: Line 17: Unexpected token return
+The lexer rule's action code section does not compile: Error: Line 24: Unexpected token return
     
   Erroneous area:
-12:     a   {       yytext += '7'         
+19:     a   {       yytext += '7'         
 ^^.......^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-13:             |
+20:             |
 ^^..^^^^^^^^^^^^^
     (...continued...)
 --  (---------------)
-16:         }
+23:         }
 ^^..^^^^^^^^^
-17:     b       return 7 | 40;
+24:     b       return 7 | 40;
 ^^..^^^^^^^^^^^^^^^^^^^^^^^^^^
-18: 
-19:     c 
+25: 
+26:     c 
 `,
           exception: null,
           text: '',
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 16,
+          line: 23,
           recoverable: false,
           state: 149,
           action: 2,
@@ -249,7 +256,14 @@ The lexer rule's action code section does not compile: Error: Line 17: Unexpecte
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%s THWART
+  __original_input__: `//
+// title: "regression for bare action chunks containing | pipe symbol"
+// test_input: a b c d 0; a
+//
+// ...
+//
+
+%s THWART
 
 %%
 

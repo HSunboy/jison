@@ -1,13 +1,27 @@
 {
   rules: [
-    [
-      'a',
-      'return a | b;\n  //',
-    ],
-    [
-      'b',
-      'return 1;\n  //',
-    ],
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: 'return a | b;\n  //',
+      rule: 'a',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: 'return 1;\n  //',
+      rule: 'b',
+    },
   ],
   macros: {},
   startConditions: {},
@@ -34,10 +48,10 @@
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 6,
+        line: 18,
         expected: null,
         recoverable: false,
-        state: 24,
+        state: 26,
         action: 2,
         new_state: 1,
         stack_pointer: 5,
@@ -51,10 +65,10 @@
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 6,
+          line: 18,
           expected: null,
           recoverable: false,
-          state: 24,
+          state: 26,
           action: 2,
           new_state: 1,
           stack_pointer: 5,
@@ -68,7 +82,19 @@
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%%
+  __original_input__: `//
+// title: "regex pipe symbol in JS action code: a | b"
+// test_input: 'abaabb'
+// 
+// ...
+// 
+// test a large set of action code patterns which are specifically targetting particular
+// lexer rules: these serve as regression tests and power checks to ensure our lexer
+// does indeed handle these as one might (or might not) expect; when it doesn't cope
+// well, these should cause a failure in the parser, ideally...
+//
+
+%%
 "a" return a | b;
   //
 "b" return 1;

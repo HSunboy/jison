@@ -1,93 +1,95 @@
 [
   {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
-      first_line: 1,
+      first_line: 7,
       first_column: 0,
-      last_line: 1,
+      last_line: 7,
       last_column: 2,
       range: [
-        0,
-        2,
+        95,
+        97,
       ],
     },
   },
   {
-    id: 51,
+    id: 53,
     token: '"STRING_LIT"',
     yytext: '"["',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 0,
-      last_line: 2,
+      last_line: 8,
       last_column: 3,
       range: [
-        3,
-        6,
-      ],
-    },
-  },
-  {
-    id: 46,
-    token: '"REGEX_SET_START"',
-    yytext: '[',
-    yylloc: {
-      first_line: 2,
-      first_column: 3,
-      last_line: 2,
-      last_column: 4,
-      range: [
-        6,
-        7,
-      ],
-    },
-  },
-  {
-    id: 49,
-    token: '"REGEX_SET"',
-    yytext: 'abc',
-    yylloc: {
-      first_line: 2,
-      first_column: 4,
-      last_line: 2,
-      last_column: 7,
-      range: [
-        7,
-        10,
+        98,
+        101,
       ],
     },
   },
   {
     id: 48,
+    token: '"REGEX_SET_START"',
+    yytext: '[',
+    yylloc: {
+      first_line: 8,
+      first_column: 3,
+      last_line: 8,
+      last_column: 4,
+      range: [
+        101,
+        102,
+      ],
+    },
+  },
+  {
+    id: 51,
+    token: '"REGEX_SET"',
+    yytext: 'abc',
+    yylloc: {
+      first_line: 8,
+      first_column: 4,
+      last_line: 8,
+      last_column: 7,
+      range: [
+        102,
+        105,
+      ],
+    },
+  },
+  {
+    id: 50,
     token: '"UNTERMINATED_REGEX_SET"',
     yytext: {
-      errStr: `Lexical error on line 2: 
+      errStr: `Lexical error on line 8: 
 regex [...] sets cannot span multiple lines.
 
 If you want a CR/LF to be part of a regex set, you can simply
 specify those as character escapes '\\r' and '\\n'.
 
   Erroneous area:
-1: %%
-2: "["[abc
+5: //
+6: 
+7: %%
+8: "["[abc
 ^.........^
-3: def]"]" -> 'BAD_REGEX'
-4: 
+9: def]"]" -> 'BAD_REGEX'
+0: 
 `,
       recoverable: false,
       text: '',
       token: null,
-      line: 1,
+      line: 7,
       loc: {
-        first_line: 2,
+        first_line: 8,
         first_column: 7,
-        last_line: 2,
+        last_line: 8,
         last_column: 7,
         range: [
-          10,
-          10,
+          105,
+          105,
         ],
       },
       yy: {},
@@ -96,31 +98,33 @@ specify those as character escapes '\\r' and '\\n'.
         ERROR: 2,
         __error_infos: [
           {
-            errStr: `Lexical error on line 2: 
+            errStr: `Lexical error on line 8: 
 regex [...] sets cannot span multiple lines.
 
 If you want a CR/LF to be part of a regex set, you can simply
 specify those as character escapes '\\r' and '\\n'.
 
   Erroneous area:
-1: %%
-2: "["[abc
+5: //
+6: 
+7: %%
+8: "["[abc
 ^.........^
-3: def]"]" -> 'BAD_REGEX'
-4: 
+9: def]"]" -> 'BAD_REGEX'
+0: 
 `,
             recoverable: false,
             text: '',
             token: null,
-            line: 1,
+            line: 7,
             loc: {
-              first_line: 2,
+              first_line: 8,
               first_column: 7,
-              last_line: 2,
+              last_line: 8,
               last_column: 7,
               range: [
-                10,
-                10,
+                105,
+                105,
               ],
             },
             yy: {
@@ -128,45 +132,56 @@ specify those as character escapes '\\r' and '\\n'.
               include_command_allowed: false,
             },
             lexer: '[lexer]',
+            isLexerError: true,
             yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
           },
           {
-            errStr: `Lexical error on line 3: 
+            errStr: `Lexical error on line 9: 
 unsupported lexer input encountered while lexing
 rules (i.e. jison lex regexes) in "rules" state.
 
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
+NOTE: When you want this input to be interpreted as a LITERAL part
+      of a lex rule regex, you MUST enclose it in double or
+      single quotes.
 
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
+      If not, then know that this input is not accepted as a valid
+      regex expression here in jison-lex rules.
 
   Erroneous area:
-1: %%
-2: "["[abc
-3: def]"]" -> 'BAD_REGEX'
-^.....^
-4: 
-5: 
+ 6: 
+ 7: %%
+ 8: "["[abc
+ 9: def]"]" -> 'BAD_REGEX'
+^^.....^
+10: 
+11: 
 `,
             recoverable: false,
             text: ']',
             token: null,
-            line: 2,
+            line: 8,
             loc: {
-              first_line: 3,
+              first_line: 9,
               first_column: 3,
-              last_line: 3,
+              last_line: 9,
               last_column: 4,
               range: [
-                14,
-                15,
+                109,
+                110,
               ],
             },
             yy: '[reference to sibling --> *.[4].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
+            isLexerError: true,
             yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
           },
         ],
         __decompressed: true,
@@ -181,25 +196,31 @@ rules (i.e. jison lex regexes) in "rules" state.
           'code',
         ],
         match: '',
-        matched: `%%
+        matched: `//
+// title: "error in lexer regex/rule: [...] set spread across multiple lines"
+//
+// ...
+//
+
+%%
 "["[abc
 def]"]" -> 'BAD_REGEX'
 
 `,
         matches: false,
         yytext: '',
-        offset: 35,
+        offset: 130,
         base_position: 0,
         yyleng: 0,
-        yylineno: 4,
+        yylineno: 10,
         yylloc: {
-          first_line: 5,
+          first_line: 11,
           first_column: 0,
-          last_line: 5,
+          last_line: 11,
           last_column: 0,
           range: [
-            35,
-            35,
+            130,
+            130,
           ],
         },
         CRLF_Re: {
@@ -217,8 +238,14 @@ def]"]" -> 'BAD_REGEX'
           depth: 0,
           include_command_allowed: false,
         },
+        __entire_action_block_matchers__: {},
       },
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
       errorDiag: {
         inputPos: 25,
         yytext: '',
@@ -232,28 +259,28 @@ def]"]" -> 'BAD_REGEX'
       },
     },
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 7,
-      last_line: 2,
+      last_line: 8,
       last_column: 7,
       range: [
-        10,
-        10,
+        105,
+        105,
       ],
     },
   },
   {
-    id: 52,
+    id: 54,
     token: '"CHARACTER_LIT"',
     yytext: 'def',
     yylloc: {
-      first_line: 3,
+      first_line: 9,
       first_column: 0,
-      last_line: 3,
+      last_line: 9,
       last_column: 3,
       range: [
-        11,
-        14,
+        106,
+        109,
       ],
     },
   },
@@ -261,37 +288,38 @@ def]"]" -> 'BAD_REGEX'
     id: 2,
     token: '"error"',
     yytext: {
-      errStr: `Lexical error on line 3: 
+      errStr: `Lexical error on line 9: 
 unsupported lexer input encountered while lexing
 rules (i.e. jison lex regexes) in "rules" state.
 
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
+NOTE: When you want this input to be interpreted as a LITERAL part
+      of a lex rule regex, you MUST enclose it in double or
+      single quotes.
 
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
+      If not, then know that this input is not accepted as a valid
+      regex expression here in jison-lex rules.
 
   Erroneous area:
-1: %%
-2: "["[abc
-3: def]"]" -> 'BAD_REGEX'
-^.....^
-4: 
-5: 
+ 6: 
+ 7: %%
+ 8: "["[abc
+ 9: def]"]" -> 'BAD_REGEX'
+^^.....^
+10: 
+11: 
 `,
       recoverable: false,
       text: ']',
       token: null,
-      line: 2,
+      line: 8,
       loc: {
-        first_line: 3,
+        first_line: 9,
         first_column: 3,
-        last_line: 3,
+        last_line: 9,
         last_column: 4,
         range: [
-          14,
-          15,
+          109,
+          110,
         ],
       },
       yy: {},
@@ -311,25 +339,31 @@ rules (i.e. jison lex regexes) in "rules" state.
           'code',
         ],
         match: '',
-        matched: `%%
+        matched: `//
+// title: "error in lexer regex/rule: [...] set spread across multiple lines"
+//
+// ...
+//
+
+%%
 "["[abc
 def]"]" -> 'BAD_REGEX'
 
 `,
         matches: false,
         yytext: '',
-        offset: 35,
+        offset: 130,
         base_position: 0,
         yyleng: 0,
-        yylineno: 4,
+        yylineno: 10,
         yylloc: {
-          first_line: 5,
+          first_line: 11,
           first_column: 0,
-          last_line: 5,
+          last_line: 11,
           last_column: 0,
           range: [
-            35,
-            35,
+            130,
+            130,
           ],
         },
         CRLF_Re: {
@@ -347,8 +381,14 @@ def]"]" -> 'BAD_REGEX'
           depth: 0,
           include_command_allowed: false,
         },
+        __entire_action_block_matchers__: {},
       },
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
       errorDiag: {
         inputPos: 20,
         yytext: ']',
@@ -361,103 +401,103 @@ def]"]" -> 'BAD_REGEX'
       },
     },
     yylloc: {
-      first_line: 3,
+      first_line: 9,
       first_column: 3,
-      last_line: 3,
+      last_line: 9,
       last_column: 4,
       range: [
-        14,
-        15,
+        109,
+        110,
       ],
     },
   },
   {
-    id: 51,
+    id: 53,
     token: '"STRING_LIT"',
     yytext: '"]"',
     yylloc: {
-      first_line: 3,
+      first_line: 9,
       first_column: 4,
-      last_line: 3,
+      last_line: 9,
       last_column: 7,
       range: [
-        15,
-        18,
-      ],
-    },
-  },
-  {
-    id: 35,
-    token: '"ARROW_ACTION_START"',
-    yytext: '->',
-    yylloc: {
-      first_line: 3,
-      first_column: 8,
-      last_line: 3,
-      last_column: 10,
-      range: [
-        19,
-        21,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: ' ',
-    yylloc: {
-      first_line: 3,
-      first_column: 10,
-      last_line: 3,
-      last_column: 11,
-      range: [
-        21,
-        22,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: "'BAD_REGEX'",
-    yylloc: {
-      first_line: 3,
-      first_column: 11,
-      last_line: 3,
-      last_column: 22,
-      range: [
-        22,
-        33,
-      ],
-    },
-  },
-  {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 3,
-      first_column: 22,
-      last_line: 3,
-      last_column: 22,
-      range: [
-        33,
-        33,
+        110,
+        113,
       ],
     },
   },
   {
     id: 34,
+    token: '"ARROW_ACTION_START"',
+    yytext: '->',
+    yylloc: {
+      first_line: 9,
+      first_column: 8,
+      last_line: 9,
+      last_column: 10,
+      range: [
+        114,
+        116,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: ' ',
+    yylloc: {
+      first_line: 9,
+      first_column: 10,
+      last_line: 9,
+      last_column: 11,
+      range: [
+        116,
+        117,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: "'BAD_REGEX'",
+    yylloc: {
+      first_line: 9,
+      first_column: 11,
+      last_line: 9,
+      last_column: 22,
+      range: [
+        117,
+        128,
+      ],
+    },
+  },
+  {
+    id: 35,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 9,
+      first_column: 22,
+      last_line: 9,
+      last_column: 22,
+      range: [
+        128,
+        128,
+      ],
+    },
+  },
+  {
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {
-      first_line: 5,
+      first_line: 11,
       first_column: 0,
-      last_line: 5,
+      last_line: 11,
       last_column: 0,
       range: [
-        35,
-        35,
+        130,
+        130,
       ],
     },
   },
@@ -466,13 +506,13 @@ def]"]" -> 'BAD_REGEX'
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 5,
+      first_line: 11,
       first_column: 0,
-      last_line: 5,
+      last_line: 11,
       last_column: 0,
       range: [
-        35,
-        35,
+        130,
+        130,
       ],
     },
   },
@@ -481,13 +521,13 @@ def]"]" -> 'BAD_REGEX'
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 5,
+      first_line: 11,
       first_column: 0,
-      last_line: 5,
+      last_line: 11,
       last_column: 0,
       range: [
-        35,
-        35,
+        130,
+        130,
       ],
     },
   },
@@ -496,13 +536,13 @@ def]"]" -> 'BAD_REGEX'
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 5,
+      first_line: 11,
       first_column: 0,
-      last_line: 5,
+      last_line: 11,
       last_column: 0,
       range: [
-        35,
-        35,
+        130,
+        130,
       ],
     },
   },
@@ -511,13 +551,13 @@ def]"]" -> 'BAD_REGEX'
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 5,
+      first_line: 11,
       first_column: 0,
-      last_line: 5,
+      last_line: 11,
       last_column: 0,
       range: [
-        35,
-        35,
+        130,
+        130,
       ],
     },
   },

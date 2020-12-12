@@ -1,232 +1,504 @@
 [
   {
-    id: 23,
-    token: '"ACTION_START_AT_SOL"',
-    yytext: '%{{',
-    yylloc: {
-      first_line: 1,
-      first_column: 0,
-      last_line: 1,
-      last_column: 0,
-      range: [
-        0,
-        0,
-      ],
-    },
-  },
-  {
     id: 36,
-    token: '"ACTION_BODY"',
-    yytext: `
+    token: '"ENTIRE_ACTION_AT_SOL"',
+    yytext: {
+      srcCode: `
 	// line A
 `,
+      shiftCount: 15,
+      action_start_marker: '%{{',
+      action_end_marker: '%}}',
+    },
     yylloc: {
-      first_line: 1,
+      first_line: 8,
       first_column: 0,
-      last_line: 3,
+      last_line: 10,
       last_column: 3,
       range: [
-        0,
-        18,
+        129,
+        147,
       ],
     },
   },
   {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 3,
-      first_column: 3,
-      last_line: 3,
-      last_column: 3,
-      range: [
-        18,
-        18,
-      ],
-    },
-  },
-  {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
-      first_line: 5,
+      first_line: 12,
       first_column: 0,
-      last_line: 5,
+      last_line: 12,
       last_column: 2,
       range: [
-        20,
-        22,
+        149,
+        151,
       ],
     },
   },
   {
     id: 23,
-    token: '"ACTION_START_AT_SOL"',
-    yytext: '{{',
-    yylloc: {
-      first_line: 6,
-      first_column: 0,
-      last_line: 6,
-      last_column: 0,
-      range: [
-        23,
-        23,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: `
+    token: '"UNTERMINATED_ACTION_BLOCK"',
+    yytext: {
+      errStr: `Lexical error on line 15: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                10: %}}
+11: 
+12: %%
+13: {{
+^^..^^
+14:  // line B
+^^..^^^^^^^^^^
+15: }}
+^^..^^
+16: "X" {{{{{
+17: return "%{..%}";
+`,
+      recoverable: false,
+      text: `{{
+	// line B
+}}`,
+      token: null,
+      line: 14,
+      loc: {
+        first_line: 13,
+        first_column: 0,
+        last_line: 15,
+        last_column: 2,
+        range: [
+          152,
+          168,
+        ],
+      },
+      yy: {
+        depth: 0,
+        include_command_allowed: false,
+      },
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: [
+          {
+            errStr: `Lexical error on line 15: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                10: %}}
+11: 
+12: %%
+13: {{
+^^..^^
+14:  // line B
+^^..^^^^^^^^^^
+15: }}
+^^..^^
+16: "X" {{{{{
+17: return "%{..%}";
+`,
+            recoverable: false,
+            text: `{{
+	// line B
+}}`,
+            token: null,
+            line: 14,
+            loc: {
+              first_line: 13,
+              first_column: 0,
+              last_line: 15,
+              last_column: 2,
+              range: [
+                152,
+                168,
+              ],
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+          {
+            errStr: `Lexical error on line 18: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                13: {{
+14:  // line B
+15: }}
+16: "X" {{{{{
+^^......^^^^^
+17: return "%{..%}";
+^^..^^^^^^^^^^^^^^^^
+18: }}}}}
+^^..^^^^^
+19: "Y" %{{{ return "Y"; %}}}
+20: . %{{ return "dot"; %}}
+`,
+            recoverable: false,
+            text: `{{{{{
+return "%{..%}";
+}}}}}`,
+            token: null,
+            line: 17,
+            loc: {
+              first_line: 16,
+              first_column: 4,
+              last_line: 18,
+              last_column: 5,
+              range: [
+                173,
+                201,
+              ],
+            },
+            yy: '[reference to sibling --> *.[2].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+        ],
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `//
+// title: test stability across lexer invocations as we patch lexer rules under the hood
+// test_input: 'XYZYX'
+//
+// ...
+//
+
+%{{
+	// line A
+%}}
+
+%%
+{{
+	// line B
+}}
+"X" {{{{{
+return "%{..%}";
+}}}}}
+"Y" %{{{ return "Y"; %}}}
+. %{{ return "dot"; %}}
+`,
+        matches: false,
+        yytext: '',
+        offset: 252,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 20,
+        yylloc: {
+          first_line: 21,
+          first_column: 0,
+          last_line: 21,
+          last_column: 0,
+          range: [
+            252,
+            252,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+        __entire_action_block_matchers__: {},
+      },
+      isLexerError: true,
+      yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
+      errorDiag: {
+        inputPos: 84,
+        yytext: {
+          fault: `
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+`,
+          srcCode: `
 	// line B
 `,
+          shiftCount: 14,
+          action_start_marker: '{{',
+          action_end_marker: '}}',
+        },
+        yyleng: 16,
+        matches: [
+          '{{',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+      },
+    },
     yylloc: {
-      first_line: 6,
+      first_line: 13,
       first_column: 0,
-      last_line: 8,
+      last_line: 15,
       last_column: 2,
       range: [
-        23,
-        39,
+        152,
+        168,
       ],
     },
   },
   {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 8,
-      first_column: 2,
-      last_line: 8,
-      last_column: 2,
-      range: [
-        39,
-        39,
-      ],
-    },
-  },
-  {
-    id: 51,
+    id: 53,
     token: '"STRING_LIT"',
     yytext: '"X"',
     yylloc: {
-      first_line: 9,
+      first_line: 16,
       first_column: 0,
-      last_line: 9,
+      last_line: 16,
       last_column: 3,
       range: [
-        40,
-        43,
+        169,
+        172,
       ],
     },
   },
   {
-    id: 26,
-    token: '"ACTION_START"',
-    yytext: '{{{{{',
-    yylloc: {
-      first_line: 9,
-      first_column: 4,
-      last_line: 9,
-      last_column: 4,
-      range: [
-        44,
-        44,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: `
+    id: 23,
+    token: '"UNTERMINATED_ACTION_BLOCK"',
+    yytext: {
+      errStr: `Lexical error on line 18: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                13: {{
+14:  // line B
+15: }}
+16: "X" {{{{{
+^^......^^^^^
+17: return "%{..%}";
+^^..^^^^^^^^^^^^^^^^
+18: }}}}}
+^^..^^^^^
+19: "Y" %{{{ return "Y"; %}}}
+20: . %{{ return "dot"; %}}
+`,
+      recoverable: false,
+      text: `{{{{{
+return "%{..%}";
+}}}}}`,
+      token: null,
+      line: 17,
+      loc: {
+        first_line: 16,
+        first_column: 4,
+        last_line: 18,
+        last_column: 5,
+        range: [
+          173,
+          201,
+        ],
+      },
+      yy: {
+        depth: 0,
+        include_command_allowed: false,
+      },
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[2].yytext.lexer.__error_infos, length = 2]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `//
+// title: test stability across lexer invocations as we patch lexer rules under the hood
+// test_input: 'XYZYX'
+//
+// ...
+//
+
+%{{
+	// line A
+%}}
+
+%%
+{{
+	// line B
+}}
+"X" {{{{{
+return "%{..%}";
+}}}}}
+"Y" %{{{ return "Y"; %}}}
+. %{{ return "dot"; %}}
+`,
+        matches: false,
+        yytext: '',
+        offset: 252,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 20,
+        yylloc: {
+          first_line: 21,
+          first_column: 0,
+          last_line: 21,
+          last_column: 0,
+          range: [
+            252,
+            252,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+        __entire_action_block_matchers__: {},
+      },
+      isLexerError: true,
+      yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
+      errorDiag: {
+        inputPos: 51,
+        yytext: {
+          fault: `
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+`,
+          srcCode: `
 return "%{..%}";
 `,
+          shiftCount: 23,
+          action_start_marker: '{{{{{',
+          action_end_marker: '}}}}}',
+        },
+        yyleng: 28,
+        matches: [
+          '{{{{{',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+      },
+    },
     yylloc: {
-      first_line: 9,
+      first_line: 16,
       first_column: 4,
-      last_line: 11,
+      last_line: 18,
       last_column: 5,
       range: [
-        44,
-        72,
+        173,
+        201,
       ],
     },
   },
   {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 11,
-      first_column: 5,
-      last_line: 11,
-      last_column: 5,
-      range: [
-        72,
-        72,
-      ],
-    },
-  },
-  {
-    id: 51,
+    id: 53,
     token: '"STRING_LIT"',
     yytext: '"Y"',
     yylloc: {
-      first_line: 12,
+      first_line: 19,
       first_column: 0,
-      last_line: 12,
+      last_line: 19,
       last_column: 3,
       range: [
-        73,
-        76,
+        202,
+        205,
       ],
     },
   },
   {
-    id: 26,
-    token: '"ACTION_START"',
-    yytext: '%{{{',
+    id: 37,
+    token: '"ENTIRE_ACTION"',
+    yytext: {
+      srcCode: ' return "Y"; ',
+      shiftCount: 17,
+      action_start_marker: '%{{{',
+      action_end_marker: '%}}}',
+    },
     yylloc: {
-      first_line: 12,
+      first_line: 19,
       first_column: 4,
-      last_line: 12,
-      last_column: 4,
+      last_line: 19,
+      last_column: 17,
       range: [
-        77,
-        77,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: ' return "Y"; ',
-    yylloc: {
-      first_line: 12,
-      first_column: 4,
-      last_line: 12,
-      last_column: 25,
-      range: [
-        77,
-        98,
-      ],
-    },
-  },
-  {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 12,
-      first_column: 25,
-      last_line: 12,
-      last_column: 25,
-      range: [
-        98,
-        98,
+        206,
+        227,
       ],
     },
   },
@@ -235,73 +507,48 @@ return "%{..%}";
     token: '"."',
     yytext: '.',
     yylloc: {
-      first_line: 13,
+      first_line: 20,
       first_column: 0,
-      last_line: 13,
+      last_line: 20,
       last_column: 1,
       range: [
-        99,
-        100,
+        228,
+        229,
       ],
     },
   },
   {
-    id: 26,
-    token: '"ACTION_START"',
-    yytext: '%{{',
+    id: 37,
+    token: '"ENTIRE_ACTION"',
+    yytext: {
+      srcCode: ' return "dot"; ',
+      shiftCount: 18,
+      action_start_marker: '%{{',
+      action_end_marker: '%}}',
+    },
     yylloc: {
-      first_line: 13,
+      first_line: 20,
       first_column: 2,
-      last_line: 13,
-      last_column: 2,
+      last_line: 20,
+      last_column: 18,
       range: [
-        101,
-        101,
+        230,
+        251,
       ],
     },
   },
   {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: ' return "dot"; ',
-    yylloc: {
-      first_line: 13,
-      first_column: 2,
-      last_line: 13,
-      last_column: 23,
-      range: [
-        101,
-        122,
-      ],
-    },
-  },
-  {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 13,
-      first_column: 23,
-      last_line: 13,
-      last_column: 23,
-      range: [
-        122,
-        122,
-      ],
-    },
-  },
-  {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 0,
-      last_line: 14,
+      last_line: 21,
       last_column: 0,
       range: [
-        123,
-        123,
+        252,
+        252,
       ],
     },
   },
@@ -310,13 +557,13 @@ return "%{..%}";
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 0,
-      last_line: 14,
+      last_line: 21,
       last_column: 0,
       range: [
-        123,
-        123,
+        252,
+        252,
       ],
     },
   },
@@ -325,13 +572,13 @@ return "%{..%}";
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 0,
-      last_line: 14,
+      last_line: 21,
       last_column: 0,
       range: [
-        123,
-        123,
+        252,
+        252,
       ],
     },
   },
@@ -340,13 +587,13 @@ return "%{..%}";
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 0,
-      last_line: 14,
+      last_line: 21,
       last_column: 0,
       range: [
-        123,
-        123,
+        252,
+        252,
       ],
     },
   },
@@ -355,13 +602,13 @@ return "%{..%}";
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 14,
+      first_line: 21,
       first_column: 0,
-      last_line: 14,
+      last_line: 21,
       last_column: 0,
       range: [
-        123,
-        123,
+        252,
+        252,
       ],
     },
   },
@@ -369,10 +616,10 @@ return "%{..%}";
     id: -2,
     token: null,
     summary: {
-      totalTokenCount: 24,
+      totalTokenCount: 14,
       EOFTokenCount: 4,
       ERRORTokenCount: 0,
-      ParseErrorCallCount: 0,
+      ParseErrorCallCount: 2,
       DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },

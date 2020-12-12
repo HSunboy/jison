@@ -1,215 +1,181 @@
 [
   {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
-      first_line: 1,
+      first_line: 7,
       first_column: 0,
-      last_line: 1,
+      last_line: 7,
       last_column: 2,
       range: [
-        0,
-        2,
+        106,
+        108,
+      ],
+    },
+  },
+  {
+    id: 53,
+    token: '"STRING_LIT"',
+    yytext: '"["',
+    yylloc: {
+      first_line: 8,
+      first_column: 0,
+      last_line: 8,
+      last_column: 3,
+      range: [
+        109,
+        112,
+      ],
+    },
+  },
+  {
+    id: 48,
+    token: '"REGEX_SET_START"',
+    yytext: '[',
+    yylloc: {
+      first_line: 8,
+      first_column: 3,
+      last_line: 8,
+      last_column: 4,
+      range: [
+        112,
+        113,
       ],
     },
   },
   {
     id: 51,
-    token: '"STRING_LIT"',
-    yytext: '"["',
+    token: '"REGEX_SET"',
+    yytext: '^\\]',
     yylloc: {
-      first_line: 2,
-      first_column: 0,
-      last_line: 2,
-      last_column: 3,
+      first_line: 8,
+      first_column: 4,
+      last_line: 8,
+      last_column: 7,
       range: [
-        3,
-        6,
-      ],
-    },
-  },
-  {
-    id: 46,
-    token: '"REGEX_SET_START"',
-    yytext: '[',
-    yylloc: {
-      first_line: 2,
-      first_column: 3,
-      last_line: 2,
-      last_column: 4,
-      range: [
-        6,
-        7,
+        113,
+        116,
       ],
     },
   },
   {
     id: 49,
-    token: '"REGEX_SET"',
-    yytext: '^\\]',
-    yylloc: {
-      first_line: 2,
-      first_column: 4,
-      last_line: 2,
-      last_column: 7,
-      range: [
-        7,
-        10,
-      ],
-    },
-  },
-  {
-    id: 47,
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 7,
-      last_line: 2,
+      last_line: 8,
       last_column: 8,
       range: [
-        10,
-        11,
+        116,
+        117,
       ],
     },
   },
   {
-    id: 51,
+    id: 53,
     token: '"STRING_LIT"',
     yytext: '"]"',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 8,
-      last_line: 2,
+      last_line: 8,
       last_column: 11,
       range: [
-        11,
-        14,
+        117,
+        120,
       ],
     },
   },
   {
-    id: 26,
-    token: '"ACTION_START"',
-    yytext: '%{{{{{',
-    yylloc: {
-      first_line: 2,
-      first_column: 12,
-      last_line: 2,
-      last_column: 12,
-      range: [
-        15,
-        15,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: `
+    id: 37,
+    token: '"ENTIRE_ACTION"',
+    yytext: {
+      srcCode: `
 return "%{..%}";
 `,
+      shiftCount: 24,
+      action_start_marker: '%{{{{{',
+      action_end_marker: '%}}}}}',
+    },
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 12,
-      last_line: 4,
+      last_line: 10,
       last_column: 6,
       range: [
-        15,
-        45,
+        121,
+        151,
       ],
     },
   },
   {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 4,
-      first_column: 6,
-      last_line: 4,
-      last_column: 6,
-      range: [
-        45,
-        45,
-      ],
-    },
-  },
-  {
-    id: 52,
+    id: 54,
     token: '"CHARACTER_LIT"',
     yytext: 'a',
     yylloc: {
-      first_line: 5,
+      first_line: 11,
       first_column: 0,
-      last_line: 5,
+      last_line: 11,
       last_column: 1,
       range: [
-        46,
-        47,
+        152,
+        153,
       ],
     },
   },
   {
-    id: 26,
-    token: '"ACTION_START"',
-    yytext: '%{',
-    yylloc: {
-      first_line: 5,
-      first_column: 2,
-      last_line: 5,
-      last_column: 2,
-      range: [
-        48,
-        48,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: ` return "A"; %}}}}}
+    id: 37,
+    token: '"ENTIRE_ACTION"',
+    yytext: {
+      srcCode: ` return "A"; %}}}}}
 b %{{{ return "A" + '`,
+      shiftCount: 43,
+      action_start_marker: '%{',
+      action_end_marker: '%}',
+    },
     yylloc: {
-      first_line: 5,
+      first_line: 11,
       first_column: 2,
-      last_line: 6,
+      last_line: 12,
       last_column: 23,
       range: [
-        48,
-        93,
+        154,
+        199,
       ],
     },
   },
   {
-    id: 40,
+    id: 42,
     token: '"UNTERMINATED_STRING_ERROR"',
     yytext: {
-      errStr: `Lexical error on line 6: 
-unterminated string constant in lexer rule action block.
+      errStr: `Lexical error on line 12: 
+unterminated string constant encountered while lexing
+rules.
 
   Erroneous area:
-3: return "%{..%}";
-4: %}}}}}
-5: a %{ return "A"; %}}}}}
-6: b %{{{ return "A" + '%}'; %}}}
-^.........................^
-7: 
-8: 
+ 9: return "%{..%}";
+10: %}}}}}
+11: a %{ return "A"; %}}}}}
+12: b %{{{ return "A" + '%}'; %}}}
+^^.........................^
+13: 
+14: 
 `,
       recoverable: false,
       text: "'",
       token: null,
-      line: 5,
+      line: 11,
       loc: {
-        first_line: 6,
+        first_line: 12,
         first_column: 23,
-        last_line: 6,
+        last_line: 12,
         last_column: 24,
         range: [
-          93,
-          94,
+          199,
+          200,
         ],
       },
       yy: {
@@ -221,30 +187,31 @@ unterminated string constant in lexer rule action block.
         ERROR: 2,
         __error_infos: [
           {
-            errStr: `Lexical error on line 6: 
-unterminated string constant in lexer rule action block.
+            errStr: `Lexical error on line 12: 
+unterminated string constant encountered while lexing
+rules.
 
   Erroneous area:
-3: return "%{..%}";
-4: %}}}}}
-5: a %{ return "A"; %}}}}}
-6: b %{{{ return "A" + '%}'; %}}}
-^.........................^
-7: 
-8: 
+ 9: return "%{..%}";
+10: %}}}}}
+11: a %{ return "A"; %}}}}}
+12: b %{{{ return "A" + '%}'; %}}}
+^^.........................^
+13: 
+14: 
 `,
             recoverable: false,
             text: "'",
             token: null,
-            line: 5,
+            line: 11,
             loc: {
-              first_line: 6,
+              first_line: 12,
               first_column: 23,
-              last_line: 6,
+              last_line: 12,
               last_column: 24,
               range: [
-                93,
-                94,
+                199,
+                200,
               ],
             },
             yy: {
@@ -252,112 +219,100 @@ unterminated string constant in lexer rule action block.
               include_command_allowed: false,
             },
             lexer: '[lexer]',
+            isLexerError: true,
             yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
           },
           {
-            errStr: `Lexical error on line 6: 
-too many closing curly braces in lexer rule action block.
+            errStr: `Lexical error on line 12: 
+unsupported lexer input encountered while lexing
+rules (i.e. jison lex regexes) in "rules" state.
 
-Note: the action code chunk may be too complex for jison to parse
-easily; we suggest you wrap the action code chunk in '%{...%}'
-to help jison grok more or less complex action code chunks.
+NOTE: When you want this input to be interpreted as a LITERAL part
+      of a lex rule regex, you MUST enclose it in double or
+      single quotes.
+
+      If not, then know that this input is not accepted as a valid
+      regex expression here in jison-lex rules.
 
   Erroneous area:
-3: return "%{..%}";
-4: %}}}}}
-5: a %{ return "A"; %}}}}}
-6: b %{{{ return "A" + '%}'; %}}}
-^.............................^
-7: 
-8: 
+ 9: return "%{..%}";
+10: %}}}}}
+11: a %{ return "A"; %}}}}}
+12: b %{{{ return "A" + '%}'; %}}}
+^^..........................^
+13: 
+14: 
 `,
             recoverable: false,
-            text: '}',
+            text: ';',
             token: null,
-            line: 5,
+            line: 11,
             loc: {
-              first_line: 6,
-              first_column: 27,
-              last_line: 6,
-              last_column: 28,
+              first_line: 12,
+              first_column: 24,
+              last_line: 12,
+              last_column: 25,
               range: [
-                97,
-                98,
+                200,
+                201,
               ],
             },
-            yy: '[reference to sibling --> *.[12].yytext.lexer.__error_infos.[0].yy]',
+            yy: '[reference to sibling --> *.[9].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
+            isLexerError: true,
             yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
           },
           {
-            errStr: `Lexical error on line 6: 
-too many closing curly braces in lexer rule action block.
+            errStr: `Lexical error on line 12: 
+unsupported lexer input encountered while lexing
+rules (i.e. jison lex regexes) in "rules" state.
 
-Note: the action code chunk may be too complex for jison to parse
-easily; we suggest you wrap the action code chunk in '%{...%}'
-to help jison grok more or less complex action code chunks.
+NOTE: When you want this input to be interpreted as a LITERAL part
+      of a lex rule regex, you MUST enclose it in double or
+      single quotes.
 
-  Erroneous area:
-3: return "%{..%}";
-4: %}}}}}
-5: a %{ return "A"; %}}}}}
-6: b %{{{ return "A" + '%}'; %}}}
-^..............................^
-7: 
-8: 
-`,
-            recoverable: false,
-            text: '}',
-            token: null,
-            line: 5,
-            loc: {
-              first_line: 6,
-              first_column: 28,
-              last_line: 6,
-              last_column: 29,
-              range: [
-                98,
-                99,
-              ],
-            },
-            yy: '[reference to sibling --> *.[12].yytext.lexer.__error_infos.[0].yy]',
-            lexer: '[lexer]',
-            yyErrorInvoked: true,
-          },
-          {
-            errStr: `Lexical error on line 6: 
-too many closing curly braces in lexer rule action block.
-
-Note: the action code chunk may be too complex for jison to parse
-easily; we suggest you wrap the action code chunk in '%{...%}'
-to help jison grok more or less complex action code chunks.
+      If not, then know that this input is not accepted as a valid
+      regex expression here in jison-lex rules.
 
   Erroneous area:
-3: return "%{..%}";
-4: %}}}}}
-5: a %{ return "A"; %}}}}}
-6: b %{{{ return "A" + '%}'; %}}}
-^...............................^
-7: 
-8: 
+ 9: return "%{..%}";
+10: %}}}}}
+11: a %{ return "A"; %}}}}}
+12: b %{{{ return "A" + '%}'; %}}}
+^^............................^
+13: 
+14: 
 `,
             recoverable: false,
-            text: '}',
+            text: '%',
             token: null,
-            line: 5,
+            line: 11,
             loc: {
-              first_line: 6,
-              first_column: 29,
-              last_line: 6,
-              last_column: 30,
+              first_line: 12,
+              first_column: 26,
+              last_line: 12,
+              last_column: 27,
               range: [
-                99,
-                100,
+                202,
+                203,
               ],
             },
-            yy: '[reference to sibling --> *.[12].yytext.lexer.__error_infos.[0].yy]',
+            yy: '[reference to sibling --> *.[9].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
+            isLexerError: true,
             yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
           },
         ],
         __decompressed: true,
@@ -372,7 +327,13 @@ to help jison grok more or less complex action code chunks.
           'code',
         ],
         match: '',
-        matched: `%%
+        matched: `//
+// title: test stability across lexer invocations as we patch lexer rules under the hood
+//
+// ...
+//
+
+%%
 "["[^\\]]"]" %{{{{{
 return "%{..%}";
 %}}}}}
@@ -382,18 +343,18 @@ b %{{{ return "A" + '%}'; %}}}
 `,
         matches: false,
         yytext: '',
-        offset: 102,
+        offset: 208,
         base_position: 0,
         yyleng: 0,
-        yylineno: 7,
+        yylineno: 13,
         yylloc: {
-          first_line: 8,
+          first_line: 14,
           first_column: 0,
-          last_line: 8,
+          last_line: 14,
           last_column: 0,
           range: [
-            102,
-            102,
+            208,
+            208,
           ],
         },
         CRLF_Re: {
@@ -411,8 +372,14 @@ b %{{{ return "A" + '%}'; %}}}
           depth: 0,
           include_command_allowed: false,
         },
+        __entire_action_block_matchers__: {},
       },
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
       errorDiag: {
         inputPos: 8,
         yytext: "'",
@@ -420,429 +387,344 @@ b %{{{ return "A" + '%}'; %}}}
         matches: [
           "'",
         ],
-        activeCondition: 'action',
-        conditionStackDepth: 3,
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
       },
     },
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 23,
-      last_line: 6,
+      last_line: 12,
       last_column: 24,
       range: [
-        93,
-        94,
+        199,
+        200,
       ],
     },
   },
   {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: '; ',
+    id: 2,
+    token: '"error"',
+    yytext: {
+      errStr: `Lexical error on line 12: 
+unsupported lexer input encountered while lexing
+rules (i.e. jison lex regexes) in "rules" state.
+
+NOTE: When you want this input to be interpreted as a LITERAL part
+      of a lex rule regex, you MUST enclose it in double or
+      single quotes.
+
+      If not, then know that this input is not accepted as a valid
+      regex expression here in jison-lex rules.
+
+  Erroneous area:
+ 9: return "%{..%}";
+10: %}}}}}
+11: a %{ return "A"; %}}}}}
+12: b %{{{ return "A" + '%}'; %}}}
+^^..........................^
+13: 
+14: 
+`,
+      recoverable: false,
+      text: ';',
+      token: null,
+      line: 11,
+      loc: {
+        first_line: 12,
+        first_column: 24,
+        last_line: 12,
+        last_column: 25,
+        range: [
+          200,
+          201,
+        ],
+      },
+      yy: {
+        depth: 0,
+        include_command_allowed: false,
+      },
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[9].yytext.lexer.__error_infos, length = 3]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `//
+// title: test stability across lexer invocations as we patch lexer rules under the hood
+//
+// ...
+//
+
+%%
+"["[^\\]]"]" %{{{{{
+return "%{..%}";
+%}}}}}
+a %{ return "A"; %}}}}}
+b %{{{ return "A" + '%}'; %}}}
+
+`,
+        matches: false,
+        yytext: '',
+        offset: 208,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 13,
+        yylloc: {
+          first_line: 14,
+          first_column: 0,
+          last_line: 14,
+          last_column: 0,
+          range: [
+            208,
+            208,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+        __entire_action_block_matchers__: {},
+      },
+      isLexerError: true,
+      yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
+      errorDiag: {
+        inputPos: 7,
+        yytext: ';',
+        yyleng: 1,
+        matches: [
+          ';',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+      },
+    },
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 24,
-      last_line: 6,
-      last_column: 26,
+      last_line: 12,
+      last_column: 25,
       range: [
-        94,
-        96,
+        200,
+        201,
       ],
     },
   },
   {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: '%',
+    id: 2,
+    token: '"error"',
+    yytext: {
+      errStr: `Lexical error on line 12: 
+unsupported lexer input encountered while lexing
+rules (i.e. jison lex regexes) in "rules" state.
+
+NOTE: When you want this input to be interpreted as a LITERAL part
+      of a lex rule regex, you MUST enclose it in double or
+      single quotes.
+
+      If not, then know that this input is not accepted as a valid
+      regex expression here in jison-lex rules.
+
+  Erroneous area:
+ 9: return "%{..%}";
+10: %}}}}}
+11: a %{ return "A"; %}}}}}
+12: b %{{{ return "A" + '%}'; %}}}
+^^............................^
+13: 
+14: 
+`,
+      recoverable: false,
+      text: '%',
+      token: null,
+      line: 11,
+      loc: {
+        first_line: 12,
+        first_column: 26,
+        last_line: 12,
+        last_column: 27,
+        range: [
+          202,
+          203,
+        ],
+      },
+      yy: {
+        depth: 0,
+        include_command_allowed: false,
+      },
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[9].yytext.lexer.__error_infos, length = 3]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `//
+// title: test stability across lexer invocations as we patch lexer rules under the hood
+//
+// ...
+//
+
+%%
+"["[^\\]]"]" %{{{{{
+return "%{..%}";
+%}}}}}
+a %{ return "A"; %}}}}}
+b %{{{ return "A" + '%}'; %}}}
+
+`,
+        matches: false,
+        yytext: '',
+        offset: 208,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 13,
+        yylloc: {
+          first_line: 14,
+          first_column: 0,
+          last_line: 14,
+          last_column: 0,
+          range: [
+            208,
+            208,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+        __entire_action_block_matchers__: {},
+      },
+      isLexerError: true,
+      yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
+      errorDiag: {
+        inputPos: 5,
+        yytext: '%',
+        yyleng: 1,
+        matches: [
+          '%',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+      },
+    },
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 26,
-      last_line: 6,
+      last_line: 12,
       last_column: 27,
       range: [
-        96,
-        97,
+        202,
+        203,
       ],
     },
   },
   {
-    id: 39,
-    token: '"BRACKET_SURPLUS"',
-    yytext: {
-      errStr: `Lexical error on line 6: 
-too many closing curly braces in lexer rule action block.
-
-Note: the action code chunk may be too complex for jison to parse
-easily; we suggest you wrap the action code chunk in '%{...%}'
-to help jison grok more or less complex action code chunks.
-
-  Erroneous area:
-3: return "%{..%}";
-4: %}}}}}
-5: a %{ return "A"; %}}}}}
-6: b %{{{ return "A" + '%}'; %}}}
-^.............................^
-7: 
-8: 
-`,
-      recoverable: false,
-      text: '}',
-      token: null,
-      line: 5,
-      loc: {
-        first_line: 6,
-        first_column: 27,
-        last_line: 6,
-        last_column: 28,
-        range: [
-          97,
-          98,
-        ],
-      },
-      yy: {
-        depth: 0,
-        include_command_allowed: false,
-      },
-      lexer: {
-        EOF: 1,
-        ERROR: 2,
-        __error_infos: '[reference to sibling array --> *.[12].yytext.lexer.__error_infos, length = 4]',
-        __decompressed: true,
-        done: true,
-        _backtrack: false,
-        _input: '',
-        _more: false,
-        _signaled_error_token: false,
-        _clear_state: 0,
-        conditionStack: [
-          'INITIAL',
-          'code',
-        ],
-        match: '',
-        matched: `%%
-"["[^\\]]"]" %{{{{{
-return "%{..%}";
-%}}}}}
-a %{ return "A"; %}}}}}
-b %{{{ return "A" + '%}'; %}}}
-
-`,
-        matches: false,
-        yytext: '',
-        offset: 102,
-        base_position: 0,
-        yyleng: 0,
-        yylineno: 7,
-        yylloc: {
-          first_line: 8,
-          first_column: 0,
-          last_line: 8,
-          last_column: 0,
-          range: [
-            102,
-            102,
-          ],
-        },
-        CRLF_Re: {
-          re: '/\\r\\n?|\\n/',
-          source: '\\r\\n?|\\n',
-          flags: '',
-        },
-        options: {
-          xregexp: true,
-          ranges: true,
-          trackPosition: true,
-          easy_keyword_rules: true,
-        },
-        yy: {
-          depth: 0,
-          include_command_allowed: false,
-        },
-      },
-      yyErrorInvoked: true,
-      errorDiag: {
-        inputPos: 4,
-        yytext: '}',
-        yyleng: 1,
-        matches: [
-          '}',
-        ],
-        activeCondition: 'action',
-        conditionStackDepth: 3,
-      },
-    },
+    id: 5,
+    token: '"}"',
+    yytext: '}',
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 27,
-      last_line: 6,
+      last_line: 12,
       last_column: 28,
       range: [
-        97,
-        98,
+        203,
+        204,
       ],
     },
   },
   {
-    id: 39,
-    token: '"BRACKET_SURPLUS"',
-    yytext: {
-      errStr: `Lexical error on line 6: 
-too many closing curly braces in lexer rule action block.
-
-Note: the action code chunk may be too complex for jison to parse
-easily; we suggest you wrap the action code chunk in '%{...%}'
-to help jison grok more or less complex action code chunks.
-
-  Erroneous area:
-3: return "%{..%}";
-4: %}}}}}
-5: a %{ return "A"; %}}}}}
-6: b %{{{ return "A" + '%}'; %}}}
-^..............................^
-7: 
-8: 
-`,
-      recoverable: false,
-      text: '}',
-      token: null,
-      line: 5,
-      loc: {
-        first_line: 6,
-        first_column: 28,
-        last_line: 6,
-        last_column: 29,
-        range: [
-          98,
-          99,
-        ],
-      },
-      yy: {
-        depth: 0,
-        include_command_allowed: false,
-      },
-      lexer: {
-        EOF: 1,
-        ERROR: 2,
-        __error_infos: '[reference to sibling array --> *.[12].yytext.lexer.__error_infos, length = 4]',
-        __decompressed: true,
-        done: true,
-        _backtrack: false,
-        _input: '',
-        _more: false,
-        _signaled_error_token: false,
-        _clear_state: 0,
-        conditionStack: [
-          'INITIAL',
-          'code',
-        ],
-        match: '',
-        matched: `%%
-"["[^\\]]"]" %{{{{{
-return "%{..%}";
-%}}}}}
-a %{ return "A"; %}}}}}
-b %{{{ return "A" + '%}'; %}}}
-
-`,
-        matches: false,
-        yytext: '',
-        offset: 102,
-        base_position: 0,
-        yyleng: 0,
-        yylineno: 7,
-        yylloc: {
-          first_line: 8,
-          first_column: 0,
-          last_line: 8,
-          last_column: 0,
-          range: [
-            102,
-            102,
-          ],
-        },
-        CRLF_Re: {
-          re: '/\\r\\n?|\\n/',
-          source: '\\r\\n?|\\n',
-          flags: '',
-        },
-        options: {
-          xregexp: true,
-          ranges: true,
-          trackPosition: true,
-          easy_keyword_rules: true,
-        },
-        yy: {
-          depth: 0,
-          include_command_allowed: false,
-        },
-      },
-      yyErrorInvoked: true,
-      errorDiag: {
-        inputPos: 3,
-        yytext: '}',
-        yyleng: 1,
-        matches: [
-          '}',
-        ],
-        activeCondition: 'action',
-        conditionStackDepth: 3,
-      },
-    },
+    id: 5,
+    token: '"}"',
+    yytext: '}',
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 28,
-      last_line: 6,
+      last_line: 12,
       last_column: 29,
       range: [
-        98,
-        99,
+        204,
+        205,
       ],
     },
   },
   {
-    id: 39,
-    token: '"BRACKET_SURPLUS"',
-    yytext: {
-      errStr: `Lexical error on line 6: 
-too many closing curly braces in lexer rule action block.
-
-Note: the action code chunk may be too complex for jison to parse
-easily; we suggest you wrap the action code chunk in '%{...%}'
-to help jison grok more or less complex action code chunks.
-
-  Erroneous area:
-3: return "%{..%}";
-4: %}}}}}
-5: a %{ return "A"; %}}}}}
-6: b %{{{ return "A" + '%}'; %}}}
-^...............................^
-7: 
-8: 
-`,
-      recoverable: false,
-      text: '}',
-      token: null,
-      line: 5,
-      loc: {
-        first_line: 6,
-        first_column: 29,
-        last_line: 6,
-        last_column: 30,
-        range: [
-          99,
-          100,
-        ],
-      },
-      yy: {
-        depth: 0,
-        include_command_allowed: false,
-      },
-      lexer: {
-        EOF: 1,
-        ERROR: 2,
-        __error_infos: '[reference to sibling array --> *.[12].yytext.lexer.__error_infos, length = 4]',
-        __decompressed: true,
-        done: true,
-        _backtrack: false,
-        _input: '',
-        _more: false,
-        _signaled_error_token: false,
-        _clear_state: 0,
-        conditionStack: [
-          'INITIAL',
-          'code',
-        ],
-        match: '',
-        matched: `%%
-"["[^\\]]"]" %{{{{{
-return "%{..%}";
-%}}}}}
-a %{ return "A"; %}}}}}
-b %{{{ return "A" + '%}'; %}}}
-
-`,
-        matches: false,
-        yytext: '',
-        offset: 102,
-        base_position: 0,
-        yyleng: 0,
-        yylineno: 7,
-        yylloc: {
-          first_line: 8,
-          first_column: 0,
-          last_line: 8,
-          last_column: 0,
-          range: [
-            102,
-            102,
-          ],
-        },
-        CRLF_Re: {
-          re: '/\\r\\n?|\\n/',
-          source: '\\r\\n?|\\n',
-          flags: '',
-        },
-        options: {
-          xregexp: true,
-          ranges: true,
-          trackPosition: true,
-          easy_keyword_rules: true,
-        },
-        yy: {
-          depth: 0,
-          include_command_allowed: false,
-        },
-      },
-      yyErrorInvoked: true,
-      errorDiag: {
-        inputPos: 2,
-        yytext: '}',
-        yyleng: 1,
-        matches: [
-          '}',
-        ],
-        activeCondition: 'action',
-        conditionStackDepth: 3,
-      },
-    },
+    id: 5,
+    token: '"}"',
+    yytext: '}',
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 29,
-      last_line: 6,
+      last_line: 12,
       last_column: 30,
       range: [
-        99,
-        100,
+        205,
+        206,
       ],
     },
   },
   {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 6,
-      first_column: 30,
-      last_line: 6,
-      last_column: 30,
-      range: [
-        100,
-        100,
-      ],
-    },
-  },
-  {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {
-      first_line: 8,
+      first_line: 14,
       first_column: 0,
-      last_line: 8,
+      last_line: 14,
       last_column: 0,
       range: [
-        102,
-        102,
+        208,
+        208,
       ],
     },
   },
@@ -851,13 +733,13 @@ b %{{{ return "A" + '%}'; %}}}
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 8,
+      first_line: 14,
       first_column: 0,
-      last_line: 8,
+      last_line: 14,
       last_column: 0,
       range: [
-        102,
-        102,
+        208,
+        208,
       ],
     },
   },
@@ -866,13 +748,13 @@ b %{{{ return "A" + '%}'; %}}}
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 8,
+      first_line: 14,
       first_column: 0,
-      last_line: 8,
+      last_line: 14,
       last_column: 0,
       range: [
-        102,
-        102,
+        208,
+        208,
       ],
     },
   },
@@ -881,13 +763,13 @@ b %{{{ return "A" + '%}'; %}}}
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 8,
+      first_line: 14,
       first_column: 0,
-      last_line: 8,
+      last_line: 14,
       last_column: 0,
       range: [
-        102,
-        102,
+        208,
+        208,
       ],
     },
   },
@@ -896,13 +778,13 @@ b %{{{ return "A" + '%}'; %}}}
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 8,
+      first_line: 14,
       first_column: 0,
-      last_line: 8,
+      last_line: 14,
       last_column: 0,
       range: [
-        102,
-        102,
+        208,
+        208,
       ],
     },
   },
@@ -910,10 +792,10 @@ b %{{{ return "A" + '%}'; %}}}
     id: -2,
     token: null,
     summary: {
-      totalTokenCount: 24,
+      totalTokenCount: 20,
       EOFTokenCount: 4,
-      ERRORTokenCount: 0,
-      ParseErrorCallCount: 4,
+      ERRORTokenCount: 2,
+      ParseErrorCallCount: 3,
       DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },

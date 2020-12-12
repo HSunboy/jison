@@ -1,76 +1,76 @@
 [
   {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
-      first_line: 1,
+      first_line: 7,
       first_column: 0,
-      last_line: 1,
+      last_line: 7,
       last_column: 2,
       range: [
-        0,
-        2,
+        68,
+        70,
+      ],
+    },
+  },
+  {
+    id: 53,
+    token: '"STRING_LIT"',
+    yytext: '"["',
+    yylloc: {
+      first_line: 8,
+      first_column: 0,
+      last_line: 8,
+      last_column: 3,
+      range: [
+        71,
+        74,
+      ],
+    },
+  },
+  {
+    id: 48,
+    token: '"REGEX_SET_START"',
+    yytext: '[',
+    yylloc: {
+      first_line: 8,
+      first_column: 3,
+      last_line: 8,
+      last_column: 4,
+      range: [
+        74,
+        75,
       ],
     },
   },
   {
     id: 51,
-    token: '"STRING_LIT"',
-    yytext: '"["',
+    token: '"REGEX_SET"',
+    yytext: '^\\\\',
     yylloc: {
-      first_line: 2,
-      first_column: 0,
-      last_line: 2,
-      last_column: 3,
+      first_line: 8,
+      first_column: 4,
+      last_line: 8,
+      last_column: 7,
       range: [
-        3,
-        6,
-      ],
-    },
-  },
-  {
-    id: 46,
-    token: '"REGEX_SET_START"',
-    yytext: '[',
-    yylloc: {
-      first_line: 2,
-      first_column: 3,
-      last_line: 2,
-      last_column: 4,
-      range: [
-        6,
-        7,
+        75,
+        78,
       ],
     },
   },
   {
     id: 49,
-    token: '"REGEX_SET"',
-    yytext: '^\\\\',
-    yylloc: {
-      first_line: 2,
-      first_column: 4,
-      last_line: 2,
-      last_column: 7,
-      range: [
-        7,
-        10,
-      ],
-    },
-  },
-  {
-    id: 47,
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 7,
-      last_line: 2,
+      last_line: 8,
       last_column: 8,
       range: [
-        10,
-        11,
+        78,
+        79,
       ],
     },
   },
@@ -78,36 +78,38 @@
     id: 2,
     token: '"error"',
     yytext: {
-      errStr: `Lexical error on line 2: 
+      errStr: `Lexical error on line 8: 
 unsupported lexer input encountered while lexing
 rules (i.e. jison lex regexes) in "rules" state.
 
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
+NOTE: When you want this input to be interpreted as a LITERAL part
+      of a lex rule regex, you MUST enclose it in double or
+      single quotes.
 
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
+      If not, then know that this input is not accepted as a valid
+      regex expression here in jison-lex rules.
 
   Erroneous area:
-1: %%
-2: "["[^\\\\]]"]" -> 'BAD_REGEX'
+5: //
+6: 
+7: %%
+8: "["[^\\\\]]"]" -> 'BAD_REGEX'
 ^..........^
-3: 
-4: 
+9: 
+0: 
 `,
       recoverable: false,
       text: ']',
       token: null,
-      line: 1,
+      line: 7,
       loc: {
-        first_line: 2,
+        first_line: 8,
         first_column: 8,
-        last_line: 2,
+        last_line: 8,
         last_column: 9,
         range: [
-          11,
-          12,
+          79,
+          80,
         ],
       },
       yy: {},
@@ -116,36 +118,38 @@ rules (i.e. jison lex regexes) in "rules" state.
         ERROR: 2,
         __error_infos: [
           {
-            errStr: `Lexical error on line 2: 
+            errStr: `Lexical error on line 8: 
 unsupported lexer input encountered while lexing
 rules (i.e. jison lex regexes) in "rules" state.
 
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
+NOTE: When you want this input to be interpreted as a LITERAL part
+      of a lex rule regex, you MUST enclose it in double or
+      single quotes.
 
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
+      If not, then know that this input is not accepted as a valid
+      regex expression here in jison-lex rules.
 
   Erroneous area:
-1: %%
-2: "["[^\\\\]]"]" -> 'BAD_REGEX'
+5: //
+6: 
+7: %%
+8: "["[^\\\\]]"]" -> 'BAD_REGEX'
 ^..........^
-3: 
-4: 
+9: 
+0: 
 `,
             recoverable: false,
             text: ']',
             token: null,
-            line: 1,
+            line: 7,
             loc: {
-              first_line: 2,
+              first_line: 8,
               first_column: 8,
-              last_line: 2,
+              last_line: 8,
               last_column: 9,
               range: [
-                11,
-                12,
+                79,
+                80,
               ],
             },
             yy: {
@@ -153,7 +157,12 @@ rules (i.e. jison lex regexes) in "rules" state.
               include_command_allowed: false,
             },
             lexer: '[lexer]',
+            isLexerError: true,
             yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
           },
         ],
         __decompressed: true,
@@ -168,24 +177,30 @@ rules (i.e. jison lex regexes) in "rules" state.
           'code',
         ],
         match: '',
-        matched: `%%
+        matched: `//
+// title: "typo error in lexer regex/rule: [...]]"
+//
+// ...
+//
+
+%%
 "["[^\\\\]]"]" -> 'BAD_REGEX'
 
 `,
         matches: false,
         yytext: '',
-        offset: 32,
+        offset: 100,
         base_position: 0,
         yyleng: 0,
-        yylineno: 3,
+        yylineno: 9,
         yylloc: {
-          first_line: 4,
+          first_line: 10,
           first_column: 0,
-          last_line: 4,
+          last_line: 10,
           last_column: 0,
           range: [
-            32,
-            32,
+            100,
+            100,
           ],
         },
         CRLF_Re: {
@@ -203,8 +218,14 @@ rules (i.e. jison lex regexes) in "rules" state.
           depth: 0,
           include_command_allowed: false,
         },
+        __entire_action_block_matchers__: {},
       },
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
       errorDiag: {
         inputPos: 20,
         yytext: ']',
@@ -217,103 +238,103 @@ rules (i.e. jison lex regexes) in "rules" state.
       },
     },
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 8,
-      last_line: 2,
+      last_line: 8,
       last_column: 9,
       range: [
-        11,
-        12,
+        79,
+        80,
       ],
     },
   },
   {
-    id: 51,
+    id: 53,
     token: '"STRING_LIT"',
     yytext: '"]"',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 9,
-      last_line: 2,
+      last_line: 8,
       last_column: 12,
       range: [
-        12,
-        15,
-      ],
-    },
-  },
-  {
-    id: 35,
-    token: '"ARROW_ACTION_START"',
-    yytext: '->',
-    yylloc: {
-      first_line: 2,
-      first_column: 13,
-      last_line: 2,
-      last_column: 15,
-      range: [
-        16,
-        18,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: ' ',
-    yylloc: {
-      first_line: 2,
-      first_column: 15,
-      last_line: 2,
-      last_column: 16,
-      range: [
-        18,
-        19,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: "'BAD_REGEX'",
-    yylloc: {
-      first_line: 2,
-      first_column: 16,
-      last_line: 2,
-      last_column: 27,
-      range: [
-        19,
-        30,
-      ],
-    },
-  },
-  {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 2,
-      first_column: 27,
-      last_line: 2,
-      last_column: 27,
-      range: [
-        30,
-        30,
+        80,
+        83,
       ],
     },
   },
   {
     id: 34,
+    token: '"ARROW_ACTION_START"',
+    yytext: '->',
+    yylloc: {
+      first_line: 8,
+      first_column: 13,
+      last_line: 8,
+      last_column: 15,
+      range: [
+        84,
+        86,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: ' ',
+    yylloc: {
+      first_line: 8,
+      first_column: 15,
+      last_line: 8,
+      last_column: 16,
+      range: [
+        86,
+        87,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: "'BAD_REGEX'",
+    yylloc: {
+      first_line: 8,
+      first_column: 16,
+      last_line: 8,
+      last_column: 27,
+      range: [
+        87,
+        98,
+      ],
+    },
+  },
+  {
+    id: 35,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 8,
+      first_column: 27,
+      last_line: 8,
+      last_column: 27,
+      range: [
+        98,
+        98,
+      ],
+    },
+  },
+  {
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {
-      first_line: 4,
+      first_line: 10,
       first_column: 0,
-      last_line: 4,
+      last_line: 10,
       last_column: 0,
       range: [
-        32,
-        32,
+        100,
+        100,
       ],
     },
   },
@@ -322,13 +343,13 @@ rules (i.e. jison lex regexes) in "rules" state.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 4,
+      first_line: 10,
       first_column: 0,
-      last_line: 4,
+      last_line: 10,
       last_column: 0,
       range: [
-        32,
-        32,
+        100,
+        100,
       ],
     },
   },
@@ -337,13 +358,13 @@ rules (i.e. jison lex regexes) in "rules" state.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 4,
+      first_line: 10,
       first_column: 0,
-      last_line: 4,
+      last_line: 10,
       last_column: 0,
       range: [
-        32,
-        32,
+        100,
+        100,
       ],
     },
   },
@@ -352,13 +373,13 @@ rules (i.e. jison lex regexes) in "rules" state.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 4,
+      first_line: 10,
       first_column: 0,
-      last_line: 4,
+      last_line: 10,
       last_column: 0,
       range: [
-        32,
-        32,
+        100,
+        100,
       ],
     },
   },
@@ -367,13 +388,13 @@ rules (i.e. jison lex regexes) in "rules" state.
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 4,
+      first_line: 10,
       first_column: 0,
-      last_line: 4,
+      last_line: 10,
       last_column: 0,
       range: [
-        32,
-        32,
+        100,
+        100,
       ],
     },
   },

@@ -1,9 +1,16 @@
 {
   rules: [
-    [
-      '.',
-      '//',
-    ],
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: '//',
+      rule: '.',
+    },
   ],
   macros: {},
   startConditions: {},
@@ -43,10 +50,10 @@
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 6,
+        line: 12,
         expected: null,
         recoverable: false,
-        state: 24,
+        state: 26,
         action: 2,
         new_state: 1,
         stack_pointer: 5,
@@ -60,10 +67,10 @@
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 6,
+          line: 12,
           expected: null,
           recoverable: false,
-          state: 24,
+          state: 26,
           action: 2,
           new_state: 1,
           stack_pointer: 5,
@@ -77,7 +84,13 @@
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%a b c
+  __original_input__: `//
+// title: test unknown declarations
+//
+// ...
+//
+
+%a b c
 %foo[bar] baz qux
 %a b c
 %%

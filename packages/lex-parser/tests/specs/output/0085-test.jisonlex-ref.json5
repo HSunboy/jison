@@ -2,7 +2,14 @@
   id: -1,
   token: null,
   fail: 1,
-  spec: `%s subsetA subsetB
+  spec: `//
+// title: "cannot nest rule scopes"
+// test_run_lexer_output: false
+//
+// ...
+//
+
+%s subsetA subsetB
 
 %%
 "A"		 -> 'A'
@@ -31,29 +38,29 @@ the start condition
 as a terminating curly brace '}' could not be found.
     
   Erroneous area:
- 6: <subsetA>{
- 7: 
- 8: "C"   -> 'C'
- 9: 
-10: <subsetB>{
+13: <subsetA>{
+14: 
+15: "C"   -> 'C'
+16: 
+17: <subsetB>{
 ^^..^
-11: 
-12: "B"   -> 'B'
+18: 
+19: "B"   -> 'B'
     
   Technical error report:
-Parse error on line 10:
+Parse error on line 17:
 <subsetB>{
 ^
-Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
+Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "UNTERMINATED_ACTION_BLOCK", "ACTION_START_AT_SOL", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "ENTIRE_ACTION_AT_SOL", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "action_chunk_at_SOL", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
 `,
       exception: null,
       text: '<',
       value: '<',
       token: '"<"',
       token_id: 3,
-      line: 9,
+      line: 16,
       recoverable: false,
-      state: 174,
+      state: 182,
       action: 2,
       new_state: 45,
       stack_pointer: 8,
@@ -65,20 +72,20 @@ the start condition
 as a terminating curly brace '}' could not be found.
     
   Erroneous area:
- 6: <subsetA>{
- 7: 
- 8: "C"   -> 'C'
- 9: 
-10: <subsetB>{
+13: <subsetA>{
+14: 
+15: "C"   -> 'C'
+16: 
+17: <subsetB>{
 ^^..^
-11: 
-12: "B"   -> 'B'
+18: 
+19: "B"   -> 'B'
     
   Technical error report:
-Parse error on line 10:
+Parse error on line 17:
 <subsetB>{
 ^
-Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
+Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "UNTERMINATED_ACTION_BLOCK", "ACTION_START_AT_SOL", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "ENTIRE_ACTION_AT_SOL", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "action_chunk_at_SOL", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
 `,
     name: 'JisonParserError',
     stack: `JisonParserError: 
@@ -88,27 +95,27 @@ the start condition
 as a terminating curly brace '}' could not be found.
     
   Erroneous area:
- 6: <subsetA>{
- 7: 
- 8: "C"   -> 'C'
- 9: 
-10: <subsetB>{
+13: <subsetA>{
+14: 
+15: "C"   -> 'C'
+16: 
+17: <subsetB>{
 ^^..^
-11: 
-12: "B"   -> 'B'
+18: 
+19: "B"   -> 'B'
     
   Technical error report:
-Parse error on line 10:
+Parse error on line 17:
 <subsetB>{
 ^
-Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
+Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "UNTERMINATED_ACTION_BLOCK", "ACTION_START_AT_SOL", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "ENTIRE_ACTION_AT_SOL", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "action_chunk_at_SOL", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
 
-    at Object.parseError (/lex-parser-cjs.js:7291:15)
-    at Object.yyError (/lex-parser-cjs.js:7481:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:3930:14)
-    at Object.parse (/lex-parser-cjs.js:8545:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
+    at Object.parseError (/lex-parser-cjs.js:7520:15)
+    at Object.yyError (/lex-parser-cjs.js:7710:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4020:14)
+    at Object.parse (/lex-parser-cjs.js:8774:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12820:25)
+    at Context.testEachParserExample (/all-tests.js:557:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -152,6 +159,7 @@ Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "U
         ],
         depth: 0,
         include_command_allowed: false,
+        __inside_condition_set__: true,
       },
       hash: {
         errStr: null,
@@ -160,10 +168,10 @@ Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "U
         value: '<',
         token: '"<"',
         token_id: 3,
-        line: 9,
+        line: 16,
         expected: null,
         recoverable: false,
-        state: 174,
+        state: 182,
         action: 2,
         new_state: 45,
         stack_pointer: 8,
@@ -171,20 +179,20 @@ Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "U
       reentrant_call_depth: 1,
       error_infos_stack: [
         {
-          errStr: `Parse error on line 10:
+          errStr: `Parse error on line 17:
 <subsetB>{
 ^
-Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"`,
+Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "UNTERMINATED_ACTION_BLOCK", "ACTION_START_AT_SOL", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "ENTIRE_ACTION_AT_SOL", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "action_chunk_at_SOL", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"`,
           exception: null,
           text: '<',
           value: '<',
           token: '"<"',
           token_id: 3,
-          line: 9,
+          line: 16,
           recoverable: true,
-          state: 173,
+          state: 181,
           action: 0,
-          new_state: 200,
+          new_state: 201,
           stack_pointer: 8,
         },
         {
@@ -195,29 +203,29 @@ the start condition
 as a terminating curly brace '}' could not be found.
     
   Erroneous area:
- 6: <subsetA>{
- 7: 
- 8: "C"   -> 'C'
- 9: 
-10: <subsetB>{
+13: <subsetA>{
+14: 
+15: "C"   -> 'C'
+16: 
+17: <subsetB>{
 ^^..^
-11: 
-12: "B"   -> 'B'
+18: 
+19: "B"   -> 'B'
     
   Technical error report:
-Parse error on line 10:
+Parse error on line 17:
 <subsetB>{
 ^
-Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
+Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "UNTERMINATED_ACTION_BLOCK", "ACTION_START_AT_SOL", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "ENTIRE_ACTION_AT_SOL", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "action_chunk_at_SOL", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
 `,
           exception: null,
           text: '<',
           value: '<',
           token: '"<"',
           token_id: 3,
-          line: 9,
+          line: 16,
           recoverable: false,
-          state: 174,
+          state: 182,
           action: 2,
           new_state: 45,
           stack_pointer: 8,
@@ -229,10 +237,10 @@ Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "U
           value: '<',
           token: '"<"',
           token_id: 3,
-          line: 9,
+          line: 16,
           expected: null,
           recoverable: false,
-          state: 174,
+          state: 182,
           action: 2,
           new_state: 45,
           stack_pointer: 8,
@@ -240,20 +248,20 @@ Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "U
       ],
       error_recovery_stack: [
         {
-          errStr: `Parse error on line 10:
+          errStr: `Parse error on line 17:
 <subsetB>{
 ^
-Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"`,
+Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "UNTERMINATED_ACTION_BLOCK", "ACTION_START_AT_SOL", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "ENTIRE_ACTION_AT_SOL", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "action_chunk_at_SOL", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"`,
           exception: null,
           text: '<',
           value: '<',
           token: '"<"',
           token_id: 3,
-          line: 9,
+          line: 16,
           recoverable: true,
-          state: 173,
+          state: 181,
           action: 0,
-          new_state: 200,
+          new_state: 201,
           stack_pointer: 8,
           base_pointer: 12,
           info_stack_pointer: 16,
@@ -267,29 +275,29 @@ the start condition
 as a terminating curly brace '}' could not be found.
     
   Erroneous area:
- 6: <subsetA>{
- 7: 
- 8: "C"   -> 'C'
- 9: 
-10: <subsetB>{
+13: <subsetA>{
+14: 
+15: "C"   -> 'C'
+16: 
+17: <subsetB>{
 ^^..^
-11: 
-12: "B"   -> 'B'
+18: 
+19: "B"   -> 'B'
     
   Technical error report:
-Parse error on line 10:
+Parse error on line 17:
 <subsetB>{
 ^
-Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "UNTERMINATED_ACTION_BLOCK", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
+Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "UNTERMINATED_ACTION_BLOCK", "ACTION_START_AT_SOL", "ACTION_START", "UNKNOWN_DECL", "OPTIONS", "IMPORT", "INIT_CODE", "START_INC", "START_EXC", "ENTIRE_ACTION_AT_SOL", "SPECIAL_GROUP", "/!", "REGEX_SPECIAL_CHAR", "ESCAPED_CHAR", macro name in '{...}' curly braces, "REGEX_SET_START", "STRING_LIT", "CHARACTER_LIT", "option_keyword", "import_keyword", "init_code_keyword", "start_inclusive_keyword", "start_exclusive_keyword", "rule", "action_chunk_at_SOL", "regex", "nonempty_regex_list", "regex_concat", "regex_base", "name_expansion", "any_group_regex", "literal_string", got unexpected "<"
 `,
           exception: null,
           text: '<',
           value: '<',
           token: '"<"',
           token_id: 3,
-          line: 9,
+          line: 16,
           recoverable: false,
-          state: 174,
+          state: 182,
           action: 2,
           new_state: 45,
           stack_pointer: 8,
@@ -308,7 +316,14 @@ Expecting "}", ">", "|", "(", "/", ",", ".", "^", "$", "ACTION_START_AT_SOL", "U
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%s subsetA subsetB
+  __original_input__: `//
+// title: "cannot nest rule scopes"
+// test_run_lexer_output: false
+//
+// ...
+//
+
+%s subsetA subsetB
 
 %%
 "A"		 -> 'A'

@@ -2,7 +2,14 @@
   id: -1,
   token: null,
   fail: 1,
-  spec: `// %s is 'active' as long as the lines following are indented *and* non-empty
+  spec: `//
+// title: "multi-line %s and %x"
+// test_input: 'abc AZ=0.4'
+//
+// ...
+//
+
+// %s is 'active' as long as the lines following are indented *and* non-empty
 // (i.e. cannot have an empty, whitespace-only line in there)
 %s    
     PICTURE_STATE    
@@ -22,11 +29,13 @@
 
 
 . {
+    this.begin('FUNCTION_STATE');
     return yytext.charCodeAt(0);
 }
 
 <<EOF>>                         yytext = {
-                                    conditionStack: this.conditionStack
+                                    conditionStack: this.conditionStack,
+                                    conditionsSet: Object.keys(this.conditions),
                                 };
                                 return 'EOF';`,
   err: {
@@ -45,26 +54,26 @@ Suggested name:
     _8bit
     
   Erroneous area:
-10: %x    
-11:     D
+17: %x    
+18:     D
     (...continued...)
-13:     FOOBAR
-14:     G7
-15:     8bit
+20:     FOOBAR
+21:     G7
+22:     8bit
 ^^......^^^^
-16: 
-17: %%
+23: 
+24: %%
 `,
       exception: null,
       text: '8bit',
       value: '8bit',
       token: '"$accept"',
       token_id: 0,
-      line: 14,
+      line: 21,
       recoverable: false,
-      state: 56,
+      state: 58,
       action: 2,
-      new_state: 124,
+      new_state: 129,
       stack_pointer: 6,
     },
     message: `
@@ -81,15 +90,15 @@ Suggested name:
     _8bit
     
   Erroneous area:
-10: %x    
-11:     D
+17: %x    
+18:     D
     (...continued...)
-13:     FOOBAR
-14:     G7
-15:     8bit
+20:     FOOBAR
+21:     G7
+22:     8bit
 ^^......^^^^
-16: 
-17: %%
+23: 
+24: %%
 `,
     name: 'JisonParserError',
     stack: `JisonParserError: 
@@ -106,22 +115,22 @@ Suggested name:
     _8bit
     
   Erroneous area:
-10: %x    
-11:     D
+17: %x    
+18:     D
     (...continued...)
-13:     FOOBAR
-14:     G7
-15:     8bit
+20:     FOOBAR
+21:     G7
+22:     8bit
 ^^......^^^^
-16: 
-17: %%
+23: 
+24: %%
 
-    at Object.parseError (/lex-parser-cjs.js:7291:15)
-    at Object.yyError (/lex-parser-cjs.js:7481:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:5248:26)
-    at Object.parse (/lex-parser-cjs.js:8748:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
+    at Object.parseError (/lex-parser-cjs.js:7520:15)
+    at Object.yyError (/lex-parser-cjs.js:7710:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:5405:26)
+    at Object.parse (/lex-parser-cjs.js:8977:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12820:25)
+    at Context.testEachParserExample (/all-tests.js:557:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -169,12 +178,12 @@ Suggested name:
         value: '8bit',
         token: '"$accept"',
         token_id: 0,
-        line: 14,
+        line: 21,
         expected: null,
         recoverable: false,
-        state: 56,
+        state: 58,
         action: 2,
-        new_state: 124,
+        new_state: 129,
         stack_pointer: 6,
       },
       reentrant_call_depth: 1,
@@ -194,26 +203,26 @@ Suggested name:
     _8bit
     
   Erroneous area:
-10: %x    
-11:     D
+17: %x    
+18:     D
     (...continued...)
-13:     FOOBAR
-14:     G7
-15:     8bit
+20:     FOOBAR
+21:     G7
+22:     8bit
 ^^......^^^^
-16: 
-17: %%
+23: 
+24: %%
 `,
           exception: null,
           text: '8bit',
           value: '8bit',
           token: '"$accept"',
           token_id: 0,
-          line: 14,
+          line: 21,
           recoverable: false,
-          state: 56,
+          state: 58,
           action: 2,
-          new_state: 124,
+          new_state: 129,
           stack_pointer: 6,
         },
         {
@@ -223,12 +232,12 @@ Suggested name:
           value: '8bit',
           token: '"$accept"',
           token_id: 0,
-          line: 14,
+          line: 21,
           expected: null,
           recoverable: false,
-          state: 56,
+          state: 58,
           action: 2,
-          new_state: 124,
+          new_state: 129,
           stack_pointer: 6,
         },
       ],
@@ -248,26 +257,26 @@ Suggested name:
     _8bit
     
   Erroneous area:
-10: %x    
-11:     D
+17: %x    
+18:     D
     (...continued...)
-13:     FOOBAR
-14:     G7
-15:     8bit
+20:     FOOBAR
+21:     G7
+22:     8bit
 ^^......^^^^
-16: 
-17: %%
+23: 
+24: %%
 `,
           exception: null,
           text: '8bit',
           value: '8bit',
           token: '"$accept"',
           token_id: 0,
-          line: 14,
+          line: 21,
           recoverable: false,
-          state: 56,
+          state: 58,
           action: 2,
-          new_state: 124,
+          new_state: 129,
           stack_pointer: 6,
           base_pointer: 6,
           info_stack_pointer: 6,
@@ -284,7 +293,14 @@ Suggested name:
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `// %s is 'active' as long as the lines following are indented *and* non-empty
+  __original_input__: `//
+// title: "multi-line %s and %x"
+// test_input: 'abc AZ=0.4'
+//
+// ...
+//
+
+// %s is 'active' as long as the lines following are indented *and* non-empty
 // (i.e. cannot have an empty, whitespace-only line in there)
 %s    
     PICTURE_STATE    
@@ -304,11 +320,13 @@ Suggested name:
 
 
 . {
+    this.begin('FUNCTION_STATE');
     return yytext.charCodeAt(0);
 }
 
 <<EOF>>                         yytext = {
-                                    conditionStack: this.conditionStack
+                                    conditionStack: this.conditionStack,
+                                    conditionsSet: Object.keys(this.conditions),
                                 };
                                 return 'EOF';`,
 }

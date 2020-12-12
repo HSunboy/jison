@@ -1,52 +1,101 @@
 {
   rules: [
-    [
-      [
-        'CALL_DIRECTIVE_STATE',
-      ],
-      '\\n',
-      `this.begin('INITIAL');
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: `this.begin('INITIAL');
     this.unput('\\n');
     return 'TERMINATOR'`,
-    ],
-    [
-      [
+      rule: '\\n',
+      start_condition: [
         'CALL_DIRECTIVE_STATE',
       ],
-      '[ ,;]+',
-      '/* ignore */',
-    ],
-    [
-      [
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: '/* ignore */',
+      rule: '[ ,;]+',
+      start_condition: [
         'CALL_DIRECTIVE_STATE',
       ],
-      '\\.',
-      'return DOT',
-    ],
-    [
-      [
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: 'return DOT',
+      rule: '\\.',
+      start_condition: [
         'CALL_DIRECTIVE_STATE',
       ],
-      '.',
-      "return '#' + yytext[0].charCodeAt(0).toString(16)",
-    ],
-    [
-      '\\$',
-      `this.begin('CALL_DIRECTIVE_STATE');
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return '#' + yytext[0].charCodeAt(0).toString(16)",
+      rule: '.',
+      start_condition: [
+        'CALL_DIRECTIVE_STATE',
+      ],
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: `this.begin('CALL_DIRECTIVE_STATE');
                                 return 'MARKER'`,
-    ],
-    [
-      '.',
-      'return yytext.charCodeAt(0)',
-    ],
-    [
-      '$',
-      `yytext = {
+      rule: '\\$',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: 'return yytext.charCodeAt(0)',
+      rule: '.',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: `yytext = {
                                     conditionStack: this.conditionStack,
                                     conditionsSet: Object.keys(this.conditions),
                                 };
                                 return 'EOF'`,
-    ],
+      rule: '$',
+    },
   ],
   macros: {},
   startConditions: {
@@ -75,6 +124,7 @@
         __options_category_description__: '???',
         __inside_scoped_ruleset__: false,
         __context_cfg_stack__: [],
+        __inside_condition_set__: false,
         depth: 0,
         include_command_allowed: false,
       },
@@ -85,10 +135,10 @@
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 41,
+        line: 53,
         expected: null,
         recoverable: false,
-        state: 24,
+        state: 26,
         action: 2,
         new_state: 1,
         stack_pointer: 5,
@@ -102,10 +152,10 @@
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 41,
+          line: 53,
           expected: null,
           recoverable: false,
-          state: 24,
+          state: 26,
           action: 2,
           new_state: 1,
           stack_pointer: 5,
@@ -119,7 +169,19 @@
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%s    
+  __original_input__: `//
+// title: "%s / %x with comma-separated list"
+// test_input: |-
+//   $A.8
+//   B1
+//   $$55Z...
+//   $
+//   ~
+//
+// ...
+//
+
+%s    
     CALL_DIRECTIVE_STATE,
     SOURCE_DIRECTIVE_STATE,
     DEFINE_DIRECTIVE_STATE,

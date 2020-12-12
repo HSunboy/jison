@@ -2,7 +2,13 @@
   id: -1,
   token: null,
   fail: 1,
-  spec: `%%
+  spec: `//
+// title: test stability across lexer invocations as we patch lexer rules under the hood
+//
+// ...
+//
+
+%%
 "["[^\\]]"]" %{{{{{
 return "%{..%}";
 %}}}}}
@@ -11,61 +17,59 @@ b %{{{ return "A" + '%}'; %}}}
 
 `,
   err: {
-    name: 'JisonLexerError',
     hash: {
-      errStr: `Lexical error on line 6: 
-unterminated string constant in lexer rule action block.
-
+      errStr: `
+The lexer rule's action code section does not compile: Error: Line 11: Unexpected token %
+    
   Erroneous area:
-3: return "%{..%}";
-4: %}}}}}
-5: a %{ return "A"; %}}}}}
-6: b %{{{ return "A" + '%}'; %}}}
-^.........................^
-7: 
-8: 
+11: a %{ return "A"; %}}}}}
+^^....^^^^^^^^^^^^^^^^^^^^^
+12: b %{{{ return "A" + '%}'; %}}}
+^^..^^^^^^^^^^^^^^^^^^^^^^^
+13: 
+14: 
 `,
+      exception: null,
+      text: `%{ return "A"; %}}}}}
+b %{{{ return "A" + '%}`,
+      token: '"$accept"',
+      token_id: 0,
+      line: 11,
       recoverable: false,
-      text: "'",
-      token: null,
-      line: 5,
-      yyErrorInvoked: true,
+      state: 149,
+      action: 2,
+      new_state: 49,
+      stack_pointer: 7,
     },
-    message: `Lexical error on line 6: 
-unterminated string constant in lexer rule action block.
-
+    message: `
+The lexer rule's action code section does not compile: Error: Line 11: Unexpected token %
+    
   Erroneous area:
-3: return "%{..%}";
-4: %}}}}}
-5: a %{ return "A"; %}}}}}
-6: b %{{{ return "A" + '%}'; %}}}
-^.........................^
-7: 
-8: 
+11: a %{ return "A"; %}}}}}
+^^....^^^^^^^^^^^^^^^^^^^^^
+12: b %{{{ return "A" + '%}'; %}}}
+^^..^^^^^^^^^^^^^^^^^^^^^^^
+13: 
+14: 
 `,
-    stack: `JisonLexerError: Lexical error on line 6: 
-unterminated string constant in lexer rule action block.
-
+    name: 'JisonParserError',
+    stack: `JisonParserError: 
+The lexer rule's action code section does not compile: Error: Line 11: Unexpected token %
+    
   Erroneous area:
-3: return "%{..%}";
-4: %}}}}}
-5: a %{ return "A"; %}}}}}
-6: b %{{{ return "A" + '%}'; %}}}
-^.........................^
-7: 
-8: 
+11: a %{ return "A"; %}}}}}
+^^....^^^^^^^^^^^^^^^^^^^^^
+12: b %{{{ return "A" + '%}'; %}}}
+^^..^^^^^^^^^^^^^^^^^^^^^^^
+13: 
+14: 
 
-    at Object.parseError (/lex-parser-cjs.js:7291:15)
-    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:9460:44)
-    at Object.yyError [as yyerror] (/lex-parser-cjs.js:9490:19)
-    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:11540:13)
-    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10415:38)
-    at Object.lexer_next [as next] (/lex-parser-cjs.js:10540:28)
-    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:10724:18)
-    at fastLex (/lex-parser-cjs.js:7886:27)
-    at Object.parse (/lex-parser-cjs.js:8060:30)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
+    at Object.parseError (/lex-parser-cjs.js:7520:15)
+    at Object.yyError (/lex-parser-cjs.js:7710:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4087:18)
+    at Object.parse (/lex-parser-cjs.js:8977:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12820:25)
+    at Context.testEachParserExample (/all-tests.js:557:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -105,45 +109,106 @@ unterminated string constant in lexer rule action block.
       hash: {
         errStr: null,
         exception: null,
-        text: "'",
-        value: "'",
+        text: `%{ return "A"; %}}}}}
+b %{{{ return "A" + '%}`,
         token: '"$accept"',
         token_id: 0,
-        line: 5,
+        line: 11,
         expected: null,
         recoverable: false,
-        state: 176,
+        state: 149,
         action: 2,
-        new_state: 176,
-        stack_pointer: 8,
+        new_state: 49,
+        stack_pointer: 7,
       },
       reentrant_call_depth: 1,
       error_infos_stack: [
         {
-          errStr: null,
+          errStr: `
+The lexer rule's action code section does not compile: Error: Line 11: Unexpected token %
+    
+  Erroneous area:
+11: a %{ return "A"; %}}}}}
+^^....^^^^^^^^^^^^^^^^^^^^^
+12: b %{{{ return "A" + '%}'; %}}}
+^^..^^^^^^^^^^^^^^^^^^^^^^^
+13: 
+14: 
+`,
           exception: null,
-          text: "'",
-          value: "'",
+          text: `%{ return "A"; %}}}}}
+b %{{{ return "A" + '%}`,
           token: '"$accept"',
           token_id: 0,
-          line: 5,
+          line: 11,
+          recoverable: false,
+          state: 149,
+          action: 2,
+          new_state: 49,
+          stack_pointer: 7,
+        },
+        {
+          errStr: null,
+          exception: null,
+          text: `%{ return "A"; %}}}}}
+b %{{{ return "A" + '%}`,
+          token: '"$accept"',
+          token_id: 0,
+          line: 11,
           expected: null,
           recoverable: false,
-          state: 176,
+          state: 149,
           action: 2,
-          new_state: 176,
-          stack_pointer: 8,
+          new_state: 49,
+          stack_pointer: 7,
         },
       ],
-      error_recovery_stack: [],
-      error_infos_stack_size: 1,
-      error_recovery_stack_size: 0,
+      error_recovery_stack: [
+        {
+          errStr: `
+The lexer rule's action code section does not compile: Error: Line 11: Unexpected token %
+    
+  Erroneous area:
+11: a %{ return "A"; %}}}}}
+^^....^^^^^^^^^^^^^^^^^^^^^
+12: b %{{{ return "A" + '%}'; %}}}
+^^..^^^^^^^^^^^^^^^^^^^^^^^
+13: 
+14: 
+`,
+          exception: null,
+          text: `%{ return "A"; %}}}}}
+b %{{{ return "A" + '%}`,
+          token: '"$accept"',
+          token_id: 0,
+          line: 11,
+          recoverable: false,
+          state: 149,
+          action: 2,
+          new_state: 49,
+          stack_pointer: 7,
+          base_pointer: 9,
+          info_stack_pointer: 9,
+          root_failure_pointer: 7,
+          yyError: true,
+          errorRuleDepth: -1,
+          recovering: 0,
+        },
+      ],
+      error_infos_stack_size: 2,
+      error_recovery_stack_size: 1,
     },
     reentrant_call_depth: 0,
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%%
+  __original_input__: `//
+// title: test stability across lexer invocations as we patch lexer rules under the hood
+//
+// ...
+//
+
+%%
 "["[^\\]]"]" %{{{{{
 return "%{..%}";
 %}}}}}

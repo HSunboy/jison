@@ -1,36 +1,78 @@
 {
   rules: [
-    [
-      'b<c',
-      "return 'PATHOLOGICAL_CASE_HIT'",
-    ],
-    [
-      [
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return 'PATHOLOGICAL_CASE_HIT'",
+      rule: 'b<c',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "popState();\n\t\t\t\t\t\t\t\treturn 'SWITCHING_TO_INITIAL_CONTEXT'",
+      rule: 'a',
+      start_condition: [
         'ALT',
       ],
-      'a',
-      "popState();\n\t\t\t\t\t\t\t\treturn 'SWITCHING_TO_INITIAL_CONTEXT'",
-    ],
-    [
-      [
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: `pushState('ALT');
+								return 'SWITCHING_TO_ALT_CONTEXT'`,
+      rule: 'a',
+      start_condition: [
         'INITIAL',
       ],
-      'a',
-      `pushState('ALT');
-								return 'SWITCHING_TO_ALT_CONTEXT'`,
-    ],
-    [
-      '\\s',
-      "return 'SPACE'",
-    ],
-    [
-      '.',
-      "return 'CHAR'",
-    ],
-    [
-      '$',
-      "return 'EOF'",
-    ],
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return 'SPACE'",
+      rule: '\\s',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return 'CHAR'",
+      rule: '.',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return 'EOF'",
+      rule: '$',
+    },
   ],
   macros: {},
   startConditions: {
@@ -51,6 +93,7 @@
         __context_cfg_stack__: [],
         depth: 0,
         include_command_allowed: false,
+        __inside_condition_set__: false,
       },
       hash: {
         errStr: null,
@@ -59,10 +102,10 @@
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 16,
+        line: 23,
         expected: null,
         recoverable: false,
-        state: 24,
+        state: 26,
         action: 2,
         new_state: 1,
         stack_pointer: 5,
@@ -76,10 +119,10 @@
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 16,
+          line: 23,
           expected: null,
           recoverable: false,
-          state: 24,
+          state: 26,
           action: 2,
           new_state: 1,
           stack_pointer: 5,
@@ -93,7 +136,14 @@
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%s ALT
+  __original_input__: `//
+// title: "rule regex pathological case: '<' is a literal regex part when not starting a rule"
+// test_input: ab<cab>ca ab<cab>ca
+//
+// ...
+//
+
+%s ALT
 
 %%
 

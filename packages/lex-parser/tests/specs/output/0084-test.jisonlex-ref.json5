@@ -2,7 +2,14 @@
   id: -1,
   token: null,
   fail: 1,
-  spec: `%s subset
+  spec: `//
+// title: "it's an error to indent rules inside scopes"
+// test_run_lexer_output: false
+//
+// ...
+//
+
+%s subset
 
 %%
 "A"		 -> 'A'
@@ -18,99 +25,99 @@
   err: {
     hash: {
       errStr: `
-There's probably an error in one or more of your lexer regex rules.
+The lexer rule's 'arrow' action code section does not compile: Error: Line 18: Unexpected string
     
-Did you perhaps indent the rule regex? 
+# NOTE that the arrow action automatically wraps the action code
+# in a \`return (...);\` statement to prevent hard-to-diagnose run-time
+# errors down the line.
+#
+# Please be aware that the reported compile error MAY be referring
+# to the wrapper code which is added by JISON automatically when
+# processing arrow actions: the entire action code chunk
+# (including wrapper) is:
     
-Note that all rule regexes MUST start at the start of the line, 
-i.e. text column 1. 
-Indented text is perceived as JavaScript action code related to the last 
-lexer rule regex.
+    return (
+                'C'
+    "B"		 -> 'B'
+            )
     
-  Erroneous code:
-5: 
-6: <subset>{
-7: 
-8:  // SHOULD NOT indent regex rules: expect error
-^...^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-9:  "C"   -> 'C'
-0:  "B"   -> 'B'
-    
-  Technical error report:
-Parse error on line 8:
- // SHOULD ...
--^
-Unexpected "ACTION_BODY"
+  Erroneous area:
+16:  "C"   -> 'C'
+^^...........^^^^
+17:  "B"   -> 'B'
+^^..^^^^^^^^^^^^^
+18: 
+19: }
 `,
       exception: null,
-      text: '// SHOULD NOT indent regex rules: expect error',
-      value: '// SHOULD NOT indent regex rules: expect error',
+      text: '',
+      value: '',
       token: '"$accept"',
       token_id: 0,
-      line: 7,
+      line: 16,
       recoverable: false,
-      state: 148,
+      state: 198,
       action: 2,
-      new_state: 59,
-      stack_pointer: 10,
+      new_state: 51,
+      stack_pointer: 12,
     },
     message: `
-There's probably an error in one or more of your lexer regex rules.
+The lexer rule's 'arrow' action code section does not compile: Error: Line 18: Unexpected string
     
-Did you perhaps indent the rule regex? 
+# NOTE that the arrow action automatically wraps the action code
+# in a \`return (...);\` statement to prevent hard-to-diagnose run-time
+# errors down the line.
+#
+# Please be aware that the reported compile error MAY be referring
+# to the wrapper code which is added by JISON automatically when
+# processing arrow actions: the entire action code chunk
+# (including wrapper) is:
     
-Note that all rule regexes MUST start at the start of the line, 
-i.e. text column 1. 
-Indented text is perceived as JavaScript action code related to the last 
-lexer rule regex.
+    return (
+                'C'
+    "B"		 -> 'B'
+            )
     
-  Erroneous code:
-5: 
-6: <subset>{
-7: 
-8:  // SHOULD NOT indent regex rules: expect error
-^...^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-9:  "C"   -> 'C'
-0:  "B"   -> 'B'
-    
-  Technical error report:
-Parse error on line 8:
- // SHOULD ...
--^
-Unexpected "ACTION_BODY"
+  Erroneous area:
+16:  "C"   -> 'C'
+^^...........^^^^
+17:  "B"   -> 'B'
+^^..^^^^^^^^^^^^^
+18: 
+19: }
 `,
     name: 'JisonParserError',
     stack: `JisonParserError: 
-There's probably an error in one or more of your lexer regex rules.
+The lexer rule's 'arrow' action code section does not compile: Error: Line 18: Unexpected string
     
-Did you perhaps indent the rule regex? 
+# NOTE that the arrow action automatically wraps the action code
+# in a \`return (...);\` statement to prevent hard-to-diagnose run-time
+# errors down the line.
+#
+# Please be aware that the reported compile error MAY be referring
+# to the wrapper code which is added by JISON automatically when
+# processing arrow actions: the entire action code chunk
+# (including wrapper) is:
     
-Note that all rule regexes MUST start at the start of the line, 
-i.e. text column 1. 
-Indented text is perceived as JavaScript action code related to the last 
-lexer rule regex.
+    return (
+                'C'
+    "B"		 -> 'B'
+            )
     
-  Erroneous code:
-5: 
-6: <subset>{
-7: 
-8:  // SHOULD NOT indent regex rules: expect error
-^...^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-9:  "C"   -> 'C'
-0:  "B"   -> 'B'
-    
-  Technical error report:
-Parse error on line 8:
- // SHOULD ...
--^
-Unexpected "ACTION_BODY"
+  Erroneous area:
+16:  "C"   -> 'C'
+^^...........^^^^
+17:  "B"   -> 'B'
+^^..^^^^^^^^^^^^^
+18: 
+19: }
 
-    at Object.parseError (/lex-parser-cjs.js:7291:15)
-    at Object.yyError (/lex-parser-cjs.js:7481:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:4275:18)
-    at Object.parse (/lex-parser-cjs.js:8545:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
+    at Object.parseError (/lex-parser-cjs.js:7520:15)
+    at Object.yyError (/lex-parser-cjs.js:7710:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4129:18)
+    at Object.parse (/lex-parser-cjs.js:8977:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12820:25)
+    at Context.testEachParserExample (/all-tests.js:557:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -153,169 +160,140 @@ Unexpected "ACTION_BODY"
         ],
         depth: 0,
         include_command_allowed: false,
+        __inside_condition_set__: false,
       },
       hash: {
         errStr: null,
         exception: null,
-        text: '// SHOULD NOT indent regex rules: expect error',
-        value: '// SHOULD NOT indent regex rules: expect error',
+        text: '',
+        value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 7,
+        line: 16,
         expected: null,
         recoverable: false,
-        state: 148,
+        state: 198,
         action: 2,
-        new_state: 59,
-        stack_pointer: 10,
+        new_state: 51,
+        stack_pointer: 12,
       },
       reentrant_call_depth: 1,
       error_infos_stack: [
         {
-          errStr: `Parse error on line 8:
- // SHOULD ...
--^
-Unexpected "ACTION_BODY"`,
-          exception: null,
-          text: '// SHOULD NOT indent regex rules: expect error',
-          value: '// SHOULD NOT indent regex rules: expect error',
-          token: '"ACTION_BODY"',
-          token_id: 36,
-          line: 7,
-          recoverable: true,
-          state: 79,
-          action: 0,
-          new_state: 200,
-          stack_pointer: 9,
-        },
-        {
           errStr: `
-There's probably an error in one or more of your lexer regex rules.
+The lexer rule's 'arrow' action code section does not compile: Error: Line 18: Unexpected string
     
-Did you perhaps indent the rule regex? 
+# NOTE that the arrow action automatically wraps the action code
+# in a \`return (...);\` statement to prevent hard-to-diagnose run-time
+# errors down the line.
+#
+# Please be aware that the reported compile error MAY be referring
+# to the wrapper code which is added by JISON automatically when
+# processing arrow actions: the entire action code chunk
+# (including wrapper) is:
     
-Note that all rule regexes MUST start at the start of the line, 
-i.e. text column 1. 
-Indented text is perceived as JavaScript action code related to the last 
-lexer rule regex.
+    return (
+                'C'
+    "B"		 -> 'B'
+            )
     
-  Erroneous code:
-5: 
-6: <subset>{
-7: 
-8:  // SHOULD NOT indent regex rules: expect error
-^...^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-9:  "C"   -> 'C'
-0:  "B"   -> 'B'
-    
-  Technical error report:
-Parse error on line 8:
- // SHOULD ...
--^
-Unexpected "ACTION_BODY"
+  Erroneous area:
+16:  "C"   -> 'C'
+^^...........^^^^
+17:  "B"   -> 'B'
+^^..^^^^^^^^^^^^^
+18: 
+19: }
 `,
           exception: null,
-          text: '// SHOULD NOT indent regex rules: expect error',
-          value: '// SHOULD NOT indent regex rules: expect error',
+          text: '',
+          value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 7,
+          line: 16,
           recoverable: false,
-          state: 148,
+          state: 198,
           action: 2,
-          new_state: 59,
-          stack_pointer: 10,
+          new_state: 51,
+          stack_pointer: 12,
         },
         {
           errStr: null,
           exception: null,
-          text: '// SHOULD NOT indent regex rules: expect error',
-          value: '// SHOULD NOT indent regex rules: expect error',
+          text: '',
+          value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 7,
+          line: 16,
           expected: null,
           recoverable: false,
-          state: 148,
+          state: 198,
           action: 2,
-          new_state: 59,
-          stack_pointer: 10,
+          new_state: 51,
+          stack_pointer: 12,
         },
       ],
       error_recovery_stack: [
         {
-          errStr: `Parse error on line 8:
- // SHOULD ...
--^
-Unexpected "ACTION_BODY"`,
-          exception: null,
-          text: '// SHOULD NOT indent regex rules: expect error',
-          value: '// SHOULD NOT indent regex rules: expect error',
-          token: '"ACTION_BODY"',
-          token_id: 36,
-          line: 7,
-          recoverable: true,
-          state: 79,
-          action: 0,
-          new_state: 200,
-          stack_pointer: 9,
-          base_pointer: 9,
-          info_stack_pointer: 12,
-          root_failure_pointer: 9,
-        },
-        {
           errStr: `
-There's probably an error in one or more of your lexer regex rules.
+The lexer rule's 'arrow' action code section does not compile: Error: Line 18: Unexpected string
     
-Did you perhaps indent the rule regex? 
+# NOTE that the arrow action automatically wraps the action code
+# in a \`return (...);\` statement to prevent hard-to-diagnose run-time
+# errors down the line.
+#
+# Please be aware that the reported compile error MAY be referring
+# to the wrapper code which is added by JISON automatically when
+# processing arrow actions: the entire action code chunk
+# (including wrapper) is:
     
-Note that all rule regexes MUST start at the start of the line, 
-i.e. text column 1. 
-Indented text is perceived as JavaScript action code related to the last 
-lexer rule regex.
+    return (
+                'C'
+    "B"		 -> 'B'
+            )
     
-  Erroneous code:
-5: 
-6: <subset>{
-7: 
-8:  // SHOULD NOT indent regex rules: expect error
-^...^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-9:  "C"   -> 'C'
-0:  "B"   -> 'B'
-    
-  Technical error report:
-Parse error on line 8:
- // SHOULD ...
--^
-Unexpected "ACTION_BODY"
+  Erroneous area:
+16:  "C"   -> 'C'
+^^...........^^^^
+17:  "B"   -> 'B'
+^^..^^^^^^^^^^^^^
+18: 
+19: }
 `,
           exception: null,
-          text: '// SHOULD NOT indent regex rules: expect error',
-          value: '// SHOULD NOT indent regex rules: expect error',
+          text: '',
+          value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 7,
+          line: 16,
           recoverable: false,
-          state: 148,
+          state: 198,
           action: 2,
-          new_state: 59,
-          stack_pointer: 10,
-          base_pointer: 10,
-          info_stack_pointer: 10,
-          root_failure_pointer: 10,
+          new_state: 51,
+          stack_pointer: 12,
+          base_pointer: 12,
+          info_stack_pointer: 12,
+          root_failure_pointer: 12,
           yyError: true,
           errorRuleDepth: -1,
-          recovering: 3,
+          recovering: 0,
         },
       ],
-      error_infos_stack_size: 3,
-      error_recovery_stack_size: 2,
+      error_infos_stack_size: 2,
+      error_recovery_stack_size: 1,
     },
     reentrant_call_depth: 0,
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%s subset
+  __original_input__: `//
+// title: "it's an error to indent rules inside scopes"
+// test_run_lexer_output: false
+//
+// ...
+//
+
+%s subset
 
 %%
 "A"		 -> 'A'

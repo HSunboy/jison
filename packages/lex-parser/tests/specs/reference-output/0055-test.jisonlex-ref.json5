@@ -1,9 +1,16 @@
 {
   rules: [
-    [
-      'foo',
-      'return 11',
-    ],
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: 'return 11',
+      rule: 'foo',
+    },
   ],
   macros: {},
   startConditions: {},
@@ -35,10 +42,10 @@
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 4,
+        line: 11,
         expected: null,
         recoverable: false,
-        state: 24,
+        state: 26,
         action: 2,
         new_state: 1,
         stack_pointer: 5,
@@ -52,10 +59,10 @@
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 4,
+          line: 11,
           expected: null,
           recoverable: false,
-          state: 24,
+          state: 26,
           action: 2,
           new_state: 1,
           stack_pointer: 5,
@@ -69,7 +76,14 @@
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%options s1="s1\\"val'ue" s2='s2\\\\x\\'val"ue' s3=\`s3\\\\x\\\\'val"ue\`
+  __original_input__: `//
+// title: test options with string values which have embedded quotes
+// test_input: 'foofoofoo'
+//
+// ...
+//
+
+%options s1="s1\\"val'ue" s2='s2\\\\x\\'val"ue' s3=\`s3\\\\x\\\\'val"ue\`
 %%
 "foo" return 11
 

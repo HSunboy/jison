@@ -1,122 +1,126 @@
 [
   {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
-      first_line: 1,
+      first_line: 12,
       first_column: 0,
-      last_line: 1,
+      last_line: 12,
       last_column: 2,
       range: [
-        0,
-        2,
+        322,
+        324,
+      ],
+    },
+  },
+  {
+    id: 53,
+    token: '"STRING_LIT"',
+    yytext: '"["',
+    yylloc: {
+      first_line: 13,
+      first_column: 0,
+      last_line: 13,
+      last_column: 3,
+      range: [
+        325,
+        328,
+      ],
+    },
+  },
+  {
+    id: 48,
+    token: '"REGEX_SET_START"',
+    yytext: '[',
+    yylloc: {
+      first_line: 13,
+      first_column: 3,
+      last_line: 13,
+      last_column: 4,
+      range: [
+        328,
+        329,
       ],
     },
   },
   {
     id: 51,
-    token: '"STRING_LIT"',
-    yytext: '"["',
+    token: '"REGEX_SET"',
+    yytext: '^\\]',
     yylloc: {
-      first_line: 2,
-      first_column: 0,
-      last_line: 2,
-      last_column: 3,
+      first_line: 13,
+      first_column: 4,
+      last_line: 13,
+      last_column: 7,
       range: [
-        3,
-        6,
-      ],
-    },
-  },
-  {
-    id: 46,
-    token: '"REGEX_SET_START"',
-    yytext: '[',
-    yylloc: {
-      first_line: 2,
-      first_column: 3,
-      last_line: 2,
-      last_column: 4,
-      range: [
-        6,
-        7,
+        329,
+        332,
       ],
     },
   },
   {
     id: 49,
-    token: '"REGEX_SET"',
-    yytext: '^\\]',
-    yylloc: {
-      first_line: 2,
-      first_column: 4,
-      last_line: 2,
-      last_column: 7,
-      range: [
-        7,
-        10,
-      ],
-    },
-  },
-  {
-    id: 47,
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
-      first_line: 2,
+      first_line: 13,
       first_column: 7,
-      last_line: 2,
+      last_line: 13,
       last_column: 8,
       range: [
-        10,
-        11,
+        332,
+        333,
       ],
     },
   },
   {
-    id: 51,
+    id: 53,
     token: '"STRING_LIT"',
     yytext: '"]"',
     yylloc: {
-      first_line: 2,
+      first_line: 13,
       first_column: 8,
-      last_line: 2,
+      last_line: 13,
       last_column: 11,
       range: [
-        11,
-        14,
+        333,
+        336,
       ],
     },
   },
   {
-    id: 25,
+    id: 23,
     token: '"UNTERMINATED_ACTION_BLOCK"',
     yytext: {
-      errStr: `Lexical error on line 2: 
+      errStr: `Lexical error on line 13: 
+                                                
 Incorrectly terminated action code block. We're expecting the
 '%}' end marker to go with the given start marker.
 Regrettably, it does not exist in the remainder of the input.
 
-  Erroneous area:
-1: %%
-2: "["[^\\]]"]" %{
-^..............^^
-3: return true;
-4: %}}
+
+Erroneous area:
+                                                10: //
+11: 
+12: %%
+13: "["[^\\]]"]" %{
+^^..............^
+14: return true;
+15: %}}
 `,
       recoverable: false,
       text: '%{',
       token: null,
-      line: 1,
+      line: 12,
       loc: {
-        first_line: 2,
+        first_line: 13,
         first_column: 12,
-        last_line: 2,
-        last_column: 14,
+        last_line: 13,
+        last_column: 0,
         range: [
-          15,
-          17,
+          337,
+          339,
         ],
       },
       yy: {
@@ -128,30 +132,34 @@ Regrettably, it does not exist in the remainder of the input.
         ERROR: 2,
         __error_infos: [
           {
-            errStr: `Lexical error on line 2: 
+            errStr: `Lexical error on line 13: 
+                                                
 Incorrectly terminated action code block. We're expecting the
 '%}' end marker to go with the given start marker.
 Regrettably, it does not exist in the remainder of the input.
 
-  Erroneous area:
-1: %%
-2: "["[^\\]]"]" %{
-^..............^^
-3: return true;
-4: %}}
+
+Erroneous area:
+                                                10: //
+11: 
+12: %%
+13: "["[^\\]]"]" %{
+^^..............^
+14: return true;
+15: %}}
 `,
             recoverable: false,
             text: '%{',
             token: null,
-            line: 1,
+            line: 12,
             loc: {
-              first_line: 2,
+              first_line: 13,
               first_column: 12,
-              last_line: 2,
-              last_column: 14,
+              last_line: 13,
+              last_column: 0,
               range: [
-                15,
-                17,
+                337,
+                339,
               ],
             },
             yy: {
@@ -159,46 +167,56 @@ Regrettably, it does not exist in the remainder of the input.
               include_command_allowed: false,
             },
             lexer: '[lexer]',
+            isLexerError: true,
             yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
           },
           {
-            errStr: `Lexical error on line 4: 
+            errStr: `Lexical error on line 15: 
 unsupported lexer input encountered while lexing
 rules (i.e. jison lex regexes) in "rules" state.
 
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
+NOTE: When you want this input to be interpreted as a LITERAL part
+      of a lex rule regex, you MUST enclose it in double or
+      single quotes.
 
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
+      If not, then know that this input is not accepted as a valid
+      regex expression here in jison-lex rules.
 
   Erroneous area:
-1: %%
-2: "["[^\\]]"]" %{
-3: return true;
-4: %}}
-^..^
-5: 
-6: 
+12: %%
+13: "["[^\\]]"]" %{
+14: return true;
+15: %}}
+^^..^
+16: 
+17: 
 `,
             recoverable: false,
             text: '%',
             token: null,
-            line: 3,
+            line: 14,
             loc: {
-              first_line: 4,
+              first_line: 15,
               first_column: 0,
-              last_line: 4,
+              last_line: 15,
               last_column: 1,
               range: [
-                31,
-                32,
+                353,
+                354,
               ],
             },
             yy: '[reference to sibling --> *.[6].yytext.lexer.__error_infos.[0].yy]',
             lexer: '[lexer]',
+            isLexerError: true,
             yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
           },
         ],
         __decompressed: true,
@@ -213,7 +231,18 @@ rules (i.e. jison lex regexes) in "rules" state.
           'code',
         ],
         match: '',
-        matched: `%%
+        matched: `//
+// title: test multiline action with end marker plus illegal tail 1
+//
+// ...
+//
+// this tests the case where the desired end marker \`%{\` is **made to look like** another end marker: \`%}}\`.
+// The tailing \`}\` is illegal in the grammar, hence would caught when occurring alone as well.
+// 
+// We check both in here.
+//
+
+%%
 "["[^\\]]"]" %{
 return true;
 %}}
@@ -221,18 +250,18 @@ return true;
 `,
         matches: false,
         yytext: '',
-        offset: 36,
+        offset: 358,
         base_position: 0,
         yyleng: 0,
-        yylineno: 5,
+        yylineno: 16,
         yylloc: {
-          first_line: 6,
+          first_line: 17,
           first_column: 0,
-          last_line: 6,
+          last_line: 17,
           last_column: 0,
           range: [
-            36,
-            36,
+            358,
+            358,
           ],
         },
         CRLF_Re: {
@@ -250,102 +279,103 @@ return true;
           depth: 0,
           include_command_allowed: false,
         },
+        __entire_action_block_matchers__: {},
       },
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
       errorDiag: {
         inputPos: 19,
-        yytext: '%{',
+        yytext: {
+          fault: `
+Incorrectly terminated action code block. We're expecting the
+'%}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+`,
+          srcCode: '',
+          shiftCount: 0,
+          action_start_marker: '%{',
+          action_end_marker: '%}',
+        },
         yyleng: 2,
         matches: [
           '%{',
         ],
-        activeCondition: 'action',
-        conditionStackDepth: 3,
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
       },
     },
     yylloc: {
-      first_line: 2,
+      first_line: 13,
       first_column: 12,
-      last_line: 2,
-      last_column: 14,
+      last_line: 13,
+      last_column: 0,
       range: [
-        15,
-        17,
+        337,
+        339,
       ],
     },
   },
   {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 2,
-      first_column: 14,
-      last_line: 2,
-      last_column: 14,
-      range: [
-        17,
-        17,
-      ],
-    },
-  },
-  {
-    id: 52,
+    id: 54,
     token: '"CHARACTER_LIT"',
     yytext: 'return',
     yylloc: {
-      first_line: 3,
+      first_line: 14,
       first_column: 0,
-      last_line: 3,
+      last_line: 14,
       last_column: 6,
       range: [
-        18,
-        24,
+        340,
+        346,
       ],
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
-      first_line: 3,
+      first_line: 14,
       first_column: 6,
-      last_line: 3,
+      last_line: 14,
       last_column: 7,
       range: [
-        24,
-        25,
+        346,
+        347,
       ],
     },
   },
   {
-    id: 36,
+    id: 38,
     token: '"ACTION_BODY"',
     yytext: 'true;',
     yylloc: {
-      first_line: 3,
+      first_line: 14,
       first_column: 7,
-      last_line: 3,
+      last_line: 14,
       last_column: 12,
       range: [
-        25,
-        30,
+        347,
+        352,
       ],
     },
   },
   {
-    id: 24,
+    id: 35,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
-      first_line: 3,
+      first_line: 14,
       first_column: 12,
-      last_line: 3,
+      last_line: 14,
       last_column: 12,
       range: [
-        30,
-        30,
+        352,
+        352,
       ],
     },
   },
@@ -353,38 +383,38 @@ return true;
     id: 2,
     token: '"error"',
     yytext: {
-      errStr: `Lexical error on line 4: 
+      errStr: `Lexical error on line 15: 
 unsupported lexer input encountered while lexing
 rules (i.e. jison lex regexes) in "rules" state.
 
-    NOTE: When you want this input to be interpreted as a LITERAL part
-          of a lex rule regex, you MUST enclose it in double or
-          single quotes.
+NOTE: When you want this input to be interpreted as a LITERAL part
+      of a lex rule regex, you MUST enclose it in double or
+      single quotes.
 
-          If not, then know that this input is not accepted as a valid
-          regex expression here in jison-lex rules.
+      If not, then know that this input is not accepted as a valid
+      regex expression here in jison-lex rules.
 
   Erroneous area:
-1: %%
-2: "["[^\\]]"]" %{
-3: return true;
-4: %}}
-^..^
-5: 
-6: 
+12: %%
+13: "["[^\\]]"]" %{
+14: return true;
+15: %}}
+^^..^
+16: 
+17: 
 `,
       recoverable: false,
       text: '%',
       token: null,
-      line: 3,
+      line: 14,
       loc: {
-        first_line: 4,
+        first_line: 15,
         first_column: 0,
-        last_line: 4,
+        last_line: 15,
         last_column: 1,
         range: [
-          31,
-          32,
+          353,
+          354,
         ],
       },
       yy: {
@@ -407,7 +437,18 @@ rules (i.e. jison lex regexes) in "rules" state.
           'code',
         ],
         match: '',
-        matched: `%%
+        matched: `//
+// title: test multiline action with end marker plus illegal tail 1
+//
+// ...
+//
+// this tests the case where the desired end marker \`%{\` is **made to look like** another end marker: \`%}}\`.
+// The tailing \`}\` is illegal in the grammar, hence would caught when occurring alone as well.
+// 
+// We check both in here.
+//
+
+%%
 "["[^\\]]"]" %{
 return true;
 %}}
@@ -415,18 +456,18 @@ return true;
 `,
         matches: false,
         yytext: '',
-        offset: 36,
+        offset: 358,
         base_position: 0,
         yyleng: 0,
-        yylineno: 5,
+        yylineno: 16,
         yylloc: {
-          first_line: 6,
+          first_line: 17,
           first_column: 0,
-          last_line: 6,
+          last_line: 17,
           last_column: 0,
           range: [
-            36,
-            36,
+            358,
+            358,
           ],
         },
         CRLF_Re: {
@@ -444,8 +485,14 @@ return true;
           depth: 0,
           include_command_allowed: false,
         },
+        __entire_action_block_matchers__: {},
       },
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
       errorDiag: {
         inputPos: 4,
         yytext: '%',
@@ -458,13 +505,13 @@ return true;
       },
     },
     yylloc: {
-      first_line: 4,
+      first_line: 15,
       first_column: 0,
-      last_line: 4,
+      last_line: 15,
       last_column: 1,
       range: [
-        31,
-        32,
+        353,
+        354,
       ],
     },
   },
@@ -473,13 +520,13 @@ return true;
     token: '"}"',
     yytext: '}',
     yylloc: {
-      first_line: 4,
+      first_line: 15,
       first_column: 1,
-      last_line: 4,
+      last_line: 15,
       last_column: 2,
       range: [
-        32,
-        33,
+        354,
+        355,
       ],
     },
   },
@@ -488,28 +535,28 @@ return true;
     token: '"}"',
     yytext: '}',
     yylloc: {
-      first_line: 4,
+      first_line: 15,
       first_column: 2,
-      last_line: 4,
+      last_line: 15,
       last_column: 3,
       range: [
-        33,
-        34,
+        355,
+        356,
       ],
     },
   },
   {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 17,
       first_column: 0,
-      last_line: 6,
+      last_line: 17,
       last_column: 0,
       range: [
-        36,
-        36,
+        358,
+        358,
       ],
     },
   },
@@ -518,13 +565,13 @@ return true;
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 17,
       first_column: 0,
-      last_line: 6,
+      last_line: 17,
       last_column: 0,
       range: [
-        36,
-        36,
+        358,
+        358,
       ],
     },
   },
@@ -533,13 +580,13 @@ return true;
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 17,
       first_column: 0,
-      last_line: 6,
+      last_line: 17,
       last_column: 0,
       range: [
-        36,
-        36,
+        358,
+        358,
       ],
     },
   },
@@ -548,13 +595,13 @@ return true;
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 17,
       first_column: 0,
-      last_line: 6,
+      last_line: 17,
       last_column: 0,
       range: [
-        36,
-        36,
+        358,
+        358,
       ],
     },
   },
@@ -563,13 +610,13 @@ return true;
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 17,
       first_column: 0,
-      last_line: 6,
+      last_line: 17,
       last_column: 0,
       range: [
-        36,
-        36,
+        358,
+        358,
       ],
     },
   },
@@ -577,7 +624,7 @@ return true;
     id: -2,
     token: null,
     summary: {
-      totalTokenCount: 20,
+      totalTokenCount: 19,
       EOFTokenCount: 4,
       ERRORTokenCount: 1,
       ParseErrorCallCount: 2,

@@ -1,31 +1,31 @@
 [
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 0,
-      last_line: 2,
+      last_line: 8,
       last_column: 7,
       range: [
-        1,
-        8,
+        127,
+        134,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: '8bit',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 8,
-      last_line: 2,
+      last_line: 8,
       last_column: 12,
       range: [
-        9,
-        13,
+        135,
+        139,
       ],
     },
   },
@@ -34,43 +34,43 @@
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 12,
-      last_line: 2,
+      last_line: 8,
       last_column: 12,
       range: [
-        13,
-        13,
+        139,
+        139,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 3,
+      first_line: 9,
       first_column: 0,
-      last_line: 3,
+      last_line: 9,
       last_column: 7,
       range: [
-        14,
-        21,
+        140,
+        147,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'case-insensitive',
     yylloc: {
-      first_line: 3,
+      first_line: 9,
       first_column: 8,
-      last_line: 3,
+      last_line: 9,
       last_column: 24,
       range: [
-        22,
-        38,
+        148,
+        164,
       ],
     },
   },
@@ -79,43 +79,43 @@
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 3,
+      first_line: 9,
       first_column: 24,
-      last_line: 3,
+      last_line: 9,
       last_column: 24,
       range: [
-        38,
-        38,
+        164,
+        164,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 4,
+      first_line: 10,
       first_column: 0,
-      last_line: 4,
+      last_line: 10,
       last_column: 7,
       range: [
-        39,
-        46,
+        165,
+        172,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'never-interactive',
     yylloc: {
-      first_line: 4,
+      first_line: 10,
       first_column: 8,
-      last_line: 4,
+      last_line: 10,
       last_column: 25,
       range: [
-        47,
-        64,
+        173,
+        190,
       ],
     },
   },
@@ -124,43 +124,43 @@
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 4,
+      first_line: 10,
       first_column: 25,
-      last_line: 4,
+      last_line: 10,
       last_column: 25,
       range: [
-        64,
-        64,
+        190,
+        190,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 5,
+      first_line: 11,
       first_column: 0,
-      last_line: 5,
+      last_line: 11,
       last_column: 7,
       range: [
-        65,
-        72,
+        191,
+        198,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'prefix',
     yylloc: {
-      first_line: 5,
+      first_line: 11,
       first_column: 8,
-      last_line: 5,
+      last_line: 11,
       last_column: 14,
       range: [
-        73,
-        79,
+        199,
+        205,
       ],
     },
   },
@@ -169,28 +169,28 @@
     token: '"="',
     yytext: '=',
     yylloc: {
-      first_line: 5,
+      first_line: 11,
       first_column: 14,
-      last_line: 5,
+      last_line: 11,
       last_column: 15,
       range: [
-        79,
-        80,
+        205,
+        206,
       ],
     },
   },
   {
-    id: 53,
+    id: 55,
     token: '"OPTION_STRING"',
     yytext: '"pp"',
     yylloc: {
-      first_line: 5,
+      first_line: 11,
       first_column: 15,
-      last_line: 5,
+      last_line: 11,
       last_column: 19,
       range: [
-        80,
-        84,
+        206,
+        210,
       ],
     },
   },
@@ -199,43 +199,43 @@
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 5,
+      first_line: 11,
       first_column: 19,
-      last_line: 5,
+      last_line: 11,
       last_column: 19,
       range: [
-        84,
-        84,
+        210,
+        210,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 0,
-      last_line: 6,
+      last_line: 12,
       last_column: 7,
       range: [
-        85,
-        92,
+        211,
+        218,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'buzz',
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 8,
-      last_line: 6,
+      last_line: 12,
       last_column: 12,
       range: [
-        93,
-        97,
+        219,
+        223,
       ],
     },
   },
@@ -244,298 +244,298 @@
     token: '"="',
     yytext: '=',
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 13,
-      last_line: 6,
+      last_line: 12,
       last_column: 14,
       range: [
-        98,
-        99,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'qqq',
-    yylloc: {
-      first_line: 6,
-      first_column: 15,
-      last_line: 6,
-      last_column: 18,
-      range: [
-        100,
-        103,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 6,
-      first_column: 18,
-      last_line: 6,
-      last_column: 18,
-      range: [
-        103,
-        103,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 8,
-      first_column: 0,
-      last_line: 8,
-      last_column: 7,
-      range: [
-        105,
-        112,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'stack',
-    yylloc: {
-      first_line: 8,
-      first_column: 8,
-      last_line: 8,
-      last_column: 13,
-      range: [
-        113,
-        118,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 8,
-      first_column: 13,
-      last_line: 8,
-      last_column: 13,
-      range: [
-        118,
-        118,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 10,
-      first_column: 0,
-      last_line: 10,
-      last_column: 7,
-      range: [
-        120,
-        127,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyy_top_state',
-    yylloc: {
-      first_line: 10,
-      first_column: 8,
-      last_line: 10,
-      last_column: 22,
-      range: [
-        128,
-        142,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 10,
-      first_column: 22,
-      last_line: 10,
-      last_column: 22,
-      range: [
-        142,
-        142,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 11,
-      first_column: 0,
-      last_line: 11,
-      last_column: 7,
-      range: [
-        143,
-        150,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyy_scan_buffer',
-    yylloc: {
-      first_line: 11,
-      first_column: 8,
-      last_line: 11,
-      last_column: 24,
-      range: [
-        151,
-        167,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 11,
-      first_column: 24,
-      last_line: 11,
-      last_column: 24,
-      range: [
-        167,
-        167,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 12,
-      first_column: 0,
-      last_line: 12,
-      last_column: 7,
-      range: [
-        168,
-        175,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyy_scan_bytes',
-    yylloc: {
-      first_line: 12,
-      first_column: 8,
-      last_line: 12,
-      last_column: 23,
-      range: [
-        176,
-        191,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 12,
-      first_column: 23,
-      last_line: 12,
-      last_column: 23,
-      range: [
-        191,
-        191,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 13,
-      first_column: 0,
-      last_line: 13,
-      last_column: 7,
-      range: [
-        192,
-        199,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyy_scan_string',
-    yylloc: {
-      first_line: 13,
-      first_column: 8,
-      last_line: 13,
-      last_column: 24,
-      range: [
-        200,
-        216,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 13,
-      first_column: 24,
-      last_line: 13,
-      last_column: 24,
-      range: [
-        216,
-        216,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 15,
-      first_column: 0,
-      last_line: 15,
-      last_column: 7,
-      range: [
-        218,
+        224,
         225,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'qqq',
+    yylloc: {
+      first_line: 12,
+      first_column: 15,
+      last_line: 12,
+      last_column: 18,
+      range: [
+        226,
+        229,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 12,
+      first_column: 18,
+      last_line: 12,
+      last_column: 18,
+      range: [
+        229,
+        229,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 14,
+      first_column: 0,
+      last_line: 14,
+      last_column: 7,
+      range: [
+        231,
+        238,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'stack',
+    yylloc: {
+      first_line: 14,
+      first_column: 8,
+      last_line: 14,
+      last_column: 13,
+      range: [
+        239,
+        244,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 14,
+      first_column: 13,
+      last_line: 14,
+      last_column: 13,
+      range: [
+        244,
+        244,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 16,
+      first_column: 0,
+      last_line: 16,
+      last_column: 7,
+      range: [
+        246,
+        253,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyy_top_state',
+    yylloc: {
+      first_line: 16,
+      first_column: 8,
+      last_line: 16,
+      last_column: 22,
+      range: [
+        254,
+        268,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 16,
+      first_column: 22,
+      last_line: 16,
+      last_column: 22,
+      range: [
+        268,
+        268,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 17,
+      first_column: 0,
+      last_line: 17,
+      last_column: 7,
+      range: [
+        269,
+        276,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyy_scan_buffer',
+    yylloc: {
+      first_line: 17,
+      first_column: 8,
+      last_line: 17,
+      last_column: 24,
+      range: [
+        277,
+        293,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 17,
+      first_column: 24,
+      last_line: 17,
+      last_column: 24,
+      range: [
+        293,
+        293,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 18,
+      first_column: 0,
+      last_line: 18,
+      last_column: 7,
+      range: [
+        294,
+        301,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyy_scan_bytes',
+    yylloc: {
+      first_line: 18,
+      first_column: 8,
+      last_line: 18,
+      last_column: 23,
+      range: [
+        302,
+        317,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 18,
+      first_column: 23,
+      last_line: 18,
+      last_column: 23,
+      range: [
+        317,
+        317,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 19,
+      first_column: 0,
+      last_line: 19,
+      last_column: 7,
+      range: [
+        318,
+        325,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyy_scan_string',
+    yylloc: {
+      first_line: 19,
+      first_column: 8,
+      last_line: 19,
+      last_column: 24,
+      range: [
+        326,
+        342,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 19,
+      first_column: 24,
+      last_line: 19,
+      last_column: 24,
+      range: [
+        342,
+        342,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 21,
+      first_column: 0,
+      last_line: 21,
+      last_column: 7,
+      range: [
+        344,
+        351,
+      ],
+    },
+  },
+  {
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'noyyget_extra',
     yylloc: {
-      first_line: 15,
+      first_line: 21,
       first_column: 8,
-      last_line: 15,
+      last_line: 21,
       last_column: 21,
       range: [
-        226,
-        239,
+        352,
+        365,
       ],
     },
   },
@@ -544,43 +544,43 @@
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 15,
+      first_line: 21,
       first_column: 21,
-      last_line: 15,
+      last_line: 21,
       last_column: 21,
       range: [
-        239,
-        239,
+        365,
+        365,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 16,
+      first_line: 22,
       first_column: 0,
-      last_line: 16,
+      last_line: 22,
       last_column: 7,
       range: [
-        240,
-        247,
+        366,
+        373,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'noyyset_extra',
     yylloc: {
-      first_line: 16,
+      first_line: 22,
       first_column: 8,
-      last_line: 16,
+      last_line: 22,
       last_column: 21,
       range: [
-        248,
-        261,
+        374,
+        387,
       ],
     },
   },
@@ -589,288 +589,18 @@
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 16,
+      first_line: 22,
       first_column: 21,
-      last_line: 16,
+      last_line: 22,
       last_column: 21,
       range: [
-        261,
-        261,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 17,
-      first_column: 0,
-      last_line: 17,
-      last_column: 7,
-      range: [
-        262,
-        269,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyyget_leng',
-    yylloc: {
-      first_line: 17,
-      first_column: 8,
-      last_line: 17,
-      last_column: 20,
-      range: [
-        270,
-        282,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 17,
-      first_column: 20,
-      last_line: 17,
-      last_column: 20,
-      range: [
-        282,
-        282,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 18,
-      first_column: 0,
-      last_line: 18,
-      last_column: 7,
-      range: [
-        283,
-        290,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyyget_text',
-    yylloc: {
-      first_line: 18,
-      first_column: 8,
-      last_line: 18,
-      last_column: 20,
-      range: [
-        291,
-        303,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 18,
-      first_column: 20,
-      last_line: 18,
-      last_column: 20,
-      range: [
-        303,
-        303,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 19,
-      first_column: 0,
-      last_line: 19,
-      last_column: 7,
-      range: [
-        304,
-        311,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyyget_lineno',
-    yylloc: {
-      first_line: 19,
-      first_column: 8,
-      last_line: 19,
-      last_column: 22,
-      range: [
-        312,
-        326,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 19,
-      first_column: 22,
-      last_line: 19,
-      last_column: 22,
-      range: [
-        326,
-        326,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 20,
-      first_column: 0,
-      last_line: 20,
-      last_column: 7,
-      range: [
-        327,
-        334,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyyset_lineno',
-    yylloc: {
-      first_line: 20,
-      first_column: 8,
-      last_line: 20,
-      last_column: 22,
-      range: [
-        335,
-        349,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 20,
-      first_column: 22,
-      last_line: 20,
-      last_column: 22,
-      range: [
-        349,
-        349,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 21,
-      first_column: 0,
-      last_line: 21,
-      last_column: 7,
-      range: [
-        350,
-        357,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyyget_in',
-    yylloc: {
-      first_line: 21,
-      first_column: 8,
-      last_line: 21,
-      last_column: 18,
-      range: [
-        358,
-        368,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 21,
-      first_column: 18,
-      last_line: 21,
-      last_column: 18,
-      range: [
-        368,
-        368,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 22,
-      first_column: 0,
-      last_line: 22,
-      last_column: 7,
-      range: [
-        369,
-        376,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyyset_in',
-    yylloc: {
-      first_line: 22,
-      first_column: 8,
-      last_line: 22,
-      last_column: 18,
-      range: [
-        377,
-        387,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 22,
-      first_column: 18,
-      last_line: 22,
-      last_column: 18,
-      range: [
         387,
         387,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
@@ -885,17 +615,287 @@
     },
   },
   {
-    id: 54,
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyyget_leng',
+    yylloc: {
+      first_line: 23,
+      first_column: 8,
+      last_line: 23,
+      last_column: 20,
+      range: [
+        396,
+        408,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 23,
+      first_column: 20,
+      last_line: 23,
+      last_column: 20,
+      range: [
+        408,
+        408,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 24,
+      first_column: 0,
+      last_line: 24,
+      last_column: 7,
+      range: [
+        409,
+        416,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyyget_text',
+    yylloc: {
+      first_line: 24,
+      first_column: 8,
+      last_line: 24,
+      last_column: 20,
+      range: [
+        417,
+        429,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 24,
+      first_column: 20,
+      last_line: 24,
+      last_column: 20,
+      range: [
+        429,
+        429,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 25,
+      first_column: 0,
+      last_line: 25,
+      last_column: 7,
+      range: [
+        430,
+        437,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyyget_lineno',
+    yylloc: {
+      first_line: 25,
+      first_column: 8,
+      last_line: 25,
+      last_column: 22,
+      range: [
+        438,
+        452,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 25,
+      first_column: 22,
+      last_line: 25,
+      last_column: 22,
+      range: [
+        452,
+        452,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 26,
+      first_column: 0,
+      last_line: 26,
+      last_column: 7,
+      range: [
+        453,
+        460,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyyset_lineno',
+    yylloc: {
+      first_line: 26,
+      first_column: 8,
+      last_line: 26,
+      last_column: 22,
+      range: [
+        461,
+        475,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 26,
+      first_column: 22,
+      last_line: 26,
+      last_column: 22,
+      range: [
+        475,
+        475,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 27,
+      first_column: 0,
+      last_line: 27,
+      last_column: 7,
+      range: [
+        476,
+        483,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyyget_in',
+    yylloc: {
+      first_line: 27,
+      first_column: 8,
+      last_line: 27,
+      last_column: 18,
+      range: [
+        484,
+        494,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 27,
+      first_column: 18,
+      last_line: 27,
+      last_column: 18,
+      range: [
+        494,
+        494,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 28,
+      first_column: 0,
+      last_line: 28,
+      last_column: 7,
+      range: [
+        495,
+        502,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyyset_in',
+    yylloc: {
+      first_line: 28,
+      first_column: 8,
+      last_line: 28,
+      last_column: 18,
+      range: [
+        503,
+        513,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 28,
+      first_column: 18,
+      last_line: 28,
+      last_column: 18,
+      range: [
+        513,
+        513,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 29,
+      first_column: 0,
+      last_line: 29,
+      last_column: 7,
+      range: [
+        514,
+        521,
+      ],
+    },
+  },
+  {
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'noyyget_out',
     yylloc: {
-      first_line: 23,
+      first_line: 29,
       first_column: 8,
-      last_line: 23,
+      last_line: 29,
       last_column: 19,
       range: [
-        396,
-        407,
+        522,
+        533,
       ],
     },
   },
@@ -904,280 +904,10 @@
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 23,
+      first_line: 29,
       first_column: 19,
-      last_line: 23,
-      last_column: 19,
-      range: [
-        407,
-        407,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 24,
-      first_column: 0,
-      last_line: 24,
-      last_column: 7,
-      range: [
-        408,
-        415,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyyset_out',
-    yylloc: {
-      first_line: 24,
-      first_column: 8,
-      last_line: 24,
-      last_column: 19,
-      range: [
-        416,
-        427,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 24,
-      first_column: 19,
-      last_line: 24,
-      last_column: 19,
-      range: [
-        427,
-        427,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 25,
-      first_column: 0,
-      last_line: 25,
-      last_column: 7,
-      range: [
-        428,
-        435,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyyget_lval',
-    yylloc: {
-      first_line: 25,
-      first_column: 8,
-      last_line: 25,
-      last_column: 20,
-      range: [
-        436,
-        448,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 25,
-      first_column: 20,
-      last_line: 25,
-      last_column: 20,
-      range: [
-        448,
-        448,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 26,
-      first_column: 0,
-      last_line: 26,
-      last_column: 7,
-      range: [
-        449,
-        456,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyyset_lval',
-    yylloc: {
-      first_line: 26,
-      first_column: 8,
-      last_line: 26,
-      last_column: 20,
-      range: [
-        457,
-        469,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 26,
-      first_column: 20,
-      last_line: 26,
-      last_column: 20,
-      range: [
-        469,
-        469,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 27,
-      first_column: 0,
-      last_line: 27,
-      last_column: 7,
-      range: [
-        470,
-        477,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyyget_lloc',
-    yylloc: {
-      first_line: 27,
-      first_column: 8,
-      last_line: 27,
-      last_column: 20,
-      range: [
-        478,
-        490,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 27,
-      first_column: 20,
-      last_line: 27,
-      last_column: 20,
-      range: [
-        490,
-        490,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 28,
-      first_column: 0,
-      last_line: 28,
-      last_column: 7,
-      range: [
-        491,
-        498,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyyset_lloc',
-    yylloc: {
-      first_line: 28,
-      first_column: 8,
-      last_line: 28,
-      last_column: 20,
-      range: [
-        499,
-        511,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 28,
-      first_column: 20,
-      last_line: 28,
-      last_column: 20,
-      range: [
-        511,
-        511,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 29,
-      first_column: 0,
       last_line: 29,
-      last_column: 7,
-      range: [
-        512,
-        519,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'noyyget_debug',
-    yylloc: {
-      first_line: 29,
-      first_column: 8,
-      last_line: 29,
-      last_column: 21,
-      range: [
-        520,
-        533,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 29,
-      first_column: 21,
-      last_line: 29,
-      last_column: 21,
+      last_column: 19,
       range: [
         533,
         533,
@@ -1185,7 +915,7 @@
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
@@ -1200,17 +930,17 @@
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
-    yytext: 'noyyset_debug',
+    yytext: 'noyyset_out',
     yylloc: {
       first_line: 30,
       first_column: 8,
       last_line: 30,
-      last_column: 21,
+      last_column: 19,
       range: [
         542,
-        555,
+        553,
       ],
     },
   },
@@ -1220,41 +950,86 @@
     yytext: '',
     yylloc: {
       first_line: 30,
-      first_column: 21,
+      first_column: 19,
       last_line: 30,
-      last_column: 21,
+      last_column: 19,
       range: [
-        555,
-        555,
+        553,
+        553,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 33,
+      first_line: 31,
       first_column: 0,
-      last_line: 33,
+      last_line: 31,
       last_column: 7,
       range: [
-        583,
-        590,
+        554,
+        561,
       ],
     },
   },
   {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: 6445,
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyyget_lval',
     yylloc: {
-      first_line: 33,
+      first_line: 31,
       first_column: 8,
-      last_line: 33,
-      last_column: 12,
+      last_line: 31,
+      last_column: 20,
       range: [
-        591,
+        562,
+        574,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 31,
+      first_column: 20,
+      last_line: 31,
+      last_column: 20,
+      range: [
+        574,
+        574,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 32,
+      first_column: 0,
+      last_line: 32,
+      last_column: 7,
+      range: [
+        575,
+        582,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyyset_lval',
+    yylloc: {
+      first_line: 32,
+      first_column: 8,
+      last_line: 32,
+      last_column: 20,
+      range: [
+        583,
         595,
       ],
     },
@@ -1264,10 +1039,10 @@
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 33,
-      first_column: 12,
-      last_line: 33,
-      last_column: 12,
+      first_line: 32,
+      first_column: 20,
+      last_line: 32,
+      last_column: 20,
       range: [
         595,
         595,
@@ -1275,13 +1050,13 @@
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 34,
+      first_line: 33,
       first_column: 0,
-      last_line: 34,
+      last_line: 33,
       last_column: 7,
       range: [
         596,
@@ -1290,17 +1065,62 @@
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
-    yytext: '42-42',
+    yytext: 'noyyget_lloc',
     yylloc: {
-      first_line: 34,
+      first_line: 33,
       first_column: 8,
-      last_line: 34,
-      last_column: 13,
+      last_line: 33,
+      last_column: 20,
       range: [
         604,
-        609,
+        616,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 33,
+      first_column: 20,
+      last_line: 33,
+      last_column: 20,
+      range: [
+        616,
+        616,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 34,
+      first_column: 0,
+      last_line: 34,
+      last_column: 7,
+      range: [
+        617,
+        624,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyyset_lloc',
+    yylloc: {
+      first_line: 34,
+      first_column: 8,
+      last_line: 34,
+      last_column: 20,
+      range: [
+        625,
+        637,
       ],
     },
   },
@@ -1310,784 +1130,113 @@
     yytext: '',
     yylloc: {
       first_line: 34,
-      first_column: 13,
-      last_line: 34,
-      last_column: 13,
-      range: [
-        609,
-        609,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 35,
-      first_column: 0,
-      last_line: 35,
-      last_column: 7,
-      range: [
-        610,
-        617,
-      ],
-    },
-  },
-  {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: 8,
-    yylloc: {
-      first_line: 35,
-      first_column: 8,
-      last_line: 35,
-      last_column: 9,
-      range: [
-        618,
-        619,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 35,
-      first_column: 9,
-      last_line: 35,
-      last_column: 9,
-      range: [
-        619,
-        619,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 36,
-      first_column: 0,
-      last_line: 36,
-      last_column: 7,
-      range: [
-        620,
-        627,
-      ],
-    },
-  },
-  {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: -5,
-    yylloc: {
-      first_line: 36,
-      first_column: 8,
-      last_line: 36,
-      last_column: 10,
-      range: [
-        628,
-        630,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 36,
-      first_column: 10,
-      last_line: 36,
-      last_column: 10,
-      range: [
-        630,
-        630,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 37,
-      first_column: 0,
-      last_line: 37,
-      last_column: 7,
-      range: [
-        631,
-        638,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"OPTION_STRING"',
-    yytext: "''",
-    yylloc: {
-      first_line: 37,
-      first_column: 8,
-      last_line: 37,
-      last_column: 10,
-      range: [
-        639,
-        641,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 37,
-      first_column: 10,
-      last_line: 37,
-      last_column: 10,
-      range: [
-        641,
-        641,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 38,
-      first_column: 0,
-      last_line: 38,
-      last_column: 7,
-      range: [
-        642,
-        649,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"OPTION_STRING"',
-    yytext: '" "',
-    yylloc: {
-      first_line: 38,
-      first_column: 8,
-      last_line: 38,
-      last_column: 11,
-      range: [
-        650,
-        653,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 38,
-      first_column: 11,
-      last_line: 38,
-      last_column: 11,
-      range: [
-        653,
-        653,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 39,
-      first_column: 0,
-      last_line: 39,
-      last_column: 7,
-      range: [
-        654,
-        661,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: '-',
-    yylloc: {
-      first_line: 39,
-      first_column: 8,
-      last_line: 39,
-      last_column: 9,
-      range: [
-        662,
-        663,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 39,
-      first_column: 9,
-      last_line: 39,
-      last_column: 9,
-      range: [
-        663,
-        663,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 40,
-      first_column: 0,
-      last_line: 40,
-      last_column: 7,
-      range: [
-        664,
-        671,
-      ],
-    },
-  },
-  {
-    id: 53,
-    token: '"OPTION_STRING"',
-    yytext: "'-'",
-    yylloc: {
-      first_line: 40,
-      first_column: 8,
-      last_line: 40,
-      last_column: 11,
-      range: [
-        672,
-        675,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 40,
-      first_column: 11,
-      last_line: 40,
-      last_column: 11,
-      range: [
-        675,
-        675,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 41,
-      first_column: 0,
-      last_line: 41,
-      last_column: 7,
-      range: [
-        676,
-        683,
-      ],
-    },
-  },
-  {
-    id: 45,
-    token: "macro name in '{...}' curly braces",
-    yytext: '{x}',
-    yylloc: {
-      first_line: 41,
-      first_column: 8,
-      last_line: 41,
-      last_column: 11,
-      range: [
-        684,
-        687,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 41,
-      first_column: 11,
-      last_line: 41,
-      last_column: 11,
-      range: [
-        687,
-        687,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 42,
-      first_column: 0,
-      last_line: 42,
-      last_column: 7,
-      range: [
-        688,
-        695,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: '__beelzebub',
-    yylloc: {
-      first_line: 42,
-      first_column: 8,
-      last_line: 42,
-      last_column: 19,
-      range: [
-        696,
-        707,
-      ],
-    },
-  },
-  {
-    id: 2,
-    token: '"error"',
-    yytext: {
-      errStr: `Lexical error on line 42: 
-unsupported lexer input: "!"
-while lexing in "options" state.
-
-If this input was intentional, you might want to put quotes around
-it; any JavaScript string quoting style is accepted (single quotes,
-double quotes *or* backtick quotes a la ES6 string templates).
-
-  Erroneous area:
-39: %option -
-40: %option '-'
-41: %option {x}
-42: %option __beelzebub!
-^^.....................^
-43: %option @you
-44: %option me@home
-`,
-      recoverable: false,
-      text: '!',
-      token: null,
-      line: 41,
-      loc: {
-        first_line: 42,
-        first_column: 19,
-        last_line: 42,
-        last_column: 20,
-        range: [
-          707,
-          708,
-        ],
-      },
-      yy: {},
-      lexer: {
-        EOF: 1,
-        ERROR: 2,
-        __error_infos: [
-          {
-            errStr: `Lexical error on line 42: 
-unsupported lexer input: "!"
-while lexing in "options" state.
-
-If this input was intentional, you might want to put quotes around
-it; any JavaScript string quoting style is accepted (single quotes,
-double quotes *or* backtick quotes a la ES6 string templates).
-
-  Erroneous area:
-39: %option -
-40: %option '-'
-41: %option {x}
-42: %option __beelzebub!
-^^.....................^
-43: %option @you
-44: %option me@home
-`,
-            recoverable: false,
-            text: '!',
-            token: null,
-            line: 41,
-            loc: {
-              first_line: 42,
-              first_column: 19,
-              last_line: 42,
-              last_column: 20,
-              range: [
-                707,
-                708,
-              ],
-            },
-            yy: {
-              depth: 0,
-              include_command_allowed: false,
-            },
-            lexer: '[lexer]',
-            yyErrorInvoked: true,
-          },
-          {
-            errStr: `Lexical error on line 46: 
-unsupported lexer input: ":"
-while lexing in "options" state.
-
-If this input was intentional, you might want to put quotes around
-it; any JavaScript string quoting style is accepted (single quotes,
-double quotes *or* backtick quotes a la ES6 string templates).
-
-  Erroneous area:
-43: %option @you
-44: %option me@home
-45: %option #no-more-bad-S
-46: %option foo:bar
-^^.............^
-47: %option "a=b"
-48: %option ~a
-`,
-            recoverable: false,
-            text: ':',
-            token: null,
-            line: 45,
-            loc: {
-              first_line: 46,
-              first_column: 11,
-              last_line: 46,
-              last_column: 12,
-              range: [
-                772,
-                773,
-              ],
-            },
-            yy: '[reference to sibling --> *.[111].yytext.lexer.__error_infos.[0].yy]',
-            lexer: '[lexer]',
-            yyErrorInvoked: true,
-          },
-          {
-            errStr: `Lexical error on line 49: 
-unsupported lexer input: "$"
-while lexing in "options" state.
-
-If this input was intentional, you might want to put quotes around
-it; any JavaScript string quoting style is accepted (single quotes,
-double quotes *or* backtick quotes a la ES6 string templates).
-
-  Erroneous area:
-46: %option foo:bar
-47: %option "a=b"
-48: %option ~a
-49: %option $a$
-^^..........^
-50: %option a#b
-51: %option al.ka.selzer
-`,
-            recoverable: false,
-            text: '$',
-            token: null,
-            line: 48,
-            loc: {
-              first_line: 49,
-              first_column: 8,
-              last_line: 49,
-              last_column: 9,
-              range: [
-                810,
-                811,
-              ],
-            },
-            yy: '[reference to sibling --> *.[111].yytext.lexer.__error_infos.[0].yy]',
-            lexer: '[lexer]',
-            yyErrorInvoked: true,
-          },
-          {
-            errStr: `Lexical error on line 49: 
-unsupported lexer input: "$"
-while lexing in "options" state.
-
-If this input was intentional, you might want to put quotes around
-it; any JavaScript string quoting style is accepted (single quotes,
-double quotes *or* backtick quotes a la ES6 string templates).
-
-  Erroneous area:
-46: %option foo:bar
-47: %option "a=b"
-48: %option ~a
-49: %option $a$
-^^............^
-50: %option a#b
-51: %option al.ka.selzer
-`,
-            recoverable: false,
-            text: '$',
-            token: null,
-            line: 48,
-            loc: {
-              first_line: 49,
-              first_column: 10,
-              last_line: 49,
-              last_column: 11,
-              range: [
-                812,
-                813,
-              ],
-            },
-            yy: '[reference to sibling --> *.[111].yytext.lexer.__error_infos.[0].yy]',
-            lexer: '[lexer]',
-            yyErrorInvoked: true,
-          },
-          {
-            errStr: `Lexical error on line 51: 
-unsupported lexer input: "."
-while lexing in "options" state.
-
-If this input was intentional, you might want to put quotes around
-it; any JavaScript string quoting style is accepted (single quotes,
-double quotes *or* backtick quotes a la ES6 string templates).
-
-  Erroneous area:
-48: %option ~a
-49: %option $a$
-50: %option a#b
-51: %option al.ka.selzer
-^^............^
-52: 
-53: // We also recognize the alias %options (plural):
-`,
-            recoverable: false,
-            text: '.',
-            token: null,
-            line: 50,
-            loc: {
-              first_line: 51,
-              first_column: 10,
-              last_line: 51,
-              last_column: 11,
-              range: [
-                836,
-                837,
-              ],
-            },
-            yy: '[reference to sibling --> *.[111].yytext.lexer.__error_infos.[0].yy]',
-            lexer: '[lexer]',
-            yyErrorInvoked: true,
-          },
-          {
-            errStr: `Lexical error on line 51: 
-unsupported lexer input: "."
-while lexing in "options" state.
-
-If this input was intentional, you might want to put quotes around
-it; any JavaScript string quoting style is accepted (single quotes,
-double quotes *or* backtick quotes a la ES6 string templates).
-
-  Erroneous area:
-48: %option ~a
-49: %option $a$
-50: %option a#b
-51: %option al.ka.selzer
-^^...............^
-52: 
-53: // We also recognize the alias %options (plural):
-`,
-            recoverable: false,
-            text: '.',
-            token: null,
-            line: 50,
-            loc: {
-              first_line: 51,
-              first_column: 13,
-              last_line: 51,
-              last_column: 14,
-              range: [
-                839,
-                840,
-              ],
-            },
-            yy: '[reference to sibling --> *.[111].yytext.lexer.__error_infos.[0].yy]',
-            lexer: '[lexer]',
-            yyErrorInvoked: true,
-          },
-        ],
-        __decompressed: true,
-        done: true,
-        _backtrack: false,
-        _input: '',
-        _more: false,
-        _signaled_error_token: false,
-        _clear_state: 0,
-        conditionStack: [
-          'INITIAL',
-          'code',
-        ],
-        match: '',
-        matched: `
-%option 8bit
-%option case-insensitive
-%option never-interactive
-%option prefix="pp"
-%option buzz = qqq
-
-%option stack
-
-%option noyy_top_state
-%option noyy_scan_buffer
-%option noyy_scan_bytes
-%option noyy_scan_string
-
-%option noyyget_extra
-%option noyyset_extra
-%option noyyget_leng
-%option noyyget_text
-%option noyyget_lineno
-%option noyyset_lineno
-%option noyyget_in
-%option noyyset_in
-%option noyyget_out
-%option noyyset_out
-%option noyyget_lval
-%option noyyset_lval
-%option noyyget_lloc
-%option noyyset_lloc
-%option noyyget_debug
-%option noyyset_debug
-
-// bad option identifers:
-%option 6445
-%option 42-42
-%option 8
-%option -5
-%option ''
-%option " "
-%option -
-%option '-'
-%option {x}
-%option __beelzebub!
-%option @you
-%option me@home
-%option #no-more-bad-S
-%option foo:bar
-%option "a=b"
-%option ~a
-%option $a$
-%option a#b
-%option al.ka.selzer
-
-// We also recognize the alias %options (plural):
-%options foo
-%options bar, but, top 						// 3 options
-%options bar bi tu ra te 					// that would be 5 options
-%options fu=bar, neg=-45, pos=71, hex=0x1A6F, max=666
-%options Fu=bar Neg=-45 Pos=71 Hex=0x1A6F Max=666
-%options NotANum=42A, neither-a-number=0x1AF_Z
-
-%option xbar, xbut, xtop 						// 3 options
-%option xbar xbi xtu xra xte 					// that would be 5 options
-%option xfu=bar, xneg=-45, xpos=71, xhex=0x1A6F, xmax=666
-%option xFu=bar xNeg=-45 xPos=71 xHex=0x1A6F xMax=666
-
-%%
-
-\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  	return 'date';
-":"                         return ':';
-[\\s\\r\\n]					return 'WS';
-<<EOF>>                     return 'EOF';
-.                           return 'INVALID';
-
-`,
-        matches: false,
-        yytext: '',
-        offset: 1579,
-        base_position: 0,
-        yyleng: 0,
-        yylineno: 73,
-        yylloc: {
-          first_line: 74,
-          first_column: 0,
-          last_line: 74,
-          last_column: 0,
-          range: [
-            1579,
-            1579,
-          ],
-        },
-        CRLF_Re: {
-          re: '/\\r\\n?|\\n/',
-          source: '\\r\\n?|\\n',
-          flags: '',
-        },
-        options: {
-          xregexp: true,
-          ranges: true,
-          trackPosition: true,
-          easy_keyword_rules: true,
-        },
-        yy: {
-          depth: 0,
-          include_command_allowed: false,
-        },
-      },
-      yyErrorInvoked: true,
-      errorDiag: {
-        inputPos: 871,
-        yytext: '!',
-        yyleng: 1,
-        matches: [
-          '!',
-        ],
-        activeCondition: 'options',
-        conditionStackDepth: 2,
-      },
-    },
-    yylloc: {
-      first_line: 42,
-      first_column: 19,
-      last_line: 42,
-      last_column: 20,
-      range: [
-        707,
-        708,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 42,
       first_column: 20,
-      last_line: 42,
+      last_line: 34,
       last_column: 20,
       range: [
-        708,
-        708,
+        637,
+        637,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 43,
+      first_line: 35,
       first_column: 0,
-      last_line: 43,
+      last_line: 35,
+      last_column: 7,
+      range: [
+        638,
+        645,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyyget_debug',
+    yylloc: {
+      first_line: 35,
+      first_column: 8,
+      last_line: 35,
+      last_column: 21,
+      range: [
+        646,
+        659,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 35,
+      first_column: 21,
+      last_line: 35,
+      last_column: 21,
+      range: [
+        659,
+        659,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 36,
+      first_column: 0,
+      last_line: 36,
+      last_column: 7,
+      range: [
+        660,
+        667,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'noyyset_debug',
+    yylloc: {
+      first_line: 36,
+      first_column: 8,
+      last_line: 36,
+      last_column: 21,
+      range: [
+        668,
+        681,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 36,
+      first_column: 21,
+      last_line: 36,
+      last_column: 21,
+      range: [
+        681,
+        681,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 39,
+      first_column: 0,
+      last_line: 39,
       last_column: 7,
       range: [
         709,
@@ -2096,13 +1245,13 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: '@you',
+    id: 57,
+    token: '"INTEGER"',
+    yytext: 6445,
     yylloc: {
-      first_line: 43,
+      first_line: 39,
       first_column: 8,
-      last_line: 43,
+      last_line: 39,
       last_column: 12,
       range: [
         717,
@@ -2115,9 +1264,9 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 43,
+      first_line: 39,
       first_column: 12,
-      last_line: 43,
+      last_line: 39,
       last_column: 12,
       range: [
         721,
@@ -2126,13 +1275,13 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 44,
+      first_line: 40,
       first_column: 0,
-      last_line: 44,
+      last_line: 40,
       last_column: 7,
       range: [
         722,
@@ -2141,17 +1290,197 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
-    yytext: 'me@home',
+    yytext: '42-42',
+    yylloc: {
+      first_line: 40,
+      first_column: 8,
+      last_line: 40,
+      last_column: 13,
+      range: [
+        730,
+        735,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 40,
+      first_column: 13,
+      last_line: 40,
+      last_column: 13,
+      range: [
+        735,
+        735,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 41,
+      first_column: 0,
+      last_line: 41,
+      last_column: 7,
+      range: [
+        736,
+        743,
+      ],
+    },
+  },
+  {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: 8,
+    yylloc: {
+      first_line: 41,
+      first_column: 8,
+      last_line: 41,
+      last_column: 9,
+      range: [
+        744,
+        745,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 41,
+      first_column: 9,
+      last_line: 41,
+      last_column: 9,
+      range: [
+        745,
+        745,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 42,
+      first_column: 0,
+      last_line: 42,
+      last_column: 7,
+      range: [
+        746,
+        753,
+      ],
+    },
+  },
+  {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: -5,
+    yylloc: {
+      first_line: 42,
+      first_column: 8,
+      last_line: 42,
+      last_column: 10,
+      range: [
+        754,
+        756,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 42,
+      first_column: 10,
+      last_line: 42,
+      last_column: 10,
+      range: [
+        756,
+        756,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 43,
+      first_column: 0,
+      last_line: 43,
+      last_column: 7,
+      range: [
+        757,
+        764,
+      ],
+    },
+  },
+  {
+    id: 55,
+    token: '"OPTION_STRING"',
+    yytext: "''",
+    yylloc: {
+      first_line: 43,
+      first_column: 8,
+      last_line: 43,
+      last_column: 10,
+      range: [
+        765,
+        767,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 43,
+      first_column: 10,
+      last_line: 43,
+      last_column: 10,
+      range: [
+        767,
+        767,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 44,
+      first_column: 0,
+      last_line: 44,
+      last_column: 7,
+      range: [
+        768,
+        775,
+      ],
+    },
+  },
+  {
+    id: 55,
+    token: '"OPTION_STRING"',
+    yytext: '" "',
     yylloc: {
       first_line: 44,
       first_column: 8,
       last_line: 44,
-      last_column: 15,
+      last_column: 11,
       range: [
-        730,
-        737,
+        776,
+        779,
       ],
     },
   },
@@ -2161,17 +1490,17 @@ double quotes *or* backtick quotes a la ES6 string templates).
     yytext: '',
     yylloc: {
       first_line: 44,
-      first_column: 15,
+      first_column: 11,
       last_line: 44,
-      last_column: 15,
+      last_column: 11,
       range: [
-        737,
-        737,
+        779,
+        779,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
@@ -2180,23 +1509,23 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 45,
       last_column: 7,
       range: [
-        738,
-        745,
+        780,
+        787,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
-    yytext: '#no-more-bad-S',
+    yytext: '-',
     yylloc: {
       first_line: 45,
       first_column: 8,
       last_line: 45,
-      last_column: 22,
+      last_column: 9,
       range: [
-        746,
-        760,
+        788,
+        789,
       ],
     },
   },
@@ -2206,17 +1535,17 @@ double quotes *or* backtick quotes a la ES6 string templates).
     yytext: '',
     yylloc: {
       first_line: 45,
-      first_column: 22,
+      first_column: 9,
       last_line: 45,
-      last_column: 22,
+      last_column: 9,
       range: [
-        760,
-        760,
+        789,
+        789,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
@@ -2225,23 +1554,113 @@ double quotes *or* backtick quotes a la ES6 string templates).
       last_line: 46,
       last_column: 7,
       range: [
-        761,
-        768,
+        790,
+        797,
       ],
     },
   },
   {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'foo',
+    id: 55,
+    token: '"OPTION_STRING"',
+    yytext: "'-'",
     yylloc: {
       first_line: 46,
       first_column: 8,
       last_line: 46,
       last_column: 11,
       range: [
-        769,
-        772,
+        798,
+        801,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 46,
+      first_column: 11,
+      last_line: 46,
+      last_column: 11,
+      range: [
+        801,
+        801,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 47,
+      first_column: 0,
+      last_line: 47,
+      last_column: 7,
+      range: [
+        802,
+        809,
+      ],
+    },
+  },
+  {
+    id: 47,
+    token: "macro name in '{...}' curly braces",
+    yytext: '{x}',
+    yylloc: {
+      first_line: 47,
+      first_column: 8,
+      last_line: 47,
+      last_column: 11,
+      range: [
+        810,
+        813,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 47,
+      first_column: 11,
+      last_line: 47,
+      last_column: 11,
+      range: [
+        813,
+        813,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 48,
+      first_column: 0,
+      last_line: 48,
+      last_column: 7,
+      range: [
+        814,
+        821,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: '__beelzebub',
+    yylloc: {
+      first_line: 48,
+      first_column: 8,
+      last_line: 48,
+      last_column: 19,
+      range: [
+        822,
+        833,
       ],
     },
   },
@@ -2249,7 +1668,88 @@ double quotes *or* backtick quotes a la ES6 string templates).
     id: 2,
     token: '"error"',
     yytext: {
-      errStr: `Lexical error on line 46: 
+      errStr: `Lexical error on line 48: 
+unsupported lexer input: "!"
+while lexing in "options" state.
+
+If this input was intentional, you might want to put quotes around
+it; any JavaScript string quoting style is accepted (single quotes,
+double quotes *or* backtick quotes a la ES6 string templates).
+
+  Erroneous area:
+45: %option -
+46: %option '-'
+47: %option {x}
+48: %option __beelzebub!
+^^.....................^
+49: %option @you
+50: %option me@home
+`,
+      recoverable: false,
+      text: '!',
+      token: null,
+      line: 47,
+      loc: {
+        first_line: 48,
+        first_column: 19,
+        last_line: 48,
+        last_column: 20,
+        range: [
+          833,
+          834,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: [
+          {
+            errStr: `Lexical error on line 48: 
+unsupported lexer input: "!"
+while lexing in "options" state.
+
+If this input was intentional, you might want to put quotes around
+it; any JavaScript string quoting style is accepted (single quotes,
+double quotes *or* backtick quotes a la ES6 string templates).
+
+  Erroneous area:
+45: %option -
+46: %option '-'
+47: %option {x}
+48: %option __beelzebub!
+^^.....................^
+49: %option @you
+50: %option me@home
+`,
+            recoverable: false,
+            text: '!',
+            token: null,
+            line: 47,
+            loc: {
+              first_line: 48,
+              first_column: 19,
+              last_line: 48,
+              last_column: 20,
+              range: [
+                833,
+                834,
+              ],
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+          {
+            errStr: `Lexical error on line 52: 
 unsupported lexer input: ":"
 while lexing in "options" state.
 
@@ -2258,33 +1758,202 @@ it; any JavaScript string quoting style is accepted (single quotes,
 double quotes *or* backtick quotes a la ES6 string templates).
 
   Erroneous area:
-43: %option @you
-44: %option me@home
-45: %option #no-more-bad-S
-46: %option foo:bar
+49: %option @you
+50: %option me@home
+51: %option #no-more-bad-S
+52: %option foo:bar
 ^^.............^
-47: %option "a=b"
-48: %option ~a
+53: %option "a=b"
+54: %option ~a
 `,
-      recoverable: false,
-      text: ':',
-      token: null,
-      line: 45,
-      loc: {
-        first_line: 46,
-        first_column: 11,
-        last_line: 46,
-        last_column: 12,
-        range: [
-          772,
-          773,
+            recoverable: false,
+            text: ':',
+            token: null,
+            line: 51,
+            loc: {
+              first_line: 52,
+              first_column: 11,
+              last_line: 52,
+              last_column: 12,
+              range: [
+                898,
+                899,
+              ],
+            },
+            yy: '[reference to sibling --> *.[111].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+          {
+            errStr: `Lexical error on line 55: 
+unsupported lexer input: "$"
+while lexing in "options" state.
+
+If this input was intentional, you might want to put quotes around
+it; any JavaScript string quoting style is accepted (single quotes,
+double quotes *or* backtick quotes a la ES6 string templates).
+
+  Erroneous area:
+52: %option foo:bar
+53: %option "a=b"
+54: %option ~a
+55: %option $a$
+^^..........^
+56: %option a#b
+57: %option al.ka.selzer
+`,
+            recoverable: false,
+            text: '$',
+            token: null,
+            line: 54,
+            loc: {
+              first_line: 55,
+              first_column: 8,
+              last_line: 55,
+              last_column: 9,
+              range: [
+                936,
+                937,
+              ],
+            },
+            yy: '[reference to sibling --> *.[111].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+          {
+            errStr: `Lexical error on line 55: 
+unsupported lexer input: "$"
+while lexing in "options" state.
+
+If this input was intentional, you might want to put quotes around
+it; any JavaScript string quoting style is accepted (single quotes,
+double quotes *or* backtick quotes a la ES6 string templates).
+
+  Erroneous area:
+52: %option foo:bar
+53: %option "a=b"
+54: %option ~a
+55: %option $a$
+^^............^
+56: %option a#b
+57: %option al.ka.selzer
+`,
+            recoverable: false,
+            text: '$',
+            token: null,
+            line: 54,
+            loc: {
+              first_line: 55,
+              first_column: 10,
+              last_line: 55,
+              last_column: 11,
+              range: [
+                938,
+                939,
+              ],
+            },
+            yy: '[reference to sibling --> *.[111].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+          {
+            errStr: `Lexical error on line 57: 
+unsupported lexer input: "."
+while lexing in "options" state.
+
+If this input was intentional, you might want to put quotes around
+it; any JavaScript string quoting style is accepted (single quotes,
+double quotes *or* backtick quotes a la ES6 string templates).
+
+  Erroneous area:
+54: %option ~a
+55: %option $a$
+56: %option a#b
+57: %option al.ka.selzer
+^^............^
+58: 
+59: // We also recognize the alias %options (plural):
+`,
+            recoverable: false,
+            text: '.',
+            token: null,
+            line: 56,
+            loc: {
+              first_line: 57,
+              first_column: 10,
+              last_line: 57,
+              last_column: 11,
+              range: [
+                962,
+                963,
+              ],
+            },
+            yy: '[reference to sibling --> *.[111].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+          {
+            errStr: `Lexical error on line 57: 
+unsupported lexer input: "."
+while lexing in "options" state.
+
+If this input was intentional, you might want to put quotes around
+it; any JavaScript string quoting style is accepted (single quotes,
+double quotes *or* backtick quotes a la ES6 string templates).
+
+  Erroneous area:
+54: %option ~a
+55: %option $a$
+56: %option a#b
+57: %option al.ka.selzer
+^^...............^
+58: 
+59: // We also recognize the alias %options (plural):
+`,
+            recoverable: false,
+            text: '.',
+            token: null,
+            line: 56,
+            loc: {
+              first_line: 57,
+              first_column: 13,
+              last_line: 57,
+              last_column: 14,
+              range: [
+                965,
+                966,
+              ],
+            },
+            yy: '[reference to sibling --> *.[111].yytext.lexer.__error_infos.[0].yy]',
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
         ],
-      },
-      yy: {},
-      lexer: {
-        EOF: 1,
-        ERROR: 2,
-        __error_infos: '[reference to sibling array --> *.[111].yytext.lexer.__error_infos, length = 6]',
         __decompressed: true,
         done: true,
         _backtrack: false,
@@ -2297,7 +1966,13 @@ double quotes *or* backtick quotes a la ES6 string templates).
           'code',
         ],
         match: '',
-        matched: `
+        matched: `//
+// title: "options may have identifiers which start with a number, e.g. '8bit'"
+// test_input: "2020-11-12 % X"
+// ...
+//
+
+
 %option 8bit
 %option case-insensitive
 %option never-interactive
@@ -2373,18 +2048,18 @@ double quotes *or* backtick quotes a la ES6 string templates).
 `,
         matches: false,
         yytext: '',
-        offset: 1579,
+        offset: 1705,
         base_position: 0,
         yyleng: 0,
-        yylineno: 73,
+        yylineno: 79,
         yylloc: {
-          first_line: 74,
+          first_line: 80,
           first_column: 0,
-          last_line: 74,
+          last_line: 80,
           last_column: 0,
           range: [
-            1579,
-            1579,
+            1705,
+            1705,
           ],
         },
         CRLF_Re: {
@@ -2402,8 +2077,387 @@ double quotes *or* backtick quotes a la ES6 string templates).
           depth: 0,
           include_command_allowed: false,
         },
+        __entire_action_block_matchers__: {},
       },
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
+      errorDiag: {
+        inputPos: 871,
+        yytext: '!',
+        yyleng: 1,
+        matches: [
+          '!',
+        ],
+        activeCondition: 'options',
+        conditionStackDepth: 2,
+      },
+    },
+    yylloc: {
+      first_line: 48,
+      first_column: 19,
+      last_line: 48,
+      last_column: 20,
+      range: [
+        833,
+        834,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 48,
+      first_column: 20,
+      last_line: 48,
+      last_column: 20,
+      range: [
+        834,
+        834,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 49,
+      first_column: 0,
+      last_line: 49,
+      last_column: 7,
+      range: [
+        835,
+        842,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: '@you',
+    yylloc: {
+      first_line: 49,
+      first_column: 8,
+      last_line: 49,
+      last_column: 12,
+      range: [
+        843,
+        847,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 49,
+      first_column: 12,
+      last_line: 49,
+      last_column: 12,
+      range: [
+        847,
+        847,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 50,
+      first_column: 0,
+      last_line: 50,
+      last_column: 7,
+      range: [
+        848,
+        855,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'me@home',
+    yylloc: {
+      first_line: 50,
+      first_column: 8,
+      last_line: 50,
+      last_column: 15,
+      range: [
+        856,
+        863,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 50,
+      first_column: 15,
+      last_line: 50,
+      last_column: 15,
+      range: [
+        863,
+        863,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 51,
+      first_column: 0,
+      last_line: 51,
+      last_column: 7,
+      range: [
+        864,
+        871,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: '#no-more-bad-S',
+    yylloc: {
+      first_line: 51,
+      first_column: 8,
+      last_line: 51,
+      last_column: 22,
+      range: [
+        872,
+        886,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 51,
+      first_column: 22,
+      last_line: 51,
+      last_column: 22,
+      range: [
+        886,
+        886,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 52,
+      first_column: 0,
+      last_line: 52,
+      last_column: 7,
+      range: [
+        887,
+        894,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'foo',
+    yylloc: {
+      first_line: 52,
+      first_column: 8,
+      last_line: 52,
+      last_column: 11,
+      range: [
+        895,
+        898,
+      ],
+    },
+  },
+  {
+    id: 2,
+    token: '"error"',
+    yytext: {
+      errStr: `Lexical error on line 52: 
+unsupported lexer input: ":"
+while lexing in "options" state.
+
+If this input was intentional, you might want to put quotes around
+it; any JavaScript string quoting style is accepted (single quotes,
+double quotes *or* backtick quotes a la ES6 string templates).
+
+  Erroneous area:
+49: %option @you
+50: %option me@home
+51: %option #no-more-bad-S
+52: %option foo:bar
+^^.............^
+53: %option "a=b"
+54: %option ~a
+`,
+      recoverable: false,
+      text: ':',
+      token: null,
+      line: 51,
+      loc: {
+        first_line: 52,
+        first_column: 11,
+        last_line: 52,
+        last_column: 12,
+        range: [
+          898,
+          899,
+        ],
+      },
+      yy: {},
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: '[reference to sibling array --> *.[111].yytext.lexer.__error_infos, length = 6]',
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `//
+// title: "options may have identifiers which start with a number, e.g. '8bit'"
+// test_input: "2020-11-12 % X"
+// ...
+//
+
+
+%option 8bit
+%option case-insensitive
+%option never-interactive
+%option prefix="pp"
+%option buzz = qqq
+
+%option stack
+
+%option noyy_top_state
+%option noyy_scan_buffer
+%option noyy_scan_bytes
+%option noyy_scan_string
+
+%option noyyget_extra
+%option noyyset_extra
+%option noyyget_leng
+%option noyyget_text
+%option noyyget_lineno
+%option noyyset_lineno
+%option noyyget_in
+%option noyyset_in
+%option noyyget_out
+%option noyyset_out
+%option noyyget_lval
+%option noyyset_lval
+%option noyyget_lloc
+%option noyyset_lloc
+%option noyyget_debug
+%option noyyset_debug
+
+// bad option identifers:
+%option 6445
+%option 42-42
+%option 8
+%option -5
+%option ''
+%option " "
+%option -
+%option '-'
+%option {x}
+%option __beelzebub!
+%option @you
+%option me@home
+%option #no-more-bad-S
+%option foo:bar
+%option "a=b"
+%option ~a
+%option $a$
+%option a#b
+%option al.ka.selzer
+
+// We also recognize the alias %options (plural):
+%options foo
+%options bar, but, top 						// 3 options
+%options bar bi tu ra te 					// that would be 5 options
+%options fu=bar, neg=-45, pos=71, hex=0x1A6F, max=666
+%options Fu=bar Neg=-45 Pos=71 Hex=0x1A6F Max=666
+%options NotANum=42A, neither-a-number=0x1AF_Z
+
+%option xbar, xbut, xtop 						// 3 options
+%option xbar xbi xtu xra xte 					// that would be 5 options
+%option xfu=bar, xneg=-45, xpos=71, xhex=0x1A6F, xmax=666
+%option xFu=bar xNeg=-45 xPos=71 xHex=0x1A6F xMax=666
+
+%%
+
+\\d\\d\\d\\d"-"\\d\\d"-"\\d\\d  	return 'date';
+":"                         return ':';
+[\\s\\r\\n]					return 'WS';
+<<EOF>>                     return 'EOF';
+.                           return 'INVALID';
+
+`,
+        matches: false,
+        yytext: '',
+        offset: 1705,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 79,
+        yylloc: {
+          first_line: 80,
+          first_column: 0,
+          last_line: 80,
+          last_column: 0,
+          range: [
+            1705,
+            1705,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+        __entire_action_block_matchers__: {},
+      },
+      isLexerError: true,
+      yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
       errorDiag: {
         inputPos: 806,
         yytext: ':',
@@ -2416,28 +2470,28 @@ double quotes *or* backtick quotes a la ES6 string templates).
       },
     },
     yylloc: {
-      first_line: 46,
+      first_line: 52,
       first_column: 11,
-      last_line: 46,
+      last_line: 52,
       last_column: 12,
       range: [
-        772,
-        773,
+        898,
+        899,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'bar',
     yylloc: {
-      first_line: 46,
+      first_line: 52,
       first_column: 12,
-      last_line: 46,
+      last_line: 52,
       last_column: 15,
       range: [
-        773,
-        776,
+        899,
+        902,
       ],
     },
   },
@@ -2446,43 +2500,43 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 46,
+      first_line: 52,
       first_column: 15,
-      last_line: 46,
+      last_line: 52,
       last_column: 15,
       range: [
-        776,
-        776,
+        902,
+        902,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 47,
+      first_line: 53,
       first_column: 0,
-      last_line: 47,
+      last_line: 53,
       last_column: 7,
       range: [
-        777,
-        784,
+        903,
+        910,
       ],
     },
   },
   {
-    id: 53,
+    id: 55,
     token: '"OPTION_STRING"',
     yytext: '"a=b"',
     yylloc: {
-      first_line: 47,
+      first_line: 53,
       first_column: 8,
-      last_line: 47,
+      last_line: 53,
       last_column: 13,
       range: [
-        785,
-        790,
+        911,
+        916,
       ],
     },
   },
@@ -2491,43 +2545,43 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 47,
+      first_line: 53,
       first_column: 13,
-      last_line: 47,
+      last_line: 53,
       last_column: 13,
       range: [
-        790,
-        790,
+        916,
+        916,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 48,
+      first_line: 54,
       first_column: 0,
-      last_line: 48,
+      last_line: 54,
       last_column: 7,
       range: [
-        791,
-        798,
+        917,
+        924,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: '~a',
     yylloc: {
-      first_line: 48,
+      first_line: 54,
       first_column: 8,
-      last_line: 48,
+      last_line: 54,
       last_column: 10,
       range: [
-        799,
-        801,
+        925,
+        927,
       ],
     },
   },
@@ -2536,28 +2590,28 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 48,
+      first_line: 54,
       first_column: 10,
-      last_line: 48,
+      last_line: 54,
       last_column: 10,
       range: [
-        801,
-        801,
+        927,
+        927,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 49,
+      first_line: 55,
       first_column: 0,
-      last_line: 49,
+      last_line: 55,
       last_column: 7,
       range: [
-        802,
-        809,
+        928,
+        935,
       ],
     },
   },
@@ -2565,7 +2619,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     id: 2,
     token: '"error"',
     yytext: {
-      errStr: `Lexical error on line 49: 
+      errStr: `Lexical error on line 55: 
 unsupported lexer input: "$"
 while lexing in "options" state.
 
@@ -2574,26 +2628,26 @@ it; any JavaScript string quoting style is accepted (single quotes,
 double quotes *or* backtick quotes a la ES6 string templates).
 
   Erroneous area:
-46: %option foo:bar
-47: %option "a=b"
-48: %option ~a
-49: %option $a$
+52: %option foo:bar
+53: %option "a=b"
+54: %option ~a
+55: %option $a$
 ^^..........^
-50: %option a#b
-51: %option al.ka.selzer
+56: %option a#b
+57: %option al.ka.selzer
 `,
       recoverable: false,
       text: '$',
       token: null,
-      line: 48,
+      line: 54,
       loc: {
-        first_line: 49,
+        first_line: 55,
         first_column: 8,
-        last_line: 49,
+        last_line: 55,
         last_column: 9,
         range: [
-          810,
-          811,
+          936,
+          937,
         ],
       },
       yy: {},
@@ -2613,7 +2667,13 @@ double quotes *or* backtick quotes a la ES6 string templates).
           'code',
         ],
         match: '',
-        matched: `
+        matched: `//
+// title: "options may have identifiers which start with a number, e.g. '8bit'"
+// test_input: "2020-11-12 % X"
+// ...
+//
+
+
 %option 8bit
 %option case-insensitive
 %option never-interactive
@@ -2689,18 +2749,18 @@ double quotes *or* backtick quotes a la ES6 string templates).
 `,
         matches: false,
         yytext: '',
-        offset: 1579,
+        offset: 1705,
         base_position: 0,
         yyleng: 0,
-        yylineno: 73,
+        yylineno: 79,
         yylloc: {
-          first_line: 74,
+          first_line: 80,
           first_column: 0,
-          last_line: 74,
+          last_line: 80,
           last_column: 0,
           range: [
-            1579,
-            1579,
+            1705,
+            1705,
           ],
         },
         CRLF_Re: {
@@ -2718,8 +2778,14 @@ double quotes *or* backtick quotes a la ES6 string templates).
           depth: 0,
           include_command_allowed: false,
         },
+        __entire_action_block_matchers__: {},
       },
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
       errorDiag: {
         inputPos: 768,
         yytext: '$',
@@ -2732,28 +2798,28 @@ double quotes *or* backtick quotes a la ES6 string templates).
       },
     },
     yylloc: {
-      first_line: 49,
+      first_line: 55,
       first_column: 8,
-      last_line: 49,
+      last_line: 55,
       last_column: 9,
       range: [
-        810,
-        811,
+        936,
+        937,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'a',
     yylloc: {
-      first_line: 49,
+      first_line: 55,
       first_column: 9,
-      last_line: 49,
+      last_line: 55,
       last_column: 10,
       range: [
-        811,
-        812,
+        937,
+        938,
       ],
     },
   },
@@ -2761,7 +2827,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     id: 2,
     token: '"error"',
     yytext: {
-      errStr: `Lexical error on line 49: 
+      errStr: `Lexical error on line 55: 
 unsupported lexer input: "$"
 while lexing in "options" state.
 
@@ -2770,26 +2836,26 @@ it; any JavaScript string quoting style is accepted (single quotes,
 double quotes *or* backtick quotes a la ES6 string templates).
 
   Erroneous area:
-46: %option foo:bar
-47: %option "a=b"
-48: %option ~a
-49: %option $a$
+52: %option foo:bar
+53: %option "a=b"
+54: %option ~a
+55: %option $a$
 ^^............^
-50: %option a#b
-51: %option al.ka.selzer
+56: %option a#b
+57: %option al.ka.selzer
 `,
       recoverable: false,
       text: '$',
       token: null,
-      line: 48,
+      line: 54,
       loc: {
-        first_line: 49,
+        first_line: 55,
         first_column: 10,
-        last_line: 49,
+        last_line: 55,
         last_column: 11,
         range: [
-          812,
-          813,
+          938,
+          939,
         ],
       },
       yy: {},
@@ -2809,7 +2875,13 @@ double quotes *or* backtick quotes a la ES6 string templates).
           'code',
         ],
         match: '',
-        matched: `
+        matched: `//
+// title: "options may have identifiers which start with a number, e.g. '8bit'"
+// test_input: "2020-11-12 % X"
+// ...
+//
+
+
 %option 8bit
 %option case-insensitive
 %option never-interactive
@@ -2885,18 +2957,18 @@ double quotes *or* backtick quotes a la ES6 string templates).
 `,
         matches: false,
         yytext: '',
-        offset: 1579,
+        offset: 1705,
         base_position: 0,
         yyleng: 0,
-        yylineno: 73,
+        yylineno: 79,
         yylloc: {
-          first_line: 74,
+          first_line: 80,
           first_column: 0,
-          last_line: 74,
+          last_line: 80,
           last_column: 0,
           range: [
-            1579,
-            1579,
+            1705,
+            1705,
           ],
         },
         CRLF_Re: {
@@ -2914,8 +2986,14 @@ double quotes *or* backtick quotes a la ES6 string templates).
           depth: 0,
           include_command_allowed: false,
         },
+        __entire_action_block_matchers__: {},
       },
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
       errorDiag: {
         inputPos: 766,
         yytext: '$',
@@ -2928,13 +3006,13 @@ double quotes *or* backtick quotes a la ES6 string templates).
       },
     },
     yylloc: {
-      first_line: 49,
+      first_line: 55,
       first_column: 10,
-      last_line: 49,
+      last_line: 55,
       last_column: 11,
       range: [
-        812,
-        813,
+        938,
+        939,
       ],
     },
   },
@@ -2943,43 +3021,43 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 49,
+      first_line: 55,
       first_column: 11,
-      last_line: 49,
+      last_line: 55,
       last_column: 11,
       range: [
-        813,
-        813,
+        939,
+        939,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 50,
+      first_line: 56,
       first_column: 0,
-      last_line: 50,
+      last_line: 56,
       last_column: 7,
       range: [
-        814,
-        821,
+        940,
+        947,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'a#b',
     yylloc: {
-      first_line: 50,
+      first_line: 56,
       first_column: 8,
-      last_line: 50,
+      last_line: 56,
       last_column: 11,
       range: [
-        822,
-        825,
+        948,
+        951,
       ],
     },
   },
@@ -2988,43 +3066,43 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 50,
+      first_line: 56,
       first_column: 11,
-      last_line: 50,
+      last_line: 56,
       last_column: 11,
       range: [
-        825,
-        825,
+        951,
+        951,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%option',
     yylloc: {
-      first_line: 51,
+      first_line: 57,
       first_column: 0,
-      last_line: 51,
+      last_line: 57,
       last_column: 7,
       range: [
-        826,
-        833,
+        952,
+        959,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'al',
     yylloc: {
-      first_line: 51,
+      first_line: 57,
       first_column: 8,
-      last_line: 51,
+      last_line: 57,
       last_column: 10,
       range: [
-        834,
-        836,
+        960,
+        962,
       ],
     },
   },
@@ -3032,7 +3110,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     id: 2,
     token: '"error"',
     yytext: {
-      errStr: `Lexical error on line 51: 
+      errStr: `Lexical error on line 57: 
 unsupported lexer input: "."
 while lexing in "options" state.
 
@@ -3041,26 +3119,26 @@ it; any JavaScript string quoting style is accepted (single quotes,
 double quotes *or* backtick quotes a la ES6 string templates).
 
   Erroneous area:
-48: %option ~a
-49: %option $a$
-50: %option a#b
-51: %option al.ka.selzer
+54: %option ~a
+55: %option $a$
+56: %option a#b
+57: %option al.ka.selzer
 ^^............^
-52: 
-53: // We also recognize the alias %options (plural):
+58: 
+59: // We also recognize the alias %options (plural):
 `,
       recoverable: false,
       text: '.',
       token: null,
-      line: 50,
+      line: 56,
       loc: {
-        first_line: 51,
+        first_line: 57,
         first_column: 10,
-        last_line: 51,
+        last_line: 57,
         last_column: 11,
         range: [
-          836,
-          837,
+          962,
+          963,
         ],
       },
       yy: {},
@@ -3080,7 +3158,13 @@ double quotes *or* backtick quotes a la ES6 string templates).
           'code',
         ],
         match: '',
-        matched: `
+        matched: `//
+// title: "options may have identifiers which start with a number, e.g. '8bit'"
+// test_input: "2020-11-12 % X"
+// ...
+//
+
+
 %option 8bit
 %option case-insensitive
 %option never-interactive
@@ -3156,18 +3240,18 @@ double quotes *or* backtick quotes a la ES6 string templates).
 `,
         matches: false,
         yytext: '',
-        offset: 1579,
+        offset: 1705,
         base_position: 0,
         yyleng: 0,
-        yylineno: 73,
+        yylineno: 79,
         yylloc: {
-          first_line: 74,
+          first_line: 80,
           first_column: 0,
-          last_line: 74,
+          last_line: 80,
           last_column: 0,
           range: [
-            1579,
-            1579,
+            1705,
+            1705,
           ],
         },
         CRLF_Re: {
@@ -3185,8 +3269,14 @@ double quotes *or* backtick quotes a la ES6 string templates).
           depth: 0,
           include_command_allowed: false,
         },
+        __entire_action_block_matchers__: {},
       },
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
       errorDiag: {
         inputPos: 742,
         yytext: '.',
@@ -3199,28 +3289,28 @@ double quotes *or* backtick quotes a la ES6 string templates).
       },
     },
     yylloc: {
-      first_line: 51,
+      first_line: 57,
       first_column: 10,
-      last_line: 51,
+      last_line: 57,
       last_column: 11,
       range: [
-        836,
-        837,
+        962,
+        963,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'ka',
     yylloc: {
-      first_line: 51,
+      first_line: 57,
       first_column: 11,
-      last_line: 51,
+      last_line: 57,
       last_column: 13,
       range: [
-        837,
-        839,
+        963,
+        965,
       ],
     },
   },
@@ -3228,7 +3318,7 @@ double quotes *or* backtick quotes a la ES6 string templates).
     id: 2,
     token: '"error"',
     yytext: {
-      errStr: `Lexical error on line 51: 
+      errStr: `Lexical error on line 57: 
 unsupported lexer input: "."
 while lexing in "options" state.
 
@@ -3237,26 +3327,26 @@ it; any JavaScript string quoting style is accepted (single quotes,
 double quotes *or* backtick quotes a la ES6 string templates).
 
   Erroneous area:
-48: %option ~a
-49: %option $a$
-50: %option a#b
-51: %option al.ka.selzer
+54: %option ~a
+55: %option $a$
+56: %option a#b
+57: %option al.ka.selzer
 ^^...............^
-52: 
-53: // We also recognize the alias %options (plural):
+58: 
+59: // We also recognize the alias %options (plural):
 `,
       recoverable: false,
       text: '.',
       token: null,
-      line: 50,
+      line: 56,
       loc: {
-        first_line: 51,
+        first_line: 57,
         first_column: 13,
-        last_line: 51,
+        last_line: 57,
         last_column: 14,
         range: [
-          839,
-          840,
+          965,
+          966,
         ],
       },
       yy: {},
@@ -3276,7 +3366,13 @@ double quotes *or* backtick quotes a la ES6 string templates).
           'code',
         ],
         match: '',
-        matched: `
+        matched: `//
+// title: "options may have identifiers which start with a number, e.g. '8bit'"
+// test_input: "2020-11-12 % X"
+// ...
+//
+
+
 %option 8bit
 %option case-insensitive
 %option never-interactive
@@ -3352,18 +3448,18 @@ double quotes *or* backtick quotes a la ES6 string templates).
 `,
         matches: false,
         yytext: '',
-        offset: 1579,
+        offset: 1705,
         base_position: 0,
         yyleng: 0,
-        yylineno: 73,
+        yylineno: 79,
         yylloc: {
-          first_line: 74,
+          first_line: 80,
           first_column: 0,
-          last_line: 74,
+          last_line: 80,
           last_column: 0,
           range: [
-            1579,
-            1579,
+            1705,
+            1705,
           ],
         },
         CRLF_Re: {
@@ -3381,8 +3477,14 @@ double quotes *or* backtick quotes a la ES6 string templates).
           depth: 0,
           include_command_allowed: false,
         },
+        __entire_action_block_matchers__: {},
       },
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
       errorDiag: {
         inputPos: 739,
         yytext: '.',
@@ -3395,28 +3497,28 @@ double quotes *or* backtick quotes a la ES6 string templates).
       },
     },
     yylloc: {
-      first_line: 51,
+      first_line: 57,
       first_column: 13,
-      last_line: 51,
+      last_line: 57,
       last_column: 14,
       range: [
-        839,
-        840,
+        965,
+        966,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'selzer',
     yylloc: {
-      first_line: 51,
+      first_line: 57,
       first_column: 14,
-      last_line: 51,
+      last_line: 57,
       last_column: 20,
       range: [
-        840,
-        846,
+        966,
+        972,
       ],
     },
   },
@@ -3425,43 +3527,43 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 51,
+      first_line: 57,
       first_column: 20,
-      last_line: 51,
+      last_line: 57,
       last_column: 20,
       range: [
-        846,
-        846,
+        972,
+        972,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%options',
     yylloc: {
-      first_line: 54,
+      first_line: 60,
       first_column: 0,
-      last_line: 54,
+      last_line: 60,
       last_column: 8,
       range: [
-        898,
-        906,
+        1024,
+        1032,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'foo',
     yylloc: {
-      first_line: 54,
+      first_line: 60,
       first_column: 9,
-      last_line: 54,
+      last_line: 60,
       last_column: 12,
       range: [
-        907,
-        910,
+        1033,
+        1036,
       ],
     },
   },
@@ -3470,43 +3572,43 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 54,
+      first_line: 60,
       first_column: 12,
-      last_line: 54,
+      last_line: 60,
       last_column: 12,
       range: [
-        910,
-        910,
+        1036,
+        1036,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%options',
     yylloc: {
-      first_line: 55,
+      first_line: 61,
       first_column: 0,
-      last_line: 55,
+      last_line: 61,
       last_column: 8,
       range: [
-        911,
-        919,
+        1037,
+        1045,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'bar',
     yylloc: {
-      first_line: 55,
+      first_line: 61,
       first_column: 9,
-      last_line: 55,
+      last_line: 61,
       last_column: 12,
       range: [
-        920,
-        923,
+        1046,
+        1049,
       ],
     },
   },
@@ -3515,417 +3617,27 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '","',
     yytext: ',',
     yylloc: {
-      first_line: 55,
+      first_line: 61,
       first_column: 12,
-      last_line: 55,
+      last_line: 61,
       last_column: 13,
       range: [
-        923,
-        924,
+        1049,
+        1050,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
     yytext: 'but',
     yylloc: {
-      first_line: 55,
+      first_line: 61,
       first_column: 14,
-      last_line: 55,
+      last_line: 61,
       last_column: 17,
       range: [
-        925,
-        928,
-      ],
-    },
-  },
-  {
-    id: 14,
-    token: '","',
-    yytext: ',',
-    yylloc: {
-      first_line: 55,
-      first_column: 17,
-      last_line: 55,
-      last_column: 18,
-      range: [
-        928,
-        929,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'top',
-    yylloc: {
-      first_line: 55,
-      first_column: 19,
-      last_line: 55,
-      last_column: 22,
-      range: [
-        930,
-        933,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 55,
-      first_column: 41,
-      last_line: 55,
-      last_column: 41,
-      range: [
-        952,
-        952,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%options',
-    yylloc: {
-      first_line: 56,
-      first_column: 0,
-      last_line: 56,
-      last_column: 8,
-      range: [
-        953,
-        961,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'bar',
-    yylloc: {
-      first_line: 56,
-      first_column: 9,
-      last_line: 56,
-      last_column: 12,
-      range: [
-        962,
-        965,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'bi',
-    yylloc: {
-      first_line: 56,
-      first_column: 13,
-      last_line: 56,
-      last_column: 15,
-      range: [
-        966,
-        968,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'tu',
-    yylloc: {
-      first_line: 56,
-      first_column: 16,
-      last_line: 56,
-      last_column: 18,
-      range: [
-        969,
-        971,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'ra',
-    yylloc: {
-      first_line: 56,
-      first_column: 19,
-      last_line: 56,
-      last_column: 21,
-      range: [
-        972,
-        974,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'te',
-    yylloc: {
-      first_line: 56,
-      first_column: 22,
-      last_line: 56,
-      last_column: 24,
-      range: [
-        975,
-        977,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 56,
-      first_column: 56,
-      last_line: 56,
-      last_column: 56,
-      range: [
-        1009,
-        1009,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%options',
-    yylloc: {
-      first_line: 57,
-      first_column: 0,
-      last_line: 57,
-      last_column: 8,
-      range: [
-        1010,
-        1018,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'fu',
-    yylloc: {
-      first_line: 57,
-      first_column: 9,
-      last_line: 57,
-      last_column: 11,
-      range: [
-        1019,
-        1021,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 57,
-      first_column: 11,
-      last_line: 57,
-      last_column: 12,
-      range: [
-        1021,
-        1022,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'bar',
-    yylloc: {
-      first_line: 57,
-      first_column: 12,
-      last_line: 57,
-      last_column: 15,
-      range: [
-        1022,
-        1025,
-      ],
-    },
-  },
-  {
-    id: 14,
-    token: '","',
-    yytext: ',',
-    yylloc: {
-      first_line: 57,
-      first_column: 15,
-      last_line: 57,
-      last_column: 16,
-      range: [
-        1025,
-        1026,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'neg',
-    yylloc: {
-      first_line: 57,
-      first_column: 17,
-      last_line: 57,
-      last_column: 20,
-      range: [
-        1027,
-        1030,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 57,
-      first_column: 20,
-      last_line: 57,
-      last_column: 21,
-      range: [
-        1030,
-        1031,
-      ],
-    },
-  },
-  {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: -45,
-    yylloc: {
-      first_line: 57,
-      first_column: 21,
-      last_line: 57,
-      last_column: 24,
-      range: [
-        1031,
-        1034,
-      ],
-    },
-  },
-  {
-    id: 14,
-    token: '","',
-    yytext: ',',
-    yylloc: {
-      first_line: 57,
-      first_column: 24,
-      last_line: 57,
-      last_column: 25,
-      range: [
-        1034,
-        1035,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'pos',
-    yylloc: {
-      first_line: 57,
-      first_column: 26,
-      last_line: 57,
-      last_column: 29,
-      range: [
-        1036,
-        1039,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 57,
-      first_column: 29,
-      last_line: 57,
-      last_column: 30,
-      range: [
-        1039,
-        1040,
-      ],
-    },
-  },
-  {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: 71,
-    yylloc: {
-      first_line: 57,
-      first_column: 30,
-      last_line: 57,
-      last_column: 32,
-      range: [
-        1040,
-        1042,
-      ],
-    },
-  },
-  {
-    id: 14,
-    token: '","',
-    yytext: ',',
-    yylloc: {
-      first_line: 57,
-      first_column: 32,
-      last_line: 57,
-      last_column: 33,
-      range: [
-        1042,
-        1043,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'hex',
-    yylloc: {
-      first_line: 57,
-      first_column: 34,
-      last_line: 57,
-      last_column: 37,
-      range: [
-        1044,
-        1047,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 57,
-      first_column: 37,
-      last_line: 57,
-      last_column: 38,
-      range: [
-        1047,
-        1048,
-      ],
-    },
-  },
-  {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: 6767,
-    yylloc: {
-      first_line: 57,
-      first_column: 38,
-      last_line: 57,
-      last_column: 44,
-      range: [
-        1048,
+        1051,
         1054,
       ],
     },
@@ -3935,10 +3647,10 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '","',
     yytext: ',',
     yylloc: {
-      first_line: 57,
-      first_column: 44,
-      last_line: 57,
-      last_column: 45,
+      first_line: 61,
+      first_column: 17,
+      last_line: 61,
+      last_column: 18,
       range: [
         1054,
         1055,
@@ -3946,14 +3658,14 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
-    yytext: 'max',
+    yytext: 'top',
     yylloc: {
-      first_line: 57,
-      first_column: 46,
-      last_line: 57,
-      last_column: 49,
+      first_line: 61,
+      first_column: 19,
+      last_line: 61,
+      last_column: 22,
       range: [
         1056,
         1059,
@@ -3961,164 +3673,44 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 57,
-      first_column: 49,
-      last_line: 57,
-      last_column: 50,
-      range: [
-        1059,
-        1060,
-      ],
-    },
-  },
-  {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: 666,
-    yylloc: {
-      first_line: 57,
-      first_column: 50,
-      last_line: 57,
-      last_column: 53,
-      range: [
-        1060,
-        1063,
-      ],
-    },
-  },
-  {
     id: 22,
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 57,
-      first_column: 53,
-      last_line: 57,
-      last_column: 53,
+      first_line: 61,
+      first_column: 41,
+      last_line: 61,
+      last_column: 41,
       range: [
-        1063,
-        1063,
+        1078,
+        1078,
       ],
     },
   },
   {
-    id: 28,
+    id: 27,
     token: '"OPTIONS"',
     yytext: '%options',
     yylloc: {
-      first_line: 58,
+      first_line: 62,
       first_column: 0,
-      last_line: 58,
+      last_line: 62,
       last_column: 8,
       range: [
-        1064,
-        1072,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'Fu',
-    yylloc: {
-      first_line: 58,
-      first_column: 9,
-      last_line: 58,
-      last_column: 11,
-      range: [
-        1073,
-        1075,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 58,
-      first_column: 11,
-      last_line: 58,
-      last_column: 12,
-      range: [
-        1075,
-        1076,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'bar',
-    yylloc: {
-      first_line: 58,
-      first_column: 12,
-      last_line: 58,
-      last_column: 15,
-      range: [
-        1076,
         1079,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'Neg',
-    yylloc: {
-      first_line: 58,
-      first_column: 16,
-      last_line: 58,
-      last_column: 19,
-      range: [
-        1080,
-        1083,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 58,
-      first_column: 19,
-      last_line: 58,
-      last_column: 20,
-      range: [
-        1083,
-        1084,
-      ],
-    },
-  },
-  {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: -45,
-    yylloc: {
-      first_line: 58,
-      first_column: 20,
-      last_line: 58,
-      last_column: 23,
-      range: [
-        1084,
         1087,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
-    yytext: 'Pos',
+    yytext: 'bar',
     yylloc: {
-      first_line: 58,
-      first_column: 24,
-      last_line: 58,
-      last_column: 27,
+      first_line: 62,
+      first_column: 9,
+      last_line: 62,
+      last_column: 12,
       range: [
         1088,
         1091,
@@ -4126,29 +3718,14 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 18,
-    token: '"="',
-    yytext: '=',
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'bi',
     yylloc: {
-      first_line: 58,
-      first_column: 27,
-      last_line: 58,
-      last_column: 28,
-      range: [
-        1091,
-        1092,
-      ],
-    },
-  },
-  {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: 71,
-    yylloc: {
-      first_line: 58,
-      first_column: 28,
-      last_line: 58,
-      last_column: 30,
+      first_line: 62,
+      first_column: 13,
+      last_line: 62,
+      last_column: 15,
       range: [
         1092,
         1094,
@@ -4156,92 +3733,47 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
-    yytext: 'Hex',
+    yytext: 'tu',
     yylloc: {
-      first_line: 58,
-      first_column: 31,
-      last_line: 58,
-      last_column: 34,
+      first_line: 62,
+      first_column: 16,
+      last_line: 62,
+      last_column: 18,
       range: [
         1095,
-        1098,
+        1097,
       ],
     },
   },
   {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 58,
-      first_column: 34,
-      last_line: 58,
-      last_column: 35,
-      range: [
-        1098,
-        1099,
-      ],
-    },
-  },
-  {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: 6767,
-    yylloc: {
-      first_line: 58,
-      first_column: 35,
-      last_line: 58,
-      last_column: 41,
-      range: [
-        1099,
-        1105,
-      ],
-    },
-  },
-  {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
-    yytext: 'Max',
+    yytext: 'ra',
     yylloc: {
-      first_line: 58,
-      first_column: 42,
-      last_line: 58,
-      last_column: 45,
+      first_line: 62,
+      first_column: 19,
+      last_line: 62,
+      last_column: 21,
       range: [
-        1106,
-        1109,
+        1098,
+        1100,
       ],
     },
   },
   {
-    id: 18,
-    token: '"="',
-    yytext: '=',
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'te',
     yylloc: {
-      first_line: 58,
-      first_column: 45,
-      last_line: 58,
-      last_column: 46,
+      first_line: 62,
+      first_column: 22,
+      last_line: 62,
+      last_column: 24,
       range: [
-        1109,
-        1110,
-      ],
-    },
-  },
-  {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: 666,
-    yylloc: {
-      first_line: 58,
-      first_column: 46,
-      last_line: 58,
-      last_column: 49,
-      range: [
-        1110,
-        1113,
+        1101,
+        1103,
       ],
     },
   },
@@ -4250,103 +3782,43 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 58,
-      first_column: 49,
-      last_line: 58,
-      last_column: 49,
+      first_line: 62,
+      first_column: 56,
+      last_line: 62,
+      last_column: 56,
       range: [
-        1113,
-        1113,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%options',
-    yylloc: {
-      first_line: 59,
-      first_column: 0,
-      last_line: 59,
-      last_column: 8,
-      range: [
-        1114,
-        1122,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'NotANum',
-    yylloc: {
-      first_line: 59,
-      first_column: 9,
-      last_line: 59,
-      last_column: 16,
-      range: [
-        1123,
-        1130,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 59,
-      first_column: 16,
-      last_line: 59,
-      last_column: 17,
-      range: [
-        1130,
-        1131,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: '42A',
-    yylloc: {
-      first_line: 59,
-      first_column: 17,
-      last_line: 59,
-      last_column: 20,
-      range: [
-        1131,
-        1134,
-      ],
-    },
-  },
-  {
-    id: 14,
-    token: '","',
-    yytext: ',',
-    yylloc: {
-      first_line: 59,
-      first_column: 20,
-      last_line: 59,
-      last_column: 21,
-      range: [
-        1134,
+        1135,
         1135,
       ],
     },
   },
   {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'neither-a-number',
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%options',
     yylloc: {
-      first_line: 59,
-      first_column: 22,
-      last_line: 59,
-      last_column: 38,
+      first_line: 63,
+      first_column: 0,
+      last_line: 63,
+      last_column: 8,
       range: [
         1136,
-        1152,
+        1144,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'fu',
+    yylloc: {
+      first_line: 63,
+      first_column: 9,
+      last_line: 63,
+      last_column: 11,
+      range: [
+        1145,
+        1147,
       ],
     },
   },
@@ -4355,73 +3827,28 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '"="',
     yytext: '=',
     yylloc: {
-      first_line: 59,
-      first_column: 38,
-      last_line: 59,
-      last_column: 39,
-      range: [
-        1152,
-        1153,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: '0x1AF_Z',
-    yylloc: {
-      first_line: 59,
-      first_column: 39,
-      last_line: 59,
-      last_column: 46,
-      range: [
-        1153,
-        1160,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 59,
-      first_column: 46,
-      last_line: 59,
-      last_column: 46,
-      range: [
-        1160,
-        1160,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 61,
-      first_column: 0,
-      last_line: 61,
-      last_column: 7,
-      range: [
-        1162,
-        1169,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'xbar',
-    yylloc: {
-      first_line: 61,
-      first_column: 8,
-      last_line: 61,
+      first_line: 63,
+      first_column: 11,
+      last_line: 63,
       last_column: 12,
       range: [
-        1170,
-        1174,
+        1147,
+        1148,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'bar',
+    yylloc: {
+      first_line: 63,
+      first_column: 12,
+      last_line: 63,
+      last_column: 15,
+      range: [
+        1148,
+        1151,
       ],
     },
   },
@@ -4430,27 +3857,177 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '","',
     yytext: ',',
     yylloc: {
-      first_line: 61,
-      first_column: 12,
-      last_line: 61,
-      last_column: 13,
+      first_line: 63,
+      first_column: 15,
+      last_line: 63,
+      last_column: 16,
       range: [
-        1174,
-        1175,
+        1151,
+        1152,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
-    yytext: 'xbut',
+    yytext: 'neg',
     yylloc: {
-      first_line: 61,
-      first_column: 14,
-      last_line: 61,
-      last_column: 18,
+      first_line: 63,
+      first_column: 17,
+      last_line: 63,
+      last_column: 20,
       range: [
-        1176,
+        1153,
+        1156,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 63,
+      first_column: 20,
+      last_line: 63,
+      last_column: 21,
+      range: [
+        1156,
+        1157,
+      ],
+    },
+  },
+  {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: -45,
+    yylloc: {
+      first_line: 63,
+      first_column: 21,
+      last_line: 63,
+      last_column: 24,
+      range: [
+        1157,
+        1160,
+      ],
+    },
+  },
+  {
+    id: 14,
+    token: '","',
+    yytext: ',',
+    yylloc: {
+      first_line: 63,
+      first_column: 24,
+      last_line: 63,
+      last_column: 25,
+      range: [
+        1160,
+        1161,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'pos',
+    yylloc: {
+      first_line: 63,
+      first_column: 26,
+      last_line: 63,
+      last_column: 29,
+      range: [
+        1162,
+        1165,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 63,
+      first_column: 29,
+      last_line: 63,
+      last_column: 30,
+      range: [
+        1165,
+        1166,
+      ],
+    },
+  },
+  {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: 71,
+    yylloc: {
+      first_line: 63,
+      first_column: 30,
+      last_line: 63,
+      last_column: 32,
+      range: [
+        1166,
+        1168,
+      ],
+    },
+  },
+  {
+    id: 14,
+    token: '","',
+    yytext: ',',
+    yylloc: {
+      first_line: 63,
+      first_column: 32,
+      last_line: 63,
+      last_column: 33,
+      range: [
+        1168,
+        1169,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'hex',
+    yylloc: {
+      first_line: 63,
+      first_column: 34,
+      last_line: 63,
+      last_column: 37,
+      range: [
+        1170,
+        1173,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 63,
+      first_column: 37,
+      last_line: 63,
+      last_column: 38,
+      range: [
+        1173,
+        1174,
+      ],
+    },
+  },
+  {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: 6767,
+    yylloc: {
+      first_line: 63,
+      first_column: 38,
+      last_line: 63,
+      last_column: 44,
+      range: [
+        1174,
         1180,
       ],
     },
@@ -4460,10 +4037,10 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '","',
     yytext: ',',
     yylloc: {
-      first_line: 61,
-      first_column: 18,
-      last_line: 61,
-      last_column: 19,
+      first_line: 63,
+      first_column: 44,
+      last_line: 63,
+      last_column: 45,
       range: [
         1180,
         1181,
@@ -4471,617 +4048,227 @@ double quotes *or* backtick quotes a la ES6 string templates).
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
-    yytext: 'xtop',
+    yytext: 'max',
     yylloc: {
-      first_line: 61,
-      first_column: 20,
-      last_line: 61,
-      last_column: 24,
+      first_line: 63,
+      first_column: 46,
+      last_line: 63,
+      last_column: 49,
       range: [
         1182,
+        1185,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 63,
+      first_column: 49,
+      last_line: 63,
+      last_column: 50,
+      range: [
+        1185,
         1186,
       ],
     },
   },
   {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: 666,
+    yylloc: {
+      first_line: 63,
+      first_column: 50,
+      last_line: 63,
+      last_column: 53,
+      range: [
+        1186,
+        1189,
+      ],
+    },
+  },
+  {
     id: 22,
     token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
-      first_line: 61,
-      first_column: 43,
-      last_line: 61,
-      last_column: 43,
+      first_line: 63,
+      first_column: 53,
+      last_line: 63,
+      last_column: 53,
       range: [
-        1205,
+        1189,
+        1189,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%options',
+    yylloc: {
+      first_line: 64,
+      first_column: 0,
+      last_line: 64,
+      last_column: 8,
+      range: [
+        1190,
+        1198,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'Fu',
+    yylloc: {
+      first_line: 64,
+      first_column: 9,
+      last_line: 64,
+      last_column: 11,
+      range: [
+        1199,
+        1201,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 64,
+      first_column: 11,
+      last_line: 64,
+      last_column: 12,
+      range: [
+        1201,
+        1202,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'bar',
+    yylloc: {
+      first_line: 64,
+      first_column: 12,
+      last_line: 64,
+      last_column: 15,
+      range: [
+        1202,
         1205,
       ],
     },
   },
   {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'Neg',
     yylloc: {
-      first_line: 62,
-      first_column: 0,
-      last_line: 62,
-      last_column: 7,
+      first_line: 64,
+      first_column: 16,
+      last_line: 64,
+      last_column: 19,
       range: [
         1206,
+        1209,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 64,
+      first_column: 19,
+      last_line: 64,
+      last_column: 20,
+      range: [
+        1209,
+        1210,
+      ],
+    },
+  },
+  {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: -45,
+    yylloc: {
+      first_line: 64,
+      first_column: 20,
+      last_line: 64,
+      last_column: 23,
+      range: [
+        1210,
         1213,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
-    yytext: 'xbar',
+    yytext: 'Pos',
     yylloc: {
-      first_line: 62,
-      first_column: 8,
-      last_line: 62,
-      last_column: 12,
+      first_line: 64,
+      first_column: 24,
+      last_line: 64,
+      last_column: 27,
       range: [
         1214,
+        1217,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 64,
+      first_column: 27,
+      last_line: 64,
+      last_column: 28,
+      range: [
+        1217,
         1218,
       ],
     },
   },
   {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'xbi',
-    yylloc: {
-      first_line: 62,
-      first_column: 13,
-      last_line: 62,
-      last_column: 16,
-      range: [
-        1219,
-        1222,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'xtu',
-    yylloc: {
-      first_line: 62,
-      first_column: 17,
-      last_line: 62,
-      last_column: 20,
-      range: [
-        1223,
-        1226,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'xra',
-    yylloc: {
-      first_line: 62,
-      first_column: 21,
-      last_line: 62,
-      last_column: 24,
-      range: [
-        1227,
-        1230,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'xte',
-    yylloc: {
-      first_line: 62,
-      first_column: 25,
-      last_line: 62,
-      last_column: 28,
-      range: [
-        1231,
-        1234,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 62,
-      first_column: 60,
-      last_line: 62,
-      last_column: 60,
-      range: [
-        1266,
-        1266,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
-      first_line: 63,
-      first_column: 0,
-      last_line: 63,
-      last_column: 7,
-      range: [
-        1267,
-        1274,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'xfu',
-    yylloc: {
-      first_line: 63,
-      first_column: 8,
-      last_line: 63,
-      last_column: 11,
-      range: [
-        1275,
-        1278,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 63,
-      first_column: 11,
-      last_line: 63,
-      last_column: 12,
-      range: [
-        1278,
-        1279,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'bar',
-    yylloc: {
-      first_line: 63,
-      first_column: 12,
-      last_line: 63,
-      last_column: 15,
-      range: [
-        1279,
-        1282,
-      ],
-    },
-  },
-  {
-    id: 14,
-    token: '","',
-    yytext: ',',
-    yylloc: {
-      first_line: 63,
-      first_column: 15,
-      last_line: 63,
-      last_column: 16,
-      range: [
-        1282,
-        1283,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'xneg',
-    yylloc: {
-      first_line: 63,
-      first_column: 17,
-      last_line: 63,
-      last_column: 21,
-      range: [
-        1284,
-        1288,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 63,
-      first_column: 21,
-      last_line: 63,
-      last_column: 22,
-      range: [
-        1288,
-        1289,
-      ],
-    },
-  },
-  {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: -45,
-    yylloc: {
-      first_line: 63,
-      first_column: 22,
-      last_line: 63,
-      last_column: 25,
-      range: [
-        1289,
-        1292,
-      ],
-    },
-  },
-  {
-    id: 14,
-    token: '","',
-    yytext: ',',
-    yylloc: {
-      first_line: 63,
-      first_column: 25,
-      last_line: 63,
-      last_column: 26,
-      range: [
-        1292,
-        1293,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'xpos',
-    yylloc: {
-      first_line: 63,
-      first_column: 27,
-      last_line: 63,
-      last_column: 31,
-      range: [
-        1294,
-        1298,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 63,
-      first_column: 31,
-      last_line: 63,
-      last_column: 32,
-      range: [
-        1298,
-        1299,
-      ],
-    },
-  },
-  {
-    id: 55,
+    id: 57,
     token: '"INTEGER"',
     yytext: 71,
     yylloc: {
-      first_line: 63,
-      first_column: 32,
-      last_line: 63,
-      last_column: 34,
-      range: [
-        1299,
-        1301,
-      ],
-    },
-  },
-  {
-    id: 14,
-    token: '","',
-    yytext: ',',
-    yylloc: {
-      first_line: 63,
-      first_column: 34,
-      last_line: 63,
-      last_column: 35,
-      range: [
-        1301,
-        1302,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'xhex',
-    yylloc: {
-      first_line: 63,
-      first_column: 36,
-      last_line: 63,
-      last_column: 40,
-      range: [
-        1303,
-        1307,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 63,
-      first_column: 40,
-      last_line: 63,
-      last_column: 41,
-      range: [
-        1307,
-        1308,
-      ],
-    },
-  },
-  {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: 6767,
-    yylloc: {
-      first_line: 63,
-      first_column: 41,
-      last_line: 63,
-      last_column: 47,
-      range: [
-        1308,
-        1314,
-      ],
-    },
-  },
-  {
-    id: 14,
-    token: '","',
-    yytext: ',',
-    yylloc: {
-      first_line: 63,
-      first_column: 47,
-      last_line: 63,
-      last_column: 48,
-      range: [
-        1314,
-        1315,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'xmax',
-    yylloc: {
-      first_line: 63,
-      first_column: 49,
-      last_line: 63,
-      last_column: 53,
-      range: [
-        1316,
-        1320,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 63,
-      first_column: 53,
-      last_line: 63,
-      last_column: 54,
-      range: [
-        1320,
-        1321,
-      ],
-    },
-  },
-  {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: 666,
-    yylloc: {
-      first_line: 63,
-      first_column: 54,
-      last_line: 63,
-      last_column: 57,
-      range: [
-        1321,
-        1324,
-      ],
-    },
-  },
-  {
-    id: 22,
-    token: '"OPTIONS_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 63,
-      first_column: 57,
-      last_line: 63,
-      last_column: 57,
-      range: [
-        1324,
-        1324,
-      ],
-    },
-  },
-  {
-    id: 28,
-    token: '"OPTIONS"',
-    yytext: '%option',
-    yylloc: {
       first_line: 64,
-      first_column: 0,
-      last_line: 64,
-      last_column: 7,
-      range: [
-        1325,
-        1332,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'xFu',
-    yylloc: {
-      first_line: 64,
-      first_column: 8,
-      last_line: 64,
-      last_column: 11,
-      range: [
-        1333,
-        1336,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 64,
-      first_column: 11,
-      last_line: 64,
-      last_column: 12,
-      range: [
-        1336,
-        1337,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'bar',
-    yylloc: {
-      first_line: 64,
-      first_column: 12,
-      last_line: 64,
-      last_column: 15,
-      range: [
-        1337,
-        1340,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'xNeg',
-    yylloc: {
-      first_line: 64,
-      first_column: 16,
-      last_line: 64,
-      last_column: 20,
-      range: [
-        1341,
-        1345,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 64,
-      first_column: 20,
-      last_line: 64,
-      last_column: 21,
-      range: [
-        1345,
-        1346,
-      ],
-    },
-  },
-  {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: -45,
-    yylloc: {
-      first_line: 64,
-      first_column: 21,
-      last_line: 64,
-      last_column: 24,
-      range: [
-        1346,
-        1349,
-      ],
-    },
-  },
-  {
-    id: 54,
-    token: '"OPTION_VALUE"',
-    yytext: 'xPos',
-    yylloc: {
-      first_line: 64,
-      first_column: 25,
-      last_line: 64,
-      last_column: 29,
-      range: [
-        1350,
-        1354,
-      ],
-    },
-  },
-  {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 64,
-      first_column: 29,
+      first_column: 28,
       last_line: 64,
       last_column: 30,
       range: [
-        1354,
-        1355,
+        1218,
+        1220,
       ],
     },
   },
   {
-    id: 55,
-    token: '"INTEGER"',
-    yytext: 71,
-    yylloc: {
-      first_line: 64,
-      first_column: 30,
-      last_line: 64,
-      last_column: 32,
-      range: [
-        1355,
-        1357,
-      ],
-    },
-  },
-  {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
-    yytext: 'xHex',
+    yytext: 'Hex',
     yylloc: {
       first_line: 64,
-      first_column: 33,
+      first_column: 31,
       last_line: 64,
-      last_column: 37,
+      last_column: 34,
       range: [
-        1358,
-        1362,
+        1221,
+        1224,
       ],
     },
   },
@@ -5091,72 +4278,72 @@ double quotes *or* backtick quotes a la ES6 string templates).
     yytext: '=',
     yylloc: {
       first_line: 64,
-      first_column: 37,
+      first_column: 34,
       last_line: 64,
-      last_column: 38,
+      last_column: 35,
       range: [
-        1362,
-        1363,
+        1224,
+        1225,
       ],
     },
   },
   {
-    id: 55,
+    id: 57,
     token: '"INTEGER"',
     yytext: 6767,
     yylloc: {
       first_line: 64,
-      first_column: 38,
+      first_column: 35,
       last_line: 64,
-      last_column: 44,
+      last_column: 41,
       range: [
-        1363,
-        1369,
+        1225,
+        1231,
       ],
     },
   },
   {
-    id: 54,
+    id: 56,
     token: '"OPTION_VALUE"',
-    yytext: 'xMax',
+    yytext: 'Max',
+    yylloc: {
+      first_line: 64,
+      first_column: 42,
+      last_line: 64,
+      last_column: 45,
+      range: [
+        1232,
+        1235,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
     yylloc: {
       first_line: 64,
       first_column: 45,
       last_line: 64,
-      last_column: 49,
+      last_column: 46,
       range: [
-        1370,
-        1374,
+        1235,
+        1236,
       ],
     },
   },
   {
-    id: 18,
-    token: '"="',
-    yytext: '=',
-    yylloc: {
-      first_line: 64,
-      first_column: 49,
-      last_line: 64,
-      last_column: 50,
-      range: [
-        1374,
-        1375,
-      ],
-    },
-  },
-  {
-    id: 55,
+    id: 57,
     token: '"INTEGER"',
     yytext: 666,
     yylloc: {
       first_line: 64,
-      first_column: 50,
+      first_column: 46,
       last_line: 64,
-      last_column: 53,
+      last_column: 49,
       range: [
-        1375,
-        1378,
+        1236,
+        1239,
       ],
     },
   },
@@ -5166,462 +4353,1377 @@ double quotes *or* backtick quotes a la ES6 string templates).
     yytext: '',
     yylloc: {
       first_line: 64,
-      first_column: 53,
+      first_column: 49,
       last_line: 64,
-      last_column: 53,
+      last_column: 49,
       range: [
-        1378,
-        1378,
+        1239,
+        1239,
       ],
     },
   },
   {
-    id: 34,
-    token: '"%%"',
-    yytext: '%%',
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%options',
     yylloc: {
-      first_line: 66,
+      first_line: 65,
       first_column: 0,
-      last_line: 66,
-      last_column: 2,
-      range: [
-        1380,
-        1382,
-      ],
-    },
-  },
-  {
-    id: 43,
-    token: '"REGEX_SPECIAL_CHAR"',
-    yytext: '\\d',
-    yylloc: {
-      first_line: 68,
-      first_column: 0,
-      last_line: 68,
-      last_column: 2,
-      range: [
-        1384,
-        1386,
-      ],
-    },
-  },
-  {
-    id: 43,
-    token: '"REGEX_SPECIAL_CHAR"',
-    yytext: '\\d',
-    yylloc: {
-      first_line: 68,
-      first_column: 2,
-      last_line: 68,
-      last_column: 4,
-      range: [
-        1386,
-        1388,
-      ],
-    },
-  },
-  {
-    id: 43,
-    token: '"REGEX_SPECIAL_CHAR"',
-    yytext: '\\d',
-    yylloc: {
-      first_line: 68,
-      first_column: 4,
-      last_line: 68,
-      last_column: 6,
-      range: [
-        1388,
-        1390,
-      ],
-    },
-  },
-  {
-    id: 43,
-    token: '"REGEX_SPECIAL_CHAR"',
-    yytext: '\\d',
-    yylloc: {
-      first_line: 68,
-      first_column: 6,
-      last_line: 68,
+      last_line: 65,
       last_column: 8,
       range: [
-        1390,
-        1392,
+        1240,
+        1248,
       ],
     },
   },
   {
-    id: 51,
-    token: '"STRING_LIT"',
-    yytext: '"-"',
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'NotANum',
+    yylloc: {
+      first_line: 65,
+      first_column: 9,
+      last_line: 65,
+      last_column: 16,
+      range: [
+        1249,
+        1256,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 65,
+      first_column: 16,
+      last_line: 65,
+      last_column: 17,
+      range: [
+        1256,
+        1257,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: '42A',
+    yylloc: {
+      first_line: 65,
+      first_column: 17,
+      last_line: 65,
+      last_column: 20,
+      range: [
+        1257,
+        1260,
+      ],
+    },
+  },
+  {
+    id: 14,
+    token: '","',
+    yytext: ',',
+    yylloc: {
+      first_line: 65,
+      first_column: 20,
+      last_line: 65,
+      last_column: 21,
+      range: [
+        1260,
+        1261,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'neither-a-number',
+    yylloc: {
+      first_line: 65,
+      first_column: 22,
+      last_line: 65,
+      last_column: 38,
+      range: [
+        1262,
+        1278,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 65,
+      first_column: 38,
+      last_line: 65,
+      last_column: 39,
+      range: [
+        1278,
+        1279,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: '0x1AF_Z',
+    yylloc: {
+      first_line: 65,
+      first_column: 39,
+      last_line: 65,
+      last_column: 46,
+      range: [
+        1279,
+        1286,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 65,
+      first_column: 46,
+      last_line: 65,
+      last_column: 46,
+      range: [
+        1286,
+        1286,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 67,
+      first_column: 0,
+      last_line: 67,
+      last_column: 7,
+      range: [
+        1288,
+        1295,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xbar',
+    yylloc: {
+      first_line: 67,
+      first_column: 8,
+      last_line: 67,
+      last_column: 12,
+      range: [
+        1296,
+        1300,
+      ],
+    },
+  },
+  {
+    id: 14,
+    token: '","',
+    yytext: ',',
+    yylloc: {
+      first_line: 67,
+      first_column: 12,
+      last_line: 67,
+      last_column: 13,
+      range: [
+        1300,
+        1301,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xbut',
+    yylloc: {
+      first_line: 67,
+      first_column: 14,
+      last_line: 67,
+      last_column: 18,
+      range: [
+        1302,
+        1306,
+      ],
+    },
+  },
+  {
+    id: 14,
+    token: '","',
+    yytext: ',',
+    yylloc: {
+      first_line: 67,
+      first_column: 18,
+      last_line: 67,
+      last_column: 19,
+      range: [
+        1306,
+        1307,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xtop',
+    yylloc: {
+      first_line: 67,
+      first_column: 20,
+      last_line: 67,
+      last_column: 24,
+      range: [
+        1308,
+        1312,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 67,
+      first_column: 43,
+      last_line: 67,
+      last_column: 43,
+      range: [
+        1331,
+        1331,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 68,
+      first_column: 0,
+      last_line: 68,
+      last_column: 7,
+      range: [
+        1332,
+        1339,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xbar',
     yylloc: {
       first_line: 68,
       first_column: 8,
       last_line: 68,
-      last_column: 11,
+      last_column: 12,
       range: [
-        1392,
-        1395,
+        1340,
+        1344,
       ],
     },
   },
   {
-    id: 43,
-    token: '"REGEX_SPECIAL_CHAR"',
-    yytext: '\\d',
-    yylloc: {
-      first_line: 68,
-      first_column: 11,
-      last_line: 68,
-      last_column: 13,
-      range: [
-        1395,
-        1397,
-      ],
-    },
-  },
-  {
-    id: 43,
-    token: '"REGEX_SPECIAL_CHAR"',
-    yytext: '\\d',
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xbi',
     yylloc: {
       first_line: 68,
       first_column: 13,
       last_line: 68,
-      last_column: 15,
+      last_column: 16,
       range: [
-        1397,
-        1399,
+        1345,
+        1348,
       ],
     },
   },
   {
-    id: 51,
-    token: '"STRING_LIT"',
-    yytext: '"-"',
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xtu',
     yylloc: {
       first_line: 68,
-      first_column: 15,
-      last_line: 68,
-      last_column: 18,
-      range: [
-        1399,
-        1402,
-      ],
-    },
-  },
-  {
-    id: 43,
-    token: '"REGEX_SPECIAL_CHAR"',
-    yytext: '\\d',
-    yylloc: {
-      first_line: 68,
-      first_column: 18,
+      first_column: 17,
       last_line: 68,
       last_column: 20,
       range: [
-        1402,
-        1404,
+        1349,
+        1352,
       ],
     },
   },
   {
-    id: 43,
-    token: '"REGEX_SPECIAL_CHAR"',
-    yytext: '\\d',
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xra',
     yylloc: {
       first_line: 68,
-      first_column: 20,
+      first_column: 21,
       last_line: 68,
-      last_column: 22,
+      last_column: 24,
       range: [
-        1404,
-        1406,
+        1353,
+        1356,
       ],
     },
   },
   {
-    id: 26,
-    token: '"ACTION_START"',
-    yytext: '  \t',
-    yylloc: {
-      first_line: 68,
-      first_column: 22,
-      last_line: 68,
-      last_column: 25,
-      range: [
-        1406,
-        1409,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: 'return ',
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xte',
     yylloc: {
       first_line: 68,
       first_column: 25,
       last_line: 68,
-      last_column: 32,
+      last_column: 28,
       range: [
-        1409,
-        1416,
+        1357,
+        1360,
       ],
     },
   },
   {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: "'date'",
-    yylloc: {
-      first_line: 68,
-      first_column: 32,
-      last_line: 68,
-      last_column: 38,
-      range: [
-        1416,
-        1422,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: ';',
-    yylloc: {
-      first_line: 68,
-      first_column: 38,
-      last_line: 68,
-      last_column: 39,
-      range: [
-        1422,
-        1423,
-      ],
-    },
-  },
-  {
-    id: 24,
-    token: '"ACTION_END"',
+    id: 22,
+    token: '"OPTIONS_END"',
     yytext: '',
     yylloc: {
       first_line: 68,
-      first_column: 39,
+      first_column: 60,
       last_line: 68,
+      last_column: 60,
+      range: [
+        1392,
+        1392,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 69,
+      first_column: 0,
+      last_line: 69,
+      last_column: 7,
+      range: [
+        1393,
+        1400,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xfu',
+    yylloc: {
+      first_line: 69,
+      first_column: 8,
+      last_line: 69,
+      last_column: 11,
+      range: [
+        1401,
+        1404,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 69,
+      first_column: 11,
+      last_line: 69,
+      last_column: 12,
+      range: [
+        1404,
+        1405,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'bar',
+    yylloc: {
+      first_line: 69,
+      first_column: 12,
+      last_line: 69,
+      last_column: 15,
+      range: [
+        1405,
+        1408,
+      ],
+    },
+  },
+  {
+    id: 14,
+    token: '","',
+    yytext: ',',
+    yylloc: {
+      first_line: 69,
+      first_column: 15,
+      last_line: 69,
+      last_column: 16,
+      range: [
+        1408,
+        1409,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xneg',
+    yylloc: {
+      first_line: 69,
+      first_column: 17,
+      last_line: 69,
+      last_column: 21,
+      range: [
+        1410,
+        1414,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 69,
+      first_column: 21,
+      last_line: 69,
+      last_column: 22,
+      range: [
+        1414,
+        1415,
+      ],
+    },
+  },
+  {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: -45,
+    yylloc: {
+      first_line: 69,
+      first_column: 22,
+      last_line: 69,
+      last_column: 25,
+      range: [
+        1415,
+        1418,
+      ],
+    },
+  },
+  {
+    id: 14,
+    token: '","',
+    yytext: ',',
+    yylloc: {
+      first_line: 69,
+      first_column: 25,
+      last_line: 69,
+      last_column: 26,
+      range: [
+        1418,
+        1419,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xpos',
+    yylloc: {
+      first_line: 69,
+      first_column: 27,
+      last_line: 69,
+      last_column: 31,
+      range: [
+        1420,
+        1424,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 69,
+      first_column: 31,
+      last_line: 69,
+      last_column: 32,
+      range: [
+        1424,
+        1425,
+      ],
+    },
+  },
+  {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: 71,
+    yylloc: {
+      first_line: 69,
+      first_column: 32,
+      last_line: 69,
+      last_column: 34,
+      range: [
+        1425,
+        1427,
+      ],
+    },
+  },
+  {
+    id: 14,
+    token: '","',
+    yytext: ',',
+    yylloc: {
+      first_line: 69,
+      first_column: 34,
+      last_line: 69,
+      last_column: 35,
+      range: [
+        1427,
+        1428,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xhex',
+    yylloc: {
+      first_line: 69,
+      first_column: 36,
+      last_line: 69,
+      last_column: 40,
+      range: [
+        1429,
+        1433,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 69,
+      first_column: 40,
+      last_line: 69,
+      last_column: 41,
+      range: [
+        1433,
+        1434,
+      ],
+    },
+  },
+  {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: 6767,
+    yylloc: {
+      first_line: 69,
+      first_column: 41,
+      last_line: 69,
+      last_column: 47,
+      range: [
+        1434,
+        1440,
+      ],
+    },
+  },
+  {
+    id: 14,
+    token: '","',
+    yytext: ',',
+    yylloc: {
+      first_line: 69,
+      first_column: 47,
+      last_line: 69,
+      last_column: 48,
+      range: [
+        1440,
+        1441,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xmax',
+    yylloc: {
+      first_line: 69,
+      first_column: 49,
+      last_line: 69,
+      last_column: 53,
+      range: [
+        1442,
+        1446,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 69,
+      first_column: 53,
+      last_line: 69,
+      last_column: 54,
+      range: [
+        1446,
+        1447,
+      ],
+    },
+  },
+  {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: 666,
+    yylloc: {
+      first_line: 69,
+      first_column: 54,
+      last_line: 69,
+      last_column: 57,
+      range: [
+        1447,
+        1450,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 69,
+      first_column: 57,
+      last_line: 69,
+      last_column: 57,
+      range: [
+        1450,
+        1450,
+      ],
+    },
+  },
+  {
+    id: 27,
+    token: '"OPTIONS"',
+    yytext: '%option',
+    yylloc: {
+      first_line: 70,
+      first_column: 0,
+      last_line: 70,
+      last_column: 7,
+      range: [
+        1451,
+        1458,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xFu',
+    yylloc: {
+      first_line: 70,
+      first_column: 8,
+      last_line: 70,
+      last_column: 11,
+      range: [
+        1459,
+        1462,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 70,
+      first_column: 11,
+      last_line: 70,
+      last_column: 12,
+      range: [
+        1462,
+        1463,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'bar',
+    yylloc: {
+      first_line: 70,
+      first_column: 12,
+      last_line: 70,
+      last_column: 15,
+      range: [
+        1463,
+        1466,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xNeg',
+    yylloc: {
+      first_line: 70,
+      first_column: 16,
+      last_line: 70,
+      last_column: 20,
+      range: [
+        1467,
+        1471,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 70,
+      first_column: 20,
+      last_line: 70,
+      last_column: 21,
+      range: [
+        1471,
+        1472,
+      ],
+    },
+  },
+  {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: -45,
+    yylloc: {
+      first_line: 70,
+      first_column: 21,
+      last_line: 70,
+      last_column: 24,
+      range: [
+        1472,
+        1475,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xPos',
+    yylloc: {
+      first_line: 70,
+      first_column: 25,
+      last_line: 70,
+      last_column: 29,
+      range: [
+        1476,
+        1480,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 70,
+      first_column: 29,
+      last_line: 70,
+      last_column: 30,
+      range: [
+        1480,
+        1481,
+      ],
+    },
+  },
+  {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: 71,
+    yylloc: {
+      first_line: 70,
+      first_column: 30,
+      last_line: 70,
+      last_column: 32,
+      range: [
+        1481,
+        1483,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xHex',
+    yylloc: {
+      first_line: 70,
+      first_column: 33,
+      last_line: 70,
+      last_column: 37,
+      range: [
+        1484,
+        1488,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 70,
+      first_column: 37,
+      last_line: 70,
+      last_column: 38,
+      range: [
+        1488,
+        1489,
+      ],
+    },
+  },
+  {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: 6767,
+    yylloc: {
+      first_line: 70,
+      first_column: 38,
+      last_line: 70,
+      last_column: 44,
+      range: [
+        1489,
+        1495,
+      ],
+    },
+  },
+  {
+    id: 56,
+    token: '"OPTION_VALUE"',
+    yytext: 'xMax',
+    yylloc: {
+      first_line: 70,
+      first_column: 45,
+      last_line: 70,
+      last_column: 49,
+      range: [
+        1496,
+        1500,
+      ],
+    },
+  },
+  {
+    id: 18,
+    token: '"="',
+    yytext: '=',
+    yylloc: {
+      first_line: 70,
+      first_column: 49,
+      last_line: 70,
+      last_column: 50,
+      range: [
+        1500,
+        1501,
+      ],
+    },
+  },
+  {
+    id: 57,
+    token: '"INTEGER"',
+    yytext: 666,
+    yylloc: {
+      first_line: 70,
+      first_column: 50,
+      last_line: 70,
+      last_column: 53,
+      range: [
+        1501,
+        1504,
+      ],
+    },
+  },
+  {
+    id: 22,
+    token: '"OPTIONS_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 70,
+      first_column: 53,
+      last_line: 70,
+      last_column: 53,
+      range: [
+        1504,
+        1504,
+      ],
+    },
+  },
+  {
+    id: 33,
+    token: '"%%"',
+    yytext: '%%',
+    yylloc: {
+      first_line: 72,
+      first_column: 0,
+      last_line: 72,
+      last_column: 2,
+      range: [
+        1506,
+        1508,
+      ],
+    },
+  },
+  {
+    id: 45,
+    token: '"REGEX_SPECIAL_CHAR"',
+    yytext: '\\d',
+    yylloc: {
+      first_line: 74,
+      first_column: 0,
+      last_line: 74,
+      last_column: 2,
+      range: [
+        1510,
+        1512,
+      ],
+    },
+  },
+  {
+    id: 45,
+    token: '"REGEX_SPECIAL_CHAR"',
+    yytext: '\\d',
+    yylloc: {
+      first_line: 74,
+      first_column: 2,
+      last_line: 74,
+      last_column: 4,
+      range: [
+        1512,
+        1514,
+      ],
+    },
+  },
+  {
+    id: 45,
+    token: '"REGEX_SPECIAL_CHAR"',
+    yytext: '\\d',
+    yylloc: {
+      first_line: 74,
+      first_column: 4,
+      last_line: 74,
+      last_column: 6,
+      range: [
+        1514,
+        1516,
+      ],
+    },
+  },
+  {
+    id: 45,
+    token: '"REGEX_SPECIAL_CHAR"',
+    yytext: '\\d',
+    yylloc: {
+      first_line: 74,
+      first_column: 6,
+      last_line: 74,
+      last_column: 8,
+      range: [
+        1516,
+        1518,
+      ],
+    },
+  },
+  {
+    id: 53,
+    token: '"STRING_LIT"',
+    yytext: '"-"',
+    yylloc: {
+      first_line: 74,
+      first_column: 8,
+      last_line: 74,
+      last_column: 11,
+      range: [
+        1518,
+        1521,
+      ],
+    },
+  },
+  {
+    id: 45,
+    token: '"REGEX_SPECIAL_CHAR"',
+    yytext: '\\d',
+    yylloc: {
+      first_line: 74,
+      first_column: 11,
+      last_line: 74,
+      last_column: 13,
+      range: [
+        1521,
+        1523,
+      ],
+    },
+  },
+  {
+    id: 45,
+    token: '"REGEX_SPECIAL_CHAR"',
+    yytext: '\\d',
+    yylloc: {
+      first_line: 74,
+      first_column: 13,
+      last_line: 74,
+      last_column: 15,
+      range: [
+        1523,
+        1525,
+      ],
+    },
+  },
+  {
+    id: 53,
+    token: '"STRING_LIT"',
+    yytext: '"-"',
+    yylloc: {
+      first_line: 74,
+      first_column: 15,
+      last_line: 74,
+      last_column: 18,
+      range: [
+        1525,
+        1528,
+      ],
+    },
+  },
+  {
+    id: 45,
+    token: '"REGEX_SPECIAL_CHAR"',
+    yytext: '\\d',
+    yylloc: {
+      first_line: 74,
+      first_column: 18,
+      last_line: 74,
+      last_column: 20,
+      range: [
+        1528,
+        1530,
+      ],
+    },
+  },
+  {
+    id: 45,
+    token: '"REGEX_SPECIAL_CHAR"',
+    yytext: '\\d',
+    yylloc: {
+      first_line: 74,
+      first_column: 20,
+      last_line: 74,
+      last_column: 22,
+      range: [
+        1530,
+        1532,
+      ],
+    },
+  },
+  {
+    id: 25,
+    token: '"ACTION_START"',
+    yytext: '  \t',
+    yylloc: {
+      first_line: 74,
+      first_column: 22,
+      last_line: 74,
+      last_column: 25,
+      range: [
+        1532,
+        1535,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: 'return ',
+    yylloc: {
+      first_line: 74,
+      first_column: 25,
+      last_line: 74,
+      last_column: 32,
+      range: [
+        1535,
+        1542,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: "'date'",
+    yylloc: {
+      first_line: 74,
+      first_column: 32,
+      last_line: 74,
+      last_column: 38,
+      range: [
+        1542,
+        1548,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: ';',
+    yylloc: {
+      first_line: 74,
+      first_column: 38,
+      last_line: 74,
       last_column: 39,
       range: [
-        1423,
-        1423,
+        1548,
+        1549,
+      ],
+    },
+  },
+  {
+    id: 35,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 74,
+      first_column: 39,
+      last_line: 74,
+      last_column: 39,
+      range: [
+        1549,
+        1549,
+      ],
+    },
+  },
+  {
+    id: 53,
+    token: '"STRING_LIT"',
+    yytext: '":"',
+    yylloc: {
+      first_line: 75,
+      first_column: 0,
+      last_line: 75,
+      last_column: 3,
+      range: [
+        1550,
+        1553,
+      ],
+    },
+  },
+  {
+    id: 25,
+    token: '"ACTION_START"',
+    yytext: '                         ',
+    yylloc: {
+      first_line: 75,
+      first_column: 3,
+      last_line: 75,
+      last_column: 28,
+      range: [
+        1553,
+        1578,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: 'return ',
+    yylloc: {
+      first_line: 75,
+      first_column: 28,
+      last_line: 75,
+      last_column: 35,
+      range: [
+        1578,
+        1585,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: "':'",
+    yylloc: {
+      first_line: 75,
+      first_column: 35,
+      last_line: 75,
+      last_column: 38,
+      range: [
+        1585,
+        1588,
+      ],
+    },
+  },
+  {
+    id: 38,
+    token: '"ACTION_BODY"',
+    yytext: ';',
+    yylloc: {
+      first_line: 75,
+      first_column: 38,
+      last_line: 75,
+      last_column: 39,
+      range: [
+        1588,
+        1589,
+      ],
+    },
+  },
+  {
+    id: 35,
+    token: '"ACTION_END"',
+    yytext: '',
+    yylloc: {
+      first_line: 75,
+      first_column: 39,
+      last_line: 75,
+      last_column: 39,
+      range: [
+        1589,
+        1589,
+      ],
+    },
+  },
+  {
+    id: 48,
+    token: '"REGEX_SET_START"',
+    yytext: '[',
+    yylloc: {
+      first_line: 76,
+      first_column: 0,
+      last_line: 76,
+      last_column: 1,
+      range: [
+        1590,
+        1591,
       ],
     },
   },
   {
     id: 51,
-    token: '"STRING_LIT"',
-    yytext: '":"',
+    token: '"REGEX_SET"',
+    yytext: '\\s\\r\\n',
     yylloc: {
-      first_line: 69,
-      first_column: 0,
-      last_line: 69,
-      last_column: 3,
+      first_line: 76,
+      first_column: 1,
+      last_line: 76,
+      last_column: 7,
       range: [
-        1424,
-        1427,
-      ],
-    },
-  },
-  {
-    id: 26,
-    token: '"ACTION_START"',
-    yytext: '                         ',
-    yylloc: {
-      first_line: 69,
-      first_column: 3,
-      last_line: 69,
-      last_column: 28,
-      range: [
-        1427,
-        1452,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: 'return ',
-    yylloc: {
-      first_line: 69,
-      first_column: 28,
-      last_line: 69,
-      last_column: 35,
-      range: [
-        1452,
-        1459,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: "':'",
-    yylloc: {
-      first_line: 69,
-      first_column: 35,
-      last_line: 69,
-      last_column: 38,
-      range: [
-        1459,
-        1462,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: ';',
-    yylloc: {
-      first_line: 69,
-      first_column: 38,
-      last_line: 69,
-      last_column: 39,
-      range: [
-        1462,
-        1463,
-      ],
-    },
-  },
-  {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 69,
-      first_column: 39,
-      last_line: 69,
-      last_column: 39,
-      range: [
-        1463,
-        1463,
-      ],
-    },
-  },
-  {
-    id: 46,
-    token: '"REGEX_SET_START"',
-    yytext: '[',
-    yylloc: {
-      first_line: 70,
-      first_column: 0,
-      last_line: 70,
-      last_column: 1,
-      range: [
-        1464,
-        1465,
+        1591,
+        1597,
       ],
     },
   },
   {
     id: 49,
-    token: '"REGEX_SET"',
-    yytext: '\\s\\r\\n',
-    yylloc: {
-      first_line: 70,
-      first_column: 1,
-      last_line: 70,
-      last_column: 7,
-      range: [
-        1465,
-        1471,
-      ],
-    },
-  },
-  {
-    id: 47,
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
-      first_line: 70,
+      first_line: 76,
       first_column: 7,
-      last_line: 70,
+      last_line: 76,
       last_column: 8,
       range: [
-        1471,
-        1472,
+        1597,
+        1598,
       ],
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: '\t\t\t\t\t',
     yylloc: {
-      first_line: 70,
+      first_line: 76,
       first_column: 8,
-      last_line: 70,
+      last_line: 76,
       last_column: 13,
       range: [
-        1472,
-        1477,
+        1598,
+        1603,
       ],
     },
   },
   {
-    id: 36,
+    id: 38,
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
-      first_line: 70,
+      first_line: 76,
       first_column: 13,
-      last_line: 70,
+      last_line: 76,
       last_column: 20,
       range: [
-        1477,
-        1484,
+        1603,
+        1610,
       ],
     },
   },
   {
-    id: 36,
+    id: 38,
     token: '"ACTION_BODY"',
     yytext: "'WS'",
     yylloc: {
-      first_line: 70,
+      first_line: 76,
       first_column: 20,
-      last_line: 70,
+      last_line: 76,
       last_column: 24,
       range: [
-        1484,
-        1488,
+        1610,
+        1614,
       ],
     },
   },
   {
-    id: 36,
+    id: 38,
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
-      first_line: 70,
+      first_line: 76,
       first_column: 24,
-      last_line: 70,
+      last_line: 76,
       last_column: 25,
       range: [
-        1488,
-        1489,
+        1614,
+        1615,
       ],
     },
   },
   {
-    id: 24,
+    id: 35,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
-      first_line: 70,
+      first_line: 76,
       first_column: 25,
-      last_line: 70,
+      last_line: 76,
       last_column: 25,
       range: [
-        1489,
-        1489,
+        1615,
+        1615,
       ],
     },
   },
@@ -5630,88 +5732,88 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '"$"',
     yytext: '<<EOF>>',
     yylloc: {
-      first_line: 71,
+      first_line: 77,
       first_column: 0,
-      last_line: 71,
+      last_line: 77,
       last_column: 7,
       range: [
-        1490,
-        1497,
+        1616,
+        1623,
       ],
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: '                     ',
     yylloc: {
-      first_line: 71,
+      first_line: 77,
       first_column: 7,
-      last_line: 71,
+      last_line: 77,
       last_column: 28,
       range: [
-        1497,
-        1518,
+        1623,
+        1644,
       ],
     },
   },
   {
-    id: 36,
+    id: 38,
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
-      first_line: 71,
+      first_line: 77,
       first_column: 28,
-      last_line: 71,
+      last_line: 77,
       last_column: 35,
       range: [
-        1518,
-        1525,
+        1644,
+        1651,
       ],
     },
   },
   {
-    id: 36,
+    id: 38,
     token: '"ACTION_BODY"',
     yytext: "'EOF'",
     yylloc: {
-      first_line: 71,
+      first_line: 77,
       first_column: 35,
-      last_line: 71,
+      last_line: 77,
       last_column: 40,
       range: [
-        1525,
-        1530,
+        1651,
+        1656,
       ],
     },
   },
   {
-    id: 36,
+    id: 38,
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
-      first_line: 71,
+      first_line: 77,
       first_column: 40,
-      last_line: 71,
+      last_line: 77,
       last_column: 41,
       range: [
-        1530,
-        1531,
+        1656,
+        1657,
       ],
     },
   },
   {
-    id: 24,
+    id: 35,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
-      first_line: 71,
+      first_line: 77,
       first_column: 41,
-      last_line: 71,
+      last_line: 77,
       last_column: 41,
       range: [
-        1531,
-        1531,
+        1657,
+        1657,
       ],
     },
   },
@@ -5720,103 +5822,103 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: '"."',
     yytext: '.',
     yylloc: {
-      first_line: 72,
+      first_line: 78,
       first_column: 0,
-      last_line: 72,
+      last_line: 78,
       last_column: 1,
       range: [
-        1532,
-        1533,
+        1658,
+        1659,
       ],
     },
   },
   {
-    id: 26,
+    id: 25,
     token: '"ACTION_START"',
     yytext: '                           ',
     yylloc: {
-      first_line: 72,
+      first_line: 78,
       first_column: 1,
-      last_line: 72,
+      last_line: 78,
       last_column: 28,
       range: [
-        1533,
-        1560,
+        1659,
+        1686,
       ],
     },
   },
   {
-    id: 36,
+    id: 38,
     token: '"ACTION_BODY"',
     yytext: 'return ',
     yylloc: {
-      first_line: 72,
+      first_line: 78,
       first_column: 28,
-      last_line: 72,
+      last_line: 78,
       last_column: 35,
       range: [
-        1560,
-        1567,
+        1686,
+        1693,
       ],
     },
   },
   {
-    id: 36,
+    id: 38,
     token: '"ACTION_BODY"',
     yytext: "'INVALID'",
     yylloc: {
-      first_line: 72,
+      first_line: 78,
       first_column: 35,
-      last_line: 72,
+      last_line: 78,
       last_column: 44,
       range: [
-        1567,
-        1576,
+        1693,
+        1702,
       ],
     },
   },
   {
-    id: 36,
+    id: 38,
     token: '"ACTION_BODY"',
     yytext: ';',
     yylloc: {
-      first_line: 72,
+      first_line: 78,
       first_column: 44,
-      last_line: 72,
+      last_line: 78,
       last_column: 45,
       range: [
-        1576,
-        1577,
+        1702,
+        1703,
       ],
     },
   },
   {
-    id: 24,
+    id: 35,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
-      first_line: 72,
+      first_line: 78,
       first_column: 45,
-      last_line: 72,
+      last_line: 78,
       last_column: 45,
       range: [
-        1577,
-        1577,
+        1703,
+        1703,
       ],
     },
   },
   {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {
-      first_line: 74,
+      first_line: 80,
       first_column: 0,
-      last_line: 74,
+      last_line: 80,
       last_column: 0,
       range: [
-        1579,
-        1579,
+        1705,
+        1705,
       ],
     },
   },
@@ -5825,13 +5927,13 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 74,
+      first_line: 80,
       first_column: 0,
-      last_line: 74,
+      last_line: 80,
       last_column: 0,
       range: [
-        1579,
-        1579,
+        1705,
+        1705,
       ],
     },
   },
@@ -5840,13 +5942,13 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 74,
+      first_line: 80,
       first_column: 0,
-      last_line: 74,
+      last_line: 80,
       last_column: 0,
       range: [
-        1579,
-        1579,
+        1705,
+        1705,
       ],
     },
   },
@@ -5855,13 +5957,13 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 74,
+      first_line: 80,
       first_column: 0,
-      last_line: 74,
+      last_line: 80,
       last_column: 0,
       range: [
-        1579,
-        1579,
+        1705,
+        1705,
       ],
     },
   },
@@ -5870,13 +5972,13 @@ double quotes *or* backtick quotes a la ES6 string templates).
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 74,
+      first_line: 80,
       first_column: 0,
-      last_line: 74,
+      last_line: 80,
       last_column: 0,
       range: [
-        1579,
-        1579,
+        1705,
+        1705,
       ],
     },
   },

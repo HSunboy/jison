@@ -1,153 +1,307 @@
 [
   {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
-      first_line: 1,
+      first_line: 7,
       first_column: 0,
-      last_line: 1,
+      last_line: 7,
       last_column: 2,
       range: [
-        0,
-        2,
+        76,
+        78,
+      ],
+    },
+  },
+  {
+    id: 53,
+    token: '"STRING_LIT"',
+    yytext: '"["',
+    yylloc: {
+      first_line: 8,
+      first_column: 0,
+      last_line: 8,
+      last_column: 3,
+      range: [
+        79,
+        82,
+      ],
+    },
+  },
+  {
+    id: 48,
+    token: '"REGEX_SET_START"',
+    yytext: '[',
+    yylloc: {
+      first_line: 8,
+      first_column: 3,
+      last_line: 8,
+      last_column: 4,
+      range: [
+        82,
+        83,
       ],
     },
   },
   {
     id: 51,
-    token: '"STRING_LIT"',
-    yytext: '"["',
+    token: '"REGEX_SET"',
+    yytext: '^\\]',
     yylloc: {
-      first_line: 2,
-      first_column: 0,
-      last_line: 2,
-      last_column: 3,
+      first_line: 8,
+      first_column: 4,
+      last_line: 8,
+      last_column: 7,
       range: [
-        3,
-        6,
-      ],
-    },
-  },
-  {
-    id: 46,
-    token: '"REGEX_SET_START"',
-    yytext: '[',
-    yylloc: {
-      first_line: 2,
-      first_column: 3,
-      last_line: 2,
-      last_column: 4,
-      range: [
-        6,
-        7,
+        83,
+        86,
       ],
     },
   },
   {
     id: 49,
-    token: '"REGEX_SET"',
-    yytext: '^\\]',
-    yylloc: {
-      first_line: 2,
-      first_column: 4,
-      last_line: 2,
-      last_column: 7,
-      range: [
-        7,
-        10,
-      ],
-    },
-  },
-  {
-    id: 47,
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 7,
-      last_line: 2,
+      last_line: 8,
       last_column: 8,
       range: [
-        10,
-        11,
+        86,
+        87,
       ],
     },
   },
   {
-    id: 51,
+    id: 53,
     token: '"STRING_LIT"',
     yytext: '"]"',
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 8,
-      last_line: 2,
+      last_line: 8,
       last_column: 11,
       range: [
-        11,
-        14,
+        87,
+        90,
       ],
     },
   },
   {
-    id: 26,
-    token: '"ACTION_START"',
-    yytext: '{{{{{',
-    yylloc: {
-      first_line: 2,
-      first_column: 12,
-      last_line: 2,
-      last_column: 12,
-      range: [
-        15,
-        15,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: `
+    id: 23,
+    token: '"UNTERMINATED_ACTION_BLOCK"',
+    yytext: {
+      errStr: `Lexical error on line 10: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                 5: //
+ 6: 
+ 7: %%
+ 8: "["[^\\]]"]" {{{{{
+^^..............^^^^^
+ 9: return "{{{{..}}}}";
+^^..^^^^^^^^^^^^^^^^^^^^
+10: }}}}}
+^^..^^^^^
+11: 
+12: 
+`,
+      recoverable: false,
+      text: `{{{{{
+return "{{{{..}}}}";
+}}}}}`,
+      token: null,
+      line: 9,
+      loc: {
+        first_line: 8,
+        first_column: 12,
+        last_line: 10,
+        last_column: 5,
+        range: [
+          91,
+          123,
+        ],
+      },
+      yy: {
+        depth: 0,
+        include_command_allowed: false,
+      },
+      lexer: {
+        EOF: 1,
+        ERROR: 2,
+        __error_infos: [
+          {
+            errStr: `Lexical error on line 10: 
+                                                
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+
+
+Erroneous area:
+                                                 5: //
+ 6: 
+ 7: %%
+ 8: "["[^\\]]"]" {{{{{
+^^..............^^^^^
+ 9: return "{{{{..}}}}";
+^^..^^^^^^^^^^^^^^^^^^^^
+10: }}}}}
+^^..^^^^^
+11: 
+12: 
+`,
+            recoverable: false,
+            text: `{{{{{
+return "{{{{..}}}}";
+}}}}}`,
+            token: null,
+            line: 9,
+            loc: {
+              first_line: 8,
+              first_column: 12,
+              last_line: 10,
+              last_column: 5,
+              range: [
+                91,
+                123,
+              ],
+            },
+            yy: {
+              depth: 0,
+              include_command_allowed: false,
+            },
+            lexer: '[lexer]',
+            isLexerError: true,
+            yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
+          },
+        ],
+        __decompressed: true,
+        done: true,
+        _backtrack: false,
+        _input: '',
+        _more: false,
+        _signaled_error_token: false,
+        _clear_state: 0,
+        conditionStack: [
+          'INITIAL',
+          'code',
+        ],
+        match: '',
+        matched: `//
+// title: test multiline action with alternative markers 6
+//
+// ...
+//
+
+%%
+"["[^\\]]"]" {{{{{
+return "{{{{..}}}}";
+}}}}}
+
+`,
+        matches: false,
+        yytext: '',
+        offset: 125,
+        base_position: 0,
+        yyleng: 0,
+        yylineno: 11,
+        yylloc: {
+          first_line: 12,
+          first_column: 0,
+          last_line: 12,
+          last_column: 0,
+          range: [
+            125,
+            125,
+          ],
+        },
+        CRLF_Re: {
+          re: '/\\r\\n?|\\n/',
+          source: '\\r\\n?|\\n',
+          flags: '',
+        },
+        options: {
+          xregexp: true,
+          ranges: true,
+          trackPosition: true,
+          easy_keyword_rules: true,
+        },
+        yy: {
+          depth: 0,
+          include_command_allowed: false,
+        },
+        __entire_action_block_matchers__: {},
+      },
+      isLexerError: true,
+      yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
+      errorDiag: {
+        inputPos: 2,
+        yytext: {
+          fault: `
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+Confusingly terminated action code block. We're expecting the
+'}}}}}' end marker to go with the given start marker.
+Regrettably, it does not exist in the remainder of the input.
+`,
+          srcCode: `
 return "{{{{..}}}}";
 `,
+          shiftCount: 27,
+          action_start_marker: '{{{{{',
+          action_end_marker: '}}}}}',
+        },
+        yyleng: 32,
+        matches: [
+          '{{{{{',
+        ],
+        activeCondition: 'rules',
+        conditionStackDepth: 2,
+      },
+    },
     yylloc: {
-      first_line: 2,
+      first_line: 8,
       first_column: 12,
-      last_line: 4,
+      last_line: 10,
       last_column: 5,
       range: [
-        15,
-        47,
+        91,
+        123,
       ],
     },
   },
   {
-    id: 24,
-    token: '"ACTION_END"',
-    yytext: '',
-    yylloc: {
-      first_line: 4,
-      first_column: 5,
-      last_line: 4,
-      last_column: 5,
-      range: [
-        47,
-        47,
-      ],
-    },
-  },
-  {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 0,
-      last_line: 6,
+      last_line: 12,
       last_column: 0,
       range: [
-        49,
-        49,
+        125,
+        125,
       ],
     },
   },
@@ -156,13 +310,13 @@ return "{{{{..}}}}";
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 0,
-      last_line: 6,
+      last_line: 12,
       last_column: 0,
       range: [
-        49,
-        49,
+        125,
+        125,
       ],
     },
   },
@@ -171,13 +325,13 @@ return "{{{{..}}}}";
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 0,
-      last_line: 6,
+      last_line: 12,
       last_column: 0,
       range: [
-        49,
-        49,
+        125,
+        125,
       ],
     },
   },
@@ -186,13 +340,13 @@ return "{{{{..}}}}";
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 0,
-      last_line: 6,
+      last_line: 12,
       last_column: 0,
       range: [
-        49,
-        49,
+        125,
+        125,
       ],
     },
   },
@@ -201,13 +355,13 @@ return "{{{{..}}}}";
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 12,
       first_column: 0,
-      last_line: 6,
+      last_line: 12,
       last_column: 0,
       range: [
-        49,
-        49,
+        125,
+        125,
       ],
     },
   },
@@ -215,10 +369,10 @@ return "{{{{..}}}}";
     id: -2,
     token: null,
     summary: {
-      totalTokenCount: 14,
+      totalTokenCount: 12,
       EOFTokenCount: 4,
       ERRORTokenCount: 0,
-      ParseErrorCallCount: 0,
+      ParseErrorCallCount: 1,
       DetectedParseErrorCallCount: 0,
       fatalExceptionCount: 0,
     },

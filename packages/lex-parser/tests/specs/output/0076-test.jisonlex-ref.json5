@@ -1,9 +1,16 @@
 {
   rules: [
-    [
-      '\\[[abc \\xA0 \\u1234 \\166 def]\\]',
-      "return 'GOOD_REGEX'",
-    ],
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return 'GOOD_REGEX'",
+      rule: '\\[[abc \\xA0 \\u1234 \\166 def]\\]',
+    },
   ],
   macros: {},
   startConditions: {},
@@ -30,10 +37,10 @@
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 3,
+        line: 10,
         expected: null,
         recoverable: false,
-        state: 24,
+        state: 26,
         action: 2,
         new_state: 1,
         stack_pointer: 5,
@@ -47,10 +54,10 @@
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 3,
+          line: 10,
           expected: null,
           recoverable: false,
-          state: 24,
+          state: 26,
           action: 2,
           new_state: 1,
           stack_pointer: 5,
@@ -64,7 +71,14 @@
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%%
+  __original_input__: `//
+// title: "lexer regex/rule [...] set may legally include whitespace"
+// test_input: 'a[abc\\u1234]b'
+//
+// ...
+//
+
+%%
 "["[abc \\xA0 \\u1234 \\166 def]"]" -> 'GOOD_REGEX'
 
 `,

@@ -2,7 +2,13 @@
   id: -1,
   token: null,
   fail: 1,
-  spec: `%%
+  spec: `//
+// title: test correct diagnosis for indented rule regex + action 1
+//
+// ...
+//
+
+%%
   "a" %{ return 1; %}
 
 `,
@@ -19,14 +25,16 @@ Indented text is perceived as JavaScript action code related to the last
 lexer rule regex.
     
   Erroneous code:
-1: %%
-2:   "a" %{ return 1; %}
+5: //
+6: 
+7: %%
+8:   "a" %{ return 1; %}
 ^....^^^
-3: 
-4: 
+9: 
+0: 
     
   Technical error report:
-Parse error on line 2:
+Parse error on line 8:
   "a" %{ ret...
 --^
 Unexpected "ACTION_BODY"
@@ -36,9 +44,9 @@ Unexpected "ACTION_BODY"
       value: '"a"',
       token: '"$accept"',
       token_id: 0,
-      line: 1,
+      line: 7,
       recoverable: false,
-      state: 148,
+      state: 156,
       action: 2,
       new_state: 59,
       stack_pointer: 7,
@@ -54,14 +62,16 @@ Indented text is perceived as JavaScript action code related to the last
 lexer rule regex.
     
   Erroneous code:
-1: %%
-2:   "a" %{ return 1; %}
+5: //
+6: 
+7: %%
+8:   "a" %{ return 1; %}
 ^....^^^
-3: 
-4: 
+9: 
+0: 
     
   Technical error report:
-Parse error on line 2:
+Parse error on line 8:
   "a" %{ ret...
 --^
 Unexpected "ACTION_BODY"
@@ -78,24 +88,26 @@ Indented text is perceived as JavaScript action code related to the last
 lexer rule regex.
     
   Erroneous code:
-1: %%
-2:   "a" %{ return 1; %}
+5: //
+6: 
+7: %%
+8:   "a" %{ return 1; %}
 ^....^^^
-3: 
-4: 
+9: 
+0: 
     
   Technical error report:
-Parse error on line 2:
+Parse error on line 8:
   "a" %{ ret...
 --^
 Unexpected "ACTION_BODY"
 
-    at Object.parseError (/lex-parser-cjs.js:7291:15)
-    at Object.yyError (/lex-parser-cjs.js:7481:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:4275:18)
-    at Object.parse (/lex-parser-cjs.js:8545:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
+    at Object.parseError (/lex-parser-cjs.js:7520:15)
+    at Object.yyError (/lex-parser-cjs.js:7710:25)
+    at Object.parser__PerformAction (/lex-parser-cjs.js:4388:18)
+    at Object.parse (/lex-parser-cjs.js:8774:24)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12820:25)
+    at Context.testEachParserExample (/all-tests.js:557:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -139,10 +151,10 @@ Unexpected "ACTION_BODY"
         value: '"a"',
         token: '"$accept"',
         token_id: 0,
-        line: 1,
+        line: 7,
         expected: null,
         recoverable: false,
-        state: 148,
+        state: 156,
         action: 2,
         new_state: 59,
         stack_pointer: 7,
@@ -150,7 +162,7 @@ Unexpected "ACTION_BODY"
       reentrant_call_depth: 1,
       error_infos_stack: [
         {
-          errStr: `Parse error on line 2:
+          errStr: `Parse error on line 8:
   "a" %{ ret...
 --^
 Unexpected "ACTION_BODY"`,
@@ -158,12 +170,12 @@ Unexpected "ACTION_BODY"`,
           text: '"a"',
           value: '"a"',
           token: '"ACTION_BODY"',
-          token_id: 36,
-          line: 1,
+          token_id: 38,
+          line: 7,
           recoverable: true,
-          state: 79,
+          state: 82,
           action: 0,
-          new_state: 200,
+          new_state: 201,
           stack_pointer: 6,
         },
         {
@@ -178,14 +190,16 @@ Indented text is perceived as JavaScript action code related to the last
 lexer rule regex.
     
   Erroneous code:
-1: %%
-2:   "a" %{ return 1; %}
+5: //
+6: 
+7: %%
+8:   "a" %{ return 1; %}
 ^....^^^
-3: 
-4: 
+9: 
+0: 
     
   Technical error report:
-Parse error on line 2:
+Parse error on line 8:
   "a" %{ ret...
 --^
 Unexpected "ACTION_BODY"
@@ -195,9 +209,9 @@ Unexpected "ACTION_BODY"
           value: '"a"',
           token: '"$accept"',
           token_id: 0,
-          line: 1,
+          line: 7,
           recoverable: false,
-          state: 148,
+          state: 156,
           action: 2,
           new_state: 59,
           stack_pointer: 7,
@@ -209,10 +223,10 @@ Unexpected "ACTION_BODY"
           value: '"a"',
           token: '"$accept"',
           token_id: 0,
-          line: 1,
+          line: 7,
           expected: null,
           recoverable: false,
-          state: 148,
+          state: 156,
           action: 2,
           new_state: 59,
           stack_pointer: 7,
@@ -220,7 +234,7 @@ Unexpected "ACTION_BODY"
       ],
       error_recovery_stack: [
         {
-          errStr: `Parse error on line 2:
+          errStr: `Parse error on line 8:
   "a" %{ ret...
 --^
 Unexpected "ACTION_BODY"`,
@@ -228,12 +242,12 @@ Unexpected "ACTION_BODY"`,
           text: '"a"',
           value: '"a"',
           token: '"ACTION_BODY"',
-          token_id: 36,
-          line: 1,
+          token_id: 38,
+          line: 7,
           recoverable: true,
-          state: 79,
+          state: 82,
           action: 0,
-          new_state: 200,
+          new_state: 201,
           stack_pointer: 6,
           base_pointer: 6,
           info_stack_pointer: 9,
@@ -251,14 +265,16 @@ Indented text is perceived as JavaScript action code related to the last
 lexer rule regex.
     
   Erroneous code:
-1: %%
-2:   "a" %{ return 1; %}
+5: //
+6: 
+7: %%
+8:   "a" %{ return 1; %}
 ^....^^^
-3: 
-4: 
+9: 
+0: 
     
   Technical error report:
-Parse error on line 2:
+Parse error on line 8:
   "a" %{ ret...
 --^
 Unexpected "ACTION_BODY"
@@ -268,9 +284,9 @@ Unexpected "ACTION_BODY"
           value: '"a"',
           token: '"$accept"',
           token_id: 0,
-          line: 1,
+          line: 7,
           recoverable: false,
-          state: 148,
+          state: 156,
           action: 2,
           new_state: 59,
           stack_pointer: 7,
@@ -289,7 +305,13 @@ Unexpected "ACTION_BODY"
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%%
+  __original_input__: `//
+// title: test correct diagnosis for indented rule regex + action 1
+//
+// ...
+//
+
+%%
   "a" %{ return 1; %}
 
 `,

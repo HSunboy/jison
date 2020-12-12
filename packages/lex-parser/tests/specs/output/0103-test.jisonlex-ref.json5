@@ -1,199 +1,170 @@
 {
-  id: -1,
-  token: null,
-  fail: 1,
-  spec: `%s    
-    CALL_DIRECTIVE_STATE,
-    SOURCE_DIRECTIVE_STATE,
-    DEFINE_DIRECTIVE_STATE,
-    ON_OFF_DIRECTIVE_STATE,
-    SET_DIRECTIVE_STATE,
-    TURN_DIRECTIVE_STATE,
-    IF_DIRECTIVE_STATE,
-    ELSE_DIRECTIVE_STATE,
-    ENDIF_DIRECTIVE_STATE,
-    ALNUM_LITERAL_STATE,
-    CONTROL_STATEMENT_STATE
-
-%%
-
-<CALL_DIRECTIVE_STATE,
-SOURCE_DIRECTIVE_STATE,
-DEFINE_DIRECTIVE_STATE,
-ON_OFF_DIRECTIVE_STATE,
-SET_DIRECTIVE_STATE,
-TURN_DIRECTIVE_STATE,
-IF_DIRECTIVE_STATE,
-ELSE_DIRECTIVE_STATE,
-ENDIF_DIRECTIVE_STATE,
-ALNUM_LITERAL_STATE,
-CONTROL_STATEMENT_STATE>{
-\\n            {
-    this.begin('INITIAL');
+  rules: [
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: `this.begin('INITIAL');
     this.unput('\\n');
-    return 'TERMINATOR';
-}
-[ ,;]+        { /* ignore */ }
-"."           {
-    return DOT;
-}
-.             {
-    return '#' + yytext[0].charCodeAt(0).toString(16);
-}
-}
-
-'$'                             
-                                this.begin('CALL_DIRECTIVE_STATE');
-                                return 'MARKER';
-
-. 
-                                return yytext.charCodeAt(0);
-
-<<EOF>>                         yytext = {
+    return 'TERMINATOR'`,
+      rule: '\\n',
+      start_condition: [
+        'CALL_DIRECTIVE_STATE',
+        'SOURCE_DIRECTIVE_STATE',
+        'DEFINE_DIRECTIVE_STATE',
+        'ON_OFF_DIRECTIVE_STATE',
+        'SET_DIRECTIVE_STATE',
+        'TURN_DIRECTIVE_STATE',
+        'IF_DIRECTIVE_STATE',
+        'ELSE_DIRECTIVE_STATE',
+        'ENDIF_DIRECTIVE_STATE',
+        'ALNUM_LITERAL_STATE',
+        'CONTROL_STATEMENT_STATE',
+      ],
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: '/* ignore */',
+      rule: '[ ,;]+',
+      start_condition: [
+        'CALL_DIRECTIVE_STATE',
+        'SOURCE_DIRECTIVE_STATE',
+        'DEFINE_DIRECTIVE_STATE',
+        'ON_OFF_DIRECTIVE_STATE',
+        'SET_DIRECTIVE_STATE',
+        'TURN_DIRECTIVE_STATE',
+        'IF_DIRECTIVE_STATE',
+        'ELSE_DIRECTIVE_STATE',
+        'ENDIF_DIRECTIVE_STATE',
+        'ALNUM_LITERAL_STATE',
+        'CONTROL_STATEMENT_STATE',
+      ],
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: 'return DOT',
+      rule: '\\.',
+      start_condition: [
+        'CALL_DIRECTIVE_STATE',
+        'SOURCE_DIRECTIVE_STATE',
+        'DEFINE_DIRECTIVE_STATE',
+        'ON_OFF_DIRECTIVE_STATE',
+        'SET_DIRECTIVE_STATE',
+        'TURN_DIRECTIVE_STATE',
+        'IF_DIRECTIVE_STATE',
+        'ELSE_DIRECTIVE_STATE',
+        'ENDIF_DIRECTIVE_STATE',
+        'ALNUM_LITERAL_STATE',
+        'CONTROL_STATEMENT_STATE',
+      ],
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: "return '#' + yytext[0].charCodeAt(0).toString(16)",
+      rule: '.',
+      start_condition: [
+        'CALL_DIRECTIVE_STATE',
+        'SOURCE_DIRECTIVE_STATE',
+        'DEFINE_DIRECTIVE_STATE',
+        'ON_OFF_DIRECTIVE_STATE',
+        'SET_DIRECTIVE_STATE',
+        'TURN_DIRECTIVE_STATE',
+        'IF_DIRECTIVE_STATE',
+        'ELSE_DIRECTIVE_STATE',
+        'ENDIF_DIRECTIVE_STATE',
+        'ALNUM_LITERAL_STATE',
+        'CONTROL_STATEMENT_STATE',
+      ],
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: `this.begin('CALL_DIRECTIVE_STATE');
+                                return 'MARKER'`,
+      rule: '\\$',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: 'return yytext.charCodeAt(0)',
+      rule: '.',
+    },
+    {
+      ast: {
+        source: '[IDEM: srcCode]',
+        augmentedSource: '[LINE-SHIFTED SOURCE]',
+        ast: '[recast AST]',
+        fault: false,
+      },
+      fault: false,
+      srcCode: `yytext = {
                                     conditionStack: this.conditionStack,
                                     conditionsSet: Object.keys(this.conditions),
                                 };
-                                return 'EOF';`,
-  err: {
-    hash: {
-      errStr: `
-Seems you did not correctly terminate the start condition set
-    <CALL_DIRECTIVE_STATE,???>
-with a terminating '>'
-    
-  Erroneous code:
-16: <CALL_DIRECTIVE_STATE,
-^^........................^
-17: SOURCE_DIRECTIVE_STATE,
-^^..^^^^^^^^^^^^^^^^^^^^^^^
-    (...continued...)
---  (---------------)
-51:                                 };
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-52:                                 return 'EOF';
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    
-  Technical error report:
-Parse error on line 16:
-<CALL_DIRECTIVE_STATE,
-----------------------^
-Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "nonnumeric_option_value", "err", got unexpected "OPTIONS_END"
-`,
-      exception: null,
-      text: '',
-      value: '',
-      token: '"$accept"',
-      token_id: 0,
-      line: 51,
-      recoverable: false,
-      state: 184,
-      action: 2,
-      new_state: 74,
-      stack_pointer: 8,
+                                return 'EOF'`,
+      rule: '$',
     },
-    message: `
-Seems you did not correctly terminate the start condition set
-    <CALL_DIRECTIVE_STATE,???>
-with a terminating '>'
-    
-  Erroneous code:
-16: <CALL_DIRECTIVE_STATE,
-^^........................^
-17: SOURCE_DIRECTIVE_STATE,
-^^..^^^^^^^^^^^^^^^^^^^^^^^
-    (...continued...)
---  (---------------)
-51:                                 };
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-52:                                 return 'EOF';
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    
-  Technical error report:
-Parse error on line 16:
-<CALL_DIRECTIVE_STATE,
-----------------------^
-Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "nonnumeric_option_value", "err", got unexpected "OPTIONS_END"
-`,
-    name: 'JisonParserError',
-    stack: `JisonParserError: 
-Seems you did not correctly terminate the start condition set
-    <CALL_DIRECTIVE_STATE,???>
-with a terminating '>'
-    
-  Erroneous code:
-16: <CALL_DIRECTIVE_STATE,
-^^........................^
-17: SOURCE_DIRECTIVE_STATE,
-^^..^^^^^^^^^^^^^^^^^^^^^^^
-    (...continued...)
---  (---------------)
-51:                                 };
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-52:                                 return 'EOF';
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    
-  Technical error report:
-Parse error on line 16:
-<CALL_DIRECTIVE_STATE,
-----------------------^
-Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "nonnumeric_option_value", "err", got unexpected "OPTIONS_END"
-
-    at Object.parseError (/lex-parser-cjs.js:7292:15)
-    at Object.yyError (/lex-parser-cjs.js:7482:25)
-    at Object.parser__PerformAction (/lex-parser-cjs.js:4601:14)
-    at Object.parse (/lex-parser-cjs.js:8546:24)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12610:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
-    at callFn (/runnable.js:364:21)
-    at Test.Runnable.run (/runnable.js:352:5)
-    at Runner.runTest (/runner.js:677:10)
-    at /runner.js:801:12
-    at next (/runner.js:594:14)
-    at /runner.js:604:7
-    at next (/runner.js:486:14)
-    at cbHookRun (/runner.js:551:7)
-    at done (/runnable.js:308:5)
-    at callFn (/runnable.js:387:7)
-    at Hook.Runnable.run (/runnable.js:352:5)
-    at next (/runner.js:510:10)
-    at Immediate._onImmediate (/runner.js:572:5)
-    at processImmediate (/timers.js:456:21)`,
+  ],
+  macros: {},
+  startConditions: {
+    CALL_DIRECTIVE_STATE: 0,
+    SOURCE_DIRECTIVE_STATE: 0,
+    DEFINE_DIRECTIVE_STATE: 0,
+    ON_OFF_DIRECTIVE_STATE: 0,
+    SET_DIRECTIVE_STATE: 0,
+    TURN_DIRECTIVE_STATE: 0,
+    IF_DIRECTIVE_STATE: 0,
+    ELSE_DIRECTIVE_STATE: 0,
+    ENDIF_DIRECTIVE_STATE: 0,
+    ALNUM_LITERAL_STATE: 0,
+    CONTROL_STATEMENT_STATE: 0,
   },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
   __extra_diag_info__: {
     pre_parse_callback_callCount: 1,
     post_parse_callback_callCount: 1,
     post_parse_diaginfo: {
       sharedState_yy: {
-        actionInclude: [],
-        options: {},
-        startConditions: {
-          CALL_DIRECTIVE_STATE: 0,
-          SOURCE_DIRECTIVE_STATE: 0,
-          DEFINE_DIRECTIVE_STATE: 0,
-          ON_OFF_DIRECTIVE_STATE: 0,
-          SET_DIRECTIVE_STATE: 0,
-          TURN_DIRECTIVE_STATE: 0,
-          IF_DIRECTIVE_STATE: 0,
-          ELSE_DIRECTIVE_STATE: 0,
-          ENDIF_DIRECTIVE_STATE: 0,
-          ALNUM_LITERAL_STATE: 0,
-          CONTROL_STATEMENT_STATE: 0,
-        },
-        __options_flags__: 11,
-        __options_category_description__: 'the <...> delimited set of lexer start conditions',
+        startConditions: '[reference to sibling --> *.startConditions]',
+        __options_flags__: 0,
+        __options_category_description__: '???',
         __inside_scoped_ruleset__: false,
-        __context_cfg_stack__: [
-          {
-            flags: 0,
-            descr: '???',
-            scoped: false,
-          },
-          {
-            flags: 0,
-            descr: 'the lexer rules definition section',
-            scoped: false,
-          },
-        ],
+        __context_cfg_stack__: [],
+        __inside_condition_set__: false,
         depth: 0,
         include_command_allowed: false,
       },
@@ -204,69 +175,16 @@ Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "n
         value: '',
         token: '"$accept"',
         token_id: 0,
-        line: 51,
+        line: 63,
         expected: null,
         recoverable: false,
-        state: 184,
+        state: 26,
         action: 2,
-        new_state: 74,
-        stack_pointer: 8,
+        new_state: 1,
+        stack_pointer: 5,
       },
       reentrant_call_depth: 1,
       error_infos_stack: [
-        {
-          errStr: `Parse error on line 16:
-<CALL_DIRECTIVE_STATE,
-----------------------^
-Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "nonnumeric_option_value", "err", got unexpected "OPTIONS_END"`,
-          exception: null,
-          text: '',
-          value: '',
-          token: '"OPTIONS_END"',
-          token_id: 22,
-          line: 15,
-          recoverable: true,
-          state: 113,
-          action: 0,
-          new_state: 200,
-          stack_pointer: 8,
-        },
-        {
-          errStr: `
-Seems you did not correctly terminate the start condition set
-    <CALL_DIRECTIVE_STATE,???>
-with a terminating '>'
-    
-  Erroneous code:
-16: <CALL_DIRECTIVE_STATE,
-^^........................^
-17: SOURCE_DIRECTIVE_STATE,
-^^..^^^^^^^^^^^^^^^^^^^^^^^
-    (...continued...)
---  (---------------)
-51:                                 };
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-52:                                 return 'EOF';
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    
-  Technical error report:
-Parse error on line 16:
-<CALL_DIRECTIVE_STATE,
-----------------------^
-Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "nonnumeric_option_value", "err", got unexpected "OPTIONS_END"
-`,
-          exception: null,
-          text: '',
-          value: '',
-          token: '"$accept"',
-          token_id: 0,
-          line: 51,
-          recoverable: false,
-          state: 184,
-          action: 2,
-          new_state: 74,
-          stack_pointer: 8,
-        },
         {
           errStr: null,
           exception: null,
@@ -274,87 +192,36 @@ Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "n
           value: '',
           token: '"$accept"',
           token_id: 0,
-          line: 51,
+          line: 63,
           expected: null,
           recoverable: false,
-          state: 184,
+          state: 26,
           action: 2,
-          new_state: 74,
-          stack_pointer: 8,
+          new_state: 1,
+          stack_pointer: 5,
         },
       ],
-      error_recovery_stack: [
-        {
-          errStr: `Parse error on line 16:
-<CALL_DIRECTIVE_STATE,
-----------------------^
-Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "nonnumeric_option_value", "err", got unexpected "OPTIONS_END"`,
-          exception: null,
-          text: '',
-          value: '',
-          token: '"OPTIONS_END"',
-          token_id: 22,
-          line: 15,
-          recoverable: true,
-          state: 113,
-          action: 0,
-          new_state: 200,
-          stack_pointer: 8,
-          base_pointer: 8,
-          info_stack_pointer: 220,
-          root_failure_pointer: 8,
-        },
-        {
-          errStr: `
-Seems you did not correctly terminate the start condition set
-    <CALL_DIRECTIVE_STATE,???>
-with a terminating '>'
-    
-  Erroneous code:
-16: <CALL_DIRECTIVE_STATE,
-^^........................^
-17: SOURCE_DIRECTIVE_STATE,
-^^..^^^^^^^^^^^^^^^^^^^^^^^
-    (...continued...)
---  (---------------)
-51:                                 };
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-52:                                 return 'EOF';
-^^..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    
-  Technical error report:
-Parse error on line 16:
-<CALL_DIRECTIVE_STATE,
-----------------------^
-Expecting "*", "=", "OPTION_STRING", "OPTION_VALUE", "option", "option_name", "nonnumeric_option_value", "err", got unexpected "OPTIONS_END"
-`,
-          exception: null,
-          text: '',
-          value: '',
-          token: '"$accept"',
-          token_id: 0,
-          line: 51,
-          recoverable: false,
-          state: 184,
-          action: 2,
-          new_state: 74,
-          stack_pointer: 8,
-          base_pointer: 9,
-          info_stack_pointer: 9,
-          root_failure_pointer: 8,
-          yyError: true,
-          errorRuleDepth: -1,
-          recovering: 3,
-        },
-      ],
-      error_infos_stack_size: 3,
-      error_recovery_stack_size: 2,
+      error_recovery_stack: [],
+      error_infos_stack_size: 1,
+      error_recovery_stack_size: 0,
     },
     reentrant_call_depth: 0,
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%s    
+  __original_input__: `//
+// title: "multi-line <A,B,...> condition"
+// test_input: |-
+//   $A.8
+//   B1
+//   $$55Z...
+//   $
+//   ~
+//
+// ...
+//
+
+%s    
     CALL_DIRECTIVE_STATE,
     SOURCE_DIRECTIVE_STATE,
     DEFINE_DIRECTIVE_STATE,

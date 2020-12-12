@@ -25,10 +25,12 @@
 
 
 . {
+    this.begin('FUNCTION_STATE');
     return yytext.charCodeAt(0);
 }
 
 <<EOF>>                         yytext = {
-                                    conditionStack: this.conditionStack
+                                    conditionStack: this.conditionStack,
+                                    conditionsSet: Object.keys(this.conditions),
                                 };
                                 return 'EOF';

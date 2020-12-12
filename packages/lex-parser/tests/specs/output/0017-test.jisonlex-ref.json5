@@ -2,7 +2,15 @@
   id: -1,
   token: null,
   fail: 1,
-  spec: `%%
+  spec: `//
+// title: test multiline action with end marker plus illegal tail 3
+//
+// ...
+//
+// test three nasty situations where we have trailing curly brace beyond the end-of-scope for the action block:
+//
+
+%%
 "["[^\\]]"]" %{
 return true;
 %}
@@ -12,7 +20,7 @@ return true;
   err: {
     name: 'JisonLexerError',
     hash: {
-      errStr: `Lexical error on line 5: 
+      errStr: `Lexical error on line 13: 
 too many closing curly braces in lexer rule action block.
 
 Note: the action code chunk may be too complex for jison to parse
@@ -20,21 +28,26 @@ easily; we suggest you wrap the action code chunk in '%{...%}'
 to help jison grok more or less complex action code chunks.
 
   Erroneous area:
-2: "["[^\\]]"]" %{
-3: return true;
-4: %}
-5:  }
-^...^
-6: 
-7: 
+10: "["[^\\]]"]" %{
+11: return true;
+12: %}
+13:  }
+^^...^
+14: 
+15: 
 `,
       recoverable: false,
       text: '}',
       token: null,
-      line: 4,
+      line: 12,
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
     },
-    message: `Lexical error on line 5: 
+    message: `Lexical error on line 13: 
 too many closing curly braces in lexer rule action block.
 
 Note: the action code chunk may be too complex for jison to parse
@@ -42,15 +55,15 @@ easily; we suggest you wrap the action code chunk in '%{...%}'
 to help jison grok more or less complex action code chunks.
 
   Erroneous area:
-2: "["[^\\]]"]" %{
-3: return true;
-4: %}
-5:  }
-^...^
-6: 
-7: 
+10: "["[^\\]]"]" %{
+11: return true;
+12: %}
+13:  }
+^^...^
+14: 
+15: 
 `,
-    stack: `JisonLexerError: Lexical error on line 5: 
+    stack: `JisonLexerError: Lexical error on line 13: 
 too many closing curly braces in lexer rule action block.
 
 Note: the action code chunk may be too complex for jison to parse
@@ -58,25 +71,25 @@ easily; we suggest you wrap the action code chunk in '%{...%}'
 to help jison grok more or less complex action code chunks.
 
   Erroneous area:
-2: "["[^\\]]"]" %{
-3: return true;
-4: %}
-5:  }
-^...^
-6: 
-7: 
+10: "["[^\\]]"]" %{
+11: return true;
+12: %}
+13:  }
+^^...^
+14: 
+15: 
 
-    at Object.parseError (/lex-parser-cjs.js:7291:15)
-    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:9460:44)
-    at Object.yyError [as yyerror] (/lex-parser-cjs.js:9490:19)
-    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:11004:15)
-    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10415:38)
-    at Object.lexer_next [as next] (/lex-parser-cjs.js:10540:28)
-    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:10724:18)
-    at fastLex (/lex-parser-cjs.js:7886:27)
-    at Object.parse (/lex-parser-cjs.js:8060:30)
-    at Object.yyparse [as parse] (/lex-parser-cjs.js:12609:25)
-    at Context.testEachParserExample (/all-tests.js:483:27)
+    at Object.parseError (/lex-parser-cjs.js:7520:15)
+    at Object.lexer_parseError [as parseError] (/lex-parser-cjs.js:9709:44)
+    at Object.yyError [as yyerror] (/lex-parser-cjs.js:9739:19)
+    at Object.lexer__performAction [as performAction] (/lex-parser-cjs.js:11297:15)
+    at Object.lexer_test_match [as test_match] (/lex-parser-cjs.js:10733:38)
+    at Object.lexer_next [as next] (/lex-parser-cjs.js:10858:28)
+    at Object.lexer_fastLex [as fastLex] (/lex-parser-cjs.js:11042:18)
+    at fastLex (/lex-parser-cjs.js:8115:27)
+    at Object.parse (/lex-parser-cjs.js:8289:30)
+    at Object.yyparse [as parse] (/lex-parser-cjs.js:12820:25)
+    at Context.testEachParserExample (/all-tests.js:557:27)
     at callFn (/runnable.js:364:21)
     at Test.Runnable.run (/runnable.js:352:5)
     at Runner.runTest (/runner.js:677:10)
@@ -120,13 +133,13 @@ to help jison grok more or less complex action code chunks.
         value: '}',
         token: '"$accept"',
         token_id: 0,
-        line: 4,
+        line: 12,
         expected: null,
         recoverable: false,
-        state: 176,
-        action: 2,
-        new_state: 176,
-        stack_pointer: 8,
+        state: 82,
+        action: 1,
+        new_state: 82,
+        stack_pointer: 6,
       },
       reentrant_call_depth: 1,
       error_infos_stack: [
@@ -137,13 +150,13 @@ to help jison grok more or less complex action code chunks.
           value: '}',
           token: '"$accept"',
           token_id: 0,
-          line: 4,
+          line: 12,
           expected: null,
           recoverable: false,
-          state: 176,
-          action: 2,
-          new_state: 176,
-          stack_pointer: 8,
+          state: 82,
+          action: 1,
+          new_state: 82,
+          stack_pointer: 6,
         },
       ],
       error_recovery_stack: [],
@@ -154,7 +167,15 @@ to help jison grok more or less complex action code chunks.
     error_infos_stack_size: 0,
     error_recovery_stack_size: 0,
   },
-  __original_input__: `%%
+  __original_input__: `//
+// title: test multiline action with end marker plus illegal tail 3
+//
+// ...
+//
+// test three nasty situations where we have trailing curly brace beyond the end-of-scope for the action block:
+//
+
+%%
 "["[^\\]]"]" %{
 return true;
 %}

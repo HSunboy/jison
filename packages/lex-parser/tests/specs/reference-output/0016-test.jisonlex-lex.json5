@@ -1,146 +1,136 @@
 [
   {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '%%',
     yylloc: {
-      first_line: 1,
+      first_line: 9,
       first_column: 0,
-      last_line: 1,
+      last_line: 9,
       last_column: 2,
       range: [
-        0,
-        2,
+        200,
+        202,
+      ],
+    },
+  },
+  {
+    id: 53,
+    token: '"STRING_LIT"',
+    yytext: '"["',
+    yylloc: {
+      first_line: 10,
+      first_column: 0,
+      last_line: 10,
+      last_column: 3,
+      range: [
+        203,
+        206,
+      ],
+    },
+  },
+  {
+    id: 48,
+    token: '"REGEX_SET_START"',
+    yytext: '[',
+    yylloc: {
+      first_line: 10,
+      first_column: 3,
+      last_line: 10,
+      last_column: 4,
+      range: [
+        206,
+        207,
       ],
     },
   },
   {
     id: 51,
-    token: '"STRING_LIT"',
-    yytext: '"["',
+    token: '"REGEX_SET"',
+    yytext: '^\\]',
     yylloc: {
-      first_line: 2,
-      first_column: 0,
-      last_line: 2,
-      last_column: 3,
+      first_line: 10,
+      first_column: 4,
+      last_line: 10,
+      last_column: 7,
       range: [
-        3,
-        6,
-      ],
-    },
-  },
-  {
-    id: 46,
-    token: '"REGEX_SET_START"',
-    yytext: '[',
-    yylloc: {
-      first_line: 2,
-      first_column: 3,
-      last_line: 2,
-      last_column: 4,
-      range: [
-        6,
-        7,
+        207,
+        210,
       ],
     },
   },
   {
     id: 49,
-    token: '"REGEX_SET"',
-    yytext: '^\\]',
-    yylloc: {
-      first_line: 2,
-      first_column: 4,
-      last_line: 2,
-      last_column: 7,
-      range: [
-        7,
-        10,
-      ],
-    },
-  },
-  {
-    id: 47,
     token: '"REGEX_SET_END"',
     yytext: ']',
     yylloc: {
-      first_line: 2,
+      first_line: 10,
       first_column: 7,
-      last_line: 2,
+      last_line: 10,
       last_column: 8,
       range: [
-        10,
-        11,
+        210,
+        211,
       ],
     },
   },
   {
-    id: 51,
+    id: 53,
     token: '"STRING_LIT"',
     yytext: '"]"',
     yylloc: {
-      first_line: 2,
+      first_line: 10,
       first_column: 8,
-      last_line: 2,
+      last_line: 10,
       last_column: 11,
       range: [
-        11,
-        14,
+        211,
+        214,
       ],
     },
   },
   {
-    id: 26,
-    token: '"ACTION_START"',
-    yytext: '%{',
-    yylloc: {
-      first_line: 2,
-      first_column: 12,
-      last_line: 2,
-      last_column: 12,
-      range: [
-        15,
-        15,
-      ],
-    },
-  },
-  {
-    id: 36,
-    token: '"ACTION_BODY"',
-    yytext: `
+    id: 37,
+    token: '"ENTIRE_ACTION"',
+    yytext: {
+      srcCode: `
 return true;
 `,
+      shiftCount: 16,
+      action_start_marker: '%{',
+      action_end_marker: '%}',
+    },
     yylloc: {
-      first_line: 2,
+      first_line: 10,
       first_column: 12,
-      last_line: 4,
+      last_line: 12,
       last_column: 2,
       range: [
-        15,
-        33,
+        215,
+        233,
       ],
     },
   },
   {
-    id: 36,
-    token: '"ACTION_BODY"',
+    id: 25,
+    token: '"ACTION_START"',
     yytext: ' ',
     yylloc: {
-      first_line: 4,
+      first_line: 12,
       first_column: 2,
-      last_line: 4,
+      last_line: 12,
       last_column: 3,
       range: [
-        33,
-        34,
+        233,
+        234,
       ],
     },
   },
   {
-    id: 39,
+    id: 41,
     token: '"BRACKET_SURPLUS"',
     yytext: {
-      errStr: `Lexical error on line 4: 
+      errStr: `Lexical error on line 12: 
 too many closing curly braces in lexer rule action block.
 
 Note: the action code chunk may be too complex for jison to parse
@@ -148,26 +138,26 @@ easily; we suggest you wrap the action code chunk in '%{...%}'
 to help jison grok more or less complex action code chunks.
 
   Erroneous area:
-1: %%
-2: "["[^\\]]"]" %{
-3: return true;
-4: %} }
-^.....^
-5: 
-6: 
+ 9: %%
+10: "["[^\\]]"]" %{
+11: return true;
+12: %} }
+^^.....^
+13: 
+14: 
 `,
       recoverable: false,
       text: '}',
       token: null,
-      line: 3,
+      line: 11,
       loc: {
-        first_line: 4,
+        first_line: 12,
         first_column: 3,
-        last_line: 4,
+        last_line: 12,
         last_column: 4,
         range: [
-          34,
-          35,
+          234,
+          235,
         ],
       },
       yy: {
@@ -179,7 +169,7 @@ to help jison grok more or less complex action code chunks.
         ERROR: 2,
         __error_infos: [
           {
-            errStr: `Lexical error on line 4: 
+            errStr: `Lexical error on line 12: 
 too many closing curly braces in lexer rule action block.
 
 Note: the action code chunk may be too complex for jison to parse
@@ -187,26 +177,26 @@ easily; we suggest you wrap the action code chunk in '%{...%}'
 to help jison grok more or less complex action code chunks.
 
   Erroneous area:
-1: %%
-2: "["[^\\]]"]" %{
-3: return true;
-4: %} }
-^.....^
-5: 
-6: 
+ 9: %%
+10: "["[^\\]]"]" %{
+11: return true;
+12: %} }
+^^.....^
+13: 
+14: 
 `,
             recoverable: false,
             text: '}',
             token: null,
-            line: 3,
+            line: 11,
             loc: {
-              first_line: 4,
+              first_line: 12,
               first_column: 3,
-              last_line: 4,
+              last_line: 12,
               last_column: 4,
               range: [
-                34,
-                35,
+                234,
+                235,
               ],
             },
             yy: {
@@ -214,7 +204,12 @@ to help jison grok more or less complex action code chunks.
               include_command_allowed: false,
             },
             lexer: '[lexer]',
+            isLexerError: true,
             yyErrorInvoked: true,
+            isLexerBacktrackingNotSupportedError: false,
+            isLexerInternalError: false,
+            extra_error_attributes: null,
+            lexerHasAlreadyForwardedCursorBy1: false,
           },
         ],
         __decompressed: true,
@@ -229,7 +224,15 @@ to help jison grok more or less complex action code chunks.
           'code',
         ],
         match: '',
-        matched: `%%
+        matched: `//
+// title: test multiline action with end marker plus illegal tail 2
+//
+// ...
+//
+// test three nasty situations where we have trailing curly brace beyond the end-of-scope for the action block:
+//
+
+%%
 "["[^\\]]"]" %{
 return true;
 %} }
@@ -237,18 +240,18 @@ return true;
 `,
         matches: false,
         yytext: '',
-        offset: 37,
+        offset: 237,
         base_position: 0,
         yyleng: 0,
-        yylineno: 5,
+        yylineno: 13,
         yylloc: {
-          first_line: 6,
+          first_line: 14,
           first_column: 0,
-          last_line: 6,
+          last_line: 14,
           last_column: 0,
           range: [
-            37,
-            37,
+            237,
+            237,
           ],
         },
         CRLF_Re: {
@@ -266,8 +269,14 @@ return true;
           depth: 0,
           include_command_allowed: false,
         },
+        __entire_action_block_matchers__: {},
       },
+      isLexerError: true,
       yyErrorInvoked: true,
+      isLexerBacktrackingNotSupportedError: false,
+      isLexerInternalError: false,
+      extra_error_attributes: null,
+      lexerHasAlreadyForwardedCursorBy1: false,
       errorDiag: {
         inputPos: 2,
         yytext: '}',
@@ -280,43 +289,43 @@ return true;
       },
     },
     yylloc: {
-      first_line: 4,
+      first_line: 12,
       first_column: 3,
-      last_line: 4,
+      last_line: 12,
       last_column: 4,
       range: [
-        34,
-        35,
+        234,
+        235,
       ],
     },
   },
   {
-    id: 24,
+    id: 35,
     token: '"ACTION_END"',
     yytext: '',
     yylloc: {
-      first_line: 4,
+      first_line: 12,
       first_column: 4,
-      last_line: 4,
+      last_line: 12,
       last_column: 4,
       range: [
-        35,
-        35,
+        235,
+        235,
       ],
     },
   },
   {
-    id: 34,
+    id: 33,
     token: '"%%"',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 14,
       first_column: 0,
-      last_line: 6,
+      last_line: 14,
       last_column: 0,
       range: [
-        37,
-        37,
+        237,
+        237,
       ],
     },
   },
@@ -325,13 +334,13 @@ return true;
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 14,
       first_column: 0,
-      last_line: 6,
+      last_line: 14,
       last_column: 0,
       range: [
-        37,
-        37,
+        237,
+        237,
       ],
     },
   },
@@ -340,13 +349,13 @@ return true;
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 14,
       first_column: 0,
-      last_line: 6,
+      last_line: 14,
       last_column: 0,
       range: [
-        37,
-        37,
+        237,
+        237,
       ],
     },
   },
@@ -355,13 +364,13 @@ return true;
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 14,
       first_column: 0,
-      last_line: 6,
+      last_line: 14,
       last_column: 0,
       range: [
-        37,
-        37,
+        237,
+        237,
       ],
     },
   },
@@ -370,13 +379,13 @@ return true;
     token: 'end of input',
     yytext: '',
     yylloc: {
-      first_line: 6,
+      first_line: 14,
       first_column: 0,
-      last_line: 6,
+      last_line: 14,
       last_column: 0,
       range: [
-        37,
-        37,
+        237,
+        237,
       ],
     },
   },
@@ -384,7 +393,7 @@ return true;
     id: -2,
     token: null,
     summary: {
-      totalTokenCount: 16,
+      totalTokenCount: 15,
       EOFTokenCount: 4,
       ERRORTokenCount: 0,
       ParseErrorCallCount: 1,
