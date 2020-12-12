@@ -18,11 +18,11 @@ npm-update:
 build:
 
 test:
-	$(MOCHA) --check-leaks --globals assert tests/
+	$(MOCHA) --timeout 18000 --check-leaks --globals assert tests/
 
 test-nyc:
 	-rm -rf ./coverage/
-	$(NYC) --reporter=lcov --reporter=html --reporter=text  -- $(MOCHA) --check-leaks --globals assert tests/
+	$(NYC) --reporter=lcov --reporter=html --reporter=text  -- $(MOCHA) --timeout 18000 --check-leaks --globals assert tests/
 
 
 # increment the XXX <prelease> number in the package.json file: version <major>.<minor>.<patch>-<prelease>
@@ -46,9 +46,11 @@ superclean: clean
 	-rm -f package-lock.json
 	-find . -type d -name 'node_modules' -exec rm -rf "{}" \;
 
+clean-dumpfiles:
+	bash -c "find . -type f \( -iname '*fatal_*_dump*' -o -ipath '*reference-output*' -o -ipath '*/lex/output/*' -o -ipath '*/lex-parser/output/*' -o -ipath '*/specs/output/*' -o -ipath '*/examples/output/*' \) -print -delete"
 
 
 
 
-.PHONY: all prep npm-install build test clean superclean bump git-tag publish npm-update test-nyc
+.PHONY: all prep npm-install build test clean superclean bump git-tag publish npm-update test-nyc clean-dumpfiles
 

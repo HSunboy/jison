@@ -29,7 +29,7 @@ function re2set(re) {
 function exec(src, line, forceDump) {
     return helpers.exec(src, function code_execution_rig(sourcecode, options, errname, debug) {
         if (forceDump) helpers.dump(sourcecode, errname);
-        const f = new Function('', sourcecode);
+        const f = new Function(sourcecode);
         return f();
     }, {
         dumpSourceCodeOnFailure: true,
@@ -3530,17 +3530,22 @@ describe('prettyPrintRange() API', function () {
 
 
 function lexer_reset() {
-    // if (RegExpLexer.parser.yy) {
-    //     var y = RegExpLexer.parser.yy;
-    //     if (y.parser) {
-    //         delete y.parser;
-    //     }
-    //     if (y.lexer) {
-    //         delete y.lexer;
-    //     }
-    // }
+    if (0) {
+        let lexer = RegExpLexer.parser.lexer;
+        lexer.cleanupAfterLex();
 
-    //RegExpLexer.parser.yy = {};
+        if (RegExpLexer.parser.yy) {
+            let y = RegExpLexer.parser.yy;
+            if (y.parser) {
+                delete y.parser;
+            }
+            if (y.lexer) {
+                delete y.lexer;
+            }
+        }
+
+        RegExpLexer.parser.yy = {};
+    }
 
     let debug = 0;
 
@@ -3582,6 +3587,9 @@ function cleanPath(filepath) {
     return path.normalize(filepath).replace(/\\/g, '/');  // UNIXify the path
 }
 
+const PATHROOT = cleanPath('../../..');
+const PATHBASE = cleanPath('.');
+
 function extractYAMLheader(src) {
     // extract the top comment (possibly empty), which carries the title, etc. metadata:
     let header = src.substr(0, src.indexOf('\n\n') + 1);
@@ -3595,6 +3603,15 @@ function extractYAMLheader(src) {
     return header;
 }
 
+function mkFilePath4Display(filepath, our_name) {
+    return filepath.replace(PATHROOT, '')
+    .replace(new RegExp(`^\\/packages\\/${our_name}\\/`), ':/')
+    .replace(/\/tests\/specs\//, '/tests/')
+    .replace(/\/tests\/lex\//, '/lex/')
+    .replace(/\/packages\//, '/')
+    .replace(/\/reference-output\//, '/')
+    .replace(/:\/tests\//, ':/')
+}
 
 
 console.log('exec glob....', __dirname);
@@ -3624,13 +3641,15 @@ testset = testset.concat(testset2);     // append testset2 at the end of the lis
 testset = testset.map(function (filepath) {
     // Get document, or throw exception on error
     try {
-        console.log('Lexer Grammar file:', filepath.replace(/^.*?\/specs\//, '').replace(/^.*?\/examples\//, '../examples/'));
         let spec;
         let header;
         let extra;
         let grammar;
 
         filepath = cleanPath(filepath);
+
+        let filepath4display = mkFilePath4Display(filepath, 'jison-lex');
+        console.log('Lexer Grammar file:', filepath4display);
 
         if (filepath.match(/\.js$/)) {
             spec = require(filepath);
@@ -3665,7 +3684,11 @@ testset = testset.map(function (filepath) {
             grammar = grammar.replace(/\n/g, '\r\n');
         }
 
-        let outbase = path.dirname(filepath).replace(/^.*[\\\/]lex-parser[\\\/]tests[\\\/]specs/, cleanPath('specs/lex-parser'));
+        let outbase = path.dirname(filepath);
+        if (!outbase.includes(PATHBASE)) {
+            // mapping test files from other sub-packages to their own specs/output.../ directories in here to prevent collisions
+            outbase = cleanPath(path.join('specs', path.dirname(filepath4display.replace(/^\/examples\//, '/jison/examples/').replace(/^[:\/]+/, '').replace('/tests/', '/'))));
+        }
         let refOutFilePath = cleanPath(path.join(outbase, 'reference-output', path.basename(filepath) + '-ref.json5'));
         let testOutFilePath = cleanPath(path.join(outbase, 'output', path.basename(filepath) + '-ref.json5'));
         let lexerRefFilePath = cleanPath(path.join(outbase, 'reference-output', path.basename(filepath) + '-lexer.js'));
@@ -3696,13 +3719,15 @@ testset = testset.map(function (filepath) {
         }
 
         return {
+            type: path.extname(filepath).toLowerCase(),
+            filepath4display,
             path: filepath,
             outputRefPath: refOutFilePath,
             outputOutPath: testOutFilePath,
             lexerRefPath: lexerRefFilePath,
             lexerOutPath: lexerOutFilePath,
-            spec: spec,
-            grammar: grammar,
+            spec,
+            grammar,
             meta: doc,
             metaExtra: extra,
             lexerRef: lexerRefOut,
@@ -3833,7 +3858,7 @@ describe('Test Lexer Grammars', function () {
         // process this file:
         let title = (filespec.meta ? filespec.meta.title : null);
 
-        let testname = 'test: ' + filespec.path.replace(/^.*?\/specs\//, '').replace(/^.*?\/examples\//, '../examples/') + (title ? ' :: ' + title : '');
+        let testname = 'test: ' + filespec.filepath4display + (title ? ' :: ' + title : '');
 
         // don't dump more than 4 EOF tokens at the end of the stream:
         const maxEOFTokenCount = 4;
@@ -3853,7 +3878,6 @@ describe('Test Lexer Grammars', function () {
 
             let lexer;
             let lexerSourceCode;
-
 
             let countEOFs = 0;
             let countERRORs = 0;
@@ -4012,6 +4036,14 @@ describe('Test Lexer Grammars', function () {
 
             // strip away devbox-specific paths in error stack traces in the output:
             refOut = stripErrorStackPaths(refOut);
+
+            refOut = rmCommonWS`
+                /* 
+                 * grammar spec generated by @gerhobbelt/jison-lex for input file:
+                 *     ${filespec.filepath4display}
+                 */
+
+            `.trimStart() + refOut;
 
             // and convert it back so we have a `tokens` set that's cleaned up
             // and potentially matching the stored reference set:

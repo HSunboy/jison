@@ -1390,7 +1390,7 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
                     );
                 }
                 chkBugger(sourcecode);
-                let lexer_f = new Function('', sourcecode);
+                let lexer_f = new Function(sourcecode);
                 return lexer_f();
             }, Object.assign({}, grammarSpec.options, {
                 throwErrorOnCompileFailure: true 
@@ -1476,6 +1476,17 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
         // Now we go and try to narrow down the problem area/category:
         assert(grammarSpec.options);
         assert(grammarSpec.options.xregexp !== undefined);
+
+        // First off, take the parsed input `dict` and feed it back into all subsequent `test_me()` calls so
+        // we save time by NOT repeatedly parsing the input while wee try different things to uncover which
+        // bit of the *code generation* uncovered this run-time error we're facing right now. 
+        // 
+        // It also is important to do it now, as at least one of our attempts will *manipulate* the input 
+        // (removing action code chunks to see if the erro goes away then) and we need the parsed input
+        // for that to go down easy.
+        dict = grammarSpec.lex_rule_dictionary;
+        assert(Array.isArray(dict.rules));
+
         let orig_xregexp_opt = !!grammarSpec.options.xregexp;
         if (!test_me(function tweakResult_1() {
             assert(grammarSpec.options.xregexp !== undefined);
@@ -1505,6 +1516,7 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
                 }, 'One or more of your lexer rules are possibly botched?', ex, null)) {
                     // kill each rule action block, one at a time and test again after each 'edit':
                     let rv = false;
+                    assert(Array.isArray(dict.rules));
                     let original_rules = dict.rules;
 
                     try {

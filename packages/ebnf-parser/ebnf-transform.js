@@ -9,7 +9,7 @@ import {
 } from './token_constants';
 
 
-const devDebug = 33;
+const devDebug = 0;
 
 // WARNING: this regex MUST match the regex for `ID` in ebnf-parser::bnf.l jison language lexer spec! (`ID = [{ALPHA}]{ALNUM}*`)
 //

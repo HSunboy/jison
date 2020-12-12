@@ -10,7 +10,7 @@ const path = require('path');
 function exec(src, line, forceDump) {
     return helpers.exec(src, function code_execution_rig(sourcecode, options, errname, debug) {
         if (forceDump) helpers.dump(sourcecode, errname);
-        const f = new Function('', sourcecode);
+        const f = new Function(sourcecode);
         return f();
     }, {
         dumpSourceCodeOnFailure: true,

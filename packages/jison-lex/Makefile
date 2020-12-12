@@ -96,7 +96,7 @@ examples_pplex:
 	$(LEX_XMPL_MAIN) examples/gnucobol-pplex.l
 	# this 'port' of the above code, while absolutely *minimal*, WILL run in NodeJS:
 	$(LEX_XMPL_MAIN) examples/gnucobol-pplex.jisonlex
-	node examples/output/gnucobol-pplex.js    						examples/inputData/gnucobol-pplex.input.txt                    			examples/output/$@.test-run.tokens.json
+	-node examples/output/gnucobol-pplex.js    						examples/inputData/gnucobol-pplex.input.txt                    			examples/output/$@.test-run.tokens.json
 
 examples_gnucobol:
 	# compile the (f)lex spec: the C code in its action blocks WILL NOT permit the generated output to run in NodeJS
@@ -310,10 +310,10 @@ superclean: clean
 	-rm -f package-lock.json
 	-find . -type d -name 'node_modules' -exec rm -rf "{}" \;
 
-
-
 clean-dumpfiles:
 	bash -c "find . -type f \( -iname '*fatal_*_dump*' -o -ipath '*reference-output*' -o -ipath '*/lex/output/*' -o -ipath '*/lex-parser/output/*' -o -ipath '*/specs/output/*' -o -ipath '*/examples/output/*' \) -print -delete"
+
+
 
 
 .PHONY: all prep npm-install build test examples clean_comparison clean superclean clean-dumpfiles bump git-tag publish comparison npm-update test-nyc \

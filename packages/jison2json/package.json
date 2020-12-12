@@ -30,6 +30,7 @@
     "node": ">=8.0"
   },
   "dependencies": {
+    "@gerhobbelt/json5": "2.1.0-48",
     "@gerhobbelt/ebnf-parser": "0.7.0-220",
     "@gerhobbelt/lex-parser": "0.7.0-220",
     "@gerhobbelt/nomnom": "1.8.4-24"

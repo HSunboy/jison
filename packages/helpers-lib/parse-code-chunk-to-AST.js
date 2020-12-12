@@ -979,6 +979,44 @@ function prettyPrintAST(ast, options) {
 
 
 
+// Generate a 'prelude text' to help place a given text at a given location (yylloc).
+// 
+// This is used to (re)generate source code chunks which will report the correct
+// *original* error position when a JavaScript interpreter or other system produces
+// an error specifying the location of the error. 
+// 
+// The `position` parameter is assumed to adhere to the `yylloc` format:
+// - one-based line numbers
+// - zero-based column numbers
+// - range[] is an array specifying the string OFFSET in characters from start to end.
+//   (We will only look at range[0], of course.)
+function generateSourcePrelude(position) {
+    if (!position) return '';
+
+    // We want the lex input to start at the given 'position', if any,
+    // so that error reports will produce a line number and character index
+    // which matches the original input file:
+    assert(typeof position === 'object');
+    position.range = position.range || [];
+    const l = position.first_line | 0;
+    const c = position.first_column | 0;
+    let o = position.range[0] | 0;
+    let prelude = '';
+    if (l > 1) {
+        prelude += (new Array(l)).join('\n');
+        o -= l;
+    }
+    if (c > 0) {
+        prelude += (new Array(c)).join(' ');
+        o -= c;
+    }
+    if (o > 3) {
+        prelude = '// ' + (new Array(o - 3)).join('.') + prelude;
+    }
+    return prelude;
+}
+
+
 
 // validate the given JISON+JavaScript snippet: does it compile?
 //
@@ -1029,12 +1067,7 @@ function checkActionBlock(src, yylloc, options) {
 
     // make sure reasonable line numbers, etc. are reported in any
     // potential parse errors by pushing the source code down:
-    let augSrc = src;
-    if (yylloc) {
-        let lines = new Array(yylloc.first_line | 0);
-        let cols = new Array(yylloc.first_column | 0);
-        augSrc = lines.join('\n') + cols.join(' ') + augSrc;
-    }
+    let augSrc = generateSourcePrelude(yylloc) + src;
 
     try {
         return {
@@ -1193,6 +1226,7 @@ export default {
     checkActionBlock,
     trimActionCode,
     braceArrowActionCode,
+    generateSourcePrelude,
 
     ID_REGEX_BASE,
     IN_ID_CHARSET

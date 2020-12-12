@@ -6,6 +6,7 @@ const version = '0.7.0-220';
 
 const path = require('path');
 const fs = require('fs');
+const JSON5 = require('@gerhobbelt/JSON5');
 
 const jison2json = require('./jison2json');
 
@@ -28,6 +29,11 @@ let opts = require('@gerhobbelt/nomnom')
       abbr: 'o',
       metavar: 'FILE',
       help: 'Filename and base module name of the generated JSON file'
+  })
+  .option('json5', {
+      flag: true,
+      default: true,
+      help: 'output in JSON5 format instead of JSON'
   })
   .option('version', {
       abbr: 'V',
@@ -52,10 +58,23 @@ exports.main = function main(opts) {
       	let name = path.basename(outpath).replace(/\..*$/g, '');
       	outpath = path.dirname(outpath);
 
-        fs.writeFileSync(path.resolve(outpath, name + '.json'), jison2json.convert(bnf, lex));
+        let json = jison2json.convert(bnf, lex);
+        if (opts.json5) {
+            json = JSON5.stringify(json, null, 2);
+        } else {
+            json = JSON.stringify(json, null, 2);
+        }
+        fs.writeFileSync(path.resolve(outpath, name + '.json'), json);
     } else {
         input(function (bnf) {
-            console.log(jison2json.convert(bnf));
+            let json = jison2json.convert(bnf);
+            if (opts.json5) {
+              json = JSON5.stringify(json, null, 2);
+            } else {
+              json = JSON.stringify(json, null, 2);
+            }
+
+            console.log('', json);
         });
     }
 };

@@ -9,6 +9,7 @@ const helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
 const trimErrorForTestReporting = helpers.trimErrorForTestReporting;
 const stripErrorStackPaths = helpers.stripErrorStackPaths;
 const cleanStackTrace4Comparison = helpers.cleanStackTrace4Comparison;
+const rmCommonWS = helpers.rmCommonWS;
 const mkdirp = helpers.mkdirp;
 
 
@@ -70,6 +71,9 @@ function cleanPath(filepath) {
     return path.normalize(filepath).replace(/\\/g, '/');  // UNIXify the path
 }
 
+const PATHROOT = cleanPath('../../..');
+const PATHBASE = cleanPath('.');
+
 function extractYAMLheader(src) {
     // extract the top comment (possibly empty), which carries the title, etc. metadata:
     let header = src.substr(0, src.indexOf('\n\n') + 1);
@@ -83,12 +87,21 @@ function extractYAMLheader(src) {
     return header;
 }
 
+function mkFilePath4Display(filepath, our_name) {
+    return filepath.replace(PATHROOT, '')
+    .replace(new RegExp(`^\\/packages\\/${our_name}\\/`), ':/')
+    .replace(/\/tests\/specs\//, '/tests/')
+    .replace(/\/tests\/lex\//, '/lex/')
+    .replace(/\/packages\//, '/')
+    .replace(/\/reference-output\//, '/')
+    .replace(/:\/tests\//, ':/')
+}
 
 
 console.log('exec glob....', __dirname);
 const original_cwd = process.cwd();
 process.chdir(__dirname);
-var testset = globby.sync([
+let testset = globby.sync([
     './specs/*.jisonlex', 
     './lex/*.jisonlex',
 ]);
@@ -106,13 +119,15 @@ testset = testset.sort((a, b) => {
 testset = testset.map(function (filepath) {
     // Get document, or throw exception on error
     try {
-        console.log('Lexer Spec file:', filepath.replace(/^.*?\/specs\//, '').replace(/^.*?\/lex\//, ''));
         let spec;
         let header;
         let extra;
         let grammar;
 
         filepath = cleanPath(filepath);
+
+        let filepath4display = mkFilePath4Display(filepath, 'lex-parser');
+        console.log('Lexer Grammar file:', filepath4display);
 
         if (filepath.match(/\.js$/)) {
             spec = require(filepath);
@@ -143,16 +158,28 @@ testset = testset.map(function (filepath) {
             filename: filepath
         }) || {};
 
-        let refOutFilePath = cleanPath(path.join(path.dirname(filepath), 'reference-output', path.basename(filepath) + '-ref.json5'));
-        let testOutFilePath = cleanPath(path.join(path.dirname(filepath), 'output', path.basename(filepath) + '-ref.json5'));
-        let lexerRefFilePath = cleanPath(path.join(path.dirname(filepath), 'reference-output', path.basename(filepath) + '-lex.json5'));
-        let lexerOutFilePath = cleanPath(path.join(path.dirname(filepath), 'output', path.basename(filepath) + '-lex.json5'));
+        if (doc.crlf && typeof grammar === 'string') {
+            grammar = grammar.replace(/\n/g, '\r\n');
+        }
+
+        let outbase = path.dirname(filepath);
+        if (!outbase.includes(PATHBASE)) {
+            // mapping test files from other sub-packages to their own specs/output.../ directories in here to prevent collisions
+            outbase = cleanPath(path.join('specs', path.dirname(filepath4display.replace(/^\/examples\//, '/jison/examples/').replace(/^[:\/]+/, '').replace('/tests/', '/'))));
+        }
+        let refOutFilePath = cleanPath(path.join(outbase, 'reference-output', path.basename(filepath) + '-ref.json5'));
+        let testOutFilePath = cleanPath(path.join(outbase, 'output', path.basename(filepath) + '-ref.json5'));
+        let lexerRefFilePath = cleanPath(path.join(outbase, 'reference-output', path.basename(filepath) + '-lex.json5'));
+        let lexerOutFilePath = cleanPath(path.join(outbase, 'output', path.basename(filepath) + '-lex.json5'));
         mkdirp(path.dirname(refOutFilePath));
         mkdirp(path.dirname(testOutFilePath));
 
         let refOut;
         try {
             var soll = fs.readFileSync(refOutFilePath, 'utf8').replace(/\r\n|\r/g, '\n');
+            if (doc.crlf) {
+                soll = soll.replace(/\n/g, '\r\n');
+            }
             refOut = JSON5.parse(soll);
         } catch (ex) {
             refOut = null;
@@ -161,19 +188,24 @@ testset = testset.map(function (filepath) {
         let lexerRefOut;
         try {
             var soll = fs.readFileSync(lexerRefFilePath, 'utf8').replace(/\r\n|\r/g, '\n');
-            lexerRefOut = JSON5.parse(soll);
+            if (doc.crlf) {
+                soll = soll.replace(/\n/g, '\r\n');
+            }
+            lexerRefOut = soll;
         } catch (ex) {
             lexerRefOut = null;
         }
 
         return {
+            type: path.extname(filepath).toLowerCase(),
+            filepath4display,
             path: filepath,
             outputRefPath: refOutFilePath,
             outputOutPath: testOutFilePath,
             lexerRefPath: lexerRefFilePath,
             lexerOutPath: lexerOutFilePath,
-            spec: spec,
-            grammar: grammar,
+            spec,
+            grammar,
             meta: doc,
             metaExtra: extra,
             lexerRef: lexerRefOut,
@@ -188,21 +220,26 @@ testset = testset.map(function (filepath) {
 .filter(function (info) {
     return !!info;
 });
-console.error(JSON5.stringify(testset, {
-    replacer: function (key, value) {
-        if (typeof value === 'string') {
-            let a = value.split('\n');
-            if (value.length > 500 || a.length > 5) {
-                return `[...string (length: ${value.length}, lines: ${a.length}) ...]`;
+
+
+if (0) {
+    console.error(JSON5.stringify(testset, {
+        replacer: function (key, value) {
+            if (typeof value === 'string') {
+                let a = value.split('\n');
+                if (value.length > 500 || a.length > 5) {
+                    return `[...string (length: ${value.length}, lines: ${a.length}) ...]`;
+                }
             }
-        }
-        if (/^(?:ref|lexerRef|spec|grammar)$/.test(key) && typeof value === 'object') {
-            return '[... JSON ...]';
-        }
-        return value;
-    },
-    space: 2,
-}));
+            if (/^(?:ref|lexerRef|spec|grammar)$/.test(key) && typeof value === 'object') {
+                return '[... JSON ...]';
+            }
+            return value;
+        },
+        space: 2,
+    }));
+}
+
 
 function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key, err) {
     // and produce an alternative structure to JSON-ify:
@@ -299,7 +336,7 @@ describe('Test Lexer Grammars', function () {
         // process this file:
         let title = (filespec.meta ? filespec.meta.title : null);
 
-        let testname = 'test: ' + filespec.path.replace(/^.*?\/specs\//, '').replace(/^.*?\/lex\//, '/lex/') + (title ? ' :: ' + title : '');
+        let testname = 'test: ' + filespec.filepath4display + (title ? ' :: ' + title : '');
 
         // don't dump more than 4 EOF tokens at the end of the stream:
         const maxEOFTokenCount = 4;
@@ -311,7 +348,7 @@ describe('Test Lexer Grammars', function () {
         console.error('generate test: ', testname);
 
         // and create a test for it:
-        it(testname, function testEachParserExample() {
+        it(testname, function testEachLexerExample() {
             let err;
             let i = 0;
             let tokens = [];
@@ -364,7 +401,7 @@ describe('Test Lexer Grammars', function () {
                     // we dump yytext in the token stream, so we can use that to dump a little
                     // more info for comparison & diagnostics:
                     this.yytext = rv;
-                    
+
                     return -42; // this.ERROR;
                 }
             };
@@ -453,23 +490,32 @@ describe('Test Lexer Grammars', function () {
             // strip away devbox-specific paths in error stack traces in the output:
             refOut = stripErrorStackPaths(refOut);
 
+            refOut = rmCommonWS`
+                /* 
+                 * grammar spec generated by @gerhobbelt/lex-parser for input file:
+                 *     ${filespec.filepath4display}
+                 */
+
+            `.trimStart() + refOut;
+
             // and convert it back so we have a `tokens` set that's cleaned up
             // and potentially matching the stored reference set:
             tokens = JSON5.parse(refOut);
 
-            if (filespec.lexerRef) {
+            let ref = JSON5.parse(filespec.lexerRef);
+            if (ref) {
                 // Perform the validations only AFTER we've written the files to output:
                 // several tests produce very large outputs, which we shouldn't let assert() process
                 // for diff reporting as that takes bloody ages:
-                //assert.deepEqual(ast, filespec.lexerRef);
+                //assert.deepEqual(ast, ref);
             } else {
                 fs.writeFileSync(filespec.lexerRefPath, refOut, 'utf8');
-                filespec.lexerRef = tokens;
+                filespec.lexerRef = ref = tokens;
             }
             fs.writeFileSync(filespec.lexerOutPath, refOut, 'utf8');
 
             // now that we have saved all data, perform the validation checks:
-            assert.deepEqual(cleanStackTrace4Comparison(tokens), cleanStackTrace4Comparison(filespec.lexerRef), 'grammar should be lexed correctly');
+            assert.deepEqual(cleanStackTrace4Comparison(tokens), cleanStackTrace4Comparison(ref), 'grammar should be lexed correctly');
         });
     });
 });
@@ -493,9 +539,7 @@ describe('LEX parser', function () {
         // process this file:
         let title = (filespec.meta ? filespec.meta.title : null);
 
-        // and create a test for it:
-
-        let testname = 'test: ' + filespec.path.replace(/^.*?\/specs\//, '').replace(/^.*?\/lex\//, '/lex/') + (title ? ' :: ' + title : '');
+        let testname = 'test: ' + filespec.filepath4display + (title ? ' :: ' + title : '');
 
         // don't dump more than 4 EOF tokens at the end of the stream:
         const maxEOFTokenCount = 4;
@@ -506,6 +550,7 @@ describe('LEX parser', function () {
 
         console.error('generate test: ', testname);
 
+        // and create a test for it:
         it('test: ' + testname, function testEachParserExample() {
             let err, ast;
 
@@ -596,6 +641,15 @@ describe('LEX parser', function () {
             });
             // strip away devbox-specific paths in error stack traces in the output:
             refOut = stripErrorStackPaths(refOut);
+
+            refOut = rmCommonWS`
+                /* 
+                 * grammar spec generated by @gerhobbelt/lex-parser for input file:
+                 *     ${filespec.filepath4display}
+                 */
+
+            `.trimStart() + refOut;
+
             // and convert it back so we have a `tokens` set that's cleaned up
             // and potentially matching the stored reference set:
             ast = JSON5.parse(refOut);
@@ -611,6 +665,9 @@ describe('LEX parser', function () {
             fs.writeFileSync(filespec.outputOutPath, refOut, 'utf8');
 
             // now that we have saved all data, perform the validation checks:
+            // keep them simple so assert doesn't need a lot of time to produce diff reports
+            // when the test fails:
+            //
             assert.deepEqual(cleanStackTrace4Comparison(ast), cleanStackTrace4Comparison(filespec.ref), 'grammar should be parsed correctly');
         });
     });

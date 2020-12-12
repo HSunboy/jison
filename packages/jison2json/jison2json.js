@@ -10,7 +10,7 @@ function processGrammar(rawGrammar, lex) {
     // trick to reposition `bnf` after `lex` in serialized JSON
     grammar.bnf = grammar.bnf;
 
-    return JSON.stringify(grammar, null, '  ');
+    return grammar;
 }
 
 exports.convert = processGrammar;

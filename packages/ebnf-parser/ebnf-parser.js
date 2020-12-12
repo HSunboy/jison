@@ -2,6 +2,9 @@
 import bnf from './parser';
 import transform from './ebnf-transform';
 import jisonlex from '../lex-parser';
+import helpers from '../helpers-lib';
+const generateSourcePrelude = helpers.generateSourcePrelude;
+
 
 const version = '0.7.0-220';                              // require('./package.json').version;
 
@@ -128,23 +131,10 @@ bnf.parser.yy.addDeclaration = function bnfAddDeclaration(grammar, decl) {
 
 // parse an embedded lex section
 function parseLex(text, position) {
-    text = text.replace(/(?:^%lex)|(?:\/lex$)/g, '');
-    // We want the lex input to start at the given 'position', if any,
-    // so that error reports will produce a line number and character index
-    // which matches the original input file:
-    position = position || {};
-    position.range = position.range || [];
-    let l = position.first_line | 0;
-    let c = position.range[0] | 0;
-    let prelude = '';
-    if (l > 1) {
-        prelude += (new Array(l)).join('\n');
-        c -= prelude.length;
-    }
-    if (c > 3) {
-        prelude = '// ' + (new Array(c - 3)).join('.') + prelude;
-    }
-    return jisonlex.parse(prelude + text);
+    assert(!/(?:^%lex)/.test(text.trim()));
+    assert(!/(?:\/lex$)/.test(text.trim()));
+
+    return jisonlex.parse(generateSourcePrelude(position) + text);
 }
 
 const ebnf_parser = {
