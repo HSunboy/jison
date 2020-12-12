@@ -124,7 +124,7 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
             }
 
             try {
-                dumpfile = path.normalize(path.join(dumpPaths[i], dumpName));
+                dumpfile = path.resolve(path.join(dumpPaths[i], dumpName));
 
                 const dump = {
                     errname,

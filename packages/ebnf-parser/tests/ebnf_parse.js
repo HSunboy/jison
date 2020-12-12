@@ -58,7 +58,7 @@ function cleanPath(filepath) {
     if (!filepath.includes(':')) {
         filepath = path.join(__dirname, filepath);
     }
-    return path.normalize(filepath).replace(/\\/g, '/');  // UNIXify the path
+    return path.resolve(filepath).replace(/\\/g, '/');  // UNIXify the path
 }
 
 const PATHROOT = cleanPath('../../..');

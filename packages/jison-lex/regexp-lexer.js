@@ -3315,9 +3315,9 @@ Limits
 
     //const [ , ...args ] = argv;
     let must_read_from_stdin = (argv[1] === '-');
-    let input_path = (!must_read_from_stdin ? path.normalize(argv[1]) : '(stdin)');
+    let input_path = (!must_read_from_stdin ? path.resolve(argv[1]) : '(stdin)');
     let must_write_to_stdout = (argv[2] === '-');
-    let output_path = (!must_write_to_stdout ? (path.normalize(argv[2] || (must_read_from_stdin ? input_path : 'stdin') + '.lexed.json')) : '(stdout)');
+    let output_path = (!must_write_to_stdout ? (path.resolve(argv[2] || (must_read_from_stdin ? input_path : 'stdin') + '.lexed.json')) : '(stdout)');
     const print_summary_and_write_to_output = (tokens) => {
         let summary = tokens[tokens.length - 1].summary;
 

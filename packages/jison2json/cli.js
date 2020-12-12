@@ -49,9 +49,9 @@ exports.main = function main(opts) {
     let bnf, lex;
 
     if (opts.file) {
-        bnf = fs.readFileSync(path.normalize(opts.file), 'utf8');
+        bnf = fs.readFileSync(path.resolve(opts.file), 'utf8');
         if (opts.lexfile) {
-            lex = fs.readFileSync(path.normalize(opts.lexfile), 'utf8');
+            lex = fs.readFileSync(path.resolve(opts.lexfile), 'utf8');
         }
 
         let outpath = (opts.outfile || opts.file);

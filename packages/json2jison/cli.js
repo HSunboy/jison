@@ -36,7 +36,7 @@ let opts = require('@gerhobbelt/nomnom')
 
 exports.main = function main(opts) {
     if (opts.file) {
-        let raw = fs.readFileSync(path.normalize(opts.file), 'utf8');
+        let raw = fs.readFileSync(path.resolve(opts.file), 'utf8');
 	      let outpath = (opts.outfile || opts.file);
     	  let name = path.basename(outpath).replace(/\..*$/g, '');
     	  outpath = path.dirname(outpath);

@@ -7,7 +7,7 @@ const Jison = require('../../../../jison/');  // jison-gho
 
 describe('BNF parser', function () {
     xit('test BNF production', function () {
-        let grammar = fs.readFileSync(path.normalize(path.join(__dirname, 'specs/bnf-0001-grammar.jison')), 'utf8');
+        let grammar = fs.readFileSync(path.resolve(path.join(__dirname, 'specs/bnf-0001-grammar.jison')), 'utf8');
 
         let parser = new Jison.Parser(grammar);
         parser.yy.addDeclaration = function (grammar, decl) {
@@ -31,7 +31,7 @@ describe('BNF parser', function () {
             }
         };
 
-        let input = fs.readFileSync(path.normalize(path.join(__dirname, 'specs/inputs/bnf-0001-grammar.input.txt')), 'utf8');
+        let input = fs.readFileSync(path.resolve(path.join(__dirname, 'specs/inputs/bnf-0001-grammar.input.txt')), 'utf8');
         let result = parser.parse(input);
         assert.ok(result, 'parse bnf production');
     });

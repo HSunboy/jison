@@ -4,7 +4,7 @@ const path = require('path');
 const yaml = require('@gerhobbelt/js-yaml');
 const JSON5 = require('@gerhobbelt/json5');
 const globby = require('globby');
-const helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
+const helpers = require('../../helpers-lib');
 const trimErrorForTestReporting = helpers.trimErrorForTestReporting;
 const stripErrorStackPaths = helpers.stripErrorStackPaths;
 const cleanStackTrace4Comparison = helpers.cleanStackTrace4Comparison;
@@ -57,7 +57,7 @@ function cleanPath(filepath) {
     if (!filepath.includes(':')) {
         filepath = path.join(__dirname, filepath);
     }
-    return path.normalize(filepath).replace(/\\/g, '/');  // UNIXify the path
+    return path.resolve(filepath).replace(/\\/g, '/');  // UNIXify the path
 }
 
 const PATHROOT = cleanPath('../../..');
@@ -403,7 +403,6 @@ describe('BNF lexer', function () {
                 // Change CWD to the directory where the source grammar resides: this helps us properly
                 // %include any files mentioned in the grammar with relative paths:
                 process.chdir(path.dirname(filespec.path));
-
 
                 ast = lexer.setInput(grammar, yy);
                 ast.__original_input__ = grammar;

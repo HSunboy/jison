@@ -98,7 +98,7 @@ function main(args) {
 
   var constants = {};
   for (var i = 1, len = args.length - 1; i < len; i++) {
-    constants = loadConstants(path.normalize(args[i]), constants);
+    constants = loadConstants(path.resolve(args[i]), constants);
   }
   if (!constants['EOF']) {
     constants['EOF'] = 1;
@@ -108,9 +108,9 @@ function main(args) {
   // }
 
 
-  var source = fs.readFileSync(path.normalize(args[args.length - 1]), 'utf8');
+  var source = fs.readFileSync(path.resolve(args[args.length - 1]), 'utf8');
   source = rewrite(source, constants);
-  fs.writeFileSync(path.normalize(args[args.length - 1]), source, 'utf8');
+  fs.writeFileSync(path.resolve(args[args.length - 1]), source, 'utf8');
 }
 
 main(process.argv.slice(1));
