@@ -6902,17 +6902,47 @@ defaultActions: bda({
 ])
 }),
 parseError: function parseError(str, hash, ExceptionClass) {
+    // do not throw an exception to terminate the parser 
+    // when one of these conditions has been met:
+    //
+    // 1. parseError() was invoked from the parser kernel,
+    //    which has already decided this error is recoverable.
+    // 2. parseError() was invoked by the parser userland code
+    //    by way of `yyerror()`: in that case, we produce the
+    //    error info hash as a usable return value in the form
+    //    of a JisonParserError class instance.
+    // 3. parseError() was invoked by the lexer kernel: we
+    //    treat all lexer errors as recoverable, or rather... as
+    //    *continuable*. 
+    // 4. parseError() was invoked by the lexer userland code
+    //    by way of `yyerror()`: in that case, we set `yytext`
+    //    to an object containing both the lexed input (yytext)
+    //    *and* the error info hash. We will return the
+    //    lexer ERROR token.
     if (hash.recoverable) {
         if (typeof this.trace === 'function') {
             this.trace(str);
         }
-        hash.destroy();             // destroy... well, *almost*!
+
+        // conditions 3 & 4: is this the lexer calling us?
+        if (hash.isLexerError) {
+            // Note: yylloc, i.e. `loc`, has already been snapshotted by the kernel code.
+            this.yytext = {
+                text: yytext,
+                errorInfo: hash,
+            };
+            return this.ERROR; 
+        } else if (hash.yyErrorInvoked) {
+            // condition 2 is met.
+            return new ExceptionClass(str, hash);
+        }
+        // ELSE: condition 1 it is! DO NOT return anything, as the parser kernel
+        // would then take this return value as the parser run's final
+        // result and terminate the parse phase immediately.
+        return;
     } else {
         if (typeof this.trace === 'function') {
             this.trace(str);
-        }
-        if (!ExceptionClass) {
-            ExceptionClass = this.JisonParserError;
         }
         throw new ExceptionClass(str, hash);
     }
@@ -6932,7 +6962,7 @@ parse: function parse(input) {
     let preErrorSymbol = 0;
     let lastEofErrorStateDepth = Infinity;
     let recoveringErrorInfo = null;
-    let recovering = 0;                 // (only used when the grammar contains error recovery rules)
+    let recoveringSymbolShiftCounter = 0;                 // (only used when the grammar contains error recovery rules)
     const TERROR = this.TERROR;
     const EOF = this.EOF;
     const ERROR_RECOVERY_TOKEN_DISCARD_COUNT = (this.options.errorRecoveryTokenDiscardCount | 0) || 3;
@@ -6961,7 +6991,10 @@ parse: function parse(input) {
         pre_parse: undefined,
         post_parse: undefined,
         pre_lex: undefined,
-        post_lex: undefined      // WARNING: must be written this way for the code expanders to work correctly!
+        post_lex: undefined,
+        copy_yytext: undefined,
+        copy_yylloc: undefined,
+        yydebug: false,
     };
 
     const ASSERT = (
@@ -6997,7 +7030,7 @@ parse: function parse(input) {
         if (src && typeof src === 'object') {
             // non-Object-type objects, e.g. RegExp, Date, etc., can usually be shallow cloned
             // using their constructor:
-            if (src.constructor !== Object) {
+            if (src.constructor !== Object && typeof src.constructor === 'function') {
                 if (Array.isArray(src)) {
                     return src.slice();
                 }
@@ -7007,13 +7040,8 @@ parse: function parse(input) {
                 shallow_copy_noclobber(dst, src);
                 return dst;
             }
-            // native objects must be cloned a different way:
-            {
-                //return Object.assign({}, src);
-                let dst = {};
-                shallow_copy_noclobber(dst, src);
-                return dst;
-            }
+            // native objects (and constructor-less objects) must be cloned a different way:
+            return Object.assign({}, src);
         }
         return src;
     }
@@ -7033,12 +7061,13 @@ parse: function parse(input) {
         }
     }
     function copy_yylloc_native(loc) {
-        let rv = shallow_copy(loc);
-        // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-        if (rv) {
+        if (loc) {
+            let rv = Object.assign({}, loc);
+            // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
             rv.range = rv.range.slice();
+            return rv;
         }
-        return rv;
+        return null;
     }
 
     // copy state
@@ -7062,27 +7091,36 @@ parse: function parse(input) {
     // their closure will still refer to the `parse()` instance which set
     // them up. Hence we MUST set them up at the start of every `parse()` run!
     if (this.yyError) {
-        this.yyError = function yyError(str /*, ...args */) {
+        this.yyError = function yyError(str, ...args) {
 
 
 
 
 
+            let rv;
 
 
-
-let error_rule_depth = (this.options.parserErrorsAreRecoverable ? locateNearestErrorRecoveryRule(state) : -1);
+            let error_rule_depth = (this.options.parserErrorsAreRecoverable ? locateNearestErrorRecoveryRule(state) : -1);
             let expected = this.collect_expected_token_set(state);
-            let hash = this.constructParseErrorInfo(str, null, expected, (error_rule_depth >= 0));
+            let hash = this.constructParseErrorInfo(str, null, expected, (error_rule_depth >= 0) || this.options.parserErrorsAreRecoverable);
+
+            // Add any extra args to the hash under the name `extra_error_attributes`:
+            if (args.length) {
+                hash.extra_error_attributes = args;
+            }
+
+            hash.yyErrorInvoked = true;
+            hash.errorRuleDepth = error_rule_depth;
+
+            rv = this.parseError(str, hash, this.JisonParserError);
+
+            let v = this.shallowCopyErrorInfo(hash);
+
             // append to the old one?
             if (recoveringErrorInfo) {
                 let esp = recoveringErrorInfo.info_stack_pointer;
 
                 recoveringErrorInfo.symbol_stack[esp] = symbol;
-                let v = this.shallowCopyErrorInfo(hash);
-                v.yyError = true;
-                v.errorRuleDepth = error_rule_depth;
-                v.recovering = recovering;
                 // v.stackSampleLength = error_rule_depth + EXTRA_STACK_SAMPLE_DEPTH;
 
                 recoveringErrorInfo.value_stack[esp] = v;
@@ -7092,20 +7130,11 @@ let error_rule_depth = (this.options.parserErrorsAreRecoverable ? locateNearestE
                 ++esp;
                 recoveringErrorInfo.info_stack_pointer = esp;
             } else {
-                recoveringErrorInfo = this.shallowCopyErrorInfo(hash);
-                recoveringErrorInfo.yyError = true;
-                recoveringErrorInfo.errorRuleDepth = error_rule_depth;
-                recoveringErrorInfo.recovering = recovering;
+                recoveringErrorInfo = v;
             }
 
 
-            // Add any extra args to the hash under the name `extra_error_attributes`:
-            let args = Array.prototype.slice.call(arguments, 1);
-            if (args.length) {
-                hash.extra_error_attributes = args;
-            }
-
-            return this.parseError(str, hash, this.JisonParserError);
+            return rv;
         };
     }
 
@@ -7164,7 +7193,7 @@ let error_rule_depth = (this.options.parserErrorsAreRecoverable ? locateNearestE
             }
 
             // cleanup:
-            if (hash && hash.destroy) {
+            if (hash && typeof hash.destroy === 'function') {
                 hash.destroy();
             }
         }
@@ -7348,6 +7377,7 @@ let error_rule_depth = (this.options.parserErrorsAreRecoverable ? locateNearestE
             loc: this.copy_yylloc(lexer.yylloc),
             expected,
             recoverable,
+            recoveringSymbolShiftCounter,      // <-- known as `recovering` before 0.7.0
             state,
             action,
             new_state: newState,
@@ -7356,17 +7386,45 @@ let error_rule_depth = (this.options.parserErrorsAreRecoverable ? locateNearestE
             value_stack: vstack,
             location_stack: lstack,
             stack_pointer: sp,
+
+            // flags to help userland code to easily recognize what sort of error they're getting fed this time:
+            isParserError: true,                // identifies this as a *parser* error (contrasting with a *lexer* error, which would have `isLexerError: true`)
+
+            isParseErrorDuringRecovery: false,
+            isParseAmbiguityError: false,
+            isInternalParserError: false,
+            isParserExceptionError: false,
+            yyErrorInvoked: false,             // `true` when error is caused by call to `yyerror()`
+
+            // additional attributes which will be set up in various error scenarios:
+            extra_error_attributes: null,      // array of extra arguments passed to parseError = args;
+            errorRuleDepth: -1,
+            info_stack_pointer: -1,
+            base_pointer: -1,
+            root_failure_pointer: sp,
+
+            // these next three members are OBSOLETED since 0.7.0: `sharedState_yy` (and its members `parser` and `lexer`) are available via the `this.yyGetSharedState()` API. 
+            // 
+            // These members will cause reference cycles if not treated very carefully, hence have memory leak risks!
+            //
             yy: sharedState_yy,
             lexer,
             parser: this,
 
-            // and make sure the error info doesn't stay due to potential
-            // ref cycle via userland code manipulations.
-            // These would otherwise all be memory leak opportunities!
-            //
-            // Note that only array and object references are nuked as those
-            // constitute the set of elements which can produce a cyclic ref.
-            // The rest of the members is kept intact as they are harmless.
+            // OBSOLETED since 0.7.0: parser and lexer error `hash` and `yy` objects are no longer carrying cyclic references, hence no more memory leak risks here.
+            // 
+            // /**
+            //  * and make sure the error info doesn't stay due to potential
+            //  * ref cycle via userland code manipulations.
+            //  * These would otherwise all be memory leak opportunities!
+            //  *
+            //  * Note that only array and object references are nuked as those
+            //  * constitute the set of elements which can produce a cyclic ref.
+            //  * The rest of the members is kept intact as they are harmless.
+            //  *
+            //  * @public
+            //  * @this {LexErrorInfo}
+            //  */
             destroy: function destructParseErrorInfo() {
                 // remove cyclic references added to error info:
                 // info.yy = null;
@@ -7679,10 +7737,10 @@ return -1; // No suitable error recovery rule available.
                 action = 2;
                 newState = this.defaultActions[state];
             } else {
-                // The single `==` condition below covers both these `===` comparisons in a single
+                // The single `!symbol` condition below covers all these `===` comparisons in a single
                 // operation:
                 //
-                //     if (symbol === null || typeof symbol === 'undefined') ...
+                //     if (symbol === 0 || symbol === null || typeof symbol === 'undefined') ...
                 if (!symbol) {
                     symbol = lex();
                 }
@@ -7698,7 +7756,7 @@ return -1; // No suitable error recovery rule available.
 
 
 
-// handle parse error
+                // handle parse error
                 if (!action) {
                     // first see if there's any chance at hitting an error recovery rule:
                     let error_rule_depth = locateNearestErrorRecoveryRule(state);
@@ -7706,7 +7764,7 @@ return -1; // No suitable error recovery rule available.
                     let errSymbolDescr = (this.describeSymbol(symbol) || symbol);
                     let expected = this.collect_expected_token_set(state);
 
-                    if (!recovering) {
+                    if (!recoveringSymbolShiftCounter) {
                         // Report error
                         errStr = 'Parse error';
                         if (typeof lexer.yylineno === 'number') {
@@ -7726,19 +7784,17 @@ return -1; // No suitable error recovery rule available.
 
                         p = this.constructParseErrorInfo(errStr, null, expected, (error_rule_depth >= 0));
 
+
+                        //p.isParseError = true;
+                        p.errorRuleDepth = error_rule_depth;
+
+                        r = this.parseError(p.errStr, p, this.JisonParserError);
+
                         // DO NOT cleanup the old one before we start the new error info track:
                         // the old one will *linger* on the error stack and stay alive until we
                         // invoke the parser's cleanup API!
                         recoveringErrorInfo = this.shallowCopyErrorInfo(p);
 
-
-
-
-
-
-
-
-r = this.parseError(p.errStr, p, this.JisonParserError);
                         if (typeof r !== 'undefined') {
                             retval = r;
                             break;
@@ -7761,19 +7817,15 @@ r = this.parseError(p.errStr, p, this.JisonParserError);
 
 
 
-let esp = recoveringErrorInfo.info_stack_pointer;
+                    let esp = recoveringErrorInfo.info_stack_pointer;
 
                     // just recovered from another error
-                    if (recovering === ERROR_RECOVERY_TOKEN_DISCARD_COUNT && error_rule_depth >= 0) {
+                    if (recoveringSymbolShiftCounter === ERROR_RECOVERY_TOKEN_DISCARD_COUNT && error_rule_depth >= 0) {
                         // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
-
-
-
                         yyloc = this.copy_yylloc(lexer.yylloc);
 
                         // SHIFT current lookahead and grab another
                         recoveringErrorInfo.symbol_stack[esp] = symbol;
-
                         recoveringErrorInfo.location_stack[esp] = yyloc;
                         recoveringErrorInfo.state_stack[esp] = newState; // push state
                         ++esp;
@@ -7792,7 +7844,7 @@ let esp = recoveringErrorInfo.info_stack_pointer;
 
                     // try to recover from error
                     if (error_rule_depth < 0) {
-                        ASSERT(recovering > 0, 'Line 1048');
+                        ASSERT(recoveringSymbolShiftCounter > 0, 'Line 1097');
                         recoveringErrorInfo.info_stack_pointer = esp;
 
                         // barf a fatal hairball when we're out of look-ahead symbols and none hit a match
@@ -7825,6 +7877,8 @@ let esp = recoveringErrorInfo.info_stack_pointer;
                         if (po) {
                             p.extra_error_attributes = po;
                         }
+
+                        p.isParseErrorDuringRecovery = true;
 
                         r = this.parseError(p.errStr, p, this.JisonParserError);
                         if (typeof r !== 'undefined') {
@@ -7920,7 +7974,7 @@ r = this.performAction.call(yyval, yyloc, combineState, sp - 1, vstack, lstack);
                     recoveringErrorInfo.info_stack_pointer = esp;
 
                     // allow N (default: 3) real symbols to be shifted before reporting a new error
-                    recovering = ERROR_RECOVERY_TOKEN_DISCARD_COUNT;
+                    recoveringSymbolShiftCounter = ERROR_RECOVERY_TOKEN_DISCARD_COUNT;
 
 
 
@@ -7993,7 +8047,7 @@ r = this.performAction.call(yyval, yyloc, combineState, sp - 1, vstack, lstack);
 
 
 
-// encountered another parse error? If so, break out to main loop
+                            // encountered another parse error? If so, break out to main loop
                             // and take it from there!
                             if (!action) {
 
@@ -8027,7 +8081,7 @@ r = this.performAction.call(yyval, yyloc, combineState, sp - 1, vstack, lstack);
 
 
 
-switch (action) {
+                        switch (action) {
                         // catch misc. parse failures:
                         default:
                             // this shouldn't happen, unless resolve defaults are off
@@ -8090,8 +8144,8 @@ switch (action) {
 
                                 yyloc = this.copy_yylloc(lexer.yylloc);
 
-                                if (recovering > 0) {
-                                    recovering--;
+                                if (recoveringSymbolShiftCounter > 0) {
+                                    recoveringSymbolShiftCounter--;
 
 
 
@@ -8104,7 +8158,7 @@ switch (action) {
                                 }
                             } else {
                                 // error just occurred, resume old lookahead f/ before error, *unless* that drops us straight back into error mode:
-                                ASSERT(recovering > 0, 'Line 1352');
+                                ASSERT(recoveringSymbolShiftCounter > 0, 'Line 1403');
                                 symbol = preErrorSymbol;
                                 preErrorSymbol = 0;
 
@@ -8124,7 +8178,7 @@ switch (action) {
                                     // recovering from now...
                                     //
                                     // Also check if the LookAhead symbol isn't the ERROR token we set as part of the error
-                                    // recovery, for then this we would we idling (cycling) on the error forever.
+                                    // recovery, for then we would be idling (cycling) on the error forever.
                                     // Yes, this does not take into account the possibility that the *lexer* may have
                                     // produced a *new* TERROR token all by itself, but that would be a very peculiar grammar!
 
@@ -8147,12 +8201,12 @@ switch (action) {
                             // ### Note About Edge Case ###
                             //
                             // Userland action code MAY already have 'reset' the
-                            // error recovery phase marker `recovering` to ZERO(0)
+                            // error recovery phase marker `recoveringSymbolShiftCounter` to ZERO(0)
                             // while the error symbol hasn't been shifted onto
                             // the stack yet. Hence we only exit this "slow parse loop"
                             // when *both* conditions are met!
-                            ASSERT(preErrorSymbol === 0, 'Line 1383');
-                            if (recovering === 0) {
+                            ASSERT(preErrorSymbol === 0, 'Line 1434');
+                            if (recoveringSymbolShiftCounter === 0) {
                                 break;
                             }
                             continue;
@@ -8307,6 +8361,9 @@ switch (action) {
                 // this shouldn't happen, unless resolve defaults are off
                 if (action instanceof Array) {
                     p = this.constructParseErrorInfo('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol, null, null, false);
+
+                    p.isParseAmbiguityError = true;
+
                     r = this.parseError(p.errStr, p, this.JisonParserError);
                     if (typeof r !== 'undefined') {
                         retval = r;
@@ -8316,6 +8373,9 @@ switch (action) {
                 // Another case of better safe than sorry: in case state transitions come out of another error recovery process
                 // or a buggy LUT (LookUp Table):
                 p = this.constructParseErrorInfo('Parsing halted. No viable error recovery approach available due to internal system failure.', null, null, false);
+
+                p.isInternalParserError = true;
+
                 r = this.parseError(p.errStr, p, this.JisonParserError);
                 if (typeof r !== 'undefined') {
                     retval = r;
@@ -8347,8 +8407,8 @@ switch (action) {
 
                 symbol = 0;
 
-                ASSERT(preErrorSymbol === 0, 'Line 1619');         // normal execution / no error
-                ASSERT(recovering === 0, 'Line 1620');             // normal execution / no error
+                ASSERT(preErrorSymbol === 0, 'Line 1677');         // normal execution / no error
+                ASSERT(recoveringSymbolShiftCounter === 0, 'Line 1678');             // normal execution / no error
 
                 // Pick up the lexer details for the current symbol as that one is not 'look-ahead' any more:
 
@@ -8359,8 +8419,8 @@ switch (action) {
 
             // reduce:
             case 2:
-                ASSERT(preErrorSymbol === 0, 'Line 1631');         // normal execution / no error
-                ASSERT(recovering === 0, 'Line 1632');             // normal execution / no error
+                ASSERT(preErrorSymbol === 0, 'Line 1689');         // normal execution / no error
+                ASSERT(recoveringSymbolShiftCounter === 0, 'Line 1690');             // normal execution / no error
 
                 this_production = this.productions_[newState - 1];  // `this.productions_[]` is zero-based indexed while states start from 1 upwards...
                 yyrulelen = this_production[1];
@@ -8490,7 +8550,10 @@ r = this.performAction.call(yyval, yyloc, newState, sp - 1, vstack, lstack);
             throw ex;
         }
 
-        p = this.constructParseErrorInfo('Parsing aborted due to exception.', ex, null, false);
+        p = this.constructParseErrorInfo('Parsing aborted due to exception: ' + ex.message, ex, null, false);
+
+        p.isParserExceptionError = true;
+
         retval = false;
         r = this.parseError(p.errStr, p, this.JisonParserError);
         if (typeof r !== 'undefined') {
@@ -17652,17 +17715,47 @@ defaultActions: {
   19: 3
 },
 parseError: function parseError(str, hash, ExceptionClass) {
+    // do not throw an exception to terminate the parser 
+    // when one of these conditions has been met:
+    //
+    // 1. parseError() was invoked from the parser kernel,
+    //    which has already decided this error is recoverable.
+    // 2. parseError() was invoked by the parser userland code
+    //    by way of `yyerror()`: in that case, we produce the
+    //    error info hash as a usable return value in the form
+    //    of a JisonParserError class instance.
+    // 3. parseError() was invoked by the lexer kernel: we
+    //    treat all lexer errors as recoverable, or rather... as
+    //    *continuable*. 
+    // 4. parseError() was invoked by the lexer userland code
+    //    by way of `yyerror()`: in that case, we set `yytext`
+    //    to an object containing both the lexed input (yytext)
+    //    *and* the error info hash. We will return the
+    //    lexer ERROR token.
     if (hash.recoverable) {
         if (typeof this.trace === 'function') {
             this.trace(str);
         }
-        hash.destroy();             // destroy... well, *almost*!
+
+        // conditions 3 & 4: is this the lexer calling us?
+        if (hash.isLexerError) {
+            // Note: yylloc, i.e. `loc`, has already been snapshotted by the kernel code.
+            this.yytext = {
+                text: yytext,
+                errorInfo: hash,
+            };
+            return this.ERROR; 
+        } else if (hash.yyErrorInvoked) {
+            // condition 2 is met.
+            return new ExceptionClass(str, hash);
+        }
+        // ELSE: condition 1 it is! DO NOT return anything, as the parser kernel
+        // would then take this return value as the parser run's final
+        // result and terminate the parse phase immediately.
+        return;
     } else {
         if (typeof this.trace === 'function') {
             this.trace(str);
-        }
-        if (!ExceptionClass) {
-            ExceptionClass = this.JisonParserError;
         }
         throw new ExceptionClass(str, hash);
     }
@@ -24452,17 +24545,47 @@ defaultActions: bda$1({
 ])
 }),
 parseError: function parseError(str, hash, ExceptionClass) {
+    // do not throw an exception to terminate the parser 
+    // when one of these conditions has been met:
+    //
+    // 1. parseError() was invoked from the parser kernel,
+    //    which has already decided this error is recoverable.
+    // 2. parseError() was invoked by the parser userland code
+    //    by way of `yyerror()`: in that case, we produce the
+    //    error info hash as a usable return value in the form
+    //    of a JisonParserError class instance.
+    // 3. parseError() was invoked by the lexer kernel: we
+    //    treat all lexer errors as recoverable, or rather... as
+    //    *continuable*. 
+    // 4. parseError() was invoked by the lexer userland code
+    //    by way of `yyerror()`: in that case, we set `yytext`
+    //    to an object containing both the lexed input (yytext)
+    //    *and* the error info hash. We will return the
+    //    lexer ERROR token.
     if (hash.recoverable) {
         if (typeof this.trace === 'function') {
             this.trace(str);
         }
-        hash.destroy();             // destroy... well, *almost*!
+
+        // conditions 3 & 4: is this the lexer calling us?
+        if (hash.isLexerError) {
+            // Note: yylloc, i.e. `loc`, has already been snapshotted by the kernel code.
+            this.yytext = {
+                text: yytext,
+                errorInfo: hash,
+            };
+            return this.ERROR; 
+        } else if (hash.yyErrorInvoked) {
+            // condition 2 is met.
+            return new ExceptionClass(str, hash);
+        }
+        // ELSE: condition 1 it is! DO NOT return anything, as the parser kernel
+        // would then take this return value as the parser run's final
+        // result and terminate the parse phase immediately.
+        return;
     } else {
         if (typeof this.trace === 'function') {
             this.trace(str);
-        }
-        if (!ExceptionClass) {
-            ExceptionClass = this.JisonParserError;
         }
         throw new ExceptionClass(str, hash);
     }
@@ -24622,7 +24745,7 @@ parse: function parse(input) {
 
 let error_rule_depth = (this.options.parserErrorsAreRecoverable ? locateNearestErrorRecoveryRule(state) : -1);
             let expected = this.collect_expected_token_set(state);
-            let hash = this.constructParseErrorInfo(str, null, expected, (error_rule_depth >= 0));
+            let hash = this.constructParseErrorInfo(str, null, expected, (error_rule_depth >= 0) || this.options.parserErrorsAreRecoverable);
             // append to the old one?
             if (recoveringErrorInfo) {
                 let esp = recoveringErrorInfo.info_stack_pointer;
@@ -36212,17 +36335,47 @@ parser$4.error = generator.error;
 // --- START parser Error class chunk ---
 const parseErrorSourceCode = `
 function parseError(str, hash, ExceptionClass) {
+    // do not throw an exception to terminate the parser 
+    // when one of these conditions has been met:
+    //
+    // 1. parseError() was invoked from the parser kernel,
+    //    which has already decided this error is recoverable.
+    // 2. parseError() was invoked by the parser userland code
+    //    by way of \`yyerror()\`: in that case, we produce the
+    //    error info hash as a usable return value in the form
+    //    of a JisonParserError class instance.
+    // 3. parseError() was invoked by the lexer kernel: we
+    //    treat all lexer errors as recoverable, or rather... as
+    //    *continuable*. 
+    // 4. parseError() was invoked by the lexer userland code
+    //    by way of \`yyerror()\`: in that case, we set \`yytext\`
+    //    to an object containing both the lexed input (yytext)
+    //    *and* the error info hash. We will return the
+    //    lexer ERROR token.
     if (hash.recoverable) {
         if (typeof this.trace === 'function') {
             this.trace(str);
         }
-        hash.destroy();             // destroy... well, *almost*!
+
+        // conditions 3 & 4: is this the lexer calling us?
+        if (hash.isLexerError) {
+            // Note: yylloc, i.e. \`loc\`, has already been snapshotted by the kernel code.
+            this.yytext = {
+                text: yytext,
+                errorInfo: hash,
+            };
+            return this.ERROR; 
+        } else if (hash.yyErrorInvoked) {
+            // condition 2 is met.
+            return new ExceptionClass(str, hash);
+        }
+        // ELSE: condition 1 it is! DO NOT return anything, as the parser kernel
+        // would then take this return value as the parser run's final
+        // result and terminate the parse phase immediately.
+        return;
     } else {
         if (typeof this.trace === 'function') {
             this.trace(str);
-        }
-        if (!ExceptionClass) {
-            ExceptionClass = this.JisonParserError;
         }
         throw new ExceptionClass(str, hash);
     }
@@ -36605,7 +36758,7 @@ function parse(input, parseParams) {
 
             let error_rule_depth = (this.options.parserErrorsAreRecoverable ? locateNearestErrorRecoveryRule(state) : -1);
             let expected = this.collect_expected_token_set(state);
-            let hash = this.constructParseErrorInfo(str, null, expected, (error_rule_depth >= 0));
+            let hash = this.constructParseErrorInfo(str, null, expected, (error_rule_depth >= 0) || this.options.parserErrorsAreRecoverable);
             // append to the old one?
             if (recoveringErrorInfo) {
                 let esp = recoveringErrorInfo.info_stack_pointer;
