@@ -217,13 +217,15 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
         chkBugger(sourcecode);
         p = code_execution_rig.call(this, sourcecode, options, errname, debug);
     } catch (ex) {
-        if (debug > 1) console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+        if (debug > 1) console.error('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
-        if (debug) console.log('generated ' + errname + ' source code fatal error: ', ex.message);
+        if (debug > 2) console.error('', 'OFFENDING SOURCECODE:\n-------------------------\n' + sourcecode + '\n---------------------------');
 
-        if (debug > 1) console.log('exec-and-diagnose options:', options);
+        if (debug) console.error('generated ' + errname + ' source code fatal error: ', ex.message);
 
-        if (debug > 1) console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+        if (debug > 1) console.error('exec-and-diagnose options:', options);
+
+        if (debug > 1) console.error('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
         if (options.dumpSourceCodeOnFailure) {
             dumpSourceToFile(sourcecode, errname, err_id, options, ex);
@@ -241,8 +243,8 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
 
 
 
-export default {
-    exec: exec_and_diagnose_this_stuff,
-    dump: dumpSourceToFile,
+export {
+    exec_and_diagnose_this_stuff,
+    dumpSourceToFile,
     convertExceptionToObject,
 };

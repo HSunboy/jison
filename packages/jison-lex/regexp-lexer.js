@@ -9,7 +9,7 @@ import setmgmt from './regexp-set-management.js';
 import helpers from '../helpers-lib';
 const rmCommonWS = helpers.rmCommonWS;
 const mkIdentifier = helpers.mkIdentifier;
-const code_exec = helpers.exec;
+const code_exec = helpers.exec_and_diagnose_this_stuff;
 // import recast from 'recast';
 // import astUtils from 'ast-util';
 import assert from 'assert';
@@ -28,7 +28,7 @@ function reportWarning(grammarSpec, msg) {
     if (typeof grammarSpec.warn_cb === 'function') {
         grammarSpec.warn_cb(msg);
     } else if (grammarSpec.warn_cb) {
-        console.error(msg);
+        console.warn(msg);
     } else {
         console.error(msg);
         // do not treat as warning; barf hairball instead so that this oddity gets noticed right away!
@@ -3261,7 +3261,7 @@ Limits
         try {
             lexer.setInput(input, yy);
 
-            for (i = 0; i < maxTokenCount; i++) {
+            for (let i = 0; i < maxTokenCount; i++) {
                 let tok = lexer.lex();
                 tokens.push({
                     id: tok,
@@ -3459,7 +3459,7 @@ function stripUnusedLexerCode(src, grammarSpec) {
         let b = a.slice(minl, line + 10);
         let c = b.splice(line - minl, 0, '', '^^^^^^^^^^^ source line above is reported as erroneous ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^', '');
         let offendingChunk = '        ' + b.join('\n        ');
-        reportWarning(rmCommonWS`
+        let warnMsg = rmCommonWS`
             stripUnusedLexerCode WARNING: 
 
                 JISON failed to reformat the generated lexer.
@@ -3472,7 +3472,15 @@ function stripUnusedLexerCode(src, grammarSpec) {
                 The offending action code chunk as reported above:
 
             ${offendingChunk}
-        `);
+        `;
+        // a bit of heuristics for readability
+        if (warnMsg.length > 500) {
+            warnMsg = warnMsg
+            .replace(/[^ -\x7F\r\n\t]/g, '¿')
+            .replace(/¿(?:-¿|¿)+/g, '¿¿')
+            .replace(/ WARNING:/, ' WARNING (non-ASCII character sequences are represented by ¿):')
+        }
+        reportWarning(warnMsg);
 
         new_src = src;
     }

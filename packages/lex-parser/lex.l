@@ -15,8 +15,9 @@ DIGIT                                   [\p{Number}]
 WHITESPACE                              [\s\r\n\p{Separator}]
 ALNUM                                   [{ALPHA}{DIGIT}]
 
-NAME                                    [{ALPHA}](?:[{ALNUM}-]*{ALNUM})?
-ID                                      [{ALPHA}]{ALNUM}*
+//ID                                    [{ALPHA}]{ALNUM}*
+// support identifiers such as '8bit' and 'alka-selzer07':
+ID                                      [{DIGIT}]*[{ALPHA}](?:[{ALNUM}-]*{ALNUM})?
 DECIMAL_NUMBER                          [1-9][0-9]*
 HEX_NUMBER                              "0"[xX][0-9a-fA-F]+
 BR                                      \r\n|\n|\r
@@ -400,7 +401,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 // from entering 'action' mode on the leading whitespace alone, thus turning `{{...}}` into the equivalent of
 // `{ { ... } }`, which would **not** produce the same result as then we then won't be able
 // to apply the patched `%{...%}` grab-all-at-once rule near the top of this file.
-// (See also the code in the `setupDelimitedActionChunkLexerRegex()` function: with
+// (See also the code in the `setupDelimitedActionChunkMatcher()` function: with
 // `{{` we intend to reap the same benefits as we do when using `%{` and friends,
 // while we want `{` to act as a regular flavor curly brace everywhere.
 //
@@ -419,7 +420,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 // - `|` starts a rule alternative, never a chunk of action code.
 // - `%%` delimits a lexer spec section and should always be placed at the start
 //   of a new line, as are most other lexer spec entities.
-// - also don't forget about the arrows: those should be lexed via whispace-skip and then
+// - also don't forget about the arrows: those should be lexed via whitespace-skip and then
 //   matching one of the rules above in the next `lex()` call.
 //
 // The `{WS}` and `{BR}` chunks in the postcondition of the lexer regex below is there to prevent
@@ -434,7 +435,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
 // 
 // Update: when we're inside a *scoped rule block*, then lexer rules MAY be indented!
 
-<rules>{WS}+/!(?:"{{"|"|"|"%"|"->"|"=>"|"→"|{WS}|{BR})
+<rules>{WS}+/!(?:"{{" | "|" | "%" | "->" | "=>" | "→" | {WS} | {BR})
                                         {{
                                             // look back beyond match: if this is an *indentation* from the
                                             // start of the line, then we won't consider this a action code block start
@@ -745,7 +746,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
                                             return 'ACTION_START';
                                         %}
 
-<INITIAL,rules,code>"%"{NAME}([^\r\n]*)
+<INITIAL,rules,code>"%"{ID}([^\r\n]*)
                                         %{
                                             /* ignore unrecognized decl */
                                             this.warn(rmCommonWS`
@@ -756,7 +757,7 @@ ANY_LITERAL_CHAR                        [^\s\r\n<>\[\](){}.*+?:!=|%\/\\^$,\'\"\`
                                                 ${this.prettyPrintRange(yylloc)}
                                             `);
                                             yytext = {
-                                                name: this.matches[1],              // {NAME}
+                                                name: this.matches[1],              // {ID}
                                                 value: this.matches[2].trim()       // optional value/parameters
                                             };
                                             return 'UNKNOWN_DECL';

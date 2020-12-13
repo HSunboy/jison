@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('fs'), require('path'), require('@gerhobbelt/json5'), require('@gerhobbelt/xregexp'), require('recast'), require('assert')) :
-    typeof define === 'function' && define.amd ? define(['fs', 'path', '@gerhobbelt/json5', '@gerhobbelt/xregexp', 'recast', 'assert'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.helpers = factory(global.fs, global.path, global.JSON5, global.XRegExp, global.recast, global.assert));
-}(this, (function (fs, path, JSON5, XRegExp, recast, assert) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('fs'), require('path'), require('@gerhobbelt/json5'), require('@gerhobbelt/xregexp'), require('recast'), require('assert'), require('@gerhobbelt/js-yaml')) :
+    typeof define === 'function' && define.amd ? define(['fs', 'path', '@gerhobbelt/json5', '@gerhobbelt/xregexp', 'recast', 'assert', '@gerhobbelt/js-yaml'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.helpers = factory(global.fs, global.path, global.JSON5, global.XRegExp, global.recast, global.assert, global.yaml));
+}(this, (function (fs, path, JSON5, XRegExp, recast, assert, yaml) { 'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -12,6 +12,7 @@
     var XRegExp__default = /*#__PURE__*/_interopDefaultLegacy(XRegExp);
     var recast__default = /*#__PURE__*/_interopDefaultLegacy(recast);
     var assert__default = /*#__PURE__*/_interopDefaultLegacy(assert);
+    var yaml__default = /*#__PURE__*/_interopDefaultLegacy(yaml);
 
     // Return TRUE if `src` starts with `searchString`.
     function startsWith(src, searchString) {
@@ -282,20 +283,41 @@
         return alt === ref;
     }
 
+    const unicodeQuotes = `“…” ‘…’ «…» ‹…› 「…」 《…》 〈…〉 •…• ’…’ ”…”`;
+    const unicodeQuoteSets = unicodeQuotes.split(' ').map((s) => {
+        return s.split('…');
+    });
+
     // properly quote and escape the given input string
-    function dquote(s) {
-        let sq = (s.indexOf('\'') >= 0);
-        let dq = (s.indexOf('"') >= 0);
+    function dquote(s, options = {}) {
+        if (options.preferred) {
+            const prefRe = new RegExp(`([${options.preferred || 'x'}])…(.)`, 'g');
+            let m;
+
+            while ((m = prefRe.exec(unicodeQuotes)) !== null) {
+                if (!s.includes(m[1]) && !s.includes(m[2])) {
+                    return m[1] + s + m[2];
+                }
+            }
+        }
+        if (!options.onlyRegular) {
+            // see if we can get away with a couple of Unicode quote pairs:
+            for (let p of unicodeQuoteSets) {
+                if (s.includes(p[0]) || s.includes(p[1]))
+                    continue;
+                return p[0] + s + p[1];
+            }
+        }
+        const sq = s.includes("'");
+        let dq = s.includes('"');
         if (sq && dq) {
             s = s.replace(/"/g, '\\"');
             dq = false;
         }
         if (dq) {
-            s = '\'' + s + '\'';
-        } else {
-            s = '"' + s + '"';
-        }
-        return s;
+            return '\'' + s + '\'';
+        } 
+        return '"' + s + '"';
     }
 
     // Return `true` when the directory has been created
@@ -431,7 +453,7 @@
                 }
 
                 try {
-                    dumpfile = path__default['default'].normalize(path__default['default'].join(dumpPaths[i], dumpName));
+                    dumpfile = path__default['default'].resolve(path__default['default'].join(dumpPaths[i], dumpName));
 
                     const dump = {
                         errname,
@@ -524,13 +546,15 @@
             chkBugger(sourcecode);
             p = code_execution_rig.call(this, sourcecode, options, errname, debug);
         } catch (ex) {
-            if (debug > 1) console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            if (debug > 1) console.error('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
-            if (debug) console.log('generated ' + errname + ' source code fatal error: ', ex.message);
+            if (debug > 2 || ex.message.includes('else')) console.error('', 'OFFENDING SOURCECODE:\n-------------------------\n' + sourcecode + '\n---------------------------');
 
-            if (debug > 1) console.log('exec-and-diagnose options:', options);
+            if (debug) console.error('generated ' + errname + ' source code fatal error: ', ex.message);
 
-            if (debug > 1) console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            if (debug > 1) console.error('exec-and-diagnose options:', options);
+
+            if (debug > 1) console.error('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
             if (options.dumpSourceCodeOnFailure) {
                 dumpSourceToFile(sourcecode, errname, err_id, options, ex);
@@ -542,17 +566,6 @@
         }
         return p;
     }
-
-
-
-
-
-
-    var exec = {
-        exec: exec_and_diagnose_this_stuff,
-        dump: dumpSourceToFile,
-        convertExceptionToObject,
-    };
 
     //
 
@@ -1160,38 +1173,6 @@
     }
 
 
-    // function compileCodeToES5(src, options) {
-    //     options = Object.assign({}, {
-    //         ast: true,
-    //         code: true,
-    //         sourceMaps: true,
-    //         comments: true,
-    //         filename: 'compileCodeToES5.js',
-    //         sourceFileName: 'compileCodeToES5.js',
-    //         sourceRoot: '.',
-    //         sourceType: 'module',
-
-    //         babelrc: false,
-
-    //         ignore: [
-    //             'node_modules/**/*.js'
-    //         ],
-    //         compact: false,
-    //         retainLines: false,
-    //         presets: [
-    //             [ '@babel/preset-env', {
-    //                 targets: {
-    //                     browsers: [ 'last 2 versions' ],
-    //                     node: '8.0'
-    //                 }
-    //             } ]
-    //         ]
-    //     }, options);
-
-    //     return babel.transformSync(src, options); // => { code, map, ast }
-    // }
-
-
     function prettyPrintAST(ast, options) {
         const defaultOptions = {
             tabWidth: 2,
@@ -1217,6 +1198,44 @@
         return new_src;
     }
 
+
+
+    // Generate a 'prelude text' to help place a given text at a given location (yylloc).
+    // 
+    // This is used to (re)generate source code chunks which will report the correct
+    // *original* error position when a JavaScript interpreter or other system produces
+    // an error specifying the location of the error. 
+    // 
+    // The `position` parameter is assumed to adhere to the `yylloc` format:
+    // - one-based line numbers
+    // - zero-based column numbers
+    // - range[] is an array specifying the string OFFSET in characters from start to end.
+    //   (We will only look at range[0], of course.)
+    function generateSourcePrelude(position) {
+        if (!position) return '';
+
+        // We want the lex input to start at the given 'position', if any,
+        // so that error reports will produce a line number and character index
+        // which matches the original input file:
+        assert__default['default'](typeof position === 'object');
+        position.range = position.range || [];
+        const l = position.first_line | 0;
+        const c = position.first_column | 0;
+        let o = position.range[0] | 0;
+        let prelude = '';
+        if (l > 1) {
+            prelude += (new Array(l)).join('\n');
+            o -= l;
+        }
+        if (c > 0) {
+            prelude += (new Array(c)).join(' ');
+            o -= c;
+        }
+        if (o > 3) {
+            prelude = '// ' + (new Array(o - 3)).join('.') + prelude;
+        }
+        return prelude;
+    }
 
 
 
@@ -1269,12 +1288,7 @@
 
         // make sure reasonable line numbers, etc. are reported in any
         // potential parse errors by pushing the source code down:
-        let augSrc = src;
-        if (yylloc) {
-            let lines = new Array(yylloc.first_line | 0);
-            let cols = new Array(yylloc.first_column | 0);
-            augSrc = lines.join('\n') + cols.join(' ') + augSrc;
-        }
+        let augSrc = generateSourcePrelude(yylloc) + src;
 
         try {
             return {
@@ -1428,11 +1442,11 @@
     var parse2AST = {
         generateMapper4JisonGrammarIdentifiers,
         parseCodeChunkToAST,
-        //compileCodeToES5,
         prettyPrintAST,
         checkActionBlock,
         trimActionCode,
         braceArrowActionCode,
+        generateSourcePrelude,
 
         ID_REGEX_BASE,
         IN_ID_CHARSET
@@ -1672,8 +1686,6 @@
         getRegExpInfo: getRegExpInfo
     };
 
-    const convertExceptionToObject$1 = exec.convertExceptionToObject;
-
     let cycleref = [];
     let cyclerefpath = [];
 
@@ -1690,7 +1702,7 @@
 
             let dst = {};
             if (src instanceof Error) {
-                dst = convertExceptionToObject$1(src);
+                dst = convertExceptionToObject(src);
             } else {
                 for (let k in src) {
                     if (Object.prototype.hasOwnProperty.call(src, k)) {
@@ -1718,7 +1730,7 @@
             } else {
                 dst = {};
                 if (src instanceof Error) {
-                    dst = convertExceptionToObject$1(src);
+                    dst = convertExceptionToObject(src);
                 } else {
                     for (let k in src) {
                         if (Object.prototype.hasOwnProperty.call(src, k)) {
@@ -2215,7 +2227,7 @@
                 // Hence we check for an 'independent' end marker for all multi-brace markers:
                 // 
                 if (is_complex_marker && srcCode) {
-                    let m2 = /[^}]$/.test(srcCode);    // no '}' allowed at the very end or you'ld have the fringe scenario above!
+                    let m2 = /[}]$/.test(srcCode);    // no '}' allowed at the very end or you'ld have the fringe scenario above!
                     if (m2) {
                         return {
                             fault: rmCommonWS`
@@ -2250,6 +2262,399 @@
         return rv;
     }
 
+    function setupFileBasedTestRig(__DIRNAME__ /* __dirname */, testset, __NAME__, options) {
+        options = options || {};
+
+        function cleanPath(filepath) {
+            // does input path contain a Windows Drive or Network path? 
+            // If so, prevent bugs in path.join() re Windows paths to kick in 
+            // while the input path is an absolute path already anyway:
+            if (!filepath.includes(':')) {
+                filepath = path__default['default'].join(__DIRNAME__, filepath);
+            }
+            return path__default['default'].resolve(filepath).replace(/\\/g, '/');  // UNIXify the path
+        }
+
+        const PATHROOT = cleanPath('../../..');
+        const PATHBASE = cleanPath('.');
+
+        function extractYAMLheader(src) {
+            // extract the top comment (possibly empty), which carries the title, etc. metadata:
+            src = src.replace(/\s+$/g, '').trim() + '\n\n\n';
+            let header = src.substr(0, src.indexOf('\n\n') + 1);
+
+            // check if this chunk is indeed a YAML header: we ASSUME it contains at least
+            // one line looking like this:
+            let is_yaml_chunk = header.split('\n').filter((l) => l.replace(/^\/\/ ?/gm, '').trim() === '...').length > 0;
+            if (!is_yaml_chunk) {
+                return '';
+            }
+            return header;
+        }
+
+        function mkFilePath4Display(filepath) {
+            return filepath.replace(PATHROOT, '')
+            .replace(new RegExp(`^\\/packages\\/${__NAME__}\\/`), ':/')
+            .replace(/\/tests\/specs\//, '/tests/')
+            .replace(/\/tests\/lex\//, '/lex/')
+            .replace(/\/packages\//, '/')
+            .replace(/\/reference-output\//, '/')
+            .replace(/-ref\./, '.')
+            .replace(/:\/tests\//, ':/')
+            .replace(/^\/([^\/]+)\/tests\//, '/$1/')
+        }
+
+
+        // collision detection helper for the generated output+reference files
+        let __hits__ = {};
+
+
+        testset = testset.map(function (filepath) {
+            // Get document, or throw exception on error
+            try {
+                let spec;
+                let header;
+                let extra;
+                let grammar;
+
+                filepath = cleanPath(filepath);
+
+                let filepath4display = mkFilePath4Display(filepath);
+                console.log('Grammar file:', filepath4display);
+
+                if (filepath.match(/\.js$/)) {
+                    spec = require(filepath);
+
+                    let hdrspec = fs__default['default'].readFileSync(filepath, 'utf8').replace(/\r\n|\r/g, '\n');
+
+                    // extract the top comment (possibly empty), which carries the title, etc. metadata:
+                    header = extractYAMLheader(hdrspec);
+
+                    grammar = spec;
+                } else {
+                    spec = fs__default['default'].readFileSync(filepath, 'utf8').replace(/\r\n|\r/g, '\n');
+
+                    // extract the top comment (possibly empty), which carries the title, etc. metadata:
+                    header = extractYAMLheader(spec);
+
+                    grammar = spec;
+                }
+
+                // then strip off the comment prefix for every line:
+                header = header.replace(/^\/\/ ?/gm, '').replace(/\n...\n[^]*$/, function (m) {
+                    extra = m;
+                    return '';
+                });
+
+                let doc = yaml__default['default'].safeLoad(header, {
+                    filename: filepath
+                }) || {};
+                //console.error("YAML safeload:", { header, filepath, doc });
+
+                if (doc.crlf && typeof grammar === 'string') {
+                    grammar = grammar.replace(/\n/g, '\r\n');
+                }
+
+                // indirection: load referenced file as grammar instead:
+                if (doc.load) {
+                    let refd_filepath = path__default['default'].resolve(path__default['default'].join(path__default['default'].dirname(filepath), doc.load));
+                    if (!fs__default['default'].existsSync(refd_filepath)) {
+                        throw new Error(`YAML::load referenced source file '${doc.load}' does not exist; absolute path: '${refd_filepath}'.`);
+                    }
+                    spec = fs__default['default'].readFileSync(refd_filepath, 'utf8').replace(/\r\n|\r/g, '\n');
+
+                    grammar = spec;
+                }
+
+                // indirection: load input file(s) into `test_input`:
+                if (doc.test_input_file) {
+                    let lst = Array.isArray(doc.test_input_file) ? doc.test_input_file : [ doc.test_input_file ];
+                    doc.test_input = lst.map(function load_indirect_input_textfile(f) {
+                        let refd_filepath = path__default['default'].resolve(path__default['default'].join(path__default['default'].dirname(filepath), f));
+                        if (!fs__default['default'].existsSync(refd_filepath)) {
+                            throw new Error(`YAML::load referenced input text file '${f}' does not exist; absolute path: '${refd_filepath}'.`);
+                        }
+                        let input = fs__default['default'].readFileSync(refd_filepath, 'utf8').replace(/\r\n|\r/g, '\n');
+
+                        if (doc.crlf) {
+                            input = input.replace(/\n/g, '\r\n');
+                        }
+                        return input;
+                    });
+
+                    if (doc.test_input.length === 1) {
+                        doc.test_input = doc.test_input[0];
+                    }
+                }
+
+                let outbase = path__default['default'].dirname(filepath);
+                let extradirs = '';
+                if (!outbase.includes(PATHBASE)) {
+                    // mapping test files from other sub-packages to their own specs/output.../ directories in here to prevent collisions
+                    extradirs = path__default['default'].dirname(filepath4display.replace(/^\/examples\//, '/jison/examples/').replace(/^[:\/]+/, '').replace('/tests/', '/')).replace(/^\//, '');
+                    outbase = cleanPath('specs');
+                }
+                let refOutFilePath = cleanPath(path__default['default'].join(outbase, 'reference-output', extradirs, path__default['default'].basename(filepath4display) + '-ref.json5'));
+                let testOutFilePath = cleanPath(path__default['default'].join(outbase, 'output', extradirs, path__default['default'].basename(filepath4display) + '-ref.json5'));
+                let generatorRefFilePath = cleanPath(path__default['default'].join(outbase, 'reference-output', extradirs, path__default['default'].basename(filepath4display) + '-lex.json5'));
+                let generatorOutFilePath = cleanPath(path__default['default'].join(outbase, 'output', extradirs, path__default['default'].basename(filepath4display) + '-lex.json5'));
+                let generatorJSRefFilePath = cleanPath(path__default['default'].join(outbase, 'reference-output', extradirs, path__default['default'].basename(filepath4display) + '-engine.js'));
+                let generatorJSOutFilePath = cleanPath(path__default['default'].join(outbase, 'output', extradirs, path__default['default'].basename(filepath4display) + '-engine.js'));
+
+                let collision;
+                if (!__hits__[testOutFilePath]) {
+                    __hits__[testOutFilePath] = {
+                        filepath, 
+                        outbase, 
+                        extradirs,
+                    };
+                } else {
+                    collision = __hits__[testOutFilePath];
+                    console.error("TEST FILE MAPPING COLLISION:", {
+                        filepath, 
+                        outbase, 
+                        testOutFilePath, 
+                        extradirs,
+                        '**HIT**': collision
+                    });        
+                    throw new Error(`TEST FILE MAPPING COLLISION for '${filepath}' vs. ${collisionfilepath}'`);
+                }
+
+                mkdirp(path__default['default'].dirname(refOutFilePath));
+                mkdirp(path__default['default'].dirname(testOutFilePath));
+
+                let refOut;
+                try {
+                    let soll = fs__default['default'].readFileSync(refOutFilePath, 'utf8').replace(/\r\n|\r/g, '\n');
+                    if (doc.crlf) {
+                        soll = soll.replace(/\n/g, '\r\n');
+                    }
+                    refOut = soll;
+                } catch (ex) {
+                    refOut = null;
+                }
+
+                let generatorRefOut;
+                try {
+                    if (options.useGeneratorRef) {
+                        let soll = fs__default['default'].readFileSync(generatorRefFilePath, 'utf8').replace(/\r\n|\r/g, '\n');
+                        if (doc.crlf) {
+                            soll = soll.replace(/\n/g, '\r\n');
+                        }
+                        generatorRefOut = soll;
+                    } else {
+                        generatorRefOut = null;
+                    }
+                } catch (ex) {
+                    generatorRefOut = null;
+                }
+
+                let generatorJSRefOut;
+                try {
+                    if (options.useGeneratorJSRef) {
+                        let soll = fs__default['default'].readFileSync(generatorJSRefFilePath, 'utf8').replace(/\r\n|\r/g, '\n');
+                        if (doc.crlf) {
+                            soll = soll.replace(/\n/g, '\r\n');
+                        }
+                        generatorJSRefOut = soll;
+                    } else {
+                        generatorJSRefOut = null;
+                    }
+                } catch (ex) {
+                    generatorJSRefOut = null;
+                }
+
+                return {
+                    type: path__default['default'].extname(filepath).toLowerCase(),
+                    filepath4display,
+                    path: filepath,
+                    outputRefPath: refOutFilePath,
+                    outputOutPath: testOutFilePath,
+                    generatorRefPath: generatorRefFilePath,
+                    generatorOutPath: generatorOutFilePath,
+                    generatorJSRefPath: generatorJSRefFilePath,
+                    generatorJSOutPath: generatorJSOutFilePath,
+                    spec,
+                    grammar,
+                    meta: doc,
+                    metaExtra: extra,
+                    useGeneratorRef: options.useGeneratorRef,
+                    useGeneratorJSRef: options.useGeneratorJSRef,
+                    generatorRef: generatorRefOut,
+                    generatorJSRef: generatorJSRefOut,
+                    ref: refOut
+                };
+            } catch (ex) {
+                console.log(ex);
+                throw ex;
+            }
+            return false;
+        })
+        .filter(function (info) {
+            return !!info;
+        });
+
+
+        function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key, err) {
+            // and produce an alternative structure to JSON-ify:
+            return {
+                circularReference: true,
+                // ex: {
+                //   message: err.message,
+                //   type: err.name
+                // },
+                index: circusPos,
+                parentDepth: objStack.length - circusPos - 1,
+                key: key,
+                keyStack: keyStack    // stack & keyStack have already been snapshotted by the JSON5 library itself so passing a direct ref is fine here!
+            };
+        }
+
+        function reduceWhitespace(src) {
+            // replace tabs with space, clean out multiple spaces and kill trailing spaces:
+            return src
+              .replace(/\r\n|\r/g, '\n')
+              .replace(/[ \t]+/g, ' ')
+              .replace(/ +$/gm, '');
+        }
+
+        // WARNING:
+        // This function will fatally destroy some parts of the object you feed it!
+        // DO NOT expect good behaviour from it for its original purposes, once we're done in here!
+        // 
+        // This function was introduced as the JSON5.stringify() calls in the test rig used to
+        // write output/reference files were taking forever and for larger test files were even
+        // causing stack overflow in Node. 
+        // Further investigation uncovered the culprit: stack run-away in deep esprima ASTs which
+        // are stored as part of checked action code chunks in the options.lex_rule_dictionary.rules[], etc.
+        function stripForSerialization(obj, depth) {
+            if (!obj) return false;
+
+            if (typeof obj !== 'object') {
+                return false;
+            }
+
+            depth = depth || 0;
+            if (Array.isArray(obj)) {
+                for (let i in obj) {
+                    stripForSerialization(obj[i], depth + 1);
+                }
+                return false;
+            } else {
+                if (depth > 8) return true;
+
+                for (let key in obj) {
+                    let el = obj[key];
+
+                    if (key === 'ast') {
+                        // if attribute is itself an object, which contains an AST member,
+                        // PLUS a `source` attribute alongside, nuke the AST sub attribute.
+                        if (el && el.ast && el.source) {
+                            el.ast = '[recast AST]';
+                            if (el.augmentedSource) {
+                                el.augmentedSource = '[LINE-SHIFTED SOURCE]';
+                            }
+                            if (el.source === obj.srcCode) {
+                                el.source = '[IDEM: srcCode]';
+                            }
+                        }
+                    }
+
+                    if (stripForSerialization(el, depth + 1)) {
+                        obj[key] = '[OBJECT @ DEPTH LIMIT]';
+                    }
+                }
+                return false;
+            }
+        }
+
+
+        // assert which makes sure we have a fast response in the testrig: DO NOT report diffs when
+        // the inputs are large/huge.
+        function assertOutputMatchesReference(ist, soll, msg) {
+            const maxSize = 1000;
+
+            assert__default['default'].strictEqual(typeof ist, 'string');
+            assert__default['default'].strictEqual(typeof soll, 'string');
+            ist = cleanStackTrace4Comparison(ist);
+            soll = cleanStackTrace4Comparison(soll);
+            //assert.strictEqual(reduceWhitespace(ist), reduceWhitespace(soll), msg);
+            ist = reduceWhitespace(ist);
+            soll = reduceWhitespace(soll);
+            
+            if (ist === soll) return;
+            
+            if (ist.length > maxSize || soll.length > maxSize) {
+                msg = `${msg}\n               [strings are too large (${ist.length} & ${soll.length}) to show a full diff quickly]`;
+                // shorten the long ones to get a decent diff performance?
+                // 
+                // At least help the developer by seeking the first spot where things went wrong:
+                // move through the strings at half-size stepping, so there's always about maxSize/2 data
+                // to diff-visualize.
+                //
+                // First scan through the strings quickly to find the index of the first difference:
+                const shortestLength = Math.min(ist.length, soll.length);
+                const seekStep = Math.max(maxSize, shortestLength / 16);
+                let firstHit = shortestLength + 1;
+
+                // the max is shortestLength+1 so we will be able to notice the length difference as an actual difference (of 1 character):
+                for (let i = 0, step = seekStep, max = shortestLength + 1 - step; i <= max; i += step) {
+                    let s1 = ist.substring(i, i + step);
+                    let s2 = soll.substring(i, i + step);
+
+                    // when identical, check next chunk
+                    if (s1 === s2) continue;
+
+                    // narrow the chunk until we have an chunk of size 1: that will be our first hit:
+                    if (step > 1) {
+                        // make sure the next for() iteration re-visits this chunk (to be segmented into 4 subchunks). 
+                        // No need to reduce 'max' as we scan sequentially and already know 
+                        // the first hit change must be near (within `step` chracters from here).
+                        // 
+                        // First reduce the chunk size
+                        step = Math.max(1, (step / 4) | 0);
+                        // now adjust the offset `i` so we revisit the block:
+                        i -= step;
+                        continue;
+                    } else {
+                        firstHit = i;
+                        break;
+                    }
+                }
+
+                // Now that we have the firstHit index, we want to offer a decent number of lines before & aft.
+                // Ideally the lines are short, but since ideal doesn't happen in the real world, we scan back
+                // for a newline from maxSize/4 characters back, so we have a deccent prelude and also some
+                // sizable diff to show:
+                let preludeIndex = Math.max(0, firstHit - (maxSize / 4) | 0);
+                let nlBlockStart = Math.max(0, preludeIndex - maxSize / 2);
+                let a = ist.substring(nlBlockStart, preludeIndex).split('\n');
+                // pick the last (partial?) line in this clip and move back that amount to arrive at SOL:
+                let backpedalLen = a[a.length - 1].length;
+                preludeIndex -= backpedalLen;
+                assert__default['default'](preludeIndex >= 0);
+
+                // now extract the segment which contains the first diff:
+                ist = (preludeIndex > 0 ?  `[...removed first part of ISTWERT;  starting at offset ${preludeIndex} ...]\n` : '') + (ist.length > maxSize ? ist.substring(preludeIndex, preludeIndex + maxSize) +   '\n\n\n[... ISTWERT (result)    has been shortened...]' : ist);
+                soll = (preludeIndex > 0 ? `[...removed first part of SOLLWERT; starting at offset ${preludeIndex} ...]\n` : '') + (soll.length > maxSize ? soll.substring(preludeIndex, preludeIndex + maxSize) + '\n\n\n[...SOLLWERT (reference) has been shortened...]' : soll);
+            }
+            assert__default['default'].strictEqual(ist, soll, msg);
+        }
+
+        return {
+            filespecList: testset,
+
+            testrig_JSON5circularRefHandler,
+            stripForSerialization,
+            reduceWhitespace,
+            trimErrorForTestReporting, 
+            stripErrorStackPaths, 
+            cleanStackTrace4Comparison,
+
+            assertOutputMatchesReference,
+        };
+    }
+
     var index = {
         rmCommonWS,
         camelCase,
@@ -2262,23 +2667,24 @@
         cleanStackTrace4Comparison,
         extractSymbolTableFromFile,
         setupDelimitedActionChunkMatcher,
+        setupFileBasedTestRig,
 
         checkRegExp: reHelpers.checkRegExp,
         getRegExpInfo: reHelpers.getRegExpInfo,
 
-        exec: exec.exec,
-        dump: exec.dump,
-        convertExceptionToObject: exec.convertExceptionToObject,
+        exec_and_diagnose_this_stuff,
+        dumpSourceToFile,
+        convertExceptionToObject,
 
         mkdirp,
 
         generateMapper4JisonGrammarIdentifiers: parse2AST.generateMapper4JisonGrammarIdentifiers,
         parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,
-        //compileCodeToES5: parse2AST.compileCodeToES5,
         prettyPrintAST: parse2AST.prettyPrintAST,
         checkActionBlock: parse2AST.checkActionBlock,
         trimActionCode: parse2AST.trimActionCode,
         braceArrowActionCode: parse2AST.braceArrowActionCode,
+        generateSourcePrelude: parse2AST.generateSourcePrelude,
 
         ID_REGEX_BASE: parse2AST.ID_REGEX_BASE,
         IN_ID_CHARSET: parse2AST.IN_ID_CHARSET,

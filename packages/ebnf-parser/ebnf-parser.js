@@ -1,4 +1,5 @@
 
+import assert from 'assert';
 import bnf from './parser';
 import transform from './ebnf-transform';
 import jisonlex from '../lex-parser';

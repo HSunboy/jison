@@ -52,7 +52,7 @@ function setupDelimitedActionChunkMatcher(marker, lexer) {
             // Hence we check for an 'independent' end marker for all multi-brace markers:
             // 
             if (is_complex_marker && srcCode) {
-                let m2 = /[^}]$/.test(srcCode);    // no '}' allowed at the very end or you'ld have the fringe scenario above!
+                let m2 = /[}]$/.test(srcCode);    // no '}' allowed at the very end or you'ld have the fringe scenario above!
                 if (m2) {
                     return {
                         fault: rmCommonWS`

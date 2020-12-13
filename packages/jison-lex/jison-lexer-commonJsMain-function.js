@@ -104,7 +104,7 @@ Limits
         try {
             lexer.setInput(input, yy);
 
-            for (i = 0; i < maxTokenCount; i++) {
+            for (let i = 0; i < maxTokenCount; i++) {
                 let tok = lexer.lex();
                 tokens.push({
                     id: tok,

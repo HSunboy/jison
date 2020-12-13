@@ -5,7 +5,7 @@ import mkIdentifier from './mkIdentifier';
 import scanRegExp from './scanRegExp';
 import isLegalIdentifierInput from './isLegalIdentifierInput';
 import dquote from './dquote';
-import exec from './safe-code-exec-and-diag';
+import { exec_and_diagnose_this_stuff, dumpSourceToFile, convertExceptionToObject } from './safe-code-exec-and-diag';
 import mkdirp from './mkdirp';
 import parse2AST from './parse-code-chunk-to-AST';
 import stringifier from './code-stringification';
@@ -15,8 +15,6 @@ import { trimErrorForTestReporting, stripErrorStackPaths, cleanStackTrace4Compar
 import extractSymbolTableFromFile from './extractSymbolTableFromJSON5File';
 import setupDelimitedActionChunkMatcher from './setupDelimitedActionChunkMatcher';
 import setupFileBasedTestRig from './setupFileBasedTestRig';
-
-if (typeof setupFileBasedTestRig !== 'function') throw new Error('x')
 
 
 export default {
@@ -36,15 +34,14 @@ export default {
     checkRegExp: reHelpers.checkRegExp,
     getRegExpInfo: reHelpers.getRegExpInfo,
 
-    exec: exec.exec,
-    dump: exec.dump,
-    convertExceptionToObject: exec.convertExceptionToObject,
+    exec_and_diagnose_this_stuff,
+    dumpSourceToFile,
+    convertExceptionToObject,
 
     mkdirp,
 
     generateMapper4JisonGrammarIdentifiers: parse2AST.generateMapper4JisonGrammarIdentifiers,
     parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,
-    //compileCodeToES5: parse2AST.compileCodeToES5,
     prettyPrintAST: parse2AST.prettyPrintAST,
     checkActionBlock: parse2AST.checkActionBlock,
     trimActionCode: parse2AST.trimActionCode,

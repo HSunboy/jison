@@ -207,7 +207,7 @@ definitions
                         let name = condition_defs[i][0];
                         if (name in $$.startConditions && $$.startConditions[name] !== condition_defs[i][1]) {
                             yyerror(rmCommonWS`
-                                You have specified the lexer condition state '${name}' as both
+                                You have specified the lexer condition state ${dquote(name)} as both
                                 EXCLUSIVE ('%x') and INCLUSIVE ('%s'). Pick one, please, e.g.:
 
                                     %x ${name}
@@ -278,11 +278,11 @@ definition
                 // macro:
                 if ($MACRO_NAME.toUpperCase() !== $MACRO_NAME) {
                     yyerror(rmCommonWS`
-                      Cannot use name \"${$MACRO_NAME}\" as a macro name
+                      Cannot use name ${dquote($MACRO_NAME)} as a macro name
                       as it clashes with the same XRegExp "\\p{..}" Unicode \'General Category\'
                       Property name.
                       Use all-uppercase macro names, e.g. name your macro
-                      \"${$MACRO_NAME.toUpperCase()}\" to work around this issue
+                      ${dquote($MACRO_NAME.toUpperCase())} to work around this issue
                       or give your offending macro a different name.
 
                         Erroneous area:
@@ -490,7 +490,7 @@ definition
     | option_keyword error OPTIONS_END
         {
             yyerror(rmCommonWS`
-                ill defined '${$option_keyword} line.
+                ill defined ${dquote($option_keyword)} line.
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @option_keyword, @OPTIONS_END)}
@@ -689,7 +689,7 @@ definition
                 illegal input in the lexer spec definitions section.
 
                 This might be stuff incorrectly dangling off the previous
-                '${yy.__options_category_description__}' definition statement, so please do check above
+                ${dquote(yy.__options_category_description__)} definition statement, so please do check above
                 when the mistake isn't immediately obvious from this error spot itself.
 
                   Erroneous code:
@@ -1148,8 +1148,6 @@ rule
     //
     | ACTION_START_AT_SOL error
         %{
-            let start_marker = $ACTION_START_AT_SOL.trim();
-            let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
             yyerror(rmCommonWS`
                 There's very probably a problem with this '%{...%\}' lexer setup action code section.
 
@@ -1435,7 +1433,7 @@ start_conditions
                 // accordingly:
                 if (name !== '*' && name !== 'INITIAL' && !(name in yy.startConditions)) {
                     yyerror(rmCommonWS`
-                        You specified an unknown lexer condition state '${name}'.
+                        You specified an unknown lexer condition state ${dquote(name)}.
                         Is this a typo or did you forget to include this one in the '%s' and '%x'
                         inclusive and exclusive condition state sets specifications at the top of
                         the lexer spec?
@@ -1834,7 +1832,7 @@ option
             // validate that this is legal behaviour under the given circumstances, i.e. parser context:
             if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
                 yyerror(rmCommonWS`
-                    The entries in a ${yy.__options_category_description__} statement MUST NOT be assigned values, such as '${$option_name}=${$any_option_value}'.
+                    The entries in a ${yy.__options_category_description__} statement MUST NOT be assigned values, such as ${dquote($option_name + '=' + $any_option_value)}.
 
                       Erroneous area:
                     ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(@any_option_value, @option_name), @-1)}
@@ -1846,7 +1844,7 @@ option
         {
             // TODO ...
             yyerror(rmCommonWS`
-                Internal error: option "${$option}" value assignment failure in a ${yy.__options_category_description__} statement.
+                Internal error: option ${dquote($option)} value assignment failure in a ${yy.__options_category_description__} statement.
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @-1)}
@@ -2110,7 +2108,7 @@ include_macro_code
 
             if (!fs.existsSync(include_path)) {
                 yyerror(rmCommonWS`
-                    Cannot %include "${include_path}":
+                    Cannot %include ${dquote(include_path)}:
                     The file does not exist.
 
                     The current working directory (set up by JISON) is:
@@ -2134,7 +2132,7 @@ include_macro_code
                     let rv = checkActionBlock(srcCode, @$, yy.options);
                     if (rv.fault) {
                         yyerror(rmCommonWS`
-                            The source code included from file '${include_path}' does not compile: ${rv.fault}
+                            The source code included from file ${dquote(include_path)} does not compile: ${rv.fault}
 
                               Erroneous area:
                             ${yylexer.prettyPrintRange(@$)}
@@ -2168,6 +2166,7 @@ include_macro_code
 
 
 const rmCommonWS = helpers.rmCommonWS;
+const dquote     = helpers.dquote;
 const checkActionBlock = helpers.checkActionBlock;
 const mkIdentifier = helpers.mkIdentifier;
 const isLegalIdentifierInput = helpers.isLegalIdentifierInput;
