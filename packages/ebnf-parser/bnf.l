@@ -15,8 +15,9 @@ DIGIT                                   [\p{Number}]
 WHITESPACE                              [\s\r\n\p{Separator}]
 ALNUM                                   [{ALPHA}{DIGIT}]
 
-NAME                                    [{ALPHA}](?:[{ALNUM}-]*{ALNUM})?
-ID                                      [{ALPHA}]{ALNUM}*
+//ID                                    [{ALPHA}]{ALNUM}*
+// support identifiers such as '8bit' and 'alka-selzer07':
+ID                                      [{DIGIT}]*[{ALPHA}](?:[{ALNUM}-]*{ALNUM})?
 DECIMAL_NUMBER                          [1-9][0-9]*
 HEX_NUMBER                              "0"[xX][0-9a-fA-F]+
 BR                                      \r\n|\n|\r
@@ -113,10 +114,6 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 // we will pick up that one and modify it on the fly as the need occurs.
 //
 
-"%{"([^]*?)"%}"/!"}"                    yytext = this.matches[1];
-                                        yy.include_command_allowed = false;
-                                        return 'ACTION_BODY';
-
 "%include"                              if (yy.include_command_allowed) {
                                             // This is an include instruction in place of (part of) an action:
                                             this.pushState('options');
@@ -194,17 +191,18 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                         }
                                         return 'ACTION_BODY';
 
-\"{DOUBLEQUOTED_STRING_CONTENT}\"|\'{QUOTED_STRING_CONTENT}\'|\`{ES2017_STRING_CONTENT}\`
+\"{DOUBLEQUOTED_STRING_CONTENT}\"   |
+\'{QUOTED_STRING_CONTENT}\'         |
+\`{ES2017_STRING_CONTENT}\`
                                         yy.include_command_allowed = false;
                                         return 'ACTION_BODY';
+
 // Gobble an entire line of code unless there's chance there's
 // a regex, string, comment, {...} block start or end brace or sentinel
 // in it: then only gobble everything up to that particular
 // character and let the lexer handle that one, and what follows,
 // in the round. Meanwhile we have us some action code pass on.
-[^/"'`%\{\}\/{BR}]+                     yy.include_command_allowed = false;
-                                        return 'ACTION_BODY';
-"%"                                     yy.include_command_allowed = false;
+[^/"'`\{\}{BR}]+                        yy.include_command_allowed = false;
                                         return 'ACTION_BODY';
 
 "{"                                     yy.depth++;
@@ -242,10 +240,19 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 // without leading whitespace. The only parser command which we do accept
 // here after the last indent is `%include`, which is considered (part
 // of) the rule's action code block.
-(?:[\s\r\n]*?){BR}+{WS}+
+//
+// Note that this rule is constructed to detect "some content follows on the next line":
+// as long as this condition applies, we assume the action code block is continuing.
+// Hence an *empty* line would signal the end of the action code block via the later {BR}
+// rule below! 
+// That 'empty' separating line which ends the action block MAY contain (trailing) whitespace.
+//
+{BR}{WS}+/!(?:{WS}|{BR})
                                         yy.include_command_allowed = true;
                                         return 'ACTION_BODY';           // keep empty lines as-is inside action code blocks.
+
 {WS}+                                   return 'ACTION_BODY';
+
 {BR}                                    if (yy.depth > 0) {
                                             yy.include_command_allowed = true;
                                             return 'ACTION_BODY';       // keep empty lines as-is inside action code blocks.
@@ -282,18 +289,82 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 //
 // Recognize any of these action code start markers:
 // `%{`, `{{`, `%{{`, `{{{`, `%{{{`, ...
-// and modify the lexer engine to provide the proper matching rule for the case at hand
-// (which is NIL in case the action code chunk starts with `{`!) as described near the
-// top of this lexer spec file, where the action state lexer rules reside.
+// and consume the *entire* action code block in one fell swoop.
 //
-<INITIAL,ebnf,code,options>(?:[%\{]\{+)|"{"
+// ---
+//
+// Here we recognize those action code blocks in a grammar parser spec
+// which are wrapped in `%{...%}` or `{{...}}`.
+//
+// These `%{...%}` and `{{...}}` chunks are special in that *anything*
+// **except the given 'end marker' (`%}` and `}}` respectively)** may
+// exist within the markers: those contents will be copied verbatim.
+//
+// Note the 'fringe case' where one or more of those end markers
+// is an integral part of your action code: you then have the choice to
+// either use the other chunk format *or* not wrap [that part of] your
+// code in any special marker block, but rely on the lexer rules for
+// parsing a regular `{...}` JavaScript code chunk instead.
+//
+// Thus these won't lex/parse correctly:
+//
+// `%{ return '%}'; %}`
+// `{{ return '{{}}'; }}`
+// `{{ return '%{ {{ }} %}'; }}`
+//
+// while these would:
+//
+// `{{ return '%}'; }}`
+// `%{ return '{{}}'; %}`
+// `{ return '%{ {{ }} %}'; }`
+// `{ return '%}'; }`
+// `{ return '{{}}'; }`
+//
+// Since 0.6.5 we also allow another approach, which can be used instead:
+// 'repeated `{` markers', which is like the `%{...%}` and `{{...}}` in that
+// anything that's not the corresponding end marker is accepted as content
+// as far as the lexer is concerned (the parser will want to check the validity
+// of the entire action code block before using it as part of the generated
+// lexer/parser kernel code though), e.g. these would lex as valid chunks:
+//
+// `%{{ return '%}'; %}}`
+// `{{{ return '{{}}'; }}}`
+// `{{{ return '%{ {{ }} %}'; }}}`
+// `%{{{ return ['%}','%}}']; %}}}`
+//
+// To speed up the lexer and keep things simple, we test these lexer rules
+// *only when we're pretty sure to match them*, where we *generate the 
+// proper lexer regex on the fly* at the moment when we find we need it
+// by invoking the `setupDelimitedActionChunkMatcher()` helpers API.
+//
+// The `setupDelimitedActionChunkMatcher()` API includes caching any 
+// generated matcher in the current lexer instance, which persists for 
+// the entire lifetime of the lexer instance. Thus, once generated, each 
+// matcher will be available very quickly every time it is requested.
+//
+// The 0.7.0 lexer kernel includes a new `consume(N)` API, which helps 
+// to advance the internal state (yylloc, etc.) once we have extracted
+// the code chunk we seek, further simplifying the approach where a
+// lexer rule regex is used to recognize the 'leader'/'heading' of a
+// text chunk, where the action code then can employ various techniques 
+// to extract the bulk of the input token, without having to resort to
+// the costly `lexer.input()` API which is inherited from lex/flex and 
+// only proceeds one character at a time. 
+//
+// Best practices would instead employ the `lexer.lookahead()` API and/or 
+// `lexer.consume(N)`.
+//
+// Aside: 
+// you will find another approach, using a lexer rule regex which gobbles 
+// 'too much input' via `.*`, where the part trailing the extracted token 
+// is then pushed back into the lexer kernel by way of `lexer.unput(str)`.
+//
+<INITIAL,ebnf,code,options>[%\{]\{+
                                     {
                                         yy.depth = 0;
                                         yy.include_command_allowed = false;
-                                        this.pushState('action');
+                                        //this.pushState('action');   <-- not needed as we'll consume the entire action code chunk all at once in here
 
-                                        // keep matched string in local variable as the `unput()` call at the end will also 'unput' `yytext`,
-                                        // which for our purposes here is highly undesirable (see trimActionCode() use in the BNF parser spec).
                                         let marker = yytext;
 
                                         // check whether this `%{` marker was located at the start of the line:
@@ -306,64 +377,38 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 
                                         let atSOL = (!precedingStr /* @ Start Of File */ || precedingStr === '\n');
 
-                                        // Make sure we've got the proper lexer rule regex active for any possible `%{...%}`, `{{...}}` or what have we here?
-                                        let endMarker = this.setupDelimitedActionChunkLexerRegex(marker);
+                                        // Construct the proper lexer regex for any possible `%{...%}`, `{{...}}` or what have we here?
+                                        const match = helpers.setupDelimitedActionChunkMatcher(marker, this);
 
-                                        // Early sanity check for better error reporting:
-                                        // we'd better make sure that end marker indeed does exist in the
-                                        // remainder of the input! When it's not, we'll have the `action`
-                                        // lexer state running past its due date as it'll then go and spit
-                                        // out a 'too may closing braces' error report at some spot way
-                                        // beyond the intended end of the action code chunk.
-                                        //
                                         // Writing the wrong end marker is a common user mistake, we can
                                         // easily look ahead and check for it now and report a proper hint
                                         // to cover this failure mode in a more helpful manner.
                                         let remaining = this.lookAhead();
-                                        let prevEnd = 0;
-                                        let endMarkerIndex;
-                                        for (;;) {
-                                            endMarkerIndex = remaining.indexOf(endMarker, prevEnd);
+                                        let m = match(remaining);
 
-                                            // Check for both simple non-existence *and* non-match due to trailing braces,
-                                            // e.g. in this input: `%{{...%}}}` -- note the 3rd curly closing brace.
-                                            //
-                                            // Also note that we must cope with pathologic cases wwhere the marker does
-                                            // not include a '%', e.g. `{{ ... { ... }}}`: note the last set of '}}}' which
-                                            // has a different count than the starting marker '{{' yet somehow looks
-                                            // *legal* due to the braces all matching up. Fringy, but legal. Hence we 
-                                            // must only advance the cursor by ONE(1) instead of skipping the entire
-                                            // false end marker (--> `prevEnd = endMarkerIndex + endMarker.length`).
-                                            //
-                                            if (endMarkerIndex >= 0 && remaining[endMarkerIndex + endMarker.length] === '}') {
-                                                prevEnd = endMarkerIndex + 1;
-                                                continue;
-                                            }
-                                            if (endMarkerIndex < 0) {
-                                                yyerror(rmCommonWS`
-                                                    Incorrectly terminated action code block. We're expecting the
-                                                    '${endMarker}' end marker to go with the given start marker.
-                                                    Regrettably, it does not exist in the remainder of the input.
+                                        // move the lexer position forward as well:
+                                        //
+                                        // WARNING: this will modity yytext, hence we must set our own `yytext`
+                                        // *afterwards*: see the statement after next!
+                                        this.consume(m.shiftCount);
 
-                                                      Erroneous area:
-                                                    ${this.prettyPrintRange(yylloc)}
-                                                `);
-                                                return 'UNTERMINATED_ACTION_BLOCK';
-                                            }
-                                            break;
+                                        // pick up the extraced action block itself:
+                                        yytext = m;
+
+                                        if (m.fault) {
+                                            yyerror(rmCommonWS`
+                                                ${m.fault}
+
+                                                  Erroneous area:
+                                                ${this.prettyPrintRange(yylloc)}
+                                            `);
+                                            return 'UNTERMINATED_ACTION_BLOCK';
                                         }
 
-                                        // Allow the start marker to be re-matched by the generated lexer rule regex:
-                                        this.unput(marker);
-
-                                        // Now RESET `yytext` to what it was originally, i.e. un-unput that lexer variable explicitly:
-                                        yytext = marker;
-
-                                        // and allow the next lexer round to match and execute the suitable lexer rule(s) to parse this incoming action code block.
                                         if (atSOL) {
-                                            return 'ACTION_START_AT_SOL';
+                                            return 'ENTIRE_ACTION_AT_SOL';
                                         }
-                                        return 'ACTION_START';
+                                        return 'ENTIRE_ACTION';
                                     }
 
 
@@ -379,6 +424,48 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                         yy.include_command_allowed = false;
                                         this.pushState('action');
                                         return 'ARROW_ACTION_START';
+<INITIAL,ebnf,code,options>"{"
+                                    {
+                                        yy.depth = 0;
+                                        yy.include_command_allowed = false;
+                                        this.pushState('action');
+
+                                        // Early sanity check for better error reporting:
+                                        // we'd better make sure that end marker indeed does exist in the
+                                        // remainder of the input! When it's not, we'll have the `action`
+                                        // lexer state running past its due date as it'll then go and spit
+                                        // out a 'too may closing braces' error report at some spot way
+                                        // beyond the intended end of the action code chunk.
+                                        //
+                                        // Writing the wrong end marker is a common user mistake, we can
+                                        // easily look ahead and check for it now and report a proper hint
+                                        // to cover this failure mode in a more helpful manner.
+                                        let remaining = this.lookAhead();
+                                        let endMarkerIndex = remaining.indexOf("}");
+
+                                        if (endMarkerIndex < 0) {
+                                            yyerror(rmCommonWS`
+                                                Incorrectly terminated action code block. We're expecting the
+                                                ${dquote("}")} end marker to go with the given start marker.
+                                                Regrettably, it does not exist in the remainder of the input.
+
+                                                  Erroneous area:
+                                                ${this.prettyPrintRange(yylloc)}
+                                            `);
+                                            return 'UNTERMINATED_ACTION_BLOCK';
+                                        }
+
+                                        // Allow the start marker to be re-matched by the action state:
+                                        this.unput(marker);
+
+                                        yytext = '{';           // hint the parser
+
+                                        // and allow the next lexer round to match and execute the suitable lexer rule(s) to parse this incoming action code block.
+                                        if (atSOL) {
+                                            return 'ACTION_START_AT_SOL';
+                                        }
+                                        return 'ACTION_START';
+                                    }
 
 <ebnf>"%%"                              this.popState();
                                         this.pushState('code');
@@ -453,8 +540,12 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                         this.unput(yytext);
                                         return 'ACTION_START';
 
+// The 'options' mode also serves to %token lists and a few other things...
 // We don't mind and allow the lexer to be 'dumb' here as the parser will
 // catch any abuse / incorrect input and report accordingly.
+">"                                     this.popState();
+                                        this.unput(yytext);
+                                        return 'OPTIONS_END';
 ","                                     return ',';
 "*"                                     return '*';
 ";"                                     this.popState();
@@ -491,7 +582,6 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 
 "["{ID}"]"                              yytext = this.matches[1]; return 'ALIAS';
 {ID}                                    return 'ID';
-{NAME}                                  return 'NAME';
 "$end"                                  return 'EOF_ID';
 // `$eof` and `EOF` are synonyms of `$end` ('$eof' is for bison compatibility);
 // this is the only place where two symbol names may map to a single symbol ID number
@@ -513,11 +603,20 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 "%parser-type"                          return 'PARSER_TYPE';
 "%prec"                                 return 'PREC';
 "%start"                                return 'START';
-"%left"                                 return 'LEFT';
-"%right"                                return 'RIGHT';
-"%nonassoc"                             return 'NONASSOC';
+"%left"                                 this.pushState('options'); 
+                                        return 'LEFT';
+"%right"                                this.pushState('options'); 
+                                        return 'RIGHT';
+"%precedence"                           this.pushState('options'); 
+                                        return 'PRECEDENCE';
+"%nonassoc"                             this.pushState('options'); 
+                                        return 'NONASSOC';
 "%token"                                this.pushState('options'); 
                                         return 'TOKEN';
+"%type"                                 this.pushState('options'); 
+                                        return 'TYPE';
+"%union"                                this.pushState('action'); 
+                                        return 'UNION';
 "%on_error_recovery_shift"              return 'ON_ERROR_RECOVERY_SHIFT';
 "%on_error_recovery_reduce"             return 'ON_ERROR_RECOVERY_REDUCE';
 "%parse-param"[s]?                      return 'PARSE_PARAM';
@@ -559,7 +658,7 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                             return 'ACTION_START';
                                         %}
 
-<INITIAL,ebnf,code>"%"{NAME}([^\r\n]*)
+<INITIAL,ebnf,code>"%"{ID}([^\r\n]*)
                                         %{
                                             /* ignore unrecognized decl */
                                             this.warn(rmCommonWS`
@@ -570,7 +669,7 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
                                                 ${this.prettyPrintRange(yylloc)}
                                             `);
                                             yytext = {
-                                                name: this.matches[1],              // {NAME}
+                                                name: this.matches[1],              // {ID}
                                                 value: this.matches[2].trim()       // optional value/parameters
                                             };
                                             return 'UNKNOWN_DECL';
@@ -699,95 +798,6 @@ const scanRegExp = helpers.scanRegExp;
 
 
 
-
-
-// Calculate the end marker to match and produce a
-// lexer rule to match when the need arrises:
-lexer.setupDelimitedActionChunkLexerRegex = function lexer__setupDelimitedActionChunkLexerRegex(marker) {
-    // Special: when we encounter `{` as the start of the action code block,
-    // we DO NOT patch the `%{...%}` lexer rule as we will handle `{...}`
-    // elsewhere in the lexer anyway: we cannot use a simple regex like
-    // `/{[^]*?}/` to match an entire action code block after all!
-    let doNotPatch = (marker === '{');
-
-    let action_end_marker = marker.replace(/\{/g, '}');
-
-    if (!doNotPatch) {
-        // Note: this bit comes straight from the lexer kernel!
-        //
-        // Get us the currently active set of lexer rules.
-        // (This is why we push the 'action' lexer condition state above *before*
-        // we commence and work on the ruleset itself.)
-        let spec = this.__currentRuleSet__;
-        if (!spec) {
-            // Update the ruleset cache as we apparently encountered a state change or just started lexing.
-            // The cache is set up for fast lookup -- we assume a lexer will switch states much less often than it will
-            // invoke the `lex()` token-producing API and related APIs, hence caching the set for direct access helps
-            // speed up those activities a tiny bit.
-            spec = this.__currentRuleSet__ = this._currentRules();
-        }
-
-        let regexes = spec.__rule_regexes;
-        let len = spec.__rule_count;
-        let rules = spec.rules;
-        let i;
-        let action_chunk_regex;
-
-        // Must we still locate the rule to patch or have we done
-        // that already during a previous encounter?
-        //
-        // WARNING: our cache/patch must live beyond the current lexer+parser invocation:
-        // our patching must remain detected indefinitely to ensure subsequent invocations
-        // of the parser will still work as expected!
-        // This implies that we CANNOT store anything in the `yy` context as that one
-        // is short-lived: `yy` dies once the current parser.parse() has completed!
-        // Hence we store our patch data in the lexer instance itself: in `spec`.
-        //
-        if (!spec.__action_chunk_rule_idx) {
-            // **WARNING**: *(this bit, like so much else in here, comes straight from the lexer kernel)*
-            //
-            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
-            let orig_re_str1 = '/^(?:%\\{([^]*?)%\\}(?!\\}))/';
-            let orig_re_str2 = '/^(?:%\\{([\\s\\S]*?)%\\}(?!\\}))/';   // the XRegExp 'cross-platform' version of the same.
-
-            // Note: the arrays are 1-based, while `len` itself is a valid index,
-            // hence the non-standard less-or-equal check in the next loop condition!
-            for (i = 1; i <= len; i++) {
-                let rule_re = regexes[i];
-                let re_str = rule_re.toString();
-                //console.error('test regexes:', {i, len, re1: re_str, match1: rule_re.toString() === orig_re_str1, match1: rule_re.toString() === orig_re_str2});
-                if (re_str === orig_re_str1 || re_str === orig_re_str2) {
-                    spec.__action_chunk_rule_idx = i;
-                    break;
-                }
-            }
-
-            if (!spec.__action_chunk_rule_idx) {
-                //console.error('ruleset dump:', spec);
-                throw new Error('INTERNAL DEV ERROR: cannot locate %{...%} rule regex!');
-            }
-
-            // As we haven't initialized yet, we're sure the rule cache doesn't exist either.
-            // Make it happen:
-            spec.__cached_action_chunk_rule = {};   // set up empty cache
-        }
-
-        i = spec.__action_chunk_rule_idx;
-
-        // Must we build the lexer rule or did we already run this variant
-        // through this lexer before? When the latter, fetch the cached version!
-        action_chunk_regex = spec.__cached_action_chunk_rule[marker];
-        if (!action_chunk_regex) {
-            action_chunk_regex = spec.__cached_action_chunk_rule[marker] = new RegExp('^(?:' + marker.replace(/\{/g, '\\{') + '([^]*?)' + action_end_marker.replace(/\}/g, '\\}') + '(?!\\}))');
-            //console.warn('encode new action block regex:', action_chunk_regex);
-        }
-        //console.error('new ACTION REGEX:', { i, action_chunk_regex });
-        // and patch the lexer regex table for the current lexer condition state:
-        regexes[i] = action_chunk_regex;
-    }
-
-    return action_end_marker;
-};
 
 
 
