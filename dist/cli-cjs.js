@@ -8,6 +8,7 @@ var path$1 = require('path');
 var JSON5 = require('@gerhobbelt/json5');
 var XRegExp = require('@gerhobbelt/xregexp');
 var recast = require('recast');
+var yaml = require('@gerhobbelt/js-yaml');
 var babel = require('@babel/core');
 var assert$1 = require('assert');
 var astUtils = require('ast-util');
@@ -22,6 +23,7 @@ var JSON5__default = /*#__PURE__*/_interopDefaultLegacy(JSON5);
 var XRegExp__default = /*#__PURE__*/_interopDefaultLegacy(XRegExp);
 var recast__default = /*#__PURE__*/_interopDefaultLegacy(recast);
 var assert__default = /*#__PURE__*/_interopDefaultLegacy(assert$1);
+var yaml__default = /*#__PURE__*/_interopDefaultLegacy(yaml);
 var astUtils__default = /*#__PURE__*/_interopDefaultLegacy(astUtils);
 var process__default = /*#__PURE__*/_interopDefaultLegacy(process$1);
 var nomnom__default = /*#__PURE__*/_interopDefaultLegacy(nomnom);
@@ -311,6 +313,33 @@ function dquote$1(s) {
     return s;
 }
 
+// Return `true` when the directory has been created
+function mkdirp(fp) {
+    if (!fp || fp === '.') {
+        return false;
+    }
+    try {
+        fs__default['default'].mkdirSync(fp);
+        return true;
+    } catch (e) {
+        if (e.code === 'ENOENT') {
+            let parent = path__default['default'].dirname(fp);
+            // Did we hit the root directory by now? If so, abort!
+            // Else, create the parent; iff that fails, we fail too...
+            if (parent !== fp && mkdirp(parent)) {
+                try {
+                    // Retry creating the original directory: it should succeed now
+                    fs__default['default'].mkdirSync(fp);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 //
 
 
@@ -417,7 +446,7 @@ function dumpSourceToFile(sourcecode, errname, err_id, options, ex) {
             }
 
             try {
-                dumpfile = path__default['default'].normalize(path__default['default'].join(dumpPaths[i], dumpName));
+                dumpfile = path__default['default'].resolve(path__default['default'].join(dumpPaths[i], dumpName));
 
                 const dump = {
                     errname,
@@ -490,7 +519,7 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
     if (err_id.length === 0) {
         err_id = 'exec_crash';
     }
-    const debug = options.debug || 0;
+    const debug = options.debug | 0;
 
     if (debug) console.warn('generated ' + errname + ' code under EXEC TEST.');
     if (debug > 1) {
@@ -511,6 +540,8 @@ function exec_and_diagnose_this_stuff(sourcecode, code_execution_rig, options, t
         p = code_execution_rig.call(this, sourcecode, options, errname, debug);
     } catch (ex) {
         if (debug > 1) console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
+        if (debug > 2 || ex.message.includes('else')) console.error('', 'OFFENDING SOURCECODE:\n-------------------------\n' + sourcecode + '\n---------------------------');
 
         if (debug) console.log('generated ' + errname + ' source code fatal error: ', ex.message);
 
@@ -1141,39 +1172,8 @@ function parseCodeChunkToAST(src, options) {
     .replace(/#/g, '\uFFDB')
     ;
     const ast = recast__default['default'].parse(src);
+    stripAST(ast);
     return ast;
-}
-
-
-function compileCodeToES5(src, options) {
-    options = Object.assign({}, {
-        ast: true,
-        code: true,
-        sourceMaps: true,
-        comments: true,
-        filename: 'compileCodeToES5.js',
-        sourceFileName: 'compileCodeToES5.js',
-        sourceRoot: '.',
-        sourceType: 'module',
-
-        babelrc: false,
-
-        ignore: [
-            'node_modules/**/*.js'
-        ],
-        compact: false,
-        retainLines: false,
-        presets: [
-            [ '@babel/preset-env', {
-                targets: {
-                    browsers: [ 'last 2 versions' ],
-                    node: '8.0'
-                }
-            } ]
-        ]
-    }, options);
-
-    return babel.transformSync(src, options); // => { code, map, ast }
 }
 
 
@@ -1204,6 +1204,44 @@ function prettyPrintAST(ast, options) {
 
 
 
+// Generate a 'prelude text' to help place a given text at a given location (yylloc).
+// 
+// This is used to (re)generate source code chunks which will report the correct
+// *original* error position when a JavaScript interpreter or other system produces
+// an error specifying the location of the error. 
+// 
+// The `position` parameter is assumed to adhere to the `yylloc` format:
+// - one-based line numbers
+// - zero-based column numbers
+// - range[] is an array specifying the string OFFSET in characters from start to end.
+//   (We will only look at range[0], of course.)
+function generateSourcePrelude(position) {
+    if (!position) return '';
+
+    // We want the lex input to start at the given 'position', if any,
+    // so that error reports will produce a line number and character index
+    // which matches the original input file:
+    assert__default['default'](typeof position === 'object');
+    position.range = position.range || [];
+    const l = position.first_line | 0;
+    const c = position.first_column | 0;
+    let o = position.range[0] | 0;
+    let prelude = '';
+    if (l > 1) {
+        prelude += (new Array(l)).join('\n');
+        o -= l;
+    }
+    if (c > 0) {
+        prelude += (new Array(c)).join(' ');
+        o -= c;
+    }
+    if (o > 3) {
+        prelude = '// ' + (new Array(o - 3)).join('.') + prelude;
+    }
+    return prelude;
+}
+
+
 
 // validate the given JISON+JavaScript snippet: does it compile?
 //
@@ -1221,14 +1259,10 @@ function checkActionBlock(src, yylloc, options) {
 
     // make sure reasonable line numbers, etc. are reported in any
     // potential parse errors by pushing the source code down:
-    if (yylloc && yylloc.first_line > 0) {
-        let cnt = yylloc.first_line;
-        let lines = new Array(cnt);
-        src = lines.join('\n') + src;
-    }
+    let augSrc = generateSourcePrelude(yylloc) + src;
 
     try {
-        void parseCodeChunkToAST(src, options);
+        void parseCodeChunkToAST(augSrc, options);
         return false;
     } catch (ex) {
         return ex.message || 'code snippet cannot be parsed';
@@ -1371,11 +1405,11 @@ function braceArrowActionCode(src) {
 var parse2AST = {
     generateMapper4JisonGrammarIdentifiers,
     parseCodeChunkToAST,
-    compileCodeToES5,
     prettyPrintAST,
     checkActionBlock,
     trimActionCode,
     braceArrowActionCode,
+    generateSourcePrelude,
 
     ID_REGEX_BASE,
     IN_ID_CHARSET
@@ -1997,6 +2031,464 @@ function trimErrorForTestReporting(e) {
     return e;
 }
 
+function findSymbolTable(o, sectionName) {
+    if (o) {
+        let s = o[sectionName];
+        if (s && typeof s === 'object' && Object.keys(s).length > 0) {
+            return s;
+        }
+        for (let key in o) {
+            let rv = findSymbolTable(o[key]);
+            if (rv) return rv;
+        }
+    }
+    return null;
+}
+
+
+function extractSymbolTableFromFile(filepath, sectionName) {
+    let source;
+    let import_error;
+    let predefined_symbols;
+
+    sectionName = sectionName || 'symbols_';
+
+    try {
+        filepath = path__default['default'].resolve(filepath);
+
+        source = fs__default['default'].readFileSync(filepath, 'utf8');
+        // It's either a JSON file or a JISON generated output file:
+        //
+        //     symbols_: {
+        //       "symbol": ID, ...
+        //     },
+        try {
+            let obj = JSON5__default['default'].parse(source);
+
+            // two options: 
+            // 
+            // 1. symbol table is part of a larger JSON5 file
+            // 2. JSON5 file specifies the symbol table only & directly,
+            //    i.e. no 'symbols_:' prelude.
+            let s = findSymbolTable(obj, sectionName);
+            if (!s && obj && typeof obj === 'object' && Object.keys(obj).length > 0) {
+                s = obj;
+            }
+            if (!s) {
+                throw new Error(`No symbol table named '${sectionName}' found in the JSON5 file '${filepath}'.`);
+            }
+            predefined_symbols = s;
+        } catch (ex) {
+            import_error = ex;
+
+            // attempt to read the file as a JISON-generated parser source instead:
+            try {
+            	let re = new RegExp(`[\\r\\n](\\s*["']?${sectionName}["']?:\\s*\\{[\\s\\S]*?\\}),?\\s*[\\r\\n]`);
+                let m = re.exec(source);
+            	//console.error("extractSymbolTableFromFile REGEX match:", {re, m: m && m[1]});
+                if (m && m[1]) {
+                    source = `
+                        {
+                            // content extracted from file:
+                            ${m[1]}
+                        }
+                    `;
+                    let obj = JSON5__default['default'].parse(source);
+                    let s = findSymbolTable(obj, sectionName);
+                    if (!s) {
+                        // let this error override anything that came before:
+                        import_error = null;
+                        throw new Error(`No symbol table found in the extracted '${sectionName}' section of file '${filepath}'.`);
+                    }
+                    predefined_symbols = s;
+                    import_error = null;
+                } else {
+                    throw new Error(`No potential '${sectionName}' symbol table section found in the file '${filepath}'.`);
+                }
+            } catch (ex2) {
+                if (!import_error) {
+                    import_error = ex2;
+                }
+            }
+        }
+    } catch (ex3) {
+        import_error = ex3;
+    }
+
+    assert__default['default'](predefined_symbols ? !import_error : import_error);
+    if (import_error) {
+        throw new Error((rmCommonWS`
+            Error: '%import symbols <path>' must point to either a JSON file containing 
+            a symbol table (hash table) or a previously generated JISON JavaScript file, 
+            which contains such a symbol table.
+
+            Expected file format: 
+            It's either a JSON file or a JISON generated output file, which contains 
+            a section like this:
+
+                ${sectionName}: {
+                    "symbol": ID, 
+                    ...
+                }
+
+            Reported error:
+                ${import_error}
+        `).trim(), import_error);
+    }
+    assert__default['default'](predefined_symbols);
+    assert__default['default'](typeof predefined_symbols === 'object');
+    return predefined_symbols;
+}
+
+// Calculate the end marker to match and produce a
+// matcher function to match the entire chunk:
+function setupDelimitedActionChunkMatcher(marker, lexer) {
+    // check the cache first:
+    let cache = lexer.__entire_action_block_matchers__ || {};
+    let rv = cache[marker];
+    if (!rv) {
+        const action_end_marker = marker.replace(/\{/g, '}');
+
+        // regex must match content + endMarker, as startMarker has already been consumed before this function got a call:
+        const escaped_end_marker = action_end_marker.replace(/\}/g, '\\}');
+        const re = new RegExp('^([^]*?)' + escaped_end_marker + '(?!\\})');
+        const is_complex_marker = (action_end_marker[0] === '}' && action_end_marker.length > 1);
+
+        const match = function matchDelimitedActionChunk(input) {
+            const m = re.exec(input);
+            if (!m) {
+                return {
+                    fault: rmCommonWS`
+                        Incorrectly terminated action code block. We're expecting the
+                        '${action_end_marker}' end marker to go with the given start marker.
+                        Regrettably, it does not exist in the remainder of the input.
+                    `,
+                    srcCode: '',
+                    shiftCount: 0,
+                    action_start_marker: marker,
+                    action_end_marker,
+                };
+            }
+
+            let srcCode = m[1];
+            let shiftCount = m[0].length;
+
+            // When we have a match, we're not home yet!
+            //
+            // It MAY be that the marker is a 'complex one', i.e. consisting of multiple '}' closing braces
+            // BUT not '%'-delimited, which would allow such fringe cases such as these to pass:
+            //
+            //     {{{ ... { ... }}}} }}}
+            //
+            // Note the '}}}}' near the end there, which would be the one matched -- and humanly sensibly so,
+            // since we tracked the matching braces with our programmer's eyes -- but in practice this kind
+            // of mess should be strongly discouraged as it results in a very confusing *code read*.
+            //
+            // See also lexer test cases 0105 and onwards for a couple of examples. And then consider that
+            // those are simple test examples, so be mindful about what this would allow to pass in daily practice.
+            //
+            // Hence we check for an 'independent' end marker for all multi-brace markers:
+            // 
+            if (is_complex_marker && srcCode) {
+                let m2 = /[^}]$/.test(srcCode);    // no '}' allowed at the very end or you'ld have the fringe scenario above!
+                if (m2) {
+                    return {
+                        fault: rmCommonWS`
+                            TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+                            Confusingly terminated action code block. We're expecting the
+                            '${action_end_marker}' end marker to go with the given start marker.
+                            Regrettably, it does not exist in the remainder of the input.
+                        `,
+                        srcCode,
+                        shiftCount,
+                        action_start_marker: marker,
+                        action_end_marker,
+                    };
+                }
+            }
+
+            return {
+                srcCode,
+                shiftCount,
+                action_start_marker: marker,
+                action_end_marker,
+            };
+        };
+
+        // cache the generated function, as it'll be useful again for the next occurrence of the same start marker:
+        cache[marker] = match;
+        lexer.__entire_action_block_matchers__ = cache;
+
+        rv = match;
+    }
+    return rv;
+}
+
+function setupFileBasedTestRig(__DIRNAME__ /* __dirname */, testset, __NAME__, options) {
+    options = options || {};
+
+    function cleanPath(filepath) {
+        // does input path contain a Windows Drive or Network path? 
+        // If so, prevent bugs in path.join() re Windows paths to kick in 
+        // while the input path is an absolute path already anyway:
+        if (!filepath.includes(':')) {
+            filepath = path__default['default'].join(__DIRNAME__, filepath);
+        }
+        return path__default['default'].resolve(filepath).replace(/\\/g, '/');  // UNIXify the path
+    }
+
+    const PATHROOT = cleanPath('../../..');
+    const PATHBASE = cleanPath('.');
+
+    function extractYAMLheader(src) {
+        // extract the top comment (possibly empty), which carries the title, etc. metadata:
+        let header = src.substr(0, src.indexOf('\n\n') + 1);
+
+        // check if this chunk is indeed a YAML header: we ASSUME it contains at least
+        // one line looking like this:
+        let is_yaml_chunk = header.split('\n').filter((l) => l.replace(/^\/\/ ?/gm, '').trim() === '...').length > 0;
+        if (!is_yaml_chunk) {
+            return '';
+        }
+        return header;
+    }
+
+    function mkFilePath4Display(filepath) {
+        return filepath.replace(PATHROOT, '')
+        .replace(new RegExp(`^\\/packages\\/${__NAME__}\\/`), ':/')
+        .replace(/\/tests\/specs\//, '/tests/')
+        .replace(/\/tests\/lex\//, '/lex/')
+        .replace(/\/packages\//, '/')
+        .replace(/\/reference-output\//, '/')
+        .replace(/-ref\./, '.')
+        .replace(/:\/tests\//, ':/')
+    }
+
+
+    // collision detection helper for the generated output+reference files
+    let __hits__ = {};
+
+
+    testset = testset.map(function (filepath) {
+        // Get document, or throw exception on error
+        try {
+            let spec;
+            let header;
+            let extra;
+            let grammar;
+
+            filepath = cleanPath(filepath);
+
+            let filepath4display = mkFilePath4Display(filepath);
+            console.log('Grammar file:', filepath4display);
+
+            if (filepath.match(/\.js$/)) {
+                spec = require(filepath);
+
+                let hdrspec = fs__default['default'].readFileSync(filepath, 'utf8').replace(/\r\n|\r/g, '\n');
+
+                // extract the top comment (possibly empty), which carries the title, etc. metadata:
+                header = extractYAMLheader(hdrspec);
+
+                grammar = spec;
+            } else {
+                spec = fs__default['default'].readFileSync(filepath, 'utf8').replace(/\r\n|\r/g, '\n');
+
+                // extract the top comment (possibly empty), which carries the title, etc. metadata:
+                header = extractYAMLheader(spec);
+
+                grammar = spec;
+            }
+
+            // then strip off the comment prefix for every line:
+            header = header.replace(/^\/\/ ?/gm, '').replace(/\n...\n[^]*$/, function (m) {
+                extra = m;
+                return '';
+            });
+
+            //console.error("YAML safeload:", { header, filepath });
+            let doc = yaml__default['default'].safeLoad(header, {
+                filename: filepath
+            }) || {};
+
+            if (doc.crlf && typeof grammar === 'string') {
+                grammar = grammar.replace(/\n/g, '\r\n');
+            }
+
+            let outbase = path__default['default'].dirname(filepath);
+            if (!outbase.includes(PATHBASE)) {
+                // mapping test files from other sub-packages to their own specs/output.../ directories in here to prevent collisions
+                outbase = cleanPath(path__default['default'].join('specs', path__default['default'].dirname(filepath4display.replace(/^\/examples\//, '/jison/examples/').replace(/^[:\/]+/, '').replace('/tests/', '/'))));
+            }
+            let refOutFilePath = cleanPath(path__default['default'].join(outbase, 'reference-output', path__default['default'].basename(filepath4display) + '-ref.json5'));
+            let testOutFilePath = cleanPath(path__default['default'].join(outbase, 'output', path__default['default'].basename(filepath4display) + '-ref.json5'));
+            let generatorRefFilePath = cleanPath(path__default['default'].join(outbase, 'reference-output', path__default['default'].basename(filepath4display) + '-lex.json5'));
+            let generatorOutFilePath = cleanPath(path__default['default'].join(outbase, 'output', path__default['default'].basename(filepath4display) + '-lex.json5'));
+
+            let collision;
+            if (!__hits__[testOutFilePath]) {
+                __hits__[testOutFilePath] = {
+                    filepath, 
+                    outbase, 
+                    raw: filepath4display.replace(/^\/examples\//, '/jison/examples/').replace(/^[:\/]+/, '').replace('/tests/', '/')
+                };
+            } else {
+                collision = __hits__[testOutFilePath];
+                console.error("TEST FILE MAPPING COLLISION:", {
+                    filepath, 
+                    outbase, 
+                    testOutFilePath, 
+                    raw: filepath4display.replace(/^\/examples\//, '/jison/examples/').replace(/^[:\/]+/, '').replace('/tests/', '/'),
+                    '**HIT**': collision
+                });        
+                throw new Error(`TEST FILE MAPPING COLLISION for '${filepath}' vs. ${collisionfilepath}'`);
+            }
+
+            mkdirp(path__default['default'].dirname(refOutFilePath));
+            mkdirp(path__default['default'].dirname(testOutFilePath));
+
+            let refOut;
+            try {
+                var soll = fs__default['default'].readFileSync(refOutFilePath, 'utf8').replace(/\r\n|\r/g, '\n');
+                if (doc.crlf) {
+                    soll = soll.replace(/\n/g, '\r\n');
+                }
+                refOut = JSON5__default['default'].parse(soll);
+            } catch (ex) {
+                refOut = null;
+            }
+
+            let generatorRefOut;
+            try {
+                if (options.useGeneratorRef) {
+                    var soll = fs__default['default'].readFileSync(generatorRefFilePath, 'utf8').replace(/\r\n|\r/g, '\n');
+                    if (doc.crlf) {
+                        soll = soll.replace(/\n/g, '\r\n');
+                    }
+                    generatorRefOut = soll;
+                } else {
+                    generatorRefOut = null;
+                }
+            } catch (ex) {
+                generatorRefOut = null;
+            }
+
+            return {
+                type: path__default['default'].extname(filepath).toLowerCase(),
+                filepath4display,
+                path: filepath,
+                outputRefPath: refOutFilePath,
+                outputOutPath: testOutFilePath,
+                generatorRefPath: generatorRefFilePath,
+                generatorOutPath: generatorOutFilePath,
+                spec,
+                grammar,
+                meta: doc,
+                metaExtra: extra,
+                useGeneratorRef: options.useGeneratorRef,
+                generatorRef: generatorRefOut,
+                ref: refOut
+            };
+        } catch (ex) {
+            console.log(ex);
+            throw ex;
+        }
+        return false;
+    })
+    .filter(function (info) {
+        return !!info;
+    });
+
+
+    function testrig_JSON5circularRefHandler(obj, circusPos, objStack, keyStack, key, err) {
+        // and produce an alternative structure to JSON-ify:
+        return {
+            circularReference: true,
+            // ex: {
+            //   message: err.message,
+            //   type: err.name
+            // },
+            index: circusPos,
+            parentDepth: objStack.length - circusPos - 1,
+            key: key,
+            keyStack: keyStack    // stack & keyStack have already been snapshotted by the JSON5 library itself so passing a direct ref is fine here!
+        };
+    }
+
+    function reduceWhitespace(src) {
+        // replace tabs with space, clean out multiple spaces and kill trailing spaces:
+        return src
+          .replace(/\r\n|\r/g, '\n')
+          .replace(/[ \t]+/g, ' ')
+          .replace(/ +$/gm, '');
+    }
+
+    // WARNING:
+    // This function will fatally destroy some parts of the object you feed it!
+    // DO NOT expect good behaviour from it for its original purposes, once we're done in here!
+    // 
+    // This function was introduced as the JSON5.stringify() calls in the test rig used to
+    // write output/reference files were taking forever and for larger test files were even
+    // causing stack overflow in Node. 
+    // Further investigation uncovered the culprit: stack run-away in deep esprima ASTs which
+    // are stored as part of checked action code chunks in the options.lex_rule_dictionary.rules[], etc.
+    function stripForSerialization(obj, depth) {
+        if (!obj) return false;
+
+        if (typeof obj !== 'object') {
+            return false;
+        }
+
+        depth = depth || 0;
+        if (Array.isArray(obj)) {
+            for (let i in obj) {
+                stripForSerialization(obj[i], depth + 1);
+            }
+            return false;
+        } else {
+            if (depth > 8) return true;
+
+            for (let key in obj) {
+                let el = obj[key];
+
+                if (key === 'ast') {
+                    // if attribute is itself an object, which contains an AST member,
+                    // PLUS a `source` attribute alongside, nuke the AST sub attribute.
+                    if (el && el.ast && el.source) {
+                        el.ast = '[recast AST]';
+                        if (el.augmentedSource) {
+                            el.augmentedSource = '[LINE-SHIFTED SOURCE]';
+                        }
+                        if (el.source === obj.srcCode) {
+                            el.source = '[IDEM: srcCode]';
+                        }
+                    }
+                }
+
+                if (stripForSerialization(el, depth + 1)) {
+                    obj[key] = '[OBJECT @ DEPTH LIMIT]';
+                }
+            }
+            return false;
+        }
+    }
+
+
+    return {
+        filespecList: testset,
+
+        testrig_JSON5circularRefHandler,
+        stripForSerialization,
+        reduceWhitespace,
+        trimErrorForTestReporting, 
+        stripErrorStackPaths, 
+        cleanStackTrace4Comparison,
+    };
+}
+
+
+
 var helpers = {
     rmCommonWS,
     camelCase,
@@ -2015,13 +2507,15 @@ var helpers = {
     dump: exec.dump,
     convertExceptionToObject: exec.convertExceptionToObject,
 
+    mkdirp,
+
     generateMapper4JisonGrammarIdentifiers: parse2AST.generateMapper4JisonGrammarIdentifiers,
     parseCodeChunkToAST: parse2AST.parseCodeChunkToAST,
-    compileCodeToES5: parse2AST.compileCodeToES5,
     prettyPrintAST: parse2AST.prettyPrintAST,
     checkActionBlock: parse2AST.checkActionBlock,
     trimActionCode: parse2AST.trimActionCode,
     braceArrowActionCode: parse2AST.braceArrowActionCode,
+    generateSourcePrelude: parse2AST.generateSourcePrelude,
 
     ID_REGEX_BASE: parse2AST.ID_REGEX_BASE,
     IN_ID_CHARSET: parse2AST.IN_ID_CHARSET,
@@ -2274,38 +2768,120 @@ let setMixin = {
 
 var Set$1 = typal.construct(setMixin);
 
-// See also:
-// http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508
-// but we keep the prototype.constructor and prototype.name assignment lines too for compatibility
-// with userland code which might access the derived class in a 'classic' way.
-function JisonParserError(msg, hash) {
-    Object.defineProperty(this, 'name', {
+/**
+ * See also:
+ * 
+ * - https://github.com/onury/custom-error-test
+ * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+ * 
+ * We now provide an ES6 derived Error class. An updated ES5-compatible class
+ * is available too, for those who might need it, as this is complex stuff to
+ * get right (see first link above).
+ *
+ * @public
+ * @constructor
+ * @nocollapse
+ */
+
+
+/*---ES5---
+
+//
+// JS CustomError implementation — The One (Adapted for JISON)
+// This is the closest we can get to ES2015 `extends Error` implementation.
+// @version 2017-01-05
+// @author
+//     Onur Yıldırım (https://github.com/onury)
+//     Matt Browne (https://github.com/mbrowne)
+// @see
+//     https://github.com/onury/custom-error-test
+//     http://stackoverflow.com/a/35881508/112731
+//     https://gist.github.com/mbrowne/4af54767dcb3d529648f5a8aa11d6348
+//     http://stackoverflow.com/a/41338601/112731
+//
+function JisonParserError(message, hash) {
+    if (message == null) message = '???';
+
+    let stacktrace;
+    if (hash && hash.exception instanceof Error) {
+        const ex2 = hash.exception;
+        message = message + ' :: ' + ex2.message;
+        stacktrace = ex2.stack;
+    }
+
+    let err;
+    if (Object.setPrototypeOf) {
+        err = new Error(message);
+        Object.setPrototypeOf(err, CustomError.prototype);
+    } else {
+        err = this;
+    }
+
+    Object.defineProperty(err, 'name', {
         enumerable: false,
         writable: false,
         value: 'JisonParserError'
     });
 
-    if (msg == null) msg = '???';
+    err.hash = hash;
 
-    Object.defineProperty(this, 'message', {
-        enumerable: false,
-        writable: true,
-        value: msg
+    if (!Object.setPrototypeOf) {
+        Object.defineProperty(err, 'message', {
+            enumerable: false,
+            writable: true,
+            value: message
+        });
+        if (!stacktrace) {
+            if (typeof Error.captureStackTrace === 'function') { // V8
+                Error.captureStackTrace(this, JisonParserError);
+            } else {
+                stacktrace = (new Error(message)).stack;
+            }
+        }
+    }
+
+    if (stacktrace) {
+        Object.defineProperty(err, 'stack', {
+            enumerable: false,
+            writable: false,
+            value: stacktrace
+        });
+    }
+
+    return err;
+}
+if (Object.setPrototypeOf) {
+    Object.setPrototypeOf(JisonParserError.prototype, Error.prototype);
+} else {
+    JisonParserError.prototype = Object.create(Error.prototype, {
+        constructor: { value: JisonParserError }
     });
+}
 
-    this.hash = hash;
+---ES5---*/
+
+//---ES6---//
+
+class JisonParserError extends Error {
+  constructor(message, hash, ...params) {
+    if (message == null) message = '???';
 
     let stacktrace;
     if (hash && hash.exception instanceof Error) {
-        let ex2 = hash.exception;
-        this.message = ex2.message || msg;
+        const ex2 = hash.exception;
+        message = message + ' :: ' + ex2.message;
         stacktrace = ex2.stack;
     }
+
+    // Pass remaining arguments (including vendor specific ones) to parent constructor
+    super(message, ...params);
+
     if (!stacktrace) {
-        if (Error.hasOwnProperty('captureStackTrace')) {        // V8/Chrome engine
-            Error.captureStackTrace(this, this.constructor);
+        // Maintains proper stack trace for where our error was thrown (only available on V8)
+        if (typeof Error.captureStackTrace === 'function') { // V8
+            Error.captureStackTrace(this, JisonParserError);
         } else {
-            stacktrace = (new Error(msg)).stack;
+            stacktrace = (new Error(message)).stack;
         }
     }
     if (stacktrace) {
@@ -2315,15 +2891,13 @@ function JisonParserError(msg, hash) {
             value: stacktrace
         });
     }
+
+    this.name = 'JisonParserError';
+    this.hash = hash;
+  }
 }
 
-if (typeof Object.setPrototypeOf === 'function') {
-    Object.setPrototypeOf(JisonParserError.prototype, Error.prototype);
-} else {
-    JisonParserError.prototype = Object.create(Error.prototype);
-}
-JisonParserError.prototype.constructor = JisonParserError;
-JisonParserError.prototype.name = 'JisonParserError';
+//---ES6---//
 
 
 
@@ -2491,7 +3065,9 @@ let parser = {
     //
     // --------- END OF REPORT -----------
 
-trace: function no_op_trace() { },
+trace: function jison_trace(...args) {
+    // Jison.print.call(null, ':: ' + (args.join('') || '???'));
+},
 JisonParserError: JisonParserError,
 yy: {},
 options: {
@@ -2913,9 +3489,11 @@ performAction: function parser__PerformAction(yyloc, yystate /* action[1] */, yy
 
           const OPTION_DOES_NOT_ACCEPT_VALUE = 0x0001;
     const OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES = 0x0002;
-    const OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME = 0x0004;
-    const OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS = 0x0008;
-    const OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS = 0x0010;
+    const OPTION_ACCEPTS_000_IDENTIFIER_NAMES = 0x0004;    
+    // ^^^ extension of OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES: '8bit', etc. is a 'legal' identifier now too, but '42' (pure number) is not!
+    const OPTION_ALSO_ACCEPTS_STAR_AS_IDENTIFIER_NAME = 0x0008;
+    const OPTION_DOES_NOT_ACCEPT_MULTIPLE_OPTIONS = 0x0010;
+    const OPTION_DOES_NOT_ACCEPT_COMMA_SEPARATED_OPTIONS = 0x0020;
 
           switch (yystate) {
 case 0:
@@ -8630,8 +9208,8 @@ parser.originalQuoteName = parser.quoteName;
  *               Produces a new errorInfo 'hash object' which can be passed into `parseError()`.
  *               See it's use in this lexer kernel in many places; example usage:
  *
- *                   var infoObj = lexer.constructParseErrorInfo('fail!', true);
- *                   var retVal = lexer.parseError(infoObj.errStr, infoObj, lexer.JisonLexerError);
+ *                   let infoObj = lexer.constructParseErrorInfo('fail!', true);
+ *                   let retVal = lexer.parseError(infoObj.errStr, infoObj, lexer.JisonLexerError);
  *
  *    options: { ... lexer %options ... },
  *
@@ -8799,144 +9377,140 @@ parser.originalQuoteName = parser.quoteName;
 
 var lexer = function() {
 
-  /**
-   * See also:
-   * 
-   * - https://github.com/onury/custom-error-test
-   * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
-   * 
-   * We now provide an ES6 derived Error class. An updated ES5-compatible class
-   * is available too, for those who might need it, as this is complex stuff to
-   * get right (see first link above).
-   *
-   * @public
-   * @constructor
-   * @nocollapse
-   */
+    /**
+ * See also:
+ * 
+ * - https://github.com/onury/custom-error-test
+ * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+ * 
+ * We now provide an ES6 derived Error class. An updated ES5-compatible class
+ * is available too, for those who might need it, as this is complex stuff to
+ * get right (see first link above).
+ *
+ * @public
+ * @constructor
+ * @nocollapse
+ */
 
 
-  /*---ES5---
+/*---ES5---
 
-  //
-  // JS CustomError implementation — The One (Adapted for JISON)
-  // This is the closest we can get to ES2015 `extends Error` implementation.
-  // @version 2017-01-05
-  // @author
-  //     Onur Yıldırım (https://github.com/onury)
-  //     Matt Browne (https://github.com/mbrowne)
-  // @see
-  //     https://github.com/onury/custom-error-test
-  //     http://stackoverflow.com/a/35881508/112731
-  //     https://gist.github.com/mbrowne/4af54767dcb3d529648f5a8aa11d6348
-  //     http://stackoverflow.com/a/41338601/112731
-  //
-  function JisonLexerError(message, hash) {
-      if (message == null) message = '???';
+//
+// JS CustomError implementation — The One (Adapted for JISON)
+// This is the closest we can get to ES2015 `extends Error` implementation.
+// @version 2017-01-05
+// @author
+//     Onur Yıldırım (https://github.com/onury)
+//     Matt Browne (https://github.com/mbrowne)
+// @see
+//     https://github.com/onury/custom-error-test
+//     http://stackoverflow.com/a/35881508/112731
+//     https://gist.github.com/mbrowne/4af54767dcb3d529648f5a8aa11d6348
+//     http://stackoverflow.com/a/41338601/112731
+//
+function JisonLexerError(message, hash) {
+    if (message == null) message = '???';
 
-      let stacktrace;
-      if (hash && hash.exception instanceof Error) {
-          const ex2 = hash.exception;
-          message = message + ' :: ' + ex2.message;
-          stacktrace = ex2.stack;
-      }
-
-      let err;
-      if (Object.setPrototypeOf) {
-          err = new Error(message);
-          Object.setPrototypeOf(err, CustomError.prototype);
-      } else {
-          err = this;
-      }
-
-      Object.defineProperty(err, 'name', {
-          enumerable: false,
-          writable: false,
-          value: 'JisonLexerError'
-      });
-
-      err.hash = hash;
-
-      if (!Object.setPrototypeOf) {
-          Object.defineProperty(err, 'message', {
-              enumerable: false,
-              writable: true,
-              value: message
-          });
-          if (!stacktrace) {
-              if (typeof Error.captureStackTrace === 'function') { // V8
-                  Error.captureStackTrace(this, JisonLexerError);
-              } else {
-                  stacktrace = (new Error(message)).stack;
-              }
-          }
-      }
-
-      if (stacktrace) {
-          Object.defineProperty(err, 'stack', {
-              enumerable: false,
-              writable: false,
-              value: stacktrace
-          });
-      }
-
-      return err;
-  }
-  if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(JisonLexerError.prototype, Error.prototype);
-  } else {
-      JisonLexerError.prototype = Object.create(Error.prototype, {
-          constructor: { value: JisonLexerError }
-      });
-  }
-
-  ---ES5---*/
-
-  //---ES6---//
-
-  class JisonLexerError extends Error {
-    constructor(message, hash, ...params) {
-      if (message == null)
-        message = '???';
-
-      let stacktrace;
-
-      if (hash && hash.exception instanceof Error) {
+    let stacktrace;
+    if (hash && hash.exception instanceof Error) {
         const ex2 = hash.exception;
         message = message + ' :: ' + ex2.message;
         stacktrace = ex2.stack;
-      }
-
-      // Pass remaining arguments (including vendor specific ones) to parent constructor
-      super(message, ...params);
-
-      if (!stacktrace) {
-        // Maintains proper stack trace for where our error was thrown (only available on V8)
-        if (typeof Error.captureStackTrace === 'function') {
-          // V8
-          Error.captureStackTrace(this, JisonLexerError);
-        } else {
-          stacktrace = new Error(message).stack;
-        }
-      }
-
-      if (stacktrace) {
-        Object.defineProperty(this, 'stack', {
-          enumerable: false,
-          writable: false,
-          value: stacktrace
-        });
-      }
-
-      this.name = 'JisonLexerError';
-      this.hash = hash;
     }
+
+    let err;
+    if (Object.setPrototypeOf) {
+        err = new Error(message);
+        Object.setPrototypeOf(err, CustomError.prototype);
+    } else {
+        err = this;
+    }
+
+    Object.defineProperty(err, 'name', {
+        enumerable: false,
+        writable: false,
+        value: 'JisonLexerError'
+    });
+
+    err.hash = hash;
+
+    if (!Object.setPrototypeOf) {
+        Object.defineProperty(err, 'message', {
+            enumerable: false,
+            writable: true,
+            value: message
+        });
+        if (!stacktrace) {
+            if (typeof Error.captureStackTrace === 'function') { // V8
+                Error.captureStackTrace(this, JisonLexerError);
+            } else {
+                stacktrace = (new Error(message)).stack;
+            }
+        }
+    }
+
+    if (stacktrace) {
+        Object.defineProperty(err, 'stack', {
+            enumerable: false,
+            writable: false,
+            value: stacktrace
+        });
+    }
+
+    return err;
+}
+if (Object.setPrototypeOf) {
+    Object.setPrototypeOf(JisonLexerError.prototype, Error.prototype);
+} else {
+    JisonLexerError.prototype = Object.create(Error.prototype, {
+        constructor: { value: JisonLexerError }
+    });
+}
+
+---ES5---*/
+
+//---ES6---//
+
+class JisonLexerError extends Error {
+  constructor(message, hash, ...params) {
+    if (message == null) message = '???';
+
+    let stacktrace;
+    if (hash && hash.exception instanceof Error) {
+        const ex2 = hash.exception;
+        message = message + ' :: ' + ex2.message;
+        stacktrace = ex2.stack;
+    }
+
+    // Pass remaining arguments (including vendor specific ones) to parent constructor
+    super(message, ...params);
+
+    if (!stacktrace) {
+        // Maintains proper stack trace for where our error was thrown (only available on V8)
+        if (typeof Error.captureStackTrace === 'function') { // V8
+            Error.captureStackTrace(this, JisonLexerError);
+        } else {
+            stacktrace = (new Error(message)).stack;
+        }
+    }
+    if (stacktrace) {
+        Object.defineProperty(this, 'stack', {
+            enumerable: false,
+            writable: false,
+            value: stacktrace
+        });
+    }
+
+    this.name = 'JisonLexerError';
+    this.hash = hash;
   }
+}
 
-  //---ES6---//
+//---ES6---//
 
-
-  const lexer = {
     
+const lexer = {
+
 // Code Generator Information Report
 // ---------------------------------
 //
@@ -9449,11 +10023,71 @@ var lexer = function() {
     },
 
     /**
-         * unshifts one char (or an entire string) into the input
-         *
-         * @public
-         * @this {RegExpLexer}
-         */
+     * consumes and returns N chars from the input
+     *
+     * @public
+     * @this {RegExpLexer}
+     */
+    consume: function lexer_consume(n) {
+        if (!this._input) {
+            //this.done = true;    -- don't set `done` as we want the lex()/next() API to be able to produce one custom EOF token match after this anyhow. (lexer can match special <<EOF>> tokens and perform user action code for a <<EOF>> match, but only does so *once*)
+            return null;
+        }
+        if (!this._clear_state && !this._more) {
+            this._clear_state = -1;
+            this.clear();
+        }
+        let str = this._input.substring(0, n);
+        let len = str.length;
+        this.yytext += str;
+        this.yyleng += len;
+        this.offset += len;
+        this.match += str;
+        this.matched += str;
+        // Count the linenumber up when we hit the LF (or a stand-alone CR).
+        // On CRLF, the linenumber is incremented when you fetch the CR or the CRLF combo
+        // and we advance immediately past the LF as well, returning both together as if
+        // it was all a single 'character' only.
+        let slice_len = len;
+        let lines_arr = str.split(this.CRLF_Re);
+        let line_count = lines_arr.length - 1;
+        let lines = false;
+        const ch = this._input[n - 1];
+        if (ch === '\n') {
+            lines = true;
+        } else if (ch === '\r') {
+            lines = true;
+            const ch2 = this._input[n];
+            if (ch2 === '\n') {
+                slice_len++;
+                str += ch2;
+                this.yytext += ch2;
+                this.yyleng++;
+                this.offset++;
+                this.match += ch2;
+                this.matched += ch2;
+                this.yylloc.range[1]++;
+            }
+        }
+        this.yylineno += line_count;
+        this.yylloc.last_line += line_count;
+        if (lines) {
+            this.yylloc.last_column = 0;
+        } else {
+            this.yylloc.last_column = lines_arr[line_count].length;
+        }
+        this.yylloc.range[1] += len;
+
+        this._input = this._input.slice(slice_len);
+        return str;
+    },
+
+    /**
+     * unshifts one char (or an entire string) into the input
+     *
+     * @public
+     * @this {RegExpLexer}
+     */
     unput: function lexer_unput(ch) {
       let len = ch.length;
       let lines = ch.split(this.CRLF_Re);
@@ -9561,13 +10195,9 @@ var lexer = function() {
         if (this.yylloc) {
           lineno_msg += ' on line ' + (this.yylineno + 1);
         }
-
-        const p = this.constructLexErrorInfo(
-          lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).',
-          false
-        );
-
-        this._signaled_error_token = this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
+            const p = this.constructLexErrorInfo(lineno_msg + ': You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).', false);
+            p.isLexerBacktrackingNotSupportedError = true;            // when this is true, you 'know' the produced error token will be queued.
+            this._signaled_error_token = (this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR);
       }
 
       return this;
@@ -12414,10 +13044,10 @@ function init_EscCode_lookup_table() {
     updatePcodesBitarrayCacheTestOrder();
 }
 
-function updatePcodesBitarrayCacheTestOrder(opts) {
+function updatePcodesBitarrayCacheTestOrder(grammarSpec) {
     let t = new Array(UNICODE_BASE_PLANE_MAX_CP + 1);
     let l = {};
-    let user_has_xregexp = opts && opts.options && opts.options.xregexp;
+    let user_has_xregexp = grammarSpec && grammarSpec.options && grammarSpec.options.xregexp;
     let i, j, k, ba;
 
     // mark every character with which regex pcodes they are part of:
@@ -12526,7 +13156,7 @@ function updatePcodesBitarrayCacheTestOrder(opts) {
 
 
 // 'Join' a regex set `[...]` into a Unicode range spanning logic array, flagging every character in the given set.
-function set2bitarray(bitarr, s, opts) {
+function set2bitarray(bitarr, s, grammarSpec) {
     let orig = s;
     let set_is_inverted = false;
     let bitarr_orig;
@@ -12653,10 +13283,10 @@ function set2bitarray(bitarr, s, opts) {
                             // remove the wrapping `/.../` to get at the (possibly *combined* series of) `[...]` sets inside:
                             xs = xs.substr(1, xs.length - 2);
 
-                            ba4p = reduceRegexToSetBitArray(xs, pex, opts);
+                            ba4p = reduceRegexToSetBitArray(xs, pex, grammarSpec);
 
                             Pcodes_bitarray_cache[pex] = ba4p;
-                            updatePcodesBitarrayCacheTestOrder(opts);
+                            updatePcodesBitarrayCacheTestOrder(grammarSpec);
                         }
                         // merge bitarrays:
                         add2bitarray(bitarr, ba4p);
@@ -12750,14 +13380,11 @@ function bitarray2set(l, output_inverted_variant, output_minimized) {
     l[UNICODE_BASE_PLANE_MAX_CP + 1] = 1;
     // now reconstruct the regex set:
     let rv = [];
-    let i, j, cnt, lut, tn, tspec, match, pcode, ba4pcode, l2;
-    let bitarr_is_cloned = false;
-    let l_orig = l;
 
     if (output_inverted_variant) {
         // generate the inverted set, hence all unmarked slots are part of the output range:
-        cnt = 0;
-        for (i = 0; i <= UNICODE_BASE_PLANE_MAX_CP; i++) {
+        let cnt = 0;
+        for (let i = 0; i <= UNICODE_BASE_PLANE_MAX_CP; i++) {
             if (!l[i]) {
                 cnt++;
             }
@@ -12773,83 +13400,12 @@ function bitarray2set(l, output_inverted_variant, output_minimized) {
             return '^\\S\\s';
         }
 
-        // Now see if we can replace several bits by an escape / pcode:
-        if (output_minimized) {
-            lut = Pcodes_bitarray_cache_test_order;
-            for (tn = 0; lut[tn]; tn++) {
-                tspec = lut[tn];
-                // check if the uniquely identifying char is in the inverted set:
-                if (!l[tspec[0]]) {
-                    // check if the pcode is covered by the inverted set:
-                    pcode = tspec[1];
-                    ba4pcode = Pcodes_bitarray_cache[pcode];
-                    match = 0;
-                    for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
-                        if (ba4pcode[j]) {
-                            if (!l[j]) {
-                                // match in current inverted bitset, i.e. there's at
-                                // least one 'new' bit covered by this pcode/escape:
-                                match++;
-                            } else if (l_orig[j]) {
-                                // mismatch!
-                                match = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    // We're only interested in matches which actually cover some
-                    // yet uncovered bits: `match !== 0 && match !== false`.
-                    //
-                    // Apply the heuristic that the pcode/escape is only going to be used
-                    // when it covers *more* characters than its own identifier's length:
-                    if (match && match > pcode.length) {
-                        rv.push(pcode);
-
-                        // and nuke the bits in the array which match the given pcode:
-                        // make sure these edits are visible outside this function as
-                        // `l` is an INPUT parameter (~ not modified)!
-                        if (!bitarr_is_cloned) {
-                            l2 = new Array(UNICODE_BASE_PLANE_MAX_CP + 1);
-                            for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
-                                l2[j] = l[j] || ba4pcode[j];    // `!(!l[j] && !ba4pcode[j])`
-                            }
-                            // recreate sentinel
-                            l2[UNICODE_BASE_PLANE_MAX_CP + 1] = 1;
-                            l = l2;
-                            bitarr_is_cloned = true;
-                        } else {
-                            for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
-                                l[j] = l[j] || ba4pcode[j];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        i = 0;
-        while (i <= UNICODE_BASE_PLANE_MAX_CP) {
-            // find first character not in original set:
-            while (l[i]) {
-                i++;
-            }
-            if (i >= UNICODE_BASE_PLANE_MAX_CP + 1) {
-                break;
-            }
-            // find next character not in original set:
-            for (j = i + 1; !l[j]; j++) {} /* empty loop */
-            // generate subset:
-            rv.push(i2c(i));
-            if (j - 1 > i) {
-                rv.push((j - 2 > i ? '-' : '') + i2c(j - 1));
-            }
-            i = j;
-        }
+        // generate the inverted set, hence all unmarked slots are part of the output range:
+        rv = bitarray2setA(l, rv, output_minimized);
     } else {
         // generate the non-inverted set, hence all logic checks are inverted here...
-        cnt = 0;
-        for (i = 0; i <= UNICODE_BASE_PLANE_MAX_CP; i++) {
+        let cnt = 0;
+        for (let i = 0; i <= UNICODE_BASE_PLANE_MAX_CP; i++) {
             if (l[i]) {
                 cnt++;
             }
@@ -12863,82 +13419,7 @@ function bitarray2set(l, output_inverted_variant, output_minimized) {
             return '^\\S\\s';
         }
 
-        // Now see if we can replace several bits by an escape / pcode:
-        if (output_minimized) {
-            lut = Pcodes_bitarray_cache_test_order;
-            for (tn = 0; lut[tn]; tn++) {
-                tspec = lut[tn];
-                // check if the uniquely identifying char is in the set:
-                if (l[tspec[0]]) {
-                    // check if the pcode is covered by the set:
-                    pcode = tspec[1];
-                    ba4pcode = Pcodes_bitarray_cache[pcode];
-                    match = 0;
-                    for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
-                        if (ba4pcode[j]) {
-                            if (l[j]) {
-                                // match in current bitset, i.e. there's at
-                                // least one 'new' bit covered by this pcode/escape:
-                                match++;
-                            } else if (!l_orig[j]) {
-                                // mismatch!
-                                match = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    // We're only interested in matches which actually cover some
-                    // yet uncovered bits: `match !== 0 && match !== false`.
-                    //
-                    // Apply the heuristic that the pcode/escape is only going to be used
-                    // when it covers *more* characters than its own identifier's length:
-                    if (match && match > pcode.length) {
-                        rv.push(pcode);
-
-                        // and nuke the bits in the array which match the given pcode:
-                        // make sure these edits are visible outside this function as
-                        // `l` is an INPUT parameter (~ not modified)!
-                        if (!bitarr_is_cloned) {
-                            l2 = new Array(UNICODE_BASE_PLANE_MAX_CP + 1);
-                            for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
-                                l2[j] = l[j] && !ba4pcode[j];
-                            }
-                            // recreate sentinel
-                            l2[UNICODE_BASE_PLANE_MAX_CP + 1] = 1;
-                            l = l2;
-                            bitarr_is_cloned = true;
-                        } else {
-                            for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
-                                l[j] = l[j] && !ba4pcode[j];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        i = 0;
-        while (i <= UNICODE_BASE_PLANE_MAX_CP) {
-            // find first character not in original set:
-            while (!l[i]) {
-                i++;
-            }
-            if (i >= UNICODE_BASE_PLANE_MAX_CP + 1) {
-                break;
-            }
-            // find next character not in original set:
-            for (j = i + 1; l[j]; j++) {} /* empty loop */
-            if (j > UNICODE_BASE_PLANE_MAX_CP + 1) {
-                j = UNICODE_BASE_PLANE_MAX_CP + 1;
-            }
-            // generate subset:
-            rv.push(i2c(i));
-            if (j - 1 > i) {
-                rv.push((j - 2 > i ? '-' : '') + i2c(j - 1));
-            }
-            i = j;
-        }
+        rv = bitarray2setB(l, rv, output_minimized);
     }
 
     assert__default['default'](rv.length);
@@ -12957,10 +13438,194 @@ function bitarray2set(l, output_inverted_variant, output_minimized) {
 
 
 
+// convert a simple bitarray back into a regex set `[...]` content:
+function bitarray2setA(l, rv, output_minimized) {
+    let i, j, lut, tn, tspec, match, pcode, ba4pcode, l2;
+    let bitarr_is_cloned = false;
+    let l_orig = l;
+
+    // Now see if we can replace several bits by an escape / pcode:
+    if (output_minimized) {
+        lut = Pcodes_bitarray_cache_test_order;
+        for (tn = 0; lut[tn]; tn++) {
+            tspec = lut[tn];
+            // check if the uniquely identifying char is in the inverted set:
+            if (!l[tspec[0]]) {
+                // check if the pcode is covered by the inverted set:
+                pcode = tspec[1];
+                ba4pcode = Pcodes_bitarray_cache[pcode];
+                match = 0;
+                for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
+                    if (ba4pcode[j]) {
+                        if (!l[j]) {
+                            // match in current inverted bitset, i.e. there's at
+                            // least one 'new' bit covered by this pcode/escape:
+                            match++;
+                        } else if (l_orig[j]) {
+                            // mismatch!
+                            match = false;
+                            break;
+                        }
+                    }
+                }
+
+                // We're only interested in matches which actually cover some
+                // yet uncovered bits: `match !== 0 && match !== false`.
+                //
+                // Apply the heuristic that the pcode/escape is only going to be used
+                // when it covers *more* characters than its own identifier's length:
+                if (match && match > pcode.length) {
+                    rv.push(pcode);
+
+                    // and nuke the bits in the array which match the given pcode:
+                    // make sure these edits are visible outside this function as
+                    // `l` is an INPUT parameter (~ not modified)!
+                    if (!bitarr_is_cloned) {
+                        l2 = new Array(UNICODE_BASE_PLANE_MAX_CP + 1);
+                        for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
+                            l2[j] = l[j] || ba4pcode[j];    // `!(!l[j] && !ba4pcode[j])`
+                        }
+                        // recreate sentinel
+                        l2[UNICODE_BASE_PLANE_MAX_CP + 1] = 1;
+                        l = l2;
+                        bitarr_is_cloned = true;
+                    } else {
+                        for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
+                            l[j] = l[j] || ba4pcode[j];
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    i = 0;
+    while (i <= UNICODE_BASE_PLANE_MAX_CP) {
+        // find first character not in original set:
+        while (l[i]) {
+            i++;
+        }
+        if (i >= UNICODE_BASE_PLANE_MAX_CP + 1) {
+            break;
+        }
+        // find next character not in original set:
+        for (j = i + 1; !l[j]; j++) {} /* empty loop */
+        // generate subset:
+        rv.push(i2c(i));
+        if (j - 1 > i) {
+            rv.push((j - 2 > i ? '-' : '') + i2c(j - 1));
+        }
+        i = j;
+    }
+
+    return rv;
+}
+
+
+
+
+
+
+
+
+
+
+
+// convert a simple bitarray back into a regex set `[...]` content:
+function bitarray2setB(l, rv, output_minimized) {
+    let i, j, lut, tn, tspec, match, pcode, ba4pcode, l2;
+    let bitarr_is_cloned = false;
+    let l_orig = l;
+
+    // generate the non-inverted set, hence all logic checks are inverted here...
+
+    // Now see if we can replace several bits by an escape / pcode:
+    if (output_minimized) {
+        lut = Pcodes_bitarray_cache_test_order;
+        for (tn = 0; lut[tn]; tn++) {
+            tspec = lut[tn];
+            // check if the uniquely identifying char is in the set:
+            if (l[tspec[0]]) {
+                // check if the pcode is covered by the set:
+                pcode = tspec[1];
+                ba4pcode = Pcodes_bitarray_cache[pcode];
+                match = 0;
+                for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
+                    if (ba4pcode[j]) {
+                        if (l[j]) {
+                            // match in current bitset, i.e. there's at
+                            // least one 'new' bit covered by this pcode/escape:
+                            match++;
+                        } else if (!l_orig[j]) {
+                            // mismatch!
+                            match = false;
+                            break;
+                        }
+                    }
+                }
+
+                // We're only interested in matches which actually cover some
+                // yet uncovered bits: `match !== 0 && match !== false`.
+                //
+                // Apply the heuristic that the pcode/escape is only going to be used
+                // when it covers *more* characters than its own identifier's length:
+                if (match && match > pcode.length) {
+                    rv.push(pcode);
+
+                    // and nuke the bits in the array which match the given pcode:
+                    // make sure these edits are visible outside this function as
+                    // `l` is an INPUT parameter (~ not modified)!
+                    if (!bitarr_is_cloned) {
+                        l2 = new Array(UNICODE_BASE_PLANE_MAX_CP + 1);
+                        for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
+                            l2[j] = l[j] && !ba4pcode[j];
+                        }
+                        // recreate sentinel
+                        l2[UNICODE_BASE_PLANE_MAX_CP + 1] = 1;
+                        l = l2;
+                        bitarr_is_cloned = true;
+                    } else {
+                        for (j = 0; j <= UNICODE_BASE_PLANE_MAX_CP; j++) {
+                            l[j] = l[j] && !ba4pcode[j];
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    i = 0;
+    while (i <= UNICODE_BASE_PLANE_MAX_CP) {
+        // find first character not in original set:
+        while (!l[i]) {
+            i++;
+        }
+        if (i >= UNICODE_BASE_PLANE_MAX_CP + 1) {
+            break;
+        }
+        // find next character not in original set:
+        for (j = i + 1; l[j]; j++) {} /* empty loop */
+        if (j > UNICODE_BASE_PLANE_MAX_CP + 1) {
+            j = UNICODE_BASE_PLANE_MAX_CP + 1;
+        }
+        // generate subset:
+        rv.push(i2c(i));
+        if (j - 1 > i) {
+            rv.push((j - 2 > i ? '-' : '') + i2c(j - 1));
+        }
+        i = j;
+    }
+
+    return rv;
+}
+
+
+
+
 
 // Pretty brutal conversion of 'regex' `s` back to raw regex set content: strip outer [...] when they're there;
 // ditto for inner combos of sets, i.e. `]|[` as in `[0-9]|[a-z]`.
-function reduceRegexToSetBitArray(s, name, opts) {
+function reduceRegexToSetBitArray(s, name, grammarSpec) {
     let orig = s;
 
     // propagate deferred exceptions = error reports.
@@ -13016,7 +13681,7 @@ function reduceRegexToSetBitArray(s, name, opts) {
 
             var se = set_content.join('');
             if (!internal_state) {
-                derr = set2bitarray(l, se, opts);
+                derr = set2bitarray(l, se, grammarSpec);
                 // propagate deferred exceptions = error reports.
                 if (derr instanceof Error) {
                     return derr;
@@ -13074,7 +13739,7 @@ function reduceRegexToSetBitArray(s, name, opts) {
             // literal character or word: take the first character only and ignore the rest, so that
             // the constructed set for `word|noun` would be `[wb]`:
             if (!internal_state) {
-                derr = set2bitarray(l, c1, opts);
+                derr = set2bitarray(l, c1, grammarSpec);
                 // propagate deferred exceptions = error reports.
                 if (derr instanceof Error) {
                     return derr;
@@ -13221,7 +13886,7 @@ const rmCommonWS$2 = helpers.rmCommonWS;
 const mkIdentifier$3 = helpers.mkIdentifier;
 const code_exec = helpers.exec;
 
-const version = '0.6.2-220';                              // require('./package.json').version;
+const version = '0.7.0-220';                              // require('./package.json').version;
 
 
 
@@ -13269,8 +13934,10 @@ const defaultJisonLexOptions = {
     debug: false,
     enableDebugLogs: false,
     json: false,
-    main: false,                    // CLI: not:(--main option)
-    dumpSourceCodeOnFailure: true,
+    noMain: true,                   // CLI: not:(--main option)
+    moduleMain: null,               // `main()` function source code if `!noMain` is true
+    moduleMainImports: null,        // require()/import statements required by the `moduleMain` function source code if `!noMain` is true
+    dumpSourceCodeOnFailure: false,
     throwErrorOnCompileFailure: true,
     doNotTestCompile: false,
 
@@ -13507,7 +14174,7 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, gramma
     let simple_rule_count = 0;
 
     // Assure all options are camelCased:
-    assert__default['default'](typeof grammarSpec.options['case-insensitive'] === 'undefined');
+    assert__default['default'].equal(typeof grammarSpec.options['case-insensitive'], 'undefined');
 
     if (!tokens) {
         tokens = {};
@@ -13658,7 +14325,7 @@ function prepareRules(dict, actions, caseHelper, tokens, startConditions, gramma
 
 // expand all macros (with maybe one exception) in the given regex: the macros may exist inside `[...]` regex sets or
 // elsewhere, which requires two different treatments to expand these macros.
-function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElsewhere_cb) {
+function reduceRegex(s, name, grammarSpec, expandAllMacrosInSet_cb, expandAllMacrosElsewhere_cb) {
     let orig = s;
 
     function errinfo() {
@@ -13673,13 +14340,10 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
         return s;
     }
 
-    let c1, c2;
     let rv = [];
-    let derr;
-    let se;
 
     while (s.length) {
-        c1 = s.match(CHR_RE$1);
+        let c1 = s.match(CHR_RE$1);
         if (!c1) {
             // cope with illegal escape sequences too!
             return new Error(errinfo() + ': illegal escape sequence at start of regex part: ' + s);
@@ -13689,6 +14353,7 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
 
         switch (c1) {
         case '[':
+        {
             // this is starting a set within the regex: scan until end of set!
             let set_content = [];
             let l = new Array(UNICODE_BASE_PLANE_MAX_CP$1 + 1);
@@ -13711,7 +14376,7 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
             }
 
             // ensure that we hit the terminating ']':
-            c2 = s.match(CHR_RE$1);
+            let c2 = s.match(CHR_RE$1);
             if (!c2) {
                 // cope with illegal escape sequences too!
                 return new Error(errinfo() + ': regex set expression is broken: "' + s + '"');
@@ -13722,7 +14387,7 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
             }
             s = s.substr(c2.length);
 
-            se = set_content.join('');
+            let se = set_content.join('');
 
             // expand any macros in here:
             if (expandAllMacrosInSet_cb) {
@@ -13733,30 +14398,39 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
                 }
             }
 
-            derr = setmgmt.set2bitarray(l, se, opts);
-            if (derr instanceof Error) {
-                return new Error(errinfo() + ': ' + derr.message);
+            if (grammarSpec.options.optimizeLexerRegexes) {
+                let derr = setmgmt.set2bitarray(l, se, grammarSpec);
+                if (derr instanceof Error) {
+                    return new Error(errinfo() + ': ' + derr.message);
+                }
+
+                // find out which set expression is optimal in size:
+                let s1 = setmgmt.produceOptimizedRegex4Set(l);
+
+                // check if the source regex set potentially has any expansions (guestimate!)
+                //
+                // The indexOf('{') picks both XRegExp Unicode escapes and JISON lexer macros, which is perfect for us here.
+                let has_expansions = (se.indexOf('{') >= 0);
+
+                se = '[' + se + ']';
+
+                if (!has_expansions && se.length < s1.length) {
+                    s1 = se;
+                }
+
+                rv.push(s1);
+            } else {
+                se = '[' + se + ']';
+
+                rv.push(se);
             }
-
-            // find out which set expression is optimal in size:
-            let s1 = setmgmt.produceOptimizedRegex4Set(l);
-
-            // check if the source regex set potentially has any expansions (guestimate!)
-            //
-            // The indexOf('{') picks both XRegExp Unicode escapes and JISON lexer macros, which is perfect for us here.
-            let has_expansions = (se.indexOf('{') >= 0);
-
-            se = '[' + se + ']';
-
-            if (!has_expansions && se.length < s1.length) {
-                s1 = se;
-            }
-            rv.push(s1);
+        }
             break;
 
         // XRegExp Unicode escape, e.g. `\\p{Number}`:
         case '\\p':
-            c2 = s.match(XREGEXP_UNICODE_ESCAPE_RE$1);
+        {
+            let c2 = s.match(XREGEXP_UNICODE_ESCAPE_RE$1);
             if (c2) {
                 c2 = c2[0];
                 s = s.substr(c2.length);
@@ -13767,12 +14441,14 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
                 // nothing to stretch this match, hence nothing to expand.
                 rv.push(c1);
             }
+        }
             break;
 
         // Either a range expression or the start of a macro reference: `.{1,3}` or `{NAME}`.
         // Treat it as a macro reference and see if it will expand to anything:
         case '{':
-            c2 = s.match(NOTHING_SPECIAL_RE$1);
+        {
+            let c2 = s.match(NOTHING_SPECIAL_RE$1);
             if (c2) {
                 c2 = c2[0];
                 s = s.substr(c2.length);
@@ -13800,6 +14476,7 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
                 // nothing to stretch this match, hence nothing to expand.
                 rv.push(c1);
             }
+        }
             break;
 
         // Recognize some other regex elements, but there's no need to understand them all.
@@ -13807,9 +14484,10 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
         // We are merely interested in any chunks now which do *not* include yet another regex set `[...]`
         // nor any `{MACRO}` reference:
         default:
+        {
             // non-set character or word: see how much of this there is for us and then see if there
             // are any macros still lurking inside there:
-            c2 = s.match(NOTHING_SPECIAL_RE$1);
+            let c2 = s.match(NOTHING_SPECIAL_RE$1);
             if (c2) {
                 c2 = c2[0];
                 s = s.substr(c2.length);
@@ -13820,6 +14498,7 @@ function reduceRegex(s, name, opts, expandAllMacrosInSet_cb, expandAllMacrosElse
                 // nothing to stretch this match, hence nothing to expand.
                 rv.push(c1);
             }
+        }
             break;
         }
     }
@@ -14034,7 +14713,7 @@ function prepareMacros(dict_macros, grammarSpec) {
 
     let i;
 
-    if (grammarSpec.debug) console.log('\n############## RAW macros: ', dict_macros);
+    if (grammarSpec.options.debug) console.error('\n############## RAW macros: ', dict_macros);
 
     // first we create the part of the dictionary which is targeting the use of macros
     // *inside* `[...]` sets; once we have completed that half of the expansions work,
@@ -14054,7 +14733,7 @@ function prepareMacros(dict_macros, grammarSpec) {
         }
     }
 
-    if (grammarSpec.debug) console.log('\n############### expanded macros: ', macros);
+    if (grammarSpec.options.debug) console.error('\n############### expanded macros: ', macros);
 
     return macros;
 }
@@ -14200,7 +14879,7 @@ function prepareStartConditions(conditions) {
 }
 
 function buildActions(dict, tokens, grammarSpec) {
-    let actions = [ dict.actionInclude || '', 'const YYSTATE = YY_START;' ];
+    const actions = [ dict.actionInclude || '', 'const YYSTATE = YY_START;' ];
     let toks = {};
     let caseHelper = [];
 
@@ -14480,7 +15159,6 @@ function generateFakeXRegExpClassSrcCode() {
 /** @constructor */
 function RegExpLexer(dict, input, tokens, build_options, yy) {
     let grammarSpec;
-    let dump = false;
 
     function test_me(tweak_cb, description, src_exception, ex_callback) {
         grammarSpec = processGrammar(dict, tokens, build_options);
@@ -14534,10 +15212,17 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
                 `,
                 'return lexer;'
             ].join('\n');
-            let lexer = code_exec(testcode, function generated_code_exec_wrapper_regexp_lexer(sourcecode) {
-                //console.log("===============================LEXER TEST CODE\n", sourcecode, "\n=====================END====================\n");
+            let lexer = code_exec(testcode, function generated_code_exec_wrapper_regexp_lexer(sourcecode, options, errname, debug) {
+                if (debug > 3) {
+                    console.error((rmCommonWS$2`
+                        =============================== LEXER TEST CODE ======================
+                        @@@
+                        =============================== END ==================================`)
+                        .replace(/@@@/, sourcecode)
+                    );
+                }
                 chkBugger$2(sourcecode);
-                let lexer_f = new Function('', sourcecode);
+                let lexer_f = new Function(sourcecode);
                 return lexer_f();
             }, Object.assign({}, grammarSpec.options, {
                 throwErrorOnCompileFailure: true 
@@ -14558,9 +15243,11 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
 
             // When we do NOT crash, we found/killed the problem area just before this call!
             if (src_exception && description) {
-                let msg = description;
+                let msg;
                 if (typeof description === 'function') {
                     msg = description();
+                } else {
+                    msg = description;
                 }
                 src_exception.message += '\n        (' + msg + ')';
             }
@@ -14582,7 +15269,14 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
                 if (typeof grammarSpec.options.showSource === 'function') {
                     grammarSpec.options.showSource(lexer, source, grammarSpec, RegExpLexer);
                 } else {
-                    console.log('\nGenerated lexer sourcecode:\n----------------------------------------\n', source, '\n----------------------------------------\n');
+                    console.log((rmCommonWS$2`
+                            ======================================================================
+                            Generated lexer sourcecode:
+                            ----------------------------------------------------------------------
+                            @@@
+                            ======================================================================
+                        `).replace(/@@@/, source)
+                    );
                 }
             }
             return lexer;
@@ -14593,33 +15287,40 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
 
             if (ex_callback) {
                 ex_callback(ex);
-            } else if (dump) {
-                console.log('source code:\n', source);
+            } else if (grammarSpec.options.dumpSourceCodeOnFailure) {
+                console.log((rmCommonWS$2`
+                        ======================================================================
+                        Generated lexer sourcecode on error:
+                        ----------------------------------------------------------------------
+                        @@@
+                        ======================================================================
+                    `).replace(/@@@/, source), ex
+                );
             }
             return false;
         }
     }
 
     /** @constructor */
-    let lexer = test_me(null, null, null, function (ex) {
+    let lexer = test_me(null, null, null, function onTestFailure_1(ex) {
         // When we get an exception here, it means some part of the user-specified lexer is botched.
         //
         // Now we go and try to narrow down the problem area/category:
         assert__default['default'](grammarSpec.options);
         assert__default['default'](grammarSpec.options.xregexp !== undefined);
         let orig_xregexp_opt = !!grammarSpec.options.xregexp;
-        if (!test_me(function () {
+        if (!test_me(function tweakResult_1() {
             assert__default['default'](grammarSpec.options.xregexp !== undefined);
             grammarSpec.options.xregexp = false;
             grammarSpec.showSource = false;
         }, 'When you have specified %option xregexp, you must also properly IMPORT the XRegExp library in the generated lexer.', ex, null)) {
-            if (!test_me(function () {
+            if (!test_me(function tweakResult_2() {
                 // restore xregexp option setting: the trouble wasn't caused by the xregexp flag i.c.w. incorrect XRegExp library importing!
                 grammarSpec.options.xregexp = orig_xregexp_opt;
 
                 grammarSpec.conditions = [];
                 grammarSpec.showSource = false;
-            }, function () {
+            }, function description_2() {
                 assert__default['default'](Array.isArray(grammarSpec.rules));
                 return (grammarSpec.rules.length > 0 ?
                     'One or more of your lexer state names are possibly botched?' :
@@ -14627,7 +15328,7 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
                 );
             }, ex, null)) {
                 let rulesSpecSize;
-                if (!test_me(function () {
+                if (!test_me(function tweakResult_3() {
                     // store the parsed rule set size so we can use that info in case
                     // this attempt also fails:
                     assert__default['default'](Array.isArray(grammarSpec.rules));
@@ -14669,7 +15370,7 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
                         }
                     }
                     if (!rv) {
-                        test_me(function () {
+                        test_me(function tweakResult_5() {
                             grammarSpec.conditions = [];
                             grammarSpec.rules = [];
                             grammarSpec.performAction = 'null';
@@ -14677,9 +15378,7 @@ function RegExpLexer(dict, input, tokens, build_options, yy) {
                             // grammarSpec.caseHelperInclude = '{}';
                             grammarSpec.showSource = false;
                             grammarSpec.__in_rules_failure_analysis_mode__ = true;
-
-                            dump = false;
-                        }, 'One or more of your lexer rule action code block(s) are possibly botched?', ex, null);
+                        }, 'One or more of your lexer action setup code block(s) are possibly botched?', ex, null);
                     }
                 }
             }
@@ -14817,6 +15516,7 @@ return `{
                 }
             }
         }
+        
         /** @constructor */
         const pei = {
             errStr: msg,
@@ -14986,18 +15686,18 @@ return `{
         // including expansion work to be done to go from a loaded
         // lexer to a usable lexer:
         if (!this.__decompressed) {
-          // step 1: decompress the regex list:
+            // step 1: decompress the regex list:
             let rules = this.rules;
             for (let i = 0, len = rules.length; i < len; i++) {
                 let rule_re = rules[i];
 
-            // compression: is the RE an xref to another RE slot in the rules[] table?
+                // compression: is the RE an xref to another RE slot in the rules[] table?
                 if (typeof rule_re === 'number') {
                     rules[i] = rules[rule_re];
                 }
             }
 
-          // step 2: unfold the conditions[] set to make these ready for use:
+            // step 2: unfold the conditions[] set to make these ready for use:
             let conditions = this.conditions;
             for (let k in conditions) {
                 let spec = conditions[k];
@@ -16306,7 +17006,7 @@ function stripUnusedLexerCode(src, grammarSpec) {
         let b = a.slice(minl, line + 10);
         let c = b.splice(line - minl, 0, '', '^^^^^^^^^^^ source line above is reported as erroneous ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^', '');
         let offendingChunk = '        ' + b.join('\n        ');
-        console.error(rmCommonWS$2`
+        let warnMsg = rmCommonWS`
             stripUnusedLexerCode WARNING: 
 
                 JISON failed to reformat the generated lexer.
@@ -16319,7 +17019,15 @@ function stripUnusedLexerCode(src, grammarSpec) {
                 The offending action code chunk as reported above:
 
             ${offendingChunk}
-        `);
+        `;
+        // a bit of heuristics for readability
+        if (warnMsg.length > 500) {
+            warnMsg = warnMsg
+            .replace(/[^ -\x7F\r\n\t]/g, '¿')
+            .replace(/¿(?:-¿|¿)+/g, '¿¿')
+            .replace(/ WARNING:/, ' WARNING (non-ASCII character sequences are represented by ¿):')
+        }
+        console.error(warnMsg);
 
         new_src = src;
     }
@@ -16461,8 +17169,8 @@ function processGrammar(dict, tokens, build_options) {
     grammarSpec.rules = code.rules || [];
     grammarSpec.macros = code.macros;
 
-    grammarSpec.regular_rule_count = code.regular_rule_count;
-    grammarSpec.simple_rule_count = code.simple_rule_count;
+    grammarSpec.regular_rule_count = code.regular_rule_count || 0;
+    grammarSpec.simple_rule_count = code.simple_rule_count || 0;
 
     grammarSpec.conditionStack = [ 'INITIAL' ];
 
@@ -16534,7 +17242,7 @@ function generateModuleBody(grammarSpec) {
     function produceOptions(opts) {
         let obj = {};
         const do_not_pass = {
-            debug: !opts.debug,     // do not include this item when it is FALSE as there's no debug tracing built into the generated grammar anyway!
+            debug: 0,             // userland action code chunks may need this one -- as there's no debug tracing built into the generated grammar kernel itself.
             enableDebugLogs: 1,
             json: 1,
             _: 1,
@@ -16651,7 +17359,7 @@ function generateModuleBody(grammarSpec) {
 
         assert__default['default'](grammarSpec.options);
         // Assure all options are camelCased:
-        assert__default['default'](typeof grammarSpec.options['case-insensitive'] === 'undefined');
+        assert__default['default'].equal(typeof grammarSpec.options['case-insensitive'], 'undefined');
 
         code.push('    options: ' + produceOptions(grammarSpec.options));
 
@@ -16682,8 +17390,8 @@ function generateModuleBody(grammarSpec) {
         // what crazy stuff (or lack thereof) the userland code is pulling in the `actionInclude` chunk.
         out = '\n';
 
-        assert__default['default'](grammarSpec.regular_rule_count === 0);
-        assert__default['default'](grammarSpec.simple_rule_count === 0);
+        assert__default['default'].strictEqual(grammarSpec.regular_rule_count, 0);
+        assert__default['default'].strictEqual(grammarSpec.simple_rule_count, 0);
         grammarSpec.is_custom_lexer = true;
 
         if (grammarSpec.actionInclude) {
@@ -18791,65 +19499,139 @@ var lexer$1 = function() {
 
   /**
    * See also:
-   * http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508
-   * but we keep the prototype.constructor and prototype.name assignment lines too for compatibility
-   * with userland code which might access the derived class in a 'classic' way.
+   * 
+   * - https://github.com/onury/custom-error-test
+   * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+   * 
+   * We now provide an ES6 derived Error class. An updated ES5-compatible class
+   * is available too, for those who might need it, as this is complex stuff to
+   * get right (see first link above).
    *
    * @public
    * @constructor
    * @nocollapse
    */
-  function JisonLexerError(msg, hash) {
-    Object.defineProperty(this, 'name', {
-      enumerable: false,
-      writable: false,
-      value: 'JisonLexerError'
-    });
 
-    if (msg == null)
-      msg = '???';
 
-    Object.defineProperty(this, 'message', {
-      enumerable: false,
-      writable: true,
-      value: msg
-    });
+  /*---ES5---
 
-    this.hash = hash;
-    let stacktrace;
+  //
+  // JS CustomError implementation — The One (Adapted for JISON)
+  // This is the closest we can get to ES2015 `extends Error` implementation.
+  // @version 2017-01-05
+  // @author
+  //     Onur Yıldırım (https://github.com/onury)
+  //     Matt Browne (https://github.com/mbrowne)
+  // @see
+  //     https://github.com/onury/custom-error-test
+  //     http://stackoverflow.com/a/35881508/112731
+  //     https://gist.github.com/mbrowne/4af54767dcb3d529648f5a8aa11d6348
+  //     http://stackoverflow.com/a/41338601/112731
+  //
+  function JisonLexerError(message, hash) {
+      if (message == null) message = '???';
 
-    if (hash && hash.exception instanceof Error) {
-      const ex2 = hash.exception;
-      this.message = ex2.message || msg;
-      stacktrace = ex2.stack;
-    }
-
-    if (!stacktrace) {
-      if (Error.hasOwnProperty('captureStackTrace')) {
-        // V8
-        Error.captureStackTrace(this, this.constructor);
-      } else {
-        stacktrace = new Error(msg).stack;
+      let stacktrace;
+      if (hash && hash.exception instanceof Error) {
+          const ex2 = hash.exception;
+          message = message + ' :: ' + ex2.message;
+          stacktrace = ex2.stack;
       }
-    }
 
-    if (stacktrace) {
-      Object.defineProperty(this, 'stack', {
-        enumerable: false,
-        writable: false,
-        value: stacktrace
+      let err;
+      if (Object.setPrototypeOf) {
+          err = new Error(message);
+          Object.setPrototypeOf(err, CustomError.prototype);
+      } else {
+          err = this;
+      }
+
+      Object.defineProperty(err, 'name', {
+          enumerable: false,
+          writable: false,
+          value: 'JisonLexerError'
       });
+
+      err.hash = hash;
+
+      if (!Object.setPrototypeOf) {
+          Object.defineProperty(err, 'message', {
+              enumerable: false,
+              writable: true,
+              value: message
+          });
+          if (!stacktrace) {
+              if (typeof Error.captureStackTrace === 'function') { // V8
+                  Error.captureStackTrace(this, JisonLexerError);
+              } else {
+                  stacktrace = (new Error(message)).stack;
+              }
+          }
+      }
+
+      if (stacktrace) {
+          Object.defineProperty(err, 'stack', {
+              enumerable: false,
+              writable: false,
+              value: stacktrace
+          });
+      }
+
+      return err;
+  }
+  if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(JisonLexerError.prototype, Error.prototype);
+  } else {
+      JisonLexerError.prototype = Object.create(Error.prototype, {
+          constructor: { value: JisonLexerError }
+      });
+  }
+
+  ---ES5---*/
+
+  //---ES6---//
+
+  class JisonLexerError extends Error {
+    constructor(message, hash, ...params) {
+      if (message == null)
+        message = '???';
+
+      let stacktrace;
+
+      if (hash && hash.exception instanceof Error) {
+        const ex2 = hash.exception;
+        message = message + ' :: ' + ex2.message;
+        stacktrace = ex2.stack;
+      }
+
+      // Pass remaining arguments (including vendor specific ones) to parent constructor
+      super(message, ...params);
+
+      if (!stacktrace) {
+        // Maintains proper stack trace for where our error was thrown (only available on V8)
+        if (typeof Error.captureStackTrace === 'function') {
+          // V8
+          Error.captureStackTrace(this, JisonLexerError);
+        } else {
+          stacktrace = new Error(message).stack;
+        }
+      }
+
+      if (stacktrace) {
+        Object.defineProperty(this, 'stack', {
+          enumerable: false,
+          writable: false,
+          value: stacktrace
+        });
+      }
+
+      this.name = 'JisonLexerError';
+      this.hash = hash;
     }
   }
 
-  if (typeof Object.setPrototypeOf === 'function') {
-    Object.setPrototypeOf(JisonLexerError.prototype, Error.prototype);
-  } else {
-    JisonLexerError.prototype = Object.create(Error.prototype);
-  }
+  //---ES6---//
 
-  JisonLexerError.prototype.constructor = JisonLexerError;
-  JisonLexerError.prototype.name = 'JisonLexerError';
 
   const lexer = {
     
@@ -19078,7 +19860,7 @@ var lexer$1 = function() {
          * @public
          * @this {RegExpLexer}
          */
-    yyerror: function yyError(str /*, ...args */) {
+    yyerror: function yyError(str, ...args) {
       let lineno_msg = 'Lexical error';
 
       if (this.yylloc) {
@@ -19088,12 +19870,11 @@ var lexer$1 = function() {
       const p = this.constructLexErrorInfo(lineno_msg + ': ' + str, this.options.lexerErrorsAreRecoverable);
 
       // Add any extra args to the hash under the name `extra_error_attributes`:
-      let args = Array.prototype.slice.call(arguments, 1);
-
       if (args.length) {
         p.extra_error_attributes = args;
       }
 
+      p.yyErrorInvoked = true;   // so parseError() user code can easily recognize it is invoked from any yyerror() in the spec action code chunks
       return this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
     },
 
@@ -19174,8 +19955,8 @@ var lexer$1 = function() {
         // step 1: decompress the regex list:
         let rules = this.rules;
 
-        for (var i = 0, len = rules.length; i < len; i++) {
-          var rule_re = rules[i];
+        for (let i = 0, len = rules.length; i < len; i++) {
+          let rule_re = rules[i];
 
           // compression: is the RE an xref to another RE slot in the rules[] table?
           if (typeof rule_re === 'number') {
@@ -19189,13 +19970,13 @@ var lexer$1 = function() {
         for (let k in conditions) {
           let spec = conditions[k];
           let rule_ids = spec.rules;
-          var len = rule_ids.length;
+          let len = rule_ids.length;
           let rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
           let rule_new_ids = new Array(len + 1);
 
-          for (var i = 0; i < len; i++) {
+          for (let i = 0; i < len; i++) {
             let idx = rule_ids[i];
-            var rule_re = rules[idx];
+            let rule_re = rules[idx];
             rule_regexes[i + 1] = rule_re;
             rule_new_ids[i + 1] = idx;
           }
@@ -19366,6 +20147,74 @@ var lexer$1 = function() {
     },
 
     /**
+         * consumes and returns N chars from the input
+         *
+         * @public
+         * @this {RegExpLexer}
+         */
+    consume: function lexer_consume(n) {
+      if (!this._input) {
+        //this.done = true;    -- don't set `done` as we want the lex()/next() API to be able to produce one custom EOF token match after this anyhow. (lexer can match special <<EOF>> tokens and perform user action code for a <<EOF>> match, but only does so *once*)
+        return null;
+      }
+
+      if (!this._clear_state && !this._more) {
+        this._clear_state = -1;
+        this.clear();
+      }
+
+      let str = this._input.substring(0, n);
+      let len = str.length;
+      this.yytext += str;
+      this.yyleng += len;
+      this.offset += len;
+      this.match += str;
+      this.matched += str;
+
+      // Count the linenumber up when we hit the LF (or a stand-alone CR).
+      // On CRLF, the linenumber is incremented when you fetch the CR or the CRLF combo
+      // and we advance immediately past the LF as well, returning both together as if
+      // it was all a single 'character' only.
+      let slice_len = len;
+
+      let lines_arr = str.split(this.CRLF_Re);
+      let line_count = lines_arr.length - 1;
+      let lines = false;
+      const ch = this._input[n - 1];
+
+      if (ch === '\n') {
+        lines = true;
+      } else if (ch === '\r') {
+        lines = true;
+        const ch2 = this._input[n];
+
+        if (ch2 === '\n') {
+          slice_len++;
+          str += ch2;
+          this.yytext += ch2;
+          this.yyleng++;
+          this.offset++;
+          this.match += ch2;
+          this.matched += ch2;
+          this.yylloc.range[1]++;
+        }
+      }
+
+      this.yylineno += line_count;
+      this.yylloc.last_line += line_count;
+
+      if (lines) {
+        this.yylloc.last_column = 0;
+      } else {
+        this.yylloc.last_column = lines_arr[line_count].length;
+      }
+
+      this.yylloc.range[1] += len;
+      this._input = this._input.slice(slice_len);
+      return str;
+    },
+
+    /**
          * unshifts one char (or an entire string) into the input
          *
          * @public
@@ -19484,6 +20333,7 @@ var lexer$1 = function() {
           false
         );
 
+        p.isLexerBacktrackingNotSupportedError = true;            // when this is true, you 'know' the produced error token will be queued.
         this._signaled_error_token = this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
       }
 
@@ -19918,6 +20768,26 @@ var lexer$1 = function() {
     },
 
     /**
+         * Take a snapshot of the given `loc` location tracking object, e.g. `this.yylloc`.
+         * 
+         * Technically, this means this function returns a cloned instance of the given `loc`.
+         * @param  {YYlloc} loc     location tracking object
+         * @return {YYlloc}     
+         */
+    copy_yylloc: function leexer_copy_yylloc(loc) {
+      if (loc) {
+        let rv = Object.assign({}, loc);
+
+        // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
+        rv.range = rv.range.slice();
+
+        return rv;
+      }
+
+      return null;
+    },
+
+    /**
          * test the lexed token: return FALSE when not a match, otherwise return token.
          *
          * `match` is supposed to be an array coming out of a regex match, i.e. `match[0]`
@@ -20082,6 +20952,8 @@ var lexer$1 = function() {
             false
           );
 
+          p.isLexerInternalError = true;
+
           // produce one 'error' token until this situation has been resolved, most probably by parse termination!
           return this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
         }
@@ -20154,21 +21026,58 @@ var lexer$1 = function() {
         let pendingInput = this._input;
         let activeCondition = this.topState();
         let conditionStackDepth = this.conditionStack.length;
-        let token = this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
+
+        // when this flag is set in your parseError() `hash`, you 'know' you cannot manipute `yytext` to be anything but 
+        // a string value, unless
+        // - you either get to experience a lexer crash once it invokes .input() with your manipulated `yytext` object,
+        // - or you must forward the lex cursor yourself by invoking `yy.input()` or equivalent, *before* you go and
+        //   tweak that `yytext`.
+        p.lexerHasAlreadyForwardedCursorBy1 = !this.matches;
+
+        // Simplify use of (advanced) custom parseError() handlers: every time we encounter an error,
+        // which HAS NOT consumed any input yet (thus causing an infinite lexer loop unless we take special action),
+        // we FIRST consume ONE character of input, BEFORE we call parseError().
+        // 
+        // This implies that the parseError() now can call `unput(this.yytext)` if it wants to only change lexer
+        // state via popState/pushState, but otherwise this would make for a cleaner parseError() implementation
+        // as there's no conditional check for `hash.lexerHasAlreadyForwardedCursorBy1` needed in there any more.
+        // 
+        // Since that flag is new as of jison-gho 0.7.0, as is this new consume1+parseError() behaviour, only
+        // sophisticated userland parseError() methods will need to be reviewed.
+        // Haven't found any of those in the (Open Source) wild today, so this should be safe to change...
+
+        // *** CONSUME 1 ***:
 
         //if (token === this.ERROR) {
-          // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
-          // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
-          // has not consumed/modified any pending input or changed state in the error handler:
-          if (!this.matches && // and make sure the input has been modified/consumed ...
-          pendingInput === this._input && // ...or the lexer state has been modified significantly enough
-          // to merit a non-consuming error handling action right now.
-          activeCondition === this.topState() && conditionStackDepth === this.conditionStack.length) {
-            this.input();
-          }
+        //    ^^^^^^^^^^^^^^^^^^^^ WARNING: no matter what token the error handler produced, 
+        //                         it MUST move the cursor forward or you'ld end up in 
+        //                         an infinite lex loop, unless one or more of the following 
+        //                         conditions was changed, so as to change the internal lexer 
+        //                         state and thus enable it to produce a different token:
+        //                         
+        // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
+        // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
+        // has not consumed/modified any pending input or changed state in the error handler:
+        if (!this.matches && // and make sure the input has been modified/consumed ...
+        pendingInput === this._input && // ...or the lexer state has been modified significantly enough
+        // to merit a non-consuming error handling action right now.
+        activeCondition === this.topState() && conditionStackDepth === this.conditionStack.length) {
+          this.input();
+        }
+
         //}
 
-        return token;
+        // *** PARSE-ERROR ***:
+        // 
+        // Note:
+        // userland code in there may `unput()` what was done, after checking the `hash.lexerHasAlreadyForwardedCursorBy1` flag.
+        // Caveat emptor! :: When you simply `unput()` the `yytext` without at least changing the lexer condition state 
+        // via popState/pushState, you WILL end up with an infinite lexer loop. 
+        // 
+        // This kernel code has been coded to prevent this dangerous situation unless you specifically seek it out
+        // in your custom parseError handler.
+
+        return this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
       }
     },
 
@@ -20420,7 +21329,7 @@ var lexer$1 = function() {
     JisonLexerError: JisonLexerError,
 
     performAction: function lexer__performAction(yy, yyrulenumber, YY_START) {
-      var yy_ = this;
+      const yy_ = this;
 
       switch (yyrulenumber) {
       case 0:
@@ -20539,6 +21448,13 @@ var parser$2 = {
     parse: yyparse$1,
     
 };
+
+
+
+
+const TOK_SUBEXPRESSION = 2;
+const TOK_SYMBOL =        3;
+const TOK_SYMBOLSTRING =  4;
 
 // WARNING: this regex MUST match the regex for `ID` in ebnf-parser::bnf.l jison language lexer spec! (`ID = [{ALPHA}]{ALNUM}*`)
 //
@@ -21161,7 +22077,8 @@ yy: {},
 options: {
   type: "lalr",
   hasPartialLrUpgradeOnConflict: true,
-  errorRecoveryTokenDiscardCount: 3
+  errorRecoveryTokenDiscardCount: 3,
+  ebnf: true
 },
 symbols_: {
   "$accept": 0,
@@ -24633,7 +25550,10 @@ parse: function parse(input) {
         pre_parse: undefined,
         post_parse: undefined,
         pre_lex: undefined,
-        post_lex: undefined      // WARNING: must be written this way for the code expanders to work correctly!
+        post_lex: undefined,
+        copy_yytext: undefined,
+        copy_yylloc: undefined,
+        yydebug: false,
     };
 
     const ASSERT = (
@@ -24669,7 +25589,7 @@ parse: function parse(input) {
         if (src && typeof src === 'object') {
             // non-Object-type objects, e.g. RegExp, Date, etc., can usually be shallow cloned
             // using their constructor:
-            if (src.constructor !== Object) {
+            if (src.constructor !== Object && typeof src.constructor === 'function') {
                 if (Array.isArray(src)) {
                     return src.slice();
                 }
@@ -24679,13 +25599,8 @@ parse: function parse(input) {
                 shallow_copy_noclobber(dst, src);
                 return dst;
             }
-            // native objects must be cloned a different way:
-            {
-                //return Object.assign({}, src);
-                let dst = {};
-                shallow_copy_noclobber(dst, src);
-                return dst;
-            }
+            // native objects (and constructor-less objects) must be cloned a different way:
+            return Object.assign({}, src);
         }
         return src;
     }
@@ -24705,12 +25620,13 @@ parse: function parse(input) {
         }
     }
     function copy_yylloc_native(loc) {
-        let rv = shallow_copy(loc);
-        // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-        if (rv) {
+        if (loc) {
+            let rv = Object.assign({}, loc);
+            // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
             rv.range = rv.range.slice();
+            return rv;
         }
-        return rv;
+        return null;
     }
 
     // copy state
@@ -24836,7 +25752,7 @@ let error_rule_depth = (this.options.parserErrorsAreRecoverable ? locateNearestE
             }
 
             // cleanup:
-            if (hash && hash.destroy) {
+            if (hash && typeof hash.destroy === 'function') {
                 hash.destroy();
             }
         }
@@ -26162,7 +27078,10 @@ r = this.performAction.call(yyval, yyloc, newState, sp - 1, vstack, lstack);
             throw ex;
         }
 
-        p = this.constructParseErrorInfo('Parsing aborted due to exception.', ex, null, false);
+        p = this.constructParseErrorInfo('Parsing aborted due to exception: ' + ex.message, ex, null, false);
+
+        p.isParserExceptionError = true;
+
         retval = false;
         r = this.parseError(p.errStr, p, this.JisonParserError);
         if (typeof r !== 'undefined') {
@@ -26239,8 +27158,8 @@ parser$3.originalQuoteName = parser$3.quoteName;
  *               Produces a new errorInfo 'hash object' which can be passed into `parseError()`.
  *               See it's use in this lexer kernel in many places; example usage:
  *
- *                   var infoObj = lexer.constructParseErrorInfo('fail!', true);
- *                   var retVal = lexer.parseError(infoObj.errStr, infoObj, lexer.JisonLexerError);
+ *                   let infoObj = lexer.constructParseErrorInfo('fail!', true);
+ *                   let retVal = lexer.parseError(infoObj.errStr, infoObj, lexer.JisonLexerError);
  *
  *    options: { ... lexer %options ... },
  *
@@ -26410,65 +27329,139 @@ var lexer$2 = function() {
 
   /**
    * See also:
-   * http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508
-   * but we keep the prototype.constructor and prototype.name assignment lines too for compatibility
-   * with userland code which might access the derived class in a 'classic' way.
+   * 
+   * - https://github.com/onury/custom-error-test
+   * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+   * 
+   * We now provide an ES6 derived Error class. An updated ES5-compatible class
+   * is available too, for those who might need it, as this is complex stuff to
+   * get right (see first link above).
    *
    * @public
    * @constructor
    * @nocollapse
    */
-  function JisonLexerError(msg, hash) {
-    Object.defineProperty(this, 'name', {
-      enumerable: false,
-      writable: false,
-      value: 'JisonLexerError'
-    });
 
-    if (msg == null)
-      msg = '???';
 
-    Object.defineProperty(this, 'message', {
-      enumerable: false,
-      writable: true,
-      value: msg
-    });
+  /*---ES5---
 
-    this.hash = hash;
-    let stacktrace;
+  //
+  // JS CustomError implementation — The One (Adapted for JISON)
+  // This is the closest we can get to ES2015 `extends Error` implementation.
+  // @version 2017-01-05
+  // @author
+  //     Onur Yıldırım (https://github.com/onury)
+  //     Matt Browne (https://github.com/mbrowne)
+  // @see
+  //     https://github.com/onury/custom-error-test
+  //     http://stackoverflow.com/a/35881508/112731
+  //     https://gist.github.com/mbrowne/4af54767dcb3d529648f5a8aa11d6348
+  //     http://stackoverflow.com/a/41338601/112731
+  //
+  function JisonLexerError(message, hash) {
+      if (message == null) message = '???';
 
-    if (hash && hash.exception instanceof Error) {
-      const ex2 = hash.exception;
-      this.message = ex2.message || msg;
-      stacktrace = ex2.stack;
-    }
-
-    if (!stacktrace) {
-      if (Error.hasOwnProperty('captureStackTrace')) {
-        // V8
-        Error.captureStackTrace(this, this.constructor);
-      } else {
-        stacktrace = new Error(msg).stack;
+      let stacktrace;
+      if (hash && hash.exception instanceof Error) {
+          const ex2 = hash.exception;
+          message = message + ' :: ' + ex2.message;
+          stacktrace = ex2.stack;
       }
-    }
 
-    if (stacktrace) {
-      Object.defineProperty(this, 'stack', {
-        enumerable: false,
-        writable: false,
-        value: stacktrace
+      let err;
+      if (Object.setPrototypeOf) {
+          err = new Error(message);
+          Object.setPrototypeOf(err, CustomError.prototype);
+      } else {
+          err = this;
+      }
+
+      Object.defineProperty(err, 'name', {
+          enumerable: false,
+          writable: false,
+          value: 'JisonLexerError'
       });
+
+      err.hash = hash;
+
+      if (!Object.setPrototypeOf) {
+          Object.defineProperty(err, 'message', {
+              enumerable: false,
+              writable: true,
+              value: message
+          });
+          if (!stacktrace) {
+              if (typeof Error.captureStackTrace === 'function') { // V8
+                  Error.captureStackTrace(this, JisonLexerError);
+              } else {
+                  stacktrace = (new Error(message)).stack;
+              }
+          }
+      }
+
+      if (stacktrace) {
+          Object.defineProperty(err, 'stack', {
+              enumerable: false,
+              writable: false,
+              value: stacktrace
+          });
+      }
+
+      return err;
+  }
+  if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(JisonLexerError.prototype, Error.prototype);
+  } else {
+      JisonLexerError.prototype = Object.create(Error.prototype, {
+          constructor: { value: JisonLexerError }
+      });
+  }
+
+  ---ES5---*/
+
+  //---ES6---//
+
+  class JisonLexerError extends Error {
+    constructor(message, hash, ...params) {
+      if (message == null)
+        message = '???';
+
+      let stacktrace;
+
+      if (hash && hash.exception instanceof Error) {
+        const ex2 = hash.exception;
+        message = message + ' :: ' + ex2.message;
+        stacktrace = ex2.stack;
+      }
+
+      // Pass remaining arguments (including vendor specific ones) to parent constructor
+      super(message, ...params);
+
+      if (!stacktrace) {
+        // Maintains proper stack trace for where our error was thrown (only available on V8)
+        if (typeof Error.captureStackTrace === 'function') {
+          // V8
+          Error.captureStackTrace(this, JisonLexerError);
+        } else {
+          stacktrace = new Error(message).stack;
+        }
+      }
+
+      if (stacktrace) {
+        Object.defineProperty(this, 'stack', {
+          enumerable: false,
+          writable: false,
+          value: stacktrace
+        });
+      }
+
+      this.name = 'JisonLexerError';
+      this.hash = hash;
     }
   }
 
-  if (typeof Object.setPrototypeOf === 'function') {
-    Object.setPrototypeOf(JisonLexerError.prototype, Error.prototype);
-  } else {
-    JisonLexerError.prototype = Object.create(Error.prototype);
-  }
+  //---ES6---//
 
-  JisonLexerError.prototype.constructor = JisonLexerError;
-  JisonLexerError.prototype.name = 'JisonLexerError';
 
   const lexer = {
     
@@ -26697,7 +27690,7 @@ var lexer$2 = function() {
          * @public
          * @this {RegExpLexer}
          */
-    yyerror: function yyError(str /*, ...args */) {
+    yyerror: function yyError(str, ...args) {
       let lineno_msg = 'Lexical error';
 
       if (this.yylloc) {
@@ -26707,12 +27700,11 @@ var lexer$2 = function() {
       const p = this.constructLexErrorInfo(lineno_msg + ': ' + str, this.options.lexerErrorsAreRecoverable);
 
       // Add any extra args to the hash under the name `extra_error_attributes`:
-      let args = Array.prototype.slice.call(arguments, 1);
-
       if (args.length) {
         p.extra_error_attributes = args;
       }
 
+      p.yyErrorInvoked = true;   // so parseError() user code can easily recognize it is invoked from any yyerror() in the spec action code chunks
       return this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
     },
 
@@ -26793,8 +27785,8 @@ var lexer$2 = function() {
         // step 1: decompress the regex list:
         let rules = this.rules;
 
-        for (var i = 0, len = rules.length; i < len; i++) {
-          var rule_re = rules[i];
+        for (let i = 0, len = rules.length; i < len; i++) {
+          let rule_re = rules[i];
 
           // compression: is the RE an xref to another RE slot in the rules[] table?
           if (typeof rule_re === 'number') {
@@ -26808,13 +27800,13 @@ var lexer$2 = function() {
         for (let k in conditions) {
           let spec = conditions[k];
           let rule_ids = spec.rules;
-          var len = rule_ids.length;
+          let len = rule_ids.length;
           let rule_regexes = new Array(len + 1);            // slot 0 is unused; we use a 1-based index approach here to keep the hottest code in `lexer_next()` fast and simple!
           let rule_new_ids = new Array(len + 1);
 
-          for (var i = 0; i < len; i++) {
+          for (let i = 0; i < len; i++) {
             let idx = rule_ids[i];
-            var rule_re = rules[idx];
+            let rule_re = rules[idx];
             rule_regexes[i + 1] = rule_re;
             rule_new_ids[i + 1] = idx;
           }
@@ -26985,6 +27977,74 @@ var lexer$2 = function() {
     },
 
     /**
+         * consumes and returns N chars from the input
+         *
+         * @public
+         * @this {RegExpLexer}
+         */
+    consume: function lexer_consume(n) {
+      if (!this._input) {
+        //this.done = true;    -- don't set `done` as we want the lex()/next() API to be able to produce one custom EOF token match after this anyhow. (lexer can match special <<EOF>> tokens and perform user action code for a <<EOF>> match, but only does so *once*)
+        return null;
+      }
+
+      if (!this._clear_state && !this._more) {
+        this._clear_state = -1;
+        this.clear();
+      }
+
+      let str = this._input.substring(0, n);
+      let len = str.length;
+      this.yytext += str;
+      this.yyleng += len;
+      this.offset += len;
+      this.match += str;
+      this.matched += str;
+
+      // Count the linenumber up when we hit the LF (or a stand-alone CR).
+      // On CRLF, the linenumber is incremented when you fetch the CR or the CRLF combo
+      // and we advance immediately past the LF as well, returning both together as if
+      // it was all a single 'character' only.
+      let slice_len = len;
+
+      let lines_arr = str.split(this.CRLF_Re);
+      let line_count = lines_arr.length - 1;
+      let lines = false;
+      const ch = this._input[n - 1];
+
+      if (ch === '\n') {
+        lines = true;
+      } else if (ch === '\r') {
+        lines = true;
+        const ch2 = this._input[n];
+
+        if (ch2 === '\n') {
+          slice_len++;
+          str += ch2;
+          this.yytext += ch2;
+          this.yyleng++;
+          this.offset++;
+          this.match += ch2;
+          this.matched += ch2;
+          this.yylloc.range[1]++;
+        }
+      }
+
+      this.yylineno += line_count;
+      this.yylloc.last_line += line_count;
+
+      if (lines) {
+        this.yylloc.last_column = 0;
+      } else {
+        this.yylloc.last_column = lines_arr[line_count].length;
+      }
+
+      this.yylloc.range[1] += len;
+      this._input = this._input.slice(slice_len);
+      return str;
+    },
+
+    /**
          * unshifts one char (or an entire string) into the input
          *
          * @public
@@ -27103,6 +28163,7 @@ var lexer$2 = function() {
           false
         );
 
+        p.isLexerBacktrackingNotSupportedError = true;            // when this is true, you 'know' the produced error token will be queued.
         this._signaled_error_token = this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
       }
 
@@ -27537,6 +28598,26 @@ var lexer$2 = function() {
     },
 
     /**
+         * Take a snapshot of the given `loc` location tracking object, e.g. `this.yylloc`.
+         * 
+         * Technically, this means this function returns a cloned instance of the given `loc`.
+         * @param  {YYlloc} loc     location tracking object
+         * @return {YYlloc}     
+         */
+    copy_yylloc: function leexer_copy_yylloc(loc) {
+      if (loc) {
+        let rv = Object.assign({}, loc);
+
+        // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
+        rv.range = rv.range.slice();
+
+        return rv;
+      }
+
+      return null;
+    },
+
+    /**
          * test the lexed token: return FALSE when not a match, otherwise return token.
          *
          * `match` is supposed to be an array coming out of a regex match, i.e. `match[0]`
@@ -27701,6 +28782,8 @@ var lexer$2 = function() {
             false
           );
 
+          p.isLexerInternalError = true;
+
           // produce one 'error' token until this situation has been resolved, most probably by parse termination!
           return this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
         }
@@ -27773,21 +28856,58 @@ var lexer$2 = function() {
         let pendingInput = this._input;
         let activeCondition = this.topState();
         let conditionStackDepth = this.conditionStack.length;
-        let token = this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
+
+        // when this flag is set in your parseError() `hash`, you 'know' you cannot manipute `yytext` to be anything but 
+        // a string value, unless
+        // - you either get to experience a lexer crash once it invokes .input() with your manipulated `yytext` object,
+        // - or you must forward the lex cursor yourself by invoking `yy.input()` or equivalent, *before* you go and
+        //   tweak that `yytext`.
+        p.lexerHasAlreadyForwardedCursorBy1 = !this.matches;
+
+        // Simplify use of (advanced) custom parseError() handlers: every time we encounter an error,
+        // which HAS NOT consumed any input yet (thus causing an infinite lexer loop unless we take special action),
+        // we FIRST consume ONE character of input, BEFORE we call parseError().
+        // 
+        // This implies that the parseError() now can call `unput(this.yytext)` if it wants to only change lexer
+        // state via popState/pushState, but otherwise this would make for a cleaner parseError() implementation
+        // as there's no conditional check for `hash.lexerHasAlreadyForwardedCursorBy1` needed in there any more.
+        // 
+        // Since that flag is new as of jison-gho 0.7.0, as is this new consume1+parseError() behaviour, only
+        // sophisticated userland parseError() methods will need to be reviewed.
+        // Haven't found any of those in the (Open Source) wild today, so this should be safe to change...
+
+        // *** CONSUME 1 ***:
 
         //if (token === this.ERROR) {
-          // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
-          // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
-          // has not consumed/modified any pending input or changed state in the error handler:
-          if (!this.matches && // and make sure the input has been modified/consumed ...
-          pendingInput === this._input && // ...or the lexer state has been modified significantly enough
-          // to merit a non-consuming error handling action right now.
-          activeCondition === this.topState() && conditionStackDepth === this.conditionStack.length) {
-            this.input();
-          }
+        //    ^^^^^^^^^^^^^^^^^^^^ WARNING: no matter what token the error handler produced, 
+        //                         it MUST move the cursor forward or you'ld end up in 
+        //                         an infinite lex loop, unless one or more of the following 
+        //                         conditions was changed, so as to change the internal lexer 
+        //                         state and thus enable it to produce a different token:
+        //                         
+        // we can try to recover from a lexer error that `parseError()` did not 'recover' for us
+        // by moving forward at least one character at a time IFF the (user-specified?) `parseError()`
+        // has not consumed/modified any pending input or changed state in the error handler:
+        if (!this.matches && // and make sure the input has been modified/consumed ...
+        pendingInput === this._input && // ...or the lexer state has been modified significantly enough
+        // to merit a non-consuming error handling action right now.
+        activeCondition === this.topState() && conditionStackDepth === this.conditionStack.length) {
+          this.input();
+        }
+
         //}
 
-        return token;
+        // *** PARSE-ERROR ***:
+        // 
+        // Note:
+        // userland code in there may `unput()` what was done, after checking the `hash.lexerHasAlreadyForwardedCursorBy1` flag.
+        // Caveat emptor! :: When you simply `unput()` the `yytext` without at least changing the lexer condition state 
+        // via popState/pushState, you WILL end up with an infinite lexer loop. 
+        // 
+        // This kernel code has been coded to prevent this dangerous situation unless you specifically seek it out
+        // in your custom parseError handler.
+
+        return this.parseError(p.errStr, p, this.JisonLexerError) || this.ERROR;
       }
     },
 
@@ -28039,7 +29159,7 @@ var lexer$2 = function() {
     JisonLexerError: JisonLexerError,
 
     performAction: function lexer__performAction(yy, yyrulenumber, YY_START) {
-      var yy_ = this;
+      const yy_ = this;
 
       switch (yyrulenumber) {
       case 2:
@@ -28324,7 +29444,8 @@ var lexer$2 = function() {
                                             unterminated string constant in parser rule action block.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yy_.yylloc));
+                                            ${this.prettyPrintRange(yy_.yylloc)}
+                                        `);
 
         return 'UNTERMINATED_STRING_ERROR';
       case 82:
@@ -28334,7 +29455,8 @@ var lexer$2 = function() {
                                             unterminated string constant in parser rule action block.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yy_.yylloc));
+                                            ${this.prettyPrintRange(yy_.yylloc)}
+                                        `);
 
         return 'UNTERMINATED_STRING_ERROR';
       case 83:
@@ -28344,7 +29466,8 @@ var lexer$2 = function() {
                                             unterminated string constant in parser rule action block.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yy_.yylloc));
+                                            ${this.prettyPrintRange(yy_.yylloc)}
+                                        `);
 
         return 'UNTERMINATED_STRING_ERROR';
       case 84:
@@ -28354,7 +29477,8 @@ var lexer$2 = function() {
                                             unterminated string constant in %options entry.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yy_.yylloc));
+                                            ${this.prettyPrintRange(yy_.yylloc)}
+                                        `);
 
         return 'UNTERMINATED_STRING_ERROR';
       case 85:
@@ -28364,7 +29488,8 @@ var lexer$2 = function() {
                                             unterminated string constant in %options entry.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yy_.yylloc));
+                                            ${this.prettyPrintRange(yy_.yylloc)}
+                                        `);
 
         return 'UNTERMINATED_STRING_ERROR';
       case 86:
@@ -28374,7 +29499,8 @@ var lexer$2 = function() {
                                             unterminated string constant in %options entry.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yy_.yylloc));
+                                            ${this.prettyPrintRange(yy_.yylloc)}
+                                        `);
 
         return 'UNTERMINATED_STRING_ERROR';
       case 87:
@@ -28388,7 +29514,8 @@ var lexer$2 = function() {
                                             ${rules}.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yy_.yylloc));
+                                            ${this.prettyPrintRange(yy_.yylloc)}
+                                        `);
 
           return 'UNTERMINATED_STRING_ERROR';
         }
@@ -28403,7 +29530,8 @@ var lexer$2 = function() {
                                             ${rules}.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yy_.yylloc));
+                                            ${this.prettyPrintRange(yy_.yylloc)}
+                                        `);
 
           return 'UNTERMINATED_STRING_ERROR';
         }
@@ -28418,7 +29546,8 @@ var lexer$2 = function() {
                                             ${rules}.
 
                                               Erroneous area:
-                                            ` + this.prettyPrintRange(yy_.yylloc));
+                                            ${this.prettyPrintRange(yy_.yylloc)}
+                                        `);
 
           return 'UNTERMINATED_STRING_ERROR';
         }
@@ -28429,9 +29558,10 @@ var lexer$2 = function() {
         yy_.yyerror(rmCommonWS`
                                                 unsupported parser input: ${dquote(yy_.yytext)}
                                                 while lexing in ${dquote(this.topState())} state.
-                                                
+
                                                   Erroneous area:
-                                                ` + this.prettyPrintRange(yy_.yylloc));
+                                                ${this.prettyPrintRange(yy_.yylloc)}
+                                            `);
 
         return 2;
       default:
@@ -29068,40 +30198,50 @@ bnf.parser.yy.addDeclaration = function bnfAddDeclaration(grammar, decl) {
 
     if (decl.start) {
         grammar.start = decl.start;
+        delete decl.start;
     }
     if (decl.lex) {
         grammar.lex = parseLex(decl.lex.text, decl.lex.position);
+        delete decl.lex;
     }
     if (decl.grammar) {
         grammar.grammar = decl.grammar;
+        delete decl.grammar;
     }
     if (decl.ebnf) {
         grammar.ebnf = decl.ebnf;
+        delete decl.ebnf;
     }
     if (decl.bnf) {
         grammar.bnf = decl.bnf;
+        delete decl.bnf;
     }
     if (decl.operator) {
         if (!grammar.operators) grammar.operators = [];
         grammar.operators.push(decl.operator);
+        delete decl.operator;
     }
     if (decl.token) {
         if (!grammar.extra_tokens) grammar.extra_tokens = [];
         grammar.extra_tokens.push(decl.token);
+        delete decl.token;
     }
     if (decl.token_list) {
         if (!grammar.extra_tokens) grammar.extra_tokens = [];
         decl.token_list.forEach(function (tok) {
             grammar.extra_tokens.push(tok);
         });
+        delete decl.token_list;
     }
     if (decl.parseParams) {
         if (!grammar.parseParams) grammar.parseParams = [];
         grammar.parseParams = grammar.parseParams.concat(decl.parseParams);
+        delete decl.parseParams;
     }
     if (decl.parserType) {
         if (!grammar.options) grammar.options = {};
         grammar.options.type = decl.parserType;
+        delete decl.parserType;
     }
     if (decl.include) {
         if (!grammar.moduleInclude) {
@@ -29109,6 +30249,7 @@ bnf.parser.yy.addDeclaration = function bnfAddDeclaration(grammar, decl) {
         } else {
             grammar.moduleInclude += '\n\n' + decl.include;
         }
+        delete decl.include;
     }
     if (decl.actionInclude) {
         if (!grammar.actionInclude) {
@@ -29116,6 +30257,7 @@ bnf.parser.yy.addDeclaration = function bnfAddDeclaration(grammar, decl) {
         } else {
             grammar.actionInclude += '\n\n' + decl.actionInclude;
         }
+        delete decl.actionInclude;
     }
     if (decl.options) {
         if (!grammar.options) grammar.options = {};
@@ -29123,32 +30265,45 @@ bnf.parser.yy.addDeclaration = function bnfAddDeclaration(grammar, decl) {
         for (let i = 0; i < decl.options.length; i++) {
             grammar.options[decl.options[i][0]] = decl.options[i][1];
         }
+        delete decl.options;
     }
     if (decl.unknownDecl) {
         if (!grammar.unknownDecls) grammar.unknownDecls = [];         // [ array of {name,value} pairs ]
         grammar.unknownDecls.push(decl.unknownDecl);
+        delete decl.unknownDecl;
     }
     if (decl.imports) {
         if (!grammar.imports) grammar.imports = [];                   // [ array of {name,path} pairs ]
         grammar.imports.push(decl.imports);
+        delete decl.imports;
     }
     if (decl.initCode) {
         if (!grammar.moduleInit) {
             grammar.moduleInit = [];
         }
         grammar.moduleInit.push(decl.initCode);       // {qualifier: <name>, include: <source code chunk>}
+        delete decl.initCode;
     }
     if (decl.codeSection) {
         if (!grammar.moduleInit) {
             grammar.moduleInit = [];
         }
         grammar.moduleInit.push(decl.codeSection);                    // {qualifier: <name>, include: <source code chunk>}
+        delete decl.codeSection;
     }
     if (decl.onErrorRecovery) {
         if (!grammar.errorRecoveryActions) {
             grammar.errorRecoveryActions = [];
         }
         grammar.errorRecoveryActions.push(decl.onErrorRecovery);      // {qualifier: <name>, include: <source code chunk>}
+        delete decl.onErrorRecovery;
+    }
+
+    // debug/testing:
+    let remaining_keys = Object.keys(decl);
+    if (remaining_keys.length > 0) {
+        console.error("Error: unsupported decl keys:", { keys, decl });
+        assert(!"should never get here");
     }
 };
 
@@ -29241,6 +30396,10 @@ function grammarPrinter(raw, options) {
     }
 
     function indentAction(src, num) {
+        if (options.doNotTestCompile) {
+            return src;
+        }
+
         // It's dangerous to indent an action code chunk as it MAY contain **template strings**
         // which MAY get corrupted that way as their actual content would change then!
 
@@ -29255,7 +30414,7 @@ function grammarPrinter(raw, options) {
         src = '\n' + pre + '\n' + src + '\n' + post + '\n';
 
         let ast = helpers.parseCodeChunkToAST(src, options);
-        let new_src = helpers.prettyPrintAST(ast, options);
+        let new_src = helpers.prettyPrintAST(ast, options.prettyCfg);
 
         let start = new_src.indexOf('// **PRE**');
         let end = new_src.lastIndexOf('// **POST**');
@@ -29997,7 +31156,7 @@ const code_exec$1  = helpers.exec;
 
 const version$2 = '0.7.0-220';
 
-let devDebug = 0;
+const devDebug = 0;
 
 function chkBugger$3(src) {
     src = '' + src;
@@ -30013,7 +31172,7 @@ function chkBugger$3(src) {
 // This is the base XRegExp ID regex used in many places; this should match the ID macro definition in the EBNF/BNF parser et al as well!
 const ID_REGEX_BASE$3 = '[\\p{Alphabetic}_][\\p{Alphabetic}_\\p{Number}]*';
 
-let Jison$1 = {
+const Jison$1 = {
     version: version$2
 };
 
@@ -30039,7 +31198,7 @@ const defaultJisonOptions = {
     moduleMain: null,               // `main()` function source code if `!noMain` is true
     moduleMainImports: null,        // require()/import statements required by the `moduleMain` function source code if `!noMain` is true
     tokenStack: false,
-    dumpSourceCodeOnFailure: true,
+    dumpSourceCodeOnFailure: false,
     throwErrorOnCompileFailure: true,
 
     moduleName: undefined,
@@ -30408,14 +31567,13 @@ Jison$1.autodetectAndConvertToJSONformat = autodetectAndConvertToJSONformat$1;
 if (typeof console !== 'undefined' && console.log) {
     // wrap console.log to prevent 'Illegal Invocation' exceptions when Jison.print() is used, e.g.
     // in the web tryout pages where this code is employed.
-    Jison$1.print = function console_log(/* ... */) {
-        let args = Array.prototype.slice.call(arguments, 0);
+    Jison$1.print = function console_log(...args) {
         args.unshift('');           // prevent `%.` printf-style expansions; see https://nodejs.org/api/console.html#console_console_log_data_args
         console.log.apply(console, args);
     };
 } else if (typeof puts !== 'undefined') {
-    Jison$1.print = function puts_print() {
-        puts([].join.call(arguments, ' '));
+    Jison$1.print = function puts_print(...args) {
+        puts(args.join(' '));
     };
 } else if (typeof print !== 'undefined') {
     Jison$1.print = print;
@@ -30700,6 +31858,7 @@ generator.constructor = function Jison_Generator(grammar, optionalLexerSection, 
     this.grammar = grammar;
 
     this.DEBUG = !!options.debug;
+    this.enableDebugLogs = !!options.enableDebugLogs;
 
     // // propagate %parse-params into the lexer!
     // if (grammar.lex) {
@@ -30730,8 +31889,6 @@ generator.constructor = function Jison_Generator(grammar, optionalLexerSection, 
     this.moduleInit = grammar.moduleInit || [];
     assert__default['default'](Array.isArray(this.moduleInit));
 
-    this.DEBUG = !!this.options.debug;
-    this.enableDebugLogs = !!options.enableDebugLogs;
     this.numExpectedConflictStates = options.numExpectedConflictStates || 0;
 
     if (this.DEBUG) {
@@ -31545,9 +32702,7 @@ generator.buildProductions = function buildProductions(bnf, productions, nonterm
             }
 
             if (prec_symbols.length > 1) {
-                if (self.DEBUG || 1) {
-                    self.warn('Ambiguous rule precedence in grammar: picking the (highest) precedence from operator "' + winning_symbol + '" for rule "' + this.symbol + ': ' + r.handle.join(' ') + '" which contains multiple operators with different precedences: {' + prec_symbols.join(', ') + '}');
-                }
+                self.warn('Ambiguous rule precedence in grammar: picking the (highest) precedence from operator "' + winning_symbol + '" for rule "' + this.symbol + ': ' + r.handle.join(' ') + '" which contains multiple operators with different precedences: {' + prec_symbols.join(', ') + '}');
             }
         }
 
@@ -31897,7 +33052,7 @@ generator.buildProductionActions = function buildProductionActions() {
         }
         this.missingActions = missingActions;
         if (missingActions.length) {
-            if ( this.DEBUG) {
+            if (1) {
                 this.warn('WARNING: missing actions for states: ', missingActions);
             }
 
@@ -32799,12 +33954,12 @@ generator.createLexer = function createLexer() {
 };
 
 // no-op. implemented in debug mixin
-generator.trace = (new Function('', 'function no_op_trace() { }\nreturn no_op_trace;'))();
-//generator.trace.name = 'no_op_trace';
+generator.trace = function jison_trace(...args) {
+    // Jison.print.call(null, ':: ' + (args.join('') || '???'));
+};
 
-generator.warn = function warn() {
-    let args = Array.prototype.slice.call(arguments, 0);
-    Jison$1.print.call(null, args.join(''));
+generator.warn = function jison_warn(...args) {
+    Jison$1.print.call(null, 'WARNING: ' + (args.join('') || '???'));
 };
 
 generator.error = function error(msg) {
@@ -32908,8 +34063,10 @@ function debug_trace() {
 // Generator debug mixin
 
 const generatorDebug = {
-    trace: (new Function('', debugTraceSrc + `
-        return debug_trace;`))(),
+    trace: (new Function(`
+        ${debugTraceSrc}
+        return debug_trace;
+    `))(),
     beforeprocessGrammar: function () {
         this.trace('Processing grammar.');
     },
@@ -33724,7 +34881,7 @@ generatorMixin.generateGenericHeaderComment = function generateGenericHeaderComm
  *    terminal_descriptions_: (if there are any) {associative list: number ==> description},
  *    productions_: [...],
  *
- *    performAction: function parser__performAction(yytext, yyleng, yylineno, yyloc, yystate, yysp, yyvstack, yylstack, yystack, yysstack),
+ *    performAction: function parser__performAction(yy, yytext, yyleng, yylineno, yyloc, yystate, yysp, yyvstack, yylstack, yystack, yysstack),
  *
  *               The function parameters and \`this\` have the following value/meaning:
  *               - \`this\`    : reference to the \`yyval\` internal object, which has members (\`$\` and \`_$\`)
@@ -33735,11 +34892,11 @@ generatorMixin.generateGenericHeaderComment = function generateGenericHeaderComm
  *                 data from one reduce action through to the next within a single parse run, then you
  *                 may get nasty and use \`yyval\` a.k.a. \`this\` for storing you own semi-permanent data.
  *
- *                 \`this.yy\` is a direct reference to the \`yy\` shared state object.
+ *               - \`yy\`      : a direct reference to the \`yy\` shared state object.
  *
  *                 \`%parse-param\`-specified additional \`parse()\` arguments have been added to this \`yy\`
  *                 object at \`parse()\` start and are therefore available to the action code via the
- *                 same named \`yy.xxxx\` attributes (where \`xxxx\` represents a identifier name from
+ *                 same named \`yy.xxxx\` attributes (where \`xxxx\` represents an identifier name from
  *                 the \%parse-param\` list.
  *
  *               - \`yytext\`  : reference to the lexer value which belongs to the last lexer token used
@@ -33871,7 +35028,7 @@ generatorMixin.generateGenericHeaderComment = function generateGenericHeaderComm
  *               the lexer section of the grammar spec): these will be inserted in the \`yy\` shared state
  *               object and any collision with those will be reported by the lexer via a thrown exception.
  *
- *    cleanupAfterParse: function(resultValue, invoke_post_methods, do_not_nuke_errorinfos),
+ *    cleanupAfterParse: function(resultValue, invoke_post_methods),
  *               Helper function **which will be set up during the first invocation of the \`parse()\` method**.
  *               This helper API is invoked at the end of the \`parse()\` call, unless an exception was thrown
  *               and \`%options no-try-catch\` has been defined for this grammar: in that case this helper MAY
@@ -33914,7 +35071,7 @@ generatorMixin.generateGenericHeaderComment = function generateGenericHeaderComm
  *        topState: function(),
  *        _currentRules: function(),
  *        stateStackSize: function(),
- *        cleanupAfterLex: function()
+ *        cleanupAfterLex: function(),
  *
  *        options: { ... lexer %options ... },
  *
@@ -34631,7 +35788,7 @@ function removeUnusedKernelFeatures(parseFn, info) {
          *     } catch (ex) {
          *         ... remove this stuff ...
          *     } finally {
-         *         retval = this.cleanupAfterParse(retval, true, true);       // <-- keep this line
+         *         retval = this.cleanupAfterParse(retval, true);       // <-- keep this line
          *     } // /finally
          *
          * and also remove any re-entrant parse() call support:
@@ -35439,38 +36596,120 @@ lrGeneratorMixin.generateModule_ = function generateModule_() {
 lrGeneratorMixin.generateErrorClass = function () {
     // --- START parser error class ---
     const prelude = `
-// See also:
-// http://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript/#35881508
-// but we keep the prototype.constructor and prototype.name assignment lines too for compatibility
-// with userland code which might access the derived class in a 'classic' way.
-function JisonParserError(msg, hash) {
-    Object.defineProperty(this, 'name', {
+/**
+ * See also:
+ * 
+ * - https://github.com/onury/custom-error-test
+ * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+ * 
+ * We now provide an ES6 derived Error class. An updated ES5-compatible class
+ * is available too, for those who might need it, as this is complex stuff to
+ * get right (see first link above).
+ *
+ * @public
+ * @constructor
+ * @nocollapse
+ */
+
+
+/*---ES5---
+
+//
+// JS CustomError implementation — The One (Adapted for JISON)
+// This is the closest we can get to ES2015 \`extends Error\` implementation.
+// @version 2017-01-05
+// @author
+//     Onur Yıldırım (https://github.com/onury)
+//     Matt Browne (https://github.com/mbrowne)
+// @see
+//     https://github.com/onury/custom-error-test
+//     http://stackoverflow.com/a/35881508/112731
+//     https://gist.github.com/mbrowne/4af54767dcb3d529648f5a8aa11d6348
+//     http://stackoverflow.com/a/41338601/112731
+//
+function JisonParserError(message, hash) {
+    if (message == null) message = '???';
+
+    let stacktrace;
+    if (hash && hash.exception instanceof Error) {
+        const ex2 = hash.exception;
+        message = message + ' :: ' + ex2.message;
+        stacktrace = ex2.stack;
+    }
+
+    let err;
+    if (Object.setPrototypeOf) {
+        err = new Error(message);
+        Object.setPrototypeOf(err, CustomError.prototype);
+    } else {
+        err = this;
+    }
+
+    Object.defineProperty(err, 'name', {
         enumerable: false,
         writable: false,
         value: 'JisonParserError'
     });
 
-    if (msg == null) msg = '???';
+    err.hash = hash;
 
-    Object.defineProperty(this, 'message', {
-        enumerable: false,
-        writable: true,
-        value: msg
+    if (!Object.setPrototypeOf) {
+        Object.defineProperty(err, 'message', {
+            enumerable: false,
+            writable: true,
+            value: message
+        });
+        if (!stacktrace) {
+            if (typeof Error.captureStackTrace === 'function') { // V8
+                Error.captureStackTrace(this, JisonParserError);
+            } else {
+                stacktrace = (new Error(message)).stack;
+            }
+        }
+    }
+
+    if (stacktrace) {
+        Object.defineProperty(err, 'stack', {
+            enumerable: false,
+            writable: false,
+            value: stacktrace
+        });
+    }
+
+    return err;
+}
+if (Object.setPrototypeOf) {
+    Object.setPrototypeOf(JisonParserError.prototype, Error.prototype);
+} else {
+    JisonParserError.prototype = Object.create(Error.prototype, {
+        constructor: { value: JisonParserError }
     });
+}
 
-    this.hash = hash;
+---ES5---*/
+
+//---ES6---//
+
+class JisonParserError extends Error {
+  constructor(message, hash, ...params) {
+    if (message == null) message = '???';
 
     let stacktrace;
     if (hash && hash.exception instanceof Error) {
-        let ex2 = hash.exception;
-        this.message = ex2.message || msg;
+        const ex2 = hash.exception;
+        message = message + ' :: ' + ex2.message;
         stacktrace = ex2.stack;
     }
+
+    // Pass remaining arguments (including vendor specific ones) to parent constructor
+    super(message, ...params);
+
     if (!stacktrace) {
-        if (Error.hasOwnProperty('captureStackTrace')) {        // V8/Chrome engine
-            Error.captureStackTrace(this, this.constructor);
+        // Maintains proper stack trace for where our error was thrown (only available on V8)
+        if (typeof Error.captureStackTrace === 'function') { // V8
+            Error.captureStackTrace(this, JisonParserError);
         } else {
-            stacktrace = (new Error(msg)).stack;
+            stacktrace = (new Error(message)).stack;
         }
     }
     if (stacktrace) {
@@ -35480,15 +36719,13 @@ function JisonParserError(msg, hash) {
             value: stacktrace
         });
     }
+
+    this.name = 'JisonParserError';
+    this.hash = hash;
+  }
 }
 
-if (typeof Object.setPrototypeOf === 'function') {
-    Object.setPrototypeOf(JisonParserError.prototype, Error.prototype);
-} else {
-    JisonParserError.prototype = Object.create(Error.prototype);
-}
-JisonParserError.prototype.constructor = JisonParserError;
-JisonParserError.prototype.name = 'JisonParserError';
+//---ES6---//
 `;
     // --- END parser error class ---
 
@@ -36171,7 +37408,7 @@ function __jison_default_main__(args) {
         console.log('Usage:', path.basename(args[0]) + ' FILE');
         process.exit(1);
     }
-    const source = fs.readFileSync(path.normalize(args[1]), 'utf8');
+    const source = fs.readFileSync(path.resolve(args[1]), 'utf8');
     const dst = exports.parser.parse(source);
     console.log('parser output:\\n\\n', {
         type: typeof dst,
@@ -36508,7 +37745,11 @@ const define_parser_APIs_1 = `
 `;
 // --- END of define_parser_APIs_1 chunk ---
 
-const api_set = (new Function('', 'return { ' + define_parser_APIs_1 + ' };'))();
+const api_set = (new Function(`
+    return { 
+        ${define_parser_APIs_1}
+    };
+`))();
 for (let api in api_set) {
     parser$4[api] = api_set[api];
 }
@@ -36602,7 +37843,7 @@ function parse(input, parseParams) {
         if (src && typeof src === 'object') {
             // non-Object-type objects, e.g. RegExp, Date, etc., can usually be shallow cloned
             // using their constructor:
-            if (src.constructor !== Object) {
+            if (src.constructor !== Object && typeof src.constructor === 'function') {
                 if (Array.isArray(src)) {
                     return src.slice();
                 }
@@ -36612,13 +37853,8 @@ function parse(input, parseParams) {
                 shallow_copy_noclobber(dst, src);
                 return dst;
             }
-            // native objects must be cloned a different way:
-            {
-                //return Object.assign({}, src);
-                let dst = {};
-                shallow_copy_noclobber(dst, src);
-                return dst;
-            }
+            // native objects (and constructor-less objects) must be cloned a different way:
+            return Object.assign({}, src);
         }
         return src;
     }
@@ -36638,12 +37874,13 @@ function parse(input, parseParams) {
         }
     }
     function copy_yylloc_native(loc) {
-        let rv = shallow_copy(loc);
-        // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
-        if (rv) {
+        if (loc) {
+            let rv = Object.assign({}, loc);
+            // shallow copy the yylloc ranges info to prevent us from modifying the original arguments' entries:
             rv.range = rv.range.slice();
+            return rv;
         }
-        return rv;
+        return null;
     }
 
     // copy state
@@ -36745,7 +37982,7 @@ function parse(input, parseParams) {
     // their closure will still refer to the \`parse()\` instance which set
     // them up. Hence we MUST set them up at the start of every \`parse()\` run!
     if (this.yyError) {
-        this.yyError = function yyError(str /*, ...args */) {
+        this.yyError = function yyError(str, ...args) {
             if (yydebug) {
                 yydebug('yyerror: ', {
                     message: str,
@@ -36786,12 +38023,11 @@ function parse(input, parseParams) {
 //_handle_error_no_recovery:                      // run this code when the grammar does not include any error recovery rules
 
             let expected = this.collect_expected_token_set(state);
-            let hash = this.constructParseErrorInfo(str, null, expected, false);
+            let hash = this.constructParseErrorInfo(str, null, expected, this.options.parserErrorsAreRecoverable);
 
 //_handle_error_end_of_section:                   // this concludes the error recovery / no error recovery code section choice above
 
             // Add any extra args to the hash under the name \`extra_error_attributes\`:
-            let args = Array.prototype.slice.call(arguments, 1);
             if (args.length) {
                 hash.extra_error_attributes = args;
             }
@@ -36896,7 +38132,7 @@ function parse(input, parseParams) {
             }
 
             // cleanup:
-            if (hash && hash.destroy) {
+            if (hash && typeof hash.destroy === 'function') {
                 hash.destroy();
             }
         }
@@ -37515,6 +38751,9 @@ function parse(input, parseParams) {
                             });
                         }
 
+                        //p.isParseError = true;
+                        p.errorRuleDepth = error_rule_depth;
+
                         r = this.parseError(p.errStr, p, this.JisonParserError);
                         if (typeof r !== 'undefined') {
                             retval = r;
@@ -37602,6 +38841,8 @@ function parse(input, parseParams) {
                         if (po) {
                             p.extra_error_attributes = po;
                         }
+
+                        p.isParseErrorDuringRecovery = true;
 
                         r = this.parseError(p.errStr, p, this.JisonParserError);
                         if (typeof r !== 'undefined') {
@@ -37885,7 +39126,7 @@ function parse(input, parseParams) {
                                     // recovering from now...
                                     //
                                     // Also check if the LookAhead symbol isn't the ERROR token we set as part of the error
-                                    // recovery, for then this we would we idling (cycling) on the error forever.
+                                    // recovery, for then we would be idling (cycling) on the error forever.
                                     // Yes, this does not take into account the possibility that the *lexer* may have
                                     // produced a *new* TERROR token all by itself, but that would be a very peculiar grammar!
                                     if (yydebug) yydebug('... SHIFT:error recovery: re-application of old symbol doesn\\'t work: instead, we\\'re moving forward now. ', { recovering, symbol });
@@ -38062,6 +39303,7 @@ function parse(input, parseParams) {
                     }
                     // we cannot recover from the error!
                     p = this.constructParseErrorInfo(errStr, null, expected, false);
+                    //p.isParseError = true;
                     r = this.parseError(p.errStr, p, this.JisonParserError);
                     if (typeof r !== 'undefined') {
                         retval = r;
@@ -38100,6 +39342,9 @@ function parse(input, parseParams) {
                 // this shouldn't happen, unless resolve defaults are off
                 if (action instanceof Array) {
                     p = this.constructParseErrorInfo('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol, null, null, false);
+
+                    p.isParseAmbiguityError = true;
+
                     r = this.parseError(p.errStr, p, this.JisonParserError);
                     if (typeof r !== 'undefined') {
                         retval = r;
@@ -38109,6 +39354,9 @@ function parse(input, parseParams) {
                 // Another case of better safe than sorry: in case state transitions come out of another error recovery process
                 // or a buggy LUT (LookUp Table):
                 p = this.constructParseErrorInfo('Parsing halted. No viable error recovery approach available due to internal system failure.', null, null, false);
+
+                p.isInternalParserError = true;
+
                 r = this.parseError(p.errStr, p, this.JisonParserError);
                 if (typeof r !== 'undefined') {
                     retval = r;
@@ -38275,7 +39523,10 @@ function parse(input, parseParams) {
             throw ex;
         }
 
-        p = this.constructParseErrorInfo('Parsing aborted due to exception.', ex, null, false);
+        p = this.constructParseErrorInfo('Parsing aborted due to exception: ' + ex.message, ex, null, false);
+
+        p.isParserExceptionError = true;
+
         retval = false;
         r = this.parseError(p.errStr, p, this.JisonParserError);
         if (typeof r !== 'undefined') {
@@ -38859,6 +40110,10 @@ function getCommandlineOptions() {
                 abbr: 't',
                 flag: true,
                 default: defaults.debug,
+                transform: function (val) {
+                    console.error('debug arg:', {val});
+                    return parseInt(val);
+                },
                 help: 'Debug mode.'
             },
             dumpSourceCodeOnFailure: {
@@ -39063,6 +40318,33 @@ function getCommandlineOptions() {
                 flag: true,
                 metavar: 'false|true|CFGFILE',
                 default: defaults.prettyCfg,
+                transform: function (val) {
+                    console.log("prettyCfg:", {val});
+                    switch (val) {
+                    case 'false':
+                    case '0':
+                        return false;
+
+                    case 'true':
+                    case '1':
+                        return true;
+
+                    default:
+                        try {
+                            let src = fs__default['default'].readFileSync(val, "utf8");
+                            let cfg = JSON5.parse(src);
+                            return cfg;
+                        } catch (ex) {
+                            console.error(rmCommonWS$6`
+                                Cannot open/read/decode the prettyPrint config file '${val}'.
+
+                                Error: ${ex.message}
+
+                            `);
+                            throw ex;
+                        }
+                    }
+                },
                 help: "Output the generated code pretty-formatted; turning this option OFF will output the generated code as-is a.k.a. 'raw'."
             },
             main: {
@@ -39096,31 +40378,6 @@ function getCommandlineOptions() {
     return opts;
 }
 
-    function mkdirp(fp) {
-        if (!fp || fp === '.' || fp.length === 0) {
-            return false;
-        }
-        try {
-            fs__default['default'].mkdirSync(fp);
-            return true;
-        } catch (e) {
-            if (e.code === 'ENOENT') {
-                let parent = path__default['default'].dirname(fp);
-                // Did we hit the root directory by now? If so, abort!
-                // Else, create the parent; iff that fails, we fail too...
-                if (parent !== fp && mkdirp(parent)) {
-                    try {
-                        // Retry creating the original directory: it should succeed now
-                        fs__default['default'].mkdirSync(fp);
-                        return true;
-                    } catch (e) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return false;
-    }
 
 function cliMain(opts) {
     //opts = Jison.mkStdOptions(opts);
@@ -39133,160 +40390,165 @@ function cliMain(opts) {
         }
     }
 
-
     function processInputFile() {
         // getting raw files
         let lex;
         const original_cwd = process__default['default'].cwd();
 
-        if (opts.lexfile) {
-            lex = fs__default['default'].readFileSync(path__default['default'].normalize(opts.lexfile), 'utf8');
-        }
-        let raw = fs__default['default'].readFileSync(path__default['default'].normalize(opts.file), 'utf8');
+        try {
+            opts.file = path__default['default'].resolve(opts.file);
+            opts.lexfile = path__default['default'].resolve(opts.lexfile);
 
-        // making best guess at json mode
-        opts.json = path__default['default'].extname(opts.file) === '.json' || opts.json;
-
-        // When only the directory part of the output path was specified, then we
-        // do NOT have the target module name in there as well!
-        let outpath = opts.outfile;
-        if (typeof outpath === 'string') {
-            if (/[\\\/]$/.test(outpath) || isDirectory(outpath)) {
-                opts.outfile = null;
-                outpath = outpath.replace(/[\\\/]$/, '');
-            } else {
-                outpath = path__default['default'].dirname(outpath);
+            if (opts.lexfile) {
+                lex = fs__default['default'].readFileSync(opts.lexfile, 'utf8');
             }
-        } else {
-            outpath = null;
-        }
-        if (outpath && outpath.length > 0) {
-            outpath += '/';
-        } else {
-            outpath = '';
-        }
+            let raw = fs__default['default'].readFileSync(opts.file, 'utf8');
 
-        // setting output file name and module name based on input file name
-        // if they aren't specified.
-        let name = path__default['default'].basename(opts.outfile || opts.file);
+            // making best guess at json mode
+            opts.json = /\.json\d?$/.test(opts.file) || opts.json;
 
-        // get the base name (i.e. the file name without extension)
-        // i.e. strip off only the extension and keep any other dots in the filename
-        name = path__default['default'].basename(name, path__default['default'].extname(name));
-
-        opts.outfile = opts.outfile || (outpath + name + '.js');
-        if (!opts.moduleName && name) {
-            opts.moduleName = opts.defaultModuleName = mkIdentifier$5(name);
-        }
-
-        if (opts.exportAST) {
-            // When only the directory part of the AST output path was specified, then we
-            // still need to construct the JSON AST output file name!
-            var astpath, astname, ext;
-
-            astpath = opts.exportAST;
-            if (typeof astpath === 'string') {
-                if (/[\\\/]$/.test(astpath) || isDirectory(astpath)) {
-                    opts.exportAST = null;
-                    astpath = astpath.replace(/[\\\/]$/, '');
+            // When only the directory part of the output path was specified, then we
+            // do NOT have the target module name in there as well!
+            let outpath = opts.outfile;
+            if (typeof outpath === 'string') {
+                if (/[\\\/]$/.test(outpath) || isDirectory(outpath)) {
+                    opts.outfile = null;
+                    outpath = outpath.replace(/[\\\/]$/, '');
                 } else {
-                    astpath = path__default['default'].dirname(astpath);
+                    outpath = path__default['default'].dirname(outpath);
                 }
             } else {
-                astpath = path__default['default'].dirname(opts.outfile);
+                outpath = null;
             }
-            if (astpath && astpath.length > 0) {
-                astpath = astpath.replace(/[\\\/]$/, '') + '/';
+            if (outpath && outpath.length > 0) {
+                outpath += '/';
             } else {
-                astpath = '';
+                outpath = '';
             }
 
-            // setting AST output file name and module name based on input file name
+            // setting output file name and module name based on input file name
             // if they aren't specified.
-            if (typeof opts.exportAST === 'string') {
-                astname = path__default['default'].basename(opts.exportAST);
-                ext = path__default['default'].extname(astname);
+            let name = path__default['default'].basename(opts.outfile || opts.file);
 
-                // get the base name (i.e. the file name without extension)
-                // i.e. strip off only the extension and keep any other dots in the filename.
-                astname = path__default['default'].basename(astname, ext);
-            } else {
-                // get the base name (i.e. the file name without extension)
-                // i.e. strip off only the extension and keep any other dots in the filename.
-                astname = path__default['default'].basename(opts.outfile, path__default['default'].extname(opts.outfile));
+            // get the base name (i.e. the file name without extension)
+            // i.e. strip off only the extension and keep any other dots in the filename
+            name = path__default['default'].basename(name, path__default['default'].extname(name));
 
-                // Then add the name postfix '-AST' to ensure we won't collide with the input file.
-                astname += '-AST';
-                ext = '.jison';
+            opts.outfile = opts.outfile || path__default['default'].join(outpath, name + '.js');
+            if (!opts.moduleName && name) {
+                opts.moduleName = opts.defaultModuleName = mkIdentifier$5(name);
             }
 
-            opts.exportAST = path__default['default'].normalize(astpath + astname + ext);
-        }
+            if (opts.exportAST) {
+                // When only the directory part of the AST output path was specified, then we
+                // still need to construct the JSON AST output file name!
+                var astpath, astname, ext;
 
-        // Change CWD to the directory where the source grammar resides: this helps us properly
-        // %include any files mentioned in the grammar with relative paths:
-        let new_cwd = path__default['default'].dirname(path__default['default'].normalize(opts.file));
-        process__default['default'].chdir(new_cwd);
+                astpath = opts.exportAST;
+                if (typeof astpath === 'string') {
+                    if (/[\\\/]$/.test(astpath) || isDirectory(astpath)) {
+                        opts.exportAST = null;
+                    } else {
+                        astpath = path__default['default'].dirname(astpath);
+                    }
+                } else {
+                    astpath = path__default['default'].dirname(opts.outfile);
+                }
+                if (astpath == null) {
+                    astpath = '';
+                }
 
-        let parser = cli.generateParserString(raw, lex, opts);
+                // setting AST output file name and module name based on input file name
+                // if they aren't specified.
+                if (typeof opts.exportAST === 'string') {
+                    // get the base name (i.e. the file name without extension)
+                    // i.e. strip off only the extension and keep any other dots in the filename.
+                    ext = path__default['default'].extname(astname);
+                    astname = path__default['default'].basename(opts.exportAST, ext);
+                } else {
+                    // get the base name (i.e. the file name without extension)
+                    // i.e. strip off only the extension and keep any other dots in the filename.
+                    astname = path__default['default'].basename(opts.outfile, path__default['default'].extname(opts.outfile));
 
-        // and change back to the CWD we started out with:
-        process__default['default'].chdir(original_cwd);
+                    // Then add the name postfix '-AST' to ensure we won't collide with the input file.
+                    astname += '-AST';
+                    ext = '.jison';
+                }
 
-        opts.outfile = path__default['default'].normalize(opts.outfile);
-        mkdirp(path__default['default'].dirname(opts.outfile));
-        fs__default['default'].writeFileSync(opts.outfile, parser, 'utf8');
-        console.log('JISON output', 'for module [' + opts.moduleName + '] has been written to file:', opts.outfile);
+                opts.exportAST = path__default['default'].resolve(path__default['default'].join(astpath, astname + ext));
+            }
 
-        if (opts.exportAllTables.enabled) {
-            // Determine the output file path 'template' for use by the exportAllTables
-            // functionality:
-            let out_base_fname = path__default['default'].join(path__default['default'].dirname(opts.outfile), path__default['default'].basename(opts.outfile, path__default['default'].extname(opts.outfile)));
+            opts.outfile = path__default['default'].resolve(opts.outfile);
 
-            let t = opts.exportAllTables;
+            // Change CWD to the directory where the source grammar resides: this helps us properly
+            // %include any files mentioned in the grammar with relative paths:
+            let new_cwd = path__default['default'].dirname(opts.file);
+            process__default['default'].chdir(new_cwd);
 
-            for (let id in t) {
-                if (t.hasOwnProperty(id) && id !== 'enabled') {
-                    var content = t[id];
-                    if (content) {
-                        var fname = out_base_fname + '.' + id.replace(/[^a-zA-Z0-9_]/g, '_') + '.json';
-                        fs__default['default'].writeFileSync(fname, JSON.stringify(content, null, 2), 'utf8');
-                        console.log('JISON table export', 'for [' + id + '] has been written to file:', fname);
+            let parser = cli.generateParserString(raw, lex, opts);
+
+            // and change back to the CWD we started out with:
+            process__default['default'].chdir(original_cwd);
+
+            mkdirp(path__default['default'].dirname(opts.outfile));
+            fs__default['default'].writeFileSync(opts.outfile, parser, 'utf8');
+            console.log('JISON-GHO output for module [' + opts.moduleName + '] has been written to file:', opts.outfile);
+
+            if (opts.exportAllTables && opts.exportAllTables.enabled) {
+                // Determine the output file path 'template' for use by the exportAllTables
+                // functionality:
+                let out_base_fname = path__default['default'].join(path__default['default'].dirname(opts.outfile), path__default['default'].basename(opts.outfile, path__default['default'].extname(opts.outfile)));
+
+                let t = opts.exportAllTables;
+
+                for (let id in t) {
+                    if (t.hasOwnProperty(id) && id !== 'enabled') {
+                        var content = t[id];
+                        if (content) {
+                            var fname = out_base_fname + '.' + id.replace(/[^a-zA-Z0-9_]/g, '_') + '.json';
+                            fs__default['default'].writeFileSync(fname, JSON.stringify(content, null, 2), 'utf8');
+                            console.log('JISON table export', 'for [' + id + '] has been written to file:', fname);
+                        }
                     }
                 }
             }
-        }
 
-        if (opts.exportAST) {
-            var content = opts.exportedAST;
-            var fname = opts.exportAST;
+            if (opts.exportAST) {
+                var content = opts.exportedAST;
+                var fname = opts.exportAST;
 
-            var ext = path__default['default'].extname(fname);
-            switch (ext) {
-            case '.json5':
-            case '.jison':
-            case '.y':
-            case '.yacc':
-            case '.l':
-            case '.lex':
-                content = Jison$1.prettyPrint(content, {
-                    format: ext.substr(1)
-                });
-                break;
+                var ext = path__default['default'].extname(fname);
+                switch (ext) {
+                case '.json5':
+                case '.jison':
+                case '.y':
+                case '.yacc':
+                case '.l':
+                case '.lex':
+                    content = Jison$1.prettyPrint(content, {
+                        format: ext.substr(1)
+                    });
+                    break;
 
-            default:
-            case '.json':
-                content = JSON.stringify(content, null, 2);
-                break;
+                default:
+                case '.json':
+                    content = JSON.stringify(content, null, 2);
+                    break;
+                }
+                mkdirp(path__default['default'].dirname(fname));
+                fs__default['default'].writeFileSync(fname, content, 'utf8');
+                console.log('Grammar AST export', 'for module [' + opts.moduleName + '] has been written to file:', fname);
             }
-            mkdirp(path__default['default'].dirname(fname));
-            fs__default['default'].writeFileSync(fname, content, 'utf8');
-            console.log('Grammar AST export', 'for module [' + opts.moduleName + '] has been written to file:', fname);
+        } catch (ex) {
+            console.error('JISON-GHO failed to compile module [' + opts.moduleName + ']:', ex);
+        } finally {
+            // reset CWD to the original path, no matter what happened
+            process__default['default'].chdir(original_cwd);
         }
     }
 
     function readin(cb) {
-        let stdin = process__default['default'].openStdin();
+        const stdin = process__default['default'].openStdin();
         let data = '';
 
         stdin.setEncoding('utf8');
@@ -39336,7 +40598,7 @@ var cli = {
 
 
 if (require.main === module) {
-    let opts = getCommandlineOptions();
+    const opts = getCommandlineOptions();
     cli.main(opts);
 }
 
