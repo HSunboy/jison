@@ -253,25 +253,18 @@ declaration
     // are always related to a preceding parser spec item, such as a
     // grammar production rule.
     //
-    | ACTION_START_AT_SOL action ACTION_END
+    | action_chunk_at_SOL
         {
-            let srcCode = trimActionCode($action + $ACTION_END, {
-                startMarker: $ACTION_START_AT_SOL
-            });
-            if (srcCode) {
-                let rv = checkActionBlock(srcCode, @action, yy.options);
-                if (rv.fault) {
-                    yyerror(rmCommonWS`
-                        The '%{...%}' grammar setup action code section does not compile: ${rv.fault}
+            let rv = $action_chunk_at_SOL;
+            if (rv.fault) {
+                yyerror(rmCommonWS`
+                    The '%{...%}' parser setup action code section does not compile: ${rv.fault}
 
-                          Erroneous area:
-                        ${yylexer.prettyPrintRange(@action, @ACTION_START_AT_SOL)}
-                    `);
-                }
-                $$ = {include: srcCode};
-            } else {
-                $$ = null;
+                      Erroneous area:
+                    ${yylexer.prettyPrintRange(@action_chunk_at_SOL)}
+                `);
             }
+            $$ = {include: rv.srcCode};
         }
     //
     // see the alternative above: this rule is added to aid error
@@ -357,7 +350,7 @@ declaration
     | option_keyword error OPTIONS_END
         {
             yyerror(rmCommonWS`
-                ill defined '${$option_keyword} line.
+                ill defined ${dquote($option_keyword)} line.
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @option_keyword, @OPTIONS_END)}
@@ -449,7 +442,7 @@ declaration
             yy.popContext('Line 449');
             $$ = null;
         }
-    | init_code_keyword option_list ACTION_START action ACTION_END OPTIONS_END
+    | init_code_keyword option_list action_chunk OPTIONS_END
         {
             // check there's only 1 option which is an identifier
             let lst = $option_list;
@@ -476,16 +469,13 @@ declaration
                 `);
             }
 
-            let srcCode = trimActionCode($action + $ACTION_END, {
-                startMarker: $ACTION_START
-            });
-            let rv = checkActionBlock(srcCode, @action, yy.options);
+            let rv = $action_chunk;
             if (rv.fault) {
                 yyerror(rmCommonWS`
                     The '%code ${name}' initialization section's action code block does not compile: ${rv.fault}
 
                       Erroneous area:
-                    ${yylexer.prettyPrintRange(@action, @init_code_keyword)}
+                    ${yylexer.prettyPrintRange(@action_chunk, @init_code_keyword)}
                 `);
             }
 
@@ -494,7 +484,7 @@ declaration
             $$ = {
                 initCode: {
                     qualifier: name,
-                    include: srcCode
+                    include: rv.srcCode
                 }
             };
         }
@@ -563,7 +553,7 @@ declaration
             var rv = checkActionBlock(srcCode, @action, yy.options);
             if (rv.fault) {
                 yyerror(rmCommonWS`
-                    The '${$on_error_recovery_keyword}' action code section does not compile: ${rv.fault}
+                    The ${dquote($on_error_recovery_keyword)} action code section does not compile: ${rv.fault}
 
                       Erroneous area:
                     ${yylexer.prettyPrintRange(@action, @on_error_recovery_keyword)}
@@ -582,7 +572,7 @@ declaration
             var marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
             var end_marker_msg = marker_msg.replace(/\{/g, '}');
             yyerror(rmCommonWS`
-                The '${$on_error_recovery_keyword} %{...%\}' initialization code section must be properly
+                The ${dquote($on_error_recovery_keyword + ' %{...%\}')} initialization code section must be properly
                 wrapped in block start markers (\`%{\`${marker_msg})
                 and matching end markers (\`%}\`${end_marker_msg}). Expected format:
 
@@ -602,7 +592,7 @@ declaration
                 illegal input in the parser spec declarations section.
 
                 This might be stuff incorrectly dangling off the previous
-                '${yy.__options_category_description__}' definition statement, 
+                ${dquote(yy.__options_category_description__)} definition statement, 
                 so please do check above when the mistake isn't immediately 
                 obvious from this error spot itself.
 
@@ -666,7 +656,13 @@ include_keyword
 
 on_error_recovery_keyword
     : ON_ERROR_RECOVERY_SHIFT
+        {
+            $$ = $1;
+        }
     | ON_ERROR_RECOVERY_REDUCE
+        {
+            $$ = $1;
+        }
     ;
 
 start_productions_marker
@@ -734,7 +730,7 @@ operator
         {
             // TODO ...
             yyerror(rmCommonWS`
-                operator token list error in an '${$associativity}' associativity statement?
+                operator token list error in an ${dquote($associativity)} associativity statement?
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @associativity)}
@@ -752,6 +748,8 @@ associativity
         { $$ = 'right'; }
     | NONASSOC
         { $$ = 'nonassoc'; }
+    | PRECEDENCE
+        { $$ = 'precedence'; }
     ;
 
 token_list
@@ -835,13 +833,6 @@ id_list
     | id
         { $$ = [$id]; }
     ;
-
-// token_id
-//     : TOKEN_TYPE id
-//         { $$ = $id; }
-//     | id
-//         { $$ = $id; }
-//     ;
 
 grammar
     : production_list
@@ -927,23 +918,18 @@ production
     // are always related to a preceding parser spec item, such as a
     // grammar production rule.
     //
-    | ACTION_START_AT_SOL action ACTION_END
+    | action_chunk_at_SOL
         {
-            let srcCode = trimActionCode($action + $ACTION_END, {
-                startMarker: $ACTION_START_AT_SOL
-            });
-            if (srcCode) {
-                let rv = checkActionBlock(srcCode, @action, yy.options);
-                if (rv.fault) {
-                    yyerror(rmCommonWS`
-                        The '%{...%}' grammar action header code section does not compile: ${rv.fault}
+            let rv = $action_chunk_at_SOL;
+            if (rv.fault) {
+                yyerror(rmCommonWS`
+                    The '%{...%}' grammar action header code section does not compile: ${rv.fault}
 
-                          Erroneous area:
-                        ${yylexer.prettyPrintRange(@action, @ACTION_START_AT_SOL)}
-                    `);
-                }
-                yy.addDeclaration($$, { actionInclude: srcCode });
+                      Erroneous area:
+                    ${yylexer.prettyPrintRange(@action_chunk_at_SOL)}
+                `);
             }
+            yy.addDeclaration($$, { actionInclude: rv.srcCode });
             $$ = null;
         }
     //
@@ -1028,7 +1014,7 @@ production
     | pct_token_which_belongs_in_header_section
         %{
             yyerror(rmCommonWS`
-                The '${$pct_token_which_belongs_in_header_section}' keyword cannot be used in the grammar 
+                The ${dquote($pct_token_which_belongs_in_header_section)} keyword cannot be used in the grammar 
                 section after the first '%%'. You must move this code to the grammar header section 
                 above the '%%'.
 
@@ -1083,7 +1069,7 @@ pct_token_which_belongs_in_header_section
         {
             $$ = $1;
 
-            yy.popContext('Line 1086');
+            yy.popContext('Line 1081');
         }
     | DEBUG
     | EBNF
@@ -1092,13 +1078,13 @@ pct_token_which_belongs_in_header_section
         {
             $$ = $1;
 
-            yy.popContext('Line 1095');
+            yy.popContext('Line 1090');
         }
     | init_code_keyword error OPTIONS_END
         {
             $$ = $1;
 
-            yy.popContext('Line 1101');
+            yy.popContext('Line 1096');
         }
     | on_error_recovery_keyword error
         {
@@ -1135,7 +1121,7 @@ production_id
         {
             // TODO ...
             yyerror(rmCommonWS`
-                Production for rule '${$id}' is missing: arrows introduce action code in Jison.
+                Production for rule ${dquote($id)} is missing: arrows introduce action code in Jison.
 
                 Jison does not support rule production definition using arrows (->, =>, →) but expects
                 colons (:) instead, so maybe you intended this:
@@ -1258,6 +1244,81 @@ handle_action
             $$ = {
                 handle: $handle,
                 prec: $prec,
+            };
+        }
+
+// TODO TDO TODO
+
+    | regex ARROW_ACTION_START action_block ACTION_END
+        {
+            let srcCode = trimActionCode($action_block + $ACTION_END, {
+                dontTrimSurroundingCurlyBraces: true
+            });
+
+            // add braces around ARROW_ACTION_CODE so that the action chunk test/compiler
+            // will uncover any illegal action code following the arrow operator, e.g.
+            // multiple statements separated by semicolon.
+            //
+            // Note/Optimization:
+            // there's no need for braces in the generated expression when we can
+            // already see the given action is an identifier string or something else
+            // that's a sure simple thing for a JavaScript `return` statement to carry.
+            // By doing this, we simplify the token return replacement code replacement
+            // process which will be applied to the parsed lexer before its code
+            // will be generated by JISON.
+            srcCode = 'return ' + braceArrowActionCode(srcCode);
+
+            let ast = checkActionBlock(srcCode, @action_block, yy.options);
+            if (ast.fault) {
+                let indentedSrc = rmCommonWS([srcCode]).split('\n').join('\n    ');
+
+                yyerror(rmCommonWS`
+                    The lexer rule's 'arrow' action code section does not compile: ${ast.fault}
+
+                    # NOTE that the arrow action automatically wraps the action code
+                    # in a \`return (...);\` statement to prevent hard-to-diagnose run-time
+                    # errors down the line.
+                    #
+                    # Please be aware that the reported compile error MAY be referring
+                    # to the wrapper code which is added by JISON automatically when
+                    # processing arrow actions: the entire action code chunk
+                    # (including wrapper) is:
+
+                        ${indentedSrc}
+
+                      Erroneous area:
+                    ${yylexer.prettyPrintRange(@action_block, @regex)}
+                `);
+            }
+
+            $$ = {
+                ast, 
+                fault: ast.fault,
+                srcCode,
+                rule: $regex,
+            };
+        }
+    | regex ARROW_ACTION_START error
+        {
+            let rv = yyerror(rmCommonWS`
+                A lexer rule action arrow must be followed by a single JavaScript expression specifying the lexer token to produce, e.g.:
+
+                    /rule/   -> 'BUGGABOO'
+
+                which is equivalent to:
+
+                    /rule/      %{ return 'BUGGABOO'; %}
+
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(@error, @regex)}
+
+                  Technical error report:
+                ${$error.errStr}
+            `);
+
+            $$ = {
+                fault: rv,
+                rule: $regex,
             };
         }
     ;
@@ -1477,42 +1538,121 @@ id
         { $$ = $ID; }
     ;
 
+
+action_chunk_at_SOL
+    : ACTION_START_AT_SOL action_block ACTION_END
+        {
+            let srcCode = trimActionCode($action_block + $ACTION_END, {
+                startMarker: $ACTION_START_AT_SOL
+            });
+            let ast = checkActionBlock(srcCode, @action_block, yy.options);
+            $$ = {
+                ast, 
+                fault: ast.fault,
+                srcCode
+            };
+        }
+    | ENTIRE_ACTION_AT_SOL
+        {
+            if ($ENTIRE_ACTION_AT_SOL.fault) {
+                $$ = $ENTIRE_ACTION_AT_SOL;
+            } else {
+                let srcCode = trimActionCode($ENTIRE_ACTION_AT_SOL.srcCode, {
+                    startMarker: $ENTIRE_ACTION_AT_SOL.action_start_marker
+                });
+
+                let ast = checkActionBlock(srcCode, @ENTIRE_ACTION_AT_SOL, yy.options);
+                $$ = {
+                    ast, 
+                    fault: ast.fault,
+                    srcCode
+                };
+            }
+        }
+    ;
+
+
+action_chunk
+    : ACTION_START action_block ACTION_END
+        {
+            let srcCode = trimActionCode($action_block + $ACTION_END, {
+                startMarker: $ACTION_START
+            });
+            let ast = checkActionBlock(srcCode, @action_block, yy.options);
+            $$ = {
+                ast, 
+                fault: ast.fault,
+                srcCode
+            };
+        }
+    | ENTIRE_ACTION
+        {
+            if ($ENTIRE_ACTION.fault) {
+                $$ = $ENTIRE_ACTION;
+            } else {
+                let srcCode = trimActionCode($ENTIRE_ACTION.srcCode, {
+                    startMarker: $ENTIRE_ACTION.action_start_marker
+                });
+
+                let ast = checkActionBlock(srcCode, @ENTIRE_ACTION, yy.options);
+                $$ = {
+                    ast, 
+                    fault: ast.fault,
+                    srcCode
+                };
+            }
+        }
+    ;
+
+
+action_block
+    : action_block action
+        { 
+            $$ = $action_block + $action;
+        }
+    | ε
+        { 
+            $$ = '';
+        }
+    ;
+
+
 action
-    : action ACTION_BODY
-        { $$ = $action + $ACTION_BODY; }
-    | action include_macro_code
-        { $$ = $action + '\n\n' + $include_macro_code + '\n\n'; }
-    | action INCLUDE_PLACEMENT_ERROR
+    : ACTION_BODY
+        { $$ = $ACTION_BODY; }
+    | include_macro_code
+        { $$ = $include_macro_code; }
+    | INCLUDE_PLACEMENT_ERROR
         {
             yyerror(rmCommonWS`
                 You may place the '%include' instruction only at the start/front of a line.
 
                   Its use is not permitted at this position:
-                ${yylexer.prettyPrintRange(@INCLUDE_PLACEMENT_ERROR, @0)}
+                ${yylexer.prettyPrintRange(@INCLUDE_PLACEMENT_ERROR, @-2)}
             `);
-            $$ = $action;
+            $$ = '';
         }
-    | action BRACKET_MISSING
+    | BRACKET_MISSING
         {
             yyerror(rmCommonWS`
                 Missing curly braces: seems you did not correctly bracket a lexer rule action block in curly braces: '{ ... }'.
 
                   Offending action body:
-                ${yylexer.prettyPrintRange(@BRACKET_MISSING, @0)}
+                ${yylexer.prettyPrintRange(@BRACKET_MISSING, @-2)}
             `);
-            $$ = $action;
+            $$ = '';
         }
-    | action BRACKET_SURPLUS
+    | BRACKET_SURPLUS
         {
             yyerror(rmCommonWS`
                 Too many curly braces: seems you did not correctly bracket a lexer rule action block in curly braces: '{ ... }'.
 
                   Offending action body:
-                ${yylexer.prettyPrintRange(@BRACKET_SURPLUS, @0)}
+                ${yylexer.prettyPrintRange(@BRACKET_SURPLUS, @-2)}
             `);
-            $$ = $action;
+            $$ = '';
         }
-    | action UNTERMINATED_STRING_ERROR
+    | UNTERMINATED_STRING_ERROR
         {
             yyerror(rmCommonWS`
                 Unterminated string constant in lexer rule action block.
@@ -1523,10 +1663,8 @@ action
                   Offending action body:
                 ${yylexer.prettyPrintRange(@UNTERMINATED_STRING_ERROR, @0)}
             `);
-            $$ = $action;
+            $$ = $UNTERMINATED_STRING_ERROR.srcCode;
         }
-    | ε
-        { $$ = ''; }
     ;
 
 
@@ -1616,7 +1754,7 @@ option
             // validate that this is legal behaviour under the given circumstances, i.e. parser context:
             if (yy.__options_flags__ & OPTION_DOES_NOT_ACCEPT_VALUE) {
                 yyerror(rmCommonWS`
-                    The entries in a ${yy.__options_category_description__} statement MUST NOT be assigned values, such as '${$option_name}=${$any_option_value}'.
+                    The entries in a ${yy.__options_category_description__} statement MUST NOT be assigned values, such as ${dquote($option_name + '=' + $any_option_value)}.
 
                       Erroneous area:
                     ${yylexer.prettyPrintRange(yylexer.deriveLocationInfo(@any_option_value, @option_name), @-1)}
@@ -1628,7 +1766,7 @@ option
         {
             // TODO ...
             yyerror(rmCommonWS`
-                Internal error: option "${$option}" value assignment failure in a ${yy.__options_category_description__} statement.
+                Internal error: option ${dquote($option)} value assignment failure in a ${yy.__options_category_description__} statement.
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@error, @-1)}
@@ -1747,7 +1885,7 @@ epilogue
         }
     | start_epilogue_marker
         {
-            yy.popContext('Line 1750');
+            yy.popContext('Line 1745');
 
             $$ = '';
         }
@@ -1766,7 +1904,7 @@ epilogue
                 }
             }
 
-            yy.popContext('Line 1769');
+            yy.popContext('Line 1764');
 
             $$ = srcCode;
         }
@@ -1893,7 +2031,7 @@ include_macro_code
 
             if (!fs.existsSync(include_path)) {
                 yyerror(rmCommonWS`
-                    Cannot %include "${include_path}":
+                    Cannot %include ${dquote(include_path)}:
                     The file does not exist.
 
                     The current working directory (set up by JISON) is:
@@ -1917,7 +2055,7 @@ include_macro_code
                     let rv = checkActionBlock(srcCode, @$, yy.options);
                     if (rv.fault) {
                         yyerror(rmCommonWS`
-                            The source code included from file '${include_path}' does not compile: ${rv.fault}
+                            The source code included from file ${dquote(include_path)} does not compile: ${rv.fault}
 
                               Erroneous area:
                             ${yylexer.prettyPrintRange(@$)}
@@ -1929,7 +2067,7 @@ include_macro_code
                 $$ = '\n// Included by Jison: ' + include_path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + include_path + '\n\n';
             }
 
-            yy.popContext('Line 1932');
+            yy.popContext('Line 1927');
         }
     | include_keyword error
         {
@@ -1942,7 +2080,7 @@ include_macro_code
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 1945');
+            yy.popContext('Line 1940');
             $$ = null;
         }
     ;
