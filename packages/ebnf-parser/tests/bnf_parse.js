@@ -55,7 +55,6 @@ let testset = globby.sync([
     './specs/0*.bnf',
     './specs/0*.ebnf',
     './specs/0*.json5',
-    '!'+  './specs/0*-ref.json5',
     './specs/0*.js',
 ]);
 
@@ -272,9 +271,7 @@ describe('BNF lexer', function () {
             // now that we have saved all data, perform the validation checks:
             // keep them simple so assert doesn't need a lot of time to produce diff reports
             // when the test fails:
-            let ist = testsetSpec.cleanStackTrace4Comparison(refOut);
-            let soll = testsetSpec.cleanStackTrace4Comparison(filespec.generatorRef);
-            assert.strictEqual(testsetSpec.reduceWhitespace(ist), testsetSpec.reduceWhitespace(soll), 'grammar should be lexed correctly');
+            testsetSpec.assertOutputMatchesReference(refOut, filespec.generatorRef, 'grammar should be parsed correctly');
         });
     });
 });
@@ -363,9 +360,7 @@ describe('BNF parser', function () {
             // now that we have saved all data, perform the validation checks:
             // keep them simple so assert doesn't need a lot of time to produce diff reports
             // when the test fails:
-            let ist = testsetSpec.cleanStackTrace4Comparison(refOut);
-            let soll = testsetSpec.cleanStackTrace4Comparison(filespec.ref);
-            assert.strictEqual(testsetSpec.reduceWhitespace(ist), testsetSpec.reduceWhitespace(soll), 'grammar should be parsed correctly');
+            testsetSpec.assertOutputMatchesReference(refOut, filespec.ref, 'grammar should be parsed correctly');
         });
     });
 });
