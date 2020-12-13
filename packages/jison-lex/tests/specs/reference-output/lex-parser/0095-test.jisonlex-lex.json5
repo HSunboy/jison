@@ -1,0 +1,236 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'IDENT:' + getTypes(yytext)",
+        rule: '{id}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NUMBER'",
+        rule: '{digit}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'SPACE'",
+        rule: '\\s',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'EOF'",
+        rule: '$',
+      },
+    ],
+    macros: {
+      digit: '[0-9]',
+      id: '[a-zA-Z_\\$][a-zA-Z0-9_\\$]*',
+    },
+    startConditions: {},
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+    actionInclude: `// Included by Jison: ../../../jison-lex/examples/includes/comments.helpers.js:
+
+// helper APIs for testing the comments.l lexer spec
+
+function getTypes(str) {
+	return 'T:' + str;
+}
+
+// End Of Include by Jison: ../../../jison-lex/examples/includes/comments.helpers.js`,
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            // Included by Jison: ../../../jison-lex/examples/includes/comments.helpers.js:
+
+// helper APIs for testing the comments.l lexer spec
+
+function getTypes(str) {
+	return 'T:' + str;
+}
+
+// End Of Include by Jison: ../../../jison-lex/examples/includes/comments.helpers.js
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {id} */ 
+ return 'IDENT:' + getTypes(yy_.yytext) 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       {digit} */ 
+   1 : 'NUMBER',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\s */ 
+   2 : 'SPACE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       $ */ 
+   3 : 'EOF'
+}`,
+  rules: [
+    {
+      re: '/^(?:([a-zA-Z_\\$][a-zA-Z0-9_\\$]*))/',
+      source: '^(?:([a-zA-Z_\\$][a-zA-Z0-9_\\$]*))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([a-zA-Z_\\$][a-zA-Z0-9_\\$]*))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([0-9]))/',
+      source: '^(?:([0-9]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([0-9]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\s)/',
+      source: '^(?:\\s)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\s)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:$)/',
+      source: '^(?:$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {
+    digit: {
+      in_set: '\\d',
+      elsewhere: '[0-9]',
+      raw: '[0-9]',
+    },
+    id: {
+      in_set: {
+        message: '[macro [id] is unsuitable for use inside regex set expressions: "[[a-zA-Z_\\$][a-zA-Z0-9_\\$]*]"]',
+        name: 'Error',
+      },
+      elsewhere: '[a-zA-Z_\\$][a-zA-Z0-9_\\$]*',
+      raw: '[a-zA-Z_\\$][a-zA-Z0-9_\\$]*',
+    },
+  },
+  regular_rule_count: 1,
+  simple_rule_count: 3,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: `// Included by Jison: ../../../jison-lex/examples/includes/comments.helpers.js:
+
+// helper APIs for testing the comments.l lexer spec
+
+function getTypes(str) {
+	return 'T:' + str;
+}
+
+// End Of Include by Jison: ../../../jison-lex/examples/includes/comments.helpers.js`,
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

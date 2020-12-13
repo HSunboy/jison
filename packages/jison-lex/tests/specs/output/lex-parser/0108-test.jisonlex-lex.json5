@@ -1,0 +1,347 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `// followed by another operator, i.e. anything that's 
+                      // not a number, or The End: then this is a unary 
+                      // \`percent\` operator.
+                      //
+                      // \`1%-2\` would be ambiguous but isn't: the \`-\` is 
+                      // considered as a unary minus and thus \`%\` is a 
+                      // \`modulo\` operator.
+                      //
+                      // \`1%*5\` thus is treated the same: any operator 
+                      // following the \`%\` is assumed to be a *binary* 
+                      // operator. Hence \`1% times 5\` which brings us to 
+                      // operators which only exist in unary form: \`!\`, and 
+                      // values which are not numbers, e.g. \`PI\` and \`E\`:
+                      // how about
+                      // - \`1%E\` -> modulo E,
+                      // - \`1%!0\` -> modulo 1 (as !0 -> 1)
+                      //
+                      // Of course, the easier way to handle this would be to 
+                      // keep the lexer itself dumb and put this additional 
+                      // logic inside a post_lex handler which should then be 
+                      // able to obtain additional look-ahead tokens and queue 
+                      // them for later, while using those to inspect and 
+                      // adjust the lexer output now -- a trick which is used 
+                      // in the cockroachDB SQL parser code, for example.
+                      //
+                      // The above regex solution however is a more local 
+                      // extra-lookahead solution and thus should cost us less 
+                      // overhead than the suggested post_lex alternative, but 
+                      // it comes at a cost itself: complex regex and 
+                      // duplication of language knowledge in the lexer itself, 
+                      // plus inclusion of *grammar* (syntactic) knowledge in 
+                      // the lexer too, where it doesn't belong in an ideal 
+                      // world...
+                      console.log('percent: ', yytext);
+                      return '%'`,
+        rule: '%(?=\\s*(?:[^0-9)]|E\\b|PI\\b|$))',
+        start_condition: [
+          'PERCENT_ALLOWED',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `this.popState(); 
+                      this.unput(yytext); 
+                      // this.unput(yytext); can be used here instead of 
+                      // this.reject(); which would only work when we set the 
+                      // \`backtrack_lexer\` option`,
+        rule: '.',
+        start_condition: [
+          'PERCENT_ALLOWED',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* skip whitespace */',
+        rule: '\\s+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `this.pushState('PERCENT_ALLOWED'); 
+                      return 'NUMBER'`,
+        rule: '[0-9]+(\\.[0-9]+)?\\b',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'EOF'",
+        rule: '$',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'CHAR'",
+        rule: '.',
+      },
+    ],
+    macros: {},
+    startConditions: {
+      PERCENT_ALLOWED: 0,
+    },
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    PERCENT_ALLOWED: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+      ],
+      inclusive: true,
+    },
+    INITIAL: {
+      rules: [
+        2,
+        3,
+        4,
+        5,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: PERCENT_ALLOWED */ 
+/*! Rule::       %(?=\\s*(?:[^0-9)]|E\\b|PI\\b|$)) */ 
+ // followed by another operator, i.e. anything that's 
+                      // not a number, or The End: then this is a unary 
+                      // \`percent\` operator.
+                      //
+                      // \`1%-2\` would be ambiguous but isn't: the \`-\` is 
+                      // considered as a unary minus and thus \`%\` is a 
+                      // \`modulo\` operator.
+                      //
+                      // \`1%*5\` thus is treated the same: any operator 
+                      // following the \`%\` is assumed to be a *binary* 
+                      // operator. Hence \`1% times 5\` which brings us to 
+                      // operators which only exist in unary form: \`!\`, and 
+                      // values which are not numbers, e.g. \`PI\` and \`E\`:
+                      // how about
+                      // - \`1%E\` -> modulo E,
+                      // - \`1%!0\` -> modulo 1 (as !0 -> 1)
+                      //
+                      // Of course, the easier way to handle this would be to 
+                      // keep the lexer itself dumb and put this additional 
+                      // logic inside a post_lex handler which should then be 
+                      // able to obtain additional look-ahead tokens and queue 
+                      // them for later, while using those to inspect and 
+                      // adjust the lexer output now -- a trick which is used 
+                      // in the cockroachDB SQL parser code, for example.
+                      //
+                      // The above regex solution however is a more local 
+                      // extra-lookahead solution and thus should cost us less 
+                      // overhead than the suggested post_lex alternative, but 
+                      // it comes at a cost itself: complex regex and 
+                      // duplication of language knowledge in the lexer itself, 
+                      // plus inclusion of *grammar* (syntactic) knowledge in 
+                      // the lexer too, where it doesn't belong in an ideal 
+                      // world...
+                      console.log('percent: ', yy_.yytext);
+                      return '%' 
+break;
+case 1 : 
+/*! Conditions:: PERCENT_ALLOWED */ 
+/*! Rule::       . */ 
+ this.popState(); 
+                      this.unput(yy_.yytext); 
+                      // this.unput(yy_.yytext); can be used here instead of 
+                      // this.reject(); which would only work when we set the 
+                      // \`backtrack_lexer\` option 
+break;
+case 2 : 
+/*! Conditions:: PERCENT_ALLOWED INITIAL */ 
+/*! Rule::       \\s+ */ 
+ /* skip whitespace */ 
+break;
+case 3 : 
+/*! Conditions:: PERCENT_ALLOWED INITIAL */ 
+/*! Rule::       [0-9]+(\\.[0-9]+)?\\b */ 
+ this.pushState('PERCENT_ALLOWED'); 
+                      return 'NUMBER' 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: PERCENT_ALLOWED INITIAL */ 
+  /*! Rule::       $ */ 
+   4 : 'EOF',
+  /*! Conditions:: PERCENT_ALLOWED INITIAL */ 
+  /*! Rule::       . */ 
+   5 : 'CHAR'
+}`,
+  rules: [
+    {
+      re: '/^(?:%(?=\\s*(?:[^0-9)]|E\\b|PI\\b|$)))/',
+      source: '^(?:%(?=\\s*(?:[^0-9)]|E\\b|PI\\b|$)))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:%(?=\\s*(?:[^0-9)]|E\\b|PI\\b|$)))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:.)/',
+      source: '^(?:.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\s+)/',
+      source: '^(?:\\s+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\s+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:[0-9]+(\\.[0-9]+)?\\b)/',
+      source: '^(?:[0-9]+(\\.[0-9]+)?\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[0-9]+(\\.[0-9]+)?\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:$)/',
+      source: '^(?:$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:.)/',
+      source: '^(?:.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {},
+  regular_rule_count: 4,
+  simple_rule_count: 2,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

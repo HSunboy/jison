@@ -1,0 +1,488 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `this.begin('INITIAL');
+    this.unput('\\n');
+    return 'TERMINATOR'`,
+        rule: '\\n',
+        start_condition: [
+          'CALL_DIRECTIVE_STATE',
+          'SOURCE_DIRECTIVE_STATE',
+          'DEFINE_DIRECTIVE_STATE',
+          'ON_OFF_DIRECTIVE_STATE',
+          'SET_DIRECTIVE_STATE',
+          'TURN_DIRECTIVE_STATE',
+          'IF_DIRECTIVE_STATE',
+          'ELSE_DIRECTIVE_STATE',
+          'ENDIF_DIRECTIVE_STATE',
+          'ALNUM_LITERAL_STATE',
+          'CONTROL_STATEMENT_STATE',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* ignore */',
+        rule: '[ ,;]+',
+        start_condition: [
+          'CALL_DIRECTIVE_STATE',
+          'SOURCE_DIRECTIVE_STATE',
+          'DEFINE_DIRECTIVE_STATE',
+          'ON_OFF_DIRECTIVE_STATE',
+          'SET_DIRECTIVE_STATE',
+          'TURN_DIRECTIVE_STATE',
+          'IF_DIRECTIVE_STATE',
+          'ELSE_DIRECTIVE_STATE',
+          'ENDIF_DIRECTIVE_STATE',
+          'ALNUM_LITERAL_STATE',
+          'CONTROL_STATEMENT_STATE',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return DOT',
+        rule: '\\.',
+        start_condition: [
+          'CALL_DIRECTIVE_STATE',
+          'SOURCE_DIRECTIVE_STATE',
+          'DEFINE_DIRECTIVE_STATE',
+          'ON_OFF_DIRECTIVE_STATE',
+          'SET_DIRECTIVE_STATE',
+          'TURN_DIRECTIVE_STATE',
+          'IF_DIRECTIVE_STATE',
+          'ELSE_DIRECTIVE_STATE',
+          'ENDIF_DIRECTIVE_STATE',
+          'ALNUM_LITERAL_STATE',
+          'CONTROL_STATEMENT_STATE',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '#' + yytext[0].charCodeAt(0).toString(16)",
+        rule: '.',
+        start_condition: [
+          'CALL_DIRECTIVE_STATE',
+          'SOURCE_DIRECTIVE_STATE',
+          'DEFINE_DIRECTIVE_STATE',
+          'ON_OFF_DIRECTIVE_STATE',
+          'SET_DIRECTIVE_STATE',
+          'TURN_DIRECTIVE_STATE',
+          'IF_DIRECTIVE_STATE',
+          'ELSE_DIRECTIVE_STATE',
+          'ENDIF_DIRECTIVE_STATE',
+          'ALNUM_LITERAL_STATE',
+          'CONTROL_STATEMENT_STATE',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `this.begin('CALL_DIRECTIVE_STATE');
+                                return 'MARKER'`,
+        rule: '\\$',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return yytext.charCodeAt(0)',
+        rule: '.',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `yytext = {
+                                    conditionStack: this.conditionStack,
+                                    conditionsSet: Object.keys(this.conditions),
+                                };
+                                return 'EOF'`,
+        rule: '$',
+      },
+    ],
+    macros: {},
+    startConditions: {
+      CALL_DIRECTIVE_STATE: 0,
+      SOURCE_DIRECTIVE_STATE: 0,
+      DEFINE_DIRECTIVE_STATE: 0,
+      ON_OFF_DIRECTIVE_STATE: 0,
+      SET_DIRECTIVE_STATE: 0,
+      TURN_DIRECTIVE_STATE: 0,
+      IF_DIRECTIVE_STATE: 0,
+      ELSE_DIRECTIVE_STATE: 0,
+      ENDIF_DIRECTIVE_STATE: 0,
+      ALNUM_LITERAL_STATE: 0,
+      CONTROL_STATEMENT_STATE: 0,
+    },
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    CALL_DIRECTIVE_STATE: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+      ],
+      inclusive: true,
+    },
+    SOURCE_DIRECTIVE_STATE: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+      ],
+      inclusive: true,
+    },
+    DEFINE_DIRECTIVE_STATE: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+      ],
+      inclusive: true,
+    },
+    ON_OFF_DIRECTIVE_STATE: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+      ],
+      inclusive: true,
+    },
+    SET_DIRECTIVE_STATE: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+      ],
+      inclusive: true,
+    },
+    TURN_DIRECTIVE_STATE: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+      ],
+      inclusive: true,
+    },
+    IF_DIRECTIVE_STATE: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+      ],
+      inclusive: true,
+    },
+    ELSE_DIRECTIVE_STATE: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+      ],
+      inclusive: true,
+    },
+    ENDIF_DIRECTIVE_STATE: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+      ],
+      inclusive: true,
+    },
+    ALNUM_LITERAL_STATE: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+      ],
+      inclusive: true,
+    },
+    CONTROL_STATEMENT_STATE: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+      ],
+      inclusive: true,
+    },
+    INITIAL: {
+      rules: [
+        4,
+        5,
+        6,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: CALL_DIRECTIVE_STATE SOURCE_DIRECTIVE_STATE DEFINE_DIRECTIVE_STATE ON_OFF_DIRECTIVE_STATE SET_DIRECTIVE_STATE TURN_DIRECTIVE_STATE IF_DIRECTIVE_STATE ELSE_DIRECTIVE_STATE ENDIF_DIRECTIVE_STATE ALNUM_LITERAL_STATE CONTROL_STATEMENT_STATE */ 
+/*! Rule::       \\n */ 
+ this.begin('INITIAL');
+    this.unput('\\n');
+    return 'TERMINATOR' 
+break;
+case 1 : 
+/*! Conditions:: CALL_DIRECTIVE_STATE SOURCE_DIRECTIVE_STATE DEFINE_DIRECTIVE_STATE ON_OFF_DIRECTIVE_STATE SET_DIRECTIVE_STATE TURN_DIRECTIVE_STATE IF_DIRECTIVE_STATE ELSE_DIRECTIVE_STATE ENDIF_DIRECTIVE_STATE ALNUM_LITERAL_STATE CONTROL_STATEMENT_STATE */ 
+/*! Rule::       [ ,;]+ */ 
+ /* ignore */ 
+break;
+case 2 : 
+/*! Conditions:: CALL_DIRECTIVE_STATE SOURCE_DIRECTIVE_STATE DEFINE_DIRECTIVE_STATE ON_OFF_DIRECTIVE_STATE SET_DIRECTIVE_STATE TURN_DIRECTIVE_STATE IF_DIRECTIVE_STATE ELSE_DIRECTIVE_STATE ENDIF_DIRECTIVE_STATE ALNUM_LITERAL_STATE CONTROL_STATEMENT_STATE */ 
+/*! Rule::       \\. */ 
+ return DOT 
+break;
+case 3 : 
+/*! Conditions:: CALL_DIRECTIVE_STATE SOURCE_DIRECTIVE_STATE DEFINE_DIRECTIVE_STATE ON_OFF_DIRECTIVE_STATE SET_DIRECTIVE_STATE TURN_DIRECTIVE_STATE IF_DIRECTIVE_STATE ELSE_DIRECTIVE_STATE ENDIF_DIRECTIVE_STATE ALNUM_LITERAL_STATE CONTROL_STATEMENT_STATE */ 
+/*! Rule::       . */ 
+ return '#' + yy_.yytext[0].charCodeAt(0).toString(16) 
+break;
+case 4 : 
+/*! Conditions:: CALL_DIRECTIVE_STATE SOURCE_DIRECTIVE_STATE DEFINE_DIRECTIVE_STATE ON_OFF_DIRECTIVE_STATE SET_DIRECTIVE_STATE TURN_DIRECTIVE_STATE IF_DIRECTIVE_STATE ELSE_DIRECTIVE_STATE ENDIF_DIRECTIVE_STATE ALNUM_LITERAL_STATE CONTROL_STATEMENT_STATE INITIAL */ 
+/*! Rule::       \\$ */ 
+ this.begin('CALL_DIRECTIVE_STATE');
+                                return 'MARKER' 
+break;
+case 5 : 
+/*! Conditions:: CALL_DIRECTIVE_STATE SOURCE_DIRECTIVE_STATE DEFINE_DIRECTIVE_STATE ON_OFF_DIRECTIVE_STATE SET_DIRECTIVE_STATE TURN_DIRECTIVE_STATE IF_DIRECTIVE_STATE ELSE_DIRECTIVE_STATE ENDIF_DIRECTIVE_STATE ALNUM_LITERAL_STATE CONTROL_STATEMENT_STATE INITIAL */ 
+/*! Rule::       . */ 
+ return yy_.yytext.charCodeAt(0) 
+break;
+case 6 : 
+/*! Conditions:: CALL_DIRECTIVE_STATE SOURCE_DIRECTIVE_STATE DEFINE_DIRECTIVE_STATE ON_OFF_DIRECTIVE_STATE SET_DIRECTIVE_STATE TURN_DIRECTIVE_STATE IF_DIRECTIVE_STATE ELSE_DIRECTIVE_STATE ENDIF_DIRECTIVE_STATE ALNUM_LITERAL_STATE CONTROL_STATEMENT_STATE INITIAL */ 
+/*! Rule::       $ */ 
+ yy_.yytext = {
+                                    conditionStack: this.conditionStack,
+                                    conditionsSet: Object.keys(this.conditions),
+                                };
+                                return 'EOF' 
+break;
+}
+        }`,
+  caseHelperInclude: `{
+
+}`,
+  rules: [
+    {
+      re: '/^(?:\\n)/',
+      source: '^(?:\\n)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\n)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:[ ,;]+)/',
+      source: '^(?:[ ,;]+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[ ,;]+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\.)/',
+      source: '^(?:\\.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:.)/',
+      source: '^(?:.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\$)/',
+      source: '^(?:\\$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:.)/',
+      source: '^(?:.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:$)/',
+      source: '^(?:$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {},
+  regular_rule_count: 7,
+  simple_rule_count: 0,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

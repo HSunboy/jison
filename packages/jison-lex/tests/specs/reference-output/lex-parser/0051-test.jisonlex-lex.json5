@@ -1,0 +1,160 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return 11',
+        rule: 'foo',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return 12',
+        rule: 'foofoo',
+      },
+    ],
+    macros: {},
+    startConditions: {},
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+    options: {
+      flex: true,
+    },
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: true,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+        1,
+        2,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 2 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       . */ 
+ console.log("", yy_.yytext); /* \`flex\` lexing mode: the last resort rule! */ 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       foo */ 
+   0 : 11,
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       foofoo */ 
+   1 : 12
+}`,
+  rules: [
+    {
+      re: '/^(?:foo)/',
+      source: '^(?:foo)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:foo)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:foofoo)/',
+      source: '^(?:foofoo)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:foofoo)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:.)/',
+      source: '^(?:.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {},
+  regular_rule_count: 1,
+  simple_rule_count: 2,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

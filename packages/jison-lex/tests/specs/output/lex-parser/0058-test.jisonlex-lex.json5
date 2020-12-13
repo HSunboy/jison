@@ -1,0 +1,114 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return 1',
+        rule: 'foo*',
+      },
+    ],
+    macros: {},
+    startConditions: {},
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       foo* */ 
+   0 : 1
+}`,
+  rules: [
+    {
+      re: '/^(?:foo*)/',
+      source: '^(?:foo*)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:foo*)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {},
+  regular_rule_count: 0,
+  simple_rule_count: 1,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

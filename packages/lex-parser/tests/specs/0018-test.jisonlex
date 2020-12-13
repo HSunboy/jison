@@ -3,7 +3,7 @@
 //
 // ...
 //
-// test three nasty situations where we have trailing curly brace beyond the end-of-scope for the action block:
+// test these nasty situations where we have trailing curly brace beyond the end-of-scope for the action block:
 //
 
 %%

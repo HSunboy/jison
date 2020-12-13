@@ -1,0 +1,270 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'PATHOLOGICAL_CASE_HIT'",
+        rule: '<x>',
+        start_condition: [
+          'ALT',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "popState();\n\t\t\t\t\t\t\t\treturn 'SWITCHING_TO_INITIAL_CONTEXT'",
+        rule: 'a',
+        start_condition: [
+          'ALT',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `pushState('ALT');
+								return 'SWITCHING_TO_ALT_CONTEXT'`,
+        rule: 'a',
+        start_condition: [
+          'INITIAL',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'SPACE'",
+        rule: '\\s',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'CHAR'",
+        rule: '.',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'EOF'",
+        rule: '$',
+      },
+    ],
+    macros: {},
+    startConditions: {
+      ALT: 0,
+    },
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    ALT: {
+      rules: [
+        0,
+        1,
+        3,
+        4,
+        5,
+      ],
+      inclusive: true,
+    },
+    INITIAL: {
+      rules: [
+        2,
+        3,
+        4,
+        5,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 1 : 
+/*! Conditions:: ALT */ 
+/*! Rule::       a */ 
+ popState();
+								return 'SWITCHING_TO_INITIAL_CONTEXT' 
+break;
+case 2 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       a */ 
+ pushState('ALT');
+								return 'SWITCHING_TO_ALT_CONTEXT' 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: ALT */ 
+  /*! Rule::       <x> */ 
+   0 : 'PATHOLOGICAL_CASE_HIT',
+  /*! Conditions:: ALT INITIAL */ 
+  /*! Rule::       \\s */ 
+   3 : 'SPACE',
+  /*! Conditions:: ALT INITIAL */ 
+  /*! Rule::       . */ 
+   4 : 'CHAR',
+  /*! Conditions:: ALT INITIAL */ 
+  /*! Rule::       $ */ 
+   5 : 'EOF'
+}`,
+  rules: [
+    {
+      re: '/^(?:<x>)/',
+      source: '^(?:<x>)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:<x>)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:a)/',
+      source: '^(?:a)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:a)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:a)/',
+      source: '^(?:a)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:a)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\s)/',
+      source: '^(?:\\s)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\s)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:.)/',
+      source: '^(?:.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:$)/',
+      source: '^(?:$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {},
+  regular_rule_count: 2,
+  simple_rule_count: 4,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

@@ -1,0 +1,821 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* ignore comment*/',
+        rule: '\\/\\/.*',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* ignore c-style comment*/',
+        rule: '\\/\\*.*',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* skip whitespace */',
+        rule: '\\s+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NULLTOKEN'",
+        rule: 'null',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'TRUETOKEN'",
+        rule: 'true',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'FALSETOKEN'",
+        rule: 'false',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'VAR'",
+        rule: 'var',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'WITH'",
+        rule: 'with',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'SWITCH'",
+        rule: 'switch',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'FUNCTION'",
+        rule: 'function',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'DEBUGGER'",
+        rule: 'debugger',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'IDENT'",
+        rule: '{id}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NUMBER'",
+        rule: '{digit}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "yytext = yytext.substr(1,yyleng-2); return 'STRING'",
+        rule: `"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*"`,
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '/'",
+        rule: '\\/',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'DIVEQUAL'",
+        rule: '\\/=',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '='",
+        rule: '=',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return ';'",
+        rule: ';',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return ','",
+        rule: ',',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '.'",
+        rule: '\\.',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '('",
+        rule: '\\(',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return ')'",
+        rule: '\\)',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '['",
+        rule: '\\[',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return ']'",
+        rule: '\\]',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'OPENBRACE'",
+        rule: '\\{',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'CLOSEBRACE'",
+        rule: '\\}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'EOF'",
+        rule: '$',
+      },
+    ],
+    macros: {
+      digit: '[0-9]',
+      id: '[a-zA-Z_\\$][a-zA-Z0-9_\\$]*',
+      esc: '\\\\',
+    },
+    startConditions: {},
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\/\\/.* */ 
+ /* ignore comment*/ 
+break;
+case 1 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\/\\*.* */ 
+ /* ignore c-style comment*/ 
+break;
+case 2 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\s+ */ 
+ /* skip whitespace */ 
+break;
+case 13 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       "(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*" */ 
+ yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 'STRING' 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       null */ 
+   3 : 'NULLTOKEN',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       true */ 
+   4 : 'TRUETOKEN',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       false */ 
+   5 : 'FALSETOKEN',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       var */ 
+   6 : 'VAR',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       with */ 
+   7 : 'WITH',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       switch */ 
+   8 : 'SWITCH',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       function */ 
+   9 : 'FUNCTION',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       debugger */ 
+   10 : 'DEBUGGER',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       {id} */ 
+   11 : 'IDENT',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       {digit} */ 
+   12 : 'NUMBER',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\/ */ 
+   14 : '/',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\/= */ 
+   15 : 'DIVEQUAL',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       = */ 
+   16 : '=',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       ; */ 
+   17 : ';',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       , */ 
+   18 : ',',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\. */ 
+   19 : '.',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\( */ 
+   20 : '(',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\) */ 
+   21 : ')',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\[ */ 
+   22 : '[',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\] */ 
+   23 : ']',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\{ */ 
+   24 : 'OPENBRACE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\} */ 
+   25 : 'CLOSEBRACE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       $ */ 
+   26 : 'EOF'
+}`,
+  rules: [
+    {
+      re: '/^(?:\\/\\/.*)/',
+      source: '^(?:\\/\\/.*)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\/\\/.*)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\/\\*.*)/',
+      source: '^(?:\\/\\*.*)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\/\\*.*)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\s+)/',
+      source: '^(?:\\s+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\s+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:null)/',
+      source: '^(?:null)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:null)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:true)/',
+      source: '^(?:true)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:true)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:false)/',
+      source: '^(?:false)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:false)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:var)/',
+      source: '^(?:var)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:var)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:with)/',
+      source: '^(?:with)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:with)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:switch)/',
+      source: '^(?:switch)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:switch)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:function)/',
+      source: '^(?:function)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:function)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:debugger)/',
+      source: '^(?:debugger)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:debugger)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([a-zA-Z_\\$][a-zA-Z0-9_\\$]*))/',
+      source: '^(?:([a-zA-Z_\\$][a-zA-Z0-9_\\$]*))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([a-zA-Z_\\$][a-zA-Z0-9_\\$]*))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([0-9]))/',
+      source: '^(?:([0-9]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([0-9]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: `/^(?:"(?:(\\\\)[\\"bfnrt/\\\\]|(\\\\)u[a-fA-F0-9]{4}|[^\\"\\\\])*")/`,
+      source: `^(?:"(?:(\\\\)[\\"bfnrt/\\\\]|(\\\\)u[a-fA-F0-9]{4}|[^\\"\\\\])*")`,
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: `^(?:"(?:(\\\\)[\\"bfnrt/\\\\]|(\\\\)u[a-fA-F0-9]{4}|[^\\"\\\\])*")`,
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\/)/',
+      source: '^(?:\\/)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\/)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\/=)/',
+      source: '^(?:\\/=)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\/=)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:=)/',
+      source: '^(?:=)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:=)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:;)/',
+      source: '^(?:;)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:;)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:,)/',
+      source: '^(?:,)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:,)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\.)/',
+      source: '^(?:\\.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\()/',
+      source: '^(?:\\()',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\()',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\))/',
+      source: '^(?:\\))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\[)/',
+      source: '^(?:\\[)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\[)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\])/',
+      source: '^(?:\\])',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\])',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\{)/',
+      source: '^(?:\\{)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\{)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\})/',
+      source: '^(?:\\})',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\})',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:$)/',
+      source: '^(?:$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {
+    digit: {
+      in_set: '\\d',
+      elsewhere: '[0-9]',
+      raw: '[0-9]',
+    },
+    id: {
+      in_set: {
+        message: '[macro [id] is unsuitable for use inside regex set expressions: "[[a-zA-Z_\\$][a-zA-Z0-9_\\$]*]"]',
+        name: 'Error',
+      },
+      elsewhere: '[a-zA-Z_\\$][a-zA-Z0-9_\\$]*',
+      raw: '[a-zA-Z_\\$][a-zA-Z0-9_\\$]*',
+    },
+    esc: {
+      in_set: '\\\\',
+      elsewhere: '\\\\',
+      raw: '\\\\',
+    },
+  },
+  regular_rule_count: 4,
+  simple_rule_count: 23,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

@@ -1,0 +1,316 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* skip whitespace */',
+        rule: '\\s+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ID'",
+        rule: 'a',
+        start_condition: [
+          'MLC',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `this.begin("MLC"); /* corrected... */ 
+                        return ';'`,
+        rule: ';',
+        start_condition: [
+          'INITIAL',
+          'MLC',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ERROR'",
+        rule: '.',
+      },
+    ],
+    moduleInclude: `// feature of the GH fork: specify your own main.
+//
+// compile with
+// 
+//      jison -o test.js --main that/will/be/me.jison
+//
+// then run
+//
+//      node ./test.js
+//
+// to see the output.
+
+var assert = require("assert");
+
+function buggerit() {
+    // set up an aborting error handler which does not throw an exception
+    // but returns a special parse 'result' instead:
+    var errmsg = null;
+    var errReturnValue = '@@@';
+    parser.yy.parseError = function (msg, hash) {
+        console.log("ERROR: ", msg);
+        errmsg = msg;
+        return errReturnValue + (hash.parser ? hash.value_stack.slice(0, hash.stack_pointer).join('.') : '???');
+    };
+
+    var rv = parser.parse(';aa;');
+    console.log("test #1: ';aa;' ==> ", rv);
+    assert.equal(rv, '@@@.;.a.a.;');
+
+    rv = parser.parse(';;a;');
+    console.log("test #2: ';;a;' ==> ", rv);
+    assert.equal(rv, '@@@.;.;.a.;');
+
+    console.log("\\nAnd now the failing inputs: even these deliver a result:\\n");
+
+    rv = parser.parse('a;');
+    console.log("test #3: 'a;' ==> ", rv);
+    assert.equal(rv, '@@@');
+
+    rv = parser.parse('a');
+    console.log("test #4: 'a' ==> ", rv);
+    assert.equal(rv, '@@@');
+
+    rv = parser.parse('b');
+    console.log("test #5: 'b' ==> ", rv);
+    assert.equal(rv, '@@@');
+
+    // if you get past the assert(), you're good.
+    console.log("tested OK");
+}`,
+    macros: {},
+    startConditions: {
+      MLC: 1,
+    },
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    MLC: {
+      rules: [
+        1,
+        2,
+      ],
+      inclusive: false,
+    },
+    INITIAL: {
+      rules: [
+        0,
+        2,
+        3,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\s+ */ 
+ /* skip whitespace */ 
+break;
+case 2 : 
+/*! Conditions:: INITIAL MLC */ 
+/*! Rule::       ; */ 
+ this.begin("MLC"); /* corrected... */ 
+                        return ';' 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: MLC */ 
+  /*! Rule::       a */ 
+   1 : 'ID',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       . */ 
+   3 : 'ERROR'
+}`,
+  rules: [
+    {
+      re: '/^(?:\\s+)/',
+      source: '^(?:\\s+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\s+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:a)/',
+      source: '^(?:a)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:a)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:;)/',
+      source: '^(?:;)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:;)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:.)/',
+      source: '^(?:.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {},
+  regular_rule_count: 2,
+  simple_rule_count: 2,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: `
+
+
+
+// feature of the GH fork: specify your own main.
+//
+// compile with
+// 
+//      jison -o test.js --main that/will/be/me.jison
+//
+// then run
+//
+//      node ./test.js
+//
+// to see the output.
+
+var assert = require("assert");
+
+function buggerit() {
+    // set up an aborting error handler which does not throw an exception
+    // but returns a special parse 'result' instead:
+    var errmsg = null;
+    var errReturnValue = '@@@';
+    parser.yy.parseError = function (msg, hash) {
+        console.log("ERROR: ", msg);
+        errmsg = msg;
+        return errReturnValue + (hash.parser ? hash.value_stack.slice(0, hash.stack_pointer).join('.') : '???');
+    };
+
+    var rv = parser.parse(';aa;');
+    console.log("test #1: ';aa;' ==> ", rv);
+    assert.equal(rv, '@@@.;.a.a.;');
+
+    rv = parser.parse(';;a;');
+    console.log("test #2: ';;a;' ==> ", rv);
+    assert.equal(rv, '@@@.;.;.a.;');
+
+    console.log("\\nAnd now the failing inputs: even these deliver a result:\\n");
+
+    rv = parser.parse('a;');
+    console.log("test #3: 'a;' ==> ", rv);
+    assert.equal(rv, '@@@');
+
+    rv = parser.parse('a');
+    console.log("test #4: 'a' ==> ", rv);
+    assert.equal(rv, '@@@');
+
+    rv = parser.parse('b');
+    console.log("test #5: 'b' ==> ", rv);
+    assert.equal(rv, '@@@');
+
+    // if you get past the assert(), you're good.
+    console.log("tested OK");
+}`,
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

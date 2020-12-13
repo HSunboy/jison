@@ -1,0 +1,217 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'IDENT'",
+        rule: '{id}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NUMBER'",
+        rule: '{digit}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "yytext = yytext.substr(1,yyleng-2); return 'STRING'",
+        rule: `"(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*",`,
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'EOF'",
+        rule: '$',
+      },
+    ],
+    macros: {
+      digit: '[0-9]',
+      id: '[a-zA-Z_\\$][a-zA-Z0-9_\\$]*',
+      esc: '\\\\',
+    },
+    startConditions: {},
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 2 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       "(?:{esc}[\\"bfnrt/{esc}]|{esc}u[a-fA-F0-9]{4}|[^\\"{esc}])*", */ 
+ yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 'STRING' 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       {id} */ 
+   0 : 'IDENT',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       {digit} */ 
+   1 : 'NUMBER',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       $ */ 
+   3 : 'EOF'
+}`,
+  rules: [
+    {
+      re: '/^(?:([a-zA-Z_\\$][a-zA-Z0-9_\\$]*))/',
+      source: '^(?:([a-zA-Z_\\$][a-zA-Z0-9_\\$]*))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([a-zA-Z_\\$][a-zA-Z0-9_\\$]*))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([0-9]))/',
+      source: '^(?:([0-9]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([0-9]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: `/^(?:"(?:(\\\\)[\\"bfnrt/\\\\]|(\\\\)u[a-fA-F0-9]{4}|[^\\"\\\\])*",)/`,
+      source: `^(?:"(?:(\\\\)[\\"bfnrt/\\\\]|(\\\\)u[a-fA-F0-9]{4}|[^\\"\\\\])*",)`,
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: `^(?:"(?:(\\\\)[\\"bfnrt/\\\\]|(\\\\)u[a-fA-F0-9]{4}|[^\\"\\\\])*",)`,
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:$)/',
+      source: '^(?:$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {
+    digit: {
+      in_set: '\\d',
+      elsewhere: '[0-9]',
+      raw: '[0-9]',
+    },
+    id: {
+      in_set: {
+        message: '[macro [id] is unsuitable for use inside regex set expressions: "[[a-zA-Z_\\$][a-zA-Z0-9_\\$]*]"]',
+        name: 'Error',
+      },
+      elsewhere: '[a-zA-Z_\\$][a-zA-Z0-9_\\$]*',
+      raw: '[a-zA-Z_\\$][a-zA-Z0-9_\\$]*',
+    },
+    esc: {
+      in_set: '\\\\',
+      elsewhere: '\\\\',
+      raw: '\\\\',
+    },
+  },
+  regular_rule_count: 1,
+  simple_rule_count: 3,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

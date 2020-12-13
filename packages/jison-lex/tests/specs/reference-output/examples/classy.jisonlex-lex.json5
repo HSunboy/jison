@@ -1,0 +1,969 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* ignore comment */',
+        rule: '\\/\\/.*',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'MAIN'",
+        rule: 'main',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'CLASS'",
+        rule: 'class',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'EXTENDS'",
+        rule: 'extends',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NATTYPE'",
+        rule: 'nat',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'IF'",
+        rule: 'if',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ELSE'",
+        rule: 'else',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'FOR'",
+        rule: 'for',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'PRINTNAT'",
+        rule: 'printNat',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'READNAT'",
+        rule: 'readNat',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'THIS'",
+        rule: 'this',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NEW'",
+        rule: 'new',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'VAR'",
+        rule: 'var',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NUL'",
+        rule: 'null',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NATLITERAL'",
+        rule: '{digit}+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ID'",
+        rule: '{id}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'EQUALITY'",
+        rule: '==',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ASSIGN'",
+        rule: '=',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'PLUS'",
+        rule: '\\+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'MINUS'",
+        rule: '-',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'TIMES'",
+        rule: '\\*',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'GREATER'",
+        rule: '>',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'OR'",
+        rule: '\\|\\|',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NOT'",
+        rule: '!',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'DOT'",
+        rule: '\\.',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'LBRACE'",
+        rule: '\\{',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'RBRACE'",
+        rule: '\\}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'LPAREN'",
+        rule: '\\(',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'RPAREN'",
+        rule: '\\)',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'SEMICOLON'",
+        rule: ';',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* skip whitespace */',
+        rule: '\\s+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "yyerror('Illegal character')",
+        rule: '.',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ENDOFFILE'",
+        rule: '$',
+      },
+    ],
+    macros: {
+      digit: '[0-9]',
+      id: '[a-zA-Z][a-zA-Z0-9]*',
+    },
+    startConditions: {},
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\/\\/.* */ 
+ /* ignore comment */ 
+break;
+case 30 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\s+ */ 
+ /* skip whitespace */ 
+break;
+case 31 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       . */ 
+ yy_.yyerror('Illegal character') 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       main */ 
+   1 : 'MAIN',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       class */ 
+   2 : 'CLASS',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       extends */ 
+   3 : 'EXTENDS',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       nat */ 
+   4 : 'NATTYPE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       if */ 
+   5 : 'IF',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       else */ 
+   6 : 'ELSE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       for */ 
+   7 : 'FOR',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       printNat */ 
+   8 : 'PRINTNAT',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       readNat */ 
+   9 : 'READNAT',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       this */ 
+   10 : 'THIS',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       new */ 
+   11 : 'NEW',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       var */ 
+   12 : 'VAR',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       null */ 
+   13 : 'NUL',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       {digit}+ */ 
+   14 : 'NATLITERAL',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       {id} */ 
+   15 : 'ID',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       == */ 
+   16 : 'EQUALITY',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       = */ 
+   17 : 'ASSIGN',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\+ */ 
+   18 : 'PLUS',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       - */ 
+   19 : 'MINUS',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\* */ 
+   20 : 'TIMES',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       > */ 
+   21 : 'GREATER',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\|\\| */ 
+   22 : 'OR',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       ! */ 
+   23 : 'NOT',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\. */ 
+   24 : 'DOT',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\{ */ 
+   25 : 'LBRACE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\} */ 
+   26 : 'RBRACE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\( */ 
+   27 : 'LPAREN',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\) */ 
+   28 : 'RPAREN',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       ; */ 
+   29 : 'SEMICOLON',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       $ */ 
+   32 : 'ENDOFFILE'
+}`,
+  rules: [
+    {
+      re: '/^(?:\\/\\/.*)/',
+      source: '^(?:\\/\\/.*)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\/\\/.*)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:main)/',
+      source: '^(?:main)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:main)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:class)/',
+      source: '^(?:class)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:class)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:extends)/',
+      source: '^(?:extends)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:extends)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:nat)/',
+      source: '^(?:nat)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:nat)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:if)/',
+      source: '^(?:if)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:if)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:else)/',
+      source: '^(?:else)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:else)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:for)/',
+      source: '^(?:for)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:for)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:printNat)/',
+      source: '^(?:printNat)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:printNat)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:readNat)/',
+      source: '^(?:readNat)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:readNat)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:this)/',
+      source: '^(?:this)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:this)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:new)/',
+      source: '^(?:new)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:new)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:var)/',
+      source: '^(?:var)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:var)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:null)/',
+      source: '^(?:null)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:null)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([0-9])+)/',
+      source: '^(?:([0-9])+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([0-9])+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([a-zA-Z][a-zA-Z0-9]*))/',
+      source: '^(?:([a-zA-Z][a-zA-Z0-9]*))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([a-zA-Z][a-zA-Z0-9]*))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:==)/',
+      source: '^(?:==)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:==)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:=)/',
+      source: '^(?:=)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:=)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\+)/',
+      source: '^(?:\\+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:-)/',
+      source: '^(?:-)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:-)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\*)/',
+      source: '^(?:\\*)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\*)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:>)/',
+      source: '^(?:>)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:>)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\|\\|)/',
+      source: '^(?:\\|\\|)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\|\\|)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:!)/',
+      source: '^(?:!)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:!)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\.)/',
+      source: '^(?:\\.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\{)/',
+      source: '^(?:\\{)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\{)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\})/',
+      source: '^(?:\\})',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\})',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\()/',
+      source: '^(?:\\()',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\()',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\))/',
+      source: '^(?:\\))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:;)/',
+      source: '^(?:;)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:;)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\s+)/',
+      source: '^(?:\\s+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\s+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:.)/',
+      source: '^(?:.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:$)/',
+      source: '^(?:$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {
+    digit: {
+      in_set: '\\d',
+      elsewhere: '[0-9]',
+      raw: '[0-9]',
+    },
+    id: {
+      in_set: {
+        message: '[macro [id] is unsuitable for use inside regex set expressions: "[[a-zA-Z][a-zA-Z0-9]*]"]',
+        name: 'Error',
+      },
+      elsewhere: '[a-zA-Z][a-zA-Z0-9]*',
+      raw: '[a-zA-Z][a-zA-Z0-9]*',
+    },
+  },
+  regular_rule_count: 3,
+  simple_rule_count: 30,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

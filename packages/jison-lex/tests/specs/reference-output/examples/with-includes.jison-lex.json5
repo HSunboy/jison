@@ -1,0 +1,545 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* skip whitespace */',
+        rule: '{WHITESPACE}+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `/* leading comment */  
+                
+
+
+
+// Included by Jison: includes/with-includes.returnNAT.js:
+
+// the lexer generator code will look at this action block and correctly replace the string token
+// return by a nice & fast numeric token ID, just like would've happened if this code had been sitting 
+// inside a \`%{...%}\` or \`{...}\` ACTION block:
+
+return 'NAT'
+
+// End Of Include by Jison: includes/with-includes.returnNAT.js`,
+        rule: '[{DIGITS}]+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'console.log("buggerit millenium hands and shrimp!")',
+        rule: '[{DIGITS}{ALPHA}]+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '+'",
+        rule: '\\+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '-'",
+        rule: '-',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '*'",
+        rule: '\\*',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'EOF'",
+        rule: '$',
+      },
+    ],
+    moduleInclude: `// Included by Jison: includes/with-includes.prelude2.js:
+
+// ................. include #2
+
+// End Of Include by Jison: includes/with-includes.prelude2.js
+
+
+
+
+
+
+// Included by Jison: includes/with-includes.main.js:
+
+lexer.main = function (args) {
+    if (!args[1]) {
+      console.log('Usage: ' + args[0] + ' FILE');
+      process.exit(1);
+    }
+
+    var tty = require('tty');
+    if (tty.isatty(process.stdout.fd)) {
+      console.log('not redirected');
+    }
+    else {
+      console.log('redirected');
+    }
+
+    var input_chunks = [];
+
+    function process_one_line(source) {
+      try {
+        var rv = lexer.parse(source);
+
+        process.stdout.write(JSON.stringify(rv, null, 2) + '\\n');
+      } catch (ex) {
+        process.stdout.write("Lexing error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input:\\n" + source + '\\n');
+      }
+    }
+
+    function act() {
+      // see if we got an entire line's worth from stdin already?
+      var source = input_chunks.join("").split('\\n');
+      while (source.length > 1) {
+        process_one_line(source[0]);
+        source.shift();
+      }
+      input_chunks = source;
+    }
+
+    if (args[1] === '-') {
+      // read from stdin, echo output to stdout
+      process.stdin.setEncoding('utf8');
+
+      process.stdin.on('readable', function() {
+        var chunk = process.stdin.read();
+        //console.log("chunk:", JSON.stringify(chunk, null, 2));
+        if (chunk !== null) {
+          input_chunks.push(chunk);
+          act();
+        }
+      });
+
+      process.stdin.on('end', function() {
+        input_chunks.push('\\n');
+        act();
+        process.exit(0);
+      });      
+    } else {
+      try {
+        var source = require('fs').readFileSync(require('path').normalize(args[1]), 'utf8');
+        var rv = lexer.parse(source);
+
+        process.stdout.write(JSON.stringify(rv, null, 2));
+        return +rv || 0;
+      } catch (ex) {
+        process.stdout.write("Lexing error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input file:\\n" + args[1]);
+        return 66;
+      }
+    }
+}
+
+// End Of Include by Jison: includes/with-includes.main.js`,
+    macros: {
+      DIGITS: '[0-9]',
+      ALPHA: '[a-zA-Z]|{DIGITS}',
+      SPACE: ' ',
+      WHITESPACE: '\\s',
+    },
+    startConditions: {},
+    codeSections: [
+      {
+        qualifier: 'required',
+        include: `// Included by Jison: includes/with-includes.prelude.top.js:
+
+// .................  include TOP
+
+// End Of Include by Jison: includes/with-includes.prelude.top.js`,
+      },
+      {
+        qualifier: 'init',
+        include: `// Included by Jison: includes/with-includes.prelude.init.js:
+
+// .................  include INIT
+
+// End Of Include by Jison: includes/with-includes.prelude.init.js`,
+      },
+    ],
+    importDecls: [],
+    unknownDecls: [],
+    options: {
+      ranges: true,
+    },
+    actionInclude: `// Included by Jison: includes/with-includes.prelude1.js:
+
+// ................. include #1
+
+// End Of Include by Jison: includes/with-includes.prelude1.js`,
+  },
+  codeSections: [
+    {
+      qualifier: 'required',
+      include: `// Included by Jison: includes/with-includes.prelude.top.js:
+
+// .................  include TOP
+
+// End Of Include by Jison: includes/with-includes.prelude.top.js`,
+    },
+    {
+      qualifier: 'init',
+      include: `// Included by Jison: includes/with-includes.prelude.init.js:
+
+// .................  include INIT
+
+// End Of Include by Jison: includes/with-includes.prelude.init.js`,
+    },
+  ],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: true,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            // Included by Jison: includes/with-includes.prelude1.js:
+
+// ................. include #1
+
+// End Of Include by Jison: includes/with-includes.prelude1.js
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {WHITESPACE}+ */ 
+ /* skip whitespace */ 
+break;
+case 1 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       [{DIGITS}]+ */ 
+ /* leading comment */  
+                
+
+
+
+// Included by Jison: includes/with-includes.returnNAT.js:
+
+// the lexer generator code will look at this action block and correctly replace the string token
+// return by a nice & fast numeric token ID, just like would've happened if this code had been sitting 
+// inside a \`%{...%}\` or \`{...}\` ACTION block:
+
+return 'NAT'
+
+// End Of Include by Jison: includes/with-includes.returnNAT.js 
+break;
+case 2 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       [{DIGITS}{ALPHA}]+ */ 
+ console.log("buggerit millenium hands and shrimp!") 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\+ */ 
+   3 : '+',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       - */ 
+   4 : '-',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\* */ 
+   5 : '*',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       $ */ 
+   6 : 'EOF'
+}`,
+  rules: [
+    {
+      re: '/^(?:(\\s)+)/',
+      source: '^(?:(\\s)+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:(\\s)+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:[\\d]+)/',
+      source: '^(?:[\\d]+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[\\d]+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:[\\d0-9A-Za-z]+)/',
+      source: '^(?:[\\d0-9A-Za-z]+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[\\d0-9A-Za-z]+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\+)/',
+      source: '^(?:\\+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:-)/',
+      source: '^(?:-)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:-)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\*)/',
+      source: '^(?:\\*)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\*)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:$)/',
+      source: '^(?:$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {
+    DIGITS: {
+      in_set: '\\d',
+      elsewhere: '[0-9]',
+      raw: '[0-9]',
+    },
+    ALPHA: {
+      in_set: '0-9A-Za-z',
+      elsewhere: '[a-zA-Z]|(?:[0-9])',
+      raw: '[a-zA-Z]|{DIGITS}',
+    },
+    SPACE: {
+      in_set: ' ',
+      elsewhere: ' ',
+      raw: ' ',
+    },
+    WHITESPACE: {
+      in_set: '\\s',
+      elsewhere: '\\s',
+      raw: '\\s',
+    },
+  },
+  regular_rule_count: 3,
+  simple_rule_count: 4,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: `// Included by Jison: includes/with-includes.prelude1.js:
+
+// ................. include #1
+
+// End Of Include by Jison: includes/with-includes.prelude1.js`,
+  moduleInclude: `
+
+
+
+// Included by Jison: includes/with-includes.prelude2.js:
+
+// ................. include #2
+
+// End Of Include by Jison: includes/with-includes.prelude2.js
+
+
+
+
+
+
+// Included by Jison: includes/with-includes.main.js:
+
+lexer.main = function (args) {
+    if (!args[1]) {
+      console.log('Usage: ' + args[0] + ' FILE');
+      process.exit(1);
+    }
+
+    var tty = require('tty');
+    if (tty.isatty(process.stdout.fd)) {
+      console.log('not redirected');
+    }
+    else {
+      console.log('redirected');
+    }
+
+    var input_chunks = [];
+
+    function process_one_line(source) {
+      try {
+        var rv = lexer.parse(source);
+
+        process.stdout.write(JSON.stringify(rv, null, 2) + '\\n');
+      } catch (ex) {
+        process.stdout.write("Lexing error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input:\\n" + source + '\\n');
+      }
+    }
+
+    function act() {
+      // see if we got an entire line's worth from stdin already?
+      var source = input_chunks.join("").split('\\n');
+      while (source.length > 1) {
+        process_one_line(source[0]);
+        source.shift();
+      }
+      input_chunks = source;
+    }
+
+    if (args[1] === '-') {
+      // read from stdin, echo output to stdout
+      process.stdin.setEncoding('utf8');
+
+      process.stdin.on('readable', function() {
+        var chunk = process.stdin.read();
+        //console.log("chunk:", JSON.stringify(chunk, null, 2));
+        if (chunk !== null) {
+          input_chunks.push(chunk);
+          act();
+        }
+      });
+
+      process.stdin.on('end', function() {
+        input_chunks.push('\\n');
+        act();
+        process.exit(0);
+      });      
+    } else {
+      try {
+        var source = require('fs').readFileSync(require('path').normalize(args[1]), 'utf8');
+        var rv = lexer.parse(source);
+
+        process.stdout.write(JSON.stringify(rv, null, 2));
+        return +rv || 0;
+      } catch (ex) {
+        process.stdout.write("Lexing error:\\n" + JSON.stringify(ex, null, 2) + "\\nfor input file:\\n" + args[1]);
+        return 66;
+      }
+    }
+}
+
+// End Of Include by Jison: includes/with-includes.main.js`,
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

@@ -1,0 +1,249 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'URL'",
+        rule: '(ftp|http|https)[:]\\/\\/(\\w+[:]{0,1}\\w*@)?(\\S+)([:][0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* skip whitespace */',
+        rule: '\\s+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ID'",
+        rule: '[a-zA-Z]+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'OTHER'",
+        rule: '[^a-zA-Z\\s\\r\\n]+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'MISC'",
+        rule: '.',
+      },
+    ],
+    moduleInclude: `// feature of the GH fork: specify your own main.
+//
+// compile with
+// 
+//      jison -o test.js --main that/will/be/me.jison
+//
+// then run
+//
+//      node ./test.js
+//
+// to see the output.
+
+var assert = require("assert")`,
+    macros: {},
+    startConditions: {},
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 1 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\s+ */ 
+ /* skip whitespace */ 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       (ftp|http|https)[:]\\/\\/(\\w+[:]{0,1}\\w*@)?(\\S+)([:][0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))? */ 
+   0 : 'URL',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       [a-zA-Z]+ */ 
+   2 : 'ID',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       [^a-zA-Z\\s\\r\\n]+ */ 
+   3 : 'OTHER',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       . */ 
+   4 : 'MISC'
+}`,
+  rules: [
+    {
+      re: '/^(?:(ftp|http|https)[:]\\/\\/(\\w+[:]{0,1}\\w*@)?(\\S+)([:][0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?)/',
+      source: '^(?:(ftp|http|https)[:]\\/\\/(\\w+[:]{0,1}\\w*@)?(\\S+)([:][0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:(ftp|http|https)[:]\\/\\/(\\w+[:]{0,1}\\w*@)?(\\S+)([:][0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\s+)/',
+      source: '^(?:\\s+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\s+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:[a-zA-Z]+)/',
+      source: '^(?:[a-zA-Z]+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[a-zA-Z]+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:[^a-zA-Z\\s\\r\\n]+)/',
+      source: '^(?:[^a-zA-Z\\s\\r\\n]+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[^a-zA-Z\\s\\r\\n]+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:.)/',
+      source: '^(?:.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {},
+  regular_rule_count: 1,
+  simple_rule_count: 4,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: `
+
+
+
+// feature of the GH fork: specify your own main.
+//
+// compile with
+// 
+//      jison -o test.js --main that/will/be/me.jison
+//
+// then run
+//
+//      node ./test.js
+//
+// to see the output.
+
+var assert = require("assert")`,
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

@@ -1,0 +1,274 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NL'",
+        rule: '[\\n]+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'showInfo'",
+        rule: 'showInfo',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'info'",
+        rule: 'info',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'say'",
+        rule: 'say',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'TXT'",
+        rule: ':[^#\\n;]+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'EOF'",
+        rule: '$',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'INVALID'",
+        rule: '.',
+      },
+    ],
+    macros: {},
+    startConditions: {},
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+    options: {
+      caseInsensitive: true,
+    },
+    actionInclude: '// Pre-lexer code can go here',
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: true,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            // Pre-lexer code can go here
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       [\\n]+ */ 
+   0 : 'NL',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       showInfo */ 
+   1 : 'showInfo',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       info */ 
+   2 : 'info',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       say */ 
+   3 : 'say',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       :[^#\\n;]+ */ 
+   4 : 'TXT',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       $ */ 
+   5 : 'EOF',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       . */ 
+   6 : 'INVALID'
+}`,
+  rules: [
+    {
+      re: '/^(?:[\\n]+)/i',
+      source: '^(?:[\\n]+)',
+      flags: 'i',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[\\n]+)',
+        flags: 'i',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:showInfo)/i',
+      source: '^(?:showInfo)',
+      flags: 'i',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:showInfo)',
+        flags: 'i',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:info)/i',
+      source: '^(?:info)',
+      flags: 'i',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:info)',
+        flags: 'i',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:say)/i',
+      source: '^(?:say)',
+      flags: 'i',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:say)',
+        flags: 'i',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?::[^#\\n;]+)/i',
+      source: '^(?::[^#\\n;]+)',
+      flags: 'i',
+      xregexp: {
+        captureNames: null,
+        source: '^(?::[^#\\n;]+)',
+        flags: 'i',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:$)/i',
+      source: '^(?:$)',
+      flags: 'i',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:$)',
+        flags: 'i',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:.)/i',
+      source: '^(?:.)',
+      flags: 'i',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: 'i',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {},
+  regular_rule_count: 0,
+  simple_rule_count: 7,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '// Pre-lexer code can go here',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

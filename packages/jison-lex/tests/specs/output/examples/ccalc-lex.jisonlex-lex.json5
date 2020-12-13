@@ -1,0 +1,532 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* eat up whitespace */',
+        rule: '[ \\t\\r\\n]+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "yytext = atof(yytext);\n        return 'VALUE'",
+        rule: '{DIGIT}+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "yytext = atof(yytext);\n        return 'VALUE'",
+        rule: '{DIGIT}+\\.{DIGIT}*',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "yytext = atof(yytext);\n        return 'VALUE'",
+        rule: `{DIGIT}+[eE]["+""-"]?{DIGIT}*`,
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "yytext = atof(yytext);\n        return 'VALUE'",
+        rule: `{DIGIT}+\\.{DIGIT}*[eE]["+""-"]?{DIGIT}*`,
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "// keep yytext as-is\n        return 'IDENTIFIER'",
+        rule: '{ID}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ADD'",
+        rule: '\\+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'SUB'",
+        rule: '-',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'MULT'",
+        rule: '\\*',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'DIV'",
+        rule: '\\/',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'LBRACE'",
+        rule: '\\(',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'RBRACE'",
+        rule: '\\)',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'SEMICOLON'",
+        rule: ';',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ASSIGN'",
+        rule: '=',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return yytext',
+        rule: '.',
+      },
+    ],
+    moduleInclude: `/*--------------------------------------------------------------------
+ * lex.l
+ *------------------------------------------------------------------*/
+
+function atof(str) {
+    return Number(str);
+}`,
+    macros: {
+      DIGIT: '[0-9]',
+      ID: '[_a-zA-Z][_a-zA-Z0-9]*',
+    },
+    startConditions: {},
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+    actionInclude: '// no special init code',
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            // no special init code
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       [ \\t\\r\\n]+ */ 
+ /* eat up whitespace */ 
+break;
+case 1 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {DIGIT}+ */ 
+ yy_.yytext = atof(yy_.yytext);
+        return 'VALUE' 
+break;
+case 2 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {DIGIT}+\\.{DIGIT}* */ 
+ yy_.yytext = atof(yy_.yytext);
+        return 'VALUE' 
+break;
+case 3 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {DIGIT}+[eE]["+""-"]?{DIGIT}* */ 
+ yy_.yytext = atof(yy_.yytext);
+        return 'VALUE' 
+break;
+case 4 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {DIGIT}+\\.{DIGIT}*[eE]["+""-"]?{DIGIT}* */ 
+ yy_.yytext = atof(yy_.yytext);
+        return 'VALUE' 
+break;
+case 5 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {ID} */ 
+ // keep yy_.yytext as-is
+        return 'IDENTIFIER' 
+break;
+case 14 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       . */ 
+ return yy_.yytext 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\+ */ 
+   6 : 'ADD',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       - */ 
+   7 : 'SUB',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\* */ 
+   8 : 'MULT',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\/ */ 
+   9 : 'DIV',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\( */ 
+   10 : 'LBRACE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\) */ 
+   11 : 'RBRACE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       ; */ 
+   12 : 'SEMICOLON',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       = */ 
+   13 : 'ASSIGN'
+}`,
+  rules: [
+    {
+      re: '/^(?:[ \\t\\r\\n]+)/',
+      source: '^(?:[ \\t\\r\\n]+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[ \\t\\r\\n]+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([0-9])+)/',
+      source: '^(?:([0-9])+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([0-9])+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([0-9])+\\.([0-9])*)/',
+      source: '^(?:([0-9])+\\.([0-9])*)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([0-9])+\\.([0-9])*)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: `/^(?:([0-9])+[eE]["+""-"]?([0-9])*)/`,
+      source: `^(?:([0-9])+[eE]["+""-"]?([0-9])*)`,
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: `^(?:([0-9])+[eE]["+""-"]?([0-9])*)`,
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: `/^(?:([0-9])+\\.([0-9])*[eE]["+""-"]?([0-9])*)/`,
+      source: `^(?:([0-9])+\\.([0-9])*[eE]["+""-"]?([0-9])*)`,
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: `^(?:([0-9])+\\.([0-9])*[eE]["+""-"]?([0-9])*)`,
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([_a-zA-Z][_a-zA-Z0-9]*))/',
+      source: '^(?:([_a-zA-Z][_a-zA-Z0-9]*))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([_a-zA-Z][_a-zA-Z0-9]*))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\+)/',
+      source: '^(?:\\+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:-)/',
+      source: '^(?:-)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:-)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\*)/',
+      source: '^(?:\\*)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\*)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\/)/',
+      source: '^(?:\\/)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\/)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\()/',
+      source: '^(?:\\()',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\()',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\))/',
+      source: '^(?:\\))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:;)/',
+      source: '^(?:;)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:;)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:=)/',
+      source: '^(?:=)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:=)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:.)/',
+      source: '^(?:.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {
+    DIGIT: {
+      in_set: '\\d',
+      elsewhere: '[0-9]',
+      raw: '[0-9]',
+    },
+    ID: {
+      in_set: {
+        message: '[macro [ID] is unsuitable for use inside regex set expressions: "[[_a-zA-Z][_a-zA-Z0-9]*]"]',
+        name: 'Error',
+      },
+      elsewhere: '[_a-zA-Z][_a-zA-Z0-9]*',
+      raw: '[_a-zA-Z][_a-zA-Z0-9]*',
+    },
+  },
+  regular_rule_count: 7,
+  simple_rule_count: 8,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '// no special init code',
+  moduleInclude: `
+
+
+
+/*--------------------------------------------------------------------
+ * lex.l
+ *------------------------------------------------------------------*/
+
+function atof(str) {
+    return Number(str);
+}`,
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

@@ -1,0 +1,217 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "this.begin('FUNCTION_STATE');\n    return yytext.charCodeAt(0)",
+        rule: '.',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `yytext = {
+                                    conditionStack: this.conditionStack,
+                                    conditionsSet: Object.keys(this.conditions),
+                                };
+                                return 'EOF'`,
+        rule: '$',
+      },
+    ],
+    macros: {},
+    startConditions: {
+      PICTURE_STATE: 0,
+      FUNCTION_STATE: 0,
+      A: 0,
+      B: 0,
+      C: 0,
+      D: 1,
+      E: 1,
+      FOOBAR: 1,
+      G7: 1,
+      _8bit: 1,
+    },
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    PICTURE_STATE: {
+      rules: [
+        0,
+        1,
+      ],
+      inclusive: true,
+    },
+    FUNCTION_STATE: {
+      rules: [
+        0,
+        1,
+      ],
+      inclusive: true,
+    },
+    A: {
+      rules: [
+        0,
+        1,
+      ],
+      inclusive: true,
+    },
+    B: {
+      rules: [
+        0,
+        1,
+      ],
+      inclusive: true,
+    },
+    C: {
+      rules: [
+        0,
+        1,
+      ],
+      inclusive: true,
+    },
+    D: {
+      rules: [],
+      inclusive: false,
+    },
+    E: {
+      rules: [],
+      inclusive: false,
+    },
+    FOOBAR: {
+      rules: [],
+      inclusive: false,
+    },
+    G7: {
+      rules: [],
+      inclusive: false,
+    },
+    _8bit: {
+      rules: [],
+      inclusive: false,
+    },
+    INITIAL: {
+      rules: [
+        0,
+        1,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: PICTURE_STATE FUNCTION_STATE A B C INITIAL */ 
+/*! Rule::       . */ 
+ this.begin('FUNCTION_STATE');
+    return yy_.yytext.charCodeAt(0) 
+break;
+case 1 : 
+/*! Conditions:: PICTURE_STATE FUNCTION_STATE A B C INITIAL */ 
+/*! Rule::       $ */ 
+ yy_.yytext = {
+                                    conditionStack: this.conditionStack,
+                                    conditionsSet: Object.keys(this.conditions),
+                                };
+                                return 'EOF' 
+break;
+}
+        }`,
+  caseHelperInclude: `{
+
+}`,
+  rules: [
+    {
+      re: '/^(?:.)/',
+      source: '^(?:.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:$)/',
+      source: '^(?:$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {},
+  regular_rule_count: 2,
+  simple_rule_count: 0,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

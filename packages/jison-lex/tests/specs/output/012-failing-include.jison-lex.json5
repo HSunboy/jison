@@ -1,0 +1,68 @@
+{
+  error: {
+    message: `Lexical error on line 5: 
+unsupported lexer input: “.”
+while lexing in “options” state.
+
+If this input was intentional, you might want to put quotes around
+it; any JavaScript string quoting style is accepted (single quotes,
+double quotes *or* backtick quotes a la ES6 string templates).
+
+  Erroneous area:
+2: // ...
+3: //
+4: 
+5: %include bugger-it-millenium-hands-and-shrimp.js
+^...............................................^
+6: 
+7: %%
+`,
+    type: 'JisonLexerError',
+    stack: `JisonLexerError: Lexical error on line 5: 
+unsupported lexer input: “.”
+while lexing in “options” state.
+
+If this input was intentional, you might want to put quotes around
+it; any JavaScript string quoting style is accepted (single quotes,
+double quotes *or* backtick quotes a la ES6 string templates).
+
+  Erroneous area:
+2: // ...
+3: //
+4: 
+5: %include bugger-it-millenium-hands-and-shrimp.js
+^...............................................^
+6: 
+7: %%
+
+    at Object.parseError (/regexp-lexer-cjs.js:8009:15)
+    at Object.lexer_parseError [as parseError] (/regexp-lexer-cjs.js:10152:50)
+    at Object.yyError [as yyerror] (/regexp-lexer-cjs.js:10179:22)
+    at Object.lexer__performAction [as performAction] (/regexp-lexer-cjs.js:12244:6)
+    at Object.lexer_test_match [as test_match] (/regexp-lexer-cjs.js:11113:40)
+    at Object.lexer_next [as next] (/regexp-lexer-cjs.js:11213:34)
+    at Object.lexer_lex [as lex] (/regexp-lexer-cjs.js:11328:22)
+    at stdLex (/regexp-lexer-cjs.js:8576:27)
+    at Object.parse (/regexp-lexer-cjs.js:8773:30)
+    at Object.yyparse [as parse] (/regexp-lexer-cjs.js:13065:25)
+    at autodetectAndConvertToJSONformat (/regexp-lexer-cjs.js:14305:35)
+    at processGrammar (/regexp-lexer-cjs.js:17656:12)
+    at test_me (/regexp-lexer-cjs.js:15394:23)
+    at new RegExpLexer (/regexp-lexer-cjs.js:15535:17)
+    at Context.testEachLexerExample (/regexplexer.js:3707:25)
+    at callFn (/runnable.js:364:21)
+    at Test.Runnable.run (/runnable.js:352:5)
+    at Runner.runTest (/runner.js:677:10)
+    at /runner.js:801:12
+    at next (/runner.js:594:14)
+    at /runner.js:604:7
+    at next (/runner.js:486:14)
+    at cbHookRun (/runner.js:551:7)
+    at done (/runnable.js:308:5)
+    at callFn (/runnable.js:387:7)
+    at Hook.Runnable.run (/runnable.js:352:5)
+    at next (/runner.js:510:10)
+    at Immediate._onImmediate (/runner.js:572:5)
+    at processImmediate (/timers.js:456:21)`,
+  },
+}

@@ -1,0 +1,622 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'IF'",
+        rule: 'if',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ELSE'",
+        rule: 'else',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'PRINT'",
+        rule: 'print',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'COLON'",
+        rule: ':',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `this.begin('EXPR'); return 'LPAREN'`,
+        rule: '\\(',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "this.popState(); return 'RPAREN'",
+        rule: '\\)',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "yytext = yytext.substr(1,yyleng-2); return 'STRING'",
+        rule: `"[^\\"]*"|'[^\\']*'`,
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'PLUS'",
+        rule: '\\+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'MINUS'",
+        rule: '-',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ID'",
+        rule: '{id}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NATLITERAL'",
+        rule: '\\d+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return "ENDOFFILE"',
+        rule: '$',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `// remaining DEDENTs implied by EOF, regardless of tabs/spaces
+					var tokens = [];
+				
+					while (0 < _iemitstack[0]) {
+						this.popState();
+						tokens.unshift("DEDENT");
+						_iemitstack.shift();
+					}
+				    
+					if (tokens.length) return tokens`,
+        rule: '\\s*$',
+        start_condition: [
+          'INITIAL',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* eat blank lines */',
+        rule: '[\\n\\r]+{spc}*(?![^\\n\\r])',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `var indentation = yyleng - yytext.search(/\\s/) - 1;
+					if (indentation > _iemitstack[0]) {
+						_iemitstack.unshift(indentation);
+						return 'INDENT';
+					}
+				
+					var tokens = [];
+				
+					while (indentation < _iemitstack[0]) {
+						this.popState();
+						tokens.unshift("DEDENT");
+						_iemitstack.shift();
+					}
+					if (tokens.length) return tokens`,
+        rule: '[\\n\\r]{spc}*',
+        start_condition: [
+          'INITIAL',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* ignore all other whitespace */',
+        rule: '{spc}+',
+      },
+    ],
+    moduleInclude: '/* initialize the pseudo-token stack with 0 indents */\n_iemitstack = [0]',
+    macros: {
+      id: '[a-zA-Z_][a-zA-Z0-9_]*',
+      spc: '[\\t \\u00a0\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u200b\\u2028\\u2029\\u3000]',
+    },
+    startConditions: {
+      EXPR: 0,
+    },
+    codeSections: [
+      {
+        qualifier: 'init',
+        include: 'let _iemitstack',
+      },
+    ],
+    importDecls: [],
+    unknownDecls: [],
+  },
+  codeSections: [
+    {
+      qualifier: 'init',
+      include: 'let _iemitstack',
+    },
+  ],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    EXPR: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13,
+        15,
+      ],
+      inclusive: true,
+    },
+    INITIAL: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 4 : 
+/*! Conditions:: EXPR INITIAL */ 
+/*! Rule::       \\( */ 
+ this.begin('EXPR'); return 'LPAREN' 
+break;
+case 5 : 
+/*! Conditions:: EXPR INITIAL */ 
+/*! Rule::       \\) */ 
+ this.popState(); return 'RPAREN' 
+break;
+case 6 : 
+/*! Conditions:: EXPR INITIAL */ 
+/*! Rule::       "[^\\"]*"|'[^\\']*' */ 
+ yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 'STRING' 
+break;
+case 12 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\s*$ */ 
+ // remaining DEDENTs implied by EOF, regardless of tabs/spaces
+					var tokens = [];
+				
+					while (0 < _iemitstack[0]) {
+						this.popState();
+						tokens.unshift("DEDENT");
+						_iemitstack.shift();
+					}
+				    
+					if (tokens.length) return tokens 
+break;
+case 13 : 
+/*! Conditions:: EXPR INITIAL */ 
+/*! Rule::       [\\n\\r]+{spc}*(?![^\\n\\r]) */ 
+ /* eat blank lines */ 
+break;
+case 14 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       [\\n\\r]{spc}* */ 
+ var indentation = yy_.yyleng - yy_.yytext.search(/\\s/) - 1;
+					if (indentation > _iemitstack[0]) {
+						_iemitstack.unshift(indentation);
+						return 'INDENT';
+					}
+				
+					var tokens = [];
+				
+					while (indentation < _iemitstack[0]) {
+						this.popState();
+						tokens.unshift("DEDENT");
+						_iemitstack.shift();
+					}
+					if (tokens.length) return tokens 
+break;
+case 15 : 
+/*! Conditions:: EXPR INITIAL */ 
+/*! Rule::       {spc}+ */ 
+ /* ignore all other whitespace */ 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: EXPR INITIAL */ 
+  /*! Rule::       if */ 
+   0 : 'IF',
+  /*! Conditions:: EXPR INITIAL */ 
+  /*! Rule::       else */ 
+   1 : 'ELSE',
+  /*! Conditions:: EXPR INITIAL */ 
+  /*! Rule::       print */ 
+   2 : 'PRINT',
+  /*! Conditions:: EXPR INITIAL */ 
+  /*! Rule::       : */ 
+   3 : 'COLON',
+  /*! Conditions:: EXPR INITIAL */ 
+  /*! Rule::       \\+ */ 
+   7 : 'PLUS',
+  /*! Conditions:: EXPR INITIAL */ 
+  /*! Rule::       - */ 
+   8 : 'MINUS',
+  /*! Conditions:: EXPR INITIAL */ 
+  /*! Rule::       {id} */ 
+   9 : 'ID',
+  /*! Conditions:: EXPR INITIAL */ 
+  /*! Rule::       \\d+ */ 
+   10 : 'NATLITERAL',
+  /*! Conditions:: EXPR INITIAL */ 
+  /*! Rule::       $ */ 
+   11 : 'ENDOFFILE'
+}`,
+  rules: [
+    {
+      re: '/^(?:if)/',
+      source: '^(?:if)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:if)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:else)/',
+      source: '^(?:else)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:else)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:print)/',
+      source: '^(?:print)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:print)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?::)/',
+      source: '^(?::)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?::)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\()/',
+      source: '^(?:\\()',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\()',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\))/',
+      source: '^(?:\\))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: `/^(?:"[^\\"]*"|'[^\\']*')/`,
+      source: `^(?:"[^\\"]*"|'[^\\']*')`,
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: `^(?:"[^\\"]*"|'[^\\']*')`,
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\+)/',
+      source: '^(?:\\+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:-)/',
+      source: '^(?:-)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:-)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([a-zA-Z_][a-zA-Z0-9_]*))/',
+      source: '^(?:([a-zA-Z_][a-zA-Z0-9_]*))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([a-zA-Z_][a-zA-Z0-9_]*))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\d+)/',
+      source: '^(?:\\d+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\d+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:$)/',
+      source: '^(?:$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\s*$)/',
+      source: '^(?:\\s*$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\s*$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:[\\n\\r]+([\\t \\u00a0\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u200b\\u2028\\u2029\\u3000])*(?![^\\n\\r]))/',
+      source: '^(?:[\\n\\r]+([\\t \\u00a0\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u200b\\u2028\\u2029\\u3000])*(?![^\\n\\r]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[\\n\\r]+([\\t \\u00a0\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u200b\\u2028\\u2029\\u3000])*(?![^\\n\\r]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:[\\n\\r]([\\t \\u00a0\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u200b\\u2028\\u2029\\u3000])*)/',
+      source: '^(?:[\\n\\r]([\\t \\u00a0\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u200b\\u2028\\u2029\\u3000])*)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[\\n\\r]([\\t \\u00a0\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u200b\\u2028\\u2029\\u3000])*)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([\\t \\u00a0\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u200b\\u2028\\u2029\\u3000])+)/',
+      source: '^(?:([\\t \\u00a0\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u200b\\u2028\\u2029\\u3000])+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([\\t \\u00a0\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u200b\\u2028\\u2029\\u3000])+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {
+    id: {
+      in_set: {
+        message: '[macro [id] is unsuitable for use inside regex set expressions: "[[a-zA-Z_][a-zA-Z0-9_]*]"]',
+        name: 'Error',
+      },
+      elsewhere: '[a-zA-Z_][a-zA-Z0-9_]*',
+      raw: '[a-zA-Z_][a-zA-Z0-9_]*',
+    },
+    spc: {
+      in_set: '\\t   -​\\u2028\\u2029　',
+      elsewhere: '[\\t \\u00a0\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u200b\\u2028\\u2029\\u3000]',
+      raw: '[\\t \\u00a0\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u200b\\u2028\\u2029\\u3000]',
+    },
+  },
+  regular_rule_count: 7,
+  simple_rule_count: 9,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: `
+
+
+
+/* initialize the pseudo-token stack with 0 indents */
+_iemitstack = [0]`,
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

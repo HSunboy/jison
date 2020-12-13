@@ -1,0 +1,2284 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(AND)',
+        rule: '{A}{N}{D}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(ARRAY)',
+        rule: '{A}{R}{R}{A}{Y}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(CASE)',
+        rule: '{C}{A}{S}{E}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(CONST)',
+        rule: '{C}{O}{N}{S}{T}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(DIV)',
+        rule: '{D}{I}{V}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(DO)',
+        rule: '{D}{O}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(DOWNTO)',
+        rule: '{D}{O}{W}{N}{T}{O}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(ELSE)',
+        rule: '{E}{L}{S}{E}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(END)',
+        rule: '{E}{N}{D}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(EXTERNAL)',
+        rule: '{E}{X}{T}{E}{R}{N}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(EXTERNAL)',
+        rule: '{E}{X}{T}{E}{R}{N}{A}{L}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(FOR)',
+        rule: '{F}{O}{R}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(FORWARD)',
+        rule: '{F}{O}{R}{W}{A}{R}{D}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(FUNCTION)',
+        rule: '{F}{U}{N}{C}{T}{I}{O}{N}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(GOTO)',
+        rule: '{G}{O}{T}{O}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(IF)',
+        rule: '{I}{F}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(IN)',
+        rule: '{I}{N}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(LABEL)',
+        rule: '{L}{A}{B}{E}{L}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(MOD)',
+        rule: '{M}{O}{D}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(NIL)',
+        rule: '{N}{I}{L}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(NOT)',
+        rule: '{N}{O}{T}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(OF)',
+        rule: '{O}{F}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(OR)',
+        rule: '{O}{R}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(OTHERWISE)',
+        rule: '{O}{T}{H}{E}{R}{W}{I}{S}{E}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(PACKED)',
+        rule: '{P}{A}{C}{K}{E}{D}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(PBEGIN)',
+        rule: '{B}{E}{G}{I}{N}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(PFILE)',
+        rule: '{F}{I}{L}{E}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(PROCEDURE)',
+        rule: '{P}{R}{O}{C}{E}{D}{U}{R}{E}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(PROGRAM)',
+        rule: '{P}{R}{O}{G}{R}{A}{M}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(RECORD)',
+        rule: '{R}{E}{C}{O}{R}{D}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(REPEAT)',
+        rule: '{R}{E}{P}{E}{A}{T}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(SET)',
+        rule: '{S}{E}{T}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(THEN)',
+        rule: '{T}{H}{E}{N}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(TO)',
+        rule: '{T}{O}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(TYPE)',
+        rule: '{T}{Y}{P}{E}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(UNTIL)',
+        rule: '{U}{N}{T}{I}{L}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(VAR)',
+        rule: '{V}{A}{R}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(WHILE)',
+        rule: '{W}{H}{I}{L}{E}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(WITH)',
+        rule: '{W}{I}{T}{H}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(IDENTIFIER)',
+        rule: '[a-zA-Z]([a-zA-Z0-9])+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(ASSIGNMENT)',
+        rule: ':=',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(CHARACTER_STRING)',
+        rule: '\\(\\{NQUOTE\\}\\|\\)\\+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(COLON)',
+        rule: ':',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(COMMA)',
+        rule: ',',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(DIGSEQ)',
+        rule: '[0-9]+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(DOT)',
+        rule: '\\.',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(DOTDOT)',
+        rule: '\\.\\.',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(EQUAL)',
+        rule: '=',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(GE)',
+        rule: '>=',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(GT)',
+        rule: '>',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(LBRAC)',
+        rule: '\\[',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(LE)',
+        rule: '<=',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(LPAREN)',
+        rule: '\\(',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(LT)',
+        rule: '<',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(MINUS)',
+        rule: '-',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(NOTEQUAL)',
+        rule: '<>',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(PLUS)',
+        rule: '\\+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(RBRAC)',
+        rule: '\\]',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(REALNUMBER)',
+        rule: '[0-9]+\\.[0-9]+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(RPAREN)',
+        rule: '\\)',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(SEMICOLON)',
+        rule: ';',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(SLASH)',
+        rule: '\\/',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(STAR)',
+        rule: '\\*',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(STARSTAR)',
+        rule: '\\*\\*',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(UPARROW)',
+        rule: '->',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return(UPARROW)',
+        rule: '\\^',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `var c;
+     while ((c = input()))
+     {
+      if (c == '}')
+       break;
+      else if (c == '*')
+      {
+       if ((c = input()) == ')')
+        break;
+       else
+        unput (c);
+      }
+      else if (c == '\\n')
+       line_no++;
+      else if (c == 0)
+       commenteof();
+     }`,
+        rule: '\\(\\*|\\{',
+      },
+      {
+        ast: {
+          source: '',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '',
+        rule: '[ \\t\\f]',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'line_no++',
+        rule: '\\n',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `fprintf (stderr, "'%c' (0%o): illegal charcter at line %d\\n", yytext[0], yytext[0], line_no)`,
+        rule: '.',
+      },
+    ],
+    moduleInclude: `function commenteof() {
+ fprintf (stderr, "unexpected EOF inside comment at line %d\\n", line_no);
+ exit(1);
+}
+
+function yywrap() {
+ return (1);
+}`,
+    macros: {
+      A: '[aA]',
+      B: '[bB]',
+      C: '[cC]',
+      D: '[dD]',
+      E: '[eE]',
+      F: '[fF]',
+      G: '[gG]',
+      H: '[hH]',
+      I: '[iI]',
+      J: '[jJ]',
+      K: '[kK]',
+      L: '[lL]',
+      M: '[mM]',
+      N: '[nN]',
+      O: '[oO]',
+      P: '[pP]',
+      Q: '[qQ]',
+      R: '[rR]',
+      S: '[sS]',
+      T: '[tT]',
+      U: '[uU]',
+      V: '[vV]',
+      W: '[wW]',
+      X: '[xX]',
+      Y: '[yY]',
+      Z: '[zZ]',
+      NQUOTE: "[^']",
+    },
+    startConditions: {},
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+    actionInclude: `/*
+ * scan.l
+ *
+ * lex input file for pascal scanner
+ *
+ * extensions: to ways to spell "external" and "->" ok for "^".
+ */
+
+var line_no = 1`,
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            /*
+ * scan.l
+ *
+ * lex input file for pascal scanner
+ *
+ * extensions: to ways to spell "external" and "->" ok for "^".
+ */
+
+var line_no = 1
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {A}{N}{D} */ 
+ return(AND) 
+break;
+case 1 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {A}{R}{R}{A}{Y} */ 
+ return(ARRAY) 
+break;
+case 2 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {C}{A}{S}{E} */ 
+ return(CASE) 
+break;
+case 3 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {C}{O}{N}{S}{T} */ 
+ return(CONST) 
+break;
+case 4 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {D}{I}{V} */ 
+ return(DIV) 
+break;
+case 5 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {D}{O} */ 
+ return(DO) 
+break;
+case 6 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {D}{O}{W}{N}{T}{O} */ 
+ return(DOWNTO) 
+break;
+case 7 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {E}{L}{S}{E} */ 
+ return(ELSE) 
+break;
+case 8 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {E}{N}{D} */ 
+ return(END) 
+break;
+case 9 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {E}{X}{T}{E}{R}{N} */ 
+ return(EXTERNAL) 
+break;
+case 10 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {E}{X}{T}{E}{R}{N}{A}{L} */ 
+ return(EXTERNAL) 
+break;
+case 11 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {F}{O}{R} */ 
+ return(FOR) 
+break;
+case 12 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {F}{O}{R}{W}{A}{R}{D} */ 
+ return(FORWARD) 
+break;
+case 13 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {F}{U}{N}{C}{T}{I}{O}{N} */ 
+ return(FUNCTION) 
+break;
+case 14 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {G}{O}{T}{O} */ 
+ return(GOTO) 
+break;
+case 15 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {I}{F} */ 
+ return(IF) 
+break;
+case 16 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {I}{N} */ 
+ return(IN) 
+break;
+case 17 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {L}{A}{B}{E}{L} */ 
+ return(LABEL) 
+break;
+case 18 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {M}{O}{D} */ 
+ return(MOD) 
+break;
+case 19 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {N}{I}{L} */ 
+ return(NIL) 
+break;
+case 20 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {N}{O}{T} */ 
+ return(NOT) 
+break;
+case 21 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {O}{F} */ 
+ return(OF) 
+break;
+case 22 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {O}{R} */ 
+ return(OR) 
+break;
+case 23 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {O}{T}{H}{E}{R}{W}{I}{S}{E} */ 
+ return(OTHERWISE) 
+break;
+case 24 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {P}{A}{C}{K}{E}{D} */ 
+ return(PACKED) 
+break;
+case 25 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {B}{E}{G}{I}{N} */ 
+ return(PBEGIN) 
+break;
+case 26 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {F}{I}{L}{E} */ 
+ return(PFILE) 
+break;
+case 27 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {P}{R}{O}{C}{E}{D}{U}{R}{E} */ 
+ return(PROCEDURE) 
+break;
+case 28 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {P}{R}{O}{G}{R}{A}{M} */ 
+ return(PROGRAM) 
+break;
+case 29 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {R}{E}{C}{O}{R}{D} */ 
+ return(RECORD) 
+break;
+case 30 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {R}{E}{P}{E}{A}{T} */ 
+ return(REPEAT) 
+break;
+case 31 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {S}{E}{T} */ 
+ return(SET) 
+break;
+case 32 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {T}{H}{E}{N} */ 
+ return(THEN) 
+break;
+case 33 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {T}{O} */ 
+ return(TO) 
+break;
+case 34 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {T}{Y}{P}{E} */ 
+ return(TYPE) 
+break;
+case 35 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {U}{N}{T}{I}{L} */ 
+ return(UNTIL) 
+break;
+case 36 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {V}{A}{R} */ 
+ return(VAR) 
+break;
+case 37 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {W}{H}{I}{L}{E} */ 
+ return(WHILE) 
+break;
+case 38 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       {W}{I}{T}{H} */ 
+ return(WITH) 
+break;
+case 39 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       [a-zA-Z]([a-zA-Z0-9])+ */ 
+ return(IDENTIFIER) 
+break;
+case 40 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       := */ 
+ return(ASSIGNMENT) 
+break;
+case 41 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\(\\{NQUOTE\\}\\|\\)\\+ */ 
+ return(CHARACTER_STRING) 
+break;
+case 42 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       : */ 
+ return(COLON) 
+break;
+case 43 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       , */ 
+ return(COMMA) 
+break;
+case 44 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       [0-9]+ */ 
+ return(DIGSEQ) 
+break;
+case 45 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\. */ 
+ return(DOT) 
+break;
+case 46 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\.\\. */ 
+ return(DOTDOT) 
+break;
+case 47 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       = */ 
+ return(EQUAL) 
+break;
+case 48 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       >= */ 
+ return(GE) 
+break;
+case 49 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       > */ 
+ return(GT) 
+break;
+case 50 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\[ */ 
+ return(LBRAC) 
+break;
+case 51 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       <= */ 
+ return(LE) 
+break;
+case 52 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\( */ 
+ return(LPAREN) 
+break;
+case 53 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       < */ 
+ return(LT) 
+break;
+case 54 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       - */ 
+ return(MINUS) 
+break;
+case 55 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       <> */ 
+ return(NOTEQUAL) 
+break;
+case 56 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\+ */ 
+ return(PLUS) 
+break;
+case 57 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\] */ 
+ return(RBRAC) 
+break;
+case 58 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       [0-9]+\\.[0-9]+ */ 
+ return(REALNUMBER) 
+break;
+case 59 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\) */ 
+ return(RPAREN) 
+break;
+case 60 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       ; */ 
+ return(SEMICOLON) 
+break;
+case 61 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\/ */ 
+ return(SLASH) 
+break;
+case 62 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\* */ 
+ return(STAR) 
+break;
+case 63 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\*\\* */ 
+ return(STARSTAR) 
+break;
+case 64 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       -> */ 
+ return(UPARROW) 
+break;
+case 65 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\^ */ 
+ return(UPARROW) 
+break;
+case 66 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\(\\*|\\{ */ 
+ var c;
+     while ((c = input()))
+     {
+      if (c == '}')
+       break;
+      else if (c == '*')
+      {
+       if ((c = input()) == ')')
+        break;
+       else
+        unput (c);
+      }
+      else if (c == '\\n')
+       line_no++;
+      else if (c == 0)
+       commenteof();
+     } 
+break;
+case 67 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       [ \\t\\f] */ 
+  
+break;
+case 68 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\n */ 
+ line_no++ 
+break;
+case 69 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       . */ 
+ fprintf (stderr, "'%c' (0%o): illegal charcter at line %d\\n", yy_.yytext[0], yy_.yytext[0], line_no) 
+break;
+}
+        }`,
+  caseHelperInclude: `{
+
+}`,
+  rules: [
+    {
+      re: '/^(?:([aA])([nN])([dD]))/',
+      source: '^(?:([aA])([nN])([dD]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([aA])([nN])([dD]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([aA])([rR])([rR])([aA])([yY]))/',
+      source: '^(?:([aA])([rR])([rR])([aA])([yY]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([aA])([rR])([rR])([aA])([yY]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([cC])([aA])([sS])([eE]))/',
+      source: '^(?:([cC])([aA])([sS])([eE]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([cC])([aA])([sS])([eE]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([cC])([oO])([nN])([sS])([tT]))/',
+      source: '^(?:([cC])([oO])([nN])([sS])([tT]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([cC])([oO])([nN])([sS])([tT]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([dD])([iI])([vV]))/',
+      source: '^(?:([dD])([iI])([vV]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([dD])([iI])([vV]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([dD])([oO]))/',
+      source: '^(?:([dD])([oO]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([dD])([oO]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([dD])([oO])([wW])([nN])([tT])([oO]))/',
+      source: '^(?:([dD])([oO])([wW])([nN])([tT])([oO]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([dD])([oO])([wW])([nN])([tT])([oO]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([eE])([lL])([sS])([eE]))/',
+      source: '^(?:([eE])([lL])([sS])([eE]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([eE])([lL])([sS])([eE]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([eE])([nN])([dD]))/',
+      source: '^(?:([eE])([nN])([dD]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([eE])([nN])([dD]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([eE])([xX])([tT])([eE])([rR])([nN]))/',
+      source: '^(?:([eE])([xX])([tT])([eE])([rR])([nN]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([eE])([xX])([tT])([eE])([rR])([nN]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([eE])([xX])([tT])([eE])([rR])([nN])([aA])([lL]))/',
+      source: '^(?:([eE])([xX])([tT])([eE])([rR])([nN])([aA])([lL]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([eE])([xX])([tT])([eE])([rR])([nN])([aA])([lL]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([fF])([oO])([rR]))/',
+      source: '^(?:([fF])([oO])([rR]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([fF])([oO])([rR]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([fF])([oO])([rR])([wW])([aA])([rR])([dD]))/',
+      source: '^(?:([fF])([oO])([rR])([wW])([aA])([rR])([dD]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([fF])([oO])([rR])([wW])([aA])([rR])([dD]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([fF])([uU])([nN])([cC])([tT])([iI])([oO])([nN]))/',
+      source: '^(?:([fF])([uU])([nN])([cC])([tT])([iI])([oO])([nN]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([fF])([uU])([nN])([cC])([tT])([iI])([oO])([nN]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([gG])([oO])([tT])([oO]))/',
+      source: '^(?:([gG])([oO])([tT])([oO]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([gG])([oO])([tT])([oO]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([iI])([fF]))/',
+      source: '^(?:([iI])([fF]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([iI])([fF]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([iI])([nN]))/',
+      source: '^(?:([iI])([nN]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([iI])([nN]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([lL])([aA])([bB])([eE])([lL]))/',
+      source: '^(?:([lL])([aA])([bB])([eE])([lL]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([lL])([aA])([bB])([eE])([lL]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([mM])([oO])([dD]))/',
+      source: '^(?:([mM])([oO])([dD]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([mM])([oO])([dD]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([nN])([iI])([lL]))/',
+      source: '^(?:([nN])([iI])([lL]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([nN])([iI])([lL]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([nN])([oO])([tT]))/',
+      source: '^(?:([nN])([oO])([tT]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([nN])([oO])([tT]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([oO])([fF]))/',
+      source: '^(?:([oO])([fF]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([oO])([fF]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([oO])([rR]))/',
+      source: '^(?:([oO])([rR]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([oO])([rR]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([oO])([tT])([hH])([eE])([rR])([wW])([iI])([sS])([eE]))/',
+      source: '^(?:([oO])([tT])([hH])([eE])([rR])([wW])([iI])([sS])([eE]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([oO])([tT])([hH])([eE])([rR])([wW])([iI])([sS])([eE]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([pP])([aA])([cC])([kK])([eE])([dD]))/',
+      source: '^(?:([pP])([aA])([cC])([kK])([eE])([dD]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([pP])([aA])([cC])([kK])([eE])([dD]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([bB])([eE])([gG])([iI])([nN]))/',
+      source: '^(?:([bB])([eE])([gG])([iI])([nN]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([bB])([eE])([gG])([iI])([nN]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([fF])([iI])([lL])([eE]))/',
+      source: '^(?:([fF])([iI])([lL])([eE]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([fF])([iI])([lL])([eE]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([pP])([rR])([oO])([cC])([eE])([dD])([uU])([rR])([eE]))/',
+      source: '^(?:([pP])([rR])([oO])([cC])([eE])([dD])([uU])([rR])([eE]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([pP])([rR])([oO])([cC])([eE])([dD])([uU])([rR])([eE]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([pP])([rR])([oO])([gG])([rR])([aA])([mM]))/',
+      source: '^(?:([pP])([rR])([oO])([gG])([rR])([aA])([mM]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([pP])([rR])([oO])([gG])([rR])([aA])([mM]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([rR])([eE])([cC])([oO])([rR])([dD]))/',
+      source: '^(?:([rR])([eE])([cC])([oO])([rR])([dD]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([rR])([eE])([cC])([oO])([rR])([dD]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([rR])([eE])([pP])([eE])([aA])([tT]))/',
+      source: '^(?:([rR])([eE])([pP])([eE])([aA])([tT]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([rR])([eE])([pP])([eE])([aA])([tT]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([sS])([eE])([tT]))/',
+      source: '^(?:([sS])([eE])([tT]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([sS])([eE])([tT]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([tT])([hH])([eE])([nN]))/',
+      source: '^(?:([tT])([hH])([eE])([nN]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([tT])([hH])([eE])([nN]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([tT])([oO]))/',
+      source: '^(?:([tT])([oO]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([tT])([oO]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([tT])([yY])([pP])([eE]))/',
+      source: '^(?:([tT])([yY])([pP])([eE]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([tT])([yY])([pP])([eE]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([uU])([nN])([tT])([iI])([lL]))/',
+      source: '^(?:([uU])([nN])([tT])([iI])([lL]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([uU])([nN])([tT])([iI])([lL]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([vV])([aA])([rR]))/',
+      source: '^(?:([vV])([aA])([rR]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([vV])([aA])([rR]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([wW])([hH])([iI])([lL])([eE]))/',
+      source: '^(?:([wW])([hH])([iI])([lL])([eE]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([wW])([hH])([iI])([lL])([eE]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([wW])([iI])([tT])([hH]))/',
+      source: '^(?:([wW])([iI])([tT])([hH]))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([wW])([iI])([tT])([hH]))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:[a-zA-Z]([a-zA-Z0-9])+)/',
+      source: '^(?:[a-zA-Z]([a-zA-Z0-9])+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[a-zA-Z]([a-zA-Z0-9])+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?::=)/',
+      source: '^(?::=)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?::=)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\(\\{NQUOTE\\}\\|\\)\\+)/',
+      source: '^(?:\\(\\{NQUOTE\\}\\|\\)\\+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\(\\{NQUOTE\\}\\|\\)\\+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?::)/',
+      source: '^(?::)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?::)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:,)/',
+      source: '^(?:,)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:,)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:[0-9]+)/',
+      source: '^(?:[0-9]+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[0-9]+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\.)/',
+      source: '^(?:\\.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\.\\.)/',
+      source: '^(?:\\.\\.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\.\\.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:=)/',
+      source: '^(?:=)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:=)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:>=)/',
+      source: '^(?:>=)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:>=)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:>)/',
+      source: '^(?:>)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:>)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\[)/',
+      source: '^(?:\\[)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\[)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:<=)/',
+      source: '^(?:<=)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:<=)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\()/',
+      source: '^(?:\\()',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\()',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:<)/',
+      source: '^(?:<)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:<)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:-)/',
+      source: '^(?:-)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:-)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:<>)/',
+      source: '^(?:<>)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:<>)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\+)/',
+      source: '^(?:\\+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\])/',
+      source: '^(?:\\])',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\])',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:[0-9]+\\.[0-9]+)/',
+      source: '^(?:[0-9]+\\.[0-9]+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[0-9]+\\.[0-9]+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\))/',
+      source: '^(?:\\))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:;)/',
+      source: '^(?:;)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:;)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\/)/',
+      source: '^(?:\\/)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\/)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\*)/',
+      source: '^(?:\\*)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\*)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\*\\*)/',
+      source: '^(?:\\*\\*)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\*\\*)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:->)/',
+      source: '^(?:->)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:->)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\^)/',
+      source: '^(?:\\^)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\^)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\(\\*|\\{)/',
+      source: '^(?:\\(\\*|\\{)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\(\\*|\\{)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:[ \\t\\f])/',
+      source: '^(?:[ \\t\\f])',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[ \\t\\f])',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\n)/',
+      source: '^(?:\\n)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\n)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:.)/',
+      source: '^(?:.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {
+    A: {
+      in_set: 'Aa',
+      elsewhere: '[aA]',
+      raw: '[aA]',
+    },
+    B: {
+      in_set: 'Bb',
+      elsewhere: '[bB]',
+      raw: '[bB]',
+    },
+    C: {
+      in_set: 'Cc',
+      elsewhere: '[cC]',
+      raw: '[cC]',
+    },
+    D: {
+      in_set: 'Dd',
+      elsewhere: '[dD]',
+      raw: '[dD]',
+    },
+    E: {
+      in_set: 'Ee',
+      elsewhere: '[eE]',
+      raw: '[eE]',
+    },
+    F: {
+      in_set: 'Ff',
+      elsewhere: '[fF]',
+      raw: '[fF]',
+    },
+    G: {
+      in_set: 'Gg',
+      elsewhere: '[gG]',
+      raw: '[gG]',
+    },
+    H: {
+      in_set: 'Hh',
+      elsewhere: '[hH]',
+      raw: '[hH]',
+    },
+    I: {
+      in_set: 'Ii',
+      elsewhere: '[iI]',
+      raw: '[iI]',
+    },
+    J: {
+      in_set: 'Jj',
+      elsewhere: '[jJ]',
+      raw: '[jJ]',
+    },
+    K: {
+      in_set: 'Kk',
+      elsewhere: '[kK]',
+      raw: '[kK]',
+    },
+    L: {
+      in_set: 'Ll',
+      elsewhere: '[lL]',
+      raw: '[lL]',
+    },
+    M: {
+      in_set: 'Mm',
+      elsewhere: '[mM]',
+      raw: '[mM]',
+    },
+    N: {
+      in_set: 'Nn',
+      elsewhere: '[nN]',
+      raw: '[nN]',
+    },
+    O: {
+      in_set: 'Oo',
+      elsewhere: '[oO]',
+      raw: '[oO]',
+    },
+    P: {
+      in_set: 'Pp',
+      elsewhere: '[pP]',
+      raw: '[pP]',
+    },
+    Q: {
+      in_set: 'Qq',
+      elsewhere: '[qQ]',
+      raw: '[qQ]',
+    },
+    R: {
+      in_set: 'Rr',
+      elsewhere: '[rR]',
+      raw: '[rR]',
+    },
+    S: {
+      in_set: 'Ss',
+      elsewhere: '[sS]',
+      raw: '[sS]',
+    },
+    T: {
+      in_set: 'Tt',
+      elsewhere: '[tT]',
+      raw: '[tT]',
+    },
+    U: {
+      in_set: 'Uu',
+      elsewhere: '[uU]',
+      raw: '[uU]',
+    },
+    V: {
+      in_set: 'Vv',
+      elsewhere: '[vV]',
+      raw: '[vV]',
+    },
+    W: {
+      in_set: 'Ww',
+      elsewhere: '[wW]',
+      raw: '[wW]',
+    },
+    X: {
+      in_set: 'Xx',
+      elsewhere: '[xX]',
+      raw: '[xX]',
+    },
+    Y: {
+      in_set: 'Yy',
+      elsewhere: '[yY]',
+      raw: '[yY]',
+    },
+    Z: {
+      in_set: 'Zz',
+      elsewhere: '[zZ]',
+      raw: '[zZ]',
+    },
+    NQUOTE: {
+      in_set: '\\u0000-&(-\\uffff',
+      elsewhere: "[^']",
+      raw: "[^']",
+    },
+  },
+  regular_rule_count: 70,
+  simple_rule_count: 0,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: `/*
+ * scan.l
+ *
+ * lex input file for pascal scanner
+ *
+ * extensions: to ways to spell "external" and "->" ok for "^".
+ */
+
+var line_no = 1`,
+  moduleInclude: `
+
+
+
+function commenteof() {
+ fprintf (stderr, "unexpected EOF inside comment at line %d\\n", line_no);
+ exit(1);
+}
+
+function yywrap() {
+ return (1);
+}`,
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

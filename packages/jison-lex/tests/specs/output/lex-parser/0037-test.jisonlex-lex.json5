@@ -1,0 +1,231 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "this.begin('TEST')",
+        rule: 'enter-test',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'T'",
+        rule: 'x',
+        start_condition: [
+          'TEST',
+          'EAT',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'Z'",
+        rule: 'z',
+        start_condition: [
+          '*',
+        ],
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `this.begin('INITIAL'); return 'TY'`,
+        rule: 'y',
+        start_condition: [
+          'TEST',
+        ],
+      },
+    ],
+    macros: {},
+    startConditions: {
+      TEST: 0,
+      TEST2: 0,
+      EAT: 1,
+    },
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    TEST: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+      ],
+      inclusive: true,
+    },
+    TEST2: {
+      rules: [
+        0,
+        2,
+      ],
+      inclusive: true,
+    },
+    EAT: {
+      rules: [
+        1,
+        2,
+      ],
+      inclusive: false,
+    },
+    INITIAL: {
+      rules: [
+        0,
+        2,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: TEST TEST2 INITIAL */ 
+/*! Rule::       enter-test */ 
+ this.begin('TEST') 
+break;
+case 3 : 
+/*! Conditions:: TEST */ 
+/*! Rule::       y */ 
+ this.begin('INITIAL'); return 'TY' 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: TEST EAT */ 
+  /*! Rule::       x */ 
+   1 : 'T',
+  /*! Conditions:: * */ 
+  /*! Rule::       z */ 
+   2 : 'Z'
+}`,
+  rules: [
+    {
+      re: '/^(?:enter-test)/',
+      source: '^(?:enter-test)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:enter-test)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:x)/',
+      source: '^(?:x)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:x)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:z)/',
+      source: '^(?:z)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:z)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:y)/',
+      source: '^(?:y)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:y)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {},
+  regular_rule_count: 2,
+  simple_rule_count: 2,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

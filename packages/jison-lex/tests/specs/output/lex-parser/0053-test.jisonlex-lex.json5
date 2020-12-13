@@ -1,0 +1,132 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'yytext += `:${yy.options.s2}:${yy.options.aBC}:${yy.options.bool1}:${yy.options.bla}:${yy.options.s1}`; return 11',
+        rule: 'foo',
+      },
+    ],
+    macros: {},
+    startConditions: {},
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+    options: {
+      ping: 666,
+      bla: 'blub',
+      bool1: true,
+      s1: 's1value',
+      s2: 's2value',
+      s3: false,
+      s4: 'false',
+      aBC: 'd',
+    },
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+    ping: 666,
+    bla: 'blub',
+    bool1: true,
+    s1: 's1value',
+    s2: 's2value',
+    s3: false,
+    s4: 'false',
+    aBC: 'd',
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       foo */ 
+ yy_.yytext += \`:${yy.options.s2}:${yy.options.aBC}:${yy.options.bool1}:${yy.options.bla}:${yy.options.s1}\`; return 11 
+break;
+}
+        }`,
+  caseHelperInclude: `{
+
+}`,
+  rules: [
+    {
+      re: '/^(?:foo)/',
+      source: '^(?:foo)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:foo)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {},
+  regular_rule_count: 1,
+  simple_rule_count: 0,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

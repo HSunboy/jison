@@ -1,0 +1,776 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'yy.freshLine = true',
+        rule: '\\n+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'yy.freshLine = false',
+        rule: '\\s+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "yytext = yytext.substr(2, yyleng - 3); return 'ACTION'",
+        rule: 'y\\{[^}]*\\}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NAME'",
+        rule: '[a-zA-Z_][a-zA-Z0-9_-]*',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'STRING_LIT'",
+        rule: `"([^"]|\\\\")*"`,
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'STRING_LIT'",
+        rule: `'([^']|\\\\')*'`,
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '|'",
+        rule: '\\|',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ANY_GROUP_REGEX'",
+        rule: '\\[(\\\\\\]|[^\\]])*\\]',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '('",
+        rule: '\\(',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return ')'",
+        rule: '\\)',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '+'",
+        rule: '\\+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '*'",
+        rule: '\\*',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '?'",
+        rule: '\\?',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '^'",
+        rule: '\\^',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '/'",
+        rule: '\\/',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ESCAPE_CHAR'",
+        rule: '\\\\[a-zA-Z0]',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '$'",
+        rule: '\\$',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '$'",
+        rule: '<<EOF>>',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '.'",
+        rule: '\\.',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '%%'",
+        rule: '%%',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'RANGE_REGEX'",
+        rule: '\\{\\d+(,\\s?\\d+|,)?\\}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: `if (yy.freshLine) { this.input('{'); return '{'; } else { this.unput('y'); }`,
+        rule: '(?=\\{)',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return '}'",
+        rule: '\\}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "yytext = yytext.substr(2, yyleng - 4); return 'ACTION'",
+        rule: '%\\{(.|\\n)*?\\}%',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* ignore bad characters */',
+        rule: '.',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'EOF'",
+        rule: '$',
+      },
+    ],
+    macros: {},
+    startConditions: {},
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\n+ */ 
+ yy.freshLine = true 
+break;
+case 1 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\s+ */ 
+ yy.freshLine = false 
+break;
+case 2 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       y\\{[^}]*\\} */ 
+ yy_.yytext = yy_.yytext.substr(2, yy_.yyleng - 3); return 'ACTION' 
+break;
+case 21 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       (?=\\{) */ 
+ if (yy.freshLine) { this.input('{'); return '{'; } else { this.unput('y'); } 
+break;
+case 23 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       %\\{(.|\\n)*?\\}% */ 
+ yy_.yytext = yy_.yytext.substr(2, yy_.yyleng - 4); return 'ACTION' 
+break;
+case 24 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       . */ 
+ /* ignore bad characters */ 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       [a-zA-Z_][a-zA-Z0-9_-]* */ 
+   3 : 'NAME',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       "([^"]|\\\\")*" */ 
+   4 : 'STRING_LIT',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       '([^']|\\\\')*' */ 
+   5 : 'STRING_LIT',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\| */ 
+   6 : '|',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\[(\\\\\\]|[^\\]])*\\] */ 
+   7 : 'ANY_GROUP_REGEX',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\( */ 
+   8 : '(',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\) */ 
+   9 : ')',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\+ */ 
+   10 : '+',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\* */ 
+   11 : '*',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\? */ 
+   12 : '?',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\^ */ 
+   13 : '^',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\/ */ 
+   14 : '/',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\\\[a-zA-Z0] */ 
+   15 : 'ESCAPE_CHAR',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\$ */ 
+   16 : '$',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       <<EOF>> */ 
+   17 : '$',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\. */ 
+   18 : '.',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       %% */ 
+   19 : '%%',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\{\\d+(,\\s?\\d+|,)?\\} */ 
+   20 : 'RANGE_REGEX',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       \\} */ 
+   22 : '}',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       $ */ 
+   25 : 'EOF'
+}`,
+  rules: [
+    {
+      re: '/^(?:\\n+)/',
+      source: '^(?:\\n+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\n+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\s+)/',
+      source: '^(?:\\s+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\s+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:y\\{[^}]*\\})/',
+      source: '^(?:y\\{[^}]*\\})',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:y\\{[^}]*\\})',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:[a-zA-Z_][a-zA-Z0-9_-]*)/',
+      source: '^(?:[a-zA-Z_][a-zA-Z0-9_-]*)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:[a-zA-Z_][a-zA-Z0-9_-]*)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: `/^(?:"([^"]|\\\\")*")/`,
+      source: `^(?:"([^"]|\\\\")*")`,
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: `^(?:"([^"]|\\\\")*")`,
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: `/^(?:'([^']|\\\\')*')/`,
+      source: `^(?:'([^']|\\\\')*')`,
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: `^(?:'([^']|\\\\')*')`,
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\|)/',
+      source: '^(?:\\|)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\|)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\[(\\\\\\]|[^\\]])*\\])/',
+      source: '^(?:\\[(\\\\\\]|[^\\]])*\\])',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\[(\\\\\\]|[^\\]])*\\])',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\()/',
+      source: '^(?:\\()',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\()',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\))/',
+      source: '^(?:\\))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\+)/',
+      source: '^(?:\\+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\*)/',
+      source: '^(?:\\*)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\*)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\?)/',
+      source: '^(?:\\?)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\?)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\^)/',
+      source: '^(?:\\^)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\^)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\/)/',
+      source: '^(?:\\/)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\/)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\\\[a-zA-Z0])/',
+      source: '^(?:\\\\[a-zA-Z0])',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\\\[a-zA-Z0])',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\$)/',
+      source: '^(?:\\$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:<<EOF>>)/',
+      source: '^(?:<<EOF>>)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:<<EOF>>)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\.)/',
+      source: '^(?:\\.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:%%)/',
+      source: '^(?:%%)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:%%)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\{\\d+(,\\s?\\d+|,)?\\})/',
+      source: '^(?:\\{\\d+(,\\s?\\d+|,)?\\})',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\{\\d+(,\\s?\\d+|,)?\\})',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:(?=\\{))/',
+      source: '^(?:(?=\\{))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:(?=\\{))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\})/',
+      source: '^(?:\\})',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\})',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:%\\{(.|\\n)*?\\}%)/',
+      source: '^(?:%\\{(.|\\n)*?\\}%)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:%\\{(.|\\n)*?\\}%)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:.)/',
+      source: '^(?:.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:$)/',
+      source: '^(?:$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {},
+  regular_rule_count: 6,
+  simple_rule_count: 20,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

@@ -1,0 +1,218 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return 11',
+        rule: '"\'\\\\\\\\\\\\*i',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: 'return 12',
+        rule: 'a\\b',
+      },
+      {
+        ast: {
+          source: '',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '',
+        rule: '\\u0001',
+      },
+      {
+        ast: {
+          source: '',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '',
+        rule: '\\n',
+      },
+      {
+        ast: {
+          source: '',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '',
+        rule: 'ÿ',
+      },
+    ],
+    macros: {},
+    startConditions: {},
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 2 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\u0001 */ 
+  
+break;
+case 3 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\n */ 
+  
+break;
+case 4 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       ÿ */ 
+  
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       "'\\\\\\\\\\\\*i */ 
+   0 : 11,
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       a\\b */ 
+   1 : 12
+}`,
+  rules: [
+    {
+      re: '/^(?:"\'\\\\\\\\\\\\*i)/',
+      source: '^(?:"\'\\\\\\\\\\\\*i)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:"\'\\\\\\\\\\\\*i)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:a\\b)/',
+      source: '^(?:a\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:a\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\u0001)/',
+      source: '^(?:\\u0001)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\u0001)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\n)/',
+      source: '^(?:\\n)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\n)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:ÿ)/',
+      source: '^(?:ÿ)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:ÿ)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {},
+  regular_rule_count: 3,
+  simple_rule_count: 2,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}

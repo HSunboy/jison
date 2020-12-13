@@ -1,0 +1,633 @@
+
+//=============================================================================
+//                     JISON-LEX OPTIONS:
+
+{
+  lexerActionsUseYYLENG: '???',
+  lexerActionsUseYYLINENO: '???',
+  lexerActionsUseYYTEXT: '???',
+  lexerActionsUseYYLOC: '???',
+  lexerActionsUseParseError: '???',
+  lexerActionsUseYYERROR: '???',
+  lexerActionsUseLocationTracking: '???',
+  lexerActionsUseMore: '???',
+  lexerActionsUseUnput: '???',
+  lexerActionsUseReject: '???',
+  lexerActionsUseLess: '???',
+  lexerActionsUseDisplayAPIs: '???',
+  lexerActionsUseDescribeYYLOC: '???',
+  lex_rule_dictionary: {
+    rules: [
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* ignore comment */',
+        rule: '\\/\\/.*',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'MAIN'",
+        rule: 'main\\b',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'CLASS'",
+        rule: 'class\\b',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'EXTENDS'",
+        rule: 'extends\\b',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NATTYPE'",
+        rule: 'nat\\b',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'IF'",
+        rule: 'if\\b',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ELSE'",
+        rule: 'else\\b',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'FOR'",
+        rule: 'for\\b',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'PRINTNAT'",
+        rule: 'printNat\\b',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'READNAT'",
+        rule: 'readNat\\b',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'THIS'",
+        rule: 'this\\b',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NEW'",
+        rule: 'new\\b',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'VAR'",
+        rule: 'var\\b',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NUL'",
+        rule: 'null\\b',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'NATLITERAL'",
+        rule: '{digit}+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ID'",
+        rule: '{id}',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: '/* skip whitespace */',
+        rule: '\\s+',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'Illegal character'",
+        rule: '.',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'ENDOFFILE'",
+        rule: '$',
+      },
+      {
+        ast: {
+          source: '[IDEM: srcCode]',
+          augmentedSource: '[LINE-SHIFTED SOURCE]',
+          ast: '[recast AST]',
+          fault: false,
+        },
+        fault: false,
+        srcCode: "return 'EOF'",
+        rule: '$',
+      },
+    ],
+    macros: {
+      digit: '[0-9]',
+      id: '[a-zA-Z_][a-zA-Z0-9_]*',
+    },
+    startConditions: {},
+    codeSections: [],
+    importDecls: [],
+    unknownDecls: [],
+    options: {
+      easy_keyword_rules: true,
+    },
+  },
+  codeSections: [],
+  importDecls: [],
+  unknownDecls: [],
+  options: {
+    moduleType: 'commonjs',
+    debug: false,
+    enableDebugLogs: false,
+    json: true,
+    noMain: true,
+    moduleMain: null,
+    moduleMainImports: null,
+    dumpSourceCodeOnFailure: false,
+    throwErrorOnCompileFailure: true,
+    doNotTestCompile: false,
+    defaultModuleName: 'lexer',
+    xregexp: false,
+    lexerErrorsAreRecoverable: false,
+    flex: false,
+    backtrack_lexer: false,
+    ranges: false,
+    trackPosition: true,
+    caseInsensitive: false,
+    exportSourceCode: {
+      enabled: false,
+    },
+    exportAST: false,
+    prettyCfg: true,
+    easy_keyword_rules: true,
+  },
+  conditions: {
+    INITIAL: {
+      rules: [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+      ],
+      inclusive: true,
+    },
+  },
+  performAction: `function lexer__performAction(yy, yyrulenumber, YY_START) {
+            const yy_ = this;
+
+            
+const YYSTATE = YY_START;
+switch(yyrulenumber) {
+case 0 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\/\\/.* */ 
+ /* ignore comment */ 
+break;
+case 16 : 
+/*! Conditions:: INITIAL */ 
+/*! Rule::       \\s+ */ 
+ /* skip whitespace */ 
+break;
+default:
+  return this.simpleCaseActionClusters[yyrulenumber];
+}
+        }`,
+  caseHelperInclude: `{
+
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       main\\b */ 
+   1 : 'MAIN',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       class\\b */ 
+   2 : 'CLASS',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       extends\\b */ 
+   3 : 'EXTENDS',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       nat\\b */ 
+   4 : 'NATTYPE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       if\\b */ 
+   5 : 'IF',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       else\\b */ 
+   6 : 'ELSE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       for\\b */ 
+   7 : 'FOR',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       printNat\\b */ 
+   8 : 'PRINTNAT',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       readNat\\b */ 
+   9 : 'READNAT',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       this\\b */ 
+   10 : 'THIS',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       new\\b */ 
+   11 : 'NEW',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       var\\b */ 
+   12 : 'VAR',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       null\\b */ 
+   13 : 'NUL',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       {digit}+ */ 
+   14 : 'NATLITERAL',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       {id} */ 
+   15 : 'ID',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       . */ 
+   17 : 'Illegal character',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       $ */ 
+   18 : 'ENDOFFILE',
+  /*! Conditions:: INITIAL */ 
+  /*! Rule::       $ */ 
+   19 : 'EOF'
+}`,
+  rules: [
+    {
+      re: '/^(?:\\/\\/.*)/',
+      source: '^(?:\\/\\/.*)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\/\\/.*)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:main\\b)/',
+      source: '^(?:main\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:main\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:class\\b)/',
+      source: '^(?:class\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:class\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:extends\\b)/',
+      source: '^(?:extends\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:extends\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:nat\\b)/',
+      source: '^(?:nat\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:nat\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:if\\b)/',
+      source: '^(?:if\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:if\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:else\\b)/',
+      source: '^(?:else\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:else\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:for\\b)/',
+      source: '^(?:for\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:for\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:printNat\\b)/',
+      source: '^(?:printNat\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:printNat\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:readNat\\b)/',
+      source: '^(?:readNat\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:readNat\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:this\\b)/',
+      source: '^(?:this\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:this\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:new\\b)/',
+      source: '^(?:new\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:new\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:var\\b)/',
+      source: '^(?:var\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:var\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:null\\b)/',
+      source: '^(?:null\\b)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:null\\b)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([0-9])+)/',
+      source: '^(?:([0-9])+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([0-9])+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:([a-zA-Z_][a-zA-Z0-9_]*))/',
+      source: '^(?:([a-zA-Z_][a-zA-Z0-9_]*))',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:([a-zA-Z_][a-zA-Z0-9_]*))',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:\\s+)/',
+      source: '^(?:\\s+)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:\\s+)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:.)/',
+      source: '^(?:.)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:.)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:$)/',
+      source: '^(?:$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+    {
+      re: '/^(?:$)/',
+      source: '^(?:$)',
+      flags: '',
+      xregexp: {
+        captureNames: null,
+        source: '^(?:$)',
+        flags: '',
+        isNative: true,
+      },
+    },
+  ],
+  macros: {
+    digit: {
+      in_set: '\\d',
+      elsewhere: '[0-9]',
+      raw: '[0-9]',
+    },
+    id: {
+      in_set: {
+        message: '[macro [id] is unsuitable for use inside regex set expressions: "[[a-zA-Z_][a-zA-Z0-9_]*]"]',
+        name: 'Error',
+      },
+      elsewhere: '[a-zA-Z_][a-zA-Z0-9_]*',
+      raw: '[a-zA-Z_][a-zA-Z0-9_]*',
+    },
+  },
+  regular_rule_count: 2,
+  simple_rule_count: 18,
+  conditionStack: [
+    'INITIAL',
+  ],
+  actionInclude: '',
+  moduleInclude: '',
+  __in_rules_failure_analysis_mode__: false,
+  is_custom_lexer: false,
+}
