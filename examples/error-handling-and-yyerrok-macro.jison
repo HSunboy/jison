@@ -1,3 +1,12 @@
+// title: error-handling-and-yyerrok-macro
+// test_input: |
+//   A
+//   B A
+//   A
+//   A
+//
+// ...
+
 /*
  * From:
  *

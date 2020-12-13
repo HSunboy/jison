@@ -1,3 +1,16 @@
+// title: test-propagation-rules-reduction-2
+// reportStats: true
+// exportAllTables: true
+// __check__: |
+//       function (p, spec, rv, tables) {
+//            assert.equal(p.unused_productions.length, 4, 'grammar must report it found 4 unused rules');
+//            assert.equal(tables.parseTable.length, 3, 'grammar must report it has 3 states in the parse table');
+//            assert.equal(Object.keys(tables.defaultParseActions).length, 1, 'grammar must report it has 1 default action rows in the parse table');
+//            assert.equal(tables.parseProductions.length, 5, 'grammar must report it has 5 productions');
+//       }
+// ...
+
+
 //
 // Show that jison optimizes out any rules which do nothing but
 // 'propagate' another rule, e.g. a rule like

@@ -1,3 +1,12 @@
+// title: error-handling-and-yyclearin
+// test_input: |
+//    A
+//    B A
+//    A
+//    A
+// ...
+//
+
 /*
  * From:
  *

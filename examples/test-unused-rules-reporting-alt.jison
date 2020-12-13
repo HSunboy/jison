@@ -1,3 +1,12 @@
+// title: test-unused-rules-reporting-alt
+// reportStats: true
+// __check__: |
+//      function (p, spec) {
+//          assert.equal(p.unused_productions.length, 3, 'grammar must report it found 3 unused rules');
+//      }
+// ...
+
+
 //
 // Show that jison reports any rules which are reachable from the start
 // rule, i.e. will be *unused* in the generated parser/grammar!

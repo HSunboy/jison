@@ -1,3 +1,6 @@
+
+%options parser-errors-are-recoverable lexer-errors-are-recoverable do-not-test-compile
+
 %{{
   Next Delphi Yacc & Lex
   Copyright (c) 2013 by Roman Yankovsky <roman@yankovsky.me>

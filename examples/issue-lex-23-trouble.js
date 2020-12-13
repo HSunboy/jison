@@ -1,4 +1,6 @@
 // title: Parse error when using arrow function in rules
+// test_input: 1 + 2 + 3 + 4 + 5
+// test_parseResult: 15
 //
 // ...
 //  
