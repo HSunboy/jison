@@ -13,7 +13,7 @@ else
 endif
 
 
-all: build test examples
+all: build test_full
 
 prep:
 
@@ -30,6 +30,8 @@ build:
 	$(ROLLUP) -c
 	$(ROLLUP) -c rollup.config-cli.js
 	node __patch_nodebang_in_js.js
+
+test_full: test examples_lex_parser
 
 test:
 	$(MOCHA) --timeout 18000 --check-leaks --globals assert tests/
@@ -63,6 +65,7 @@ examples:                                           \
 		examples_issue_x2                           \
 		examples_jslex								\
 		examples_lex                                \
+		examples_lex_parser 						\
 		examples_lex_grammar                        \
 		examples_lexer_comm_debug                   \
 		examples_mermaid							\
@@ -140,6 +143,15 @@ examples_shex:
 examples_with_includes_test:
 	$(LEX_XMPL_MAIN) examples/with-includes.test.lex
 	node examples/output/with-includes.test.js    			examples/inputData/with-includes.test.input.txt                    			examples/output/$@.test-run.tokens.json
+
+examples_lex_parser:
+	@echo "Taking the new lexer in /lex-parser/ for a test drive..."
+	$(LEX_XMPL_MAIN) ../lex-parser/lex.l -o examples/output/new_lex_parser_test.js
+	# we need to patch the relative import paths or node+esm won't make fruit bowl from this:
+	node __patch_imports_in_generated_example.js examples/output/new_lex_parser_test.js ../..
+	# and feed it itself to see what will pop out
+	# (Note: node won't run this 'import' stuff unless you install 'esm': https://reactgo.com/node-es6-imports/)
+	node -r esm ./examples/output/new_lex_parser_test.js    			../lex-parser/lex.l                                 			examples/output/$@.test-run.tokens.json
 
 examples_lex:
 	$(LEX_XMPL_MAIN) examples/lex.l
@@ -316,7 +328,7 @@ clean-dumpfiles:
 
 
 
-.PHONY: all prep npm-install build test examples clean_comparison clean superclean clean-dumpfiles bump git-tag publish comparison npm-update test-nyc \
+.PHONY: all prep npm-install build test test_full examples clean_comparison clean superclean clean-dumpfiles bump git-tag publish comparison npm-update test-nyc \
 		examples_basic2_lex                         \
 		examples_basic_lex                          \
 		examples_c99                                \
@@ -340,6 +352,7 @@ clean-dumpfiles:
 		examples_issue_x2                           \
 		examples_jslex								\
 		examples_lex                                \
+		examples_lex_parser 						\
 		examples_lex_grammar                        \
 		examples_lexer_comm_debug                   \
 		examples_mermaid							\

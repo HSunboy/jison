@@ -12,7 +12,7 @@ const stripErrorStackPaths = helpers.stripErrorStackPaths;
 const cleanStackTrace4Comparison = helpers.cleanStackTrace4Comparison;
 const rmCommonWS = helpers.rmCommonWS;
 const mkdirp = helpers.mkdirp;
-const code_exec = helpers.exec;
+const code_exec = helpers.exec_and_diagnose_this_stuff;
 
 
 const lexData = {
@@ -353,24 +353,18 @@ describe('Example/Test Grammars', function () {
 
             `.trimStart() + refOut;
 
-            // and convert it back so we have a `tokens` set that's cleaned up
-            // and potentially matching the stored reference set:
-            tokens = JSON5.parse(refOut);
-
-            let ref = JSON5.parse(filespec.generatorRef);
-            if (ref) {
+            if (filespec.ref) {
                 // Perform the validations only AFTER we've written the files to output:
                 // several tests produce very large outputs, which we shouldn't let assert() process
                 // for diff reporting as that takes bloody ages:
-                //assert.deepEqual(ast, ref);
             } else {
-                fs.writeFileSync(filespec.generatorRefPath, refOut, 'utf8');
-                filespec.generatorRef = ref = tokens;
+                fs.writeFileSync(filespec.outputRefPath, refOut, 'utf8');
+                filespec.ref = refOut;
             }
-            fs.writeFileSync(filespec.generatorOutPath, refOut, 'utf8');
+            fs.writeFileSync(filespec.outputOutPath, refOut, 'utf8');
 
             // now that we have saved all data, perform the validation checks:
-            assert.deepEqual(testsetSpec.cleanStackTrace4Comparison(tokens), testsetSpec.cleanStackTrace4Comparison(ref), 'grammar should be lexed correctly');
+            testsetSpec.assertOutputMatchesReference(refOut, filespec.ref, 'grammar should be parsed correctly');
         });
     });
 });

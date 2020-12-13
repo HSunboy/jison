@@ -51,11 +51,65 @@ describe('helpers API', function () {
         assert.strictEqual(helpers.mkIdentifier('a+b+c+d+e+-Fg'), 'a_b_c_d_e_Fg');
     });
 
-    it('dquote', function () {
-        assert.strictEqual(helpers.dquote('abc'), '"abc"');
-        assert.strictEqual(helpers.dquote("abc's"), "\"abc\'s\"");
-        assert.strictEqual(helpers.dquote('"abc'), "'\"abc'");
-        assert.strictEqual(helpers.dquote("\"abc\'s\""), "\"\\\"abc\'s\\\"\"");
+    it('dquote: onlyRegular = output for code generators', function () {
+        const opts = { onlyRegular: true };
+        assert.strictEqual(helpers.dquote('abc', opts), '"abc"');
+        assert.strictEqual(helpers.dquote("abc's", opts), "\"abc's\"");
+        assert.strictEqual(helpers.dquote('"abc', opts), "'\"abc'");
+        assert.strictEqual(helpers.dquote("\"abc\'s\"", opts), "\"\\\"abc\'s\\\"\"");
+    });
+
+    it('dquote: default = unicode quotes', function () {
+        assert.strictEqual(helpers.dquote('abc'), '“abc”');
+        assert.strictEqual(helpers.dquote("abc's"), "“abc's”");
+        assert.strictEqual(helpers.dquote('"abc'), "“\"abc”");
+        assert.strictEqual(helpers.dquote("\"abc\'s\""), "“\"abc\'s\"”");
+    });
+
+    it('dquote: default; find suitable quotes for content with various quotes contained', function () {
+        assert.strictEqual(helpers.dquote('quote “ abc'), '‘quote “ abc’');
+        assert.strictEqual(helpers.dquote('quote “’ abc'), '«quote “’ abc»');
+        assert.strictEqual(helpers.dquote('quote 「“’«›》〈…」 abc'), '•quote 「“’«›》〈…」 abc•');
+        assert.strictEqual(helpers.dquote('quote 「“’«›》〈•••」 abc'), '”quote 「“’«›》〈•••」 abc”');
+        assert.strictEqual(helpers.dquote("quote '「”’«›》〈•••」' abc"), '"quote \'「”’«›》〈•••」\' abc"');
+    });
+
+    it('dquote: preferred = true', function () {
+        const opts = { preferred: true };
+        assert.strictEqual(helpers.dquote('abc', opts), '“abc”');
+        assert.strictEqual(helpers.dquote("abc's", opts), "“abc's”");
+        assert.strictEqual(helpers.dquote('"abc', opts), "“\"abc”");
+        assert.strictEqual(helpers.dquote("\"abc\'s\"", opts), "“\"abc\'s\"”");
+    });
+
+    it('dquote: empty options -> unicode quotes', function () {
+        const opts = { };
+        assert.strictEqual(helpers.dquote('abc', opts), '“abc”');
+        assert.strictEqual(helpers.dquote("abc's", opts), "“abc's”");
+        assert.strictEqual(helpers.dquote('"abc', opts), "“\"abc”");
+        assert.strictEqual(helpers.dquote("\"abc\'s\"", opts), "“\"abc\'s\"”");
+        assert.strictEqual(helpers.dquote('quote “ abc', opts), '‘quote “ abc’');
+        assert.strictEqual(helpers.dquote('quote “’ abc', opts), '«quote “’ abc»');
+    });
+
+    it('dquote: preferred quotes', function () {
+        const opts = { preferred: '•”' };
+        assert.strictEqual(helpers.dquote('abc', opts), '•abc•');
+        assert.strictEqual(helpers.dquote("abc's", opts), "•abc's•");
+        assert.strictEqual(helpers.dquote('"abc', opts), "•\"abc•");
+        assert.strictEqual(helpers.dquote("abc•s", opts), "”abc•s”");
+        assert.strictEqual(helpers.dquote('quote •” abc', opts), '‘quote •” abc’');
+    });
+
+    it('dquote: preferred quotes + onlyRegular', function () {
+        const opts = { onlyRegular: true, preferred: '•”' };
+        assert.strictEqual(helpers.dquote('abc', opts), '•abc•');
+        assert.strictEqual(helpers.dquote("abc's", opts), "•abc's•");
+        assert.strictEqual(helpers.dquote('"abc', opts), "•\"abc•");
+        assert.strictEqual(helpers.dquote("abc•s", opts), "”abc•s”");
+        assert.strictEqual(helpers.dquote('quote •” abc', opts), '"quote •” abc"');
+        assert.strictEqual(helpers.dquote('quote "•” abc', opts), "'quote \"•” abc'");
+        assert.strictEqual(helpers.dquote('quote "•”\' abc', opts), "\"quote \\\"•”' abc\"");
     });
 
     it('rmCommonWS', function () {
@@ -504,12 +558,12 @@ yyerror(rmCommonWS\`
         assert.strictEqual(rv.replace(/\s+/g, ' '), sollwert_src.trim().replace(/\s+/g, ' '));
     });
 
-    it('exec: **TBD**', function () {
-        assert.ok(typeof helpers.exec === 'function');
+    it('exec_and_diagnose_this_stuff: **TBD**', function () {
+        assert.ok(typeof helpers.exec_and_diagnose_this_stuff === 'function');
     });
 
-    it('dump: **TBD**', function () {
-        assert.ok(typeof helpers.dump === 'function');
+    it('dumpSourceToFile: **TBD**', function () {
+        assert.ok(typeof helpers.dumpSourceToFile === 'function');
     });
 
     it('isLegalIdentifierInput:', function () {

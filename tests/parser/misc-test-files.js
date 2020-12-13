@@ -19,12 +19,14 @@ function generator_reset() {
     let debug = 0;
 
     if (!debug) {
+        // TODO
+        
         // silence warn+log messages from the test internals:
-        bnf.bnf_parser.parser.warn = function bnf_warn() {
+        Jison.warn = function bnf_warn() {
             // console.warn("TEST WARNING: ", arguments);
         };
 
-        bnf.bnf_parser.parser.log = function bnf_log() {
+        Jison.log = function bnf_log() {
             // console.warn("TEST LOG: ", arguments);
         };
     }
@@ -242,22 +244,20 @@ describe('JISON code generator', function () {
 
             `.trimStart() + refOut;
 
-            if (filespec.generatorRef) {
+            if (filespec.ref) {
                 // Perform the validations only AFTER we've written the files to output:
                 // several tests produce very large outputs, which we shouldn't let assert() process
                 // for diff reporting as that takes bloody ages:
             } else {
-                fs.writeFileSync(filespec.generatorRefPath, refOut, 'utf8');
-                filespec.generatorRef = refOut;
+                fs.writeFileSync(filespec.outputRefPath, refOut, 'utf8');
+                filespec.ref = refOut;
             }
-            fs.writeFileSync(filespec.generatorOutPath, refOut, 'utf8');
+            fs.writeFileSync(filespec.outputOutPath, refOut, 'utf8');
 
             // now that we have saved all data, perform the validation checks:
             // keep them simple so assert doesn't need a lot of time to produce diff reports
             // when the test fails:
-            let ist = testsetSpec.cleanStackTrace4Comparison(refOut);
-            let soll = testsetSpec.cleanStackTrace4Comparison(filespec.generatorRef);
-            assert.strictEqual(testsetSpec.reduceWhitespace(ist), testsetSpec.reduceWhitespace(soll), 'grammar should be lexed correctly');
+            testsetSpec.assertOutputMatchesReference(refOut, filespec.ref, 'grammar should be parsed correctly');
         });
     });
 });

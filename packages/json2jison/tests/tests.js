@@ -4,7 +4,7 @@ const path = require('path');
 const yaml = require('@gerhobbelt/js-yaml');
 const JSON5 = require('@gerhobbelt/json5');
 const globby = require('globby');
-const helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
+const helpers = require('../../helpers-lib/');
 const rmCommonWS = helpers.rmCommonWS;
 
 const json2jison = require('../json2jison');
@@ -101,9 +101,7 @@ describe('JSON2JISON', function () {
             // now that we have saved all data, perform the validation checks:
             // keep them simple so assert doesn't need a lot of time to produce diff reports
             // when the test fails:
-            let ist = testsetSpec.cleanStackTrace4Comparison(refOut);
-            let soll = testsetSpec.cleanStackTrace4Comparison(filespec.ref);
-            assert.strictEqual(testsetSpec.reduceWhitespace(ist), testsetSpec.reduceWhitespace(soll), 'generated grammar spec does not match reference; please compare /output/ vs /reference-output/');
+            testsetSpec.assertOutputMatchesReference(refOut, filespec.ref, 'generated grammar spec does not match reference; please compare /output/ vs /reference-output/');
         });
     });
 });

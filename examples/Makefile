@@ -233,6 +233,7 @@ ALL_TARGETS =                                                   \
 			btyacc-t1                                           \
 			btyacc-t2                                           \
 			c99                                                 \
+			delphi-ndyacc 										\
 			fsyacc-cgrammar                                     \
 			gantt                                               \
 			handlebars                                          \
@@ -617,6 +618,9 @@ btyacc-t2:
 	$(JISON) --main ./$@.y
 
 error-only:
+	$(JISON) --main ./$@.y
+
+delphi-ndyacc:
 	$(JISON) --main ./$@.y
 
 profiling:                                                          \

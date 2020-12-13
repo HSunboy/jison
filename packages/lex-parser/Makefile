@@ -44,9 +44,7 @@ endif
 tests/lex/lex-master.jisonlex: tests/lex/lex-master.header.txt lex.l
 	cat tests/lex/lex-master.header.txt lex.l > $@
 	
-prep-test: tests/lex/lex-master.jisonlex
-
-test: prep-test
+test:
 	$(MOCHA) --timeout 18000 --check-leaks --globals assert tests/
 
 test-nyc:
@@ -83,5 +81,5 @@ clean-dumpfiles:
 
 
 
-.PHONY: all prep npm-install build test prep-test clean superclean clean-dumpfiles bump git-tag publish npm-update test-nyc
+.PHONY: all prep npm-install build test clean superclean clean-dumpfiles bump git-tag publish npm-update test-nyc
 

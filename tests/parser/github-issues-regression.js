@@ -4,7 +4,7 @@ const assert = require('chai').assert;
 const Jison = require('../setup').Jison;
 const Lexer = require('../setup').Lexer;
 const helpers = require('../../packages/helpers-lib');
-const code_exec = helpers.exec;
+const code_exec = helpers.exec_and_diagnose_this_stuff;
 
 
 const original_cwd = process.cwd();

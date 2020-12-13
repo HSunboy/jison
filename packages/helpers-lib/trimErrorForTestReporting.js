@@ -1,5 +1,5 @@
-import safe from './safe-code-exec-and-diag';
-const convertExceptionToObject = safe.convertExceptionToObject;
+
+import { convertExceptionToObject } from './safe-code-exec-and-diag';
 
 let cycleref = [];
 let cyclerefpath = [];

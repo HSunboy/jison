@@ -42,16 +42,17 @@
     "jison-helpers-lib": "0.7.0-220"
   },
   "devDependencies": {
-    "@gerhobbelt/js-yaml": "3.10.1-5",
     "@babel/cli": "7.7.0",
     "@babel/core": "7.7.2",
     "@babel/preset-env": "7.7.1",
+    "@gerhobbelt/js-yaml": "3.10.1-5",
     "babel-preset-modern-browsers": "14.0.0",
     "chai": "4.1.2",
+    "esm": "^3.2.25",
     "globby": "8.0.1",
     "mocha": "5.2.0",
-    "rollup-plugin-node-resolve": "3.3.0",
-    "rollup": "0.65.0"
+    "rollup": "0.65.0",
+    "rollup-plugin-node-resolve": "3.3.0"
   },
   "scripts": {
     "test": "make test",

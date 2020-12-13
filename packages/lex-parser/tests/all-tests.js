@@ -1,4 +1,4 @@
-const assert = require('chai').assert;
+const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const yaml = require('@gerhobbelt/js-yaml');
@@ -273,9 +273,7 @@ describe('Test Lexer Grammars', function () {
             // now that we have saved all data, perform the validation checks:
             // keep them simple so assert doesn't need a lot of time to produce diff reports
             // when the test fails:
-            let ist = testsetSpec.cleanStackTrace4Comparison(refOut);
-            let soll = testsetSpec.cleanStackTrace4Comparison(filespec.generatorRef);
-            assert.strictEqual(testsetSpec.reduceWhitespace(ist), testsetSpec.reduceWhitespace(soll), 'grammar should be lexed correctly');
+            testsetSpec.assertOutputMatchesReference(refOut, filespec.generatorRef, 'grammar should be parsed correctly');
         });
     });
 });
@@ -420,9 +418,7 @@ describe('LEX parser', function () {
             // now that we have saved all data, perform the validation checks:
             // keep them simple so assert doesn't need a lot of time to produce diff reports
             // when the test fails:
-            let ist = testsetSpec.cleanStackTrace4Comparison(refOut);
-            let soll = testsetSpec.cleanStackTrace4Comparison(filespec.ref);
-            assert.strictEqual(testsetSpec.reduceWhitespace(ist), testsetSpec.reduceWhitespace(soll), 'grammar should be parsed correctly');
+            testsetSpec.assertOutputMatchesReference(refOut, filespec.ref, 'grammar should be parsed correctly');
         });
     });
 });

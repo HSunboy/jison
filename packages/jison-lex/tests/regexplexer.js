@@ -6,7 +6,7 @@ const JSON5 = require('@gerhobbelt/json5');
 const globby = require('globby');
 const XRegExp = require('@gerhobbelt/xregexp');
 const RegExpLexer = require('../dist/regexp-lexer-cjs');
-const helpers = require('../../helpers-lib/dist/helpers-lib-cjs');
+const helpers = require('../../helpers-lib');
 const rmCommonWS = helpers.rmCommonWS;
 
 
@@ -23,8 +23,8 @@ function re2set(re) {
 }
 
 function exec(src, line, forceDump) {
-    return helpers.exec(src, function code_execution_rig(sourcecode, options, errname, debug) {
-        if (forceDump) helpers.dump(sourcecode, errname);
+    return helpers.exec_and_diagnose_this_stuff(src, function code_execution_rig(sourcecode, options, errname, debug) {
+        if (forceDump) helpers.dumpSourceToFile(sourcecode, errname);
         const f = new Function(sourcecode);
         return f();
     }, {
@@ -3599,7 +3599,7 @@ testset = testset.sort();
 testset2 = testset2.sort();
 testset = testset.concat(testset2);     // append testset2 at the end of the list
 
-const testsetSpec = helpers.setupFileBasedTestRig(__dirname, testset, 'jison-lex', { useGeneratorRef: true });
+const testsetSpec = helpers.setupFileBasedTestRig(__dirname, testset, 'jison-lex', { useGeneratorRef: true, useGeneratorJSRef: true });
 
 
 
@@ -3816,22 +3816,11 @@ describe('Test Lexer Grammars', function () {
             }
             fs.writeFileSync(filespec.outputOutPath, refOut, 'utf8');
 
-            let ist = testsetSpec.cleanStackTrace4Comparison(refOut);
-            let soll = testsetSpec.cleanStackTrace4Comparison(filespec.ref);
 
 
-            let refSrc, dumpStr;
+            let dumpStr;
             if (lexerSourceCode) {
-                testsetSpec.stripForSerialization(lexerSourceCode.options);                
-                dumpStr = rmCommonWS`
-                    ${lexerSourceCode.sourceCode.replace(/\r\n|\r/g, '\n')}
-
-                    //=============================================================================
-                    //                     JISON-LEX OPTIONS:
-
-                    const lexerSpecConglomerate = ${JSON5.stringify(lexerSourceCode.options, { space: 2 })}
-
-                `;
+                dumpStr = lexerSourceCode.sourceCode.replace(/\r\n|\r/g, '\n');
             } else {
                 dumpStr = JSON5.stringify({
                     error: {
@@ -3844,6 +3833,42 @@ describe('Test Lexer Grammars', function () {
                 dumpStr = testsetSpec.stripErrorStackPaths(dumpStr);
             }
 
+            if (filespec.generatorJSRef) {
+                //assert.equal(filespec.generatorRef, lexerSourceCode);
+                // ^--- when this one fails, it takes ages to print a diff from those huge files,
+                //      hence we write this another way.
+                //
+                // Perform the validations only AFTER we've written the files to output:
+                // several tests produce very large outputs, which we shouldn't let assert() process
+                // for diff reporting as that takes bloody ages:
+            } else {
+                fs.writeFileSync(filespec.generatorJSRefPath, dumpStr, 'utf8');
+                filespec.generatorJSRef = dumpStr;
+            }
+            fs.writeFileSync(filespec.generatorJSOutPath, dumpStr, 'utf8');
+
+
+
+            let dumpStr2;
+            if (lexerSourceCode) {
+                testsetSpec.stripForSerialization(lexerSourceCode.options);                
+                dumpStr2 = rmCommonWS`
+                    //=============================================================================
+                    //                     JISON-LEX OPTIONS:
+
+                ` + JSON5.stringify(lexerSourceCode.options, { space: 2 });
+            } else {
+                dumpStr2 = JSON5.stringify({
+                    error: {
+                        message: err.message,
+                        type: err.name,
+                        stack: err.stack
+                    }
+                }, { space: 2 });
+
+                dumpStr2 = testsetSpec.stripErrorStackPaths(dumpStr2);
+            }
+
             if (filespec.generatorRef) {
                 //assert.equal(filespec.generatorRef, lexerSourceCode);
                 // ^--- when this one fails, it takes ages to print a diff from those huge files,
@@ -3853,19 +3878,19 @@ describe('Test Lexer Grammars', function () {
                 // several tests produce very large outputs, which we shouldn't let assert() process
                 // for diff reporting as that takes bloody ages:
             } else {
-                fs.writeFileSync(filespec.generatorRefPath, dumpStr, 'utf8');
-                filespec.generatorRef = dumpStr;
+                fs.writeFileSync(filespec.generatorRefPath, dumpStr2, 'utf8');
+                filespec.generatorRef = dumpStr2;
             }
-            fs.writeFileSync(filespec.generatorOutPath, dumpStr, 'utf8');
+            fs.writeFileSync(filespec.generatorOutPath, dumpStr2, 'utf8');
 
-            let ist2 = testsetSpec.cleanStackTrace4Comparison(dumpStr);
-            let soll2 = testsetSpec.cleanStackTrace4Comparison(filespec.generatorRef);
+
 
             // now that we have saved all data, perform the validation checks:
             // keep them simple so assert doesn't need a lot of time to produce diff reports
             // when the test fails:
-            assert.strictEqual(testsetSpec.reduceWhitespace(ist), testsetSpec.reduceWhitespace(soll), 'lexer output token stream does not match reference; please compare /output/ vs /reference-output/');
-            assert.strictEqual(testsetSpec.reduceWhitespace(ist2), testsetSpec.reduceWhitespace(soll2), 'generated source code does not match reference; please compare /output/ vs /reference-output/');
+            testsetSpec.assertOutputMatchesReference(refOut, filespec.ref, 'lexer output token stream does not match reference; please compare /output/ vs /reference-output/');
+            testsetSpec.assertOutputMatchesReference(dumpStr, filespec.generatorJSRef, 'parsed lexer structure does not match reference; please compare /output/ vs /reference-output/');
+            testsetSpec.assertOutputMatchesReference(dumpStr2, filespec.generatorRef, 'generated source code does not match reference; please compare /output/ vs /reference-output/');
         });
     });
 });
