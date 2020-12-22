@@ -495,6 +495,8 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 //===================== <options> section start =============================
 <options>{
 
+{ID}                                    return 'OPTION_ID';
+
 "="                                     return '=';
 
 \"{DOUBLEQUOTED_STRING_CONTENT}\"       return 'OPTION_STRING';
@@ -503,7 +505,9 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 
 // make sure to terminate before the section ends,
 // which is announced by `%%`, `|` or `;`:
-"%%"|"|"|";"                            this.popState();
+"%%"        |
+"|"         |
+";"                                     this.popState();
                                         this.unput(yytext);
                                         return 'OPTIONS_END';
 
@@ -589,8 +593,8 @@ LEX_CONTENT                             {WS}*(?:{BR}[^]*?)?{BR}{WS}*
 // as we use `$end` for that one!
 "$eof"                                  return 'EOF_ID';
 
-\"{DOUBLEQUOTED_STRING_CONTENT}\"       return 'STRING_LIT';
-\'{QUOTED_STRING_CONTENT}\'             return 'STRING_LIT';
+\"{DOUBLEQUOTED_STRING_CONTENT}\"   |
+\'{QUOTED_STRING_CONTENT}\'         |
 \`{ES2017_STRING_CONTENT}\`             return 'STRING_LIT';
 
 ":"                                     return ':';

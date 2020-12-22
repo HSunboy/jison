@@ -190,8 +190,8 @@ declaration_list
     ;
 
 declaration
-    : START id
-        { $$ = {start: $id}; }
+    : START ID
+        { $$ = {start: $ID}; }
     | START error
         {
             // TODO ...
@@ -223,11 +223,34 @@ declaration
             `);
             $$ = null;
         }
-    | operator
-        { $$ = {operator: $operator}; }
-    | TOKEN full_token_definitions
-        { $$ = {token_list: $full_token_definitions}; }
-    | TOKEN error
+    | associativity full_precedence_token_definitions OPTIONS_END
+        { 
+            let rv = {
+                associativity: $associativity,
+                token_list: $full_precedence_token_definitions
+            };
+            $$ = { operator: rv };
+    | associativity error OPTIONS_END
+        {
+            // TODO ...
+            yyerror(rmCommonWS`
+                operator token list error in an ${dquote($associativity)} associativity statement?
+
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(@error, @associativity)}
+
+                  Technical error report:
+                ${$error.errStr}
+            `);
+            $$ = null;
+        }
+    | TOKEN full_token_definitions OPTIONS_END
+        { 
+            $$ = {
+                token_list: $full_token_definitions
+            }; 
+        }
+    | TOKEN error OPTIONS_END
         {
             // TODO ...
             yyerror(rmCommonWS`
@@ -319,13 +342,39 @@ declaration
             `);
             $$ = null;
         %}
-    | parse_params
+    | PARSE_PARAM token_list OPTIONS_END
         {
-            $$ = {parseParams: $parse_params};
+            $$ = {parseParams: $token_list};
         }
-    | parser_type
+    | PARSE_PARAM error OPTIONS_END
         {
-            $$ = {parserType: $parser_type};
+            // TODO ...
+            yyerror(rmCommonWS`
+                %parse-params declaration error?
+
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(@error, @PARSE_PARAM)}
+
+                  Technical error report:
+                ${$error.errStr}
+            `);
+        }
+    | PARSER_TYPE symbol
+        {
+            $$ = {parserType: $symbol};
+        }
+    | PARSER_TYPE error
+        {
+            // TODO ...
+            yyerror(rmCommonWS`
+                %parser-type declaration error?
+
+                  Erroneous area:
+                ${yylexer.prettyPrintRange(@error, @PARSER_TYPE)}
+
+                  Technical error report:
+                ${$error.errStr}
+            `);
         }
     //
     // may be an `%options` statement, e.g.
@@ -340,7 +389,7 @@ declaration
             for (let i = 0, len = lst.length; i < len; i++) {
                 yy.options[lst[i][0]] = lst[i][1];
             }
-            yy.popContext('Line 350');
+            yy.popContext('Line 343');
             $$ = {options: lst};
         }
     //
@@ -358,7 +407,7 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 368');
+            yy.popContext('Line 361');
             $$ = null;
         }
     | option_keyword error
@@ -373,7 +422,7 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 383');
+            yy.popContext('Line 376');
             $$ = null;
         }
     | DEBUG
@@ -419,7 +468,7 @@ declaration
                 `);
             }
 
-            yy.popContext('Line 429');
+            yy.popContext('Line 422');
 
             $$ = {
                 imports: body
@@ -439,7 +488,7 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 449');
+            yy.popContext('Line 442');
             $$ = null;
         }
     | init_code_keyword option_list action_chunk OPTIONS_END
@@ -479,7 +528,7 @@ declaration
                 `);
             }
 
-            yy.popContext('Line 492');
+            yy.popContext('Line 482');
 
             $$ = {
                 initCode: {
@@ -506,7 +555,7 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 519');
+            yy.popContext('Line 509');
             $$ = null;
         }
     | init_code_keyword error ACTION_START /* ...action */ error OPTIONS_END
@@ -523,7 +572,7 @@ declaration
                   Technical error report:
                 ${$error1.errStr}
             `);
-            yy.popContext('Line 536');
+            yy.popContext('Line 526');
             $$ = null;
         }
     | init_code_keyword error OPTIONS_END
@@ -544,7 +593,7 @@ declaration
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 557');
+            yy.popContext('Line 547');
             $$ = null;
         }
     | on_error_recovery_keyword ACTION_START action ACTION_END
@@ -687,60 +736,6 @@ start_epilogue_marker
         }
     ;
 
-parse_params
-    : PARSE_PARAM token_list
-        { $$ = $token_list; }
-    | PARSE_PARAM error
-        {
-            // TODO ...
-            yyerror(rmCommonWS`
-                %parse-params declaration error?
-
-                  Erroneous area:
-                ${yylexer.prettyPrintRange(@error, @PARSE_PARAM)}
-
-                  Technical error report:
-                ${$error.errStr}
-            `);
-        }
-    ;
-
-parser_type
-    : PARSER_TYPE symbol
-        { $$ = $symbol; }
-    | PARSER_TYPE error
-        {
-            // TODO ...
-            yyerror(rmCommonWS`
-                %parser-type declaration error?
-
-                  Erroneous area:
-                ${yylexer.prettyPrintRange(@error, @PARSER_TYPE)}
-
-                  Technical error report:
-                ${$error.errStr}
-            `);
-        }
-    ;
-
-operator
-    : associativity token_list
-        { $$ = [$associativity]; $$.push.apply($$, $token_list); }
-    | associativity error
-        {
-            // TODO ...
-            yyerror(rmCommonWS`
-                operator token list error in an ${dquote($associativity)} associativity statement?
-
-                  Erroneous area:
-                ${yylexer.prettyPrintRange(@error, @associativity)}
-
-                  Technical error report:
-                ${$error.errStr}
-            `);
-        }
-    ;
-
 associativity
     : LEFT
         { $$ = 'left'; }
@@ -761,77 +756,63 @@ token_list
 
 // As per http://www.gnu.org/software/bison/manual/html_node/Token-Decl.html
 full_token_definitions
-    : optional_token_type id_list
+    : TOKEN_TYPE?[optional_token_type] one_full_token+[token_list]
         {
-            let rv = [];
-            let lst = $id_list;
+            let lst = $token_list;
             for (let i = 0, len = lst.length; i < len; i++) {
-                let id = lst[i];
-                let m = {id: id};
+                let symbol = lst[i];
                 if ($optional_token_type) {
-                    m.type = $optional_token_type;
+                    symbol.type = $optional_token_type;
                 }
-                rv.push(m);
             }
-            $$ = rv;
-        }
-    | optional_token_type one_full_token
-        {
-            let m = $one_full_token;
-            if ($optional_token_type) {
-                m.type = $optional_token_type;
-            }
-            $$ = [m];
+            $$ = lst;
         }
     ;
 
+// As per http://www.gnu.org/software/bison/manual/html_node/Token-Decl.html
+// for %token:
 one_full_token
-    : id token_value token_description
+    : ID INTEGER?[symbol_number] OPTION_STRING?token_description
         {
             $$ = {
-                id: $id,
-                value: $token_value,
-                description: $token_description
-            };
-        }
-    | id token_description
-        {
-            $$ = {
-                id: $id,
-                description: $token_description
-            };
-        }
-    | id token_value
-        {
-            $$ = {
-                id: $id,
-                value: $token_value
+                id: $ID,
+                value: $symbol_number,
+                description: $token_description         // also known as 'string alias' of the token
             };
         }
     ;
 
-optional_token_type
-    : %epsilon
-        { $$ = false; }
-    | TOKEN_TYPE
-        { $$ = $TOKEN_TYPE; }
-    ;
-
-token_value
-    : INTEGER
-        { $$ = $INTEGER; }
-    ;
-
-token_description
-    : STRING_LIT
-        { $$ = $STRING_LIT; }
+// As per http://www.gnu.org/software/bison/manual/html_node/Precedence-Decl.html
+// for %left, %right, etc.
+//
+// Note cf. the bison documentation:
+//
+// > For backward compatibility, there is a confusing difference between the argument lists 
+// > of %token and precedence declarations. Only a %token can associate a literal string 
+// > with a token kind name. A precedence declaration always interprets a literal string 
+// > as a reference to a separate token.
+one_full_precedence_token
+    : ID INTEGER?[symbol_number]
+        {
+            $$ = {
+                id: $ID,
+                value: $symbol_number,
+            };
+        }
+    | OPTION_STRING INTEGER?[symbol_number]
+        {
+            $$ = {
+                id: $OPTION_STRING,
+                value: $symbol_number,
+            };
+        }
     ;
 
 id_list
-    : id_list id
-        { $$ = $id_list; $$.push($id); }
-    | id
-        { $$ = [$id]; }
+    : id_list ID
+        { $$ = $id_list; $$.push($ID); }
+    | ID
+        { $$ = [$ID]; }
     ;
 
 grammar
@@ -1069,7 +1050,7 @@ pct_token_which_belongs_in_header_section
         {
             $$ = $1;
 
-            yy.popContext('Line 1081');
+            yy.popContext('Line 1072');
         }
     | DEBUG
     | EBNF
@@ -1078,13 +1059,13 @@ pct_token_which_belongs_in_header_section
         {
             $$ = $1;
 
-            yy.popContext('Line 1090');
+            yy.popContext('Line 1081');
         }
     | init_code_keyword error OPTIONS_END
         {
             $$ = $1;
 
-            yy.popContext('Line 1096');
+            yy.popContext('Line 1087');
         }
     | on_error_recovery_keyword error
         {
@@ -1093,14 +1074,14 @@ pct_token_which_belongs_in_header_section
     ;
 
 production_id
-    : id production_description?[descr] ':'
+    : ID production_description?[descr] ':'
         {
             $$ = {
-                id: $id,
+                id: $ID,
                 description: $descr
             };
         }
-    | id production_description?[descr] error
+    | ID production_description?[descr] error
         {
             // TODO ...
             yyerror(rmCommonWS`
@@ -1110,30 +1091,30 @@ production_id
                 This text must be surrounded by single ('), double (") or backtick (\`) quotes.
 
                   Erroneous area:
-                ${yylexer.prettyPrintRange(@error, @id)}
+                ${yylexer.prettyPrintRange(@error, @ID)}
 
                   Technical error report:
                 ${$error.errStr}
             `);
             $$ = null;
         }
-    | id production_description?[descr] ARROW_ACTION
+    | ID production_description?[descr] ARROW_ACTION
         {
             // TODO ...
             yyerror(rmCommonWS`
-                Production for rule ${dquote($id)} is missing: arrows introduce action code in Jison.
+                Production for rule ${dquote($ID)} is missing: arrows introduce action code in Jison.
 
                 Jison does not support rule production definition using arrows (->, =>, →) but expects
                 colons (:) instead, so maybe you intended this:
 
-                    ${$id} : ${$ARROW_ACTION}
+                    ${$ID} : ${$ARROW_ACTION}
 
                 while the user-defined action code block MAY be an arrow function, e.g.
 
-                    rule: id -> Math.min($id, 42);
+                    rule: ID -> Math.min($ID, 42);
 
                   Erroneous area:
-                ${yylexer.prettyPrintRange(@ARROW_ACTION, @id)}
+                ${yylexer.prettyPrintRange(@ARROW_ACTION, @ID)}
             `);
             $$ = null;
         }
@@ -1533,11 +1514,6 @@ symbol
         }
     ;
 
-id
-    : ID
-        { $$ = $ID; }
-    ;
-
 
 action_chunk_at_SOL
     : ACTION_START_AT_SOL action_block ACTION_END
@@ -1803,7 +1779,7 @@ option
     ;
 
 option_name
-    : nonnumeric_option_value[name]
+    : regular_option_name[name]
         {
             // validate that this is legal input under the given circumstances, i.e. parser context:
             if (yy.__options_flags__ & OPTION_EXPECTS_ONLY_IDENTIFIER_NAMES) {
@@ -1862,20 +1838,27 @@ option_name
                       Erroneous area:
                     ${yylexer.prettyPrintRange(@star, @-1)}
                 `);
+                $$ = $star;
             }
         }
     ;
 
-nonnumeric_option_value
+regular_option_name
+    : OPTION_STRING
+        { $$ = JSON5.parse($OPTION_STRING); }
+    | OPTION_ID
+        { $$ = $OPTION_ID; }
+    ;
+
+any_option_value
     : OPTION_STRING
         { $$ = JSON5.parse($OPTION_STRING); }
     | OPTION_VALUE
         { $$ = parseValue($OPTION_VALUE); }
-    ;
-
-any_option_value
-    : nonnumeric_option_value
     | INTEGER
+        { $$ = $1; }
+    | OPTION_ID
+        { $$ = parseValue($OPTION_ID); }
     ;
 
 epilogue
@@ -1885,7 +1868,7 @@ epilogue
         }
     | start_epilogue_marker
         {
-            yy.popContext('Line 1745');
+            yy.popContext('Line 1888');
 
             $$ = '';
         }
@@ -1904,7 +1887,7 @@ epilogue
                 }
             }
 
-            yy.popContext('Line 1764');
+            yy.popContext('Line 1907');
 
             $$ = srcCode;
         }
@@ -1930,26 +1913,22 @@ epilogue_chunk
     // pathological condition, we do support wrapping chunks of epilogue
     // in `%{...%}`.
     //
-    : ACTION_START_AT_SOL action ACTION_END
+    : action_chunk_at_SOL
         {
-            let srcCode = trimActionCode($action + $ACTION_END, {
-                startMarker: $ACTION_START_AT_SOL
-            });
-            if (srcCode) {
-                let rv = checkActionBlock(srcCode, @action, yy.options);
-                if (rv.fault) {
-                    yyerror(rmCommonWS`
-                        The '%{...%}' lexer epilogue code chunk does not compile: ${rv.fault}
+            let rv = $action_chunk_at_SOL;
+            if (rv.fault) {
+                yyerror(rmCommonWS`
+                    The '%{...%}' parser epilogue code chunk does not compile: ${rv.fault}
 
-                          Erroneous area:
-                        ${yylexer.prettyPrintRange(@action, @ACTION_START_AT_SOL)}
-                    `);
-                }
+                      Erroneous area:
+                    ${yylexer.prettyPrintRange(@action_chunk_at_SOL)}
+                `);
             }
+
             // Since the epilogue is concatenated as-is (see the `epilogue_chunks` rule above)
             // we append those protective double newlines right now, as the calling site
             // won't do it for us:
-            $$ = '\n\n' + srcCode + '\n\n';
+            $$ = '\n\n' + rv.srcCode + '\n\n';
         }
     //
     // see the alternative above: this rule is added to aid error
@@ -1960,7 +1939,7 @@ epilogue_chunk
             let start_marker = $ACTION_START_AT_SOL.trim();
             let marker_msg = (start_marker ? ' or similar, such as ' + start_marker : '');
             yyerror(rmCommonWS`
-                There's very probably a problem with this '%{...%\}' lexer setup action code section.
+                There's very probably a problem with this '%{...%\}' parser setup action code section.
 
                   Erroneous area:
                 ${yylexer.prettyPrintRange(@ACTION_START_AT_SOL)}
@@ -2064,10 +2043,10 @@ include_macro_code
                 }
 
                 // And no, we don't support nested '%include':
-                $$ = '\n// Included by Jison: ' + include_path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + include_path + '\n\n';
+                $$ = '\n\n\n\n// Included by Jison: ' + include_path + ':\n\n' + srcCode + '\n\n// End Of Include by Jison: ' + include_path + '\n\n\n\n';
             }
 
-            yy.popContext('Line 1927');
+            yy.popContext('Line 2070');
         }
     | include_keyword error
         {
@@ -2080,8 +2059,8 @@ include_macro_code
                   Technical error report:
                 ${$error.errStr}
             `);
-            yy.popContext('Line 1940');
-            $$ = null;
+            yy.popContext('Line 2083');
+            $$ = '\n\n\n\n';
         }
     ;
 
