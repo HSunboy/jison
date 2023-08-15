@@ -1,0 +1,9 @@
+{
+    "name": "jison-example",
+    "dependencies": {
+        "jison-ob": "workspace:*"
+    },
+    "devDependencies": {
+        "nyc": "11.4.1"
+    }
+}

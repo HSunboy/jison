@@ -14,7 +14,7 @@ endif
 
 
 
-all: clean-nyc build test test-nyc examples-test report-nyc
+all: clean-nyc build test-nyc examples-test report-nyc
 
 everything:                         \
 		clean                       \
@@ -96,7 +96,7 @@ test-nyc:
 	cd packages/ebnf-parser && make test-nyc
 	cd packages/json2jison && make test-nyc
 	cd packages/jison2json && make test-nyc
-	$(NYC) --reporter=lcov --reporter=text --exclude 'examples/issue-lex*.js' -- $(MOCHA) --timeout 18000 --check-leaks --globals assert --recursive tests/
+	cd packages/jison && make test-nyc
 	-rm -rf ./coverage/
 	# report PRELIMINARY collective coverage results:
 	$(NYC) report --reporter=html
@@ -115,329 +115,325 @@ web/content/assets/js/calculator.js: examples/calculator.jison build
 
 
 comparison:
-	cd examples/ && make comparison
+	cd packages/examples/ && make comparison
 
 lexer-comparison: build
 	cd packages/jison-lex && make comparison
 
 examples_directory: build
-	cd examples/ && make all
+	cd packages/examples/ && make all
 
 
 examples-test: build
-	cd examples/ && make error-handling-tests basic-tests github-issue-tests misc-tests
+	cd packages/examples/ && make error-handling-tests basic-tests github-issue-tests misc-tests
 
 error-handling-tests: build
-	cd examples/ && make error-handling-tests
+	cd packages/examples/ && make error-handling-tests
 
 basic-tests: build
-	cd examples/ && make basic-tests
+	cd packages/examples/ && make basic-tests
 
 github-issue-tests: build
-	cd examples/ && make github-issue-tests
+	cd packages/examples/ && make github-issue-tests
 
 misc-tests: build
-	cd examples/ && make misc-tests
+	cd packages/examples/ && make misc-tests
 
 
 
 examples/ansic: build
-	cd examples/ && make ansic
+	cd packages/examples/ && make ansic
 
 examples/basic: build
-	cd examples/ && make basic
+	cd packages/examples/ && make basic
 
 examples/basic2: build
-	cd examples/ && make basic2
+	cd packages/examples/ && make basic2
 
 examples/basic2_lex: build
-	cd examples/ && make basic2_lex
+	cd packages/examples/ && make basic2_lex
 
 examples/basic_lex: build
-	cd examples/ && make basic_lex
+	cd packages/examples/ && make basic_lex
 
 examples/basic_w_error_rule: build
-	cd examples/ && make basic_w_error_rule
+	cd packages/examples/ && make basic_w_error_rule
 
 examples/bloop: build
-	cd examples/ && make bloop
+	cd packages/examples/ && make bloop
 
 examples/btyacc-ansiC: build
-	cd examples/ && make btyacc-ansiC
+	cd packages/examples/ && make btyacc-ansiC
 
 examples/btyacc-ansiC2: build
-	cd examples/ && make btyacc-ansiC2
+	cd packages/examples/ && make btyacc-ansiC2
 
 examples/btyacc-ftp: build
-	cd examples/ && make btyacc-ftp
+	cd packages/examples/ && make btyacc-ftp
 
 examples/btyacc-t1: build
-	cd examples/ && make btyacc-t1
+	cd packages/examples/ && make btyacc-t1
 
 examples/btyacc-t2: build
-	cd examples/ && make btyacc-t2
+	cd packages/examples/ && make btyacc-t2
 
 examples/c99: build
-	cd examples/ && make c99
+	cd packages/examples/ && make c99
 
 examples/calc_LA_on_demand: build
-	cd examples/ && make calc_LA_on_demand
+	cd packages/examples/ && make calc_LA_on_demand
 
 examples/calculator: build
-	cd examples/ && make calculator
+	cd packages/examples/ && make calculator
 
 examples/calculator_json: build
-	cd examples/ && make calculator_json
+	cd packages/examples/ && make calculator_json
 
 examples/ccalc: build
-	cd examples/ && make ccalc
+	cd packages/examples/ && make ccalc
 
 examples/classy: build
-	cd examples/ && make classy
+	cd packages/examples/ && make classy
 
 examples/classy_ast: build
-	cd examples/ && make classy_ast
+	cd packages/examples/ && make classy_ast
 
 examples/comments: build
-	cd examples/ && make comments
+	cd packages/examples/ && make comments
 
 examples/compiled_calc: build
-	cd examples/ && make compiled_calc
+	cd packages/examples/ && make compiled_calc
 
 examples/dism: build
-	cd examples/ && make dism
+	cd packages/examples/ && make dism
 
 examples/dism_lr0: build
-	cd examples/ && make dism_lr0
+	cd packages/examples/ && make dism_lr0
 
 examples/dot: build
-	cd examples/ && make dot
+	cd packages/examples/ && make dot
 
 examples/error-handling-and-yyclearin: build
-	cd examples/ && make error-handling-and-yyclearin
+	cd packages/examples/ && make error-handling-and-yyclearin
 
 examples/error-handling-and-yyerrok-loopfix: build
-	cd examples/ && make error-handling-and-yyerrok-loopfix
+	cd packages/examples/ && make error-handling-and-yyerrok-loopfix
 
 examples/error-handling-and-yyerrok-looping1: build
-	cd examples/ && make error-handling-and-yyerrok-looping1
+	cd packages/examples/ && make error-handling-and-yyerrok-looping1
 
 examples/error-handling-and-yyerrok-looping2: build
-	cd examples/ && make error-handling-and-yyerrok-looping2
+	cd packages/examples/ && make error-handling-and-yyerrok-looping2
 
 examples/error-handling-and-yyerrok-macro: build
-	cd examples/ && make error-handling-and-yyerrok-macro
+	cd packages/examples/ && make error-handling-and-yyerrok-macro
 
 examples/error-handling-and-yyerrok-part1: build
-	cd examples/ && make error-handling-and-yyerrok-part1
+	cd packages/examples/ && make error-handling-and-yyerrok-part1
 
 examples/error-handling-and-yyerrok-part2: build
-	cd examples/ && make error-handling-and-yyerrok-part2
+	cd packages/examples/ && make error-handling-and-yyerrok-part2
 
 examples/error-handling-and-yyerrok-part3: build
-	cd examples/ && make error-handling-and-yyerrok-part3
+	cd packages/examples/ && make error-handling-and-yyerrok-part3
 
 examples/error-handling-and-yyerrok-part4a: build
-	cd examples/ && make error-handling-and-yyerrok-part4a
+	cd packages/examples/ && make error-handling-and-yyerrok-part4a
 
 examples/error-handling-and-yyerrok-part4b: build
-	cd examples/ && make error-handling-and-yyerrok-part4b
+	cd packages/examples/ && make error-handling-and-yyerrok-part4b
 
 examples/error-handling-and-yyerrok-part5: build
-	cd examples/ && make error-handling-and-yyerrok-part5
+	cd packages/examples/ && make error-handling-and-yyerrok-part5
 
 examples/error-only: build
-	cd examples/ && make error-only
+	cd packages/examples/ && make error-only
 
 examples/error-recognition-actions: build
-	cd examples/ && make error-recognition-actions
+	cd packages/examples/ && make error-recognition-actions
 
 examples/faking-multiple-start-rules: build
-	cd examples/ && make faking-multiple-start-rules
+	cd packages/examples/ && make faking-multiple-start-rules
 
 examples/faking-multiple-start-rules-alt: build
-	cd examples/ && make faking-multiple-start-rules-alt
+	cd packages/examples/ && make faking-multiple-start-rules-alt
 
 examples/flow: build
-	cd examples/ && make flow
+	cd packages/examples/ && make flow
 
 examples/formula: build
-	cd examples/ && make formula
+	cd packages/examples/ && make formula
 
 examples/fsyacc-cgrammar: build
-	cd examples/ && make fsyacc-cgrammar
+	cd packages/examples/ && make fsyacc-cgrammar
 
 examples/gantt: build
-	cd examples/ && make gantt
+	cd packages/examples/ && make gantt
 
 examples/grammar: build
-	cd examples/ && make grammar
+	cd packages/examples/ && make grammar
 
 examples/handlebars: build
-	cd examples/ && make handlebars
+	cd packages/examples/ && make handlebars
 
 examples/happyhappy: build
-	cd examples/ && make happyhappy
+	cd packages/examples/ && make happyhappy
 
 examples/inherited_y: build
-	cd examples/ && make inherited_y
+	cd packages/examples/ && make inherited_y
 
 examples/issue-205: build
-	cd examples/ && make issue-205
+	cd packages/examples/ && make issue-205
 
 examples/issue-205-2: build
-	cd examples/ && make issue-205-2
+	cd packages/examples/ && make issue-205-2
 
 examples/issue-205-3: build
-	cd examples/ && make issue-205-3
+	cd packages/examples/ && make issue-205-3
 
 examples/issue-205-4: build
-	cd examples/ && make issue-205-4
+	cd packages/examples/ && make issue-205-4
 
 examples/issue-254: build
-	cd examples/ && make issue-254
+	cd packages/examples/ && make issue-254
 
 examples/issue-289: build
-	cd examples/ && make issue-289
+	cd packages/examples/ && make issue-289
 
 examples/issue-293: build
-	cd examples/ && make issue-293
+	cd packages/examples/ && make issue-293
 
 examples/issue-342: build
-	cd examples/ && make issue-342
+	cd packages/examples/ && make issue-342
 
 examples/issue-344: build
-	cd examples/ && make issue-344
+	cd packages/examples/ && make issue-344
 
 examples/issue-344-2: build
-	cd examples/ && make issue-344-2
+	cd packages/examples/ && make issue-344-2
 
 examples/issue-348: build
-	cd examples/ && make issue-348
+	cd packages/examples/ && make issue-348
 
 examples/issue-357-url-lexing: build
-	cd examples/ && make issue-357-url-lexing
+	cd packages/examples/ && make issue-357-url-lexing
 
 examples/issue-360: build
-	cd examples/ && make issue-360
+	cd packages/examples/ && make issue-360
 
 examples/jscore: build
-	cd examples/ && make jscore
+	cd packages/examples/ && make jscore
 
 examples/json_ast_js: build
-	cd examples/ && make json_ast_js
+	cd packages/examples/ && make json_ast_js
 
 examples/json_js: build
-	cd examples/ && make json_js
+	cd packages/examples/ && make json_js
 
 examples/klammergebirge: build
-	cd examples/ && make klammergebirge
+	cd packages/examples/ && make klammergebirge
 
 examples/lalr-but-not-slr: build
-	cd examples/ && make lalr-but-not-slr
+	cd packages/examples/ && make lalr-but-not-slr
 
 examples/lambdacalc: build
-	cd examples/ && make lambdacalc
+	cd packages/examples/ && make lambdacalc
 
 examples/lex: build
-	cd examples/ && make lex
+	cd packages/examples/ && make lex
 
 examples/lojban-300: build
-	cd examples/ && make lojban-300
+	cd packages/examples/ && make lojban-300
 
 examples/lr-but-not-lalr: build
-	cd examples/ && make lr-but-not-lalr
+	cd packages/examples/ && make lr-but-not-lalr
 
 examples/mermaid: build
-	cd examples/ && make mermaid
+	cd packages/examples/ && make mermaid
 
 examples/mfcalc: build
-	cd examples/ && make mfcalc
+	cd packages/examples/ && make mfcalc
 
 examples/no-prec-hack-needed: build
-	cd examples/ && make no-prec-hack-needed
+	cd packages/examples/ && make no-prec-hack-needed
 
 examples/codegen-feature-tester: build
-	cd examples/ && make codegen-feature-tester
+	cd packages/examples/ && make codegen-feature-tester
 
 examples/nv_classy_ast: build
-	cd examples/ && make nv_classy_ast
+	cd packages/examples/ && make nv_classy_ast
 
 examples/olmenu-proto2: build
-	cd examples/ && make olmenu-proto2
+	cd packages/examples/ && make olmenu-proto2
 
 examples/parser-to-lexer-communication-test: build
-	cd examples/ && make parser-to-lexer-communication-test
+	cd packages/examples/ && make parser-to-lexer-communication-test
 
 examples/parser-to-lexer-communication-test--profiling: build
-	cd examples/ && make parser-to-lexer-communication-test--profiling
+	cd packages/examples/ && make parser-to-lexer-communication-test--profiling
 
 profiling:
-	cd examples/ && make profiling
+	cd packages/examples/ && make profiling
 
 examples/pascal: build
-	cd examples/ && make pascal
+	cd packages/examples/ && make pascal
 
 examples/phraser: build
-	cd examples/ && make phraser
+	cd packages/examples/ && make phraser
 
 examples/precedence: build
-	cd examples/ && make precedence
+	cd packages/examples/ && make precedence
 
 examples/reduce_conflict: build
-	cd examples/ && make reduce_conflict
+	cd packages/examples/ && make reduce_conflict
 
 examples/regex: build
-	cd examples/ && make regex
+	cd packages/examples/ && make regex
 
 examples/semwhitespace: build
-	cd examples/ && make semwhitespace
+	cd packages/examples/ && make semwhitespace
 
 examples/test-EOF-bugfix: build
-	cd examples/ && make test-EOF-bugfix
+	cd packages/examples/ && make test-EOF-bugfix
 
 examples/test-epsilon-rules-early-reduce: build
-	cd examples/ && make test-epsilon-rules-early-reduce
+	cd packages/examples/ && make test-epsilon-rules-early-reduce
 
 examples/test-literal-quote-tokens-in-grammar: build
-	cd examples/ && make test-literal-quote-tokens-in-grammar
+	cd packages/examples/ && make test-literal-quote-tokens-in-grammar
 
 examples/test-nonassociative-operator-0: build
-	cd examples/ && make test-nonassociative-operator-0
+	cd packages/examples/ && make test-nonassociative-operator-0
 
 examples/test-nonassociative-operator-1: build
-	cd examples/ && make test-nonassociative-operator-1
+	cd packages/examples/ && make test-nonassociative-operator-1
 
 examples/test-nonassociative-operator-2: build
-	cd examples/ && make test-nonassociative-operator-2
+	cd packages/examples/ && make test-nonassociative-operator-2
 
 examples/test-propagation-rules-reduction-1: build
-	cd examples/ && make test-propagation-rules-reduction-1
+	cd packages/examples/ && make test-propagation-rules-reduction-1
 
 examples/theory-left-recurs-01: build
-	cd examples/ && make theory-left-recurs-01
+	cd packages/examples/ && make theory-left-recurs-01
 
 examples/tikiwikiparser: build
-	cd examples/ && make tikiwikiparser
+	cd packages/examples/ && make tikiwikiparser
 
 examples/unicode: build
-	cd examples/ && make unicode
+	cd packages/examples/ && make unicode
 
 examples/unicode2: build
-	cd examples/ && make unicode2
+	cd packages/examples/ && make unicode2
 
 examples/with-includes: build
-	cd examples/ && make with-includes
+	cd packages/examples/ && make with-includes
 
 examples/with_custom_lexer: build
-	cd examples/ && make with_custom_lexer
+	cd packages/examples/ && make with_custom_lexer
 
 examples/yacc-error-recovery: build
-	cd examples/ && make yacc-error-recovery
-
-
-
-
+	cd packages/examples/ && make yacc-error-recovery
 
 
 
@@ -447,7 +443,6 @@ examples/yacc-error-recovery: build
 build:                                                                  \
 		subpackages                                                     \
 		prep_util_dir                                                   \
-		dist/cli-cjs-es5.js                                             \
 		packages/ebnf-parser/ebnf.y                                     \
 		packages/ebnf-parser/bnf.y                                      \
 		packages/ebnf-parser/bnf.l                                      \
@@ -467,7 +462,6 @@ prep_util_dir:
 	#+[ -f dist/cli-cjs-es5.js     ] || ( cp node_modules/jison-gho/dist/cli-cjs-es5.js      dist/cli-cjs-es5.js      && touch -d 1970/1/1  dist/cli-cjs-es5.js     )
 
 dist/cli-cjs-es5.js: dist/jison.js rollup.config-cli.js
-	node __patch_version_in_js.js
 	-mkdir -p dist
 	$(ROLLUP) -c rollup.config-cli.js
 	$(BABEL) dist/cli-cjs.js -o dist/cli-cjs-es5.js
@@ -475,7 +469,6 @@ dist/cli-cjs-es5.js: dist/jison.js rollup.config-cli.js
 	node __patch_nodebang_in_js.js
 
 dist/jison.js: rollup.config.js
-	node __patch_version_in_js.js
 	node __patch_parser_kernel_in_js.js
 	-mkdir -p dist
 	$(ROLLUP) -c
@@ -486,7 +479,7 @@ dist/jison.js: rollup.config.js
 
 
 
-subpackages: helpers-lib lex-parser jison-lex ebnf-parser json2jison jison2json
+subpackages: helpers-lib lex-parser jison-lex ebnf-parser json2jison jison2json jison
 
 helpers-lib:
 	cd packages/helpers-lib && make
@@ -505,6 +498,8 @@ json2jison:
 
 jison2json:
 	cd packages/jison2json && make
+jison:
+	cd packages/jison && make
 
 
 subpackages-prep:
@@ -528,7 +523,6 @@ subpackages-npm-update:
 # increment the XXX <prelease> number in the package.json file: version <major>.<minor>.<patch>-<prelease>
 bump:
 	npm version --no-git-tag-version prerelease
-	node __patch_version_in_js.js
 
 
 git-tag:
@@ -553,7 +547,7 @@ publish: subpackages-publish
 
 
 clean: clean-site
-	cd examples/ && make clean
+	cd packages/examples/ && make clean
 
 	cd packages/helpers-lib && make clean
 	cd packages/lex-parser && make clean
@@ -574,7 +568,7 @@ superclean: clean clean-site
 	-rm -rf node_modules/
 	-rm -f package-lock.json
 
-	cd examples/ && make superclean
+	cd packages/examples/ && make superclean
 
 	cd packages/helpers-lib && make superclean
 	cd packages/lex-parser && make superclean

@@ -3,16 +3,12 @@
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 (function (global, factory) {
-    (typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('fs'), require('path'), require('@gerhobbelt/recast'), require('assert')) : typeof define === 'function' && define.amd ? define(['fs', 'path', '@gerhobbelt/recast', 'assert'], factory) : global['jison-helpers-lib'] = factory(global.fs, global.path, global.recast, global.assert);
+    (typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('fs'), require('path'), require('@gerhobbelt/recast'), require('assert')) : typeof define === 'function' && define.amd ? define(['fs', 'path', '@gerhobbelt/recast', 'assert'], factory) : (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global["jison-helpers-lib"] = factory(global.fs, global.path, global.recast, global.assert));
 })(undefined, function (fs, path, recast, assert) {
     'use strict';
 
-    fs = fs && fs.hasOwnProperty('default') ? fs['default'] : fs;
-    path = path && path.hasOwnProperty('default') ? path['default'] : path;
-    recast = recast && recast.hasOwnProperty('default') ? recast['default'] : recast;
-    assert = assert && assert.hasOwnProperty('default') ? assert['default'] : assert;
-
     // Return TRUE if `src` starts with `searchString`. 
+
     function startsWith(src, searchString) {
         return src.substr(0, searchString.length) === searchString;
     }
@@ -148,21 +144,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     //
-    // Helper library for safe code execution/compilation, including dumping offending code to file for further error analysis
-    // (the idea was originally coded in https://github.com/GerHobbelt/jison/commit/85e367d03b977780516d2b643afbe6f65ee758f2 )
-    //
-    // MIT Licensed
-    //
-    //
-    // This code is intended to help test and diagnose arbitrary chunks of code, answering questions like this:
-    //
-    // the given code fails, but where exactly and why? It's precise failure conditions are 'hidden' due to 
-    // the stuff running inside an `eval()` or `Function(...)` call, so we want the code dumped to file so that
-    // we can test the code in a different environment so that we can see what precisely is causing the failure.
-    // 
 
 
-    function chkBugger(src) {
+    function chkBugger$1(src) {
         src = String(src);
         if (src.match(/\bcov_\w+/)) {
             console.error('### ISTANBUL COVERAGE CODE DETECTED ###\n', src);
@@ -250,25 +234,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
         var debug = 0;
 
-        if (debug) console.warn('generated ' + errname + ' code under EXEC TEST.');
-        if (debug > 1) console.warn('\n        ######################## source code ##########################\n        ' + sourcecode + '\n        ######################## source code ##########################\n        ');
-
         var p;
         try {
             // p = eval(sourcecode);
             if (typeof code_execution_rig !== 'function') {
                 throw new Error("safe-code-exec-and-diag: code_execution_rig MUST be a JavaScript function");
             }
-            chkBugger(sourcecode);
+            chkBugger$1(sourcecode);
             p = code_execution_rig.call(this, sourcecode, options, errname, debug);
         } catch (ex) {
-            if (debug > 1) console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-
-            if (debug) console.log("generated " + errname + " source code fatal error: ", ex.message);
-
-            if (debug > 1) console.log("exec-and-diagnose options:", options);
-
-            if (debug > 1) console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
             if (options.dumpSourceCodeOnFailure) {
                 dumpSourceToFile(sourcecode, errname, err_id, options, ex);
@@ -287,18 +261,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     };
 
     //
-    // Parse a given chunk of code to an AST.
-    //
-    // MIT Licensed
-    //
-    //
-    // This code is intended to help test and diagnose arbitrary chunks of code, answering questions like this:
-    //
-    // would the given code compile and possibly execute correctly, when included in a lexer, parser or other engine?
-    // 
 
-
-    //import astUtils from '@gerhobbelt/ast-util';
     assert(recast);
     var types = recast.types;
     assert(types);
@@ -320,6 +283,22 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     function prettyPrintAST(ast, options) {
         var new_src;
+        var options = options || {};
+        var defaultOptions = {
+            tabWidth: 2,
+            quote: 'single',
+            arrowParensAlways: true,
+
+            // Do not reuse whitespace (or anything else, for that matter)
+            // when printing generically.
+            reuseWhitespace: false
+        };
+        for (var key in defaultOptions) {
+            if (options[key] === undefined) {
+                options[key] = defaultOptions[key];
+            }
+        }
+
         var s = recast.prettyPrint(ast, {
             tabWidth: 2,
             quote: 'single',
@@ -369,7 +348,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         checkActionBlock: checkActionBlock
     };
 
-    function chkBugger$1(src) {
+    function chkBugger(src) {
         src = String(src);
         if (src.match(/\bcov_\w+/)) {
             console.error('### ISTANBUL COVERAGE CODE DETECTED ###\n', src);
@@ -380,7 +359,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /** @public */
     function printFunctionSourceCode(f) {
         var src = String(f);
-        chkBugger$1(src);
+        chkBugger(src);
         return src;
     }
 

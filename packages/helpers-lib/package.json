@@ -38,7 +38,7 @@
     "babel-preset-modern-browsers": "10.0.1",
     "chai": "4.1.2",
     "mocha": "4.0.1",
-    "rollup-plugin-node-resolve": "3.0.0",
-    "rollup": "0.52.3"
+    "nyc": "11.4.1",
+    "rollup": "^3.0.0"
   }
 }

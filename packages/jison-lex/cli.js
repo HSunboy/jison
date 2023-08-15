@@ -3,12 +3,12 @@ import fs from 'fs';
 import path from 'path';
 import nomnom from '@gerhobbelt/nomnom';
 
-import helpers from '../helpers-lib';
+import helpers from 'jison-helpers-lib';
 var mkIdentifier = helpers.mkIdentifier;
 
 import RegExpLexer from './regexp-lexer.js';
 
-var version = '0.6.1-215';                              // require('./package.json').version;
+import { version } from './package.json';
 
 
 function getCommandlineOptions() {

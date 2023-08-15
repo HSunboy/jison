@@ -29,9 +29,9 @@
     "node": ">=4.0"
   },
   "dependencies": {
-    "@gerhobbelt/lex-parser": "0.6.1-215",
+    "@gerhobbelt/lex-parser": "workspace:*",
     "@gerhobbelt/xregexp": "3.2.0-22",
-    "jison-helpers-lib": "0.6.1-215"
+    "jison-helpers-lib": "workspace:*"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
@@ -41,7 +41,7 @@
     "globby": "7.1.1",
     "jison-gho": "0.6.1-214",
     "mocha": "4.0.1",
-    "rollup-plugin-node-resolve": "3.0.0",
-    "rollup": "0.52.3"
+    "nyc": "11.4.1",
+    "rollup": "^3.0.0"
   }
 }

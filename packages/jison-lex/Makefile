@@ -1,9 +1,9 @@
 
 
-ROLLUP = ../../node_modules/.bin/rollup
-BABEL = ../../node_modules/.bin/babel
-MOCHA = ../../node_modules/.bin/mocha
-NYC = ../../node_modules/.bin/nyc      --clean=false --temp-directory ../../.nyc_output
+ROLLUP = ./node_modules/.bin/rollup
+BABEL = ./node_modules/.bin/babel
+MOCHA = ./node_modules/.bin/mocha
+NYC = ./node_modules/.bin/nyc      --clean=false --temp-directory ../../.nyc_output
 
 ifndef FULL_CODE_COVERAGE
 	LEX = node ./dist/cli-cjs-es5.js -o ./output/$@/
@@ -23,7 +23,6 @@ npm-update:
 	ncu -a --packageFile=package.json
 
 build:
-	node __patch_version_in_js.js
 	node __patch_lexer_kernel_in_js.js
 	-mkdir -p dist
 	$(ROLLUP) -c
@@ -165,7 +164,7 @@ comparison:                                                                 \
 
 # increment the XXX <prelease> number in the package.json file: version <major>.<minor>.<patch>-<prelease>
 bump:
-	cd ../../ && node __patch_version_in_js.js
+
 
 git-tag:
 

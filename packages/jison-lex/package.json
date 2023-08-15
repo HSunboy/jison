@@ -33,14 +33,15 @@
   "dependencies": {
     "@gerhobbelt/ast-util": "0.6.1-4",
     "@gerhobbelt/json5": "0.5.1-20",
-    "@gerhobbelt/lex-parser": "0.6.1-215",
+    "@gerhobbelt/lex-parser": "workspace:*",
     "@gerhobbelt/nomnom": "1.8.4-24",
     "@gerhobbelt/recast": "0.13.0-23",
     "@gerhobbelt/xregexp": "3.2.0-22",
-    "jison-helpers-lib": "0.6.1-215"
+    "jison-helpers-lib": "workspace:*"
   },
   "devDependencies": {
     "@gerhobbelt/js-yaml": "3.10.1-5",
+    "@rollup/plugin-json": "^6.0.0",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
     "babel-preset-env": "1.6.1",
@@ -48,8 +49,8 @@
     "chai": "4.1.2",
     "globby": "7.1.1",
     "mocha": "4.0.1",
-    "rollup-plugin-node-resolve": "3.0.0",
-    "rollup": "0.52.3"
+    "nyc": "11.4.1",
+    "rollup": "^3.0.0"
   },
   "scripts": {
     "test": "make test",

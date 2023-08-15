@@ -4,17 +4,16 @@
 
 import XRegExp from '@gerhobbelt/xregexp';
 import json5 from '@gerhobbelt/json5';
-import lexParser from '../lex-parser';
+import lexParser from '@gerhobbelt/lex-parser';
 import setmgmt from './regexp-set-management.js';
-import helpers from '../helpers-lib';
+import helpers from 'jison-helpers-lib';
 var rmCommonWS  = helpers.rmCommonWS;
 var mkIdentifier = helpers.mkIdentifier;
 var code_exec   = helpers.exec;
 // import recast from '@gerhobbelt/recast';
 // import astUtils from '@gerhobbelt/ast-util';
 import assert from 'assert';
-
-var version = '0.6.1-215';                              // require('./package.json').version;
+import { version } from './package.json';
 
 
 

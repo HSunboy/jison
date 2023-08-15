@@ -1,8 +1,8 @@
 
-ROLLUP = ../../node_modules/.bin/rollup
-BABEL = ../../node_modules/.bin/babel
-MOCHA = ../../node_modules/.bin/mocha
-NYC = ../../node_modules/.bin/nyc      --clean=false --temp-directory ../../.nyc_output
+ROLLUP = ./node_modules/.bin/rollup
+BABEL = ./node_modules/.bin/babel
+MOCHA = ./node_modules/.bin/mocha
+NYC = ./node_modules/.bin/nyc      --clean=false --temp-directory ../../.nyc_output
 
 
 all: build test
@@ -27,7 +27,6 @@ test-nyc:
 
 # increment the XXX <prelease> number in the package.json file: version <major>.<minor>.<patch>-<prelease>
 bump:
-	cd ../../ && node __patch_version_in_js.js
 
 git-tag:
 

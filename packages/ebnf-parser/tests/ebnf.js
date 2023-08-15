@@ -1,7 +1,7 @@
 var assert = require("chai").assert;
 var bnf = require("../dist/ebnf-parser-cjs-es5");
 var ebnf = bnf.ebnf_parser;
-var Jison = require('../../../../jison/');  // jison-gho
+var Jison = require('jison-gho');  // jison-gho
 var Parser = Jison.Parser;
 
 function testParse(top, strings) {
