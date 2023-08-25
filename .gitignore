@@ -48,8 +48,8 @@ Vagrantfile
 *.patch
 
 # istanbul / nyc code coverage analysis workspaces
-/.nyc_output
-/coverage
+.nyc_output
+coverage
 /packages/helpers-lib/coverage
 /packages/jison-lex/coverage
 /packages/json2jison/coverage
@@ -58,3 +58,5 @@ Vagrantfile
 /packages/ebnf-parser/coverage
 /packages/examples/coverage/
 /packages/jison/coverage
+
+profile.parser-to-lexer-communication-test*
