@@ -15,6 +15,7 @@ endif
 
 
 all: clean-nyc build test-nyc examples-test report-nyc
+	echo "done"
 
 everything:                         \
 		clean                       \

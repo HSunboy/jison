@@ -33,16 +33,12 @@ ifeq ($(wildcard ./node_modules/.bin/jison),)
 	$(error "### FAILURE: Make sure you have run 'make prep' before as the jison compiler is unavailable! ###")
 endif
 
-	$(JISON) -m es bnf.y bnf.l
-	mv bnf.js parser.js
+	$(JISON) -m es -o src/parser.js bnf.y bnf.l
 
-	$(JISON) -m es ebnf.y
-	mv ebnf.js transform-parser.js
+	$(JISON) -m es -o src/transform-parser.js ebnf.y
 
 	-mkdir -p dist
 	$(ROLLUP) -c
-	$(BABEL) dist/ebnf-parser-cjs.js -o dist/ebnf-parser-cjs-es5.js
-	$(BABEL) dist/ebnf-parser-umd.js -o dist/ebnf-parser-umd-es5.js
 
 test:
 	$(MOCHA) --timeout 18000 --check-leaks --globals assert tests/

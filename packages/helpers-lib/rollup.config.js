@@ -1,7 +1,7 @@
 // rollup.config.js
-
+const ts = require("rollup-plugin-ts");
 module.exports = {
-  input: 'index.js',
+  input: './src/index.ts',
   output: [
   	  {
 	    file: 'dist/helpers-lib-cjs.js',
@@ -16,5 +16,10 @@ module.exports = {
 	    name: 'jison-helpers-lib',
 	    format: 'umd'
 	  }
+  ],
+  plugins: [
+	ts({
+		transpiler: "babel"
+	})
   ]
 };

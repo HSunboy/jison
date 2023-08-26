@@ -62,7 +62,7 @@ export default function rmCommonWS(strings, ...values) {
     // Process template string partials now, but only when there's
     // some actual UNindenting to do:
     if (indent_str) {
-        for (var i = 0, len = src.length; i < len; i++) {
+        for (var i = 0, len: number = src.length; i < len; i++) {
             var a = src[i];
             // only correct indentation at start of line, i.e. only check for
             // the indent after every NEWLINE ==> start at j=1 rather than j=0
@@ -76,7 +76,7 @@ export default function rmCommonWS(strings, ...values) {
 
     // now merge everything to construct the template result:
     var rv = [];
-    for (var i = 0, len = values.length; i < len; i++) {
+    for (var i = 0, len: number = values.length; i < len; i++) {
         rv.push(src[i].join('\n'));
         rv.push(values[i]);
     }

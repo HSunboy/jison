@@ -13,8 +13,8 @@
 // 
 
 
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 
 
@@ -29,7 +29,7 @@ function chkBugger(src) {
 
 
 // Helper function: pad number with leading zeroes
-function pad(n, p) {
+function pad(n, p?: number) {
     p = p || 2;
     var rv = '0000' + n;
     return rv.slice(-p);

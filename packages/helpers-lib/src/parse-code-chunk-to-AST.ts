@@ -10,7 +10,7 @@
 // 
 
 
-import recast from '@gerhobbelt/recast';
+const recast  = require('@gerhobbelt/recast');
 //import astUtils from '@gerhobbelt/ast-util';
 import assert from 'assert';
 
@@ -26,7 +26,7 @@ assert(b);
 
 
 
-function parseCodeChunkToAST(src, options) {
+function parseCodeChunkToAST(src) {
     // src = src
     // .replace(/@/g, '\uFFDA')
     // .replace(/#/g, '\uFFDB')

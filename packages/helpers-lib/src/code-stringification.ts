@@ -70,6 +70,7 @@ function printFunctionSourceCodeContainer(f) {
             }
         } else {
             var e = new Error('Cannot extract code from function');
+            // @ts-ignore
             e.subject = action;
             throw e;
         }

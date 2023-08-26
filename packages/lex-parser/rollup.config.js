@@ -1,5 +1,5 @@
 // rollup.config.js
-
+const { babel } = require("@rollup/plugin-babel");
 
 module.exports = {
   input: 'lex-parser.js',
@@ -17,5 +17,12 @@ module.exports = {
 	    name: 'lex-parser',
 	    format: 'umd'
 	  }
+  ],
+  plugins: [
+	babel({
+		targets: {
+			chrome: "69"
+		}
+	})
   ]
 };

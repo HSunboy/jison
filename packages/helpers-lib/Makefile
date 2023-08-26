@@ -18,8 +18,6 @@ npm-update:
 build:
 	-mkdir -p dist
 	$(ROLLUP) -c
-	$(BABEL) dist/helpers-lib-cjs.js -o dist/helpers-lib-cjs-es5.js
-	$(BABEL) dist/helpers-lib-umd.js -o dist/helpers-lib-umd-es5.js
 
 test:
 	$(MOCHA) --check-leaks --globals assert tests/

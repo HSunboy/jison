@@ -35,8 +35,6 @@ endif
 	$(JISON) -m es -o lex-parser.js lex.y lex.l
 	-mkdir -p dist
 	$(ROLLUP) -c
-	$(BABEL) dist/lex-parser-cjs.js -o dist/lex-parser-cjs-es5.js
-	$(BABEL) dist/lex-parser-umd.js -o dist/lex-parser-umd-es5.js
 
 test:
 	$(MOCHA) --timeout 18000 --check-leaks --globals assert tests/

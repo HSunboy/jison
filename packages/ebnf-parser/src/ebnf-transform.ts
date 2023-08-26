@@ -1,5 +1,6 @@
 import parser from './transform-parser.js';
-import XRegExp from '@gerhobbelt/xregexp';
+
+const XRegExp = require("@gerhobbelt/xregexp")
 
 //import assert from 'assert';
 
@@ -28,7 +29,7 @@ function generateUniqueSymbol(id, postfix, opts) {
 
 function generatePushAction(handle, offset) {
     var terms = handle.terms;
-    var rv = [];
+    var rv: any = [];
 
     for (var i = 0, len = terms.length; i < len; i++) {
         rv.push('$' + (i + offset));
@@ -46,7 +47,7 @@ function generatePushAction(handle, offset) {
 function transformExpression(e, opts, emit) {
     var type = e[0],
         value = e[1],
-        name = false,
+        name: any = false,
         has_transformed = 0;
     var list, n;
 
@@ -229,6 +230,7 @@ function transformProduction(id, production, grammar) {
                 // seek out all names and aliases; strip out literal tokens first as those cannot serve as $names:
                 var alist = list.terms; // rhs.replace(/'[^']+'/g, '~').replace(/"[^"]+"/g, '~').split(' ');
                 // we also know at which index the first transformation occurred:
+                // @ts-ignore
                 var first_index = list.first_transformed_term_index - 1;
                 if (devDebug > 2) console.log('alist ~ rhs rule terms: ', alist, rhs);
 
@@ -370,7 +372,7 @@ var ref_list;
 var ref_names;
 
 // create a deep copy of the input, so we will keep the input constant.
-function deepClone(from, sub) {
+function deepClone(from, sub?: string) {
     if (sub == null) {
         ref_list = [];
         ref_names = [];

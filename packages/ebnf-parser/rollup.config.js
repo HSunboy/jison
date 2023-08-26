@@ -1,7 +1,8 @@
 // rollup.config.js
-const json = require('@rollup/plugin-json').default
+const json = require('@rollup/plugin-json').default;
+const ts = require('rollup-plugin-ts');
 module.exports = {
-  input: 'ebnf-parser.js',
+  input: 'src/ebnf-parser.ts',
   output: [
   	  {
 	    file: 'dist/ebnf-parser-cjs.js',
@@ -17,5 +18,9 @@ module.exports = {
 	    format: 'umd'
 	  }
   ],
-  plugins: [json()]
+  plugins: [json(),
+	ts({
+		transpiler: "babel"
+	})
+	]
 };

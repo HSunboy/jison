@@ -1,9 +1,10 @@
 
 import bnf from "./parser";
 import transform from "./ebnf-transform";
-import jisonlex from "@gerhobbelt/lex-parser";
 
-import { version } from './package.json';
+const jisonlex = require("@gerhobbelt/lex-parser")
+
+const { version } = require('../package.json');
 
 function parse(grammar) {
     return bnf.parser.parse(grammar);
