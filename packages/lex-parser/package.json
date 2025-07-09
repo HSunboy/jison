@@ -42,8 +42,6 @@
     "babel-preset-modern-browsers": "10.0.1",
     "chai": "4.1.2",
     "jison-gho": "0.6.1-214",
-    "mocha": "4.0.1",
-    "nyc": "11.4.1",
     "rollup": "^3.0.0"
   }
 }

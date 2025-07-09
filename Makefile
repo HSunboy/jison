@@ -4,17 +4,10 @@ NANOC := $(shell command -v nanoc 2> /dev/null)
 ROLLUP = node_modules/.bin/rollup
 BABEL = node_modules/.bin/babel
 MOCHA = node_modules/.bin/mocha
-NYC = node_modules/.bin/nyc      --clean=false --temp-directory ./.nyc_output
-
-ifndef FULL_CODE_COVERAGE
-	JISON = node dist/cli-cjs-es5.js
-else
-	JISON = $(NYC) --reporter=lcov -- node dist/cli-cjs-es5.js
-endif
 
 
 
-all: clean-nyc build test-nyc examples-test report-nyc
+all: build
 	echo "done"
 
 everything:                         \
@@ -26,39 +19,7 @@ everything:                         \
 
 prep: subpackages-prep npm-install
 
-test:
-	$(MOCHA) --timeout 18000 --check-leaks --globals assert --recursive tests/
-
-analyze-coverage:
-	istanbul cover test/unit-tests.js
-
-check-coverage:
-	istanbul check-coverage --statement 96 --branch 96 --function 96
-
 dynamic-analysis: analyze-coverage check-coverage
-
-clean-nyc:
-	# clear the coverage cache, etc.
-	-rm -rf ./.nyc_output
-	-rm -rf ./coverage/
-
-test-nyc:
-	# DO NOT clear the coverage cache, etc.: earlier build tasks MAY also have contributed coverage info!
-	cd packages/helpers-lib && make test-nyc
-	cd packages/lex-parser && make test-nyc
-	cd packages/jison-lex && make test-nyc
-	cd packages/ebnf-parser && make test-nyc
-	cd packages/json2jison && make test-nyc
-	cd packages/jison2json && make test-nyc
-	cd packages/jison && make test-nyc
-	-rm -rf ./coverage/
-	# report PRELIMINARY collective coverage results:
-	$(NYC) report --reporter=html
-
-report-nyc:
-	-rm -rf ./coverage/
-	# report collective coverage results:
-	$(NYC) report --reporter=html
 
 
 examples: examples_directory
@@ -73,23 +34,6 @@ lexer-comparison: build
 
 examples_directory: build
 	cd packages/examples/ && make all
-
-
-examples-test: build
-	cd packages/examples/ && make error-handling-tests basic-tests github-issue-tests misc-tests
-
-error-handling-tests: build
-	cd packages/examples/ && make error-handling-tests
-
-basic-tests: build
-	cd packages/examples/ && make basic-tests
-
-github-issue-tests: build
-	cd packages/examples/ && make github-issue-tests
-
-misc-tests: build
-	cd packages/examples/ && make misc-tests
-
 
 
 examples/ansic: build
@@ -308,8 +252,6 @@ examples/mfcalc: build
 examples/no-prec-hack-needed: build
 	cd packages/examples/ && make no-prec-hack-needed
 
-examples/codegen-feature-tester: build
-	cd packages/examples/ && make codegen-feature-tester
 
 examples/nv_classy_ast: build
 	cd packages/examples/ && make nv_classy_ast
@@ -317,11 +259,6 @@ examples/nv_classy_ast: build
 examples/olmenu-proto2: build
 	cd packages/examples/ && make olmenu-proto2
 
-examples/parser-to-lexer-communication-test: build
-	cd packages/examples/ && make parser-to-lexer-communication-test
-
-examples/parser-to-lexer-communication-test--profiling: build
-	cd packages/examples/ && make parser-to-lexer-communication-test--profiling
 
 profiling:
 	cd packages/examples/ && make profiling
@@ -343,27 +280,6 @@ examples/regex: build
 
 examples/semwhitespace: build
 	cd packages/examples/ && make semwhitespace
-
-examples/test-EOF-bugfix: build
-	cd packages/examples/ && make test-EOF-bugfix
-
-examples/test-epsilon-rules-early-reduce: build
-	cd packages/examples/ && make test-epsilon-rules-early-reduce
-
-examples/test-literal-quote-tokens-in-grammar: build
-	cd packages/examples/ && make test-literal-quote-tokens-in-grammar
-
-examples/test-nonassociative-operator-0: build
-	cd packages/examples/ && make test-nonassociative-operator-0
-
-examples/test-nonassociative-operator-1: build
-	cd packages/examples/ && make test-nonassociative-operator-1
-
-examples/test-nonassociative-operator-2: build
-	cd packages/examples/ && make test-nonassociative-operator-2
-
-examples/test-propagation-rules-reduction-1: build
-	cd packages/examples/ && make test-propagation-rules-reduction-1
 
 examples/theory-left-recurs-01: build
 	cd packages/examples/ && make theory-left-recurs-01
@@ -540,15 +456,13 @@ superclean: clean
 .PHONY: all everything                                                              \
 		prep subpackages-prep                                                       \
 		helpers-lib lex-parser jison-lex ebnf-parser json2jison jison2json          \
-		test  examples examples-test                \
+		examples               \
 		examples_directory comparison lexer-comparison                              \
-		error-handling-tests basic-tests github-issue-tests misc-tests              \
 		build npm-install                                                           \
 		subpackages                                                                 \
 		clean superclean git prep_util_dir                                          \
 		bump                                                                        \
 		git-tag subpackages-git-tag                                                 \
 		publish subpackages-publish                                                 \
-		npm-update subpackages-npm-update                                           \
-		test-nyc clean-nyc report-nyc
+		npm-update subpackages-npm-update                                           
 

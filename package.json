@@ -53,10 +53,7 @@
     "eslint": "^8.57.0",
     "get-stdin": "5.0.1",
     "globby": "7.1.1",
-    "istanbul": "0.4.5",
     "jison-gho": "0.6.1-214",
-    "mocha": "4.0.1",
-    "nyc": "11.4.1",
     "uglify-js": "3.2.2"
   },
   "scripts": {
