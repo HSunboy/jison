@@ -1,0 +1,98 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "rules": {
+    // 从 JSCS 迁移的规则
+    "no-with": "error",
+    "space-unary-ops": ["error", {
+      "words": true,
+      "nonwords": false
+    }],
+    "brace-style": ["error", "1tbs", { "allowSingleLine": false }],
+    "padded-blocks": ["error", "never"],
+    "one-var": ["error", {
+      "initialized": "never",
+      "uninitialized": "always"
+    }],
+    "func-call-spacing": ["error", "never"],
+    "quote-props": ["error", "as-needed"],
+    "key-spacing": ["error", {
+      "beforeColon": false,
+      "afterColon": true
+    }],
+    "comma-spacing": ["error", {
+      "before": false,
+      "after": true
+    }],
+    "comma-style": ["error", "last"],
+    "space-before-blocks": ["error", "always"],
+    "space-infix-ops": "error",
+    "keyword-spacing": ["error", {
+      "before": true,
+      "after": true
+    }],
+    "space-before-function-paren": ["error", {
+      "anonymous": "always",
+      "named": "never",
+      "asyncArrow": "always"
+    }],
+    "object-curly-newline": ["error", {
+      "ObjectExpression": { "multiline": true, "minProperties": 2 },
+      "ObjectPattern": { "multiline": true },
+      "ImportDeclaration": "never",
+      "ExportDeclaration": { "multiline": true, "minProperties": 3 }
+    }],
+    "eol-last": ["error", "always"],
+    "semi": ["error", "always"],
+    "linebreak-style": ["error", "unix"],
+    
+    // 从 JSHint 迁移的规则
+    "no-extra-semi": "off",
+    "curly": "off",
+    "no-debugger": "off",
+    "eqeqeq": "off",
+    "no-unused-expressions": "error",
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    
+    // 其他推荐规则
+    "no-unused-vars": ["error", { 
+      "vars": "all", 
+      "args": "after-used",
+      "ignoreRestSiblings": true 
+    }],
+    "no-console": "off",
+    "no-constant-condition": "error",
+    "no-control-regex": "error",
+    "no-dupe-args": "error",
+    "no-dupe-keys": "error",
+    "no-duplicate-case": "error",
+    "no-empty": "error",
+    "no-empty-character-class": "error",
+    "no-ex-assign": "error",
+    "no-extra-boolean-cast": "error",
+    "no-func-assign": "error",
+    "no-inner-declarations": "error",
+    "no-invalid-regexp": "error",
+    "no-irregular-whitespace": "error",
+    "no-negated-in-lhs": "error",
+    "no-obj-calls": "error",
+    "no-regex-spaces": "error",
+    "no-sparse-arrays": "error",
+    "no-unreachable": "error",
+    "use-isnan": "error",
+    "valid-jsdoc": "off",
+    "valid-typeof": "error"
+  },
+  "globals": {
+    "define": "readonly",
+    "module": "readonly",
+    "require": "readonly"
+  }
+} 

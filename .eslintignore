@@ -1,0 +1,41 @@
+# 依赖目录
+node_modules/
+packages/*/node_modules/
+
+# 构建产物
+dist/
+build/
+lib/
+coverage/
+.nyc_output/
+
+# 文档和网站
+docs/
+web/
+
+# 测试覆盖率
+*.lcov
+
+# 日志
+*.log
+
+# 编辑器配置
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 示例和参考输出
+packages/examples/reference-output/
+packages/jison-lex/examples/reference-output/
+examples/reference-output/
+
+# 生成的文件
+packages/ebnf-parser/src/parser.js
+packages/ebnf-parser/src/transform-parser.js
+packages/jison/lib/jison-parser-*.js
+packages/lex-parser/lex-parser.js
+
+# 其他
+*.min.js
+compiled_*.js 
