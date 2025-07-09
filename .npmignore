@@ -26,7 +26,6 @@ npm-debug.log
 
 
 # Ignore build/publish scripts, etc.
-git-tag-and-bump-and-rebuild.sh
 Makefile
 
 # `npm install jison` doesn't need any submodules: ignore them!
