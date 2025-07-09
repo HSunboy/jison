@@ -28,10 +28,6 @@ npm-debug.log
 *.bak
 *~
 
-# Generated web content directories (nanoc output)
-web/tmp/
-web/crash.log
-
 # ignore the compiler output for any examples:            
 /packages/examples/output
 /packages/jison-lex/examples/output

@@ -21,57 +21,10 @@ everything:                         \
 		clean                       \
 		npm-update                  \
 		prep                        \
-		all                         \
-		site
+		all                         
 
 
 prep: subpackages-prep npm-install
-
-# `make site` will perform an extensive (re)build of the jison tool, all examples and the web pages.
-# Use `make compile-site` for a faster, if less complete, site rebuild action.
-site: build test examples-test web-examples web/content/assets/js/jison.js compile-site
-
-clean-site:
-	-@rm -rf web/tmp/
-	-@rm -rf web/output/jison/
-	-@rm -rf web/content/examples/
-	-rm web/content/assets/js/jison.js
-	-rm web/content/assets/js/calculator.js
-
-# `make compile-site` will perform a quick (re)build of the web pages
-compile-site: web-examples web/content/assets/js/jison.js
-	-@rm -rf web/tmp/
-	-@rm -rf web/content/examples/
-	cp -r examples web/content/examples/
-ifndef NANOC
-	$(warning "*** nanoc is not available, please install ruby, gem and nanoc. ***")
-	$(warning "*** JISON website pages have NOT been updated!                  ***")
-else
-	cd web/ && nanoc compile
-	-@rm -rf docs/
-	-mkdir -p docs
-	cp -r web/output/jison/* docs/
-endif
-
-web/content/assets/js/jison.js: build
-	@[ -a  node_modules/.bin/browserify ] || echo "### FAILURE: Make sure you run 'make prep' before as the browserify tool is unavailable! ###"
-	sh node_modules/.bin/browserify entry.js --exports require > web/content/assets/js/jison.js
-
-preview:
-ifndef NANOC
-	$(error "nanoc is not available, please install ruby, gem and nanoc")
-else
-	cd web/ && nanoc view &
-	open http://localhost:3000/jison/
-endif
-
-# `make deploy` is `make site` plus GIT checkin of the result into the gh-pages branch
-deploy: site
-	#git checkout gh-pages
-	#cp -r web/output/jison/* ./
-	#git add . --all
-	git commit -a -m 'Deploy site updates'
-	#git checkout master
 
 test:
 	$(MOCHA) --timeout 18000 --check-leaks --globals assert --recursive tests/
@@ -107,12 +60,9 @@ report-nyc:
 	# report collective coverage results:
 	$(NYC) report --reporter=html
 
-web-examples: web/content/assets/js/calculator.js
 
 examples: examples_directory
 
-web/content/assets/js/calculator.js: examples/calculator.jison build
-	$(JISON) examples/calculator.jison -o $@
 
 
 comparison:
@@ -547,7 +497,7 @@ publish: subpackages-publish
 	npm run pub
 
 
-clean: clean-site
+clean:
 	cd packages/examples/ && make clean
 
 	cd packages/helpers-lib && make clean
@@ -565,7 +515,7 @@ clean: clean-site
 # The 'superclean' target is also useful in the above context for it enables you to find the 'originals'
 # of each part of the generator (lexer & parser) as all derived copies have been killed.
 #
-superclean: clean clean-site
+superclean: clean
 	-rm -rf node_modules/
 	-rm -f package-lock.json
 
@@ -590,7 +540,7 @@ superclean: clean clean-site
 .PHONY: all everything                                                              \
 		prep subpackages-prep                                                       \
 		helpers-lib lex-parser jison-lex ebnf-parser json2jison jison2json          \
-		site preview deploy test web-examples examples examples-test                \
+		test  examples examples-test                \
 		examples_directory comparison lexer-comparison                              \
 		error-handling-tests basic-tests github-issue-tests misc-tests              \
 		build npm-install                                                           \
@@ -598,7 +548,6 @@ superclean: clean clean-site
 		clean superclean git prep_util_dir                                          \
 		bump                                                                        \
 		git-tag subpackages-git-tag                                                 \
-		compile-site clean-site                                                     \
 		publish subpackages-publish                                                 \
 		npm-update subpackages-npm-update                                           \
 		test-nyc clean-nyc report-nyc
