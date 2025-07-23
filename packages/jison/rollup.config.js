@@ -11,11 +11,6 @@ module.exports = {
 	  {
 	    file: 'dist/jison-es6.js',
 	    format: 'es'
-	  },
-	  {
-	    file: 'dist/jison-umd.js',
-	    name: 'jison',
-	    format: 'umd'
 	  }
   ],
   plugins: [json()]

@@ -1,5 +1,5 @@
 // rollup.config.js
-const { babel } = require("@rollup/plugin-babel");
+const swc = require("rollup-plugin-swc3").default;
 
 module.exports = {
   input: 'lex-parser.js',
@@ -11,17 +11,13 @@ module.exports = {
 	  {
 	    file: 'dist/lex-parser-es6.js',
 	    format: 'es'
-	  },
-	  {
-	    file: 'dist/lex-parser-umd.js',
-	    name: 'lex-parser',
-	    format: 'umd'
 	  }
   ],
   plugins: [
-	babel({
-		targets: {
-			chrome: "69"
+	swc({
+		minify: true,
+		jsc: {
+			target:  "es2016"
 		}
 	})
   ]

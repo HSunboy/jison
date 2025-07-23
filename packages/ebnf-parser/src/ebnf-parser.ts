@@ -1,6 +1,6 @@
 
-import bnf from "./parser";
-import transform from "./ebnf-transform";
+import bnf from "./parser.js";
+import transform from "./ebnf-transform.js";
 
 const jisonlex = require("@gerhobbelt/lex-parser")
 

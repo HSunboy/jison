@@ -2,7 +2,6 @@
 JISON_VERSION := $(shell node ../../dist/cli-cjs-es5.js -V 2> /dev/null )
 
 ROLLUP = ./node_modules/.bin/rollup
-BABEL = ./node_modules/.bin/babel
 MOCHA = ./node_modules/.bin/mocha
 NYC = ./node_modules/.bin/nyc      --clean=false --temp-directory ../../.nyc_output
 
@@ -18,9 +17,7 @@ endif
 
 
 
-all: build test
-
-prep:
+all: build
 
 npm-install:
 	npm install
@@ -70,5 +67,5 @@ superclean: clean
 
 
 
-.PHONY: all prep npm-install build test clean superclean bump git-tag publish npm-update test-nyc
+.PHONY: all npm-install build test clean superclean bump git-tag publish npm-update test-nyc
 

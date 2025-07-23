@@ -1,6 +1,6 @@
 // rollup.config.js
 const json = require('@rollup/plugin-json').default
-
+const swc = require("rollup-plugin-swc3").default;
 module.exports = {
   input: 'lib/cli.js',
   output: [
@@ -11,12 +11,12 @@ module.exports = {
 	  {
 	    file: 'dist/cli-es6.js',
 	    format: 'es'
-	  },
-	  {
-	    file: 'dist/cli-umd.js',
-	    name: 'jison-cli',
-	    format: 'umd'
 	  }
   ],
-  plugins: [json()]
+  plugins: [json(), swc({
+		minify: true,
+		jsc: {
+			target:  "es2016"
+		}
+	})]
 };

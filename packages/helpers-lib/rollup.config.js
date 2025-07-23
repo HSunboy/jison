@@ -1,5 +1,6 @@
 // rollup.config.js
-const ts = require("rollup-plugin-ts");
+const swc = require("rollup-plugin-swc3").default;
+
 module.exports = {
   input: './src/index.ts',
   output: [
@@ -10,16 +11,20 @@ module.exports = {
 	  {
 	    file: 'dist/helpers-lib-es6.js',
 	    format: 'es'
-	  },
-	  {
-	    file: 'dist/helpers-lib-umd.js',
-	    name: 'jison-helpers-lib',
-	    format: 'umd'
 	  }
   ],
   plugins: [
-	ts({
-		transpiler: "babel"
+	swc({
+		minify: true,
+		jsc: {
+			target:  "es2016",
+			parser: {
+				syntax: "typescript",
+				"tsx": false,
+				"decorators": false,
+				"dynamicImport": false
+			}
+		}
 	})
   ]
 };

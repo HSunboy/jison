@@ -42,19 +42,17 @@
   "devDependencies": {
     "@gerhobbelt/js-yaml": "3.10.1-5",
     "@rollup/plugin-json": "^6.0.0",
-    "babel-cli": "6.26.0",
-    "babel-core": "6.26.0",
-    "babel-preset-env": "1.6.1",
-    "babel-preset-modern-browsers": "10.0.1",
     "chai": "4.1.2",
     "globby": "7.1.1",
     "mocha": "4.0.1",
     "nyc": "11.4.1",
-    "rollup": "^3.0.0"
+    "rollup": "^3.0.0",
+    "@swc/core": "^1.13.2",
+    "rollup-plugin-swc3": "^0.12.1"
   },
   "scripts": {
     "test": "make test",
-    "build": "make",
+    "build": "node __patch_lexer_kernel_in_js.js && rollup -c && rollup -c rollup.config-cli.js && node __patch_nodebang_in_js.js",
     "pub": "npm publish --access public"
   },
   "directories": {

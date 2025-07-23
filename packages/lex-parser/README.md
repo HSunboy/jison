@@ -83,7 +83,7 @@ and then invoking the local make:
     cd packages/lex-parser
     make
 
-This will generate `lex-parser.js` and the rollup/babel-postprocessed ES6 and ES5 
+This will generate `lex-parser.js` and the rollup/swc-postprocessed ES6 and ES5 
 compatible libraries in the local `dist/` directory.
 
 >

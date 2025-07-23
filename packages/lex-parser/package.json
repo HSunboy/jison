@@ -11,7 +11,8 @@
   "module": "lex-parser.js",
   "scripts": {
     "test": "make test",
-    "pub": "npm publish --access public"
+    "pub": "npm publish --access public",
+    "build": "jison -m es -o lex-parser.js lex.y lex.l && rollup -c"
   },
   "repository": {
     "type": "git",
@@ -32,14 +33,8 @@
     "jison-helpers-lib": "workspace:*"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.11",
-    "@babel/plugin-transform-runtime": "^7.22.10",
-    "@babel/preset-env": "^7.22.10",
-    "@babel/runtime": "^7.22.11",
-    "@rollup/plugin-babel": "^6.0.3",
-    "babel-cli": "6.26.0",
-    "babel-preset-env": "1.6.1",
-    "babel-preset-modern-browsers": "10.0.1",
+    "@swc/core": "^1.13.2",
+    "rollup-plugin-swc3": "^0.12.1",
     "chai": "4.1.2",
     "jison-gho": "0.6.1-214",
     "rollup": "^3.0.0"

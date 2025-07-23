@@ -6,6 +6,7 @@
         "allowSyntheticDefaultImports": true,
         "allowJs": true
     },
+    "rootDir": "src",
     "include": [
         "src/**/*",
         "package.json"

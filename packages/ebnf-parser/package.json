@@ -11,7 +11,8 @@
   "module": "dist/ebnf-parser-es6.js",
   "scripts": {
     "test": "make test",
-    "pub": "npm publish --access public"
+    "pub": "npm publish --access public",
+    "build": "jison -m es -o src/parser.js bnf.y bnf.l && jison -m es -o src/transform-parser.js ebnf.y && rollup -c"
   },
   "repository": {
     "type": "git",
@@ -31,21 +32,17 @@
   "dependencies": {
     "@gerhobbelt/lex-parser": "workspace:*",
     "@gerhobbelt/xregexp": "3.2.0-22",
-    "jison-helpers-lib": "workspace:*"
+    "@swc/core": "^1.13.2",
+    "jison-helpers-lib": "workspace:*",
+    "rollup-plugin-swc3": "^0.12.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.11",
-    "@babel/plugin-transform-runtime": "^7.22.10",
-    "@babel/preset-env": "^7.22.10",
-    "@babel/preset-typescript": "^7.22.11",
-    "@babel/runtime": "^7.22.11",
     "@types/node": "^20.5.6",
     "chai": "4.1.2",
     "globby": "7.1.1",
     "jison-gho": "0.6.1-214",
     "mocha": "4.0.1",
     "nyc": "11.4.1",
-    "rollup": "^3.0.0",
-    "rollup-plugin-ts": "^3.4.4"
+    "rollup": "^3.0.0"
   }
 }
